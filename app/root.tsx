@@ -10,6 +10,7 @@ import {
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { RecoilRoot } from "recoil";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -29,19 +30,21 @@ export const meta: MetaFunction = () => ({
 export default function App() {
   return (
     <QueryClientProvider client={globalClient}>
-      <html lang="kr">
-        <head>
-          <Meta />
-          <Links />
-        </head>
-        <body className="bg-white leading-6">
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </body>
-      </html>
+      <RecoilRoot>
+        <html lang="kr">
+          <head>
+            <Meta />
+            <Links />
+          </head>
+          <body className="bg-white leading-6">
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </body>
+        </html>
+      </RecoilRoot>
     </QueryClientProvider>
   );
 }
