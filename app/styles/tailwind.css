@@ -749,6 +749,10 @@ video {
   width: 1rem;
 }
 
+.w-8 {
+  width: 2rem;
+}
+
 .min-w-full {
   min-width: 100%;
 }
@@ -1186,6 +1190,10 @@ video {
 }
 
 @media (min-width: 640px) {
+  .sm\:w-10 {
+    width: 2.5rem;
+  }
+
   .sm\:max-w-\[640px\] {
     max-width: 640px;
   }
@@ -1204,12 +1212,20 @@ video {
     width: 12rem;
   }
 
+  .md\:w-40 {
+    width: 10rem;
+  }
+
   .md\:max-w-\[768px\] {
     max-width: 768px;
   }
 
   .md\:max-w-3xl {
     max-width: 48rem;
+  }
+
+  .md\:max-w-\[76px\] {
+    max-width: 76px;
   }
 
   .md\:p-20 {
@@ -1354,5 +1370,10 @@ video {
   .\32xl\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .\32xl\:px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
