@@ -18,7 +18,7 @@ const SearchForm = () => {
   );
 
   return (
-    <div className="hidden flex-1 items-center lg:col-span-4 lg:flex">
+    <div className="xl:col-s hidden flex-1 items-center lg:col-span-6 lg:flex xl:col-span-7">
       <form className="relative flex flex-1 flex-row items-stretch lg:col-span-5">
         <span className="absolute z-30 flex h-full flex-row items-center p-4 text-gray-500">
           <SearchIcon className="h-4 w-4 fill-current" />

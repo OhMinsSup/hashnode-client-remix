@@ -4,3 +4,4 @@ export { default as CreateIcon } from "./Create";
 export { default as DraftIcon } from "./Draft";
 export { default as MoonIcon } from "./Moon";
 export { default as NotificationIcon } from "./Notification";
+export { default as MenuIcon } from "./Menu";
