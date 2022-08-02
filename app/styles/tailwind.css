@@ -594,12 +594,12 @@ video {
   z-index: 50;
 }
 
-.z-30 {
-  z-index: 30;
-}
-
 .z-20 {
   z-index: 20;
+}
+
+.z-30 {
+  z-index: 30;
 }
 
 .col-span-12 {
@@ -610,12 +610,12 @@ video {
   grid-column: 1/-1;
 }
 
-.col-span-8 {
-  grid-column: span 8 / span 8;
-}
-
 .col-span-4 {
   grid-column: span 4 / span 4;
+}
+
+.col-span-8 {
+  grid-column: span 8 / span 8;
 }
 
 .mx-auto {
@@ -671,6 +671,10 @@ video {
 
 .mr-4 {
   margin-right: 1rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 
 .block {
@@ -729,6 +733,10 @@ video {
   width: 66.666667%;
 }
 
+.w-8 {
+  width: 2rem;
+}
+
 .w-5 {
   width: 1.25rem;
 }
@@ -747,10 +755,6 @@ video {
 
 .w-4 {
   width: 1rem;
-}
-
-.w-8 {
-  width: 2rem;
 }
 
 .min-w-full {
@@ -788,10 +792,6 @@ video {
 
 .grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-.grid-cols-8 {
-  grid-template-columns: repeat(8, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -846,12 +846,12 @@ video {
   border-radius: 9999px;
 }
 
-.rounded {
-  border-radius: 0.25rem;
-}
-
 .rounded-lg {
   border-radius: 0.5rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
 }
 
 .border {
@@ -873,6 +873,15 @@ video {
 .border-blue-600 {
   --tw-border-opacity: 1;
   border-color: rgb(37 99 235 / var(--tw-border-opacity));
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.border-blue-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity));
 }
 
 .bg-white {
@@ -993,14 +1002,18 @@ video {
   padding-bottom: 0.25rem;
 }
 
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+.pt-5 {
+  padding-top: 1.25rem;
 }
 
 .text-center {
@@ -1176,6 +1189,12 @@ video {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
+.hover\:shadow-md:hover {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .focus\:border:focus {
   border-width: 1px;
 }
@@ -1208,12 +1227,12 @@ video {
     display: block;
   }
 
-  .md\:w-48 {
-    width: 12rem;
-  }
-
   .md\:w-40 {
     width: 10rem;
+  }
+
+  .md\:w-48 {
+    width: 12rem;
   }
 
   .md\:max-w-\[768px\] {
@@ -1222,10 +1241,6 @@ video {
 
   .md\:max-w-3xl {
     max-width: 48rem;
-  }
-
-  .md\:max-w-\[76px\] {
-    max-width: 76px;
   }
 
   .md\:p-20 {
@@ -1257,16 +1272,16 @@ video {
     grid-column: span 6 / span 6;
   }
 
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .lg\:col-span-4 {
     grid-column: span 4 / span 4;
   }
 
   .lg\:col-span-5 {
     grid-column: span 5 / span 5;
-  }
-
-  .lg\:col-span-2 {
-    grid-column: span 2 / span 2;
   }
 
   .lg\:mt-16 {
@@ -1309,14 +1324,6 @@ video {
     max-width: 100%;
   }
 
-  .lg\:flex-row {
-    flex-direction: row;
-  }
-
-  .lg\:items-center {
-    align-items: center;
-  }
-
   .lg\:justify-between {
     justify-content: space-between;
   }
@@ -1328,20 +1335,24 @@ video {
 }
 
 @media (min-width: 1280px) {
-  .xl\:col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-
-  .xl\:col-span-4 {
-    grid-column: span 4 / span 4;
-  }
-
   .xl\:col-span-2 {
     grid-column: span 2 / span 2;
   }
 
+  .xl\:col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
   .xl\:col-span-7 {
     grid-column: span 7 / span 7;
+  }
+
+  .xl\:col-span-10 {
+    grid-column: span 10 / span 10;
+  }
+
+  .xl\:col-start-2 {
+    grid-column-start: 2;
   }
 
   .xl\:max-w-\[1280px\] {
@@ -1359,12 +1370,24 @@ video {
 }
 
 @media (min-width: 1536px) {
+  .\32xl\:col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+
+  .\32xl\:col-start-3 {
+    grid-column-start: 3;
+  }
+
   .\32xl\:mr-2 {
     margin-right: 0.5rem;
   }
 
   .\32xl\:max-w-\[1536px\] {
     max-width: 1536px;
+  }
+
+  .\32xl\:grid-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
   }
 
   .\32xl\:px-0 {

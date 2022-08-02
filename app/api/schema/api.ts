@@ -1,5 +1,3 @@
-import type { AxiosRequestConfig } from "axios";
-
 // ================== Common =================== //
 
 export interface ErrorSchema {
@@ -13,11 +11,4 @@ export type ErrorAPI = ErrorSchema;
 
 export interface Options {
   withAuthorization?: boolean;
-}
-
-export interface Params<Body = any> {
-  url: string;
-  body?: Body;
-  config?: AxiosRequestConfig | undefined;
-  options?: Options;
 }

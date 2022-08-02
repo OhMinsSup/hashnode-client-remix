@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import React from "react";
-import { CreateIcon } from "../../Icon";
+import { CreateIcon } from "~/components/ui/Icon";
 
 interface WriteButtonGroupProps {}
 // rgba(52, 102, 246, var(--tw-bg-opacity))
