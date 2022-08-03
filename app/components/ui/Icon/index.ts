@@ -6,3 +6,5 @@ export { default as MoonIcon } from "./Moon";
 export { default as NotificationIcon } from "./Notification";
 export { default as MenuIcon } from "./Menu";
 export { default as DownArrow } from "./DownArrow";
+export { default as ImageIcon } from "./Image";
+export { default as TypographyIcon } from "./Typography";

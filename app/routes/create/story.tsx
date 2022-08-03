@@ -1,6 +1,13 @@
 import React from "react";
+import { ActionButtonGroup, Title } from "~/components/posts";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
+
+import styles from "~/styles/editor.css";
+
+export function links() {
+  return [{ rel: "stylesheet", href: styles }];
+}
 
 export default function CreateStory() {
   return (
@@ -11,7 +18,9 @@ export default function CreateStory() {
           <div className="relative w-full pt-5">
             <div className="create-post">
               {/* Step1 */}
+              <ActionButtonGroup />
               {/* Step2 */}
+              <Title />
               {/* Step3 */}
               <div className="relative z-20">
                 <Editor />
