@@ -37,6 +37,7 @@
     "react": "^18.2.0",
     "react-aria": "^3.18.0",
     "react-dom": "^18.2.0",
+    "react-use": "^17.4.0",
     "recoil": "^0.7.4",
     "ts-pattern": "^4.0.5",
     "yup": "^0.32.11"

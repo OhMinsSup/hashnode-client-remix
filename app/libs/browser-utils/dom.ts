@@ -72,3 +72,6 @@ export function sortByDomNode<T>(
     return 0;
   });
 }
+
+export const IS_APPLE: boolean =
+  isBrowser && /Mac|iPod|iPhone|iPad/.test(navigator.platform);

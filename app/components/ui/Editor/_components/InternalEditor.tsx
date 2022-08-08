@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useSettingsContext } from "../_context/setting";
 
@@ -7,6 +7,7 @@ import Placeholder from "./Placeholder";
 import ContentEditable from "./ContentEditable";
 
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ToolbarPlugin } from "../_plugins";
 
 const InternalEditor = () => {
   const {
@@ -31,14 +32,19 @@ const InternalEditor = () => {
 
   const placeholder = <Placeholder>{text}</Placeholder>;
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={<ContentEditable />}
-        placeholder={placeholder}
-        // TODO Collab support until 0.4
-        initialEditorState={isCollab ? null : undefined}
-      />
+      {isRichText ? <ToolbarPlugin /> : <></>}
+      <div ref={scrollRef}>
+        <RichTextPlugin
+          contentEditable={<ContentEditable />}
+          placeholder={placeholder}
+          // TODO Collab support until 0.4
+          initialEditorState={isCollab ? null : undefined}
+        />
+      </div>
     </LexicalComposer>
   );
 };

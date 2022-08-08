@@ -3,11 +3,20 @@ import { ActionButtonGroup, Title } from "~/components/posts";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
 
-import styles from "~/styles/editor.css";
+import editor from "~/styles/editor.css";
+import toolbar from "~/styles/editor-toolbar.css";
 
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
+import type { LinksFunction } from "@remix-run/cloudflare";
+
+export const links: LinksFunction = () => {
+  return [
+    { rel: "stylesheet", href: editor },
+    {
+      rel: "stylesheet",
+      href: toolbar,
+    },
+  ];
+};
 
 export default function CreateStory() {
   return (
