@@ -73,5 +73,6 @@ export function sortByDomNode<T>(
   });
 }
 
-export const IS_APPLE: boolean =
-  isBrowser && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+export const IS_APPLE: boolean = isBrowser
+  ? /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+  : false;

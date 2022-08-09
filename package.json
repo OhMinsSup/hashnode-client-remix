@@ -22,6 +22,7 @@
     "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run"
   },
   "dependencies": {
+    "@headlessui/react": "^1.6.6",
     "@lexical/react": "^0.3.8",
     "@remix-run/cloudflare": "^1.6.5",
     "@remix-run/cloudflare-pages": "^1.6.5",

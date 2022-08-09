@@ -4,18 +4,11 @@ import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
 
 import editor from "~/styles/editor.css";
-import toolbar from "~/styles/editor-toolbar.css";
 
 import type { LinksFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: editor },
-    {
-      rel: "stylesheet",
-      href: toolbar,
-    },
-  ];
+  return [{ rel: "stylesheet", href: editor }];
 };
 
 export default function CreateStory() {

@@ -3,16 +3,12 @@ import { type AriaButtonProps, useButton } from "react-aria";
 
 interface ButtonProps
   extends Omit<AriaButtonProps<"button">, "type" | "elementType"> {
-  icon?: React.ReactNode;
-  text?: string;
   title?: HTMLAttributes<HTMLButtonElement>["title"];
   className?: HTMLAttributes<HTMLButtonElement>["className"];
   children?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
-  icon,
-  text,
   title,
   className,
   children,
@@ -30,8 +26,6 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={className} title={title} ref={btnRef} {...buttonProps}>
-      {icon}
-      {text && <span>{text}</span>}
       {children}
     </button>
   );

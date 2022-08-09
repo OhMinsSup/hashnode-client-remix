@@ -36,7 +36,14 @@ const InternalEditor = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      {isRichText ? <ToolbarPlugin /> : <></>}
+      {isRichText ? (
+        <div className="relative z-30">
+          <ToolbarPlugin />
+        </div>
+      ) : (
+        <></>
+      )}
+      {/* <div className="relative z-20"> */}
       <div ref={scrollRef}>
         <RichTextPlugin
           contentEditable={<ContentEditable />}
@@ -44,6 +51,7 @@ const InternalEditor = () => {
           // TODO Collab support until 0.4
           initialEditorState={isCollab ? null : undefined}
         />
+        {/* </div> */}
       </div>
     </LexicalComposer>
   );
