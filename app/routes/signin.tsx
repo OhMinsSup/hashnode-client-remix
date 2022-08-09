@@ -16,7 +16,7 @@ import { HTTPError } from "ky-universal";
 
 // components
 import { Logo } from "~/components/ui/Logo";
-import { ValidationMessage } from "~/components/ui/error";
+import { ValidationMessage } from "~/components/ui/Error";
 import { LoadingIcon } from "~/components/ui/Icon";
 
 // api
