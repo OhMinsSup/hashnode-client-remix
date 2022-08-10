@@ -10,3 +10,4 @@ export { default as ImageIcon } from "./Image";
 export { default as TypographyIcon } from "./Typography";
 export { default as ArrowCounterClockWise } from "./ArrowCounterClockWise";
 export { default as ArrowClockWise } from "./ArrowClockWise";
+export { default as ParagraphIcon } from "./Paragraph";

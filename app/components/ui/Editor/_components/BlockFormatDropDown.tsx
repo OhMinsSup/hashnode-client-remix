@@ -19,6 +19,8 @@ import {
 import React, { useCallback } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { blockTypeToBlockName } from "../_plugins/ToolbarPlugin";
+import { DropDown, DropDownItem } from "~/components/ui/Shared";
+import classNames from "classnames";
 
 interface BlockFormatDropDownProps {
   blockType: keyof typeof blockTypeToBlockName;
@@ -93,63 +95,32 @@ const BlockFormatDropDown: React.FC<BlockFormatDropDownProps> = ({
     }
   };
 
-  const onChange = (value: keyof typeof blockTypeToBlockName) => {
-    onChangeBlockType(value);
-
-    if (value.startsWith("h")) {
-      formatHeading(value as HeadingTagType);
-    }
-  };
-
   return (
-    <Listbox
-      as="div"
-      className="relative"
-      value={blockType}
-      onChange={onChange}
+    <DropDown
+      buttonClassName="toolbar-item block-controls"
+      buttonIconClassName={"icon block-type " + blockType}
+      buttonLabel={blockTypeToBlockName[blockType]}
+      buttonAriaLabel="Formatting options for text style"
     >
-      <Listbox.Button>{blockType}</Listbox.Button>
-      <Transition
-        as={React.Fragment}
-        leave="transition ease-in duration-100"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
+      <DropDownItem
+        className={classNames("item", {
+          "active dropdown-item-active": blockType === "paragraph",
+        })}
+        onClick={formatParagraph}
       >
-        <Listbox.Options className="absolute mt-1 max-h-60 w-full min-w-fit overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          {Object.keys(blockTypeToBlockName).map((key) => {
-            const k = key as unknown as keyof typeof blockTypeToBlockName;
-            return (
-              <Listbox.Option
-                key={key}
-                value={key}
-                className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-                  }`
-                }
-              >
-                {({ selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${
-                        selected ? "font-medium" : "font-normal"
-                      }`}
-                    >
-                      {blockTypeToBlockName[k]}
-                    </span>
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                        🔥
-                      </span>
-                    ) : null}
-                  </>
-                )}
-              </Listbox.Option>
-            );
-          })}
-        </Listbox.Options>
-      </Transition>
-    </Listbox>
+        <i className="icon paragraph" />
+        <span className="text">Normal</span>
+      </DropDownItem>
+      <DropDownItem
+        className={classNames("item", {
+          "active dropdown-item-active": blockType === "h1",
+        })}
+        onClick={() => formatHeading("h1")}
+      >
+        <i className="icon h1" />
+        <span className="text">Heading 1</span>
+      </DropDownItem>
+    </DropDown>
   );
 };
 

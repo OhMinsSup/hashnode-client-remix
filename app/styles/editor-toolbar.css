@@ -1,0 +1,167 @@
+.icon.paragraph {
+  background-image: url(/icons/text-paragraph.svg);
+}
+
+/* .icon.h1 {
+  background-image: url(images/icons/type-h1.svg);
+}
+
+.icon.h2 {
+  background-image: url(images/icons/type-h2.svg);
+}
+
+.icon.h3 {
+  background-image: url(images/icons/type-h3.svg);
+}
+
+.icon.h4 {
+  background-image: url(images/icons/type-h4.svg);
+}
+
+.icon.h5 {
+  background-image: url(images/icons/type-h5.svg);
+}
+
+.icon.h6 {
+  background-image: url(images/icons/type-h6.svg);
+}
+
+.icon.bullet-list,
+.icon.bullet {
+  background-image: url(images/icons/list-ul.svg);
+}
+
+.icon.check-list,
+.icon.check {
+  background-image: url(images/icons/square-check.svg);
+}
+
+.icon.numbered-list,
+.icon.number {
+  background-image: url(images/icons/list-ol.svg);
+}
+
+.icon.quote {
+  background-image: url(images/icons/chat-square-quote.svg);
+}
+
+.icon.code {
+  background-image: url(images/icons/code.svg);
+} */
+
+i.chevron-down {
+  background-color: transparent;
+  background-size: contain;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  background-image: url(/icons/chevron-down.svg);
+}
+
+.toolbar {
+}
+
+.toolbar button.toolbar-item {
+  border: 0;
+  display: flex;
+  background: none;
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toolbar button.toolbar-item:disabled {
+  cursor: not-allowed;
+}
+
+.toolbar button.toolbar-item.spaced {
+  margin-right: 2px;
+}
+
+.toolbar button.toolbar-item i.format {
+  background-size: contain;
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  vertical-align: -0.25em;
+  display: flex;
+  opacity: 0.6;
+}
+
+.toolbar button.toolbar-item:disabled i.format {
+  opacity: 0.2;
+}
+
+.toolbar button.toolbar-item.active {
+  background-color: rgba(223, 232, 250, 0.3);
+}
+
+.toolbar button.toolbar-item.active i {
+  opacity: 1;
+}
+
+.toolbar .toolbar-item:hover:not([disabled]) {
+  background-color: #eee;
+}
+
+.toolbar .toolbar-item.font-family .text {
+  display: block;
+  max-width: 40px;
+}
+
+.toolbar .code-language {
+  width: 150px;
+}
+
+.toolbar .toolbar-item .text {
+  display: flex;
+  line-height: 20px;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #777;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
+  text-align: left;
+  padding-right: 10px;
+}
+
+.toolbar .toolbar-item .icon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  user-select: none;
+  margin-right: 8px;
+  line-height: 16px;
+  background-size: contain;
+}
+
+.toolbar i.chevron-down {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  user-select: none;
+}
+
+.toolbar i.chevron-down.inside {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  margin-left: -25px;
+  margin-top: 11px;
+  margin-right: 10px;
+  pointer-events: none;
+}
+
+button.item.dropdown-item-active {
+  background-color: rgba(223, 232, 250, 0.3);
+}
+
+button.item.dropdown-item-active i {
+  opacity: 1;
+}

@@ -85,6 +85,8 @@ const ToolbarPlugin: React.FC = () => {
           const type = parentList
             ? parentList.getListType()
             : element.getListType();
+          console.log("???", type);
+
           methods.setBlockType(type);
         } else {
           const type = $isHeadingNode(element)

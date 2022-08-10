@@ -1,14 +1,40 @@
 import React from "react";
-import InternalEditor from "./_components/InternalEditor";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+
+import LexicalEditor from "./_components/LexicalEditor";
 import { SharedHistoryContext } from "./_context/history";
-import { SettingsProvider } from "./_context/setting";
+import { SettingsProvider, useSettingsContext } from "./_context/setting";
+import { Nodes } from "./_nodes/Nodes";
+import theme from "./_theme/DefaultEditorTheme";
+
+const InternalEditor = () => {
+  const {
+    settings: { isCollab, emptyEditor, measureTypingPerf, isRichText },
+  } = useSettingsContext();
+
+  const initialConfig = {
+    editorState: isCollab ? null : emptyEditor ? undefined : undefined,
+    namespace: "RemixEditor",
+    nodes: [...Nodes],
+    onError: (error: Error) => {
+      throw error;
+    },
+    theme,
+  };
+
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <SharedHistoryContext>
+        <LexicalEditor />
+      </SharedHistoryContext>
+    </LexicalComposer>
+  );
+};
 
 const Editor = () => {
   return (
     <SettingsProvider>
-      <SharedHistoryContext>
-        <InternalEditor />
-      </SharedHistoryContext>
+      <InternalEditor />
     </SettingsProvider>
   );
 };
