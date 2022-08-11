@@ -12,7 +12,7 @@ import { useSharedHistoryContext } from "../_context/history";
 
 const LexicalEditor = () => {
   const {
-    settings: { emptyEditor, isRichText },
+    settings: { isRichText },
   } = useSettingsContext();
 
   const { historyState } = useSharedHistoryContext();

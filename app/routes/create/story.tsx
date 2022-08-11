@@ -10,18 +10,6 @@ import type { LinksFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [
-    {
-      rel: "preload",
-      href: "/icons/text-paragraph.svg",
-      as: "image",
-      type: "image/svg+xml",
-    },
-    {
-      rel: "preload",
-      href: "/icons/chevron-down.svg",
-      as: "image",
-      type: "image/svg+xml",
-    },
     { rel: "stylesheet", href: editor },
     {
       rel: "stylesheet",

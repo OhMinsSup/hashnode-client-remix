@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useMethods, useMedia } from "react-use";
+
 import {
   $getSelection,
   $isRangeSelection,
+  CAN_REDO_COMMAND,
+  CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  UNDO_COMMAND,
   type NodeKey,
 } from "lexical";
-import { useMethods, useMedia } from "react-use";
-
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { Button } from "~/components/ui/Shared";
 
-import { IS_APPLE } from "~/libs/browser-utils";
-import { ArrowClockWise, ArrowCounterClockWise } from "../../Icon";
-import BlockFormatDropDown from "../_components/BlockFormatDropDown";
-import { useCallback } from "react";
+import {
+  CODE_LANGUAGE_FRIENDLY_NAME_MAP,
+  $isCodeNode,
+  CODE_LANGUAGE_MAP,
+} from "@lexical/code";
 import {
   $getNearestBlockElementAncestorOrThrow,
   $getNearestNodeOfType,
@@ -35,6 +39,10 @@ import {
   REMOVE_LIST_COMMAND,
 } from "@lexical/list";
 
+import { IS_APPLE } from "~/libs/browser-utils";
+import BlockFormatDropDown from "../_components/BlockFormatDropDown";
+import CodLanguageDropDown from "../_components/CodLanguageDropDown";
+
 export const blockTypeToBlockName = {
   bullet: "Bulleted List",
   check: "Check List",
@@ -49,6 +57,20 @@ export const blockTypeToBlockName = {
   paragraph: "Normal",
   quote: "Quote",
 };
+
+function getCodeLanguageOptions(): [string, string][] {
+  const options: [string, string][] = [];
+
+  for (const [lang, friendlyName] of Object.entries(
+    CODE_LANGUAGE_FRIENDLY_NAME_MAP
+  )) {
+    options.push([lang, friendlyName]);
+  }
+
+  return options;
+}
+
+export const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
 
 const ToolbarPlugin: React.FC = () => {
   const [editor] = useLexicalComposerContext();
@@ -75,6 +97,8 @@ const ToolbarPlugin: React.FC = () => {
       const elementKey = element.getKey();
       const elementDOM = activeEditor.getElementByKey(elementKey);
 
+      methods.setIsCode(selection.hasFormat("code"));
+
       if (elementDOM !== null) {
         methods.setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
@@ -85,7 +109,6 @@ const ToolbarPlugin: React.FC = () => {
           const type = parentList
             ? parentList.getListType()
             : element.getListType();
-          console.log("???", type);
 
           methods.setBlockType(type);
         } else {
@@ -94,6 +117,15 @@ const ToolbarPlugin: React.FC = () => {
             : element.getType();
           if (type in blockTypeToBlockName) {
             methods.setBlockType(type as keyof typeof blockTypeToBlockName);
+          }
+
+          if ($isCodeNode(element)) {
+            const language =
+              element.getLanguage() as keyof typeof CODE_LANGUAGE_MAP;
+            methods.setCodeLanguage(
+              language ? CODE_LANGUAGE_MAP[language] || language : "plain"
+            );
+            return;
           }
         }
       }
@@ -118,7 +150,23 @@ const ToolbarPlugin: React.FC = () => {
         editorState.read(() => {
           updateToolbar();
         });
-      })
+      }),
+      activeEditor.registerCommand<boolean>(
+        CAN_UNDO_COMMAND,
+        (payload) => {
+          methods.setCanUndo(payload);
+          return false;
+        },
+        COMMAND_PRIORITY_CRITICAL
+      ),
+      activeEditor.registerCommand<boolean>(
+        CAN_REDO_COMMAND,
+        (payload) => {
+          methods.setCanRedo(payload);
+          return false;
+        },
+        COMMAND_PRIORITY_CRITICAL
+      )
     );
   }, [activeEditor, updateToolbar]);
 
@@ -137,36 +185,45 @@ const ToolbarPlugin: React.FC = () => {
           <div className="flex flex-row flex-wrap justify-between">
             <div className="flex flex-row items-center font-normal">123</div>
             <div className="hidden flex-row md:mt-2 md:flex md:w-full lg:mt-0 lg:w-auto">
-              {state.blockType in blockTypeToBlockName &&
-                activeEditor === editor && (
-                  <BlockFormatDropDown
-                    blockType={state.blockType}
-                    editor={editor}
-                    onChangeBlockType={onChangeBlockType}
-                  />
-                )}
-              <Button
-                title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}
-                className="relative inline-flex flex-row items-center justify-center rounded-full border border-transparent px-2 py-1 text-center text-sm font-medium text-gray-700 outline-none"
-                isDisabled={!state.canUndo}
-                onPress={() => {
-                  console.log("undo");
+              <button
+                disabled={!state.canUndo}
+                onClick={() => {
+                  activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
                 }}
+                title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}
+                className="toolbar-item spaced"
                 aria-label="Undo"
               >
-                <ArrowCounterClockWise className="h-4 w-4 fill-current" />
-              </Button>
-              <Button
-                title={IS_APPLE ? "Redo (⌘Y)" : "Redo (Ctrl+Y)"}
-                className="relative inline-flex flex-row items-center justify-center rounded-full border border-transparent px-2 py-1 text-center text-sm font-medium text-gray-700 outline-none"
-                isDisabled={!state.canRedo}
-                onPress={() => {
-                  console.log("redo");
+                <i className="format icon undo" />
+              </button>
+              <button
+                disabled={!state.canRedo}
+                onClick={() => {
+                  activeEditor.dispatchCommand(REDO_COMMAND, undefined);
                 }}
+                title={IS_APPLE ? "Redo (⌘Y)" : "Redo (Ctrl+Y)"}
+                className="toolbar-item"
                 aria-label="Redo"
               >
-                <ArrowClockWise className="h-4 w-4 fill-current" />
-              </Button>
+                <i className="format icon redo" />
+              </button>
+              {state.blockType in blockTypeToBlockName &&
+                activeEditor === editor && (
+                  <>
+                    <BlockFormatDropDown
+                      blockType={state.blockType}
+                      editor={editor}
+                      onChangeBlockType={onChangeBlockType}
+                    />
+                  </>
+                )}
+              {state.blockType === "code" && (
+                <CodLanguageDropDown
+                  codeLanguage={state.codeLanguage}
+                  editor={activeEditor}
+                  selectedElementKey={state.selectedElementKey}
+                />
+              )}
             </div>
           </div>
         </div>

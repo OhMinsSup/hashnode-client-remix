@@ -1,53 +1,49 @@
+.icon.undo {
+  background-image: url(/icons/arrow-counterclockwise.svg);
+}
+
+.icon.redo {
+  background-image: url(/icons/arrow-clockwise.svg);
+}
+
 .icon.paragraph {
   background-image: url(/icons/text-paragraph.svg);
 }
 
-/* .icon.h1 {
-  background-image: url(images/icons/type-h1.svg);
+.icon.h1 {
+  background-image: url(/icons/type-h1.svg);
 }
 
 .icon.h2 {
-  background-image: url(images/icons/type-h2.svg);
+  background-image: url(/icons/type-h2.svg);
 }
 
 .icon.h3 {
-  background-image: url(images/icons/type-h3.svg);
-}
-
-.icon.h4 {
-  background-image: url(images/icons/type-h4.svg);
-}
-
-.icon.h5 {
-  background-image: url(images/icons/type-h5.svg);
-}
-
-.icon.h6 {
-  background-image: url(images/icons/type-h6.svg);
+  background-image: url(/icons/type-h3.svg);
 }
 
 .icon.bullet-list,
 .icon.bullet {
-  background-image: url(images/icons/list-ul.svg);
+  background-image: url(/icons/list-ul.svg);
 }
 
 .icon.check-list,
 .icon.check {
-  background-image: url(images/icons/square-check.svg);
+  background-image: url(/icons/square-check.svg);
 }
 
 .icon.numbered-list,
 .icon.number {
-  background-image: url(images/icons/list-ol.svg);
+  background-image: url(/icons/list-ol.svg);
 }
 
 .icon.quote {
-  background-image: url(images/icons/chat-square-quote.svg);
+  background-image: url(/icons/chat-square-quote.svg);
 }
 
 .icon.code {
-  background-image: url(images/icons/code.svg);
-} */
+  background-image: url(/icons/code.svg);
+}
 
 i.chevron-down {
   background-color: transparent;
@@ -140,6 +136,21 @@ i.chevron-down {
   background-size: contain;
 }
 
+.toolbar button.toolbar-item i.format {
+  background-size: contain;
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  vertical-align: -0.25em;
+  display: flex;
+  opacity: 0.6;
+  margin: 0;
+}
+
+.toolbar button.toolbar-item:disabled i.format {
+  opacity: 0.2;
+}
+
 .toolbar i.chevron-down {
   margin-top: 3px;
   width: 16px;
@@ -156,6 +167,86 @@ i.chevron-down {
   margin-top: 11px;
   margin-right: 10px;
   pointer-events: none;
+}
+
+.dropdown {
+  z-index: 50;
+  display: block;
+  position: fixed;
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  min-height: 40px;
+  background-color: #fff;
+}
+
+.dropdown .item {
+  margin: 0 8px 0 8px;
+  padding: 8px;
+  color: #050505;
+  cursor: pointer;
+  line-height: 16px;
+  font-size: 15px;
+  display: flex;
+  align-content: center;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 0;
+  max-width: 250px;
+  min-width: 100px;
+}
+
+.dropdown .item.fontsize-item,
+.dropdown .item.fontsize-item .text {
+  min-width: unset;
+}
+
+.dropdown .item .active {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+}
+
+.dropdown .item:first-child {
+  margin-top: 8px;
+}
+
+.dropdown .item:last-child {
+  margin-bottom: 8px;
+}
+
+.dropdown .item:hover {
+  background-color: #eee;
+}
+
+.dropdown .item .text {
+  display: flex;
+  line-height: 20px;
+  flex-grow: 1;
+  min-width: 150px;
+}
+
+.dropdown .item .icon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  user-select: none;
+  margin-right: 12px;
+  line-height: 16px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dropdown .divider {
+  width: auto;
+  background-color: #eee;
+  margin: 4px 8px;
+  height: 1px;
 }
 
 button.item.dropdown-item-active {

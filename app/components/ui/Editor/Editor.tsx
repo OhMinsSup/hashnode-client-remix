@@ -9,11 +9,11 @@ import theme from "./_theme/DefaultEditorTheme";
 
 const InternalEditor = () => {
   const {
-    settings: { isCollab, emptyEditor, measureTypingPerf, isRichText },
+    settings: { emptyEditor, measureTypingPerf, isRichText },
   } = useSettingsContext();
 
   const initialConfig = {
-    editorState: isCollab ? null : emptyEditor ? undefined : undefined,
+    editorState: emptyEditor ? undefined : undefined,
     namespace: "RemixEditor",
     nodes: [...Nodes],
     onError: (error: Error) => {
