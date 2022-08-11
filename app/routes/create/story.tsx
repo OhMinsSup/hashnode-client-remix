@@ -1,5 +1,5 @@
 import React from "react";
-import { ActionButtonGroup, Title } from "~/components/posts";
+import { ActionButtonGroup, SubTitle, Title } from "~/components/posts";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
 
@@ -30,6 +30,8 @@ export default function CreateStory() {
               <ActionButtonGroup />
               {/* Step2 */}
               <Title />
+              {/* SubTitle */}
+              <SubTitle />
               {/* Step3 */}
               <div className="relative z-20">
                 <Editor />

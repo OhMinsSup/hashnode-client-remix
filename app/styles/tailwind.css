@@ -555,6 +555,10 @@ video {
   pointer-events: none;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .absolute {
   position: absolute;
 }
@@ -672,6 +676,10 @@ video {
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.mt-\[-1\.25rem\] {
+  margin-top: -1.25rem;
 }
 
 .block {
@@ -797,6 +805,10 @@ video {
 
 .resize-none {
   resize: none;
+}
+
+.resize {
+  resize: both;
 }
 
 .appearance-none {
@@ -1047,6 +1059,14 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
+}
+
+.pl-4 {
+  padding-left: 1rem;
 }
 
 .text-center {

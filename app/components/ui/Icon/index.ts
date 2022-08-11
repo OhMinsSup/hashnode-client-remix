@@ -9,3 +9,4 @@ export { default as DownArrow } from "./DownArrow";
 export { default as ImageIcon } from "./Image";
 export { default as TypographyIcon } from "./Typography";
 export { default as ParagraphIcon } from "./Paragraph";
+export { default as XIcon } from "./X";
