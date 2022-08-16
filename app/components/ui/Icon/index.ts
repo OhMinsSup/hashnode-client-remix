@@ -10,3 +10,5 @@ export { default as ImageIcon } from "./Image";
 export { default as TypographyIcon } from "./Typography";
 export { default as ParagraphIcon } from "./Paragraph";
 export { default as XIcon } from "./X";
+export { default as UploadIcon } from "./Upload";
+export { default as UnsplashIcon } from "./Unsplash";

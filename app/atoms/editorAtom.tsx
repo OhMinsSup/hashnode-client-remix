@@ -20,14 +20,12 @@ export function useSubTitleAtom() {
 type CoverType = "Upload" | "Unsplash";
 
 interface CoverAtom {
-  visible: boolean;
   tabType: CoverType;
 }
 
 export const coverAtom = atom<CoverAtom>({
   key: "coverAtom",
   default: {
-    visible: false,
     tabType: "Upload",
   },
 });
