@@ -16,6 +16,15 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
         <PicsumGridCard />
         <PicsumGridCard />
         <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
+        <PicsumGridCard />
       </div>
     </div>
   );

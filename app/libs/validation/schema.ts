@@ -46,4 +46,17 @@ export const schema = {
         )
         .required(),
     }),
+  write: () =>
+    yup.object().shape({
+      title: yup.string().max(1000).required(),
+      subTitle: yup.string().max(100).optional().nullable(true).notRequired(),
+      content: yup.string().required(),
+      cover: yup
+        .object()
+        .shape({
+          idx: yup.number().optional().nullable(true).notRequired(),
+          url: yup.string().url().required(),
+        })
+        .optional(),
+    }),
 };
