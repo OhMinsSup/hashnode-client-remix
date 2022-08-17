@@ -12,3 +12,5 @@ export { default as ParagraphIcon } from "./Paragraph";
 export { default as XIcon } from "./X";
 export { default as UploadIcon } from "./Upload";
 export { default as UnsplashIcon } from "./Unsplash";
+export { default as LeftArrowIcon } from "./LeftArrow";
+export { default as TopDownArrowIcon } from "./TopDownArrow";

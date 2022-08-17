@@ -1,6 +1,7 @@
 import React from "react";
 import { Popover, Tab } from "@headlessui/react";
 import { UnsplashIcon, UploadIcon, XIcon } from "../ui/Icon";
+import { PicsumGrid, UploadPanel } from "./_components";
 
 interface CoverImagePopoverProps {
   control: React.ReactNode;
@@ -56,8 +57,12 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
                 </Tab.List>
               </div>
               <Tab.Panels>
-                <Tab.Panel>Content 1</Tab.Panel>
-                <Tab.Panel>Content 2</Tab.Panel>
+                <Tab.Panel>
+                  <UploadPanel />
+                </Tab.Panel>
+                <Tab.Panel>
+                  <PicsumGrid />
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </>
