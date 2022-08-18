@@ -11,5 +11,8 @@
     "jest": {
       "version": 27
     }
+  },
+  "rules": {
+    "react/display-name": "off"
   }
 }

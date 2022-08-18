@@ -4,11 +4,15 @@ import { useSettingsContext } from "../_context/setting";
 import Placeholder from "./Placeholder";
 import ContentEditable from "./ContentEditable";
 
+import { AutoScrollPlugin } from "@lexical/react/LexicalAutoScrollPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ToolbarPlugin } from "../_plugins";
 import { useSharedHistoryContext } from "../_context/history";
+import { CodeHighlightPlugin } from "../_plugins/CodeHighlightPlugin";
 
 const LexicalEditor = () => {
   const {
@@ -35,6 +39,7 @@ const LexicalEditor = () => {
         </>
       )}
       <div className="editor-container" ref={scrollRef}>
+        <AutoScrollPlugin scrollRef={scrollRef} />
         {isRichText ? (
           <>
             <HistoryPlugin externalHistoryState={historyState} />
@@ -44,6 +49,9 @@ const LexicalEditor = () => {
               // TODO Collab support until 0.4
               initialEditorState={undefined}
             />
+            <CodeHighlightPlugin />
+            <ListPlugin />
+            <CheckListPlugin />
           </>
         ) : (
           <>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useMethods, useMedia } from "react-use";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
 
 import {
   $getSelection,
@@ -19,34 +20,16 @@ import {
   $isCodeNode,
   CODE_LANGUAGE_MAP,
 } from "@lexical/code";
-import {
-  $getNearestBlockElementAncestorOrThrow,
-  $getNearestNodeOfType,
-  mergeRegister,
-} from "@lexical/utils";
-import {
-  $createHeadingNode,
-  $createQuoteNode,
-  $isHeadingNode,
-  HeadingTagType,
-} from "@lexical/rich-text";
-import {
-  $isListNode,
-  INSERT_CHECK_LIST_COMMAND,
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-  ListNode,
-  REMOVE_LIST_COMMAND,
-} from "@lexical/list";
+import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
+import { $isHeadingNode } from "@lexical/rich-text";
+import { $isListNode, ListNode } from "@lexical/list";
 
 import { IS_APPLE } from "~/libs/browser-utils";
 import BlockFormatDropDown from "../_components/BlockFormatDropDown";
 import CodLanguageDropDown from "../_components/CodLanguageDropDown";
 
 export const blockTypeToBlockName = {
-  bullet: "Bulleted List",
-  check: "Check List",
-  code: "Code Block",
+  paragraph: "Normal",
   h1: "Heading 1",
   h2: "Heading 2",
   h3: "Heading 3",
@@ -54,8 +37,10 @@ export const blockTypeToBlockName = {
   h5: "Heading 5",
   h6: "Heading 6",
   number: "Numbered List",
-  paragraph: "Normal",
   quote: "Quote",
+  bullet: "Bulleted List",
+  check: "Check List",
+  code: "Code Block",
 };
 
 function getCodeLanguageOptions(): [string, string][] {
@@ -78,13 +63,6 @@ const ToolbarPlugin: React.FC = () => {
   const isLage = useMedia("(min-width: 1024px)", false);
 
   const [state, methods] = useMethods(createMethods, initialState);
-
-  const onChangeBlockType = useCallback(
-    (blockType: keyof typeof blockTypeToBlockName) => {
-      methods.setBlockType(blockType);
-    },
-    [methods]
-  );
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -115,6 +93,7 @@ const ToolbarPlugin: React.FC = () => {
           const type = $isHeadingNode(element)
             ? element.getTag()
             : element.getType();
+
           if (type in blockTypeToBlockName) {
             methods.setBlockType(type as keyof typeof blockTypeToBlockName);
           }
@@ -130,12 +109,13 @@ const ToolbarPlugin: React.FC = () => {
         }
       }
     }
-  }, [activeEditor]);
+  }, [activeEditor, methods]);
 
   useEffect(() => {
     return editor.registerCommand(
       SELECTION_CHANGE_COMMAND,
       (_payload, newEditor) => {
+        console.log(_payload);
         updateToolbar();
         setActiveEditor(newEditor);
         return false;
@@ -194,7 +174,7 @@ const ToolbarPlugin: React.FC = () => {
                 className="toolbar-item spaced"
                 aria-label="Undo"
               >
-                <i className="format icon undo" />
+                <ArrowLeftIcon className="h-3 w-3 fill-current" />
               </button>
               <button
                 disabled={!state.canRedo}
@@ -205,7 +185,7 @@ const ToolbarPlugin: React.FC = () => {
                 className="toolbar-item"
                 aria-label="Redo"
               >
-                <i className="format icon redo" />
+                <ArrowRightIcon className="h-3 w-3 fill-current" />
               </button>
               {state.blockType in blockTypeToBlockName &&
                 activeEditor === editor && (
@@ -213,7 +193,6 @@ const ToolbarPlugin: React.FC = () => {
                     <BlockFormatDropDown
                       blockType={state.blockType}
                       editor={editor}
-                      onChangeBlockType={onChangeBlockType}
                     />
                   </>
                 )}
@@ -280,6 +259,7 @@ function createMethods(state: InitialState) {
       return initialState;
     },
     setBlockType(blockType: keyof typeof blockTypeToBlockName) {
+      console.log("block", blockType);
       return {
         ...state,
         blockType,

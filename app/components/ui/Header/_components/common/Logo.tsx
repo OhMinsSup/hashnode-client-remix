@@ -41,7 +41,7 @@ const Logo = () => {
         }}
       >
         <Link to={"/"} className="block w-36 md:w-48 lg:w-full">
-          <RemixLogo className="h-5 w-full fill-current" />
+          <RemixLogo className="h-5 w-5 fill-current" />
         </Link>
       </span>
     </div>
