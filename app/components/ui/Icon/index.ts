@@ -14,3 +14,6 @@ export { default as UploadIcon } from "./Upload";
 export { default as UnsplashIcon } from "./Unsplash";
 export { default as LeftArrowIcon } from "./LeftArrow";
 export { default as TopDownArrowIcon } from "./TopDownArrow";
+export { default as BlodIcon } from "./Blod";
+export { default as ItalicIcon } from "./Italic";
+export { default as UnderlineIcon } from "./Underline";

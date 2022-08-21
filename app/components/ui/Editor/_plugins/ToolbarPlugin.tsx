@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useMethods, useMedia } from "react-use";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CodeIcon,
+} from "@heroicons/react/solid";
+import { BlodIcon, ItalicIcon, UnderlineIcon } from "../../Icon";
 
 import {
   $getSelection,
@@ -8,6 +13,7 @@ import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  FORMAT_TEXT_COMMAND,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -27,6 +33,7 @@ import { $isListNode, ListNode } from "@lexical/list";
 import { IS_APPLE } from "~/libs/browser-utils";
 import BlockFormatDropDown from "../_components/BlockFormatDropDown";
 import CodLanguageDropDown from "../_components/CodLanguageDropDown";
+import FontDropDown from "../_components/FontDropDown";
 
 export const blockTypeToBlockName = {
   paragraph: "Normal",
@@ -54,6 +61,29 @@ function getCodeLanguageOptions(): [string, string][] {
 
   return options;
 }
+
+export const FONT_FAMILY_OPTIONS: [string, string][] = [
+  ["Arial", "Arial"],
+  ["Courier New", "Courier New"],
+  ["Georgia", "Georgia"],
+  ["Times New Roman", "Times New Roman"],
+  ["Trebuchet MS", "Trebuchet MS"],
+  ["Verdana", "Verdana"],
+];
+
+export const FONT_SIZE_OPTIONS: [string, string][] = [
+  ["10px", "10px"],
+  ["11px", "11px"],
+  ["12px", "12px"],
+  ["13px", "13px"],
+  ["14px", "14px"],
+  ["15px", "15px"],
+  ["16px", "16px"],
+  ["17px", "17px"],
+  ["18px", "18px"],
+  ["19px", "19px"],
+  ["20px", "20px"],
+];
 
 export const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
 
@@ -196,12 +226,89 @@ const ToolbarPlugin: React.FC = () => {
                     />
                   </>
                 )}
-              {state.blockType === "code" && (
+              {state.blockType === "code" ? (
                 <CodLanguageDropDown
                   codeLanguage={state.codeLanguage}
                   editor={activeEditor}
                   selectedElementKey={state.selectedElementKey}
                 />
+              ) : (
+                <>
+                  <FontDropDown
+                    style={"font-family"}
+                    value={state.fontFamily}
+                    editor={editor}
+                  />
+                  <FontDropDown
+                    style={"font-size"}
+                    value={state.fontSize}
+                    editor={editor}
+                  />
+                  <div className="divide-x" />
+                  <button
+                    onClick={() => {
+                      activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+                    }}
+                    className={
+                      "toolbar-item spaced self-end" +
+                      (state.isBold ? "active" : "")
+                    }
+                    title={IS_APPLE ? "Bold (⌘B)" : "Bold (Ctrl+B)"}
+                    aria-label={`Format text as bold. Shortcut: ${
+                      IS_APPLE ? "⌘B" : "Ctrl+B"
+                    }`}
+                  >
+                    <BlodIcon className="h-5 w-5 fill-current" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      activeEditor.dispatchCommand(
+                        FORMAT_TEXT_COMMAND,
+                        "italic"
+                      );
+                    }}
+                    className={
+                      "toolbar-item spaced self-end" +
+                      (state.isItalic ? "active" : "")
+                    }
+                    title={IS_APPLE ? "Italic (⌘I)" : "Italic (Ctrl+I)"}
+                    aria-label={`Format text as italics. Shortcut: ${
+                      IS_APPLE ? "⌘I" : "Ctrl+I"
+                    }`}
+                  >
+                    <ItalicIcon className="h-5 w-5 fill-current" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      activeEditor.dispatchCommand(
+                        FORMAT_TEXT_COMMAND,
+                        "underline"
+                      );
+                    }}
+                    className={
+                      "toolbar-item spaced self-end" +
+                      (state.isUnderline ? "active" : "")
+                    }
+                    title={IS_APPLE ? "Underline (⌘U)" : "Underline (Ctrl+U)"}
+                    aria-label={`Format text to underlined. Shortcut: ${
+                      IS_APPLE ? "⌘U" : "Ctrl+U"
+                    }`}
+                  >
+                    <UnderlineIcon className="h-5 w-5 fill-current" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
+                    }}
+                    className={
+                      "toolbar-item spaced " + (state.isCode ? "active" : "")
+                    }
+                    title="Insert code block"
+                    aria-label="Insert code block"
+                  >
+                    <CodeIcon className="h-5 w-5 fill-current" />
+                  </button>
+                </>
               )}
             </div>
           </div>
