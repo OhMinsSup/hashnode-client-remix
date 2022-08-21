@@ -61,7 +61,9 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
                   <UploadPanel />
                 </Tab.Panel>
                 <Tab.Panel>
-                  <PicsumGrid />
+                  <React.Suspense fallback={<>....Loading</>}>
+                    <PicsumGrid />
+                  </React.Suspense>
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useImperativeHandle, useRef } from "react";
 
-const PicsumGridCard = () => {
+interface PicsumGridCardProps {}
+
+const PicsumGridCard: React.ForwardRefRenderFunction<
+  HTMLDivElement,
+  PicsumGridCardProps
+> = (props, ref) => {
+  const divRef = useRef<HTMLDivElement | null>(null);
+
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
+    ref,
+    () => divRef.current
+  );
+
   return (
-    <div className=" col-span-4 cursor-pointer rounded-lg md:col-span-3">
+    <div
+      className=" col-span-4 cursor-pointer rounded-lg md:col-span-3"
+      ref={divRef}
+    >
       <button
         aria-label="Set unsplash cover image"
         className="w-full overflow-hidden rounded-lg border outline-none"
@@ -32,4 +47,4 @@ const PicsumGridCard = () => {
   );
 };
 
-export default PicsumGridCard;
+export default React.forwardRef(PicsumGridCard);
