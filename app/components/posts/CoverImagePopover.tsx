@@ -13,7 +13,7 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
       <Popover.Button as={React.Fragment}>{control}</Popover.Button>
 
       <Popover.Panel
-        className=" absolute left-0 top-full z-50 w-full overflow-auto rounded-lg border bg-white p-4 shadow-lg md:w-2/4"
+        className=" absolute left-0 top-full z-50 w-full overflow-auto rounded-lg border bg-white p-4 shadow-lg"
         style={{ maxWidth: "725px" }}
       >
         {({ close }) => (
