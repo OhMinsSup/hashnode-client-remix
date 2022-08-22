@@ -42,8 +42,8 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
   );
 
   return (
-    <div className="h-80" ref={ref}>
-      <div className="grid grid-cols-8 gap-4 overflow-y-scroll md:grid-cols-9">
+    <div className="h-80 overflow-y-scroll" ref={ref}>
+      <div className="grid grid-cols-8 gap-4 md:grid-cols-9">
         {photos.map((item, i) => (
           <PicsumGridCard key={`photo-item-${item.id}`} />
         ))}

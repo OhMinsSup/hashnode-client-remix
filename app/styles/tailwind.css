@@ -731,10 +731,6 @@ video {
   display: grid;
 }
 
-.contents {
-  display: contents;
-}
-
 .hidden {
   display: none;
 }
@@ -747,8 +743,8 @@ video {
   height: 1.25rem;
 }
 
-.h-72 {
-  height: 18rem;
+.h-80 {
+  height: 20rem;
 }
 
 .h-full {
@@ -769,10 +765,6 @@ video {
 
 .h-4 {
   height: 1rem;
-}
-
-.h-80 {
-  height: 20rem;
 }
 
 .max-h-60 {
