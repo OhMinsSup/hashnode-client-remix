@@ -1,7 +1,10 @@
+import { useRef } from "react";
 import {
-  type RecoilValue,
   selectorFamily,
-  useRecoilRefresher_UNSTABLE,
+  atom,
+  useRecoilCallback,
+  useRecoilValue,
+  selector,
 } from "recoil";
 import { picsumClient } from "~/api/client";
 
@@ -14,16 +17,63 @@ export interface Photo {
   download_url: string;
 }
 
-export const currentPhotoQuery = selectorFamily({
-  key: "currentPhotoQuery",
-  get: (params: { page: number; limit: number }) => async (get) => {
+const photosAtom = atom<Photo[][]>({
+  key: "photosAtom",
+  default: [],
+});
+
+export const fetchPhotoSelector = selectorFamily({
+  key: "fetchPhotoSelector",
+  get: (params: { page: number; limit: number }) => async () => {
     const { page, limit } = params;
     const resp = await picsumClient.get(`?page=${page}&limit=${limit}`);
-    const jsonData = await resp.json<Photo[]>();
-    return jsonData;
+    return await resp.json<Photo[]>();
   },
 });
 
-export const useRecoilCacheRefresh = (state: RecoilValue<any>) => {
-  return useRecoilRefresher_UNSTABLE(state);
-};
+export const photosQuery = selector({
+  key: "photosQuery",
+  get: ({ get }) => {
+    const originVlaue = get(photosAtom);
+    return originVlaue.flatMap((i) => i);
+  },
+});
+
+export function usePhotoQuery() {
+  const stateRef = useRef({
+    page: 1,
+  });
+
+  const originValues = useRecoilValue(photosQuery);
+
+  const newValues = useRecoilValue(
+    fetchPhotoSelector({
+      page: stateRef.current.page,
+      limit: 15,
+    })
+  );
+
+  const fetchNext = useRecoilCallback(({ snapshot, set }) => async () => {
+    const state = stateRef.current;
+
+    const next = state.page + 1;
+
+    console.log("next", next);
+
+    const origin = await snapshot.getPromise(
+      fetchPhotoSelector({
+        page: next,
+        limit: 15,
+      })
+    );
+
+    stateRef.current.page = next;
+
+    set(photosAtom, (old) => [...old, origin]);
+  });
+
+  return {
+    photos: originValues.concat(newValues),
+    fetchNext,
+  };
+}

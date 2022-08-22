@@ -1,45 +1,51 @@
-import React, { useCallback, useRef, useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
-import { currentPhotoQuery } from "~/atoms/photoAtom";
-import { useInfiniteScroll } from "~/libs/hooks/useInfiniteScroll";
+import React, { useRef } from "react";
+import { usePhotoQuery } from "~/atoms/photoAtom";
+import {
+  getClientHeight,
+  getScrollHeight,
+  getScrollTop,
+  getTargetElement,
+} from "~/libs/browser-utils";
+import { useEventListener } from "~/libs/hooks/useEventListener";
 import PicsumGridCard from "./PicsumGridCard";
 
 interface PicsumGridProps {}
 
 const PicsumGrid: React.FC<PicsumGridProps> = () => {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(15);
-
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const list = useRecoilValue(
-    currentPhotoQuery({
-      page,
-      limit,
-    })
+  const { fetchNext, photos } = usePhotoQuery();
+
+  const scrollMethod = () => {
+    const el = getTargetElement(ref);
+    console.log("element", el);
+    if (!el) {
+      return;
+    }
+
+    const scrollTop = getScrollTop(el);
+    const scrollHeight = getScrollHeight(el);
+    const clientHeight = getClientHeight(el);
+
+    if (scrollHeight - scrollTop <= clientHeight + 100) {
+      fetchNext();
+    }
+  };
+
+  useEventListener(
+    "scroll",
+    () => {
+      console.log("target");
+      scrollMethod();
+    },
+    { target: ref }
   );
 
-  const fetchNext = useRecoilCallback(({ snapshot, set }) => () => {
-    const next = page + 1;
-    snapshot.getLoadable(
-      currentPhotoQuery({
-        page: next,
-        limit,
-      })
-    );
-    setPage(next);
-  });
-
-  useInfiniteScroll(ref, fetchNext);
-
   return (
-    <div className="h-72">
-      <div className=" grid grid-cols-8 gap-4 md:grid-cols-9">
-        {list.map((item, i) => (
-          <PicsumGridCard
-            ref={list.at(-1)?.id === item.id ? ref : null}
-            key={`photo-item-${item.id}`}
-          />
+    <div className="h-80" ref={ref}>
+      <div className="grid grid-cols-8 gap-4 overflow-y-scroll md:grid-cols-9">
+        {photos.map((item, i) => (
+          <PicsumGridCard key={`photo-item-${item.id}`} />
         ))}
       </div>
     </div>

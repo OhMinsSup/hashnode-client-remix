@@ -731,6 +731,10 @@ video {
   display: grid;
 }
 
+.contents {
+  display: contents;
+}
+
 .hidden {
   display: none;
 }
@@ -765,6 +769,10 @@ video {
 
 .h-4 {
   height: 1rem;
+}
+
+.h-80 {
+  height: 20rem;
 }
 
 .max-h-60 {
@@ -950,6 +958,10 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .truncate {
@@ -1523,10 +1535,6 @@ video {
 
   .md\:flex {
     display: flex;
-  }
-
-  .md\:w-2\/4 {
-    width: 50%;
   }
 
   .md\:w-40 {

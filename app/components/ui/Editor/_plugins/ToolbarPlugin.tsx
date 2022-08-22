@@ -200,7 +200,7 @@ const ToolbarPlugin: React.FC = () => {
                 onClick={() => {
                   activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
                 }}
-                title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}
+                // title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}
                 className="toolbar-item spaced"
                 aria-label="Undo"
               >
@@ -211,7 +211,7 @@ const ToolbarPlugin: React.FC = () => {
                 onClick={() => {
                   activeEditor.dispatchCommand(REDO_COMMAND, undefined);
                 }}
-                title={IS_APPLE ? "Redo (⌘Y)" : "Redo (Ctrl+Y)"}
+                // title={IS_APPLE ? "Redo (⌘Y)" : "Redo (Ctrl+Y)"}
                 className="toolbar-item"
                 aria-label="Redo"
               >
@@ -253,10 +253,10 @@ const ToolbarPlugin: React.FC = () => {
                       "toolbar-item spaced self-end" +
                       (state.isBold ? "active" : "")
                     }
-                    title={IS_APPLE ? "Bold (⌘B)" : "Bold (Ctrl+B)"}
-                    aria-label={`Format text as bold. Shortcut: ${
-                      IS_APPLE ? "⌘B" : "Ctrl+B"
-                    }`}
+                    // title={IS_APPLE ? "Bold (⌘B)" : "Bold (Ctrl+B)"}
+                    // aria-label={`Format text as bold. Shortcut: ${
+                    //   IS_APPLE ? "⌘B" : "Ctrl+B"
+                    // }`}
                   >
                     <BlodIcon className="h-5 w-5 fill-current" />
                   </button>
@@ -271,10 +271,10 @@ const ToolbarPlugin: React.FC = () => {
                       "toolbar-item spaced self-end" +
                       (state.isItalic ? "active" : "")
                     }
-                    title={IS_APPLE ? "Italic (⌘I)" : "Italic (Ctrl+I)"}
-                    aria-label={`Format text as italics. Shortcut: ${
-                      IS_APPLE ? "⌘I" : "Ctrl+I"
-                    }`}
+                    // title={IS_APPLE ? "Italic (⌘I)" : "Italic (Ctrl+I)"}
+                    // aria-label={`Format text as italics. Shortcut: ${
+                    //   IS_APPLE ? "⌘I" : "Ctrl+I"
+                    // }`}
                   >
                     <ItalicIcon className="h-5 w-5 fill-current" />
                   </button>
@@ -289,10 +289,10 @@ const ToolbarPlugin: React.FC = () => {
                       "toolbar-item spaced self-end" +
                       (state.isUnderline ? "active" : "")
                     }
-                    title={IS_APPLE ? "Underline (⌘U)" : "Underline (Ctrl+U)"}
-                    aria-label={`Format text to underlined. Shortcut: ${
-                      IS_APPLE ? "⌘U" : "Ctrl+U"
-                    }`}
+                    // title={IS_APPLE ? "Underline (⌘U)" : "Underline (Ctrl+U)"}
+                    // aria-label={`Format text to underlined. Shortcut: ${
+                    //   IS_APPLE ? "⌘U" : "Ctrl+U"
+                    // }`}
                   >
                     <UnderlineIcon className="h-5 w-5 fill-current" />
                   </button>
