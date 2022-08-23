@@ -18,7 +18,6 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
 
   const scrollMethod = () => {
     const el = getTargetElement(ref);
-    console.log("element", el);
     if (!el) {
       return;
     }
@@ -27,7 +26,7 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
     const scrollHeight = getScrollHeight(el);
     const clientHeight = getClientHeight(el);
 
-    if (scrollHeight - scrollTop <= clientHeight + 100) {
+    if (scrollHeight - scrollTop <= clientHeight + 200) {
       fetchNext();
     }
   };
@@ -35,7 +34,6 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
   useEventListener(
     "scroll",
     () => {
-      console.log("target");
       scrollMethod();
     },
     { target: ref }
@@ -45,7 +43,7 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
     <div className="h-80 overflow-y-scroll" ref={ref}>
       <div className="grid grid-cols-8 gap-4 md:grid-cols-9">
         {photos.map((item, i) => (
-          <PicsumGridCard key={`photo-item-${item.id}`} />
+          <PicsumGridCard key={`photo-item-${item.id}-${i}`} url={item.url} />
         ))}
       </div>
     </div>

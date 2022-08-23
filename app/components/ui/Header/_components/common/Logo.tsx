@@ -40,8 +40,8 @@ const Logo = () => {
           WebkitTouchCallout: "none",
         }}
       >
-        <Link to={"/"} className="block w-36 md:w-48 lg:w-full">
-          <RemixLogo className="h-5 w-5 fill-current" />
+        <Link to={"/"} className="hidden w-36 md:w-48 lg:block lg:w-full">
+          <RemixLogo className="h-full w-full fill-current" />
         </Link>
       </span>
     </div>

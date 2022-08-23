@@ -8,8 +8,11 @@ export const API_ENDPOINTS = {
 export const PAGE_ENDPOINTS = {
   ROOT: "/",
   AUTH: {
-    SIGNIN: "/signin",
-    SIGNUP: "/signup",
+    SIGNIN: "/auth/signin",
+    SIGNUP: "/auth/signup",
+  },
+  CREATE: {
+    STORY: "/create/story",
   },
 };
 

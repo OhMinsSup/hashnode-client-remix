@@ -30,7 +30,7 @@ const ItemGroup: React.FC<ItemGroupProps> = () => {
           </span>
         </button>
       </div>
-      <div className="h-10 w-10 flex-shrink-0">
+      <div className="mr-2 h-10 w-10 flex-shrink-0">
         <button
           className="block h-full w-full overflow-hidden rounded-full bg-gray-300"
           type="button"

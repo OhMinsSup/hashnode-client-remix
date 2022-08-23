@@ -628,6 +628,14 @@ video {
   grid-column: span 8 / span 8;
 }
 
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
+
 .m-5 {
   margin: 1.25rem;
 }
@@ -815,8 +823,16 @@ video {
   width: 1rem;
 }
 
+.w-16 {
+  width: 4rem;
+}
+
 .min-w-full {
   min-width: 100%;
+}
+
+.min-w-0 {
+  min-width: 0px;
 }
 
 .flex-1 {
@@ -882,6 +898,14 @@ video {
 
 .grid-cols-8 {
   grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -1195,6 +1219,10 @@ video {
   padding-right: 1rem;
 }
 
+.pb-24 {
+  padding-bottom: 6rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1498,6 +1526,10 @@ video {
     width: 2.5rem;
   }
 
+  .sm\:w-16 {
+    width: 4rem;
+  }
+
   .sm\:max-w-\[640px\] {
     max-width: 640px;
   }
@@ -1539,6 +1571,10 @@ video {
 
   .md\:w-48 {
     width: 12rem;
+  }
+
+  .md\:w-20 {
+    width: 5rem;
   }
 
   .md\:max-w-\[768px\] {
@@ -1623,6 +1659,10 @@ video {
     height: auto;
   }
 
+  .lg\:h-5 {
+    height: 1.25rem;
+  }
+
   .lg\:min-h-\[1024px\] {
     min-height: 1024px;
   }
@@ -1633,6 +1673,10 @@ video {
 
   .lg\:w-full {
     width: 100%;
+  }
+
+  .lg\:w-5 {
+    width: 1.25rem;
   }
 
   .lg\:min-w-0 {
@@ -1647,6 +1691,10 @@ video {
     max-width: 100%;
   }
 
+  .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
   .lg\:justify-between {
     justify-content: space-between;
   }
@@ -1654,6 +1702,11 @@ video {
   .lg\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .lg\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
 
@@ -1678,6 +1731,15 @@ video {
     grid-column-start: 2;
   }
 
+  .xl\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .xl\:min-w-0 {
+    min-width: 0px;
+  }
+
   .xl\:max-w-\[1280px\] {
     max-width: 1280px;
   }
@@ -1686,9 +1748,18 @@ video {
     max-width: 100%;
   }
 
+  .xl\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
   .xl\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .xl\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
@@ -1701,8 +1772,17 @@ video {
     grid-column-start: 3;
   }
 
+  .\32xl\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .\32xl\:mr-2 {
     margin-right: 0.5rem;
+  }
+
+  .\32xl\:min-w-0 {
+    min-width: 0px;
   }
 
   .\32xl\:max-w-\[1536px\] {

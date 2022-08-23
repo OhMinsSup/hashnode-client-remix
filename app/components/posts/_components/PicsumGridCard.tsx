@@ -1,6 +1,8 @@
 import React, { useImperativeHandle, useRef } from "react";
 
-interface PicsumGridCardProps {}
+interface PicsumGridCardProps {
+  url: string;
+}
 
 const PicsumGridCard: React.ForwardRefRenderFunction<
   HTMLDivElement,
@@ -36,7 +38,7 @@ const PicsumGridCard: React.ForwardRefRenderFunction<
             }}
           >
             <img
-              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixid=MnwyNjEwMzZ8MHwxfHNlYXJjaHwxfHxibG9nfGVufDB8MHx8fDE2NjA2Njg4NDY&amp;ixlib=rb-1.2.1&amp;w=200&amp;q=80&amp;fit=crop"
+              src={props.url}
               alt="MacBook Pro, white ceramic mug,and black smartphone on table"
               className="h-full w-full"
             />
