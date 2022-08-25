@@ -17,3 +17,6 @@ export { default as TopDownArrowIcon } from "./TopDownArrow";
 export { default as BlodIcon } from "./Blod";
 export { default as ItalicIcon } from "./Italic";
 export { default as UnderlineIcon } from "./Underline";
+export { default as FeaturedIcon, FeaturedOutline } from "./Featured";
+export { default as PersonalizedIcon } from "./Personalized";
+export { default as RecentIcon } from "./Recent";
