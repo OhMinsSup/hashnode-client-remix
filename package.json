@@ -24,12 +24,12 @@
   "dependencies": {
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
-    "@lexical/react": "^0.3.8",
-    "@remix-run/cloudflare": "^1.6.7",
-    "@remix-run/cloudflare-pages": "^1.6.7",
-    "@remix-run/react": "^1.6.7",
-    "@tanstack/react-query": "^4.0.5",
-    "@tanstack/react-query-devtools": "^4.0.5",
+    "@lexical/react": "^0.3.11",
+    "@remix-run/cloudflare": "^1.7.0",
+    "@remix-run/cloudflare-pages": "^1.7.0",
+    "@remix-run/react": "^1.7.0",
+    "@tanstack/react-query": "^4.2.3",
+    "@tanstack/react-query-devtools": "^4.2.3",
     "classnames": "^2.3.1",
     "cross-env": "^7.0.3",
     "ky": "^0.31.0",
@@ -46,8 +46,8 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
-    "@remix-run/dev": "^1.6.7",
-    "@remix-run/eslint-config": "^1.6.7",
+    "@remix-run/dev": "^1.7.0",
+    "@remix-run/eslint-config": "^1.7.0",
     "@testing-library/cypress": "^8.0.3",
     "@testing-library/dom": "^8.16.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -75,7 +75,7 @@
     "vite": "^3.0.2",
     "vite-tsconfig-paths": "^3.5.0",
     "vitest": "^0.18.1",
-    "wrangler": "^2.0.24"
+    "wrangler": "^2.0.27"
   },
   "prettier": {},
   "eslintIgnore": [

@@ -20,3 +20,5 @@ export { default as UnderlineIcon } from "./Underline";
 export { default as FeaturedIcon, FeaturedOutline } from "./Featured";
 export { default as PersonalizedIcon } from "./Personalized";
 export { default as RecentIcon } from "./Recent";
+export { default as BookIcon } from "./Book";
+export { default as BookmarkIcon } from "./Bookmark";
