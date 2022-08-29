@@ -46,3 +46,17 @@ export function getError<T>(obj: T, path: string, defaultValue?: unknown): any {
       : obj[path as keyof T]
     : result;
 }
+
+export function optimizeAnimation(callback: () => void) {
+  let ticking = false;
+
+  return () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        callback();
+        ticking = false;
+      });
+    }
+  };
+}
