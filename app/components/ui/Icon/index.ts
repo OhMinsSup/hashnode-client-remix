@@ -22,3 +22,5 @@ export { default as PersonalizedIcon } from "./Personalized";
 export { default as RecentIcon } from "./Recent";
 export { default as BookIcon } from "./Book";
 export { default as BookmarkIcon } from "./Bookmark";
+export { default as CommentIcon } from "./Comment";
+export { default as LikeIcon } from "./Like";

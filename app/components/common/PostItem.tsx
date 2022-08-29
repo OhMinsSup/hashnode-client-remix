@@ -1,6 +1,12 @@
 import React from "react";
 import { Link } from "@remix-run/react";
-import { BookIcon, BookmarkIcon, FeaturedIcon } from "~/components/ui/Icon";
+import {
+  BookIcon,
+  BookmarkIcon,
+  CommentIcon,
+  FeaturedIcon,
+  LikeIcon,
+} from "~/components/ui/Icon";
 
 function PostItem() {
   return (
@@ -145,7 +151,24 @@ function PostItem() {
         </div>
         {/* left */}
         <div className="flex w-full flex-row items-center md:w-auto md:pl-0">
-          <div className="flex flex-row flex-wrap items-center"></div>
+          <div className="flex flex-row flex-wrap items-center">
+            {/* Like */}
+            <Link
+              to="/"
+              className="inline-flex flex-row items-center justify-center rounded-full border border-transparent px-3 py-1 text-base font-medium text-gray-700 outline-none"
+            >
+              <LikeIcon className="mr-2 h-5 w-5 flex-shrink fill-current" />
+              <span>66</span>
+            </Link>
+            {/* Comment */}
+            <Link
+              to="/"
+              className="inline-flex flex-row items-center justify-center rounded-full border border-transparent px-3 py-1 text-base font-medium text-gray-700 outline-none"
+            >
+              <CommentIcon className="mr-2 h-5 w-5 flex-shrink fill-current" />
+              <span>6</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -153,3 +176,50 @@ function PostItem() {
 }
 
 export default PostItem;
+
+// padding-left: 0.75rem;
+// padding-right: 0.75rem;
+// padding-top: 0.25rem;
+// padding-bottom: 0.25rem;
+// font-size: 1rem;
+// line-height: 1.625;
+// font-weight: 500;
+// --tw-text-opacity: 1;
+// color: rgba(55, 65, 81, var(--tw-text-opacity));
+// border-width: 1px;
+// border-color: transparent;
+// border-radius: 9999px;
+// display: -webkit-box;
+// display: -webkit-flex;
+// display: -ms-flexbox;
+// display: flex;
+// -webkit-flex-direction: row;
+// -ms-flex-direction: row;
+// flex-direction: row;
+// -webkit-align-items: center;
+// -webkit-box-align: center;
+// -ms-flex-align: center;
+// align-items: center;
+// display: inline-block;
+// padding-left: 0.5rem;
+// padding-right: 0.5rem;
+// font-size: 0.875rem;
+// line-height: 1.25rem;
+// text-align: center;
+// display: -webkit-inline-box;
+// display: -webkit-inline-flex;
+// display: -ms-inline-flexbox;
+// display: inline-flex;
+// -webkit-flex-direction: row;
+// -ms-flex-direction: row;
+// flex-direction: row;
+// -webkit-align-items: center;
+// -webkit-box-align: center;
+// -ms-flex-align: center;
+// align-items: center;
+// -webkit-box-pack: center;
+// -ms-flex-pack: center;
+// -webkit-justify-content: center;
+// justify-content: center;
+// outline: 2px solid transparent!important;
+// outline-offset: 2px!important;

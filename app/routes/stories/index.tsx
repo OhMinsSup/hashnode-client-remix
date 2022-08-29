@@ -71,8 +71,16 @@ const Stories = () => {
                 <PostItem key={i} />
               ))}
             </Tab.Panel>
-            <Tab.Panel>Content 2</Tab.Panel>
-            <Tab.Panel>Content 3</Tab.Panel>
+            <Tab.Panel>
+              {Array.from({ length: 10 }, (_, i) => (
+                <PostItem key={i} />
+              ))}
+            </Tab.Panel>
+            <Tab.Panel>
+              {Array.from({ length: 10 }, (_, i) => (
+                <PostItem key={i} />
+              ))}
+            </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
