@@ -24,3 +24,7 @@ export { default as BookIcon } from "./Book";
 export { default as BookmarkIcon } from "./Bookmark";
 export { default as CommentIcon } from "./Comment";
 export { default as LikeIcon } from "./Like";
+export { default as FeedIcon } from "./Feed";
+export { default as ExploreIcon } from "./Explore";
+export { default as TempIcon } from "./Temp";
+export { default as TrendingIcon } from "./Trending";

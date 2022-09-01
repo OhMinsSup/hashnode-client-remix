@@ -1,6 +1,15 @@
+import { type LoaderFunction, json } from "@remix-run/cloudflare";
 import { Outlet } from "@remix-run/react";
 import { Main } from "~/components/ui/Content";
 import { Header } from "~/components/ui/Header";
+import { getTendingTags } from "~/libs/mock/tags";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { tags: trendingTags } = await getTendingTags();
+  return json({
+    trendingTags,
+  });
+};
 
 export default function Stories() {
   return (

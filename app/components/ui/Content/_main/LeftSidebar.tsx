@@ -1,10 +1,18 @@
+import { useLoaderData } from "@remix-run/react";
 import React, { useRef, useState } from "react";
 import { useMedia } from "react-use";
 import { getTargetElement } from "~/libs/browser-utils";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { optimizeAnimation } from "~/utils/util";
+import { MenuLinks, TrendingTags } from "../_components";
+
+const GAP_SIZE = 32;
 
 const LeftSidebar = () => {
+  const { trendingTags } = useLoaderData<{ trendingTags: any[] }>();
+
+  console.log("tagList", trendingTags);
+
   const isWide = useMedia("(min-width: 1260px)", false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,7 +47,7 @@ const LeftSidebar = () => {
       const contentClientRect = $content.getBoundingClientRect();
       const rightClientRect = $right.getBoundingClientRect();
       const totalWidth = contentClientRect.width - rightClientRect.width;
-      const newLeftWidth = totalWidth - leftClientRect.width - 32;
+      const newLeftWidth = totalWidth - leftClientRect.width - GAP_SIZE;
       setWidth(newLeftWidth);
     }
   });
@@ -67,7 +75,21 @@ const LeftSidebar = () => {
         }}
       >
         <div className="my-5 flex flex-col overflow-y-auto overflow-x-hidden rounded-lg border bg-white py-2 text-gray-900">
-          <div className="mb-10 flex-1">LeftSidebar</div>
+          <div className="mb-10 flex-1">
+            <MenuLinks />
+            <TrendingTags
+              trendingTags={trendingTags.map((tag) => ({
+                id: tag.node.id,
+                count: tag.count,
+                name: tag.node.name,
+                slug: tag.node.slug,
+              }))}
+            />
+            <div className="mb-5 flex flex-col items-start px-4 text-center text-sm text-gray-600">
+              <hr className="my-5 h-[1px] w-[25%]" />
+              <p>© {new Date().getFullYear()} Solid</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
