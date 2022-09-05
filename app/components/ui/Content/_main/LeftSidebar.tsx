@@ -11,8 +11,6 @@ const GAP_SIZE = 32;
 const LeftSidebar = () => {
   const { trendingTags } = useLoaderData<{ trendingTags: any[] }>();
 
-  console.log("tagList", trendingTags);
-
   const isWide = useMedia("(min-width: 1260px)", false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,7 +27,6 @@ const LeftSidebar = () => {
     // 스크롤이 최상단에서 90px 이하로 내려가면 sticky 처리
     if (scrollTop <= 90) {
       setIsSticky(false);
-      el.style.width = "auto";
       setWidth(null);
     } else {
       setIsSticky(true);
