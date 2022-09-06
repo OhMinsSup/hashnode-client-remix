@@ -2,6 +2,7 @@ import React from "react";
 import { Tab } from "@headlessui/react";
 import RightContentBox from "./RightContentBox";
 import classNames from "classnames";
+import { TrendingSimplePostItem } from "~/components/common";
 
 interface TrendingPostBoxProps {}
 
@@ -64,7 +65,12 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
           </Tab>
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel>Content 1</Tab.Panel>
+          <Tab.Panel className="space-y-4 divide-y">
+            <TrendingSimplePostItem />
+            <TrendingSimplePostItem />
+            <TrendingSimplePostItem />
+            <TrendingSimplePostItem />
+          </Tab.Panel>
           <Tab.Panel>Content 2</Tab.Panel>
           <Tab.Panel>Content 3</Tab.Panel>
         </Tab.Panels>
