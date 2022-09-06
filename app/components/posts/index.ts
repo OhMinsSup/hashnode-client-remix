@@ -1,5 +1,3 @@
-export { default as ActionButtonGroup } from "./ActionButtonGroup";
-export { default as Title } from "./Title";
-export { default as SubTitle } from "./SubTitle";
-export { default as CoverImagePopover } from "./CoverImagePopover";
-export { default as CoverImage } from "./CoverImage";
+export { default as FeaturedList } from "./FeaturedList";
+export { default as PersonalizedList } from "./PersonalizedList";
+export { default as RecentList } from "./RecentList";

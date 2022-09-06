@@ -1,14 +1,12 @@
 import React from "react";
 import classnames from "classnames";
 import { Tab } from "@headlessui/react";
-import { Link } from "@remix-run/react";
 import {
-  FeaturedIcon,
   FeaturedOutline,
   PersonalizedIcon,
   RecentIcon,
 } from "~/components/ui/Icon";
-import { PostItem } from "~/components/common";
+import { FeaturedList, PersonalizedList, RecentList } from "~/components/posts";
 
 const Stories = () => {
   return (
@@ -67,19 +65,13 @@ const Stories = () => {
           </div>
           <Tab.Panels>
             <Tab.Panel>
-              {Array.from({ length: 10 }, (_, i) => (
-                <PostItem key={i} />
-              ))}
+              <PersonalizedList />
             </Tab.Panel>
             <Tab.Panel>
-              {Array.from({ length: 10 }, (_, i) => (
-                <PostItem key={i} />
-              ))}
+              <FeaturedList />
             </Tab.Panel>
             <Tab.Panel>
-              {Array.from({ length: 10 }, (_, i) => (
-                <PostItem key={i} />
-              ))}
+              <RecentList />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

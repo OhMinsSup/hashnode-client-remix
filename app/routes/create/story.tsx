@@ -4,7 +4,7 @@ import {
   CoverImage,
   SubTitle,
   Title,
-} from "~/components/posts";
+} from "~/components/write";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
 
