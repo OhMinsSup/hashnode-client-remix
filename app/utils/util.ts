@@ -61,5 +61,14 @@ export function optimizeAnimation(callback: () => void) {
   };
 }
 
+export function parseUrlParams<T>(url: string) {
+  const params = new URLSearchParams(new URL(url).searchParams);
+  const result = {} as any;
+  for (const [key, value] of params) {
+    result[key] = value;
+  }
+  return result as T;
+}
+
 export const delayPromise = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));

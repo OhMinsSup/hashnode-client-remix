@@ -784,12 +784,12 @@ video {
   margin-top: 1.5rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
-}
-
 .-ml-1 {
   margin-left: -0.25rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .mb-1 {

@@ -7,6 +7,16 @@ import {
   RecentIcon,
 } from "~/components/ui/Icon";
 import { FeaturedList, PersonalizedList, RecentList } from "~/components/posts";
+import { json, type LoaderFunction } from "@remix-run/cloudflare";
+import { getPersonalizedPosts } from "~/libs/mock/posts";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  console.log("stories/index.tsx loader", request.url);
+  const { personalizedPosts } = await getPersonalizedPosts();
+  return json({
+    personalizedPosts,
+  });
+};
 
 const Stories = () => {
   return (
