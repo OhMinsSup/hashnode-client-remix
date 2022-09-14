@@ -1,4 +1,4 @@
-import React, { useCallback, useSyncExternalStore, useTransition } from "react";
+import React, { useCallback } from "react";
 
 // hooks
 import { useSearchTextAtom } from "~/atoms/searchAtom";
@@ -7,7 +7,6 @@ import { useSearchTextAtom } from "~/atoms/searchAtom";
 import { SearchIcon } from "~/components/ui/Icon";
 
 const SearchForm = () => {
-  const [isPending, startTransition] = useTransition();
   const [text, setText] = useSearchTextAtom();
 
   const onChangeText = useCallback(
