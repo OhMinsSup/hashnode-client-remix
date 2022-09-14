@@ -1,6 +1,6 @@
 import React from "react";
 import { useMedia } from "react-use";
-import { TrendingPostBox } from "../_components";
+import { TrendingPostBox, OtherBox } from "../_components";
 
 const RightSidebar = () => {
   const isLarge = useMedia("(min-width: 1024px)", false);
@@ -13,6 +13,7 @@ const RightSidebar = () => {
       <div className="py-5 lg:block">
         {/* X close button ??? */}
         <TrendingPostBox />
+        <OtherBox />
       </div>
     </aside>
   );
