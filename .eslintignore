@@ -1,0 +1,10 @@
+# js
+server.js
+remix.config.js
+
+# Node.js
+node_modules
+
+# Remix
+build
+.cache

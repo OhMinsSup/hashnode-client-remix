@@ -1,7 +1,7 @@
 import ky from "ky-universal";
 
 export const apiClient = ky.create({
-  prefixUrl: "http://localhost:8000/api/v1",
+  prefixUrl: "http://localhost:8080/api/v1",
   hooks: {
     beforeRequest: [
       (request) => {

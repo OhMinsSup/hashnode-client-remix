@@ -1,5 +1,4 @@
-import type { AppAPI } from "./api";
-
-export interface SigninResp extends AppAPI {
-  token: string;
+export interface AuthRespSchema {
+  userId: number;
+  accessToken: string;
 }
