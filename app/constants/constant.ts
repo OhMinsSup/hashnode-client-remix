@@ -3,6 +3,9 @@ export const API_ENDPOINTS = {
     SIGNUP: "auth/signup",
     SIGNIN: "auth/signin",
   },
+  USERS: {
+    ME: "users",
+  },
 };
 
 export const PAGE_ENDPOINTS = {

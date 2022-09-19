@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { json, redirect } from "@remix-run/cloudflare";
 import classNames from "classnames";
 
@@ -14,6 +13,7 @@ import {
 import { HTTPError } from "ky-universal";
 
 // components
+import { match, P } from "ts-pattern";
 import { ValidationMessage } from "~/components/ui/Error";
 import { LoadingIcon } from "~/components/ui/Icon";
 
@@ -36,9 +36,7 @@ import type { ThrownResponse } from "@remix-run/react";
 import type { ErrorAPI } from "~/api/schema/api";
 
 interface ActionData {
-  focusId?: string;
-  message?: string;
-  errors: Partial<Record<string, string>>;
+  errors?: Record<string, string> | null;
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -55,7 +53,6 @@ export const action: ActionFunction = async ({ request }) => {
     });
 
     const { header: headers } = await signinApi({
-      type: "normal",
       email: validForm.email,
       password: validForm.password,
     });
@@ -70,21 +67,33 @@ export const action: ActionFunction = async ({ request }) => {
         acc[path] = message;
         return acc;
       }, {} as Record<string, string>);
-
-      const focusId = error.inner[0]?.path;
-      return {
-        focusId,
+      return json({
         errors,
-      };
+      });
     }
 
     if (error instanceof HTTPError) {
       const resp = error.response;
       const data = await resp.json<ErrorAPI>();
-      if (resp.status === STATUS_CODE.UNAUTHORIZED) {
-        return json({
-          message: data.error,
-        });
+
+      if (
+        [STATUS_CODE.BAD_REQUEST, STATUS_CODE.NOT_FOUND].includes(resp.status)
+      ) {
+        const errorKey = data.error;
+        const state = match(data.message)
+          .with(P.array(P.string), (data) => ({
+            errors: {
+              [errorKey]: data[0],
+            },
+          }))
+          .with(P.string, (data) => ({
+            errors: {
+              [errorKey]: data,
+            },
+          }))
+          .exhaustive();
+
+        return json(state);
       }
 
       throw json(error, {
@@ -103,19 +112,9 @@ export default function Signin({ error }: Props) {
   const actionData = useActionData<ActionData>();
   const navigate = useNavigate();
 
-  const focusId = actionData?.focusId;
   const errors = actionData?.errors;
-  const message = actionData?.message;
 
   const isLoading = useFormLoading();
-
-  useEffect(() => {
-    if (!focusId) return;
-    const ipt = document.querySelector<HTMLInputElement>(
-      `input[id="${focusId}"]`
-    );
-    if (ipt) ipt.focus();
-  }, [transition.state, focusId]);
 
   return (
     <div className="col-[1/-1] flex flex-col lg:col-span-6">
@@ -161,12 +160,6 @@ export default function Signin({ error }: Props) {
             />
           ) : null}
         </div>
-        {message && (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={message}
-          />
-        )}
         <button
           className={classNames(
             "mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base",

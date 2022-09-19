@@ -1,4 +1,8 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -8,14 +12,45 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import cookies from "cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot } from "recoil";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import { getUserInfoApi } from "./api/user/user";
 
 export const globalClient = new QueryClient();
+
+export const loader: LoaderFunction = async ({ request, context }) => {
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return null;
+  const { access_token } = cookies.parse(cookie);
+  if (!access_token) return null;
+
+  try {
+    const user = await getUserInfoApi({
+      hooks: {
+        beforeRequest: [
+          (request) => {
+            //  set-cookie
+            request.headers.set(
+              "Cookie",
+              cookies.serialize("access_token", access_token)
+            );
+            return request;
+          },
+        ],
+      },
+    });
+    return user;
+  } catch (error) {
+    console.log("error", error);
+  }
+
+  return null;
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];

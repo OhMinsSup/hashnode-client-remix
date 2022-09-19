@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from "~/constants/constant";
 import type { Options } from "ky-universal";
 import type { SignupBody, SigninBody } from "../schema/body";
 import type { AuthRespSchema } from "../schema/resp";
+import type { AppAPI } from "../schema/api";
 
 function createCookieHeaders(setCookieHeader: string[] | undefined) {
   if (!setCookieHeader || setCookieHeader?.length === 0) {
@@ -29,7 +30,7 @@ export async function signupApi(body: SignupBody, options?: Options) {
     json: body,
     ...opts,
   });
-  const result = await response.json<AuthRespSchema>();
+  const result = await response.json<AppAPI<AuthRespSchema>>();
   const cookieHeader = response.headers.get("set-cookie");
   const header = createCookieHeaders(cookieHeader ? [cookieHeader] : undefined);
   return { result, header };
@@ -45,7 +46,7 @@ export async function signinApi(body: SigninBody, options?: Options) {
     json: body,
     ...opts,
   });
-  const result = await response.json<AuthRespSchema>();
+  const result = await response.json<AppAPI<AuthRespSchema>>();
   const cookieHeader = response.headers.get("set-cookie");
   const header = createCookieHeaders(cookieHeader ? [cookieHeader] : undefined);
   return { result, header };

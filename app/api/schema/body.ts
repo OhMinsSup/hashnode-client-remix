@@ -6,9 +6,6 @@ export interface SignupBody {
 }
 
 export interface SigninBody {
-  type: "normal";
-  username?: string;
   email: string;
   password: string;
-  mfa_token?: boolean;
 }

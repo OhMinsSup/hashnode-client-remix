@@ -57,9 +57,11 @@ export const action: ActionFunction = async ({ request }) => {
       password: validForm.password,
     };
 
-    await signupApi(body);
+    const { header: headers } = await signupApi(body);
 
-    return redirect(PAGE_ENDPOINTS.ROOT);
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers,
+    });
   } catch (error) {
     if (ValidationError.isError(error)) {
       const errors = error.inner.reduce((acc, { path, message }) => {
@@ -67,7 +69,6 @@ export const action: ActionFunction = async ({ request }) => {
         acc[path] = message;
         return acc;
       }, {} as Record<string, string>);
-
       return json({
         errors,
       });
