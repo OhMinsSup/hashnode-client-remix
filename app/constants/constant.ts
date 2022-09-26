@@ -6,7 +6,11 @@ export const API_ENDPOINTS = {
   USERS: {
     ME: "users",
   },
-};
+} as const;
+
+export const QUERIES_KEY = {
+  ME: ["getUserInfoApi"],
+} as const;
 
 export const PAGE_ENDPOINTS = {
   ROOT: "/",
@@ -17,7 +21,7 @@ export const PAGE_ENDPOINTS = {
   CREATE: {
     STORY: "/create/story",
   },
-};
+} as const;
 
 export const STATUS_CODE = {
   OK: 200,
@@ -35,7 +39,7 @@ export const STATUS_CODE = {
 
   SERVER_ERROR: 500,
   BAD_GATEWAY: 502,
-};
+} as const;
 
 export const RESULT_CODE = {
   // 성공
@@ -54,10 +58,4 @@ export const RESULT_CODE = {
   TOKEN_EXPIRED: 4001,
   // 로그인 할 수 없음
   CANNOT_BE_LOGIN: 5000,
-};
-
-export const WEB_APP = "@@APP";
-
-export const STORAGE_KEY = {
-  TOKEN_KEY: `${WEB_APP}/authToken`,
-};
+} as const;
