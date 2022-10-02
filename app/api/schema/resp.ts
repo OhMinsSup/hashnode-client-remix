@@ -6,3 +6,7 @@ export interface AuthRespSchema {
 }
 
 export interface UserRespSchema extends UserSchema {}
+
+export interface PostRespSchema {
+  dataId: number;
+}

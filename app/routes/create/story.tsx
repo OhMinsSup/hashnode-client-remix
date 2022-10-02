@@ -1,4 +1,5 @@
 import React from "react";
+import { ClientOnly } from "remix-utils";
 import {
   ActionButtonGroup,
   CoverImage,
@@ -92,7 +93,9 @@ export default function CreateStory() {
               <SubTitle />
               {/* Step3 */}
               <div className="relative z-20">
-                <Editor />
+                <ClientOnly fallback={<>Loading....</>}>
+                  {() => <Editor />}
+                </ClientOnly>
               </div>
             </Form>
           </div>

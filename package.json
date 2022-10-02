@@ -36,6 +36,7 @@
     "react-use": "^17.4.0",
     "react-virtuoso": "^2.18.0",
     "recoil": "^0.7.4",
+    "remix-utils": "^3.3.0",
     "ts-pattern": "^4.0.5",
     "yup": "^0.32.11"
   },

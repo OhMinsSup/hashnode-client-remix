@@ -6,8 +6,8 @@ export const API_ENDPOINTS = {
   USERS: {
     ME: "users",
   },
-  CREATE: {
-    STORY: "create/story",
+  POSTS: {
+    ROOT: "posts",
   },
 } as const;
 
