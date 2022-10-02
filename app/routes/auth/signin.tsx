@@ -75,10 +75,12 @@ export const action: ActionFunction = async ({ request }) => {
     if (error instanceof HTTPError) {
       const resp = error.response;
       const data = await resp.json<ErrorAPI>();
+      const checkStatusCode = [
+        STATUS_CODE.BAD_REQUEST,
+        STATUS_CODE.NOT_FOUND,
+      ] as number[];
 
-      if (
-        [STATUS_CODE.BAD_REQUEST, STATUS_CODE.NOT_FOUND].includes(resp.status)
-      ) {
+      if (checkStatusCode.includes(resp.status)) {
         const errorKey = data.error;
         const state = match(data.message)
           .with(P.array(P.string), (data) => ({

@@ -6,6 +6,9 @@ export const API_ENDPOINTS = {
   USERS: {
     ME: "users",
   },
+  CREATE: {
+    STORY: "create/story",
+  },
 } as const;
 
 export const QUERIES_KEY = {

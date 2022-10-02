@@ -1,4 +1,5 @@
 import { apiClient } from "../client";
+import cookies from "cookie";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
@@ -19,4 +20,21 @@ export async function getUserInfoApi(options?: Options) {
   });
   const result = await response.json<AppAPI<UserRespSchema>>();
   return { result };
+}
+
+export async function getUserInfoSsrApi(access_token: string) {
+  const { result } = await getUserInfoApi({
+    hooks: {
+      beforeRequest: [
+        (request) => {
+          request.headers.set(
+            "Cookie",
+            cookies.serialize("access_token", access_token)
+          );
+          return request;
+        },
+      ],
+    },
+  });
+  return result;
 }

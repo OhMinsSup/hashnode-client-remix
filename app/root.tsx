@@ -13,6 +13,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { globalClient } from "./api/client";
 
 import cookies from "cookie";
 import {
@@ -20,53 +21,43 @@ import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
+  type DehydratedState,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot } from "recoil";
 
 // api
-import { getUserInfoApi } from "./api/user/user";
+import { getUserInfoSsrApi } from "./api/user/user";
 import { QUERIES_KEY } from "./constants/constant";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 
-export const globalClient = new QueryClient();
-
-const getUserInfo = async (access_token: string) => {
-  const data = await getUserInfoApi({
-    hooks: {
-      beforeRequest: [
-        (request) => {
-          //  set-cookie
-          request.headers.set(
-            "Cookie",
-            cookies.serialize("access_token", access_token)
-          );
-          return request;
-        },
-      ],
-    },
-  });
-  return data.result.result;
-};
-
-export const loader: LoaderFunction = async ({ request, context }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");
-  if (!cookie) return null;
-  const { access_token } = cookies.parse(cookie);
-  if (!access_token) return null;
+  const client = new QueryClient();
+
+  const resp = {
+    dehydratedState: dehydrate(client),
+  };
+
   try {
-    const client = new QueryClient();
-    await client.fetchQuery(QUERIES_KEY.ME, () => getUserInfo(access_token), {
-      staleTime: 10000,
-    });
-    return json({
-      dehydratedState: dehydrate(client),
-    });
+    if (cookie) {
+      const { access_token } = cookies.parse(cookie);
+      if (access_token) {
+        await client.prefetchQuery(
+          QUERIES_KEY.ME,
+          () => getUserInfoSsrApi(access_token),
+          {
+            staleTime: 10000,
+          }
+        );
+      }
+    }
+
+    return json(resp);
   } catch (error) {
-    console.error("error", error);
-    return json({});
+    return json(resp);
   }
 };
 
@@ -81,7 +72,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function App() {
-  const loadData = useLoaderData();
+  const loadData = useLoaderData<{ dehydratedState: DehydratedState }>();
 
   return (
     <QueryClientProvider client={globalClient}>
