@@ -5,6 +5,7 @@ import {
   CoverImage,
   SubTitle,
   Title,
+  WriteTemplate,
 } from "~/components/write";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
@@ -17,7 +18,14 @@ import editor from "~/styles/editor.css";
 import editorToolbar from "~/styles/editor-toolbar.css";
 
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
-import { Form } from "@remix-run/react";
+
+import { Form, useFetcher } from "@remix-run/react";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
+
+interface FormFieldValues {
+  title: string;
+  subTitle?: string;
+}
 
 export const links: LinksFunction = () => {
   return [
@@ -29,25 +37,15 @@ export const links: LinksFunction = () => {
   ];
 };
 
-interface ActonData {
-  title: string;
-  subTitle?: string | null;
-  content: string;
-  cover?: {
-    idx?: number | null;
-    url: string;
-  };
-}
-
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
   const form = {
     title: formData.get("title"),
     subTitle: formData.get("subTitle"),
-    content: formData.get("content"),
-    cover: formData.get("cover"),
   };
+
+  console.log(form);
 
   try {
     const validForm = await schema.write().validate(form, {
@@ -71,36 +69,47 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function CreateStory() {
+  const methods = useForm();
+
+  const fetcher = useFetcher();
+
+  const onSubmit = () => {
+    fetcher.submit(
+      {
+        title: "create story",
+        subTitle: "create story",
+      },
+      {
+        method: "post",
+      }
+    );
+  };
+
   return (
-    <>
-      <WriterHeader />
-      <div className="mx-auto grid w-full grid-cols-12 px-2 sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] 2xl:grid-cols-10 2xl:px-5">
-        <div className="col-span-12 xl:col-span-10 xl:col-start-2 2xl:col-span-6 2xl:col-start-3">
-          <div className="relative w-full pt-5">
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-              className="create-post"
-            >
-              {/* Step1 */}
-              <ActionButtonGroup />
-              {/* Cover Image */}
-              <CoverImage />
-              {/* Step2 */}
-              <Title />
-              {/* SubTitle */}
-              <SubTitle />
-              {/* Step3 */}
-              <div className="relative z-20">
-                <ClientOnly fallback={<>Loading....</>}>
-                  {() => <Editor />}
-                </ClientOnly>
-              </div>
-            </Form>
+    <WriteTemplate header={<WriterHeader />}>
+      <FormProvider {...methods}>
+        <form
+          method="post"
+          className="create-post"
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <button type="submit">임시 버튼</button>
+          {/* Step1 */}
+          <ActionButtonGroup />
+          {/* Cover Image */}
+          <CoverImage />
+          {/* Step2 */}
+          <Title />
+          {/* SubTitle */}
+          <SubTitle />
+          {/* Step3 */}
+          <div className="relative z-20">
+            <ClientOnly fallback={<>Loading....</>}>
+              {() => <Editor />}
+            </ClientOnly>
           </div>
-        </div>
-      </div>
-    </>
+        </form>
+      </FormProvider>
+    </WriteTemplate>
   );
 }

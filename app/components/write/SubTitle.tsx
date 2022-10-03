@@ -28,6 +28,8 @@ const SubTitle = () => {
     <div className="relative mb-4 mt-[-1.25rem]">
       <textarea
         maxLength={150}
+        id="subTitle"
+        name="subTitle"
         placeholder="Article title…"
         className="bg-transparen w-full resize-none appearance-none pr-10 pl-4 font-medium text-gray-700 outline-none"
         spellCheck="false"

@@ -3,14 +3,11 @@ import { useButton } from "react-aria";
 
 const PublishButton = () => {
   let btnRef = useRef<HTMLButtonElement | null>(null);
-  const { buttonProps, isPressed } = useButton(
+  const { buttonProps } = useButton(
     {
       type: "button",
       elementType: "button",
       "aria-label": "post publish",
-      onPressEnd(e) {
-        (e.target as unknown as HTMLElement).blur();
-      },
     },
     btnRef
   );
