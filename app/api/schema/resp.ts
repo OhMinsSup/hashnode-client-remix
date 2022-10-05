@@ -12,9 +12,5 @@ export interface PostRespSchema {
   dataId: number;
 }
 
-export interface SignedUrlRespSchema {
-  uploadUrl: string;
-}
-
 export interface UploadRespSchema
   extends Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> {}

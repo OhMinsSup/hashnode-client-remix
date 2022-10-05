@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { ClientOnly } from "remix-utils";
 import {
   CoverImage,
@@ -87,6 +87,13 @@ export default function CreateStory() {
     });
   };
 
+  const onRemoveThumbnail = useCallback(() => {
+    methods.setValue("thumbnail", null, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }, [methods]);
+
   const watchThumbnail = methods.watch("thumbnail");
 
   return (
@@ -99,7 +106,7 @@ export default function CreateStory() {
         >
           {/* Step1 */}
           <div className="relative mb-10 flex flex-row items-center">
-            <CoverImagePopover />
+            {!watchThumbnail && <CoverImagePopover />}
             <ActionButton
               icon={<TypographyIcon className="mr-2 h-5 w-5 fill-current" />}
               text="Add Subtitle"
@@ -109,7 +116,9 @@ export default function CreateStory() {
             />
           </div>
           {/* Cover Image */}
-          {watchThumbnail && <CoverImage src={watchThumbnail.url} />}
+          {watchThumbnail && (
+            <CoverImage src={watchThumbnail.url} onRemove={onRemoveThumbnail} />
+          )}
           {/* Step2 */}
           <Title />
           {/* SubTitle */}

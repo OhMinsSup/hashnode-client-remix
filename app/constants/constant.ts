@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
     ROOT: "posts",
   },
   FILES: {
-    SIGNED_URL: "files/signed_url",
+    UPLOAD_URL: "files/upload_url",
     UPLOAD: "files/upload",
   },
 } as const;
