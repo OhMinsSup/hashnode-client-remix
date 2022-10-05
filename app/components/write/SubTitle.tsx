@@ -1,44 +1,36 @@
 import React, { useCallback } from "react";
-import { useSubTitleAtom } from "~/atoms/editorAtom";
+import { useFormContext } from "react-hook-form";
+import { useWriteStore } from "~/stores/useWriteStore";
 import { XIcon } from "../ui/Icon";
 
 const SubTitle = () => {
-  const [subTitleState, setVisibleBySubTitle] = useSubTitleAtom();
+  const { register, setValue } = useFormContext();
 
-  const onChagne = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setVisibleBySubTitle((old) => ({
-        ...old,
-        subTitle: e.target.value,
-      }));
-    },
-    [setVisibleBySubTitle]
-  );
+  const { visible, closeSubTitle } = useWriteStore();
 
   const onClose = useCallback(() => {
-    setVisibleBySubTitle({
-      visible: false,
-      subTitle: "",
+    closeSubTitle();
+    setValue("subTitle", "", {
+      shouldDirty: true,
+      shouldValidate: true,
     });
-  }, [setVisibleBySubTitle]);
+  }, [closeSubTitle, setValue]);
 
-  if (!subTitleState.visible) return null;
+  if (!visible.subTitle) return null;
 
   return (
     <div className="relative mb-4 mt-[-1.25rem]">
       <textarea
         maxLength={150}
-        id="subTitle"
-        name="subTitle"
         placeholder="Article title…"
         className="bg-transparen w-full resize-none appearance-none pr-10 pl-4 font-medium text-gray-700 outline-none"
         spellCheck="false"
-        onChange={onChagne}
         style={{
           fontSize: "1.5rem",
           lineHeight: "1.375",
         }}
-      ></textarea>
+        {...register("subTitle")}
+      />
       <button
         type="button"
         onClick={onClose}

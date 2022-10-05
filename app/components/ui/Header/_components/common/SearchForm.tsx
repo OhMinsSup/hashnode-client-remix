@@ -1,13 +1,10 @@
-import React, { useCallback } from "react";
-
-// hooks
-import { useSearchTextAtom } from "~/atoms/searchAtom";
+import React, { useCallback, useState } from "react";
 
 // components
 import { SearchIcon } from "~/components/ui/Icon";
 
 const SearchForm = () => {
-  const [text, setText] = useSearchTextAtom();
+  const [text, setText] = useState<string>("");
 
   const onChangeText = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

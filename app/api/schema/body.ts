@@ -1,4 +1,5 @@
 import type { Nullable } from "./api";
+import type { MediaType, UploadType } from "./file";
 
 export interface SignupBody {
   username: string;
@@ -19,4 +20,10 @@ export interface PostBody {
   description: string;
   thumbnail?: Nullable<string>;
   tags: string[];
+}
+
+export interface UploadBody {
+  file: File;
+  uploadType: UploadType;
+  mediaType: MediaType;
 }

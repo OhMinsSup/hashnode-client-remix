@@ -27,7 +27,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot } from "recoil";
 
 // api
-import { getUserInfoSsrApi } from "./api/user/user";
+import { getUserInfoSsrApi } from "./api/user";
 import { QUERIES_KEY } from "./constants/constant";
 
 // styles
@@ -45,7 +45,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (cookie) {
       const { access_token } = cookies.parse(cookie);
       if (access_token) {
-        await client.prefetchQuery(
+        await client.fetchQuery(
           QUERIES_KEY.ME,
           () => getUserInfoSsrApi(access_token),
           {

@@ -40,7 +40,8 @@
     "recoil": "^0.7.4",
     "remix-utils": "^3.3.0",
     "ts-pattern": "^4.0.5",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",

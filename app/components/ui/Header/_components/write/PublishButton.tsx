@@ -5,7 +5,7 @@ const PublishButton = () => {
   let btnRef = useRef<HTMLButtonElement | null>(null);
   const { buttonProps } = useButton(
     {
-      type: "button",
+      type: "submit",
       elementType: "button",
       "aria-label": "post publish",
     },

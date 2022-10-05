@@ -1,14 +1,15 @@
 import React from "react";
 import { ClientOnly } from "remix-utils";
 import {
-  ActionButtonGroup,
   CoverImage,
+  CoverImagePopover,
   SubTitle,
   Title,
   WriteTemplate,
 } from "~/components/write";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
+import { useWriteStore } from "~/stores/useWriteStore";
 
 // validation
 import { schema } from "~/libs/validation/schema";
@@ -19,12 +20,17 @@ import editorToolbar from "~/styles/editor-toolbar.css";
 
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
-import { Form, useFetcher } from "@remix-run/react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { useFetcher } from "@remix-run/react";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { TypographyIcon } from "~/components/ui/Icon";
+import { ActionButton } from "~/components/write/_components";
+
+import type { FileSchema } from "~/api/schema/file";
 
 interface FormFieldValues {
   title: string;
   subTitle?: string;
+  thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
 }
 
 export const links: LinksFunction = () => {
@@ -69,35 +75,41 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function CreateStory() {
-  const methods = useForm();
+  const methods = useForm<FormFieldValues>();
 
   const fetcher = useFetcher();
 
-  const onSubmit = () => {
-    fetcher.submit(
-      {
-        title: "create story",
-        subTitle: "create story",
-      },
-      {
-        method: "post",
-      }
-    );
+  const { openSubTitle, visible } = useWriteStore();
+
+  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
+    fetcher.submit(input as Record<string, any>, {
+      method: "post",
+    });
   };
 
+  const watchThumbnail = methods.watch("thumbnail");
+
   return (
-    <WriteTemplate header={<WriterHeader />}>
-      <FormProvider {...methods}>
+    <FormProvider {...methods}>
+      <WriteTemplate header={<WriterHeader />}>
         <form
           method="post"
           className="create-post"
           onSubmit={methods.handleSubmit(onSubmit)}
         >
-          <button type="submit">임시 버튼</button>
           {/* Step1 */}
-          <ActionButtonGroup />
+          <div className="relative mb-10 flex flex-row items-center">
+            <CoverImagePopover />
+            <ActionButton
+              icon={<TypographyIcon className="mr-2 h-5 w-5 fill-current" />}
+              text="Add Subtitle"
+              aria-label="add post sub title"
+              aria-haspopup={visible.subTitle ? "true" : "false"}
+              onPress={openSubTitle}
+            />
+          </div>
           {/* Cover Image */}
-          <CoverImage />
+          {watchThumbnail && <CoverImage src={watchThumbnail.url} />}
           {/* Step2 */}
           <Title />
           {/* SubTitle */}
@@ -109,7 +121,7 @@ export default function CreateStory() {
             </ClientOnly>
           </div>
         </form>
-      </FormProvider>
-    </WriteTemplate>
+      </WriteTemplate>
+    </FormProvider>
   );
 }

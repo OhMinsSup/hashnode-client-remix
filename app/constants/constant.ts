@@ -9,6 +9,10 @@ export const API_ENDPOINTS = {
   POSTS: {
     ROOT: "posts",
   },
+  FILES: {
+    SIGNED_URL: "files/signed_url",
+    UPLOAD: "files/upload",
+  },
 } as const;
 
 export const QUERIES_KEY = {

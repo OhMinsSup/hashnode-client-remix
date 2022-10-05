@@ -1,16 +1,29 @@
 import React from "react";
 import { Popover, Tab } from "@headlessui/react";
-import { UnsplashIcon, UploadIcon, XIcon } from "../ui/Icon";
-import { PicsumGrid, UploadPanel } from "./_components";
+import {
+  ImageIcon,
+  UnsplashIcon,
+  UploadIcon,
+  XIcon,
+  ArrowPathIcon,
+} from "../ui/Icon";
+import { ImageGrid, UploadPanel } from "./_components";
+import { useWriteStore } from "~/stores/useWriteStore";
 
-interface CoverImagePopoverProps {
-  control: React.ReactNode;
-}
+interface CoverImagePopoverProps {}
 
-const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
+const CoverImagePopover: React.FC<CoverImagePopoverProps> = () => {
+  const { upload } = useWriteStore();
   return (
     <Popover>
-      <Popover.Button as={React.Fragment}>{control}</Popover.Button>
+      <Popover.Button className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none">
+        {upload.status === "uploading" ? (
+          <ArrowPathIcon className="mr-2 h-5 w-5 animate-spin fill-current" />
+        ) : (
+          <ImageIcon className="mr-2 h-5 w-5 fill-current" />
+        )}
+        <span>Add Cover</span>
+      </Popover.Button>
 
       <Popover.Panel
         className=" absolute left-0 top-full z-50 w-full overflow-auto rounded-lg border bg-white p-4 shadow-lg"
@@ -52,7 +65,7 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
                     }
                   >
                     <UnsplashIcon className="mr-2 h-5 w-5 fill-current" />
-                    <span>Unsplash</span>
+                    <span>Images</span>
                   </Tab>
                 </Tab.List>
               </div>
@@ -62,7 +75,7 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = ({ control }) => {
                 </Tab.Panel>
                 <Tab.Panel>
                   <React.Suspense fallback={<>....Loading</>}>
-                    <PicsumGrid />
+                    <ImageGrid />
                   </React.Suspense>
                 </Tab.Panel>
               </Tab.Panels>
