@@ -7,7 +7,7 @@ const MenuLinks = () => {
     <>
       <SidebarNavLink
         text="My Feed"
-        to="/stories"
+        to="/"
         end
         icon={
           <FeedIcon className=" flex-shrink-0 fill-current lg:mr-2 lg:h-5 lg:w-5" />
@@ -15,21 +15,21 @@ const MenuLinks = () => {
       />
       <SidebarNavLink
         text="Explore"
-        to="/stories/explore"
+        to="/explore"
         icon={
           <ExploreIcon className=" flex-shrink-0 fill-current lg:mr-2 lg:h-5 lg:w-5" />
         }
       />
       <SidebarNavLink
         text="Drafts"
-        to="/stories/drafts"
+        to="/drafts"
         icon={
           <TempIcon className=" flex-shrink-0 fill-current lg:mr-2 lg:h-5 lg:w-5" />
         }
       />
       <SidebarNavLink
         text="Bookmarks"
-        to="/stories/bookmarks"
+        to="/bookmarks"
         icon={
           <BookmarkIcon className=" flex-shrink-0 fill-current lg:mr-2 lg:h-5 lg:w-5" />
         }

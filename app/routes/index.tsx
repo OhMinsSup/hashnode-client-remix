@@ -1,9 +1,95 @@
-import { Header } from "~/components/ui/Header";
+import React from "react";
+import classnames from "classnames";
+import { Tab } from "@headlessui/react";
+
+import { type LoaderFunction, json } from "@remix-run/cloudflare";
+import { RootTemplate } from "~/components/posts";
+import { getTendingTags } from "~/libs/mock/tags";
+
+import {
+  FeaturedOutline,
+  PersonalizedIcon,
+  RecentIcon,
+} from "~/components/ui/Icon";
+import { FeaturedList, PersonalizedList, RecentList } from "~/components/posts";
+import { getPersonalizedPosts } from "~/libs/mock/posts";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { tags: trendingTags } = await getTendingTags();
+  const { personalizedPosts } = await getPersonalizedPosts();
+  return json({
+    trendingTags,
+    personalizedPosts,
+  });
+};
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-gray-50 text-zinc-800">
-      <Header />
-    </div>
+    <RootTemplate>
+      <div className="relative col-span-7 min-w-0 pt-5 pb-24">
+        <div className="overflow-hidden rounded-lg border bg-white">
+          <Tab.Group>
+            <div className="relative z-20 flex max-w-[100vw] flex-row justify-between border-b px-5 pt-2 font-medium text-gray-600">
+              <Tab.List className="flex flex-row items-center overflow-auto">
+                <Tab
+                  className={({ selected }) =>
+                    classnames(
+                      "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
+                      {
+                        "border-b-blue-500 text-blue-500": selected,
+                        "border-transparent": !selected,
+                      }
+                    )
+                  }
+                >
+                  <PersonalizedIcon className="mr-2 h-5 w-5 fill-current" />
+                  <span className="whitespace-nowrap">Personalized</span>
+                </Tab>
+                <Tab
+                  className={({ selected }) =>
+                    classnames(
+                      "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
+                      {
+                        "border-b-blue-500 text-blue-500": selected,
+                        "border-transparent": !selected,
+                      }
+                    )
+                  }
+                >
+                  <FeaturedOutline className="mr-2 h-5 w-5 fill-current" />
+                  <span className="whitespace-nowrap">Featured</span>
+                </Tab>
+                <Tab
+                  className={({ selected }) =>
+                    classnames(
+                      "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
+                      {
+                        "border-b-blue-500 text-blue-500": selected,
+                        "border-transparent": !selected,
+                      }
+                    )
+                  }
+                >
+                  <RecentIcon className="mr-2 h-5 w-5 fill-current" />
+                  <span className="whitespace-nowrap">Recent</span>
+                </Tab>
+              </Tab.List>
+              <div className="flex flex-row items-center"></div>
+            </div>
+            <Tab.Panels>
+              <Tab.Panel>
+                <PersonalizedList />
+              </Tab.Panel>
+              <Tab.Panel>
+                <FeaturedList />
+              </Tab.Panel>
+              <Tab.Panel>
+                <RecentList />
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
+        </div>
+      </div>
+    </RootTemplate>
   );
 }
