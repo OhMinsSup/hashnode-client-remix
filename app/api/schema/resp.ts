@@ -1,5 +1,15 @@
+import type { Nullable } from "./api";
 import type { FileSchema } from "./file";
 import type { UserSchema } from "./user";
+
+export interface ListRespSchema<Item = Record<string, any>> {
+  list: Item[];
+  totalCount: number;
+  pageInfo: {
+    endCursor: Nullable<number>;
+    hasNextPage: boolean;
+  };
+}
 
 export interface AuthRespSchema {
   userId: number;
@@ -14,3 +24,6 @@ export interface PostRespSchema {
 
 export interface UploadRespSchema
   extends Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> {}
+
+export interface FileListRespSchema
+  extends ListRespSchema<Omit<FileSchema, "deletedAt">> {}

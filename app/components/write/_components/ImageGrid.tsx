@@ -1,4 +1,7 @@
-import React, { useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { useMemo, useRef } from "react";
+import { getFileListApi } from "~/api/files";
+import { QUERIES_KEY } from "~/constants/constant";
 import {
   getClientHeight,
   getScrollHeight,
@@ -14,6 +17,25 @@ interface PicsumGridProps {}
 const PicsumGrid: React.FC<PicsumGridProps> = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useInfiniteQuery(
+      QUERIES_KEY.FILE.ROOT,
+      async ({ pageParam = 0 }) => {
+        const { result } = await getFileListApi({
+          cursor: pageParam,
+        });
+        return result.result;
+      },
+      {
+        getNextPageParam: (lastPage) =>
+          lastPage.pageInfo.endCursor ?? undefined,
+      }
+    );
+
+  const list = useMemo(() => {
+    return data?.pages?.flatMap?.((page) => page.list) ?? [];
+  }, [data]);
+
   const scrollMethod = optimizeAnimation(() => {
     const el = getTargetElement(ref);
     if (!el) {
@@ -24,8 +46,8 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
     const scrollHeight = getScrollHeight(el);
     const clientHeight = getClientHeight(el);
 
-    if (scrollHeight - scrollTop <= clientHeight + 200) {
-      console.log("load more");
+    if (scrollHeight - scrollTop <= clientHeight + 200 && hasNextPage) {
+      fetchNextPage();
     }
   });
 
@@ -34,11 +56,8 @@ const PicsumGrid: React.FC<PicsumGridProps> = () => {
   return (
     <div className="h-80 overflow-y-scroll" ref={ref}>
       <div className="grid grid-cols-8 gap-4 md:grid-cols-9">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <ImageGridCard
-            key={`photo-item-${i}`}
-            url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiqSizWZqSm1U1zNtLzzDJa5eHMlM20CS4Rg&usqp=CAU"
-          />
+        {list.map((item) => (
+          <ImageGridCard key={`photo-item-${item.id}`} url={item.url} />
         ))}
       </div>
     </div>

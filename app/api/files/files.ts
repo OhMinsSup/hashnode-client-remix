@@ -1,12 +1,13 @@
-import ky from "ky-universal";
 import { apiClient } from "../client";
 import { useMutation } from "@tanstack/react-query";
 import { API_ENDPOINTS } from "~/constants/constant";
+import { isEmpty } from "~/utils/assertion";
 
 import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
 import type { UploadBody } from "../schema/body";
-import type { UploadRespSchema } from "../schema/resp";
+import type { FileListRespSchema, UploadRespSchema } from "../schema/resp";
+import type { PaginationQuery } from "../schema/query";
 
 export async function imageUploadApi(body: UploadBody, options?: Options) {
   const { headers, ...opts } = options ?? {};
@@ -43,4 +44,35 @@ export async function imageUploadApi(body: UploadBody, options?: Options) {
 
 export function useImageUploadMutation() {
   return useMutation(imageUploadApi);
+}
+
+export async function getFileListApi(
+  query?: PaginationQuery,
+  options?: Options
+) {
+  const { headers, ...opts } = options ?? {};
+  const search = new URLSearchParams();
+
+  if (query?.limit) {
+    search.set("limit", query.limit.toString());
+  }
+  if (query?.cursor) {
+    search.set("cursor", query.cursor.toString());
+  }
+
+  let url = API_ENDPOINTS.FILES.ROOT;
+  if (!isEmpty(search.toString())) {
+    url += `?${search.toString()}`;
+  }
+
+  const response = await apiClient.get(url, {
+    credentials: "include",
+    headers: {
+      "content-type": "application/json",
+      ...(headers ?? {}),
+    },
+    ...opts,
+  });
+  const result = await response.json<AppAPI<FileListRespSchema>>();
+  return { result };
 }

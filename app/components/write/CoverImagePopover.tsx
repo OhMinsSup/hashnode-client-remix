@@ -71,10 +71,10 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = () => {
               </div>
               <Tab.Panels>
                 <Tab.Panel>
-                  <UploadPanel />
+                  <UploadPanel onClose={close} />
                 </Tab.Panel>
                 <Tab.Panel>
-                  <React.Suspense fallback={<>....Loading</>}>
+                  <React.Suspense fallback={<>Loading....</>}>
                     <ImageGrid />
                   </React.Suspense>
                 </Tab.Panel>

@@ -4,9 +4,16 @@ import { useImageUploadMutation } from "~/api/files";
 import { useWriteStore } from "~/stores/useWriteStore";
 import { isEmpty } from "~/utils/assertion";
 
-interface UploadPancelProps {}
+interface UploadPancelProps {
+  onClose: (
+    focusableElement?:
+      | HTMLElement
+      | React.MutableRefObject<HTMLElement | null>
+      | undefined
+  ) => void;
+}
 
-const UploadPanel: React.FC<UploadPancelProps> = () => {
+const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
   const { setValue } = useFormContext();
 
   const { changeUploadStatus } = useWriteStore();
@@ -27,6 +34,24 @@ const UploadPanel: React.FC<UploadPancelProps> = () => {
           throw new Error("No file");
         }
 
+        const objectUrl = URL.createObjectURL(file);
+
+        // validation checj file sizes 1600 x 800 px
+        const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = (e) => reject(e);
+          img.src = objectUrl;
+        });
+
+        if (objectUrl) {
+          URL.revokeObjectURL(objectUrl);
+        }
+
+        if (image.width > 1600 || image.height > 800) {
+          throw new Error("Image size is too small");
+        }
+
         changeUploadStatus("uploading");
 
         const { result } = await mutateAsync({
@@ -40,6 +65,8 @@ const UploadPanel: React.FC<UploadPancelProps> = () => {
           shouldDirty: true,
         });
 
+        onClose();
+
         changeUploadStatus("success");
       } catch (error) {
         changeUploadStatus("error");
@@ -49,7 +76,7 @@ const UploadPanel: React.FC<UploadPancelProps> = () => {
         });
       }
     },
-    [changeUploadStatus, mutateAsync, setValue]
+    [changeUploadStatus, mutateAsync, onClose, setValue]
   );
 
   return (

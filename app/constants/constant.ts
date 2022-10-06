@@ -10,6 +10,7 @@ export const API_ENDPOINTS = {
     ROOT: "posts",
   },
   FILES: {
+    ROOT: "files",
     UPLOAD_URL: "files/upload_url",
     UPLOAD: "files/upload",
   },
@@ -17,6 +18,9 @@ export const API_ENDPOINTS = {
 
 export const QUERIES_KEY = {
   ME: ["getUserInfoApi"],
+  FILE: {
+    ROOT: ["getFileListApi"],
+  },
 } as const;
 
 export const PAGE_ENDPOINTS = {
