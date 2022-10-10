@@ -24,7 +24,6 @@ import {
   type DehydratedState,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { RecoilRoot } from "recoil";
 
 // api
 import { getUserInfoSsrApi } from "./api/user";
@@ -32,6 +31,7 @@ import { QUERIES_KEY } from "./constants/constant";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import customStylesheetUrl from "./styles/custom.css";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");
@@ -62,7 +62,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
+  return [
+    { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "stylesheet", href: customStylesheetUrl },
+  ];
 };
 
 export const meta: MetaFunction = () => ({
@@ -77,21 +80,19 @@ export default function App() {
   return (
     <QueryClientProvider client={globalClient}>
       <Hydrate state={loadData.dehydratedState}>
-        <RecoilRoot>
-          <html lang="kr">
-            <head>
-              <Meta />
-              <Links />
-            </head>
-            <body className="bg-white leading-6">
-              <Outlet />
-              <ScrollRestoration />
-              <Scripts />
-              <LiveReload />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </body>
-          </html>
-        </RecoilRoot>
+        <html lang="kr">
+          <head>
+            <Meta />
+            <Links />
+          </head>
+          <body className="bg-white leading-6">
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </body>
+        </html>
       </Hydrate>
     </QueryClientProvider>
   );

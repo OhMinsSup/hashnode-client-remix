@@ -15,6 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   let btnRef = useRef<HTMLButtonElement | null>(null);
+
   const { buttonProps } = useButton(
     {
       type: "button",
