@@ -1,7 +1,7 @@
 import React, { type HTMLAttributes, useRef } from "react";
 import { type AriaButtonProps, useButton } from "react-aria";
 
-interface ButtonProps
+export interface ButtonProps
   extends Omit<AriaButtonProps<"button">, "type" | "elementType"> {
   title?: HTMLAttributes<HTMLButtonElement>["title"];
   className?: HTMLAttributes<HTMLButtonElement>["className"];
