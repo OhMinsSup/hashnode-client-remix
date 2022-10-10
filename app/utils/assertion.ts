@@ -112,3 +112,6 @@ export const isInvalidDate = (date?: Date | null) => {
   if (!date) return true;
   return isNaN(date.getTime());
 };
+
+export const isThenable = (value: any): value is PromiseLike<any> =>
+  !!(value && !!value.then);
