@@ -65,9 +65,9 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
           shouldDirty: true,
         });
 
-        onClose();
-
         changeUploadStatus("success");
+
+        onClose();
       } catch (error) {
         changeUploadStatus("error");
         setValue("thumbnail", null, {

@@ -24,19 +24,8 @@ const PicsumGridCard: React.ForwardRefRenderFunction<
         aria-label="Set unsplash cover image"
         className="w-full overflow-hidden rounded-lg border outline-none"
       >
-        <div
-          data-radix-aspect-ratio-wrapper
-          style={{
-            position: "relative",
-            paddingBottom: "56.25%",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              inset: "0px",
-            }}
-          >
+        <div className="relative pb-[56.25%]">
+          <div className="absolute inset-0">
             <img
               src={props.url}
               alt="MacBook Pro, white ceramic mug,and black smartphone on table"

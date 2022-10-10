@@ -580,6 +580,13 @@ video {
   position: sticky;
 }
 
+.inset-0 {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
 .inset-y-0 {
   top: 0px;
   bottom: 0px;
@@ -908,6 +915,10 @@ video {
 
 .max-w-\[100vw\] {
   max-width: 100vw;
+}
+
+.max-w-\[725px\] {
+  max-width: 725px;
 }
 
 .flex-1 {
@@ -1388,6 +1399,10 @@ video {
   padding-right: 1rem;
 }
 
+.pb-\[56\.25\%\] {
+  padding-bottom: 56.25%;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1776,6 +1791,10 @@ video {
 
   .md\:w-48 {
     width: 12rem;
+  }
+
+  .md\:w-1\/2 {
+    width: 50%;
   }
 
   .md\:max-w-\[768px\] {

@@ -18,25 +18,12 @@ export async function imageUploadApi(body: UploadBody, options?: Options) {
   formData.append("mediaType", body.mediaType);
   formData.append("filename", body.file.name);
 
-  await apiClient.post(API_ENDPOINTS.FILES.UPLOAD_URL, {
+  const resp = await apiClient.post(API_ENDPOINTS.FILES.UPLOAD, {
     body: formData,
     credentials: "include",
     ...opts,
   });
 
-  const resp = await apiClient.post(API_ENDPOINTS.FILES.UPLOAD, {
-    json: {
-      filename: body.file.name,
-      uploadType: body.uploadType,
-      mediaType: body.mediaType,
-    },
-    credentials: "include",
-    headers: {
-      "content-type": "application/json",
-      ...(headers ?? {}),
-    },
-    ...opts,
-  });
   const result = await resp.json<AppAPI<UploadRespSchema>>();
 
   return { result };

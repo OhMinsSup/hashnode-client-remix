@@ -25,18 +25,13 @@ const CoverImagePopover: React.FC<CoverImagePopoverProps> = () => {
         <span>Add Cover</span>
       </Popover.Button>
 
-      <Popover.Panel
-        className=" absolute left-0 top-full z-50 w-full overflow-auto rounded-lg border bg-white p-4 shadow-lg"
-        style={{ maxWidth: "725px" }}
-      >
+      <Popover.Panel className=" absolute left-0 top-full z-50 w-full max-w-[725px] overflow-auto rounded-lg border bg-white p-4 shadow-lg md:w-1/2">
         {({ close }) => (
           <>
             <button
               type="button"
               className="absolute top-0 right-0 m-2 inline-flex flex-row items-center justify-center rounded-full border border-transparent text-base font-medium text-gray-700 outline-none"
-              onClick={() => {
-                close();
-              }}
+              onClick={() => close()}
             >
               <XIcon className="h-5 w-5 fill-current" />
             </button>
