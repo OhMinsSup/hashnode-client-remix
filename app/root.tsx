@@ -32,6 +32,9 @@ import { QUERIES_KEY } from "./constants/constant";
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import customStylesheetUrl from "./styles/custom.css";
+import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
+// import lazysizesParentFit from "lazysizes/plugins/parent-fit/ls.parent-fit";
+// import lazysizesBlurUp from "lazysizes/plugins/blur-up/ls.blur-up";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");
@@ -65,6 +68,7 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     { rel: "stylesheet", href: customStylesheetUrl },
+    { rel: "stylesheet", href: rcDrawerStylesheetUrl },
   ];
 };
 

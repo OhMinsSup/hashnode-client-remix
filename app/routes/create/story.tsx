@@ -1,4 +1,6 @@
 import React, { useCallback } from "react";
+
+// components
 import { ClientOnly } from "remix-utils";
 import {
   CoverImage,
@@ -9,23 +11,27 @@ import {
 } from "~/components/write";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
+
+// hooks
 import { useWriteStore } from "~/stores/useWriteStore";
+import { useFetcher } from "@remix-run/react";
 
 // validation
 import { schema } from "~/libs/validation/schema";
 import { ValidationError } from "yup";
 
-import editor from "~/styles/editor.css";
-import editorToolbar from "~/styles/editor-toolbar.css";
-
-import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
-
-import { useFetcher } from "@remix-run/react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { TypographyIcon } from "~/components/ui/Icon";
 import { ActionButton } from "~/components/write/_components";
 
+import Drawer from "rc-drawer";
+
 import type { FileSchema } from "~/api/schema/file";
+import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
+
+// styles
+import editor from "~/styles/editor.css";
+import editorToolbar from "~/styles/editor-toolbar.css";
 
 interface FormFieldValues {
   title: string;
@@ -79,7 +85,7 @@ export default function CreateStory() {
 
   const fetcher = useFetcher();
 
-  const { openSubTitle, visible } = useWriteStore();
+  const { openSubTitle, visible, closeSetting } = useWriteStore();
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
     fetcher.submit(input as Record<string, any>, {
@@ -130,6 +136,16 @@ export default function CreateStory() {
             </ClientOnly>
           </div>
         </form>
+
+        <Drawer
+          open={visible.setting}
+          placement="right"
+          width={"50%"}
+          destroyOnClose
+          onClose={closeSetting}
+        >
+          content
+        </Drawer>
       </WriteTemplate>
     </FormProvider>
   );
