@@ -8,6 +8,7 @@ import {
   SubTitle,
   Title,
   WriteTemplate,
+  PublishDrawer,
 } from "~/components/write";
 import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
@@ -15,7 +16,6 @@ import { WriterHeader } from "~/components/ui/Header";
 // hooks
 import { useWriteStore } from "~/stores/useWriteStore";
 import { useFetcher } from "@remix-run/react";
-import { useMedia } from "react-use";
 
 // validation
 import { schema } from "~/libs/validation/schema";
@@ -23,17 +23,13 @@ import { ValidationError } from "yup";
 
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { TypographyIcon } from "~/components/ui/Icon";
-import { ActionButton } from "~/components/write/_components";
 import { Button } from "~/components/ui/Shared";
-import Drawer from "rc-drawer";
 
 import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
 // styles
 import editor from "~/styles/editor.css";
-import editorToolbar from "~/styles/editor-toolbar.css";
-import X from "~/components/ui/Icon/X";
 
 interface FormFieldValues {
   title: string;
@@ -42,13 +38,7 @@ interface FormFieldValues {
 }
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: editor },
-    {
-      rel: "stylesheet",
-      href: editorToolbar,
-    },
-  ];
+  return [{ rel: "stylesheet", href: editor }];
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -89,9 +79,7 @@ export default function CreateStory() {
 
   const wrpperRef = useRef<HTMLDivElement>(null);
 
-  const is768px = useMedia("(min-width: 768px)");
-
-  const { openSubTitle, visible, closeSetting } = useWriteStore();
+  const { openSubTitle, visible } = useWriteStore();
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
     fetcher.submit(input as Record<string, any>, {
@@ -120,14 +108,15 @@ export default function CreateStory() {
             {/* Step1 */}
             <div className="relative mb-10 flex flex-row items-center">
               {!watchThumbnail && <CoverImagePopover />}
-              <ActionButton
+              <Button
                 className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none"
-                icon={<TypographyIcon className="mr-2 h-5 w-5 fill-current" />}
-                text="Add Subtitle"
                 aria-label="add post sub title"
                 aria-haspopup={visible.subTitle ? "true" : "false"}
                 onPress={openSubTitle}
-              />
+              >
+                <TypographyIcon className="mr-2 h-5 w-5 fill-current" />
+                <span>Add Subtitle</span>
+              </Button>
             </div>
             {/* Cover Image */}
             {watchThumbnail && (
@@ -148,31 +137,7 @@ export default function CreateStory() {
             </div>
           </form>
 
-          <Drawer
-            open={visible.setting}
-            placement="right"
-            width={is768px ? "40%" : "100%"}
-            destroyOnClose
-            onClose={closeSetting}
-          >
-            <div className="px-4 pt-4 pb-10 md:px-6">
-              <div className="relative">
-                <div className="flex flex-row items-center justify-between border-b pb-4">
-                  <Button onPress={() => {}}>
-                    <X />
-                    <span className="sr-only">Close</span>
-                  </Button>
-                  <Button
-                    onPress={() => {}}
-                    className="ml-2 flex flex-row items-center justify-center rounded-full border border-blue-500 bg-blue-500 py-1 px-3 text-center text-lg font-semibold text-white outline-none hover:shadow-md"
-                  >
-                    Publish
-                  </Button>
-                </div>
-              </div>
-              content
-            </div>
-          </Drawer>
+          <PublishDrawer />
         </WriteTemplate>
       </FormProvider>
     </div>

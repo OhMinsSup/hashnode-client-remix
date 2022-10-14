@@ -14,12 +14,23 @@ export const API_ENDPOINTS = {
     UPLOAD_URL: "files/upload_url",
     UPLOAD: "files/upload",
   },
+  TAGS: {
+    ROOT: "tags",
+  },
 } as const;
 
 export const QUERIES_KEY = {
   ME: ["getUserInfoApi"],
   FILE: {
     ROOT: ["getFileListApi"],
+  },
+  TAGS: {
+    ROOT: (keyword?: string) => {
+      if (keyword) {
+        return ["getTagListApi", keyword];
+      }
+      return ["getTagListApi"];
+    },
   },
 } as const;
 

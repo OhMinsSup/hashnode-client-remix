@@ -17,20 +17,18 @@ interface PicsumGridProps {}
 const PicsumGrid: React.FC<PicsumGridProps> = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useInfiniteQuery(
-      QUERIES_KEY.FILE.ROOT,
-      async ({ pageParam = 0 }) => {
-        const { result } = await getFileListApi({
-          cursor: pageParam,
-        });
-        return result.result;
-      },
-      {
-        getNextPageParam: (lastPage) =>
-          lastPage.pageInfo.endCursor ?? undefined,
-      }
-    );
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    QUERIES_KEY.FILE.ROOT,
+    async ({ pageParam = 0 }) => {
+      const { result } = await getFileListApi({
+        cursor: pageParam,
+      });
+      return result.result;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.pageInfo.endCursor ?? undefined,
+    }
+  );
 
   const list = useMemo(() => {
     return data?.pages?.flatMap?.((page) => page.list) ?? [];

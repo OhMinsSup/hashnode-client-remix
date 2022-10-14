@@ -1,6 +1,7 @@
 import type { Nullable } from "./api";
 import type { FileSchema } from "./file";
 import type { UserSchema } from "./user";
+import type { TagSchema } from "./tag";
 
 export interface ListRespSchema<Item = Record<string, any>> {
   list: Item[];
@@ -27,3 +28,6 @@ export interface UploadRespSchema
 
 export interface FileListRespSchema
   extends ListRespSchema<Omit<FileSchema, "deletedAt">> {}
+
+export interface TagListRespSchema
+  extends ListRespSchema<Omit<TagSchema, "deletedAt">> {}
