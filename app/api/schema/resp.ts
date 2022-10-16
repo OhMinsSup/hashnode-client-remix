@@ -23,6 +23,10 @@ export interface PostRespSchema {
   dataId: number;
 }
 
+export interface TagWithPostCountSchema extends Omit<TagSchema, "deletedAt"> {
+  postsCount: number;
+}
+
 export interface UploadRespSchema
   extends Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> {}
 
@@ -30,4 +34,4 @@ export interface FileListRespSchema
   extends ListRespSchema<Omit<FileSchema, "deletedAt">> {}
 
 export interface TagListRespSchema
-  extends ListRespSchema<Omit<TagSchema, "deletedAt">> {}
+  extends ListRespSchema<TagWithPostCountSchema> {}

@@ -1,32 +1,35 @@
 import React from "react";
-import { TrendingIcon } from "../../Icon";
 import TagItem from "./TagItem";
 
-interface TagSchema {
-  id: number;
-  name: string;
-  slug: string;
-  count: number;
-}
+import { useLoaderData } from "@remix-run/react";
+import { useTagQuery } from "~/api/tags/tags";
 
-interface TrendingTagsProps {
-  trendingTags: TagSchema[];
-}
+interface TrendingTagsProps {}
 
-const TrendingTags: React.FC<TrendingTagsProps> = ({ trendingTags }) => {
+const TrendingTags: React.FC<TrendingTagsProps> = () => {
+  const { trendingTag } = useLoaderData<Record<string, any>>();
+
+  const { list } = useTagQuery(
+    {
+      limit: 5,
+      type: "popular",
+    },
+    {
+      initialData: trendingTag,
+    }
+  );
+
   return (
-    <div className="px-4">
-      <hr className="my-5 border-gray-200"></hr>
-      <h5 className="mb-5 flex flex-row items-center text-gray-700">
-        <span>TrendingTags</span>
-        <TrendingIcon className="ml-2 h-5 w-5 fill-current opacity-50" />
-      </h5>
-      <div className="flex flex-col items-start">
-        {/* tag list */}
-        {trendingTags.map((tag) => (
-          <TagItem key={tag.id} {...tag} />
-        ))}
-      </div>
+    <div className="flex flex-col items-start">
+      {/* tag list */}
+      {list.map((tag) => (
+        <TagItem
+          key={tag.id}
+          id={tag.id}
+          name={tag.name}
+          count={tag.postsCount}
+        />
+      ))}
     </div>
   );
 };

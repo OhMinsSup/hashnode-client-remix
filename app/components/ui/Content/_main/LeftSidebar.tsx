@@ -1,16 +1,20 @@
-import { useLoaderData } from "@remix-run/react";
 import React, { useRef, useState } from "react";
-import { useMedia } from "react-use";
-import { getTargetElement } from "~/libs/browser-utils";
-import { useEventListener } from "~/libs/hooks/useEventListener";
-import { optimizeAnimation } from "~/utils/util";
+
+// components
 import { MenuLinks, TrendingTags } from "../_components";
+import { TrendingIcon } from "~/components/ui/Icon";
+
+// hooks
+import { useMedia } from "react-use";
+import { useEventListener } from "~/libs/hooks/useEventListener";
+
+// utils
+import { getTargetElement } from "~/libs/browser-utils";
+import { optimizeAnimation } from "~/utils/util";
 
 const GAP_SIZE = 32;
 
 const LeftSidebar = () => {
-  const { trendingTags } = useLoaderData<{ trendingTags: any[] }>();
-
   const isWide = useMedia("(min-width: 1260px)", false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,14 +78,14 @@ const LeftSidebar = () => {
         <div className="my-5 flex flex-col overflow-y-auto overflow-x-hidden rounded-lg border bg-white py-2 text-gray-900">
           <div className="mb-10 flex-1">
             <MenuLinks />
-            <TrendingTags
-              trendingTags={trendingTags.map((tag) => ({
-                id: tag.node.id,
-                count: tag.count,
-                name: tag.node.name,
-                slug: tag.node.slug,
-              }))}
-            />
+            <div className="px-4">
+              <hr className="my-5 border-gray-200"></hr>
+              <h5 className="mb-5 flex flex-row items-center text-gray-700">
+                <span>TrendingTags</span>
+                <TrendingIcon className="ml-2 h-5 w-5 fill-current opacity-50" />
+              </h5>
+              <TrendingTags />
+            </div>
             <div className="mb-5 flex flex-col items-start px-4 text-center text-sm text-gray-600">
               <hr className="my-5 h-[1px] w-[25%]" />
               <p>© {new Date().getFullYear()} Solid</p>

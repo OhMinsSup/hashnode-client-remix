@@ -4,11 +4,10 @@ import { Link } from "@remix-run/react";
 interface TagItemProps {
   id: number;
   name: string;
-  slug: string;
   count: number;
 }
 
-const TagItem: React.FC<TagItemProps> = ({ id, name, slug, count }) => {
+const TagItem: React.FC<TagItemProps> = ({ id, name, count }) => {
   return (
     <Link
       to="/"

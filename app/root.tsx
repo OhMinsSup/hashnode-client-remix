@@ -48,18 +48,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (cookie) {
       const { access_token } = cookies.parse(cookie);
       if (access_token) {
-        await client.fetchQuery(
-          QUERIES_KEY.ME,
-          () => getUserInfoSsrApi(access_token),
-          {
-            staleTime: 10000,
-          }
+        await client.fetchQuery(QUERIES_KEY.ME, () =>
+          getUserInfoSsrApi(access_token)
         );
       }
     }
 
     return json(resp);
   } catch (error) {
+    console.log("error", error);
     return json(resp);
   }
 };

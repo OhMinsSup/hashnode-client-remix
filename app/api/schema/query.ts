@@ -5,4 +5,5 @@ export interface PaginationQuery {
 
 export interface TagListQuery extends PaginationQuery {
   name?: string;
+  type?: "popular" | "recent";
 }

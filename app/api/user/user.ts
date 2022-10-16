@@ -12,6 +12,7 @@ import type { AppAPI } from "../schema/api";
 export async function getUserInfoApi(options?: Options) {
   const { headers, ...opts } = options ?? {};
   const response = await apiClient.get(API_ENDPOINTS.USERS.ME, {
+    credentials: "include",
     headers: {
       "content-type": "application/json",
       ...(headers ?? {}),

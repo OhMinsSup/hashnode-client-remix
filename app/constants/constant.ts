@@ -25,11 +25,18 @@ export const QUERIES_KEY = {
     ROOT: ["getFileListApi"],
   },
   TAGS: {
-    ROOT: (keyword?: string) => {
+    ROOT: (keyword?: string, type?: string) => {
+      let keys = ["getTagListApi"];
+
       if (keyword) {
-        return ["getTagListApi", keyword];
+        keys.push(keyword);
       }
-      return ["getTagListApi"];
+
+      if (type) {
+        keys.push(type);
+      }
+
+      return keys;
     },
   },
 } as const;
