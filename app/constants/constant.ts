@@ -1,3 +1,5 @@
+import type { PostListQuery } from "~/api/schema/query";
+
 export const API_ENDPOINTS = {
   AUTH: {
     SIGNUP: "auth/signup",
@@ -8,6 +10,7 @@ export const API_ENDPOINTS = {
   },
   POSTS: {
     ROOT: "posts",
+    TRENDING: "posts/trending",
   },
   FILES: {
     ROOT: "files",
@@ -24,6 +27,16 @@ export const QUERIES_KEY = {
   FILE: {
     ROOT: ["getFileListApi"],
   },
+  POSTS: {
+    ROOT: (query?: PostListQuery) => {
+      let keys: any[] = ["getPostsListApi"];
+      if (query) {
+        keys = [...keys, query];
+      }
+      return keys;
+    },
+    TRENDING: (type: string) => ["getSimpleTrendingPostsApi", type],
+  },
   TAGS: {
     ROOT: (keyword?: string, type?: string) => {
       let keys = ["getTagListApi"];
@@ -39,7 +52,7 @@ export const QUERIES_KEY = {
       return keys;
     },
   },
-} as const;
+};
 
 export const PAGE_ENDPOINTS = {
   ROOT: "/",

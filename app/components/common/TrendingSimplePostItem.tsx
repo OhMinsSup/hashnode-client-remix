@@ -2,7 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CommentIcon, LikeIcon } from "../ui/Icon";
 
-const TrendingSimplePostItem = () => {
+import type { SimpleTrendingPostItemSchema } from "~/api/schema/resp";
+
+interface TrendingSimplePostItemProps extends SimpleTrendingPostItemSchema {}
+
+const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
+  title,
+  subTitle,
+  thumbnail,
+}) => {
   return (
     <div className="flex flex-row items-start py-2">
       {/* Thubmnail */}
@@ -15,7 +23,7 @@ const TrendingSimplePostItem = () => {
             <div className="relative h-full w-full rounded-full bg-gray-100">
               <img
                 className="h-full w-full object-cover"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiqSizWZqSm1U1zNtLzzDJa5eHMlM20CS4Rg&usqp=CAU"
+                src={thumbnail ?? undefined}
                 alt=""
               />
             </div>
@@ -29,10 +37,10 @@ const TrendingSimplePostItem = () => {
           className="mb-1 font-bold text-gray-900"
           style={{ lineHeight: "1.375" }}
         >
-          <Link to="/">title</Link>
+          <Link to="/">{title}</Link>
         </h3>
         <p className="mb-2 text-gray-500">
-          <Link to="/">Eleftheria Batsou</Link>
+          <Link to="/">{subTitle}</Link>
         </p>
         <div className="flex flex-row flex-wrap items-center">
           {/* Like */}

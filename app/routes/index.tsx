@@ -2,20 +2,20 @@ import React from "react";
 import { type LoaderFunction, json } from "@remix-run/cloudflare";
 import classnames from "classnames";
 
-// components
-import { Tab } from "@headlessui/react";
-
 // api
 import { getTagListApi } from "~/api/tags";
+import { getSimpleTrendingPostsApi } from "~/api/posts/posts";
+import { getPersonalizedPosts } from "~/libs/mock/posts";
+
+// components
+import { Tab } from "@headlessui/react";
 import { RootTemplate } from "~/components/posts";
 import { FeaturedList, PersonalizedList, RecentList } from "~/components/posts";
-
 import {
   FeaturedOutline,
   PersonalizedIcon,
   RecentIcon,
 } from "~/components/ui/Icon";
-import { getPersonalizedPosts } from "~/libs/mock/posts";
 
 // constants
 import { QUERIES_KEY } from "~/constants/constant";
@@ -30,13 +30,19 @@ export const loader: LoaderFunction = async ({ request }) => {
     QUERIES_KEY.TAGS.ROOT(undefined, "popular"),
     () => getTagListApi({ type: "popular", limit: 6 })
   );
+  const { result: simpleTrending } = await client.fetchQuery(
+    QUERIES_KEY.POSTS.TRENDING("1W"),
+    () =>
+      getSimpleTrendingPostsApi({
+        type: "1W",
+      })
+  );
 
   const { personalizedPosts } = await getPersonalizedPosts();
 
-  console.log("personalizedPosts");
-
   return json({
     trendingTag,
+    simpleTrending,
     personalizedPosts,
   });
 };
