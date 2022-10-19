@@ -2,27 +2,19 @@ import React from "react";
 import TagItem from "./TagItem";
 
 import { useLoaderData } from "@remix-run/react";
-import { useTagQuery } from "~/api/tags/tags";
+
+// types
+import type { RootLoaderData } from "~/api/schema/loader";
 
 interface TrendingTagsProps {}
 
 const TrendingTags: React.FC<TrendingTagsProps> = () => {
-  const { trendingTag } = useLoaderData<Record<string, any>>();
-
-  const { list } = useTagQuery(
-    {
-      limit: 5,
-      type: "popular",
-    },
-    {
-      initialData: trendingTag,
-    }
-  );
+  const { trendingTag } = useLoaderData<RootLoaderData>();
 
   return (
     <div className="flex flex-col items-start">
       {/* tag list */}
-      {list.map((tag) => (
+      {trendingTag?.result?.list.map((tag) => (
         <TagItem
           key={tag.id}
           id={tag.id}

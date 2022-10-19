@@ -16,5 +16,5 @@ export interface PostListQuery extends PaginationQuery {
 }
 
 export interface SimpleTrendingPostsQuery {
-  type: "1W" | "1M" | "3M" | "6M";
+  dataType: "1W" | "1M" | "3M" | "6M";
 }

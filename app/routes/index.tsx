@@ -16,27 +16,21 @@ import {
   PersonalizedIcon,
   RecentIcon,
 } from "~/components/ui/Icon";
-
-// constants
-import { QUERIES_KEY } from "~/constants/constant";
-
-// hooks
-import { QueryClient } from "@tanstack/react-query";
+import { parseUrlParams } from "~/utils/util";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const client = new QueryClient();
+  const { dateType } = parseUrlParams<{
+    dateType?: "1W" | "1M" | "3M" | "6M";
+  }>(request.url);
 
-  const { result: trendingTag } = await client.fetchQuery(
-    QUERIES_KEY.TAGS.ROOT(undefined, "popular"),
-    () => getTagListApi({ type: "popular", limit: 6 })
-  );
-  const { result: simpleTrending } = await client.fetchQuery(
-    QUERIES_KEY.POSTS.TRENDING("1W"),
-    () =>
-      getSimpleTrendingPostsApi({
-        type: "1W",
-      })
-  );
+  const { result: trendingTag } = await getTagListApi({
+    type: "popular",
+    limit: 6,
+  });
+
+  const { result: simpleTrending } = await getSimpleTrendingPostsApi({
+    dataType: dateType || "1W",
+  });
 
   const { personalizedPosts } = await getPersonalizedPosts();
 

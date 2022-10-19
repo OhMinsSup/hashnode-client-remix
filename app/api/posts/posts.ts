@@ -135,7 +135,7 @@ export async function getSimpleTrendingPostsApi(
   options?: Options
 ) {
   const { headers, ...opts } = options ?? {};
-  const url = `${API_ENDPOINTS.POSTS.TRENDING}?type=${query.type}`;
+  const url = `${API_ENDPOINTS.POSTS.TRENDING}?dataType=${query.dataType}`;
   const response = await apiClient.get(url, {
     credentials: "include",
     headers: {
@@ -168,10 +168,10 @@ export function useSimpleTrendingPostsQuery(
   >
 ) {
   const resp = useQuery(
-    QUERIES_KEY.POSTS.TRENDING(query.type),
+    QUERIES_KEY.POSTS.TRENDING(query.dataType),
     (_key) =>
       getSimpleTrendingPostsApi({
-        type: _key.queryKey[1] as SimpleTrendingPostsQuery["type"],
+        dataType: _key.queryKey[1] as SimpleTrendingPostsQuery["dataType"],
       }),
     options
   );
