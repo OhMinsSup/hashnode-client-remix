@@ -63,6 +63,9 @@ export const PAGE_ENDPOINTS = {
   CREATE: {
     STORY: "/create/story",
   },
+  ITEMS: {
+    ID: (id: number | string) => `/items/${id}`,
+  },
 } as const;
 
 export const STATUS_CODE = {

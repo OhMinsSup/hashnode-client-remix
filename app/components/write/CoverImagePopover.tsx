@@ -14,6 +14,7 @@ interface CoverImagePopoverProps {}
 
 const CoverImagePopover: React.FC<CoverImagePopoverProps> = () => {
   const { upload } = useWriteStore();
+
   return (
     <Popover>
       <Popover.Button className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none">

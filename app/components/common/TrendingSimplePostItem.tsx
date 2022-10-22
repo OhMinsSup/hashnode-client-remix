@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { CommentIcon, LikeIcon } from "../ui/Icon";
 
 import type { SimpleTrendingPostItemSchema } from "~/api/schema/resp";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface TrendingSimplePostItemProps extends SimpleTrendingPostItemSchema {}
 
 const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
+  id,
   title,
   subTitle,
   thumbnail,
@@ -16,7 +18,7 @@ const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
       {/* Thubmnail */}
       <div className="mr-3">
         <Link
-          to="/"
+          to={PAGE_ENDPOINTS.ITEMS.ID(id)}
           className="block h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border"
         >
           <div className="h-full w-full">
@@ -37,10 +39,10 @@ const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
           className="mb-1 font-bold text-gray-900"
           style={{ lineHeight: "1.375" }}
         >
-          <Link to="/">{title}</Link>
+          <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)}>{title}</Link>
         </h3>
         <p className="mb-2 text-gray-500">
-          <Link to="/">{subTitle}</Link>
+          <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)}>{subTitle}</Link>
         </p>
         <div className="flex flex-row flex-wrap items-center">
           {/* Like */}

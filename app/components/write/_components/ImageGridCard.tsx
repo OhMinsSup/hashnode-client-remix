@@ -1,19 +1,31 @@
-import React, { useImperativeHandle, useRef } from "react";
+import React, { useCallback, useImperativeHandle, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 
-interface PicsumGridCardProps {
-  url: string;
-}
+// types
+import type { FileSchema } from "~/api/schema/file";
+
+interface PicsumGridCardProps extends Omit<FileSchema, "deletedAt"> {}
 
 const PicsumGridCard: React.ForwardRefRenderFunction<
   HTMLDivElement,
   PicsumGridCardProps
 > = (props, ref) => {
+  const { children, ...otherProps } = props;
   const divRef = useRef<HTMLDivElement | null>(null);
+
+  const { setValue } = useFormContext();
 
   useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
     ref,
     () => divRef.current
   );
+
+  const onClickSelect = useCallback(() => {
+    setValue("thumbnail", otherProps, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [otherProps, setValue]);
 
   return (
     <div
@@ -21,6 +33,7 @@ const PicsumGridCard: React.ForwardRefRenderFunction<
       ref={divRef}
     >
       <button
+        onClick={onClickSelect}
         aria-label="Set unsplash cover image"
         className="w-full overflow-hidden rounded-lg border outline-none"
       >
