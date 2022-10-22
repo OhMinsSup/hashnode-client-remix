@@ -9,7 +9,7 @@ import Drawer from "rc-drawer";
 // components
 import { XIcon } from "~/components/ui/Icon";
 import { Button } from "~/components/ui/Shared";
-import { TagCombobox } from "./_components";
+import { Description, TagCombobox } from "./_components";
 
 const PublishDrawer = () => {
   const { visible, closeSetting } = useWriteStore();
@@ -43,6 +43,7 @@ const PublishDrawer = () => {
           </div>
         </div>
         <TagCombobox />
+        <Description />
       </div>
     </Drawer>
   );

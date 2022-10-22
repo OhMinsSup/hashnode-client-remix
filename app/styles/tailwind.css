@@ -883,6 +883,10 @@ video {
   height: 1.5rem;
 }
 
+.h-24 {
+  height: 6rem;
+}
+
 .max-h-60 {
   max-height: 15rem;
 }
@@ -1630,6 +1634,16 @@ video {
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
+}
+
+.placeholder-gray-400::-moz-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-placeholder-opacity));
+}
+
+.placeholder-gray-400::placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-placeholder-opacity));
 }
 
 .opacity-70 {
