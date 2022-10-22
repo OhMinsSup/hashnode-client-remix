@@ -31,10 +31,16 @@ import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 // styles
 import editor from "~/styles/editor.css";
 
+interface FormFiledTagValue {
+  id: number | string;
+  name: string;
+}
+
 interface FormFieldValues {
   title: string;
   subTitle?: string;
   thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
+  tags?: FormFiledTagValue[];
 }
 
 export const links: LinksFunction = () => {

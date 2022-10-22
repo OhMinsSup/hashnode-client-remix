@@ -82,3 +82,7 @@ export function applyAuth(request: Request) {
 
   return true;
 }
+
+export const generateUniqueId = () => {
+  return Math.floor(Math.random() * 1000000000000000);
+};
