@@ -23,21 +23,21 @@ export const loader: LoaderFunction = async ({ request }) => {
     dateType?: "1W" | "1M" | "3M" | "6M";
   }>(request.url);
 
-  const { result: trendingTag } = await getTagListApi({
-    type: "popular",
-    limit: 6,
-  });
-
-  const { result: simpleTrending } = await getSimpleTrendingPostsApi({
-    dataType: dateType || "1W",
-  });
-
-  const { personalizedPosts } = await getPersonalizedPosts();
+  const [resp_1, resp_2, resp_3] = await Promise.all([
+    getTagListApi({
+      type: "popular",
+      limit: 6,
+    }),
+    getSimpleTrendingPostsApi({
+      dataType: dateType || "1W",
+    }),
+    getPersonalizedPosts(),
+  ]);
 
   return json({
-    trendingTag,
-    simpleTrending,
-    personalizedPosts,
+    trendingTag: resp_1.result,
+    simpleTrending: resp_2.result,
+    personalizedPosts: resp_3.personalizedPosts,
   });
 };
 

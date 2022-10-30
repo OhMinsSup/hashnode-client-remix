@@ -1,22 +1,25 @@
 import React from "react";
 import TrendingSimplePostItem from "./TrendingSimplePostItem";
+import { isNull, isUndefined } from "~/utils/assertion";
 
-import type { RootLoaderData } from "~/api/schema/loader";
+import type { SimpleTrendingPostItemSchema } from "~/api/schema/resp";
 
 interface TrendingSimplePostItemProps {
   type: "1W" | "1M" | "3M" | "6M";
-  simpleTrending?: RootLoaderData["simpleTrending"];
+  simpleTrending?: SimpleTrendingPostItemSchema[];
 }
 
 const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({
   type,
   simpleTrending,
 }) => {
+  if (isNull(simpleTrending) || isUndefined(simpleTrending)) return null;
+
   return (
     <>
-      {simpleTrending?.result?.list?.map((item) => (
+      {simpleTrending?.map((item) => (
         <TrendingSimplePostItem
-          key={`trending-simple-post-item-${item.id}`}
+          key={`trending-simple-post-${type}-item-${item.id}`}
           {...item}
         />
       ))}

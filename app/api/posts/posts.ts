@@ -169,10 +169,11 @@ export function useSimpleTrendingPostsQuery(
 ) {
   const resp = useQuery(
     QUERIES_KEY.POSTS.TRENDING(query.dataType),
-    (_key) =>
-      getSimpleTrendingPostsApi({
+    (_key) => {
+      return getSimpleTrendingPostsApi({
         dataType: _key.queryKey[1] as SimpleTrendingPostsQuery["dataType"],
-      }),
+      });
+    },
     options
   );
   return {

@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 
 // hooks
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useSimpleTrendingPostsQuery } from "~/api/posts/posts";
+import { useLoaderData } from "@remix-run/react";
 
 // components
 import RightContentBox from "./RightContentBox";
-
 import { Tab } from "@headlessui/react";
 import { TrendingSimplePost } from "~/components/common";
 
@@ -15,7 +15,7 @@ import type { RootLoaderData } from "~/api/schema/loader";
 
 interface TrendingPostBoxProps {}
 
-const MAP: Record<number, string> = {
+const MAP: Record<number, "1W" | "1M" | "3M" | "6M"> = {
   0: "1W",
   1: "1M",
   2: "3M",
@@ -24,18 +24,25 @@ const MAP: Record<number, string> = {
 
 const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { simpleTrending } = useLoaderData<RootLoaderData>();
 
-  const fetcher = useFetcher();
+  const loader = useLoaderData<RootLoaderData>();
 
-  const onChangeTab = useCallback(
-    async (index: number) => {
-      setSelectedIndex(index);
-      const dateType = MAP[index];
-      fetcher.load(`?index&dateType=${dateType}`);
+  const { result } = useSimpleTrendingPostsQuery(
+    {
+      dataType: MAP[selectedIndex],
     },
-    [fetcher]
+    {
+      // @ts-ignore
+      initialData: loader.simpleTrending,
+      keepPreviousData: true,
+    }
   );
+
+  const simpleTrending = useMemo(() => result?.list ?? [], [result]);
+
+  const onChangeTab = useCallback((index: number) => {
+    setSelectedIndex(index);
+  }, []);
 
   return (
     <RightContentBox title="Trending" to="/">

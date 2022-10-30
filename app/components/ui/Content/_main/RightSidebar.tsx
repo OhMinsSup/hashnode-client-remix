@@ -4,7 +4,6 @@ import { TrendingPostBox, OtherBox } from "../_components";
 
 const RightSidebar = () => {
   const isLarge = useMedia("(min-width: 1024px)", false);
-  console.log("isLarge", isLarge);
 
   if (!isLarge) return null;
 
