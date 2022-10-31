@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
   },
   POSTS: {
     ROOT: "posts",
-    TRENDING: "posts/trending",
+    TRENDING: "posts/trending/simple",
   },
   FILES: {
     ROOT: "files",
