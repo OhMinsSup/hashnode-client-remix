@@ -40,13 +40,24 @@ export const schema = {
     yup.object().shape({
       title: yup.string().max(1000).required(),
       subTitle: yup.string().max(100).optional().nullable(true).notRequired(),
+      description: yup.string().min(146).max(150).required(),
       content: yup.string().required(),
-      cover: yup
+      thumbnail: yup
         .object()
         .shape({
           idx: yup.number().optional().nullable(true).notRequired(),
           url: yup.string().url().required(),
         })
         .optional(),
+      tags: yup.array().of(yup.string()).max(5).nullable(true).optional(),
+      disabledComment: yup.boolean().optional(),
+      isPublic: yup.boolean().optional(),
+      hasPublishedTime: yup.boolean().optional(),
+      publishingDate: yup
+        .date()
+        .min(new Date())
+        .optional()
+        .nullable(true)
+        .notRequired(),
     }),
 };

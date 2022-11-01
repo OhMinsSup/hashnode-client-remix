@@ -8,3 +8,18 @@
   -webkit-filter: blur(0);
   filter: blur(0);
 }
+
+.toastui-editor-defaultUI {
+  border: none !important;
+}
+
+.toastui-editor-toolbar {
+  border: 1px solid #dadde6;
+  border-bottom: none;
+  border-radius: 3px;
+}
+
+.toastui-editor-defaultUI .placeholder {
+  font-size: 24px;
+  font-weight: 800;
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 
 // components
 import { ClientOnly } from "remix-utils";
@@ -10,7 +10,6 @@ import {
   WriteTemplate,
   PublishDrawer,
 } from "~/components/write";
-import { Editor } from "~/components/ui/Editor";
 import { WriterHeader } from "~/components/ui/Header";
 
 // hooks
@@ -28,21 +27,31 @@ import { Button } from "~/components/ui/Shared";
 import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
+import editorStyles from "@toast-ui/editor/dist/toastui-editor.css";
+import { getTargetElement } from "~/libs/browser-utils";
+
+const ToastEditor = React.lazy(
+  // @ts-ignore
+  () => import("~/components/ui/Editor/ToastEditor")
+);
+
 // styles
-import editor from "~/styles/editor.css";
 
 export interface FormFieldValues {
   title: string;
   subTitle?: string;
   description: string;
+  content: string;
   thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
   tags?: string[];
   disabledComment: boolean;
   isPublic: boolean;
+  hasPublishedTime: boolean;
+  publishingDate?: Date;
 }
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: editor }];
+  return [{ rel: "stylesheet", href: editorStyles }];
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -51,6 +60,14 @@ export const action: ActionFunction = async ({ request }) => {
   const form = {
     title: formData.get("title"),
     subTitle: formData.get("subTitle"),
+    description: formData.get("description"),
+    content: formData.get("content"),
+    thumbnail: formData.get("thumbnail"),
+    tags: formData.get("tags"),
+    disabledComment: formData.get("disabledComment"),
+    isPublic: formData.get("isPublic"),
+    hasPublishedTime: formData.get("hasPublishedTime"),
+    publishingDate: formData.get("publishingDate"),
   };
 
   console.log(form);
@@ -77,16 +94,35 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function CreateStory() {
-  const methods = useForm<FormFieldValues>();
+  const intialValues: FormFieldValues = useMemo(() => {
+    return {
+      title: "",
+      subTitle: undefined,
+      description: "",
+      content: "",
+      thumbnail: null,
+      tags: undefined,
+      disabledComment: false,
+      isPublic: false,
+      hasPublishedTime: false,
+      publishingDate: undefined,
+    };
+  }, []);
+
+  const methods = useForm<FormFieldValues>({
+    defaultValues: intialValues,
+  });
 
   const fetcher = useFetcher();
 
   const wrpperRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { openSubTitle, visible } = useWriteStore();
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
-    fetcher.submit(input as Record<string, any>, {
+    // @ts-ignore
+    fetcher.submit(input, {
       method: "post",
     });
   };
@@ -98,6 +134,26 @@ export default function CreateStory() {
     });
   }, [methods]);
 
+  const onChangeHtml = useCallback(
+    (html: string) => {
+      methods.setValue("content", html, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    [methods]
+  );
+
+  const onPublich = useCallback(() => {
+    const ele = getTargetElement(formRef);
+    ele?.dispatchEvent(
+      new Event("submit", {
+        cancelable: true,
+        bubbles: true,
+      })
+    );
+  }, []);
+
   const watchThumbnail = methods.watch("thumbnail");
 
   return (
@@ -106,10 +162,10 @@ export default function CreateStory() {
         <WriteTemplate header={<WriterHeader />}>
           <form
             method="post"
+            ref={formRef}
             className="create-post"
             onSubmit={methods.handleSubmit(onSubmit)}
           >
-            {/* Step1 */}
             <div className="relative mb-10 flex flex-row items-center">
               {!watchThumbnail && <CoverImagePopover />}
               <Button
@@ -122,26 +178,31 @@ export default function CreateStory() {
                 <span>Add Subtitle</span>
               </Button>
             </div>
-            {/* Cover Image */}
             {watchThumbnail && (
               <CoverImage
                 src={watchThumbnail.url}
                 onRemove={onRemoveThumbnail}
               />
             )}
-            {/* Step2 */}
             <Title />
-            {/* SubTitle */}
             <SubTitle />
-            {/* Step3 */}
             <div className="relative z-20">
               <ClientOnly fallback={<>Loading....</>}>
-                {() => <Editor />}
+                {() => (
+                  <React.Suspense fallback={<>Loading....</>}>
+                    <ToastEditor
+                      height="600px"
+                      initialEditType="wysiwyg"
+                      hideModeSwitch={true}
+                      placeholder="Write your story..."
+                      onChangeHtml={onChangeHtml}
+                    />
+                  </React.Suspense>
+                )}
               </ClientOnly>
             </div>
           </form>
-
-          <PublishDrawer />
+          <PublishDrawer onPublich={onPublich} />
         </WriteTemplate>
       </FormProvider>
     </div>

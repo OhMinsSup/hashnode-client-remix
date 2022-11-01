@@ -29,3 +29,4 @@ export { default as ExploreIcon } from "./Explore";
 export { default as TempIcon } from "./Temp";
 export { default as TrendingIcon } from "./Trending";
 export { default as ArrowPathIcon } from "./ArrowPath";
+export { default as ScheduleIcon } from "./Schedule";

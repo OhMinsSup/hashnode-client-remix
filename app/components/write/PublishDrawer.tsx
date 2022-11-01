@@ -17,7 +17,11 @@ import {
   TagCombobox,
 } from "./_components";
 
-const PublishDrawer = () => {
+interface PublishDrawerProps {
+  onPublich: () => void;
+}
+
+const PublishDrawer: React.FC<PublishDrawerProps> = ({ onPublich }) => {
   const { visible, closeSetting } = useWriteStore();
 
   const is768px = useMedia("(min-width: 768px)");
@@ -41,7 +45,7 @@ const PublishDrawer = () => {
               <span>Close</span>
             </Button>
             <Button
-              onPress={() => {}}
+              onPress={onPublich}
               className="ml-2 flex flex-row items-center justify-center rounded-full border border-blue-500 bg-blue-500 py-1 px-3 text-center text-lg font-semibold text-white outline-none hover:shadow-md"
             >
               Publish
