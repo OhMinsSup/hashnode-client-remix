@@ -42,7 +42,7 @@ const Schedule = () => {
           <div className="flex w-full flex-row items-center justify-between rounded-lg border bg-gray-50 p-4 text-base text-gray-900 outline-none">
             <input
               type="datetime-local"
-              className="flex-1"
+              className="flex-1 bg-gray-50"
               {...register("publishingDate", { valueAsDate: true })}
             />
             <Button

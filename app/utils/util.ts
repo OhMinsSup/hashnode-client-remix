@@ -73,16 +73,6 @@ export function parseUrlParams<T>(url: string) {
 export const delayPromise = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-export function applyAuth(request: Request) {
-  const cookie = request.headers.get("Cookie");
-
-  if (!cookie || !cookie.includes("access_token")) {
-    return false;
-  }
-
-  return true;
-}
-
 export const generateUniqueId = () => {
   return Math.floor(Math.random() * 1000000000000000);
 };

@@ -33,8 +33,6 @@ import { QUERIES_KEY } from "./constants/constant";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import customStylesheetUrl from "./styles/custom.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
-// import lazysizesParentFit from "lazysizes/plugins/parent-fit/ls.parent-fit";
-// import lazysizesBlurUp from "lazysizes/plugins/blur-up/ls.blur-up";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");

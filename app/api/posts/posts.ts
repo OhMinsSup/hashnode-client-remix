@@ -1,5 +1,4 @@
 import { apiClient } from "../client";
-import cookies from "cookie";
 import { useQuery } from "@tanstack/react-query";
 
 // constants
@@ -32,23 +31,6 @@ export async function createPostsApi(body: PostBody, options?: Options) {
   });
   const result = await response.json<AppAPI<PostRespSchema>>();
   return { result };
-}
-
-export async function createPostsSsrApi(body: PostBody, access_token: string) {
-  const { result } = await createPostsApi(body, {
-    hooks: {
-      beforeRequest: [
-        (request) => {
-          request.headers.set(
-            "Cookie",
-            cookies.serialize("access_token", access_token)
-          );
-          return request;
-        },
-      ],
-    },
-  });
-  return result;
 }
 
 /// list

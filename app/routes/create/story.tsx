@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from "react";
-
+import cookies from "cookie";
+import { redirect } from "@remix-run/cloudflare";
 // components
 import { ClientOnly } from "remix-utils";
 import {
@@ -14,11 +15,12 @@ import { WriterHeader } from "~/components/ui/Header";
 
 // hooks
 import { useWriteStore } from "~/stores/useWriteStore";
-import { useFetcher } from "@remix-run/react";
+import { useCatch, useFetcher } from "@remix-run/react";
 
 // validation
-import { schema } from "~/libs/validation/schema";
-import { ValidationError } from "yup";
+import { getTargetElement } from "~/libs/browser-utils";
+import { schema, transform } from "~/libs/validation/schema";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { TypographyIcon } from "~/components/ui/Icon";
@@ -28,7 +30,9 @@ import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
 import editorStyles from "@toast-ui/editor/dist/toastui-editor.css";
-import { getTargetElement } from "~/libs/browser-utils";
+import { applyAuth } from "~/libs/server/applyAuth";
+import { createPostsApi } from "~/api/posts";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 const ToastEditor = React.lazy(
   // @ts-ignore
@@ -55,41 +59,33 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  const token = applyAuth(request);
+  if (!token) {
+    throw new Error("Not logged in");
+  }
+
   const formData = await request.formData();
 
-  const form = {
-    title: formData.get("title"),
-    subTitle: formData.get("subTitle"),
-    description: formData.get("description"),
-    content: formData.get("content"),
-    thumbnail: formData.get("thumbnail"),
-    tags: formData.get("tags"),
-    disabledComment: formData.get("disabledComment"),
-    isPublic: formData.get("isPublic"),
-    hasPublishedTime: formData.get("hasPublishedTime"),
-    publishingDate: formData.get("publishingDate"),
-  };
-
-  console.log(form);
-
   try {
-    const validForm = await schema.write().validate(form, {
-      abortEarly: false,
-    });
-  } catch (error) {
-    if (ValidationError.isError(error)) {
-      const errors = error.inner.reduce((acc, { path, message }) => {
-        if (!path) return acc;
-        acc[path] = message;
-        return acc;
-      }, {} as Record<string, string>);
+    const body = transform.write(formData);
 
-      const focusId = error.inner[0]?.path;
-      return {
-        focusId,
-        errors,
-      };
-    }
+    const { result } = await createPostsApi(body, {
+      hooks: {
+        beforeRequest: [
+          (request) => {
+            request.headers.set(
+              "Cookie",
+              cookies.serialize("access_token", token)
+            );
+            return request;
+          },
+        ],
+      },
+    });
+
+    return redirect(PAGE_ENDPOINTS.ITEMS.ID(result.result.dataId));
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -110,6 +106,7 @@ export default function CreateStory() {
   }, []);
 
   const methods = useForm<FormFieldValues>({
+    resolver: yupResolver(schema.write()),
     defaultValues: intialValues,
   });
 
@@ -121,8 +118,12 @@ export default function CreateStory() {
   const { openSubTitle, visible } = useWriteStore();
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
+    const body = {
+      ...input,
+      thumbnail: input.thumbnail ? JSON.stringify(input.thumbnail) : null,
+    };
     // @ts-ignore
-    fetcher.submit(input, {
+    fetcher.submit(body, {
       method: "post",
     });
   };
@@ -207,4 +208,10 @@ export default function CreateStory() {
       </FormProvider>
     </div>
   );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.log(caught);
+  return <CreateStory />;
 }

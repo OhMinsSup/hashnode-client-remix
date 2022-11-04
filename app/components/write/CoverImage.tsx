@@ -6,6 +6,8 @@ interface CoverImageProps {
   onRemove: () => void;
 }
 
+// {"result":{"id":7,"name":"card.jpg","url":"https://pub-839fae1de7c64f8eae6caecfd852f848.r2.dev/1/post_thumbnail/image/card.jpg","uploadType":"POST_THUMBNAIL","mediaType":"IMAGE"},"resultCode":0,"message":null,"error":null}
+
 const CoverImage: React.FC<CoverImageProps> = ({ src, onRemove }) => {
   return (
     <div className="mb-5">
