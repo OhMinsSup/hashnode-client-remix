@@ -1,3 +1,4 @@
+import type { Nullable } from "~/api/schema/api";
 import type { PostListQuery } from "~/api/schema/query";
 
 export const API_ENDPOINTS = {
@@ -11,6 +12,7 @@ export const API_ENDPOINTS = {
   POSTS: {
     ROOT: "posts",
     TRENDING: "posts/trending/simple",
+    ID: (id: string | number) => `posts/${id}`,
   },
   FILES: {
     ROOT: "files",
@@ -30,12 +32,15 @@ export const QUERIES_KEY = {
   POSTS: {
     ROOT: (query?: PostListQuery) => {
       let keys: any[] = ["getPostsListApi"];
-      if (query) {
-        keys = [...keys, query];
-      }
+      if (query) keys = [...keys, query];
       return keys;
     },
     TRENDING: (type: string) => ["getSimpleTrendingPostsApi", type],
+    ID: (id?: Nullable<string | number>) => {
+      const keys: any[] = ["getPostApi"];
+      if (id) keys.push(id);
+      return keys;
+    },
   },
   TAGS: {
     ROOT: (keyword?: string, type?: string) => {

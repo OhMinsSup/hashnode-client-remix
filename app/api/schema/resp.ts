@@ -56,3 +56,5 @@ export interface SimpleTrendingPostsRespSchema {
   list: SimpleTrendingPostItemSchema[];
   hasNextPage: boolean;
 }
+
+export interface PostDetailRespSchema extends PostSchema {}

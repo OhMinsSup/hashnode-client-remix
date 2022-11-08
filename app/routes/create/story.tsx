@@ -29,7 +29,6 @@ import { Button } from "~/components/ui/Shared";
 import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
-import editorStyles from "@toast-ui/editor/dist/toastui-editor.css";
 import { applyAuth } from "~/libs/server/applyAuth";
 import { createPostsApi } from "~/api/posts";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -55,7 +54,7 @@ export interface FormFieldValues {
 }
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: editorStyles }];
+  return [];
 };
 
 export const action: ActionFunction = async ({ request }) => {

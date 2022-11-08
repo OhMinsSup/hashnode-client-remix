@@ -28,6 +28,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // api
 import { getUserInfoSsrApi } from "./api/user";
 import { QUERIES_KEY } from "./constants/constant";
+import { applyAuth } from "./libs/server/applyAuth";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -35,26 +36,20 @@ import customStylesheetUrl from "./styles/custom.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const cookie = request.headers.get("Cookie");
   const client = new QueryClient();
+  const token = applyAuth(request);
 
   const resp = {
     dehydratedState: dehydrate(client),
   };
 
   try {
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) {
-        await client.fetchQuery(QUERIES_KEY.ME, () =>
-          getUserInfoSsrApi(access_token)
-        );
-      }
+    if (token) {
+      await client.fetchQuery(QUERIES_KEY.ME, () => getUserInfoSsrApi(token));
     }
 
     return json(resp);
   } catch (error) {
-    console.log("error", error);
     return json(resp);
   }
 };

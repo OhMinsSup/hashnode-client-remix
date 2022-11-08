@@ -10,7 +10,6 @@ const RightSidebar = () => {
   return (
     <aside className="col-span-3">
       <div className="py-5 lg:block">
-        {/* X close button ??? */}
         <TrendingPostBox />
         <OtherBox />
       </div>

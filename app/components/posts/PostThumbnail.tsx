@@ -1,9 +1,14 @@
 import React from "react";
+import type { Nullable } from "~/api/schema/api";
 
-const PostThumbnail = () => {
+interface PostThumbnailProps {
+  source?: Nullable<string>;
+}
+
+const PostThumbnail: React.FC<PostThumbnailProps> = ({ source }) => {
   return (
     <div className="relative">
-      <img src="https://user-images.githubusercontent.com/1500684/160208939-34fe20ed-3146-4f4b-a68a-d82284339c47.png" />
+      <img src={source ?? undefined} alt="" />
     </div>
   );
 };
