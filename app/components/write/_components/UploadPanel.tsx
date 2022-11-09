@@ -44,13 +44,9 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
           img.src = objectUrl;
         });
 
-        console.log("??", image);
-
         if (objectUrl) {
           URL.revokeObjectURL(objectUrl);
         }
-
-        console.log("!!", image.width, image.height);
 
         if (image.width > 1600 || image.height > 800) {
           throw new Error("Image size is too small");

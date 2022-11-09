@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import cookies from "cookie";
 import { redirect } from "@remix-run/cloudflare";
+import { applyAuth } from "~/libs/server/applyAuth";
+
 // components
 import { ClientOnly } from "remix-utils";
 import {
@@ -25,20 +27,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { TypographyIcon } from "~/components/ui/Icon";
 import { Button } from "~/components/ui/Shared";
+import { ToastEditor } from "~/components/ui/Editor";
+
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
+// api
+import { createPostsApi } from "~/api/posts";
 
 import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
 
-import { applyAuth } from "~/libs/server/applyAuth";
-import { createPostsApi } from "~/api/posts";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-
-const ToastEditor = React.lazy(
-  // @ts-ignore
-  () => import("~/components/ui/Editor/ToastEditor")
-);
-
-// styles
+import toastUiStyles from "@toast-ui/editor/dist/toastui-editor.css";
 
 export interface FormFieldValues {
   title: string;
@@ -54,7 +54,7 @@ export interface FormFieldValues {
 }
 
 export const links: LinksFunction = () => {
-  return [];
+  return [{ rel: "stylesheet", href: toastUiStyles }];
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -189,15 +189,13 @@ export default function CreateStory() {
             <div className="relative z-20">
               <ClientOnly fallback={<>Loading....</>}>
                 {() => (
-                  <React.Suspense fallback={<>Loading....</>}>
-                    <ToastEditor
-                      height="600px"
-                      initialEditType="wysiwyg"
-                      hideModeSwitch={true}
-                      placeholder="Write your story..."
-                      onChangeHtml={onChangeHtml}
-                    />
-                  </React.Suspense>
+                  <ToastEditor
+                    height="600px"
+                    initialEditType="wysiwyg"
+                    hideModeSwitch={true}
+                    placeholder="Write your story..."
+                    onChangeHtml={onChangeHtml}
+                  />
                 )}
               </ClientOnly>
             </div>

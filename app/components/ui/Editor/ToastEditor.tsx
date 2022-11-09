@@ -1,5 +1,9 @@
-import React, { useCallback, useRef } from "react";
-import { Editor } from "@toast-ui/react-editor";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
+// hooks
+import { useImageUploadMutation } from "~/api/files";
+
+// types
 import type { EditorProps } from "@toast-ui/react-editor";
 
 interface ToastEditorProps extends Omit<EditorProps, "onChange"> {
@@ -10,7 +14,12 @@ const ToastEditor: React.FC<ToastEditorProps> = ({
   onChangeHtml,
   ...otherProps
 }) => {
-  const editorRef = useRef<Editor | null>(null);
+  const editorRef = useRef<any>(null);
+  const instance = useRef<any>({});
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const { ClientEditor } = instance.current || {};
+
+  const { mutateAsync } = useImageUploadMutation();
 
   const onChange = useCallback(() => {
     const instance = editorRef.current?.getInstance();
@@ -19,19 +28,34 @@ const ToastEditor: React.FC<ToastEditorProps> = ({
     onChangeHtml?.(html);
   }, [onChangeHtml, editorRef]);
 
+  useEffect(() => {
+    async function load() {
+      // @ts-ignore
+      const { Editor } = await import("@toast-ui/react-editor");
+      instance.current = { ClientEditor: Editor };
+      setEditorLoaded(true);
+    }
+
+    load();
+  }, []);
+
+  if (!editorLoaded) return null;
+
   return (
-    <Editor
+    <ClientEditor
       ref={editorRef}
       onChange={onChange}
-      //   hooks={{
-      //     addImageBlobHook: async (blob, callback) => {
-      //       const image = await api.upload({
-      //         file: blob as File,
-      //         uploadType: "ETC",
-      //       });
-      //       callback(image.contentPath, (blob as File).name);
-      //     },
-      //   }}
+      hooks={{
+        addImageBlobHook: async (blob: any, callback: any) => {
+          const { result } = await mutateAsync({
+            file: blob as File,
+            uploadType: "IMAGE",
+            mediaType: "IMAGE",
+          });
+          const { url, name } = result.result ?? {};
+          callback(url, name);
+        },
+      }}
       {...otherProps}
     />
   );
