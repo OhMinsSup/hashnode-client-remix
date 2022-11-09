@@ -1,4 +1,5 @@
 import type { Nullable } from "./api";
+import type { UserSchema } from "./user";
 
 export interface PostSchema {
   id: number;
@@ -11,4 +12,5 @@ export interface PostSchema {
   updatedAt: Date;
   deletedAt: Nullable<Date>;
   userId: number;
+  user: UserSchema;
 }

@@ -12,12 +12,25 @@ import { useCatch, useLoaderData } from "@remix-run/react";
 import { getPostApi } from "~/api/posts/posts";
 
 // components
-import { PostThumbnail, PostTitle } from "~/components/posts";
+import {
+  PostSubTitle,
+  PostThumbnail,
+  PostTitle,
+  PostWriteInfo,
+} from "~/components/posts";
+import { ClientOnly } from "remix-utils";
 import { Header } from "~/components/ui/Header";
+import { ToastViewer } from "~/components/ui/Editor";
 
 // types
-import type { LoaderFunction } from "@remix-run/cloudflare";
 import type { PostDetailRespSchema } from "~/api/schema/resp";
+import type { LoaderFunction, LinksFunction } from "@remix-run/cloudflare";
+
+import toastUiStyles from "@toast-ui/editor/dist/toastui-editor.css";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: toastUiStyles }];
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const id = params.itemId;
@@ -60,21 +73,34 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const StoriesDetail = () => {
   const { item } = useLoaderData<{ item: PostDetailRespSchema }>();
-  console.log(item);
+
   return (
     <div className="min-h-screen bg-gray-50 text-zinc-800">
       <Header />
       <div className="relative z-40">
-        <main className="pb-24">
+        <main className="pb-24 pt-24">
           <article>
             {/* Wrapper */}
             <div className="relative z-40 mx-auto grid w-full grid-cols-8 sm:max-w-[640px] md:max-w-3xl lg:max-w-5xl">
               {/* Content */}
               <div className="col-span-1 lg:col-span-6 lg:col-start-2">
                 {/* Thumbnail */}
-                <PostThumbnail source={item.thumbnail} />
-                <PostTitle title={item.title} />
+                <PostThumbnail source={item?.thumbnail} />
+                <PostTitle title={item?.title} />
+                {item?.subTitle && <PostSubTitle subTitle={item.subTitle} />}
+                <PostWriteInfo
+                  username={item?.user?.username}
+                  avatarUrl={item?.user?.profile?.avatarUrl}
+                  createdAt={item?.createdAt}
+                />
               </div>
+            </div>
+            <div className="relative z-30 mx-auto grid w-full grid-flow-row grid-cols-8 sm:max-w-[640px] md:max-w-3xl lg:max-w-5xl">
+              <section className=" relative col-span-8 mb-10 px-4 md:z-10 lg:col-span-6 lg:col-start-2 lg:px-0">
+                <ClientOnly fallback={<>Loading....</>}>
+                  {() => <ToastViewer initialValue={item.content} />}
+                </ClientOnly>
+              </section>
             </div>
           </article>
         </main>

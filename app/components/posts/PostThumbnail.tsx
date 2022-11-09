@@ -8,7 +8,7 @@ interface PostThumbnailProps {
 const PostThumbnail: React.FC<PostThumbnailProps> = ({ source }) => {
   return (
     <div className="relative">
-      <img src={source ?? undefined} alt="" />
+      <img className="w-full" src={source ?? undefined} alt="post thumbnail" />
     </div>
   );
 };
