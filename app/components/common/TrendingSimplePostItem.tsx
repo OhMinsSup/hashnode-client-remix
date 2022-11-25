@@ -24,7 +24,7 @@ const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
           <div className="h-full w-full">
             <div className="relative h-full w-full rounded-full bg-gray-100">
               <img
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fill"
                 src={thumbnail ?? undefined}
                 alt=""
               />

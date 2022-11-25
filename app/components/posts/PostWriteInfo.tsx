@@ -36,7 +36,9 @@ const PostWriteInfo: React.FC<PostWriteInfoProps> = ({
         </Link>
       </div>
       <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:w-auto md:justify-start">
-        <span className=" ml-3 mr-3 font-bold text-gray-500 md:block">·</span>
+        <span className="ml-3 mr-3 hidden font-bold text-gray-500 md:block">
+          ·
+        </span>
         <Link to="/" className="tooltip-handle text-gray-700">
           <span>{getDateFormat(createdAt, FORMAT.MMMM_D_YYYY)}</span>
         </Link>

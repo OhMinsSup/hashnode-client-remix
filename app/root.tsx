@@ -15,7 +15,6 @@ import {
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
-import cookies from "cookie";
 import {
   dehydrate,
   Hydrate,

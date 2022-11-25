@@ -17,6 +17,8 @@ import {
   PostThumbnail,
   PostTitle,
   PostWriteInfo,
+  PostTags,
+  PostWriterFooter,
 } from "~/components/posts";
 import { ClientOnly } from "remix-utils";
 import { Header } from "~/components/ui/Header";
@@ -83,7 +85,7 @@ const StoriesDetail = () => {
             {/* Wrapper */}
             <div className="relative z-40 mx-auto grid w-full grid-cols-8 sm:max-w-[640px] md:max-w-3xl lg:max-w-5xl">
               {/* Content */}
-              <div className="col-span-1 lg:col-span-6 lg:col-start-2">
+              <div className="col-span-full lg:col-span-6 lg:col-start-2">
                 {/* Thumbnail */}
                 <PostThumbnail source={item?.thumbnail} />
                 <PostTitle title={item?.title} />
@@ -96,10 +98,18 @@ const StoriesDetail = () => {
               </div>
             </div>
             <div className="relative z-30 mx-auto grid w-full grid-flow-row grid-cols-8 sm:max-w-[640px] md:max-w-3xl lg:max-w-5xl">
-              <section className=" relative col-span-8 mb-10 px-4 md:z-10 lg:col-span-6 lg:col-start-2 lg:px-0">
-                <ClientOnly fallback={<>Loading....</>}>
-                  {() => <ToastViewer initialValue={item.content} />}
-                </ClientOnly>
+              <section className="relative col-span-8 mb-10 px-4 md:z-10 lg:col-span-6 lg:col-start-2 lg:px-0">
+                <div className="mx-auto mb-10 min-h-[30vh] break-words text-lg text-gray-900">
+                  <ClientOnly fallback={<>Loading....</>}>
+                    {() => <ToastViewer initialValue={item.content} />}
+                  </ClientOnly>
+                </div>
+                <PostTags tags={item.tags} />
+                <PostWriterFooter
+                  username={item?.user?.username}
+                  avatarUrl={item?.user?.profile?.avatarUrl}
+                  bio={item?.user?.profile?.bio}
+                />
               </section>
             </div>
           </article>
