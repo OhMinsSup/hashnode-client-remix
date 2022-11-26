@@ -61,7 +61,7 @@ export function optimizeAnimation(callback: () => void) {
   };
 }
 
-export function parseUrlParams<T>(url: string) {
+export function parseUrlParams<T = Record<string, any>>(url: string) {
   const params = new URLSearchParams(new URL(url).searchParams);
   const result = {} as any;
   for (const [key, value] of params) {

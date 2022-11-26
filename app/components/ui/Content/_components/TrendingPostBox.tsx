@@ -3,15 +3,11 @@ import classNames from "classnames";
 
 // hooks
 import { useSimpleTrendingPostsQuery } from "~/api/posts/posts";
-import { useLoaderData } from "@remix-run/react";
 
 // components
 import RightContentBox from "./RightContentBox";
 import { Tab } from "@headlessui/react";
 import { TrendingSimplePost } from "~/components/common";
-
-// types
-import type { RootLoaderData } from "~/api/schema/loader";
 
 interface TrendingPostBoxProps {}
 
@@ -25,15 +21,11 @@ const MAP: Record<number, "1W" | "1M" | "3M" | "6M"> = {
 const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const loader = useLoaderData<RootLoaderData>();
-
   const { result } = useSimpleTrendingPostsQuery(
     {
       dataType: MAP[selectedIndex],
     },
     {
-      // @ts-ignore
-      initialData: loader.simpleTrending,
       keepPreviousData: true,
     }
   );

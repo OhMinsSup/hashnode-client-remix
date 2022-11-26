@@ -1,6 +1,6 @@
 import type { Nullable } from "./api";
 import type { FileSchema } from "./file";
-import type { UserProfileSchema, UserSchema } from "./user";
+import type { UserSchema } from "./user";
 import type { TagSchema } from "./tag";
 import type { PostSchema } from "./post";
 
@@ -37,24 +37,12 @@ export interface FileListRespSchema
 export interface TagListRespSchema
   extends ListRespSchema<TagWithPostCountSchema> {}
 
-export interface PostListRespSchema
-  extends ListRespSchema<Record<string, any>> {}
+export interface PostDetailRespSchema extends PostSchema {}
 
-export type SimpleTrendingPostItemSchema = Omit<
-  PostSchema,
-  "deletedAt" | "userId"
-> & {
-  user: Pick<UserSchema, "id" | "email" | "username"> & {
-    profile: Omit<
-      UserProfileSchema,
-      "name" | "bio" | "avatarUrl" | "availableText" | "location" | "website"
-    >;
-  };
-};
+export interface PostListRespSchema
+  extends ListRespSchema<PostDetailRespSchema> {}
 
 export interface SimpleTrendingPostsRespSchema {
-  list: SimpleTrendingPostItemSchema[];
+  list: PostListRespSchema[];
   hasNextPage: boolean;
 }
-
-export interface PostDetailRespSchema extends PostSchema {}

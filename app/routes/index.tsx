@@ -4,8 +4,7 @@ import classnames from "classnames";
 
 // api
 import { getTagListApi } from "~/api/tags";
-import { getSimpleTrendingPostsApi } from "~/api/posts/posts";
-import { getPersonalizedPosts } from "~/libs/mock/posts";
+import { getPostsListApi } from "~/api/posts/posts";
 
 // components
 import { Tab } from "@headlessui/react";
@@ -19,25 +18,31 @@ import {
 import { parseUrlParams } from "~/utils/util";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { dateType } = parseUrlParams<{
-    dateType?: "1W" | "1M" | "3M" | "6M";
-  }>(request.url);
+  const params = parseUrlParams(request.url);
 
-  const [resp_1, resp_2, resp_3] = await Promise.all([
-    getTagListApi({
-      type: "popular",
-      limit: 6,
-    }),
-    getSimpleTrendingPostsApi({
-      dataType: dateType || "1W",
-    }),
-    getPersonalizedPosts(),
-  ]);
+  let cursor = undefined;
+  if (params.cursor) {
+    cursor = parseInt(params.cursor);
+  }
+
+  let limit = 3;
+  if (params.limit) {
+    limit = parseInt(params.limit);
+  }
+
+  const trendingTag = await getTagListApi({
+    type: "popular",
+    limit: 6,
+  });
+
+  const posts = await getPostsListApi({
+    cursor,
+    limit,
+  });
 
   return json({
-    trendingTag: resp_1.result,
-    simpleTrending: resp_2.result,
-    personalizedPosts: resp_3.personalizedPosts,
+    trendingTag: trendingTag.result?.result,
+    posts: posts.result?.result,
   });
 };
 

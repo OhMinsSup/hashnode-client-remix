@@ -8,7 +8,11 @@ import {
   LikeIcon,
 } from "~/components/ui/Icon";
 
-function PostItem() {
+interface PostItemProps {
+  title: string;
+}
+
+function PostItem({ title }) {
   return (
     <div className="border-b px-5 py-5">
       {/* Header */}
@@ -32,7 +36,7 @@ function PostItem() {
           <div className="text-base">
             <div className="flex flex-row flex-wrap items-center">
               <Link to="/" className="font-semibold text-gray-900">
-                Developer Avocado
+                Developer Avocado - {title}
               </Link>
             </div>
             <div className="hidden flex-row flex-wrap items-center text-gray-500 md:flex">

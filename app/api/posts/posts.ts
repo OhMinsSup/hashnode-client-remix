@@ -140,7 +140,7 @@ interface SimpleTrendingPostsQueryOptions<TQueryFnData, TError, TData>
     UseQueryOptions<TQueryFnData, TError, TData, string[]>,
     "queryKey" | "queryFn"
   > {
-  initialData: TQueryFnData | (() => TQueryFnData);
+  initialData?: TQueryFnData | (() => TQueryFnData);
 }
 export function useSimpleTrendingPostsQuery(
   query: SimpleTrendingPostsQuery,
