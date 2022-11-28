@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "@remix-run/react";
 import {
   BookIcon,
@@ -8,11 +8,69 @@ import {
   LikeIcon,
 } from "~/components/ui/Icon";
 
-interface PostItemProps {
-  title: string;
+import { isEmpty } from "~/utils/assertion";
+import { getDateFormat } from "~/libs/date";
+
+// types
+import type { PostDetailRespSchema } from "~/api/schema/resp";
+
+interface PostTagsProps {
+  id: number;
+  tags: PostDetailRespSchema["tags"];
 }
 
-function PostItem({ title }) {
+function PostTags({ tags }: PostTagsProps) {
+  const visibleTags = useMemo(() => {
+    return tags.slice(0, 2);
+  }, [tags]);
+
+  const tagCount = useMemo(() => {
+    const totalCount = tags.length;
+    return totalCount > 2 ? totalCount - 2 : 0;
+  }, [tags]);
+
+  return (
+    <div className="mr-2 flex flex-row items-center text-sm font-medium text-gray-600">
+      {visibleTags?.map((tag) => (
+        <Link
+          to="/"
+          key={`post-item-tag-${tag.id}`}
+          className="mr-1 block w-20 overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border px-2 py-1 text-center text-gray-500 sm:w-24 md:w-auto md:max-w-[8rem]"
+          style={{ lineHeight: "1.625" }}
+        >
+          {tag.name}
+        </Link>
+      ))}
+      {tagCount > 0 && (
+        <Link
+          to="/"
+          className="mr-1 block overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border px-2 py-1 text-center text-gray-500"
+          style={{ lineHeight: "1.625" }}
+        >
+          {`+${tagCount}`}
+        </Link>
+      )}
+    </div>
+  );
+}
+
+interface PostItemProps {
+  post: PostDetailRespSchema;
+}
+
+function PostItem({ post }: PostItemProps) {
+  const tags = useMemo(() => {
+    return post?.tags ?? [];
+  }, [post]);
+
+  const thumbnailUrl = useMemo(() => {
+    return post?.thumbnail ?? undefined;
+  }, [post]);
+
+  const avatarUrl = useMemo(() => {
+    return post?.user?.profile?.avatarUrl ?? "/images/qDAyv6PK_.png";
+  }, [post]);
+
   return (
     <div className="border-b px-5 py-5">
       {/* Header */}
@@ -24,9 +82,9 @@ function PostItem({ title }) {
               <div className="h-full w-full">
                 <div className="relative z-20 h-10 w-10 rounded-full bg-gray-100 xl:h-12 xl:w-12">
                   <img
-                    alt="profile"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiqSizWZqSm1U1zNtLzzDJa5eHMlM20CS4Rg&usqp=CAU"
-                    className="h-full w-full rounded-full"
+                    data-src={avatarUrl}
+                    className="lazyload blur-up h-full w-full rounded-full object-cover"
+                    alt="thumbnail"
                   />
                 </div>
               </div>
@@ -36,25 +94,25 @@ function PostItem({ title }) {
           <div className="text-base">
             <div className="flex flex-row flex-wrap items-center">
               <Link to="/" className="font-semibold text-gray-900">
-                Developer Avocado - {title}
+                {post?.user?.username}
               </Link>
             </div>
             <div className="hidden flex-row flex-wrap items-center text-gray-500 md:flex">
-              <Link to="/">avocadev.hashnode.dev</Link>
+              <Link to="/">{post?.user?.profile?.name}</Link>
               <span className="mx-2 block font-bold text-gray-400">·</span>
               <Link to="/" className="text-gray-500">
-                Aug 24, 2022
+                {getDateFormat(post?.createdAt)}
               </Link>
             </div>
           </div>
         </div>
-        <Link
+        {/* <Link
           to="/"
           className="text- absolute top-0 right-0 m-0 flex-row items-center rounded-full border bg-emerald-50 px-2 py-1 text-xs font-bold uppercase text-amber-400 md:flex"
         >
           <FeaturedIcon className="mr-1 h-4 w-4 fill-current" />
           <span className="tracking-wide text-emerald-600">Featured</span>
-        </Link>
+        </Link> */}
       </div>
       {/* Header */}
       <div
@@ -69,11 +127,11 @@ function PostItem({ title }) {
             style={{ wordBreak: "break-word" }}
           >
             <Link to="/" className="block">
-              Solve Problems like a Developer
+              {post?.title}
             </Link>
           </h1>
           {/* created time */}
-          <div className="mb-2 flex flex-row flex-wrap items-center">
+          {/* <div className="mb-2 flex flex-row flex-wrap items-center">
             <Link
               to="/"
               className="mr-4 flex flex-row items-center font-medium text-gray-900"
@@ -83,17 +141,14 @@ function PostItem({ title }) {
               </span>
               <span className="inline-flex">10 min read</span>
             </Link>
-          </div>
+          </div> */}
           {/* html content */}
           <p
             style={{ wordBreak: "break-word", lineHeight: "1.375" }}
             className="break-words text-gray-600"
           >
             <Link to="/" className="block">
-              What I'm going to tell you here is applicable not only in software
-              development, technical writing, and design but also in life. “A
-              problem well stated is a problem half solved.” A quote by John
-              Dewe…
+              {post?.description}
             </Link>
           </p>
         </div>
@@ -105,8 +160,10 @@ function PostItem({ title }) {
             className="block w-full overflow-hidden rounded-xl border bg-gray-100"
           >
             <img
-              src="https://velog.velcdn.com/images/sehyunny/post/9b55ba24-f26a-407b-be4f-484b7ddefd6f/image.jpeg"
-              alt={"Solve Problems like a Developer"}
+              src={thumbnailUrl}
+              data-src={thumbnailUrl}
+              className="lazyload blur-up min-h-[125px] w-full"
+              alt="thumbnail"
             />
           </Link>
         </div>
@@ -128,29 +185,7 @@ function PostItem({ title }) {
               </button>
             </div>
             {/* tags */}
-            <div className="mr-2 flex flex-row items-center text-sm font-medium text-gray-600">
-              <Link
-                to="/"
-                className="mr-1 block w-20 overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border px-2 py-1 text-center text-gray-500 sm:w-24 md:w-auto md:max-w-[8rem]"
-                style={{ lineHeight: "1.625" }}
-              >
-                Beginner Developers
-              </Link>
-              <Link
-                to="/"
-                className="mr-1 block w-20 overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border px-2 py-1 text-center text-gray-500 sm:w-24 md:w-auto md:max-w-[8rem]"
-                style={{ lineHeight: "1.625" }}
-              >
-                React
-              </Link>
-              <Link
-                to="/"
-                className="mr-1 block overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border px-2 py-1 text-center text-gray-500"
-                style={{ lineHeight: "1.625" }}
-              >
-                +3
-              </Link>
-            </div>
+            {isEmpty(tags) ? null : <PostTags tags={tags} id={post.id} />}
           </div>
         </div>
         {/* left */}
@@ -162,7 +197,7 @@ function PostItem({ title }) {
               className="inline-flex flex-row items-center justify-center rounded-full border border-transparent px-3 py-1 text-base font-medium text-gray-700 outline-none"
             >
               <LikeIcon className="mr-2 h-5 w-5 flex-shrink fill-current" />
-              <span>66</span>
+              <span>{post?.count?.postLike}</span>
             </Link>
             {/* Comment */}
             <Link
@@ -170,7 +205,7 @@ function PostItem({ title }) {
               className="inline-flex flex-row items-center justify-center rounded-full border border-transparent px-3 py-1 text-base font-medium text-gray-700 outline-none"
             >
               <CommentIcon className="mr-2 h-5 w-5 flex-shrink fill-current" />
-              <span>6</span>
+              <span>0</span>
             </Link>
           </div>
         </div>

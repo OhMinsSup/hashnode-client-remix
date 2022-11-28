@@ -37,7 +37,11 @@ export interface FileListRespSchema
 export interface TagListRespSchema
   extends ListRespSchema<TagWithPostCountSchema> {}
 
-export interface PostDetailRespSchema extends PostSchema {}
+export interface PostDetailRespSchema extends PostSchema {
+  count: {
+    postLike: number;
+  };
+}
 
 export interface PostListRespSchema
   extends ListRespSchema<PostDetailRespSchema> {}

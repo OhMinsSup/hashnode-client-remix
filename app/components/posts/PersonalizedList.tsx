@@ -1,12 +1,14 @@
-import { useFetcher, useLoaderData, useTransition } from "@remix-run/react";
 import React, { useCallback, useEffect, useState } from "react";
+import { useFetcher, useLoaderData, useTransition } from "@remix-run/react";
 import { Virtuoso } from "react-virtuoso";
 import { PostItem } from "../common";
+
+import type { PostDetailRespSchema } from "~/api/schema/resp";
 
 const PersonalizedList = () => {
   const { posts } = useLoaderData();
 
-  const [items, setItems] = useState<any[]>(posts?.list ?? []);
+  const [items, setItems] = useState<PostDetailRespSchema[]>(posts?.list ?? []);
 
   const transition = useTransition();
   const fetcher = useFetcher();
@@ -22,10 +24,10 @@ const PersonalizedList = () => {
         const { posts } = fetcher.data;
         const { hasNextPage } = posts?.pageInfo ?? {};
         if (hasNextPage) {
-          fetcher.load(`?index&cursor=${lastItem.id}&limit=3`);
+          fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
         }
       } else {
-        fetcher.load(`?index&cursor=${lastItem.id}&limit=3`);
+        fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
       }
     },
     [fetcher, items]
@@ -47,14 +49,12 @@ const PersonalizedList = () => {
       endReached={loadMore}
       components={{
         Footer: (props) =>
-          transition.state === "loading" ? (
-            <>Loading more...</>
-          ) : (
-            <>Nothing to see here...</>
-          ),
+          transition.state === "loading" ? <>Loading more...</> : null,
       }}
       overscan={5}
-      itemContent={(index, data) => <PostItem key={index} title={data.title} />}
+      itemContent={(_, data) => {
+        return <PostItem post={data} />;
+      }}
     />
   );
 };

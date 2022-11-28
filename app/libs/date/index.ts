@@ -18,8 +18,8 @@ export const dayjsWrap = (
 
 export const getDateFormat = (
   date: number | Date | string | null | undefined,
-  key = FORMAT.YYYYMMDD_HHMMSS,
-  format = "-"
+  key = FORMAT.MMMM_D_YYYY,
+  format = ""
 ) => {
   if (!date) return format;
   if (!isNumber(date) && !isString(date)) {

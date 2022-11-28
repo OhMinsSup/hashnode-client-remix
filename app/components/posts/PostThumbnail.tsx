@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "remix-image";
 import type { Nullable } from "~/api/schema/api";
 
 interface PostThumbnailProps {
@@ -9,10 +8,10 @@ interface PostThumbnailProps {
 const PostThumbnail: React.FC<PostThumbnailProps> = ({ source }) => {
   return (
     <div className="relative">
-      <Image
+      <img
         className="w-full"
         src={source ?? undefined}
-        loaderUrl="/api/image"
+        // loaderUrl="/api/image"
         alt="post thumbnail"
       />
       {/* <img className="w-full" src={source ?? undefined} alt="post thumbnail" /> */}

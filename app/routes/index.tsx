@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     cursor = parseInt(params.cursor);
   }
 
-  let limit = 3;
+  let limit = 25;
   if (params.limit) {
     limit = parseInt(params.limit);
   }
