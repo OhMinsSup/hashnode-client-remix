@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { CommentIcon, LikeIcon } from "../ui/Icon";
 
-import type { SimpleTrendingPostItemSchema } from "~/api/schema/resp";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import type { PostDetailRespSchema } from "~/api/schema/resp";
 
-interface TrendingSimplePostItemProps extends SimpleTrendingPostItemSchema {}
+interface TrendingSimplePostItemProps extends PostDetailRespSchema {}
 
 const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
   id,
   title,
   subTitle,
-  thumbnail,
+  user,
 }) => {
+  const avatarUrl = useMemo(() => {
+    return user?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
+  }, [user]);
+
   return (
     <div className="flex flex-row items-start py-2">
       {/* Thubmnail */}
@@ -24,9 +28,10 @@ const TrendingSimplePostItem: React.FC<TrendingSimplePostItemProps> = ({
           <div className="h-full w-full">
             <div className="relative h-full w-full rounded-full bg-gray-100">
               <img
-                className="h-full w-full object-fill"
-                src={thumbnail ?? undefined}
-                alt=""
+                src={avatarUrl}
+                data-src={avatarUrl}
+                className="lazyload blur-up h-full w-full object-cover"
+                alt="thumbnail"
               />
             </div>
           </div>

@@ -1,40 +1,53 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-
-// hooks
-import { useSimpleTrendingPostsQuery } from "~/api/posts/posts";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 
 // components
 import RightContentBox from "./RightContentBox";
 import { Tab } from "@headlessui/react";
 import { TrendingSimplePost } from "~/components/common";
 
+import type { PostDetailRespSchema } from "~/api/schema/resp";
+
 interface TrendingPostBoxProps {}
 
-const MAP: Record<number, "1W" | "1M" | "3M" | "6M"> = {
-  0: "1W",
-  1: "1M",
-  2: "3M",
-  3: "6M",
-};
-
 const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
+  const { trendingPosts } = useLoaderData();
+
+  const KEY_MAP_RECORD: Record<number, "1W" | "1M" | "3M" | "6M"> =
+    useMemo(() => {
+      return {
+        0: "1W",
+        1: "1M",
+        2: "3M",
+        3: "6M",
+      };
+    }, []);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { result } = useSimpleTrendingPostsQuery(
-    {
-      dataType: MAP[selectedIndex],
-    },
-    {
-      keepPreviousData: true,
-    }
+  const [items, setItems] = useState<PostDetailRespSchema[]>(
+    trendingPosts?.list ?? []
   );
 
-  const simpleTrending = useMemo(() => result?.list ?? [], [result]);
+  const fetcher = useFetcher();
 
-  const onChangeTab = useCallback((index: number) => {
-    setSelectedIndex(index);
-  }, []);
+  const onChangeTab = useCallback(
+    (index: number) => {
+      const dateType = KEY_MAP_RECORD[index];
+      setSelectedIndex(index);
+      fetcher.load(`?index&dateType=${dateType}`);
+    },
+    [KEY_MAP_RECORD, fetcher]
+  );
+
+  useEffect(() => {
+    if (fetcher.data) {
+      const { trendingPosts } = fetcher.data;
+      const nextItems = trendingPosts?.list ?? [];
+      setItems(nextItems);
+    }
+  }, [fetcher.data]);
 
   return (
     <RightContentBox title="Trending" to="/">
@@ -100,19 +113,19 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
         <Tab.Panels>
           <Tab.Panel className="space-y-4 divide-y">
             {/* @ts-ignore */}
-            <TrendingSimplePost type="1W" simpleTrending={simpleTrending} />
+            <TrendingSimplePost type="1W" simpleTrending={items} />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
             {/* @ts-ignore */}
-            <TrendingSimplePost type="1M" simpleTrending={simpleTrending} />
+            <TrendingSimplePost type="1M" simpleTrending={items} />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
             {/* @ts-ignore */}
-            <TrendingSimplePost type="3M" simpleTrending={simpleTrending} />
+            <TrendingSimplePost type="3M" simpleTrending={items} />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
             {/* @ts-ignore */}
-            <TrendingSimplePost type="6M" simpleTrending={simpleTrending} />
+            <TrendingSimplePost type="6M" simpleTrending={items} />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

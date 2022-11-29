@@ -2,11 +2,11 @@ import React from "react";
 import TrendingSimplePostItem from "./TrendingSimplePostItem";
 import { isNull, isUndefined } from "~/utils/assertion";
 
-import type { SimpleTrendingPostItemSchema } from "~/api/schema/resp";
+import type { PostDetailRespSchema } from "~/api/schema/resp";
 
 interface TrendingSimplePostItemProps {
   type: "1W" | "1M" | "3M" | "6M";
-  simpleTrending?: SimpleTrendingPostItemSchema[];
+  simpleTrending?: PostDetailRespSchema[];
 }
 
 const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({

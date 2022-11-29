@@ -59,6 +59,10 @@ export const QUERIES_KEY = {
   },
 };
 
+export const ASSET_URL = {
+  DEFAULT_AVATAR: "/images/qDAyv6PK_.png",
+};
+
 export const PAGE_ENDPOINTS = {
   ROOT: "/",
   AUTH: {

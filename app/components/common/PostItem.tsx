@@ -10,6 +10,7 @@ import {
 
 import { isEmpty } from "~/utils/assertion";
 import { getDateFormat } from "~/libs/date";
+import { ASSET_URL } from "~/constants/constant";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
@@ -68,7 +69,7 @@ function PostItem({ post }: PostItemProps) {
   }, [post]);
 
   const avatarUrl = useMemo(() => {
-    return post?.user?.profile?.avatarUrl ?? "/images/qDAyv6PK_.png";
+    return post?.user?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
   }, [post]);
 
   return (

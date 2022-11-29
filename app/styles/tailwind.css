@@ -571,6 +571,10 @@ video {
   visibility: visible !important;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -892,16 +896,16 @@ video {
   max-height: 15rem;
 }
 
+.min-h-\[125px\] {
+  min-height: 125px;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
 
 .min-h-\[30vh\] {
   min-height: 30vh;
-}
-
-.min-h-\[125px\] {
-  min-height: 125px;
 }
 
 .w-5 {
@@ -1335,6 +1339,11 @@ video {
 
 .fill-current {
   fill: currentColor;
+}
+
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .object-cover {
