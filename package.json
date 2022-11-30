@@ -43,6 +43,7 @@
     "react-use": "^17.4.0",
     "react-virtuoso": "^2.19.1",
     "remix-utils": "^3.4.0",
+    "resize-observer-polyfill": "^1.5.1",
     "ts-pattern": "^4.0.6",
     "use-debounce": "^8.0.4",
     "yup": "^0.32.11",
