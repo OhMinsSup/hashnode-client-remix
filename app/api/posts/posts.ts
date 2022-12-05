@@ -11,11 +11,11 @@ import type {
   PostDetailRespSchema,
   PostListRespSchema,
   PostRespSchema,
-  SimpleTrendingPostsRespSchema,
+  GetTopPostsRespSchema,
 } from "../schema/resp";
 import type { AppAPI, Nullable } from "../schema/api";
 import type { PostBody } from "../schema/body";
-import type { PostListQuery, SimpleTrendingPostsQuery } from "../schema/query";
+import type { PostListQuery, GetTopPostsQuery } from "../schema/query";
 import type { UseQueryOptions } from "@tanstack/react-query";
 
 /// create
@@ -113,12 +113,13 @@ export function usePostsQuery(
 
 /// trending
 
-export async function getSimpleTrendingPostsApi(
-  query: SimpleTrendingPostsQuery,
+export async function getTopPostsApi(
+  query: GetTopPostsQuery,
   options?: Options
 ) {
   const { headers, ...opts } = options ?? {};
-  const url = `${API_ENDPOINTS.POSTS.TRENDING}?dataType=${query.dateType}`;
+  const url = `${API_ENDPOINTS.POSTS.GET_TOP_POSTS}?duration=${query.duration}`;
+  console.log(url);
   const response = await apiClient.get(url, {
     credentials: "include",
     headers: {
@@ -127,34 +128,38 @@ export async function getSimpleTrendingPostsApi(
     },
     ...opts,
   });
-  const result = await response.json<AppAPI<SimpleTrendingPostsRespSchema>>();
+  const result = await response.json<AppAPI<GetTopPostsRespSchema>>();
   return { result };
 }
 
-interface SimpleTrendingPostsReturnValue {
-  result: AppAPI<SimpleTrendingPostsRespSchema>;
+interface GetTopPostsRespReturnValue {
+  result: AppAPI<GetTopPostsRespSchema>;
 }
 
-interface SimpleTrendingPostsQueryOptions<TQueryFnData, TError, TData>
+interface GetTopPostsQueryOptions<TQueryFnData, TError, TData>
   extends Omit<
-    UseQueryOptions<TQueryFnData, TError, TData, string[]>,
+    UseQueryOptions<TQueryFnData, TError, TData, [string, GetTopPostsQuery]>,
     "queryKey" | "queryFn"
   > {
   initialData?: TQueryFnData | (() => TQueryFnData);
 }
-export function useSimpleTrendingPostsQuery(
-  query: SimpleTrendingPostsQuery,
-  options?: SimpleTrendingPostsQueryOptions<
-    SimpleTrendingPostsReturnValue,
+export function useGetTopPostsQuery(
+  query: GetTopPostsQuery,
+  options?: GetTopPostsQueryOptions<
+    GetTopPostsRespReturnValue,
     Record<string, any>,
-    SimpleTrendingPostsReturnValue
+    GetTopPostsRespReturnValue
   >
 ) {
   const resp = useQuery(
-    QUERIES_KEY.POSTS.TRENDING(query.dateType),
+    QUERIES_KEY.POSTS.GET_TOP_POSTS(query.duration) as unknown as [
+      string,
+      GetTopPostsQuery
+    ],
     (_key) => {
-      return getSimpleTrendingPostsApi({
-        dateType: _key.queryKey[1] as SimpleTrendingPostsQuery["dateType"],
+      const [_, { duration }] = _key.queryKey;
+      return getTopPostsApi({
+        duration,
       });
     },
     options

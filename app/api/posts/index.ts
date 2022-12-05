@@ -1,1 +1,1 @@
-export { createPostsApi, createPostsSsrApi } from "./posts";
+export { createPostsApi, getTopPostsApi } from "./posts";

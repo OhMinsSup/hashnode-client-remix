@@ -11,7 +11,7 @@ export const API_ENDPOINTS = {
   },
   POSTS: {
     ROOT: "posts",
-    TRENDING: "posts/trending/simple",
+    GET_TOP_POSTS: "posts/get-top-posts",
     ID: (id: string | number) => `posts/${id}`,
   },
   FILES: {
@@ -35,7 +35,7 @@ export const QUERIES_KEY = {
       if (query) keys = [...keys, query];
       return keys;
     },
-    TRENDING: (type: string) => ["getSimpleTrendingPostsApi", type],
+    GET_TOP_POSTS: (duration: number) => ["getTopPostsApi", { duration }],
     ID: (id?: Nullable<string | number>) => {
       const keys: any[] = ["getPostApi"];
       if (id) keys.push(id);

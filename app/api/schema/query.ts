@@ -15,6 +15,6 @@ export interface PostListQuery extends PaginationQuery {
   endDate?: string;
 }
 
-export interface SimpleTrendingPostsQuery {
-  dateType: "1W" | "1M" | "3M" | "6M";
+export interface GetTopPostsQuery {
+  duration: number;
 }

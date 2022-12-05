@@ -4,7 +4,7 @@ import classnames from "classnames";
 
 // api
 import { getTagListApi } from "~/api/tags";
-import { getPostsListApi, getSimpleTrendingPostsApi } from "~/api/posts/posts";
+import { getPostsListApi, getTopPostsApi } from "~/api/posts/posts";
 
 // components
 import { Tab } from "@headlessui/react";
@@ -30,11 +30,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     limit = parseInt(params.limit);
   }
 
-  let dateType = "1W";
-  if (params.dateType) {
-    dateType = params.dateType;
-  }
-
   const trendingTag = await getTagListApi({
     type: "popular",
     limit: 6,
@@ -45,14 +40,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     limit,
   });
 
-  const trendingPosts = await getSimpleTrendingPostsApi({
-    dateType: dateType as "1W" | "1M" | "3M" | "6M",
+  const topPosts = await getTopPostsApi({
+    duration: 7,
   });
 
   return json({
     trendingTag: trendingTag.result?.result,
     posts: posts.result?.result,
-    trendingPosts: trendingPosts.result?.result,
+    topPosts,
   });
 };
 

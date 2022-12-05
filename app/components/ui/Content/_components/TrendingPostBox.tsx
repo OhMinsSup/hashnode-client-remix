@@ -1,60 +1,38 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 // components
 import RightContentBox from "./RightContentBox";
 import { Tab } from "@headlessui/react";
 import { TrendingSimplePost } from "~/components/common";
 
-import type { PostDetailRespSchema } from "~/api/schema/resp";
-
 interface TrendingPostBoxProps {}
 
 const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
-  const { trendingPosts } = useLoaderData();
+  const { topPosts } = useLoaderData();
 
-  const KEY_MAP_RECORD: Record<number, "1W" | "1M" | "3M" | "6M"> =
-    useMemo(() => {
-      return {
-        0: "1W",
-        1: "1M",
-        2: "3M",
-        3: "6M",
-      };
-    }, []);
+  const KEY_MAP_RECORD: Record<number, string> = useMemo(() => {
+    return {
+      0: "7",
+      1: "30",
+      2: "90",
+      3: "180",
+    };
+  }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const [items, setItems] = useState<PostDetailRespSchema[]>(
-    trendingPosts?.list ?? []
-  );
-
-  const fetcher = useFetcher();
-
-  const onChangeTab = useCallback(
-    (index: number) => {
-      const dateType = KEY_MAP_RECORD[index];
-      setSelectedIndex(index);
-      fetcher.load(`?index&dateType=${dateType}`);
-    },
-    [KEY_MAP_RECORD, fetcher]
-  );
-
-  useEffect(() => {
-    if (fetcher.data) {
-      const { trendingPosts } = fetcher.data;
-      const nextItems = trendingPosts?.list ?? [];
-      setItems(nextItems);
-    }
-  }, [fetcher.data]);
+  const onChangeTab = useCallback((index: number) => {
+    setSelectedIndex(index);
+  }, []);
 
   return (
     <RightContentBox title="Trending" to="/">
       <Tab.Group selectedIndex={selectedIndex} onChange={onChangeTab}>
         <Tab.List className="mb-4 flex flex-row items-center overflow-auto whitespace-nowrap border-b text-sm text-gray-500">
           <Tab
-            value="1W"
+            value="7"
             className={({ selected }) =>
               classNames(
                 "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
@@ -68,7 +46,7 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
             1 week
           </Tab>
           <Tab
-            value="1M"
+            value="30"
             className={({ selected }) =>
               classNames(
                 "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
@@ -82,7 +60,7 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
             1 months
           </Tab>
           <Tab
-            value="3M"
+            value="90"
             className={({ selected }) =>
               classNames(
                 "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
@@ -96,7 +74,7 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
             3 months
           </Tab>
           <Tab
-            value="6M"
+            value="180"
             className={({ selected }) =>
               classNames(
                 "mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 px-2 py-3 font-semibold",
@@ -112,20 +90,29 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel className="space-y-4 divide-y">
-            {/* @ts-ignore */}
-            <TrendingSimplePost type="1W" simpleTrending={items} />
+            <TrendingSimplePost
+              duration={KEY_MAP_RECORD[0]}
+              enabled={selectedIndex === 0}
+              initialData={topPosts}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            {/* @ts-ignore */}
-            <TrendingSimplePost type="1M" simpleTrending={items} />
+            <TrendingSimplePost
+              duration={KEY_MAP_RECORD[1]}
+              enabled={selectedIndex === 1}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            {/* @ts-ignore */}
-            <TrendingSimplePost type="3M" simpleTrending={items} />
+            <TrendingSimplePost
+              duration={KEY_MAP_RECORD[2]}
+              enabled={selectedIndex === 2}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            {/* @ts-ignore */}
-            <TrendingSimplePost type="6M" simpleTrending={items} />
+            <TrendingSimplePost
+              duration={KEY_MAP_RECORD[3]}
+              enabled={selectedIndex === 3}
+            />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

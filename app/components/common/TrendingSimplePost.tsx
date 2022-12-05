@@ -1,25 +1,42 @@
-import React from "react";
+import React, { useMemo } from "react";
 import TrendingSimplePostItem from "./TrendingSimplePostItem";
 import { isNull, isUndefined } from "~/utils/assertion";
-
-import type { PostDetailRespSchema } from "~/api/schema/resp";
+import { useGetTopPostsQuery } from "~/api/posts/posts";
 
 interface TrendingSimplePostItemProps {
-  type: "1W" | "1M" | "3M" | "6M";
-  simpleTrending?: PostDetailRespSchema[];
+  enabled: boolean;
+  duration: string;
+  initialData?: any;
 }
 
 const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({
-  type,
-  simpleTrending,
+  duration,
+  initialData,
+  enabled,
 }) => {
-  if (isNull(simpleTrending) || isUndefined(simpleTrending)) return null;
+  const { data } = useGetTopPostsQuery(
+    {
+      duration: Number(duration),
+    },
+    {
+      enabled,
+      initialData,
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: 1000 * 60 * 60 * 24,
+    }
+  );
+
+  const posts = useMemo(() => {
+    return data?.result?.result?.posts ?? [];
+  }, [data]);
+
+  if (isNull(posts) || isUndefined(posts)) return null;
 
   return (
     <>
-      {simpleTrending?.map((item) => (
+      {posts?.map((item) => (
         <TrendingSimplePostItem
-          key={`trending-simple-post-${type}-item-${item.id}`}
+          key={`trending-simple-post-${duration}-item-${item.id}`}
           {...item}
         />
       ))}

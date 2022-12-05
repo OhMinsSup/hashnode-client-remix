@@ -12,4 +12,10 @@ export const apiClient = ky.create({
   },
 });
 
-export const globalClient = new QueryClient();
+export const globalClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
