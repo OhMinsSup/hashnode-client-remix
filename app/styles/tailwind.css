@@ -2003,6 +2003,10 @@ video {
     max-width: 48rem;
   }
 
+  .md\:max-w-full {
+    max-width: 100%;
+  }
+
   .md\:flex-1 {
     flex: 1 1 0%;
   }
@@ -2196,6 +2200,11 @@ video {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+
+  .lg\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -2312,5 +2321,10 @@ video {
   .\32xl\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+  }
+
+  .\32xl\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

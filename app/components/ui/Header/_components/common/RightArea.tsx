@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 // hooks
-import { useUserQuery } from "~/api/user/user";
+import { useUserQuery } from "~/api/user/hooks/hook";
 
 // data
 import { Serialize } from "~/libs/serialize/serialize";
@@ -23,7 +23,7 @@ const RightArea: React.FC<RightAreaProps> = () => {
 
   return (
     <div className="col-span-8 flex flex-row items-center justify-end lg:col-span-4 lg:justify-between xl:col-span-3">
-      {profile && <WriteButtonGroup />}
+      <WriteButtonGroup />
       <ItemGroup />
     </div>
   );

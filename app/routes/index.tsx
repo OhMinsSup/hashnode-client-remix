@@ -16,6 +16,7 @@ import {
   RecentIcon,
 } from "~/components/ui/Icon";
 import { parseUrlParams } from "~/utils/util";
+import { useAuthStore } from "~/stores/useAuthStore";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const params = parseUrlParams(request.url);
@@ -52,6 +53,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
+  const { isLoggedIn } = useAuthStore();
+  console.log(isLoggedIn);
   return (
     <RootTemplate>
       <div className="relative col-span-7 min-w-0 pt-5 pb-24">

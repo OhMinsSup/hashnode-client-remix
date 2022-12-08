@@ -26,6 +26,7 @@ import {
   type DehydratedState,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthProvider, useCreateAuthStore } from "./stores/useAuthStore";
 
 // api
 import { getUserInfoSsrApi } from "./api/user";
@@ -36,25 +37,6 @@ import { applyAuth } from "./libs/server/applyAuth";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import customStylesheetUrl from "./styles/custom.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const client = new QueryClient();
-  const token = applyAuth(request);
-
-  const resp = {
-    dehydratedState: dehydrate(client),
-  };
-
-  try {
-    if (token) {
-      await client.fetchQuery(QUERIES_KEY.ME, () => getUserInfoSsrApi(token));
-    }
-
-    return json(resp);
-  } catch (error) {
-    return json(resp);
-  }
-};
 
 export const links: LinksFunction = () => {
   return [
@@ -70,26 +52,55 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const client = new QueryClient();
+  const token = applyAuth(request);
+
+  if (token) {
+    try {
+      await client.prefetchQuery(QUERIES_KEY.ME, () =>
+        getUserInfoSsrApi(token)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return json({
+    isLoggedIn: !!token,
+    dehydratedState: dehydrate(client),
+  });
+};
+
 export default function App() {
-  const loadData = useLoaderData<{ dehydratedState: DehydratedState }>();
+  const { dehydratedState, isLoggedIn } = useLoaderData<{
+    dehydratedState: DehydratedState;
+    isLoggedIn: boolean;
+  }>();
+
+  const createAuthStore = useCreateAuthStore({
+    isLoggedIn,
+  });
 
   return (
-    <QueryClientProvider client={globalClient}>
-      <Hydrate state={loadData.dehydratedState}>
-        <html lang="kr">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body className="bg-white leading-6">
-            <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload port={8002} />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </body>
-        </html>
-      </Hydrate>
-    </QueryClientProvider>
+    <AuthProvider createStore={createAuthStore}>
+      <QueryClientProvider client={globalClient}>
+        <Hydrate state={dehydratedState}>
+          <html lang="kr">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body className="bg-white leading-6">
+              <Outlet />
+              <ScrollRestoration />
+              <Scripts />
+              <LiveReload port={8002} />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </body>
+          </html>
+        </Hydrate>
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }

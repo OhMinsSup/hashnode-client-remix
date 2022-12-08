@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 
 // hooks
-import { useUserQuery } from "~/api/user/user";
+import { useUserQuery } from "~/api/user/hooks/hook";
 import { ASSET_URL } from "~/constants/constant";
 import { useIsomorphicLayoutEffect } from "react-use";
 
@@ -96,7 +96,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatarUrl, open }) => {
             <div className=" relative min-h-[2rem] min-w-[4rem] bg-white">
               <div className="w-[18rem]">
                 <div className=" relative flex w-[36rem] rounded-lg transition-all duration-150">
-                  Hemi
+                  <section>Hemi</section>
                 </div>
               </div>
             </div>
@@ -122,34 +122,33 @@ const ItemGroup: React.FC<ItemGroupProps> = () => {
 
   return (
     <div className="flex flex-row items-center justify-end">
-      {profile && (
-        <div className="relative mr-2 h-10 w-10 md:block">
-          <button
-            type="button"
-            aria-label="changelog"
-            className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
-          >
-            <DraftIcon className="h-6 w-6 fill-current" />
-          </button>
-        </div>
-      )}
+      <div className="relative mr-2 h-10 w-10 md:block">
+        <button
+          type="button"
+          aria-label="changelog"
+          className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
+        >
+          <DraftIcon className="h-6 w-6 fill-current" />
+        </button>
+      </div>
+
       <button className="ransition-transform relative mr-2 flex h-10 w-10 flex-row items-center justify-center rounded-full text-gray-700 duration-300">
         <MoonIcon className="h-6 w-6 fill-current" />
       </button>
-      {profile && (
-        <div className="mr-2 h-10 w-10 md:block">
-          <button
-            className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
-            type="button"
-            aria-label="Notifications"
-          >
-            <NotificationIcon className="h-6 w-6 fill-current" />
-            <span className="absolute right-[-0.25rem] top-[-0.25rem] rounded-full bg-red-500 px-2 font-bold text-white">
-              1
-            </span>
-          </button>
-        </div>
-      )}
+
+      <div className="mr-2 h-10 w-10 md:block">
+        <button
+          className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
+          type="button"
+          aria-label="Notifications"
+        >
+          <NotificationIcon className="h-6 w-6 fill-current" />
+          {/* <span className="absolute right-[-0.25rem] top-[-0.25rem] rounded-full bg-red-500 px-2 font-bold text-white">
+            1
+          </span> */}
+        </button>
+      </div>
+
       <Popover className="mr-2 h-10 w-10 flex-shrink-0">
         {({ open }) => <UserMenu avatarUrl={avatarUrl} open={open} />}
       </Popover>
