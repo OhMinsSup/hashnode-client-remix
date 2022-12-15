@@ -1,1 +1,0 @@
-export { getTagListApi } from "./tags";

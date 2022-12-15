@@ -3,7 +3,7 @@ import { type LoaderFunction, json } from "@remix-run/cloudflare";
 import classnames from "classnames";
 
 // api
-import { getTagListApi } from "~/api/tags";
+import { getTagListApi } from "~/api/tags/tags";
 import { getPostsListApi, getTopPostsApi } from "~/api/posts/posts";
 
 // components

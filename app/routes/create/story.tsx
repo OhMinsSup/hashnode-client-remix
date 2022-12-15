@@ -33,7 +33,7 @@ import { ToastEditor } from "~/components/ui/Editor";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // api
-import { createPostsApi } from "~/api/posts";
+import { createPostsApi } from "~/api/posts/posts";
 
 import type { FileSchema } from "~/api/schema/file";
 import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
