@@ -5,9 +5,6 @@ import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
 import { ValidationMessage } from "~/components/ui/Error";
 import { LoadingIcon } from "~/components/ui/Icon";
 
-// error
-import { HTTPError } from "ky-universal";
-
 // hooks
 import { useFormLoading } from "~/libs/hooks/useFormLoading";
 import { useGoBack } from "~/libs/hooks/useGoBack";
@@ -16,91 +13,24 @@ import { useGoBack } from "~/libs/hooks/useGoBack";
 import { signupApi } from "~/api/auth";
 
 // utils
-import { match, P } from "ts-pattern";
 import classNames from "classnames";
 
 // constants
-import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
-
-// validation
-import { schema } from "~/libs/validation/schema";
-import { ValidationError } from "yup";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
+import type { HTTPError } from "ky-universal";
 import type { ActionFunction } from "@remix-run/cloudflare";
 import type { ThrownResponse } from "@remix-run/react";
-import type { ErrorAPI } from "~/api/schema/api";
+import {
+  signupHTTPErrorWrapper,
+  signupSchema,
+  signupValidationErrorWrapper,
+} from "~/api/auth/validation/signup";
 
 interface ActionData {
   errors?: Record<string, string> | null;
 }
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-
-  const form = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    name: formData.get("name"),
-    confirmPassword: formData.get("confirmPassword"),
-  };
-
-  try {
-    const validForm = await schema.signup().validate(form, {
-      abortEarly: false,
-    });
-
-    const body = {
-      username: validForm.username,
-      email: validForm.email,
-      password: validForm.password,
-    };
-
-    const { header: headers } = await signupApi(body);
-
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers,
-    });
-  } catch (error) {
-    if (ValidationError.isError(error)) {
-      const errors = error.inner.reduce((acc, { path, message }) => {
-        if (!path) return acc;
-        acc[path] = message;
-        return acc;
-      }, {} as Record<string, string>);
-      return json({
-        errors,
-      });
-    }
-
-    if (error instanceof HTTPError) {
-      const resp = error.response;
-      const data = await resp.json<ErrorAPI>();
-
-      if (resp.status === STATUS_CODE.BAD_REQUEST) {
-        const errorKey = data.error;
-        const state = match(data.message)
-          .with(P.array(P.string), (data) => ({
-            errors: {
-              [errorKey]: data[0],
-            },
-          }))
-          .with(P.string, (data) => ({
-            errors: {
-              [errorKey]: data,
-            },
-          }))
-          .exhaustive();
-        return json(state);
-      }
-
-      throw json(error, {
-        status: error.response.status,
-      });
-    }
-  }
-};
 
 interface Props {
   error?: HTTPError;
@@ -248,3 +178,45 @@ export function CatchBoundary() {
 
   return <Signup error={caught.data} />;
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  const form = {
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    name: formData.get("name"),
+    confirmPassword: formData.get("confirmPassword"),
+  };
+
+  try {
+    const parse = await signupSchema.parseAsync(form);
+
+    const { header: headers } = await signupApi({
+      username: parse.username,
+      email: parse.email,
+      password: parse.password,
+    });
+
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers,
+    });
+  } catch (error) {
+    const nextError = signupValidationErrorWrapper(error);
+    if (nextError) {
+      return json({
+        errors: nextError,
+      });
+    }
+
+    const httpError = signupHTTPErrorWrapper(error);
+    if (httpError) {
+      return json({
+        errors: httpError,
+      });
+    }
+
+    throw json(error);
+  }
+};

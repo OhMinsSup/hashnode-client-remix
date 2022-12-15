@@ -1,15 +1,22 @@
 import { apiClient } from "../client";
-import cookies from "cookie";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { Options } from "ky-universal";
-import type { UserRespSchema } from "../schema/resp";
-import type { AppAPI } from "../schema/api";
+import type { UserRespSchema } from "~/api/schema/resp";
+import type { AppAPI } from "~/api/schema/api";
 
-export async function getUserInfoApi(options?: Options) {
+/**
+ * @version 1.0.0
+ * @description 유저 정보를 가져옵니다.
+ * @param {Options} options
+ * @returns {Promise<{ result: AppAPI<UserRespSchema> }>}
+ */
+export async function getUserInfoApi(
+  options?: Options
+): Promise<{ result: AppAPI<UserRespSchema> }> {
   const { headers, ...opts } = options ?? {};
   const response = await apiClient.get(API_ENDPOINTS.USERS.ME, {
     credentials: "include",
@@ -21,21 +28,4 @@ export async function getUserInfoApi(options?: Options) {
   });
   const result = await response.json<AppAPI<UserRespSchema>>();
   return { result };
-}
-
-export async function getUserInfoSsrApi(access_token: string) {
-  const { result } = await getUserInfoApi({
-    hooks: {
-      beforeRequest: [
-        (request) => {
-          request.headers.set(
-            "Cookie",
-            cookies.serialize("access_token", access_token)
-          );
-          return request;
-        },
-      ],
-    },
-  });
-  return result;
 }

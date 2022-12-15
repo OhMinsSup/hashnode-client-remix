@@ -7,7 +7,7 @@ import { useAuthStore } from "~/stores/useAuthStore";
 import { QUERIES_KEY } from "~/constants/constant";
 
 // types
-import { getUserInfoApi } from "../user";
+import { getUserInfoApi } from "~/api/user/user";
 
 import type { AppAPI } from "~/api/schema/api";
 import type { UserRespSchema } from "~/api/schema/resp";

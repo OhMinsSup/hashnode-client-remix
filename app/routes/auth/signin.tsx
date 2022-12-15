@@ -9,101 +9,32 @@ import {
   useTransition,
 } from "@remix-run/react";
 
-// error
-import { HTTPError } from "ky-universal";
-
 // components
-import { match, P } from "ts-pattern";
 import { ValidationMessage } from "~/components/ui/Error";
 import { LoadingIcon } from "~/components/ui/Icon";
 
 // api
 import { signinApi } from "~/api/auth/auth";
+import {
+  signinValidationErrorWrapper,
+  signinHTTPErrorWrapper,
+  signinSchema,
+} from "~/api/auth/validation/signin";
 
 // hooks
 import { useFormLoading } from "~/libs/hooks/useFormLoading";
 
 // constants
-import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
-
-// validation
-import { schema } from "~/libs/validation/schema";
-import { ValidationError } from "yup";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { ActionFunction } from "@remix-run/cloudflare";
 import type { ThrownResponse } from "@remix-run/react";
-import type { ErrorAPI } from "~/api/schema/api";
+import type { HTTPError } from "ky-universal";
 
 interface ActionData {
   errors?: Record<string, string> | null;
 }
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-
-  const form = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
-
-  try {
-    const validForm = await schema.signin().validate(form, {
-      abortEarly: false,
-    });
-
-    const { header: headers } = await signinApi({
-      email: validForm.email,
-      password: validForm.password,
-    });
-
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers,
-    });
-  } catch (error) {
-    if (ValidationError.isError(error)) {
-      const errors = error.inner.reduce((acc, { path, message }) => {
-        if (!path) return acc;
-        acc[path] = message;
-        return acc;
-      }, {} as Record<string, string>);
-      return json({
-        errors,
-      });
-    }
-
-    if (error instanceof HTTPError) {
-      const resp = error.response;
-      const data = await resp.json<ErrorAPI>();
-      const checkStatusCode = [
-        STATUS_CODE.BAD_REQUEST,
-        STATUS_CODE.NOT_FOUND,
-      ] as number[];
-
-      if (checkStatusCode.includes(resp.status)) {
-        const errorKey = data.error;
-        const state = match(data.message)
-          .with(P.array(P.string), (data) => ({
-            errors: {
-              [errorKey]: data[0],
-            },
-          }))
-          .with(P.string, (data) => ({
-            errors: {
-              [errorKey]: data,
-            },
-          }))
-          .exhaustive();
-
-        return json(state);
-      }
-
-      throw json(error, {
-        status: error.response.status,
-      });
-    }
-  }
-};
 
 interface Props {
   error?: HTTPError;
@@ -195,3 +126,38 @@ export function CatchBoundary() {
 
   return <Signin error={caught.data} />;
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  const form = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
+
+  try {
+    const parse = await signinSchema.parseAsync(form);
+
+    const { header: headers } = await signinApi(parse);
+
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers,
+    });
+  } catch (error) {
+    const nextError = signinValidationErrorWrapper(error);
+    if (nextError) {
+      return json({
+        errors: nextError,
+      });
+    }
+
+    const httpError = signinHTTPErrorWrapper(error);
+    if (httpError) {
+      return json({
+        errors: httpError,
+      });
+    }
+
+    throw json(error);
+  }
+};

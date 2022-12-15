@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 
 // hooks
-import { useUserQuery } from "~/api/user/hooks/hook";
+import { useUserQuery } from "~/api/user/hooks/useUserQuery";
 import { ASSET_URL } from "~/constants/constant";
 import { useIsomorphicLayoutEffect } from "react-use";
 

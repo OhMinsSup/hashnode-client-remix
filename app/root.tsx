@@ -28,8 +28,10 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider, useCreateAuthStore } from "./stores/useAuthStore";
 
+import cookies from "cookie";
+
 // api
-import { getUserInfoSsrApi } from "./api/user";
+import { getUserInfoApi } from "~/api/user/user";
 import { QUERIES_KEY } from "./constants/constant";
 import { applyAuth } from "./libs/server/applyAuth";
 
@@ -58,9 +60,22 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   if (token) {
     try {
-      await client.prefetchQuery(QUERIES_KEY.ME, () =>
-        getUserInfoSsrApi(token)
-      );
+      await client.prefetchQuery(QUERIES_KEY.ME, async () => {
+        const { result } = await getUserInfoApi({
+          hooks: {
+            beforeRequest: [
+              (request) => {
+                request.headers.set(
+                  "Cookie",
+                  cookies.serialize("access_token", token)
+                );
+                return request;
+              },
+            ],
+          },
+        });
+        return result;
+      });
     } catch (error) {
       console.log(error);
     }

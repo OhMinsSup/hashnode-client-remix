@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 // hooks
-import { useUserQuery } from "~/api/user/hooks/hook";
+import { useUserQuery } from "~/api/user/hooks/useUserQuery";
 
 // data
 import { Serialize } from "~/libs/serialize/serialize";
