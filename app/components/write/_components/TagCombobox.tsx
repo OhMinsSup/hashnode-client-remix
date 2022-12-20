@@ -3,7 +3,7 @@ import AsyncCreatableSelect from "react-select/async-creatable";
 import { useDebouncedCallback } from "use-debounce";
 
 // api
-import { getTagListApi } from "~/api/tags";
+import { getTagListApi } from "~/api/tags/tags";
 
 // hooks
 import { useFormContext } from "react-hook-form";

@@ -18,13 +18,7 @@ import {
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
-import {
-  dehydrate,
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-  type DehydratedState,
-} from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider, useCreateAuthStore } from "./stores/useAuthStore";
 
@@ -32,13 +26,15 @@ import cookies from "cookie";
 
 // api
 import { getUserInfoApi } from "~/api/user/user";
-import { QUERIES_KEY } from "./constants/constant";
 import { applyAuth } from "./libs/server/applyAuth";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import customStylesheetUrl from "./styles/custom.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
+
+// types
+import type { UserRespSchema } from "./api/schema/resp";
 
 export const links: LinksFunction = () => {
   return [
@@ -55,66 +51,64 @@ export const meta: MetaFunction = () => ({
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const client = new QueryClient();
   const token = applyAuth(request);
+
+  let profile: UserRespSchema | null = null;
 
   if (token) {
     try {
-      await client.prefetchQuery(QUERIES_KEY.ME, async () => {
-        const { result } = await getUserInfoApi({
-          hooks: {
-            beforeRequest: [
-              (request) => {
-                request.headers.set(
-                  "Cookie",
-                  cookies.serialize("access_token", token)
-                );
-                return request;
-              },
-            ],
-          },
-        });
-        return result;
+      const { result } = await getUserInfoApi({
+        hooks: {
+          beforeRequest: [
+            (request) => {
+              request.headers.set(
+                "Cookie",
+                cookies.serialize("access_token", token)
+              );
+              return request;
+            },
+          ],
+        },
       });
+      profile = result.result;
     } catch (error) {
-      console.log(error);
+      profile = null;
     }
   }
 
   return json({
     isLoggedIn: !!token,
-    dehydratedState: dehydrate(client),
+    currentProfile: profile,
   });
 };
 
 export default function App() {
-  const { dehydratedState, isLoggedIn } = useLoaderData<{
-    dehydratedState: DehydratedState;
+  const { currentProfile, isLoggedIn } = useLoaderData<{
+    currentProfile: UserRespSchema | null;
     isLoggedIn: boolean;
   }>();
 
   const createAuthStore = useCreateAuthStore({
     isLoggedIn,
+    currentProfile,
   });
 
   return (
     <AuthProvider createStore={createAuthStore}>
       <QueryClientProvider client={globalClient}>
-        <Hydrate state={dehydratedState}>
-          <html lang="kr">
-            <head>
-              <Meta />
-              <Links />
-            </head>
-            <body className="bg-white leading-6">
-              <Outlet />
-              <ScrollRestoration />
-              <Scripts />
-              <LiveReload port={8002} />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </body>
-          </html>
-        </Hydrate>
+        <html lang="kr">
+          <head>
+            <Meta />
+            <Links />
+          </head>
+          <body className="bg-white leading-6">
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload port={8002} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </body>
+        </html>
       </QueryClientProvider>
     </AuthProvider>
   );

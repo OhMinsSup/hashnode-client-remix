@@ -30,3 +30,5 @@ export { default as TempIcon } from "./Temp";
 export { default as TrendingIcon } from "./Trending";
 export { default as ArrowPathIcon } from "./ArrowPath";
 export { default as ScheduleIcon } from "./Schedule";
+export { default as UserIcon } from "./User";
+export { default as LogoutIcon } from "./Logout";

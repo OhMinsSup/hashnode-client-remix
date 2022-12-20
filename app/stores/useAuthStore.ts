@@ -3,9 +3,15 @@ import create, { type UseBoundStore, type StoreApi } from "zustand";
 import createContext from "zustand/context";
 import { isBrowser } from "~/libs/browser-utils";
 
+import type { Nullable } from "~/api/schema/api";
+import type { UserRespSchema } from "~/api/schema/resp";
+
 interface AuthStore {
   isLoggedIn: boolean;
+  currentProfile: Nullable<UserRespSchema>;
   setLoggedIn: (isLoggedIn: boolean) => void;
+  setProfile: (profile: Nullable<UserRespSchema>) => void;
+  setAuth: (isLoggedIn: boolean, profile: Nullable<UserRespSchema>) => void;
 }
 
 let store: UseBoundStore<StoreApi<AuthStore>>;
@@ -13,6 +19,7 @@ let store: UseBoundStore<StoreApi<AuthStore>>;
 const getDefaultInitialState = () =>
   ({
     isLoggedIn: false,
+    currentProfile: null,
   } as Omit<AuthStore, "setLoggedIn">);
 
 const zustandContext = createContext();
@@ -24,17 +31,24 @@ export const useAuthStore = zustandContext.useStore as UseBoundStore<
 >;
 
 export const initializeAuthStore = (
-  preloadedState = {} as Omit<AuthStore, "setLoggedIn">
+  preloadedState = {} as Omit<
+    AuthStore,
+    "setLoggedIn" | "setProfile" | "setAuth"
+  >
 ) => {
   return create<AuthStore>((set, get) => ({
     ...getDefaultInitialState(),
     ...preloadedState,
     setLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
+    setProfile: (profile: Nullable<UserRespSchema>) =>
+      set({ currentProfile: profile }),
+    setAuth: (isLoggedIn: boolean, profile: Nullable<UserRespSchema>) =>
+      set({ isLoggedIn, currentProfile: profile }),
   }));
 };
 
 export function useCreateAuthStore(
-  serverInitialState: Omit<AuthStore, "setLoggedIn">
+  serverInitialState: Omit<AuthStore, "setLoggedIn" | "setProfile" | "setAuth">
 ) {
   // Server side code: For SSR & SSG, always use a new store.
   if (!isBrowser) {

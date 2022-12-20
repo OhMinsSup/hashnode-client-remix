@@ -59,7 +59,7 @@ export default function Index() {
     <RootTemplate>
       <div className="relative col-span-7 min-w-0 pt-5 pb-24">
         <div className="overflow-hidden rounded-lg border bg-white">
-          <Tab.Group>
+          <Tab.Group defaultIndex={0}>
             <div className="relative z-20 flex max-w-[100vw] flex-row justify-between border-b px-5 pt-2 font-medium text-gray-600">
               <Tab.List className="flex flex-row items-center overflow-auto">
                 <Tab

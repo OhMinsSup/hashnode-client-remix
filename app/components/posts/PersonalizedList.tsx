@@ -13,6 +13,9 @@ const PersonalizedList = () => {
   const transition = useTransition();
   const fetcher = useFetcher();
 
+  console.log("PersonalizedList ssr", posts);
+  console.log("windows", typeof window);
+
   const loadMore = useCallback(
     (index: number) => {
       if (index <= 0) return;

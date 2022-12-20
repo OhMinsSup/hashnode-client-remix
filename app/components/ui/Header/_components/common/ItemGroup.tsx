@@ -2,15 +2,21 @@ import React, { useMemo, useRef, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 
 // hooks
-import { useUserQuery } from "~/api/user/hooks/useUserQuery";
 import { ASSET_URL } from "~/constants/constant";
 import { useIsomorphicLayoutEffect } from "react-use";
-
-// data
-import { Serialize } from "~/libs/serialize/serialize";
+import { useAuthStore } from "~/stores/useAuthStore";
 
 // components
-import { DraftIcon, MoonIcon, NotificationIcon } from "../../../Icon";
+import { Link } from "@remix-run/react";
+import {
+  DraftIcon,
+  MoonIcon,
+  NotificationIcon,
+  TempIcon,
+  UserIcon,
+  BookmarkIcon,
+  LogoutIcon,
+} from "~/components/ui/Icon";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { optimizeAnimation } from "~/utils/util";
 import { getTargetElement, isBrowser } from "~/libs/browser-utils";
@@ -26,11 +32,16 @@ interface AbsolutePosition {
 }
 
 interface UserMenuProps {
-  avatarUrl: string;
   open: boolean;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ avatarUrl, open }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ open }) => {
+  const { currentProfile } = useAuthStore();
+
+  const avatarUrl = useMemo(() => {
+    return currentProfile?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
+  }, [currentProfile]);
+
   const [postion, setPosition] = useState<Nullable<AbsolutePosition>>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -95,8 +106,72 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatarUrl, open }) => {
           <div className="overflow-hidden rounded-lg border bg-white shadow-lg">
             <div className=" relative min-h-[2rem] min-w-[4rem] bg-white">
               <div className="w-[18rem]">
-                <div className=" relative flex w-[36rem] rounded-lg transition-all duration-150">
-                  <section>Hemi</section>
+                {/* w-[36rem] */}
+                <div className="relative flex rounded-lg transition-all duration-150">
+                  <section className="flex flex-1 flex-col">
+                    {/* Header */}
+                    <Link
+                      to="/"
+                      className="flex max-w-[18rem] flex-row items-center p-6"
+                    >
+                      <div className=" mr-4 h-14 w-14 flex-shrink-0 rounded-full">
+                        <div className=" relative block h-full w-full rounded-full bg-gray-100">
+                          <img
+                            className="lazyload blur-up"
+                            data-src={avatarUrl}
+                            alt="Profile"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className=" min-w-0 flex-1"
+                        style={{ lineHeight: 1.25 }}
+                      >
+                        <h2
+                          title="OhMinSup"
+                          className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold text-gray-900"
+                        >
+                          {currentProfile?.username}
+                        </h2>
+                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
+                          @{currentProfile?.profile?.name}
+                        </p>
+                      </div>
+                    </Link>
+                    <hr className=" mx-6 h-[1px] flex-1" />
+                    {/* Header */}
+                    {/* Link */}
+                    <Link
+                      to="/"
+                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                    >
+                      <TempIcon className="mr-2 h-6 w-6 fill-current" />
+                      <span>My Drafts</span>
+                    </Link>
+                    <Link
+                      to="/"
+                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                    >
+                      <BookmarkIcon className="mr-2 h-6 w-6 fill-current" />
+                      <span>My Bookmarks</span>
+                    </Link>
+                    <Link
+                      to="/"
+                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                    >
+                      <UserIcon className="mr-2 h-6 w-6 fill-current" />
+                      <span>Account Settings</span>
+                    </Link>
+                    <hr className=" mx-6 h-[1px] flex-1" />
+                    <Link
+                      to="/"
+                      className="flex flex-row items-center py-4 px-6 font-semibold text-red-500"
+                    >
+                      <LogoutIcon className="mr-2 h-6 w-6 fill-current" />
+                      <span>Log out</span>
+                    </Link>
+                    {/* Link */}
+                  </section>
                 </div>
               </div>
             </div>
@@ -108,18 +183,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatarUrl, open }) => {
 };
 
 const ItemGroup: React.FC<ItemGroupProps> = () => {
-  const { data } = useUserQuery();
-
-  const profile = useMemo(() => {
-    return Serialize.default({
-      data,
-    });
-  }, [data]);
-
-  const avatarUrl = useMemo(() => {
-    return profile?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
-  }, [profile]);
-
   return (
     <div className="flex flex-row items-center justify-end">
       <div className="relative mr-2 h-10 w-10 md:block">
@@ -150,7 +213,7 @@ const ItemGroup: React.FC<ItemGroupProps> = () => {
       </div>
 
       <Popover className="mr-2 h-10 w-10 flex-shrink-0">
-        {({ open }) => <UserMenu avatarUrl={avatarUrl} open={open} />}
+        {({ open }) => <UserMenu open={open} />}
       </Popover>
     </div>
   );
