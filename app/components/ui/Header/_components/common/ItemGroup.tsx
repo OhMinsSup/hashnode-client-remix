@@ -105,75 +105,104 @@ const UserMenu: React.FC<UserMenuProps> = ({ open }) => {
         >
           <div className="overflow-hidden rounded-lg border bg-white shadow-lg">
             <div className=" relative min-h-[2rem] min-w-[4rem] bg-white">
-              <div className="w-[18rem]">
-                {/* w-[36rem] */}
-                <div className="relative flex rounded-lg transition-all duration-150">
-                  <section className="flex flex-1 flex-col">
-                    {/* Header */}
-                    <Link
-                      to="/"
-                      className="flex max-w-[18rem] flex-row items-center p-6"
-                    >
-                      <div className=" mr-4 h-14 w-14 flex-shrink-0 rounded-full">
-                        <div className=" relative block h-full w-full rounded-full bg-gray-100">
-                          <img
-                            className="lazyload blur-up"
-                            data-src={avatarUrl}
-                            alt="Profile"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        className=" min-w-0 flex-1"
-                        style={{ lineHeight: 1.25 }}
+              {/* w-[36rem] */}
+              {currentProfile ? (
+                <div className="w-[18rem]">
+                  <div className="relative flex rounded-lg transition-all duration-150">
+                    <section className="flex flex-1 flex-col">
+                      {/* Header */}
+                      <Link
+                        to="/"
+                        className="flex max-w-[18rem] flex-row items-center p-6"
                       >
-                        <h2
-                          title="OhMinSup"
-                          className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold text-gray-900"
+                        <div className=" mr-4 h-14 w-14 flex-shrink-0 rounded-full">
+                          <div className=" relative block h-full w-full rounded-full bg-gray-100">
+                            <img
+                              className="lazyload blur-up"
+                              data-src={avatarUrl}
+                              alt="Profile"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className=" min-w-0 flex-1"
+                          style={{ lineHeight: 1.25 }}
                         >
-                          {currentProfile?.username}
-                        </h2>
-                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
-                          @{currentProfile?.profile?.name}
-                        </p>
-                      </div>
-                    </Link>
-                    <hr className=" mx-6 h-[1px] flex-1" />
-                    {/* Header */}
-                    {/* Link */}
-                    <Link
-                      to="/"
-                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
-                    >
-                      <TempIcon className="mr-2 h-6 w-6 fill-current" />
-                      <span>My Drafts</span>
-                    </Link>
-                    <Link
-                      to="/"
-                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
-                    >
-                      <BookmarkIcon className="mr-2 h-6 w-6 fill-current" />
-                      <span>My Bookmarks</span>
-                    </Link>
-                    <Link
-                      to="/"
-                      className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
-                    >
-                      <UserIcon className="mr-2 h-6 w-6 fill-current" />
-                      <span>Account Settings</span>
-                    </Link>
-                    <hr className=" mx-6 h-[1px] flex-1" />
-                    <Link
-                      to="/"
-                      className="flex flex-row items-center py-4 px-6 font-semibold text-red-500"
-                    >
-                      <LogoutIcon className="mr-2 h-6 w-6 fill-current" />
-                      <span>Log out</span>
-                    </Link>
-                    {/* Link */}
-                  </section>
+                          <h2
+                            title="OhMinSup"
+                            className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold text-gray-900"
+                          >
+                            {currentProfile?.username}
+                          </h2>
+                          <p className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
+                            @{currentProfile?.profile?.name}
+                          </p>
+                        </div>
+                      </Link>
+                      <hr className=" mx-6 h-[1px] flex-1" />
+                      {/* Header */}
+                      {/* Link */}
+                      <Link
+                        to="/"
+                        className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                      >
+                        <TempIcon className="mr-2 h-6 w-6 fill-current" />
+                        <span>My Drafts</span>
+                      </Link>
+                      <Link
+                        to="/"
+                        className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                      >
+                        <BookmarkIcon className="mr-2 h-6 w-6 fill-current" />
+                        <span>My Bookmarks</span>
+                      </Link>
+                      <Link
+                        to="/"
+                        className="flex flex-row items-center py-4 px-6 font-semibold text-gray-900"
+                      >
+                        <UserIcon className="mr-2 h-6 w-6 fill-current" />
+                        <span>Account Settings</span>
+                      </Link>
+                      <hr className=" mx-6 h-[1px] flex-1" />
+                      <Link
+                        to="/"
+                        className="flex flex-row items-center py-4 px-6 font-semibold text-red-500"
+                      >
+                        <LogoutIcon className="mr-2 h-6 w-6 fill-current" />
+                        <span>Log out</span>
+                      </Link>
+                      {/* Link */}
+                    </section>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  className="h-auto w-[16rem] p-6 md:w-[18rem]"
+                  style={{ lineHeight: "1.375" }}
+                >
+                  <div className="mx-auto mb-5 block h-24 w-24">
+                    <img
+                      className="lazyload blur-up"
+                      data-src={ASSET_URL.DEFAULT_AVATAR}
+                      alt="Profile"
+                    />
+                  </div>
+                  <h1 className="mb-4 text-2xl font-extrabold text-gray-900">
+                    Sign up or log in to your Hashnode account.
+                  </h1>
+                  <p className="mb-4 text-base text-gray-700">
+                    Takes less than a few seconds.
+                  </p>
+                  <div className="css-o2d6zf">
+                    <Link
+                      to="/auth/signin"
+                      className="ml-2 flex flex-row items-center justify-center rounded-full border border-blue-500 bg-blue-500 py-1 px-3 text-center text-lg font-semibold text-white outline-none hover:shadow-md"
+                    >
+                      <span>Sign in</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </Popover.Panel>
