@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "@remix-run/react";
-import { ClientOnly } from "remix-utils";
-import { ToastViewer } from "~/components/ui/Editor";
+// import { ClientOnly } from "remix-utils";
+// import { ToastViewer } from "~/components/ui/Editor";
 
 // types
 import type { Nullable } from "~/api/schema/api";
@@ -47,9 +47,9 @@ const PostWriterFooter: React.FC<PostWriterFooterProps> = ({
             </div>
           </div>
           <div className="max-w-[65ch] break-words text-base text-gray-600">
-            <ClientOnly fallback={<>Loading....</>}>
+            {/* <ClientOnly fallback={<>Loading....</>}>
               {() => <ToastViewer initialValue={bio ?? ""} />}
-            </ClientOnly>
+            </ClientOnly> */}
           </div>
         </div>
       </div>

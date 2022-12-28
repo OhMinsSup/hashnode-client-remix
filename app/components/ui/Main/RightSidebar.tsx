@@ -1,6 +1,7 @@
 import React from "react";
 import { useMedia } from "react-use";
-import { TrendingPostBox, OtherBox } from "../_components";
+import TrendingPostBox from "~/components/ui/Main/TrendingPostBox";
+import OtherBox from "~/components/ui/Main/OtherBox";
 
 const RightSidebar = () => {
   const isLarge = useMedia("(min-width: 1024px)", false);

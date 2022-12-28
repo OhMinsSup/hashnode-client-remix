@@ -1,61 +1,39 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import cookies from "cookie";
 import { redirect } from "@remix-run/cloudflare";
 import { applyAuth } from "~/libs/server/applyAuth";
 
 // components
-import { ClientOnly } from "remix-utils";
+import { Editor } from "~/components/ui/Editor";
+import { TypographyIcon } from "~/components/ui/Icon";
+import { Button } from "~/components/ui/Shared";
 import {
   CoverImage,
   CoverImagePopover,
   SubTitle,
   Title,
-  WriteTemplate,
   PublishDrawer,
 } from "~/components/write";
-import { WriterHeader } from "~/components/ui/Header";
 
 // hooks
 import { useWriteStore } from "~/stores/useWriteStore";
-import { useCatch, useFetcher } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
+import { useWriteContext } from "~/stores/useWirteContext";
+import { useFormContext } from "react-hook-form";
 
 // validation
 import { getTargetElement } from "~/libs/browser-utils";
-import { schema, transform } from "~/libs/validation/schema";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { TypographyIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/Shared";
-import { ToastEditor } from "~/components/ui/Editor";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { isEmpty } from "~/utils/assertion";
 
 // api
 import { createPostsApi } from "~/api/posts/posts";
 
-import type { FileSchema } from "~/api/schema/file";
-import type { ActionFunction, LinksFunction } from "@remix-run/cloudflare";
-
-import toastUiStyles from "@toast-ui/editor/dist/toastui-editor.css";
-
-export interface FormFieldValues {
-  title: string;
-  subTitle?: string;
-  description: string;
-  content: string;
-  thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
-  tags?: string[];
-  disabledComment: boolean;
-  isPublic: boolean;
-  hasPublishedTime: boolean;
-  publishingDate?: Date;
-}
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: toastUiStyles }];
-};
+import type { SubmitHandler } from "react-hook-form";
+import type { ActionFunction } from "@remix-run/cloudflare";
+import type { FormFieldValues } from "~/routes/create";
 
 export const action: ActionFunction = async ({ request }) => {
   const token = applyAuth(request);
@@ -65,8 +43,69 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = await request.formData();
 
+  const data = {
+    title: formData.get("title"),
+    subTitle: formData.get("subTitle"),
+    description: formData.get("description"),
+    content: formData.get("content"),
+    thumbnail: formData.get("thumbnail"),
+    tags: formData.get("tags"),
+    disabledComment: formData.get("disabledComment"),
+    isPublic: formData.get("isPublic"),
+    hasPublishedTime: formData.get("hasPublishedTime"),
+    publishingDate: formData.get("publishingDate"),
+  } as Record<string, string>;
+
+  const isNullOrUndefined = (value: string | null | undefined) => {
+    return (
+      value === null ||
+      value === undefined ||
+      value === "null" ||
+      value === "undefined"
+    );
+  };
+
+  const stringToBoolean = (value: string) => {
+    return value === "true";
+  };
+
+  const toDate = (value: string) => {
+    return new Date(value);
+  };
+
+  const thumbnail = isNullOrUndefined(data.thumbnail)
+    ? null
+    : JSON.parse(data.thumbnail)?.url;
+
+  const beforTags = isNullOrUndefined(data.tags) ? null : data.tags.split(",");
+
+  const tags = !beforTags || isEmpty(beforTags) ? [] : beforTags;
+
   try {
-    const body = transform.write(formData);
+    const body = {
+      title: (isNullOrUndefined(data.title) ? null : data.title) as string,
+      subTitle: isNullOrUndefined(data.subTitle) ? null : data.subTitle,
+      description: (isNullOrUndefined(data.description)
+        ? null
+        : data.description) as string,
+      content: (isNullOrUndefined(data.content)
+        ? null
+        : data.content) as string,
+      tags,
+      thumbnail,
+      disabledComment: isNullOrUndefined(data.disabledComment)
+        ? false
+        : stringToBoolean(data.disabledComment),
+      isPublic: isNullOrUndefined(data.isPublic)
+        ? false
+        : stringToBoolean(data.isPublic),
+      hasPublishedTime: isNullOrUndefined(data.hasPublishedTime)
+        ? false
+        : stringToBoolean(data.hasPublishedTime),
+      publishingDate: isNullOrUndefined(data.publishingDate)
+        ? null
+        : toDate(data.publishingDate),
+    };
 
     const { result } = await createPostsApi(body, {
       hooks: {
@@ -89,29 +128,17 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function CreateStory() {
-  const intialValues: FormFieldValues = useMemo(() => {
-    return {
-      title: "",
-      subTitle: undefined,
-      description: "",
-      content: "",
-      thumbnail: null,
-      tags: undefined,
-      disabledComment: false,
-      isPublic: false,
-      hasPublishedTime: false,
-      publishingDate: undefined,
-    };
-  }, []);
+  const { setValue, watch, handleSubmit, formState } =
+    useFormContext<FormFieldValues>();
 
-  const methods = useForm<FormFieldValues>({
-    resolver: yupResolver(schema.write()),
-    defaultValues: intialValues,
-  });
+  console.log(formState.errors);
+
+  const { setEditorJS, editorJS } = useWriteContext();
+
+  const watchThumbnail = watch("thumbnail");
 
   const fetcher = useFetcher();
 
-  const wrpperRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const { openSubTitle, visible } = useWriteStore();
@@ -128,23 +155,27 @@ export default function CreateStory() {
   };
 
   const onRemoveThumbnail = useCallback(() => {
-    methods.setValue("thumbnail", null, {
+    setValue("thumbnail", null, {
       shouldDirty: true,
       shouldValidate: true,
     });
-  }, [methods]);
+  }, [setValue]);
 
-  const onChangeHtml = useCallback(
-    (html: string) => {
-      methods.setValue("content", html, {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-    },
-    [methods]
-  );
+  const syncEditorContent = useCallback(async () => {
+    const blocks = await editorJS?.save();
+    const data = JSON.stringify(blocks);
 
-  const onPublich = useCallback(() => {
+    setValue("content", data, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    return data;
+  }, [editorJS, setValue]);
+
+  const onPublich = useCallback(async () => {
+    await syncEditorContent();
+
     const ele = getTargetElement(formRef);
     ele?.dispatchEvent(
       new Event("submit", {
@@ -152,63 +183,42 @@ export default function CreateStory() {
         bubbles: true,
       })
     );
-  }, []);
-
-  const watchThumbnail = methods.watch("thumbnail");
+  }, [syncEditorContent]);
 
   return (
-    <div ref={wrpperRef}>
-      <FormProvider {...methods}>
-        <WriteTemplate header={<WriterHeader />}>
-          <form
-            method="post"
-            ref={formRef}
-            className="create-post"
-            onSubmit={methods.handleSubmit(onSubmit)}
+    <>
+      <form
+        method="post"
+        ref={formRef}
+        className="create-post"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="relative mb-10 flex flex-row items-center">
+          {!watchThumbnail && <CoverImagePopover />}
+          <Button
+            className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none"
+            aria-label="add post sub title"
+            aria-haspopup={visible.subTitle ? "true" : "false"}
+            onPress={openSubTitle}
           >
-            <div className="relative mb-10 flex flex-row items-center">
-              {!watchThumbnail && <CoverImagePopover />}
-              <Button
-                className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none"
-                aria-label="add post sub title"
-                aria-haspopup={visible.subTitle ? "true" : "false"}
-                onPress={openSubTitle}
-              >
-                <TypographyIcon className="mr-2 h-5 w-5 fill-current" />
-                <span>Add Subtitle</span>
-              </Button>
-            </div>
-            {watchThumbnail && (
-              <CoverImage
-                src={watchThumbnail.url}
-                onRemove={onRemoveThumbnail}
-              />
-            )}
-            <Title />
-            <SubTitle />
-            <div className="relative z-20">
-              <ClientOnly fallback={<>Loading....</>}>
-                {() => (
-                  <ToastEditor
-                    height="600px"
-                    initialEditType="wysiwyg"
-                    hideModeSwitch={true}
-                    placeholder="Write your story..."
-                    onChangeHtml={onChangeHtml}
-                  />
-                )}
-              </ClientOnly>
-            </div>
-          </form>
-          <PublishDrawer onPublich={onPublich} />
-        </WriteTemplate>
-      </FormProvider>
-    </div>
+            <TypographyIcon className="mr-2 h-5 w-5 fill-current" />
+            <span>Add Subtitle</span>
+          </Button>
+        </div>
+        {watchThumbnail && (
+          <CoverImage src={watchThumbnail.url} onRemove={onRemoveThumbnail} />
+        )}
+        <Title />
+        <SubTitle />
+        <div className="relative z-20">
+          <Editor onReady={setEditorJS} />
+        </div>
+      </form>
+      <PublishDrawer onPublich={onPublich} />
+    </>
   );
 }
 
 export function CatchBoundary() {
-  const caught = useCatch();
-  console.log(caught);
   return <CreateStory />;
 }

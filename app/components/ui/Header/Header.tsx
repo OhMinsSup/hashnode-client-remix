@@ -1,5 +1,7 @@
 import React from "react";
-import { Logo, RightArea, SearchForm } from "./_components";
+import Logo from "~/components/ui/Header/Logo";
+import RightArea from "~/components/ui/Header/RightArea";
+import SearchForm from "~/components/ui/Header/SearchForm";
 
 interface HeaderProps {}
 

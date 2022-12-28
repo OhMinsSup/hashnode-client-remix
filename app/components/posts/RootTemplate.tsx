@@ -1,5 +1,5 @@
 import React from "react";
-import { Main } from "../ui/Content";
+import { Main } from "../ui/Main";
 import { Header } from "../ui/Header";
 
 interface RootTemplateProps {

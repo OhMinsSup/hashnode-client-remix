@@ -1,6 +1,11 @@
 import React from "react";
-import SidebarNavLink from "./SidebarNavLink";
-import { ExploreIcon, BookmarkIcon, FeedIcon, TempIcon } from "../../Icon";
+import SidebarNavLink from "~/components/ui/Main/SidebarNavLink";
+import {
+  ExploreIcon,
+  BookmarkIcon,
+  FeedIcon,
+  TempIcon,
+} from "~/components/ui/Icon";
 
 const MenuLinks = () => {
   return (

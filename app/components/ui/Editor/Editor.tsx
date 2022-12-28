@@ -1,42 +1,166 @@
-import React from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  useCallback,
+} from "react";
+import { isBrowser } from "~/libs/browser-utils";
+import { useImageUploadMutation } from "~/api/files";
 
-import LexicalEditor from "./_components/LexicalEditor";
-import { SharedHistoryContext } from "./_context/history";
-import { SettingsProvider, useSettingsContext } from "./_context/setting";
-import { Nodes } from "./_nodes/Nodes";
-import theme from "./_theme/DefaultEditorTheme";
+import type EditorJS from "@editorjs/editorjs";
+import { isString } from "~/utils/assertion";
 
-const InternalEditor = () => {
-  const {
-    settings: { emptyEditor, measureTypingPerf, isRichText },
-  } = useSettingsContext();
+interface EditorProps {
+  readOnly?: boolean;
+  initialData?: Record<string, unknown> | string;
+  onReady?: (editor: EditorJS) => void;
+}
 
-  const initialConfig = {
-    editorState: emptyEditor ? undefined : undefined,
-    namespace: "RemixEditor",
-    nodes: [...Nodes],
-    onError: (error: Error) => {
-      throw error;
+const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
+  props,
+  componentRef
+) => {
+  const ref = useRef<EditorJS | null>(null);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  const { mutateAsync } = useImageUploadMutation();
+
+  const getUploadImageData = useCallback(
+    async (file: File) => {
+      try {
+        if (!file) {
+          throw new Error("No file");
+        }
+
+        const { result } = await mutateAsync({
+          file,
+          uploadType: "IMAGE",
+          mediaType: "IMAGE",
+        });
+
+        const data = result.result;
+
+        return {
+          success: 1,
+          file: {
+            url: data.url,
+          },
+        };
+      } catch (error) {
+        return {
+          success: 0,
+          file: null,
+        };
+      }
     },
-    theme,
-  };
+    [mutateAsync]
+  );
+
+  async function initializeEditor() {
+    const EditorJS = (await import("@editorjs/editorjs")).default;
+    // @ts-ignore
+    const Header = (await import("@editorjs/header")).default;
+    // @ts-ignore
+    const Embed = (await import("@editorjs/embed")).default;
+    // @ts-ignore
+    const Table = (await import("@editorjs/table")).default;
+    // @ts-ignore
+    const List = (await import("@editorjs/list")).default;
+    // @ts-ignore
+    const Code = (await import("@editorjs/code")).default;
+    // @ts-ignore
+    const LinkTool = (await import("@editorjs/link")).default;
+    // @ts-ignore
+    const InlineCode = (await import("@editorjs/inline-code")).default;
+    // @ts-ignore
+    const ImageTool = (await import("@editorjs/image")).default;
+    if (!ref.current) {
+      const data = isString(props.initialData)
+        ? JSON.parse(props.initialData) || undefined
+        : props.initialData || undefined;
+
+      const editor = new EditorJS({
+        holder: "editor",
+        onReady() {
+          ref.current = editor;
+          props.onReady?.(editor);
+        },
+        readOnly: props.readOnly,
+        placeholder: "Type here to write your post...",
+        inlineToolbar: true,
+        data,
+        tools: {
+          header: Header,
+          linkTool: LinkTool,
+          list: List,
+          code: Code,
+          inlineCode: InlineCode,
+          table: Table,
+          embed: Embed,
+          image: {
+            class: ImageTool,
+            config: {
+              /**
+               * Custom uploader
+               */
+              uploader: {
+                /**
+                 * Upload file to the server and return an uploaded image data
+                 * @param {File} file - file selected from the device or pasted by drag-n-drop
+                 * @return {Promise.<{success, file: {url}}>}
+                 */
+                uploadByFile(file: File) {
+                  return getUploadImageData(file).then((data) => {
+                    return data;
+                  });
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (isBrowser) setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      initializeEditor();
+
+      return () => {
+        ref.current?.destroy();
+        ref.current = null;
+      };
+    }
+  }, [isMounted]);
+
+  useImperativeHandle(componentRef, () => {
+    return ref.current as unknown as EditorJS;
+  });
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <SharedHistoryContext>
-        <LexicalEditor />
-      </SharedHistoryContext>
-    </LexicalComposer>
+    <div className="grid w-full gap-10">
+      <div className="prose prose-stone mx-auto w-full">
+        <div id="editor" className="min-h-[500px]" />
+        {props.readOnly ? null : (
+          <p className="text-sm text-gray-500">
+            Use{" "}
+            <kbd className="rounded-md border bg-slate-50 px-1 text-xs uppercase">
+              Tab
+            </kbd>{" "}
+            to open the command menu.
+          </p>
+        )}
+      </div>
+    </div>
   );
 };
 
-const Editor = () => {
-  return (
-    <SettingsProvider>
-      <InternalEditor />
-    </SettingsProvider>
-  );
-};
-
-export default Editor;
+export default React.forwardRef(Editor);
