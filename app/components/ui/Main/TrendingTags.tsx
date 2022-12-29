@@ -1,5 +1,5 @@
 import React from "react";
-import TagItem from "~/components/ui/Main/TagItem";
+import TagItem from "~/components/ui/main/TagItem";
 
 import { useLoaderData } from "@remix-run/react";
 

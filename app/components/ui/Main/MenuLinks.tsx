@@ -1,5 +1,5 @@
 import React from "react";
-import SidebarNavLink from "~/components/ui/Main/SidebarNavLink";
+import SidebarNavLink from "~/components/ui/main/SidebarNavLink";
 import {
   ExploreIcon,
   BookmarkIcon,

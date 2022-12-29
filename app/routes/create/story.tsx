@@ -4,9 +4,9 @@ import { redirect } from "@remix-run/cloudflare";
 import { applyAuth } from "~/libs/server/applyAuth";
 
 // components
-import { Editor } from "~/components/ui/Editor";
+import { Editor } from "~/components/ui/editor";
 import { TypographyIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/Shared";
+import { Button } from "~/components/ui/shared";
 import {
   CoverImage,
   CoverImagePopover,

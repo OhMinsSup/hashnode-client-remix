@@ -1,5 +1,5 @@
 import React from "react";
-import RightContentBox from "~/components/ui/Main/RightContentBox";
+import RightContentBox from "~/components/ui/main/RightContentBox";
 
 interface OtherBoxProps {}
 

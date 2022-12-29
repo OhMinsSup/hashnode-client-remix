@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useButton } from "react-aria";
 import { Link } from "@remix-run/react";
-import { Logo as RemixLogo } from "~/components/ui/Logo";
+import { Logo as RemixLogo } from "~/components/ui/logo";
 import { MenuIcon } from "~/components/ui/Icon";
 import classNames from "classnames";
 

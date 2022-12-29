@@ -1,7 +1,7 @@
 import React from "react";
 
-import LeftSidebar from "~/components/ui/Main/LeftSidebar";
-import RightSidebar from "~/components/ui/Main/RightSidebar";
+import LeftSidebar from "~/components/ui/main/LeftSidebar";
+import RightSidebar from "~/components/ui/main/RightSidebar";
 
 interface MainProps {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 
 // components
-import MenuLinks from "~/components/ui/Main/MenuLinks";
-import TrendingTags from "~/components/ui/Main/TrendingTags";
+import MenuLinks from "~/components/ui/main/MenuLinks";
+import TrendingTags from "~/components/ui/main/TrendingTags";
 import { TrendingIcon } from "~/components/ui/Icon";
 
 // hooks

@@ -2,8 +2,8 @@ import React from "react";
 
 // components
 import { Link } from "@remix-run/react";
-import { Logo as RemixLogo } from "~/components/ui/Logo";
-import { Button } from "../Shared";
+import { Logo as RemixLogo } from "~/components/ui/logo";
+import { Button } from "../shared";
 
 // hooks
 import { useWriteStore } from "~/stores/useWriteStore";

@@ -20,18 +20,12 @@ import {
   PostTags,
   PostWriterFooter,
 } from "~/components/posts";
-import { Editor } from "~/components/ui/Editor";
-import { Header } from "~/components/ui/Header";
+import { Editor } from "~/components/ui/editor";
+import { Header } from "~/components/ui/header";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
-import type { LoaderFunction, LinksFunction } from "@remix-run/cloudflare";
-
-import toastUiStyles from "@toast-ui/editor/dist/toastui-editor.css";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: toastUiStyles }];
-};
+import type { LoaderFunction } from "@remix-run/cloudflare";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const id = params.itemId;

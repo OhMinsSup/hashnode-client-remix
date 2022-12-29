@@ -2,7 +2,7 @@ import { XIcon } from "@heroicons/react/solid";
 import React, { useCallback } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { ScheduleIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/Shared";
+import { Button } from "~/components/ui/shared";
 
 // types
 import type { FormFieldValues } from "~/routes/create/story";

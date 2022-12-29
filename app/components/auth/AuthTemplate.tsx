@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@remix-run/react";
-import { Logo } from "~/components/ui/Logo";
+import { Logo } from "~/components/ui/logo";
 
 interface AuthTemplateProps {
   children: React.ReactNode;

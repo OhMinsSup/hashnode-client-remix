@@ -10,7 +10,7 @@ import {
 } from "@remix-run/react";
 
 // components
-import { ValidationMessage } from "~/components/ui/Error";
+import { ValidationMessage } from "~/components/ui/error";
 import { LoadingIcon } from "~/components/ui/Icon";
 
 // api

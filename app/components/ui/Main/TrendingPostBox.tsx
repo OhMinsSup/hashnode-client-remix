@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useLoaderData } from "@remix-run/react";
 
 // components
-import RightContentBox from "~/components/ui/Main/RightContentBox";
+import RightContentBox from "~/components/ui/main/RightContentBox";
 import { Tab } from "@headlessui/react";
 import { TrendingSimplePost } from "~/components/common";
 

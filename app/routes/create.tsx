@@ -3,7 +3,7 @@ import { Outlet } from "@remix-run/react";
 
 // components
 import { WriteTemplate } from "~/components/write";
-import { WriterHeader } from "~/components/ui/Header";
+import { WriterHeader } from "~/components/ui/header";
 
 // validation
 import { createPostSchema } from "~/api/posts/validation/create";
