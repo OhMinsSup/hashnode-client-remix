@@ -5,10 +5,12 @@ import { PostItem } from "../common";
 
 import type { PostDetailRespSchema } from "~/api/schema/resp";
 
-const PersonalizedList = () => {
-  const { posts } = useLoaderData();
+const LikedPostList = () => {
+  const { likePosts } = useLoaderData();
 
-  const [items, setItems] = useState<PostDetailRespSchema[]>(posts?.list ?? []);
+  const [items, setItems] = useState<PostDetailRespSchema[]>(
+    likePosts?.list ?? []
+  );
 
   const transition = useTransition();
   const fetcher = useFetcher();
@@ -21,13 +23,13 @@ const PersonalizedList = () => {
       if (!lastItem) return;
 
       if (fetcher.data) {
-        const { posts } = fetcher.data;
-        const { hasNextPage } = posts?.pageInfo ?? {};
+        const { likePosts } = fetcher.data;
+        const { hasNextPage } = likePosts?.pageInfo ?? {};
         if (hasNextPage) {
-          fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
+          fetcher.load(`?cursor=${lastItem.id}&limit=25`);
         }
       } else {
-        fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
+        fetcher.load(`?cursor=${lastItem.id}&limit=25`);
       }
     },
     [fetcher, items]
@@ -35,8 +37,8 @@ const PersonalizedList = () => {
 
   useEffect(() => {
     if (fetcher.data) {
-      const { posts } = fetcher.data;
-      const nextItems = posts?.list ?? [];
+      const { likePosts } = fetcher.data;
+      const nextItems = likePosts?.list ?? [];
       setItems((prevItems) => [...prevItems, ...nextItems]);
     }
   }, [fetcher.data]);
@@ -59,4 +61,4 @@ const PersonalizedList = () => {
   );
 };
 
-export default PersonalizedList;
+export default LikedPostList;

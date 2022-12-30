@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   POSTS: {
     ROOT: "posts",
     GET_TOP_POSTS: "posts/get-top-posts",
+    GET_LIKES: "posts/get-likes",
     ID: (id: string | number) => `posts/${id}`,
   },
   FILES: {

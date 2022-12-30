@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import TrendingSimplePostItem from "./TrendingSimplePostItem";
 import { isNull, isUndefined } from "~/utils/assertion";
-import { useGetTopPostsQuery } from "~/api/posts/posts";
+import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
 
 interface TrendingSimplePostItemProps {
   enabled: boolean;
