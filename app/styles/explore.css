@@ -356,6 +356,75 @@
   flex-wrap: wrap;
 }
 
+.newly-added-tag {
+  padding: 0.5rem;
+}
+
+.newly-added-tag .newly-added-tag-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  padding: 1rem;
+}
+
+.newly-added-tag .newly-added-tag-wrapper .profile {
+  margin-right: 0.5rem;
+}
+
+.newly-added-tag .newly-added-tag-wrapper .profile a {
+  display: block;
+  height: 2.5rem;
+  width: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.25rem;
+}
+
+.newly-added-tag .newly-added-tag-wrapper .profile a img {
+  display: block;
+  width: 100%;
+}
+
+.newly-added-tag .newly-added-tag-wrapper .content {
+  margin-right: 0.5rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  min-width: 0px;
+  -webkit-flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.newly-added-tag .newly-added-tag-wrapper .content h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
 @media (min-width: 640px) {
   .explore-tab-area {
     -webkit-box-pack: center;
@@ -406,5 +475,13 @@
     -webkit-flex-direction: row;
     -ms-flex-direction: row;
     flex-direction: row;
+  }
+
+  .newly-added-tag {
+    width: 33.333333%;
+  }
+
+  .newly-added-tag .newly-added-tag-wrapper .content {
+    white-space: nowrap;
   }
 }
