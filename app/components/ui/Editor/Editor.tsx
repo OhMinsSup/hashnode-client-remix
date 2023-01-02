@@ -85,6 +85,9 @@ const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
           ref.current = editor;
           props.onReady?.(editor);
         },
+        onChange(api, event) {
+          console.log("onChange", api, event);
+        },
         readOnly: props.readOnly,
         placeholder: "Type here to write your post...",
         inlineToolbar: true,

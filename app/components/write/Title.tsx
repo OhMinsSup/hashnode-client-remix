@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 const Title = () => {
   const { register } = useFormContext();
+
   return (
     <div style={{ lineHeight: "1.375" }}>
       <textarea

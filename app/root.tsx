@@ -31,6 +31,7 @@ import { applyAuth } from "./libs/server/applyAuth";
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import customStylesheetUrl from "./styles/custom.css";
+import commonStylesheetUrl from "./styles/common.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
 
 // types
@@ -39,6 +40,7 @@ import type { UserRespSchema } from "./api/schema/resp";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "stylesheet", href: commonStylesheetUrl },
     { rel: "stylesheet", href: customStylesheetUrl },
     { rel: "stylesheet", href: rcDrawerStylesheetUrl },
   ];
