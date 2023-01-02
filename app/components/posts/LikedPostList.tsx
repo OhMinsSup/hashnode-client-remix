@@ -3,12 +3,12 @@ import { useFetcher, useLoaderData, useTransition } from "@remix-run/react";
 import { Virtuoso } from "react-virtuoso";
 import { PostItem } from "../common";
 
-import type { PostDetailRespSchema } from "~/api/schema/resp";
+import type { PostLikeRespSchema } from "~/api/schema/resp";
 
 const LikedPostList = () => {
   const { likePosts } = useLoaderData();
 
-  const [items, setItems] = useState<PostDetailRespSchema[]>(
+  const [items, setItems] = useState<Array<PostLikeRespSchema>>(
     likePosts?.list ?? []
   );
 
@@ -21,15 +21,17 @@ const LikedPostList = () => {
 
       const lastItem = items.at(index);
       if (!lastItem) return;
+      if (!lastItem.cursorId) return;
 
       if (fetcher.data) {
         const { likePosts } = fetcher.data;
         const { hasNextPage } = likePosts?.pageInfo ?? {};
+
         if (hasNextPage) {
-          fetcher.load(`?cursor=${lastItem.id}&limit=25`);
+          fetcher.load(`/bookmarks?cursor=${lastItem.cursorId}&limit=25`);
         }
       } else {
-        fetcher.load(`?cursor=${lastItem.id}&limit=25`);
+        fetcher.load(`/bookmarks?cursor=${lastItem.cursorId}&limit=25`);
       }
     },
     [fetcher, items]

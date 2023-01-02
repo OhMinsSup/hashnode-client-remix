@@ -128,10 +128,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function CreateStory() {
-  const { setValue, watch, handleSubmit, formState } =
-    useFormContext<FormFieldValues>();
-
-  console.log(formState.errors);
+  const { setValue, watch, handleSubmit } = useFormContext<FormFieldValues>();
 
   const { setEditorJS, editorJS } = useWriteContext();
 

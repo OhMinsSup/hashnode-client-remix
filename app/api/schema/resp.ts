@@ -43,8 +43,15 @@ export interface PostDetailRespSchema extends PostSchema {
   };
 }
 
+export interface PostLikeRespSchema extends PostDetailRespSchema {
+  cursorId: number;
+}
+
 export interface PostListRespSchema
   extends ListRespSchema<PostDetailRespSchema> {}
+
+export interface PostLikeListRespSchema
+  extends ListRespSchema<PostLikeRespSchema> {}
 
 export interface GetTopPostsRespSchema {
   posts: PostDetailRespSchema[];

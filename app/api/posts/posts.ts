@@ -11,6 +11,7 @@ import type {
   PostListRespSchema,
   PostRespSchema,
   GetTopPostsRespSchema,
+  PostLikeListRespSchema,
 } from "../schema/resp";
 import type { AppAPI } from "../schema/api";
 import type { PostBody } from "../schema/body";
@@ -91,19 +92,6 @@ export async function getPostsLikeListApi(
     search.set("cursor", query.cursor.toString());
   }
 
-  // if (query?.keyword) {
-  //   search.set("keyword", query.keyword);
-  // }
-
-  // if (query?.type) {
-  //   search.set("type", query.type);
-  // }
-
-  // if (query?.startDate && query?.endDate) {
-  //   search.set("startDate", query.startDate);
-  //   search.set("endDate", query.endDate);
-  // }
-
   let url = API_ENDPOINTS.POSTS.GET_LIKES;
   if (!isEmpty(search.toString())) {
     url += `?${search.toString()}`;
@@ -117,7 +105,7 @@ export async function getPostsLikeListApi(
     },
     ...opts,
   });
-  const result = await response.json<AppAPI<PostListRespSchema>>();
+  const result = await response.json<AppAPI<PostLikeListRespSchema>>();
   return { result };
 }
 
@@ -129,7 +117,6 @@ export async function getTopPostsApi(
 ) {
   const { headers, ...opts } = options ?? {};
   const url = `${API_ENDPOINTS.POSTS.GET_TOP_POSTS}?duration=${query.duration}`;
-  console.log(url);
   const response = await apiClient.get(url, {
     credentials: "include",
     headers: {

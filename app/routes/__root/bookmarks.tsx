@@ -5,6 +5,7 @@ import { parseUrlParams } from "~/utils/util";
 import { getPostsLikeListApi } from "~/api/posts/posts";
 import { applyAuth } from "~/libs/server/applyAuth";
 import cookies from "cookie";
+import LikedPostList from "~/components/posts/LikedPostList";
 
 // styles
 import bookmarksStylesheetUrl from "../../styles/bookmarks.css";
@@ -17,8 +18,7 @@ import { STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { LinksFunction } from "@remix-run/cloudflare";
-import type { PostListRespSchema } from "~/api/schema/resp";
-import LikedPostList from "~/components/posts/LikedPostList";
+import type { PostLikeListRespSchema } from "~/api/schema/resp";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: bookmarksStylesheetUrl }];
@@ -27,7 +27,7 @@ export const links: LinksFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
   const token = applyAuth(request);
 
-  let list: PostListRespSchema | null = null;
+  let list: PostLikeListRespSchema | null = null;
   let isLoggedIn = false;
 
   if (token) {
@@ -63,7 +63,6 @@ export const loader: LoaderFunction = async ({ request }) => {
           },
         }
       );
-
       list = posts.result?.result ?? null;
       isLoggedIn = true;
     } catch (error) {
