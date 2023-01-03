@@ -24,6 +24,8 @@ export interface PostRespSchema {
   dataId: number;
 }
 
+export interface DraftRespSchema extends PostRespSchema {}
+
 export interface TagWithPostCountSchema extends Omit<TagSchema, "deletedAt"> {
   postsCount: number;
 }

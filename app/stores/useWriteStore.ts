@@ -12,6 +12,8 @@ interface UploadState {
 interface WriteStore {
   visible: VisibleState;
   upload: UploadState;
+  draftId?: number;
+  setDraftsId: (draftId: number | undefined) => void;
   openSubTitle: () => void;
   closeSubTitle: () => void;
   openSetting: () => void;
@@ -27,6 +29,9 @@ export const useWriteStore = create<WriteStore>((set) => ({
   upload: {
     status: "idle",
   },
+  draftId: undefined,
+  setDraftsId: (draftId: number | undefined) =>
+    set((prev) => ({ ...prev, draftId })),
   openSubTitle: () =>
     set((prev) => ({ ...prev, visible: { ...prev.visible, subTitle: true } })),
   closeSubTitle: () =>

@@ -23,6 +23,9 @@ export const API_ENDPOINTS = {
   TAGS: {
     ROOT: "tags",
   },
+  DRAFTS: {
+    NEW: "drafts/new",
+  },
 } as const;
 
 export const QUERIES_KEY = {
