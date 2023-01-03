@@ -208,7 +208,12 @@ export default function CreateStory() {
         <Title />
         <SubTitle />
         <div className="relative z-20">
-          <Editor onReady={setEditorJS} />
+          <Editor
+            onReady={setEditorJS}
+            onChange={() => {
+              console.log("changed!");
+            }}
+          />
         </div>
       </form>
       <PublishDrawer onPublich={onPublich} />

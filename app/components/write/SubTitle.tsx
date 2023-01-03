@@ -1,12 +1,26 @@
-import React, { useCallback } from "react";
-import { useFormContext } from "react-hook-form";
+import React, { useCallback, useEffect } from "react";
+import { useFormContext, useController, useWatch } from "react-hook-form";
 import { useWriteStore } from "~/stores/useWriteStore";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+
 import { XIcon } from "../ui/Icon";
 
+// types
+import type { FormFieldValues } from "~/routes/create";
+
 const SubTitle = () => {
-  const { register, setValue } = useFormContext();
+  const { setValue, control } = useFormContext<FormFieldValues>();
 
   const { visible, closeSubTitle } = useWriteStore();
+
+  const { field } = useController<FormFieldValues, "subTitle">({
+    name: "subTitle",
+    control,
+  });
+
+  const watchSubTitle = useWatch<FormFieldValues, "subTitle">({
+    name: "subTitle",
+  });
 
   const onClose = useCallback(() => {
     closeSubTitle();
@@ -15,6 +29,21 @@ const SubTitle = () => {
       shouldValidate: true,
     });
   }, [closeSubTitle, setValue]);
+
+  const debounced = useDebounceFn(
+    (subTitle: string | undefined) => {
+      console.log("debounce", subTitle);
+    },
+    {
+      wait: 200,
+      trailing: true,
+    }
+  );
+
+  useEffect(() => {
+    debounced.run(watchSubTitle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchSubTitle]);
 
   if (!visible.subTitle) return null;
 
@@ -29,7 +58,7 @@ const SubTitle = () => {
           fontSize: "1.5rem",
           lineHeight: "1.375",
         }}
-        {...register("subTitle")}
+        {...field}
       />
       <button
         type="button"
