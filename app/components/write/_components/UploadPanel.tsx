@@ -3,6 +3,8 @@ import { useFormContext } from "react-hook-form";
 import { useImageUploadMutation } from "~/api/files";
 import { useWriteStore } from "~/stores/useWriteStore";
 import { isEmpty } from "~/utils/assertion";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
+import { scheduleMicrotask } from "~/libs/browser-utils";
 
 interface UploadPancelProps {
   onClose: (
@@ -18,6 +20,7 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
 
   const { changeUploadStatus } = useWriteStore();
   const { isLoading, mutateAsync } = useImageUploadMutation();
+  const { setTransition } = useWriteContext();
 
   const onUploadChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,9 +68,12 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
           shouldDirty: true,
         });
 
-        changeUploadStatus("success");
-
         onClose();
+
+        scheduleMicrotask(() => {
+          changeUploadStatus("success");
+          setTransition(Transition.UPDATING);
+        });
       } catch (error) {
         changeUploadStatus("error");
         setValue("thumbnail", null, {
@@ -76,7 +82,7 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
         });
       }
     },
-    [changeUploadStatus, mutateAsync, onClose, setValue]
+    [changeUploadStatus, mutateAsync, onClose, setTransition, setValue]
   );
 
   return (

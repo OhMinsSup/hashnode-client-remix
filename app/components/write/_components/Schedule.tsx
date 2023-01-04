@@ -1,23 +1,31 @@
 import { XIcon } from "@heroicons/react/solid";
-import React, { useCallback } from "react";
-import { useFormContext, Controller } from "react-hook-form";
+import React, { useCallback, useEffect } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { ScheduleIcon } from "~/components/ui/Icon";
 import { Button } from "~/components/ui/shared";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
-import type { FormFieldValues } from "~/routes/create/story";
+import type { FormFieldValues } from "~/routes/create";
 
 const Schedule = () => {
-  const { watch, setValue, register } = useFormContext<FormFieldValues>();
+  const { setValue, register, formState } = useFormContext<FormFieldValues>();
 
-  const hasPublishedTime = watch("hasPublishedTime", false);
+  const { setTransition } = useWriteContext();
+
+  const publishingDate = useWatch<FormFieldValues, "publishingDate">({
+    name: "publishingDate",
+  });
+
+  const hasPublishedTime = useWatch<FormFieldValues, "hasPublishedTime">({
+    name: "hasPublishedTime",
+  });
 
   const onRemoveSchedule = useCallback(() => {
     const options = {
       shouldDirty: true,
       shouldTouch: true,
     };
-
     setValue("hasPublishedTime", false, options);
     setValue("publishingDate", undefined, options);
   }, [setValue]);
@@ -28,6 +36,11 @@ const Schedule = () => {
       shouldTouch: true,
     });
   }, [setValue]);
+
+  useEffect(() => {
+    if (!formState.dirtyFields.publishingDate) return;
+    setTransition(Transition.UPDATING);
+  }, [publishingDate, formState.dirtyFields.publishingDate]);
 
   return (
     <div className="border-b py-8 px-5">

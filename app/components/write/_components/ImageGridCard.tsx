@@ -1,8 +1,10 @@
 import React, { useCallback, useImperativeHandle, useRef } from "react";
 import { useFormContext } from "react-hook-form";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
 import type { FileSchema } from "~/api/schema/file";
+import { scheduleMicrotask } from "~/libs/browser-utils";
 
 interface PicsumGridCardProps extends Omit<FileSchema, "deletedAt"> {}
 
@@ -15,6 +17,8 @@ const PicsumGridCard: React.ForwardRefRenderFunction<
 
   const { setValue } = useFormContext();
 
+  const { setTransition } = useWriteContext();
+
   useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
     ref,
     () => divRef.current
@@ -25,7 +29,10 @@ const PicsumGridCard: React.ForwardRefRenderFunction<
       shouldValidate: true,
       shouldDirty: true,
     });
-  }, [otherProps, setValue]);
+    scheduleMicrotask(() => {
+      setTransition(Transition.UPDATING);
+    });
+  }, [otherProps, setTransition, setValue]);
 
   return (
     <div

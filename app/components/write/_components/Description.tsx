@@ -1,11 +1,40 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useFormContext, useController, useWatch } from "react-hook-form";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
-import type { FormFieldValues } from "~/routes/create/story";
+import type { FormFieldValues } from "~/routes/create";
 
 const Description = () => {
-  const { register } = useFormContext<FormFieldValues>();
+  const { control, formState } = useFormContext<FormFieldValues>();
+
+  const { setTransition } = useWriteContext();
+
+  const { field } = useController<FormFieldValues, "description">({
+    name: "description",
+    control,
+  });
+
+  const watchDescription = useWatch<FormFieldValues, "description">({
+    name: "description",
+  });
+
+  const debounced = useDebounceFn(
+    (description: string) => {
+      setTransition(Transition.UPDATING);
+    },
+    {
+      wait: 200,
+      trailing: true,
+    }
+  );
+
+  useEffect(() => {
+    if (!formState.dirtyFields.description) return;
+    debounced.run(watchDescription);
+  }, [watchDescription, formState.dirtyFields.description]);
+
   return (
     <div className="border-b py-8 px-5">
       <h3 className=" mb-3 text-lg font-bold text-gray-900">Description</h3>
@@ -22,7 +51,7 @@ const Description = () => {
           style={{
             height: "58px !important",
           }}
-          {...register("description")}
+          {...field}
         />
       </div>
     </div>

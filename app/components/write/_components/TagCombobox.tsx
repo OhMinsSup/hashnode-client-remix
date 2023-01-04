@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import { useDebouncedCallback } from "use-debounce";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // api
 import { getTagListApi } from "~/api/tags/tags";
@@ -9,14 +10,17 @@ import { getTagListApi } from "~/api/tags/tags";
 import { useFormContext } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/create/story";
+import type { FormFieldValues } from "~/routes/create";
 import type { MultiValue } from "react-select";
+import { scheduleMicrotask } from "~/libs/browser-utils";
 
 const TagCombobox = () => {
   const [inputValue, setInputValue] = useState("");
   const { setValue, watch } = useFormContext<FormFieldValues>();
 
   const tags = watch("tags");
+
+  const { setTransition } = useWriteContext();
 
   const loadOptions = useDebouncedCallback(async (inputValue) => {
     const { result } = await getTagListApi({
@@ -32,14 +36,13 @@ const TagCombobox = () => {
 
   const onChangeTags = useCallback(
     (value: MultiValue<any>) => {
-      console.log(value);
-      setValue(
-        "tags",
-        value.map((item) => item.value),
-        { shouldValidate: true, shouldDirty: true }
-      );
+      const tags = value.map((item) => item.value);
+      setValue("tags", tags, { shouldValidate: true, shouldDirty: true });
+      scheduleMicrotask(() => {
+        setTransition(Transition.UPDATING);
+      });
     },
-    [setValue]
+    [setTransition, setValue]
   );
 
   return (

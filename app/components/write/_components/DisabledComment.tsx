@@ -1,12 +1,33 @@
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useFormContext, useController, useWatch } from "react-hook-form";
 import { Switch } from "@headlessui/react";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
-import type { FormFieldValues } from "~/routes/create/story";
+import type { FormFieldValues } from "~/routes/create";
 
 const DisabledComment = () => {
   const { control } = useFormContext<FormFieldValues>();
+
+  const { field, formState } = useController<
+    FormFieldValues,
+    "disabledComment"
+  >({
+    name: "disabledComment",
+    control,
+  });
+
+  const watchDisabledComment = useWatch<FormFieldValues, "disabledComment">({
+    name: "disabledComment",
+  });
+
+  const { setTransition } = useWriteContext();
+
+  useEffect(() => {
+    if (!formState.dirtyFields.disabledComment) return;
+    setTransition(Transition.UPDATING);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchDisabledComment, formState.dirtyFields.disabledComment]);
 
   return (
     <div className="border-b py-8 px-5">
@@ -17,28 +38,20 @@ const DisabledComment = () => {
         This will hide the comments section below your article.
       </p>
       <div className="relative">
-        <Controller
-          name="disabledComment"
-          control={control}
-          render={({ field }) => {
-            return (
-              <Switch
-                checked={field.value}
-                onChange={(value) => field.onChange(value)}
-                className={`${
-                  field.value ? "bg-blue-600" : "bg-gray-200"
-                } relative inline-flex h-6 w-11 items-center rounded-full`}
-              >
-                <span className="sr-only">Enable notifications</span>
-                <span
-                  className={`${
-                    field.value ? "translate-x-6" : "translate-x-1"
-                  } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                />
-              </Switch>
-            );
-          }}
-        />
+        <Switch
+          checked={field.value}
+          onChange={(checked: boolean) => field.onChange(checked)}
+          className={`${
+            watchDisabledComment ? "bg-blue-600" : "bg-gray-200"
+          } relative inline-flex h-6 w-11 items-center rounded-full`}
+        >
+          <span className="sr-only">Enable notifications</span>
+          <span
+            className={`${
+              watchDisabledComment ? "translate-x-6" : "translate-x-1"
+            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+          />
+        </Switch>
       </div>
     </div>
   );

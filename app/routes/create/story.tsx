@@ -1,7 +1,8 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import cookies from "cookie";
 import { redirect } from "@remix-run/cloudflare";
 import { applyAuth } from "~/libs/server/applyAuth";
+import isEqual from "lodash-es/isEqual";
 
 // components
 import { Editor } from "~/components/ui/editor";
@@ -18,11 +19,11 @@ import {
 // hooks
 import { useWriteStore } from "~/stores/useWriteStore";
 import { useFetcher } from "@remix-run/react";
-import { useWriteContext } from "~/stores/useWirteContext";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 import { useFormContext } from "react-hook-form";
 
 // validation
-import { getTargetElement } from "~/libs/browser-utils";
+import { getTargetElement, scheduleMicrotask } from "~/libs/browser-utils";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -130,9 +131,12 @@ export const action: ActionFunction = async ({ request }) => {
 export default function CreateStory() {
   const { setValue, watch, handleSubmit } = useFormContext<FormFieldValues>();
 
-  const { setEditorJS, editorJS } = useWriteContext();
+  const { setEditorJS, editorJS, setTransition, transition } =
+    useWriteContext();
 
   const watchThumbnail = watch("thumbnail");
+
+  const watchAll = watch();
 
   const fetcher = useFetcher();
 
@@ -171,8 +175,6 @@ export default function CreateStory() {
   }, [editorJS, setValue]);
 
   const onPublich = useCallback(async () => {
-    await syncEditorContent();
-
     const ele = getTargetElement(formRef);
     ele?.dispatchEvent(
       new Event("submit", {
@@ -180,7 +182,17 @@ export default function CreateStory() {
         bubbles: true,
       })
     );
-  }, [syncEditorContent]);
+  }, []);
+
+  useEffect(() => {
+    console.log("Transition Status::", transition);
+    if (transition === Transition.UPDATING) {
+      setTransition(Transition.DONE);
+      scheduleMicrotask(() => {
+        setTransition(Transition.IDLE);
+      });
+    }
+  }, [transition, watchAll]);
 
   return (
     <>
@@ -210,8 +222,9 @@ export default function CreateStory() {
         <div className="relative z-20">
           <Editor
             onReady={setEditorJS}
-            onChange={() => {
-              console.log("changed!");
+            onChange={async () => {
+              await syncEditorContent();
+              setTransition(Transition.UPDATING);
             }}
           />
         </div>

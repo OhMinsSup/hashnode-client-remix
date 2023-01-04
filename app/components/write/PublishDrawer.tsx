@@ -31,7 +31,6 @@ const PublishDrawer: React.FC<PublishDrawerProps> = ({ onPublich }) => {
       open={visible.setting}
       placement={is768px ? "right" : "bottom"}
       width={is768px ? "40%" : "100%"}
-      destroyOnClose
       onClose={closeSetting}
     >
       <div className="px-4 pt-4 pb-10 md:px-6">

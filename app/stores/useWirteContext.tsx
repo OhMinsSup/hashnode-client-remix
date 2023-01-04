@@ -2,7 +2,7 @@ import React, { useReducer, useMemo } from "react";
 import { createContext } from "~/libs/react-utils";
 import type EditorJS from "@editorjs/editorjs";
 
-enum Transition {
+export enum Transition {
   IDLE = "IDLE",
   UPDATING = "UPDATING",
   DONE = "DONE",

@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useFormContext, useController, useWatch } from "react-hook-form";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
 import type { FormFieldValues } from "~/routes/create";
 
 const Title = () => {
-  const { control } = useFormContext<FormFieldValues>();
+  const { control, formState } = useFormContext<FormFieldValues>();
+
+  const { setTransition } = useWriteContext();
 
   const { field } = useController<FormFieldValues, "title">({
     name: "title",
@@ -19,7 +22,7 @@ const Title = () => {
 
   const debounced = useDebounceFn(
     (title: string) => {
-      console.log("debounce", title);
+      setTransition(Transition.UPDATING);
     },
     {
       wait: 200,
@@ -28,9 +31,9 @@ const Title = () => {
   );
 
   useEffect(() => {
+    if (!formState.dirtyFields.title) return;
     debounced.run(watchTitle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchTitle]);
+  }, [watchTitle, formState.dirtyFields.title]);
 
   return (
     <div style={{ lineHeight: "1.375" }}>
