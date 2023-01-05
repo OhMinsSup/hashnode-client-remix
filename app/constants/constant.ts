@@ -24,7 +24,9 @@ export const API_ENDPOINTS = {
     ROOT: "tags",
   },
   DRAFTS: {
+    ROOT: "drafts",
     NEW: "drafts/new",
+    SAVE_DATA: "drafts/save-data",
   },
 } as const;
 

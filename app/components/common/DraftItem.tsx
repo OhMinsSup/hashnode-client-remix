@@ -1,8 +1,14 @@
 import { TrashIcon } from "@heroicons/react/solid";
 import { Link } from "@remix-run/react";
 import React from "react";
+import type { DraftSchema } from "~/api/schema/draft";
+import { getDateFormat } from "~/libs/date";
 
-function DraftItem() {
+interface DraftItemProps {
+  draft: DraftSchema;
+}
+
+function DraftItem({ draft }: DraftItemProps) {
   return (
     <div className="draft-item">
       <div className="image-area">
@@ -12,13 +18,12 @@ function DraftItem() {
       </div>
       <div className="content-area">
         <h1>
-          <Link to="/">DraftItem</Link>
+          <Link to="/">{draft.title || "No Title"}</Link>
         </h1>
-        <p>DraftItem</p>
-        <p>DraftItem</p>
+        <p>{draft.content ? draft.description : "Empty Draft"}</p>
         <Link to="/">
           <span>Last updated:</span>
-          <em>December 26, 2022</em>
+          <em>{getDateFormat(draft.updatedAt)}</em>
         </Link>
       </div>
       <div className="btn-area">

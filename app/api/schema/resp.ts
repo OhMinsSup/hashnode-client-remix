@@ -3,6 +3,7 @@ import type { FileSchema } from "./file";
 import type { UserSchema } from "./user";
 import type { TagSchema } from "./tag";
 import type { PostSchema } from "./post";
+import type { DraftSchema } from "./draft";
 
 export interface ListRespSchema<Item = Record<string, any>> {
   list: Item[];
@@ -58,3 +59,5 @@ export interface PostLikeListRespSchema
 export interface GetTopPostsRespSchema {
   posts: PostDetailRespSchema[];
 }
+
+export interface DraftListRespSchema extends ListRespSchema<DraftSchema> {}

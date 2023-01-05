@@ -21,17 +21,21 @@ import { useWriteStore } from "~/stores/useWriteStore";
 import { useFetcher } from "@remix-run/react";
 import { Transition, useWriteContext } from "~/stores/useWirteContext";
 import { useFormContext } from "react-hook-form";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { useSnapShot } from "~/libs/hooks/useSnapShot";
 
 // validation
 import { getTargetElement, scheduleMicrotask } from "~/libs/browser-utils";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { isEmpty } from "~/utils/assertion";
 
 // api
 import { createPostsApi } from "~/api/posts/posts";
+import { createDraftsApi, saveDraftsApi } from "~/api/drafts/drafts";
 
+// types
 import type { SubmitHandler } from "react-hook-form";
 import type { ActionFunction } from "@remix-run/cloudflare";
 import type { FormFieldValues } from "~/routes/create";
@@ -142,7 +146,65 @@ export default function CreateStory() {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { openSubTitle, visible } = useWriteStore();
+  const { setSnapShot, getSnapShot } = useSnapShot();
+
+  const { openSubTitle, visible, draftId, setDraftsId } = useWriteStore();
+
+  const debounced = useDebounceFn(
+    async (input: FormFieldValues) => {
+      const snapShot = getSnapShot();
+
+      const body = {
+        ...input,
+        thumbnail: input.thumbnail ? input.thumbnail.url : undefined,
+        ...(draftId && { draftId }),
+      };
+
+      if (isEqual(snapShot, body)) {
+        return;
+      }
+
+      setSnapShot(body);
+
+      if (!draftId) {
+        try {
+          const resp = await createDraftsApi(body);
+
+          const { resultCode = -1, result } = resp.result;
+          if (resultCode === RESULT_CODE.OK) {
+            setDraftsId(result.dataId);
+            setTransition(Transition.DONE);
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          scheduleMicrotask(() => {
+            setTransition(Transition.IDLE);
+          });
+        }
+        return;
+      }
+
+      try {
+        const resp = await saveDraftsApi(body);
+        const { resultCode = -1, result } = resp.result;
+        if (resultCode === RESULT_CODE.OK) {
+          setDraftsId(result.dataId);
+          setTransition(Transition.DONE);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        scheduleMicrotask(() => {
+          setTransition(Transition.IDLE);
+        });
+      }
+    },
+    {
+      wait: 500,
+      trailing: true,
+    }
+  );
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
     const body = {
@@ -160,7 +222,8 @@ export default function CreateStory() {
       shouldDirty: true,
       shouldValidate: true,
     });
-  }, [setValue]);
+    setTransition(Transition.UPDATING);
+  }, [setTransition, setValue]);
 
   const syncEditorContent = useCallback(async () => {
     const blocks = await editorJS?.save();
@@ -187,10 +250,7 @@ export default function CreateStory() {
   useEffect(() => {
     console.log("Transition Status::", transition);
     if (transition === Transition.UPDATING) {
-      setTransition(Transition.DONE);
-      scheduleMicrotask(() => {
-        setTransition(Transition.IDLE);
-      });
+      debounced.run(watchAll);
     }
   }, [transition, watchAll]);
 
