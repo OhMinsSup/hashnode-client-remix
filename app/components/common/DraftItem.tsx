@@ -19,8 +19,8 @@ function DraftItem({ draft }: DraftItemProps) {
       <div className="content-area">
         <h1>
           <Link to="/">{draft.title || "No Title"}</Link>
+          <p>{draft.content ? draft.description : "Empty Draft"}</p>
         </h1>
-        <p>{draft.content ? draft.description : "Empty Draft"}</p>
         <Link to="/">
           <span>Last updated:</span>
           <em>{getDateFormat(draft.updatedAt)}</em>

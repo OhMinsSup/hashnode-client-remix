@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@remix-run/react";
 import { CommentIcon, LikeIcon } from "../ui/Icon";
 
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
