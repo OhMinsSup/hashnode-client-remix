@@ -18,6 +18,7 @@ import {
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
+import { SSRProvider } from "react-aria";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider, useCreateAuthStore } from "./stores/useAuthStore";
@@ -30,6 +31,7 @@ import { applyAuth } from "./libs/server/applyAuth";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import mainStylesheetUrl from "./styles/main.css";
 import customStylesheetUrl from "./styles/custom.css";
 import commonStylesheetUrl from "./styles/common.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
@@ -40,6 +42,7 @@ import type { UserRespSchema } from "./api/schema/resp";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "stylesheet", href: mainStylesheetUrl },
     { rel: "stylesheet", href: commonStylesheetUrl },
     { rel: "stylesheet", href: customStylesheetUrl },
     { rel: "stylesheet", href: rcDrawerStylesheetUrl },
@@ -98,19 +101,21 @@ export default function App() {
   return (
     <AuthProvider createStore={createAuthStore}>
       <QueryClientProvider client={globalClient}>
-        <html lang="kr">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body className="bg-white leading-6">
-            <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload port={8002} />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </body>
-        </html>
+        <SSRProvider>
+          <html lang="kr">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body className="container-body">
+              <Outlet />
+              <ScrollRestoration />
+              <Scripts />
+              <LiveReload port={8002} />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </body>
+          </html>
+        </SSRProvider>
       </QueryClientProvider>
     </AuthProvider>
   );

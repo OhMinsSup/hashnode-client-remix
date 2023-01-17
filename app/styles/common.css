@@ -1,3 +1,171 @@
+/* Custom divide */
+
+.custom-divide {
+  width: 1px;
+  --tw-bg-opacity: 0.2;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+/* Button */
+.menu-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: transparent;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  text-align: center;
+  outline: 2px solid transparent !important;
+  outline-offset: 2px !important;
+  margin-right: 0.5rem;
+}
+
+.write-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  border-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(52 102 246 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.write-button a {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(52 102 246 / var(--tw-bg-opacity));
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+.write-button button {
+  border-top-right-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(52 102 246 / var(--tw-bg-opacity));
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.25rem;
+  padding-right: 0.5rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Button */
+
+/* Input */
+
+.input-seach {
+  padding-right: 2.5rem;
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 247 250 / var(--tw-bg-opacity));
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 2.5rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* 크롬, 사파리, 파이어폭스인 경우 input type="seach" x 버튼제거 */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* 사파리 */
+
+/* Input */
+
+/* Link */
+
+.link-logo {
+  display: block;
+  width: 9rem;
+}
+
+/* Link */
+
+/* Icon */
+.icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: currentColor;
+}
+
+.icon-logo {
+  width: 100%;
+  fill: currentColor;
+}
+/* Icon */
+
+/* Draft Style */
 .draft-item {
   display: flex;
   flex-flow: row wrap;
@@ -140,6 +308,40 @@
   outline-offset: 2px !important;
 }
 
+/* Draft Style */
+
+@media (min-width: 1536px) {
+  .write-button a {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .link-logo {
+    width: 11rem;
+    padding-right: 0.5rem;
+  }
+
+  .input-seach {
+    padding-right: 14rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .menu-button {
+    display: none;
+  }
+
+  .link-logo {
+    width: 100%;
+  }
+}
+
 @media (min-width: 768px) {
   .draft-item {
     flex-wrap: nowrap;
@@ -161,5 +363,9 @@
     -webkit-flex: 1 1 0%;
     -ms-flex: 1 1 0%;
     flex: 1 1 0%;
+  }
+
+  .link-logo {
+    width: 11rem;
   }
 }
