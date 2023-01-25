@@ -17,6 +17,11 @@ import {
   BookmarkIcon,
   LogoutIcon,
 } from "~/components/ui/Icon";
+import Button from "~/components/ui/shared/Button";
+import PopoverTrigger from "~/components/ui/shared/PopoverTrigger";
+import { SimpleDialog } from "~/components/ui/shared/Dialog";
+import UserMenuPopover from "~/components/ui/header/UserMenuPopover";
+
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { optimizeAnimation } from "~/utils/util";
 import { getTargetElement, isBrowser } from "~/libs/browser-utils";
@@ -213,37 +218,53 @@ const UserMenu: React.FC<UserMenuProps> = ({ open }) => {
 
 const ItemGroup: React.FC<ItemGroupProps> = () => {
   return (
-    <div className="flex flex-row items-center justify-end">
-      <div className="relative mr-2 h-10 w-10 md:block">
-        <button
-          type="button"
+    <div className="item-group">
+      <div className="first-item">
+        <Button
+          id="changelogWidgetTrigger"
           aria-label="changelog"
-          className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
+          className="changelog-btn"
         >
-          <DraftIcon className="h-6 w-6 fill-current" />
-        </button>
+          <DraftIcon className="icon-md" />
+        </Button>
       </div>
 
-      <button className="ransition-transform relative mr-2 flex h-10 w-10 flex-row items-center justify-center rounded-full text-gray-700 duration-300">
-        <MoonIcon className="h-6 w-6 fill-current" />
-      </button>
+      <Button aria-label="Toggle theme" className="theme-btn">
+        <MoonIcon className="icon-md" />
+      </Button>
 
-      <div className="mr-2 h-10 w-10 md:block">
-        <button
-          className=" relative flex h-full w-full flex-row items-center justify-center rounded-full text-gray-700 hover:bg-gray-200 2xl:mr-2"
-          type="button"
-          aria-label="Notifications"
-        >
-          <NotificationIcon className="h-6 w-6 fill-current" />
-          {/* <span className="absolute right-[-0.25rem] top-[-0.25rem] rounded-full bg-red-500 px-2 font-bold text-white">
+      <div className="notifications">
+        <Button className="notification-btn" aria-label="Notifications">
+          <NotificationIcon className="icon-md" />
+          <span className="absolute right-[-0.25rem] top-[-0.25rem] rounded-full bg-red-500 px-2 font-bold text-white">
             1
-          </span> */}
-        </button>
+          </span>
+        </Button>
       </div>
 
-      <Popover className="mr-2 h-10 w-10 flex-shrink-0">
-        {({ open }) => <UserMenu open={open} />}
-      </Popover>
+      <PopoverTrigger
+        eleAs="div"
+        eleProps={{
+          className: "profile",
+        }}
+        triggerButtonProps={{
+          "aria-label": "Profile Dropdown",
+          className: "profile-btn",
+        }}
+        label={
+          <div className="container">
+            <img
+              className="lazyload blur-up rounded-full"
+              data-src={ASSET_URL.DEFAULT_AVATAR}
+              alt="Profile"
+            />
+          </div>
+        }
+      >
+        <SimpleDialog>
+          <UserMenuPopover />
+        </SimpleDialog>
+      </PopoverTrigger>
     </div>
   );
 };
