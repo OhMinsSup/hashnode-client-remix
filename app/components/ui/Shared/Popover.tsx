@@ -1,14 +1,15 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { DismissButton, Overlay, usePopover } from "react-aria";
+import { useForceUpdate } from "~/libs/hooks/useForceUpdate";
 
 import type { AriaPopoverProps } from "react-aria";
 import type { OverlayTriggerState } from "react-stately";
 
-interface OverridablePopoverProps {
+export interface OverridablePopoverProps {
   popoverRef?: React.RefObject<Element>;
 }
 
-interface PopoverProps
+export interface PopoverProps
   extends Omit<AriaPopoverProps, "popoverRef">,
     OverridablePopoverProps {
   children: React.ReactNode;
@@ -18,14 +19,13 @@ interface PopoverProps
 const Popover: React.FC<PopoverProps> = ({
   children,
   state,
-  popoverRef: overridePopoverRef,
   offset = 8,
   ...props
 }) => {
-  const popoverRef = useRef<Element | null>(
-    overridePopoverRef?.current ?? null
-  );
-  const { popoverProps, underlayProps, arrowProps, placement } = usePopover(
+  const forceUpdate = useForceUpdate();
+  const timeoutId = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+  const { popoverProps, underlayProps } = usePopover(
     {
       ...props,
       offset,
@@ -34,14 +34,29 @@ const Popover: React.FC<PopoverProps> = ({
     state
   );
 
+  console.log("Popover", typeof window);
+
+  console.log("Popover::popoverRef", popoverProps);
+
+  useEffect(() => {
+    // BUG: Force update to reposition popover when it opens.
+    // This is a workaround for a bug in react-aria where the popover
+    // doesn't reposition when it opens.
+    timeoutId.current = setTimeout(() => {
+      forceUpdate();
+    }, 16);
+
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+    };
+  }, [state.isOpen]);
+
   return (
     <Overlay>
       <div {...underlayProps} className="underlay" />
-      {/* @ts-ignore */}
-      <div {...popoverProps} ref={popoverRef} className="popover">
-        <svg {...arrowProps} className="arrow" data-placement={placement}>
-          <path d="M0 0,L6 6,L12 0" />
-        </svg>
+      <div ref={popoverRef} {...popoverProps} className="popover">
         <DismissButton onDismiss={state.close} />
         {children}
         <DismissButton onDismiss={state.close} />

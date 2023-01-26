@@ -4,14 +4,18 @@ import { useOverlayTriggerState } from "react-stately";
 
 import Button, { type ButtonProps } from "~/components/ui/shared/Button";
 import Popover from "~/components/ui/shared/Popover";
-import { When } from "react-if";
+
+import type { AriaPopoverProps } from "react-aria";
+import type { OverlayTriggerProps } from "react-stately";
 
 type ReactTag = keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>;
 
-interface PopoverTriggerProps {
+interface PopoverTriggerProps
+  extends Partial<AriaPopoverProps>,
+    OverlayTriggerProps {
   label: React.ReactNode;
   children: any;
-  eleAs: ReactTag;
+  eleAs?: ReactTag;
   eleProps?: React.DetailedHTMLProps<React.HTMLAttributes<any>, any>;
   triggerButtonProps?: ButtonProps;
 }
@@ -32,20 +36,20 @@ const PopoverTrigger: React.FC<PopoverTriggerProps> = ({
     ref
   );
 
-  const Element = eleAs || React.Fragment;
+  const Element = eleAs || "div";
 
   return (
     <>
       <Element {...eleProps}>
-        <Button {...triggerButtonProps} {...triggerProps} buttonRef={ref}>
+        <Button ref={ref} {...triggerButtonProps} {...triggerProps}>
           {label}
         </Button>
       </Element>
-      <When condition={state.isOpen}>
+      {state.isOpen ? (
         <Popover {...props} triggerRef={ref} state={state}>
           {React.cloneElement(children, overlayProps)}
         </Popover>
-      </When>
+      ) : null}
     </>
   );
 };

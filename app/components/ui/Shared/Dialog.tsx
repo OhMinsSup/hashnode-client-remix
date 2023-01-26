@@ -7,22 +7,24 @@ import type { AriaDialogProps } from "react-aria";
 import type { Argument } from "classnames";
 
 interface SimepleDialogProps extends AriaDialogProps {
+  title?: string;
   className?: Argument;
   children: any;
 }
 
 export const SimpleDialog: React.FC<SimepleDialogProps> = ({
   children,
+  title,
   className,
   ...props
 }) => {
-  console.log("SimpleDialog");
   const ref = useRef<HTMLDivElement | null>(null);
   const { dialogProps, titleProps } = useDialog(props, ref);
 
   return (
     <div {...dialogProps} ref={ref} className={classNames(className)}>
-      {React.cloneElement(children, titleProps)}
+      {title && <h3 {...titleProps}>{title}</h3>}
+      {children}
     </div>
   );
 };
