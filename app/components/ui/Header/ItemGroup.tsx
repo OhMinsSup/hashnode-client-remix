@@ -13,7 +13,7 @@ import UserMenuPopover from "~/components/ui/header/UserMenuPopover";
 interface ItemGroupProps {}
 
 const ItemGroup: React.FC<ItemGroupProps> = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="item-group">
@@ -52,8 +52,8 @@ const ItemGroup: React.FC<ItemGroupProps> = () => {
         label={
           <div className="container">
             <img
-              className="lazyload blur-up rounded-full"
-              data-src={ASSET_URL.DEFAULT_AVATAR}
+              className="rounded-full"
+              src={ASSET_URL.DEFAULT_AVATAR}
               alt="Profile"
             />
           </div>

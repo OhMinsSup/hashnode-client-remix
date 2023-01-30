@@ -374,6 +374,116 @@
   width: 18rem;
 }
 
+.user-profile-popover .container .default-wrapper {
+  height: auto;
+  width: 16rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding: 1.5rem;
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  line-height: 1.375;
+}
+
+.user-profile-popover .container .default-wrapper .profile-menu {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.25rem;
+  display: block;
+  height: 6rem;
+  width: 6rem;
+}
+
+.user-profile-popover .container .default-wrapper h1 {
+  margin-bottom: 1rem;
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: 1.5rem;
+  line-height: 1.375;
+  font-weight: 800;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
+.user-profile-popover .container .default-wrapper p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.375;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+}
+
+.user-profile-popover .container .default-wrapper .auth-wrapper {
+  display: flex;
+  flex-direction: row;
+  -moz-box-align: center;
+  align-items: center;
+  -moz-box-pack: center;
+  justify-content: center;
+}
+
+.user-profile-popover .container .default-wrapper .auth-wrapper .signup-link {
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  flex-direction: row;
+  -moz-box-align: center;
+  align-items: center;
+  -moz-box-pack: center;
+  justify-content: center;
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+  margin-right: 0.25rem;
+  display: block;
+  width: 50%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.user-profile-popover .container .default-wrapper .auth-wrapper .signin-link {
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  flex-direction: row;
+  -moz-box-align: center;
+  align-items: center;
+  -moz-box-pack: center;
+  justify-content: center;
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+  margin-left: 0.25rem;
+  display: block;
+  width: 50%;
+  text-align: center;
+  font-weight: 700;
+}
+
 .user-profile-popover .container .wrapper .profile-menu {
   position: relative;
   display: flex;
@@ -524,6 +634,10 @@
 
   .header-right-area .item-group .notifications {
     display: block;
+  }
+
+  .user-profile-popover .container .default-wrapper {
+    width: 18rem;
   }
 }
 

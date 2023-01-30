@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/Icon";
 
 // constants
-import { ASSET_URL } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { useAuthStore } from "~/stores/useAuthStore";
 
 const UserMenuPopover = () => {
@@ -26,11 +26,7 @@ const UserMenuPopover = () => {
                 <Link to="/" aria-label="User Profile" data-type="profile">
                   <div className="profile-popover-image-container">
                     <div>
-                      <img
-                        className="lazyload blur-up"
-                        data-src={ASSET_URL.DEFAULT_AVATAR}
-                        alt="Profile"
-                      />
+                      <img src={ASSET_URL.DEFAULT_AVATAR} alt="Profile" />
                     </div>
                   </div>
                   <div className="profile-popover-text-container">
@@ -62,29 +58,26 @@ const UserMenuPopover = () => {
             </div>
           </div>
         ) : (
-          <div
-            className="h-auto w-[16rem] p-6 md:w-[18rem]"
-            style={{ lineHeight: "1.375" }}
-          >
-            <div className="mx-auto mb-5 block h-24 w-24">
-              <img
-                className="lazyload blur-up"
-                data-src={ASSET_URL.DEFAULT_AVATAR}
-                alt="Profile"
-              />
+          <div className="default-wrapper">
+            <div className="profile-menu">
+              <img src={ASSET_URL.DEFAULT_AVATAR} alt="Profile" />
             </div>
-            <h1 className="mb-4 text-2xl font-extrabold text-gray-900">
-              Sign up or log in to your Hashnode account.
-            </h1>
-            <p className="mb-4 text-base text-gray-700">
-              Takes less than a few seconds.
-            </p>
-            <div className="css-o2d6zf">
+            <h1>Sign up or log in to your Hashnode account.</h1>
+            <p>Takes less than a few seconds.</p>
+            <div className="auth-wrapper">
               <Link
-                to="/auth/signin"
-                className="ml-2 flex flex-row items-center justify-center rounded-full border border-blue-500 bg-blue-500 py-1 px-3 text-center text-lg font-semibold text-white outline-none hover:shadow-md"
+                to={PAGE_ENDPOINTS.AUTH.SIGNUP}
+                className="signup-link"
+                aria-label="Sign up"
               >
-                <span>Sign in</span>
+                <span>Sign Up</span>
+              </Link>
+              <Link
+                to={PAGE_ENDPOINTS.AUTH.SIGNIN}
+                className="signin-link"
+                aria-label="Log in"
+              >
+                <span>Log in</span>
               </Link>
             </div>
           </div>
