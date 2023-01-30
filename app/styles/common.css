@@ -152,9 +152,16 @@ input[type="search"]::-webkit-search-results-decoration {
 /* Link */
 
 /* Icon */
+
 .icon {
   height: 1.25rem;
   width: 1.25rem;
+  fill: currentColor;
+}
+
+.icon-xs {
+  height: 0.75rem;
+  width: 0.75rem;
   fill: currentColor;
 }
 

@@ -34,10 +34,6 @@ const Popover: React.FC<PopoverProps> = ({
     state
   );
 
-  console.log("Popover", typeof window);
-
-  console.log("Popover::popoverRef", popoverProps);
-
   useEffect(() => {
     // BUG: Force update to reposition popover when it opens.
     // This is a workaround for a bug in react-aria where the popover

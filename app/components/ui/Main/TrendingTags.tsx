@@ -1,7 +1,9 @@
 import React from "react";
+import { Link } from "@remix-run/react";
 import TagItem from "~/components/ui/main/TagItem";
 
 import { useLoaderData } from "@remix-run/react";
+import { MoreArrowIcon } from "../Icon";
 
 interface TrendingTagsProps {}
 
@@ -9,8 +11,7 @@ const TrendingTags: React.FC<TrendingTagsProps> = () => {
   const { trendingTag } = useLoaderData();
 
   return (
-    <div className="flex flex-col items-start">
-      {/* tag list */}
+    <div className="tag-menu-container">
       {trendingTag?.list?.map((tag: any) => (
         <TagItem
           key={tag.id}
@@ -19,6 +20,10 @@ const TrendingTags: React.FC<TrendingTagsProps> = () => {
           count={tag.postsCount}
         />
       ))}
+      <Link to="/tags" className="sell-all-tags">
+        <span>See all</span>
+        <MoreArrowIcon className="icon-xs ml-2" />
+      </Link>
     </div>
   );
 };
