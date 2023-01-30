@@ -1361,10 +1361,6 @@ video {
   height: 1px;
 }
 
-.h-auto {
-  height: auto;
-}
-
 .h-24 {
   height: 6rem;
 }
@@ -1415,14 +1411,6 @@ video {
 
 .w-5 {
   width: 1.25rem;
-}
-
-.w-\[16rem\] {
-  width: 16rem;
-}
-
-.w-24 {
-  width: 6rem;
 }
 
 .w-16 {
@@ -1798,10 +1786,6 @@ video {
 
 .p-3 {
   padding: 0.75rem;
-}
-
-.p-6 {
-  padding: 1.5rem;
 }
 
 .px-10 {
@@ -2267,10 +2251,6 @@ video {
 
   .md\:w-1\/2 {
     width: 50%;
-  }
-
-  .md\:w-\[18rem\] {
-    width: 18rem;
   }
 
   .md\:w-20 {
