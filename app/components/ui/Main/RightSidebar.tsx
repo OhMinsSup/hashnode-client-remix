@@ -1,16 +1,11 @@
 import React from "react";
-import { useMedia } from "react-use";
 import TrendingPostBox from "~/components/ui/main/TrendingPostBox";
 import OtherBox from "~/components/ui/main/OtherBox";
 
 const RightSidebar = () => {
-  const isLarge = useMedia("(min-width: 1024px)", false);
-
-  if (!isLarge) return null;
-
   return (
-    <aside className="col-span-3">
-      <div className="py-5 lg:block">
+    <aside className="right-sidebar">
+      <div className="container">
         <TrendingPostBox />
         <OtherBox />
       </div>

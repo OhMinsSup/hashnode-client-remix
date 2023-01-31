@@ -35,10 +35,12 @@ const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({
   return (
     <>
       {posts?.map((item) => (
-        <TrendingSimplePostItem
+        <React.Fragment
           key={`trending-simple-post-${duration}-item-${item.id}`}
-          {...item}
-        />
+        >
+          <TrendingSimplePostItem {...item} />
+          {posts.at(-1) !== item && <hr className="custom-divide-my" />}
+        </React.Fragment>
       ))}
     </>
   );

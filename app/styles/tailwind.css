@@ -1119,12 +1119,12 @@ video {
   z-index: 20;
 }
 
-.z-40 {
-  z-index: 40;
-}
-
 .z-50 {
   z-index: 50;
+}
+
+.z-40 {
+  z-index: 40;
 }
 
 .z-30 {
@@ -1149,10 +1149,6 @@ video {
 
 .col-span-8 {
   grid-column: span 8 / span 8;
-}
-
-.col-span-2 {
-  grid-column: span 2 / span 2;
 }
 
 .col-span-3 {
@@ -1551,12 +1547,12 @@ video {
   justify-content: space-between;
 }
 
-.gap-4 {
-  gap: 1rem;
-}
-
 .gap-10 {
   gap: 2.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
@@ -1587,14 +1583,6 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
-}
-
-.overflow-y-auto {
-  overflow-y: auto;
-}
-
-.overflow-x-hidden {
-  overflow-x: hidden;
 }
 
 .overflow-y-scroll {
@@ -1660,10 +1648,6 @@ video {
 
 .border-b-2 {
   border-bottom-width: 2px;
-}
-
-.border-r-2 {
-  border-right-width: 2px;
 }
 
 .border-transparent {
@@ -2363,10 +2347,6 @@ video {
     margin-top: 4rem;
   }
 
-  .lg\:mr-2 {
-    margin-right: 0.5rem;
-  }
-
   .lg\:block {
     display: block;
   }
@@ -2375,16 +2355,8 @@ video {
     height: auto;
   }
 
-  .lg\:h-5 {
-    height: 1.25rem;
-  }
-
   .lg\:min-h-\[1024px\] {
     min-height: 1024px;
-  }
-
-  .lg\:w-5 {
-    width: 1.25rem;
   }
 
   .lg\:min-w-0 {
@@ -2395,26 +2367,13 @@ video {
     max-width: 1024px;
   }
 
-  .lg\:max-w-full {
-    max-width: 100%;
-  }
-
   .lg\:max-w-5xl {
     max-width: 64rem;
-  }
-
-  .lg\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-
-  .lg\:px-2 {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
   }
 
   .lg\:px-0 {
@@ -2432,11 +2391,6 @@ video {
     grid-column-start: 2;
   }
 
-  .xl\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .xl\:h-12 {
     height: 3rem;
   }
@@ -2445,30 +2399,13 @@ video {
     width: 3rem;
   }
 
-  .xl\:min-w-0 {
-    min-width: 0px;
-  }
-
   .xl\:max-w-\[1280px\] {
     max-width: 1280px;
-  }
-
-  .xl\:max-w-full {
-    max-width: 100%;
-  }
-
-  .xl\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 
   .xl\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
-  }
-
-  .xl\:px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   .xl\:text-5xl {
@@ -2491,26 +2428,12 @@ video {
     grid-column-start: 3;
   }
 
-  .\32xl\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .\32xl\:min-w-0 {
-    min-width: 0px;
-  }
-
   .\32xl\:max-w-\[1536px\] {
     max-width: 1536px;
   }
 
   .\32xl\:grid-cols-10 {
     grid-template-columns: repeat(10, minmax(0, 1fr));
-  }
-
-  .\32xl\:px-0 {
-    padding-left: 0px;
-    padding-right: 0px;
   }
 
   .\32xl\:px-5 {
