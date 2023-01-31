@@ -70,6 +70,12 @@ export const ASSET_URL = {
 };
 
 export const PAGE_ENDPOINTS = {
+  BOOKMARKS: {
+    ROOT: "/bookmarks",
+  },
+  EXPLORE: {
+    ROOT: "/explore",
+  },
   ROOT: "/",
   AUTH: {
     SIGNIN: "/auth/signin",

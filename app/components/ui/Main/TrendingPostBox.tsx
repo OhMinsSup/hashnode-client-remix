@@ -4,9 +4,11 @@ import { useLoaderData } from "@remix-run/react";
 
 // components
 import RightContentBox from "~/components/ui/main/RightContentBox";
-import { ClientOnly } from "remix-utils";
-import { Tab } from "@headlessui/react";
+import Button from "~/components/ui/shared/Button";
 import { TrendingSimplePost } from "~/components/common";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
+import type { PressEvent } from "@react-types/shared";
 
 interface TrendingPostBoxProps {}
 
@@ -22,97 +24,67 @@ const TrendingPostBox: React.FC<TrendingPostBoxProps> = () => {
     };
   }, []);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [duration, setDuration] = useState(KEY_MAP_RECORD[0]);
 
-  const onChangeTab = useCallback((index: number) => {
-    setSelectedIndex(index);
+  const onClickTab = useCallback((e: PressEvent) => {
+    const duration = e.target?.getAttribute("data-value");
+    if (!duration) return;
+    setDuration(duration);
   }, []);
 
   return (
-    <RightContentBox title="Trending" to="/">
-      <ClientOnly fallback={<div>Loading...</div>}>
-        {() => (
-          <Tab.Group
-            defaultIndex={0}
-            selectedIndex={selectedIndex}
-            onChange={onChangeTab}
-          >
-            <Tab.List className="treding-post-tabs">
-              <Tab
-                value="7"
-                as="button"
-                className={({ selected }) =>
-                  classNames("tab", {
-                    active: selected,
-                  })
-                }
-              >
-                1 week
-              </Tab>
-              <Tab
-                as="button"
-                value="30"
-                className={({ selected }) =>
-                  classNames("tab", {
-                    active: selected,
-                  })
-                }
-              >
-                1 months
-              </Tab>
-              <Tab
-                as="button"
-                value="90"
-                className={({ selected }) =>
-                  classNames("tab", {
-                    active: selected,
-                  })
-                }
-              >
-                3 months
-              </Tab>
-              <Tab
-                as="button"
-                value="180"
-                className={({ selected }) =>
-                  classNames("tab", {
-                    active: selected,
-                  })
-                }
-              >
-                6 months
-              </Tab>
-            </Tab.List>
-            <Tab.Panels>
-              <Tab.Panel>
-                <TrendingSimplePost
-                  duration={KEY_MAP_RECORD[0]}
-                  enabled={selectedIndex === 0}
-                  initialData={topPosts}
-                />
-              </Tab.Panel>
-              <Tab.Panel>
-                <TrendingSimplePost
-                  duration={KEY_MAP_RECORD[1]}
-                  enabled={selectedIndex === 1}
-                />
-              </Tab.Panel>
-              <Tab.Panel>
-                <TrendingSimplePost
-                  duration={KEY_MAP_RECORD[2]}
-                  enabled={selectedIndex === 2}
-                />
-              </Tab.Panel>
-              <Tab.Panel>
-                <TrendingSimplePost
-                  duration={KEY_MAP_RECORD[3]}
-                  enabled={selectedIndex === 3}
-                />
-              </Tab.Panel>
-            </Tab.Panels>
-          </Tab.Group>
-        )}
-      </ClientOnly>
+    <RightContentBox title="Trending" to={PAGE_ENDPOINTS.EXPLORE.ROOT}>
+      <div className="treding-post-tabs">
+        <Button
+          type="button"
+          data-value="7"
+          className={classNames("tab", {
+            active: duration === KEY_MAP_RECORD[0],
+          })}
+          onPress={onClickTab}
+        >
+          1 week
+        </Button>
+        <Button
+          type="button"
+          data-value="30"
+          className={classNames("tab", {
+            active: duration === KEY_MAP_RECORD[1],
+          })}
+          onPress={onClickTab}
+        >
+          1 months
+        </Button>
+        <Button
+          type="button"
+          data-value="90"
+          className={classNames("tab", {
+            active: duration === KEY_MAP_RECORD[2],
+          })}
+          onPress={onClickTab}
+        >
+          3 months
+        </Button>
+        <Button
+          type="button"
+          data-value="180"
+          className={classNames("tab", {
+            active: duration === KEY_MAP_RECORD[3],
+          })}
+          onPress={onClickTab}
+        >
+          6 months
+        </Button>
+      </div>
+      <div>
+        <div>
+          <TrendingSimplePost
+            enabled
+            duration={duration}
+            initialData={duration === KEY_MAP_RECORD[0] ? topPosts : undefined}
+          />
+        </div>
+      </div>
     </RightContentBox>
   );
 };

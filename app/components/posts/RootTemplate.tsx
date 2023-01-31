@@ -1,6 +1,6 @@
 import React from "react";
-import { Main } from "../ui/main";
-import { Header } from "../ui/header";
+import Main from "~/components/ui/main/Main";
+import Header from "~/components/ui/header/Header";
 
 interface RootTemplateProps {
   children: React.ReactNode;

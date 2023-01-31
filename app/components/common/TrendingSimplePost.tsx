@@ -14,7 +14,7 @@ const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({
   initialData,
   enabled,
 }) => {
-  const { data } = useGetTopPostsQuery(
+  const { data, isLoading } = useGetTopPostsQuery(
     {
       duration: Number(duration),
     },
@@ -29,6 +29,8 @@ const TrendingSimplePost: React.FC<TrendingSimplePostItemProps> = ({
   const posts = useMemo(() => {
     return data?.result?.result?.posts ?? [];
   }, [data]);
+
+  if (isLoading) return <>Loading...</>;
 
   if (isNull(posts) || isUndefined(posts)) return null;
 

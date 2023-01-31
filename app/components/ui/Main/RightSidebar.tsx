@@ -1,13 +1,13 @@
 import React from "react";
 import TrendingPostBox from "~/components/ui/main/TrendingPostBox";
-import OtherBox from "~/components/ui/main/OtherBox";
+import BookmarkBox from "~/components/ui/main/BookmarkBox";
 
 const RightSidebar = () => {
   return (
     <aside className="right-sidebar">
       <div className="container">
         <TrendingPostBox />
-        <OtherBox />
+        <BookmarkBox />
       </div>
     </aside>
   );

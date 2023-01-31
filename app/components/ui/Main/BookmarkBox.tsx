@@ -1,12 +1,13 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import RightContentBox from "~/components/ui/main/RightContentBox";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-interface OtherBoxProps {}
+interface BookmarkBoxProps {}
 
-const OtherBox: React.FC<OtherBoxProps> = () => {
+const BookmarkBox: React.FC<BookmarkBoxProps> = () => {
   return (
-    <RightContentBox title="Bookmarks" to="/">
+    <RightContentBox title="Bookmarks" to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}>
       <div>
         <div>
           <h3 className="bookmark-desc">
@@ -26,4 +27,4 @@ const OtherBox: React.FC<OtherBoxProps> = () => {
   );
 };
 
-export default OtherBox;
+export default BookmarkBox;
