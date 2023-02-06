@@ -1,5 +1,9 @@
 import React from "react";
-import { type LoaderFunction, json } from "@remix-run/cloudflare";
+import {
+  type LoaderFunction,
+  json,
+  type LinksFunction,
+} from "@remix-run/cloudflare";
 import classnames from "classnames";
 
 // api
@@ -15,6 +19,9 @@ import {
   RecentIcon,
 } from "~/components/ui/Icon";
 import { parseUrlParams } from "~/utils/util";
+
+import homeStylesheetUrl from "../../styles/home.css";
+import TabPostList from "~/components/ui/main/TabPostList";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const params = parseUrlParams(request.url);
@@ -50,12 +57,19 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: homeStylesheetUrl }];
+};
+
 export default function Index() {
   return (
-    <div className="relative col-span-7 min-w-0 pt-5 pb-24">
-      <div className="overflow-hidden rounded-lg border bg-white">
-        <Tab.Group defaultIndex={0}>
-          <div className="relative z-20 flex max-w-[100vw] flex-row justify-between border-b px-5 pt-2 font-medium text-gray-600">
+    <div className="home-container">
+      {/* Trending Users List */}
+      <div className="tab-container">
+        <TabPostList />
+
+        {/* <Tab.Group defaultIndex={0}>
+          <div className="tab-content">
             <Tab.List className="flex flex-row items-center overflow-auto">
               <Tab
                 className={({ selected }) =>
@@ -113,7 +127,7 @@ export default function Index() {
               <RecentList />
             </Tab.Panel>
           </Tab.Panels>
-        </Tab.Group>
+        </Tab.Group> */}
       </div>
     </div>
   );
