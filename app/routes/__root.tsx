@@ -47,7 +47,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function PathLessRootLayout() {
   // const { isLoggedIn } = useAuthStore();
-
   return (
     <RootTemplate>
       <Outlet />

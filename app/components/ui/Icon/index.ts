@@ -33,3 +33,6 @@ export { default as ScheduleIcon } from "./Schedule";
 export { default as UserIcon } from "./User";
 export { default as LogoutIcon } from "./Logout";
 export { default as MoreArrowIcon } from "./MoreArrow";
+export { default as FilterIcon } from "./Filter";
+export { default as ViewTypeModernIcon } from "./ViewTypeModern";
+export { default as ViewTypeClassicIcon } from "./ViewTypeClassic";

@@ -22,6 +22,7 @@ import { parseUrlParams } from "~/utils/util";
 
 import homeStylesheetUrl from "../../styles/home.css";
 import TabPostList from "~/components/ui/main/TabPostList";
+import { ListProvider } from "~/context/useListContext";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const params = parseUrlParams(request.url);
@@ -66,8 +67,9 @@ export default function Index() {
     <div className="home-container">
       {/* Trending Users List */}
       <div className="tab-container">
-        <TabPostList />
-
+        <ListProvider>
+          <TabPostList />
+        </ListProvider>
         {/* <Tab.Group defaultIndex={0}>
           <div className="tab-content">
             <Tab.List className="flex flex-row items-center overflow-auto">
