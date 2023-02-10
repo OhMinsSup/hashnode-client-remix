@@ -8,8 +8,11 @@ import {
   RecentIcon,
 } from "~/components/ui/Icon";
 import TabPostSetting from "~/components/ui/main/TabPostSetting";
+import ListSearchFilter from "~/components/ui/main/ListSearchFilter";
+import { useListContext } from "~/context/useListContext";
 
 const TabPostList: React.FC = () => {
+  const { isFilter } = useListContext();
   return (
     <>
       <Tabs
@@ -17,7 +20,8 @@ const TabPostList: React.FC = () => {
         itemClassName="tab-item"
         wrapperClassName="tab-content"
         key={"Personalized"}
-        after={<TabPostSetting />}
+        afterTab={<TabPostSetting />}
+        beforePanel={isFilter ? <ListSearchFilter /> : null}
       >
         <Item
           key="Personalized"

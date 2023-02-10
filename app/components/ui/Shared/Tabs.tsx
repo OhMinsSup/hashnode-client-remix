@@ -17,8 +17,10 @@ interface TabsProps<T = object> extends TabListProps<T>, AriaTabListProps<T> {
   wrapperClassName?: Argument;
   itemClassName?: Argument;
   panelClassName?: Argument;
-  after?: React.ReactNode;
-  before?: React.ReactNode;
+  afterTab?: React.ReactNode;
+  beforeTab?: React.ReactNode;
+  afterPanel?: React.ReactNode;
+  beforePanel?: React.ReactNode;
 }
 
 const Tabs: React.FC<TabsProps> = ({
@@ -26,8 +28,10 @@ const Tabs: React.FC<TabsProps> = ({
   wrapperClassName,
   itemClassName,
   panelClassName,
-  after,
-  before,
+  afterTab,
+  beforeTab,
+  afterPanel,
+  beforePanel,
   ...props
 }) => {
   const state = useTabListState(props);
@@ -37,7 +41,7 @@ const Tabs: React.FC<TabsProps> = ({
   return (
     <>
       <div className={classNames(wrapperClassName)}>
-        {before}
+        {beforeTab}
         <div className={classNames("tabs", className, props.orientation)}>
           <div {...tabListProps} className="tab-wrapper" ref={ref}>
             {[...state.collection].map((item) => (
@@ -51,13 +55,15 @@ const Tabs: React.FC<TabsProps> = ({
             ))}
           </div>
         </div>
-        {after}
+        {afterTab}
       </div>
+      {beforePanel}
       <TabPanel
         key={state.selectedItem?.key}
         className={panelClassName}
         state={state}
       />
+      {afterPanel}
     </>
   );
 };

@@ -183,7 +183,7 @@
   .container
   .section
   .treding-post-tabs
-  .tab.active {
+  .tab[role="tab"][aria-selected="true"] {
   --tw-border-opacity: 1;
   border-color: rgb(37 99 235 / var(--tw-border-opacity));
   font-weight: 600;
