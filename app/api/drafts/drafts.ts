@@ -30,7 +30,7 @@ export async function createDraftsApi(
 }
 
 export async function saveDraftsApi(
-  body: Partial<PostBody & { draftId: number }>,
+  body: Partial<PostBody & { draftId: number | string }>,
   options?: Options
 ) {
   const { headers, ...opts } = options ?? {};

@@ -9,9 +9,9 @@ import {
 } from "@remix-run/cloudflare";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
+  LiveReload,
   Scripts,
   ScrollRestoration,
   useLoaderData,
@@ -21,7 +21,7 @@ import { globalClient } from "./api/client";
 import { SSRProvider } from "react-aria";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AuthProvider, useCreateAuthStore } from "./stores/useAuthStore";
+import { AuthProvider } from "./stores/useAuthContext";
 
 import cookies from "cookie";
 
@@ -32,7 +32,6 @@ import { applyAuth } from "./libs/server/applyAuth";
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import mainStylesheetUrl from "./styles/main.css";
-import customStylesheetUrl from "./styles/custom.css";
 import commonStylesheetUrl from "./styles/common.css";
 import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
 
@@ -44,7 +43,6 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     { rel: "stylesheet", href: mainStylesheetUrl },
     { rel: "stylesheet", href: commonStylesheetUrl },
-    { rel: "stylesheet", href: customStylesheetUrl },
     { rel: "stylesheet", href: rcDrawerStylesheetUrl },
   ];
 };
@@ -93,13 +91,8 @@ export default function App() {
     isLoggedIn: boolean;
   }>();
 
-  const createAuthStore = useCreateAuthStore({
-    isLoggedIn,
-    currentProfile,
-  });
-
   return (
-    <AuthProvider createStore={createAuthStore}>
+    <AuthProvider currentProfile={currentProfile} isLoggedIn={isLoggedIn}>
       <QueryClientProvider client={globalClient}>
         <SSRProvider>
           <html lang="kr">
@@ -107,7 +100,7 @@ export default function App() {
               <Meta />
               <Links />
             </head>
-            <body className="container-body">
+            <body>
               <Outlet />
               <ScrollRestoration />
               <Scripts />

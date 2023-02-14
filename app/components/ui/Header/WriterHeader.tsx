@@ -6,12 +6,12 @@ import { Logo as RemixLogo } from "~/components/ui/logo";
 import { Button } from "../shared";
 
 // hooks
-import { useWriteStore } from "~/stores/useWriteStore";
+import { useWriteContext } from "~/stores/useWirteContext";
 
 interface WriterHeaderProps {}
 
 const WriterHeader: React.FC<WriterHeaderProps> = () => {
-  const { openSetting } = useWriteStore();
+  const { toggleSetting } = useWriteContext();
 
   return (
     <div className="border-b p-4 2xl:px-5">
@@ -21,7 +21,7 @@ const WriterHeader: React.FC<WriterHeaderProps> = () => {
         </Link>
         <div className="relative flex flex-row">
           <Button
-            onPress={openSetting}
+            onPress={() => toggleSetting(true)}
             className="ml-2 flex flex-row items-center justify-center rounded-full border border-blue-500 bg-blue-500 py-1 px-3 text-center text-lg font-semibold text-white outline-none hover:shadow-md"
           >
             Publish

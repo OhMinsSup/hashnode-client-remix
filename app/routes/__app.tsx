@@ -8,7 +8,6 @@ import { getPostsListApi, getTopPostsApi } from "~/api/posts/posts";
 // components
 import { RootTemplate } from "~/components/posts";
 import { parseUrlParams } from "~/utils/util";
-// import { useAuthStore } from "~/stores/useAuthStore";
 import { Outlet } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -46,7 +45,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function PathLessRootLayout() {
-  // const { isLoggedIn } = useAuthStore();
   return (
     <RootTemplate>
       <Outlet />

@@ -11,10 +11,14 @@ import {
 
 // constants
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
-import { useAuthStore } from "~/stores/useAuthStore";
+import { useAuthContext } from "~/stores/useAuthContext";
 
 const UserMenuPopover = () => {
-  const { currentProfile } = useAuthStore();
+  const { currentProfile } = useAuthContext();
+
+  if (!currentProfile) {
+    return null;
+  }
 
   return (
     <div className="user-profile-popover">

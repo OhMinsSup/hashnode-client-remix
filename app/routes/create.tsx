@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // hooks
 import { FormProvider, useForm } from "react-hook-form";
-import { WriteContextProvider } from "~/stores/useWirteContext";
+import { WriteProvider } from "~/stores/useWirteContext";
 
 // types
 import type { FileSchema } from "~/api/schema/file";
@@ -51,12 +51,12 @@ export default function CreateRouteLayout() {
   });
 
   return (
-    <WriteContextProvider>
+    <WriteProvider>
       <FormProvider {...methods}>
         <WriteTemplate header={<WriterHeader />}>
           <Outlet />
         </WriteTemplate>
       </FormProvider>
-    </WriteContextProvider>
+    </WriteProvider>
   );
 }

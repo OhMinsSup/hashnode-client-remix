@@ -17,7 +17,6 @@ import {
 } from "~/components/write";
 
 // hooks
-import { useWriteStore } from "~/stores/useWriteStore";
 import { useFetcher } from "@remix-run/react";
 import { Transition, useWriteContext } from "~/stores/useWirteContext";
 import { useFormContext } from "react-hook-form";
@@ -148,7 +147,8 @@ export default function CreateStory() {
 
   const { setSnapShot, getSnapShot } = useSnapShot();
 
-  const { openSubTitle, visible, draftId, setDraftsId } = useWriteStore();
+  const { toggleSubtitle, visibility, draftId, setDraftsId } =
+    useWriteContext();
 
   const debounced = useDebounceFn(
     async (input: FormFieldValues) => {
@@ -267,8 +267,8 @@ export default function CreateStory() {
           <Button
             className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none"
             aria-label="add post sub title"
-            aria-haspopup={visible.subTitle ? "true" : "false"}
-            onPress={openSubTitle}
+            aria-haspopup={visibility.subTitle ? "true" : "false"}
+            onPress={() => toggleSubtitle(true)}
           >
             <TypographyIcon className="mr-2 h-5 w-5 fill-current" />
             <span>Add Subtitle</span>

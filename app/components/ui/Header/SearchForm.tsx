@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useRef } from "react";
 import classNames from "classnames";
 
 // components
@@ -15,6 +15,7 @@ const SearchForm = () => {
   const state = useSearchFieldState({
     placeholder: "Search for tags, people, articles, and many more",
   });
+
   const { labelProps, inputProps } = useSearchField(
     {
       label: "Search",

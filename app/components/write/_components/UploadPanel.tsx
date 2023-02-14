@@ -1,9 +1,12 @@
 import React, { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useImageUploadMutation } from "~/api/files";
-import { useWriteStore } from "~/stores/useWriteStore";
 import { isEmpty } from "~/utils/assertion";
-import { Transition, useWriteContext } from "~/stores/useWirteContext";
+import {
+  Transition,
+  UploadStatus,
+  useWriteContext,
+} from "~/stores/useWirteContext";
 import { scheduleMicrotask } from "~/libs/browser-utils";
 
 interface UploadPancelProps {
@@ -18,14 +21,14 @@ interface UploadPancelProps {
 const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
   const { setValue } = useFormContext();
 
-  const { changeUploadStatus } = useWriteStore();
+  const { changeUploadStatus } = useWriteContext();
   const { isLoading, mutateAsync } = useImageUploadMutation();
   const { setTransition } = useWriteContext();
 
   const onUploadChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       try {
-        changeUploadStatus("idle");
+        changeUploadStatus(UploadStatus.IDLE);
         const files = e.target.files;
 
         if (!files || isEmpty(files)) {
@@ -55,7 +58,7 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
           throw new Error("Image size is too small");
         }
 
-        changeUploadStatus("uploading");
+        changeUploadStatus(UploadStatus.UPLOADING);
 
         const { result } = await mutateAsync({
           file,
@@ -71,11 +74,11 @@ const UploadPanel: React.FC<UploadPancelProps> = ({ onClose }) => {
         onClose();
 
         scheduleMicrotask(() => {
-          changeUploadStatus("success");
+          changeUploadStatus(UploadStatus.SUCCESS);
           setTransition(Transition.UPDATING);
         });
       } catch (error) {
-        changeUploadStatus("error");
+        changeUploadStatus(UploadStatus.ERROR);
         setValue("thumbnail", null, {
           shouldValidate: true,
           shouldDirty: true,

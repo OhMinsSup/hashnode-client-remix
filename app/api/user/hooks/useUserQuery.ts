@@ -1,7 +1,7 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 
 // hooks
-import { useAuthStore } from "~/stores/useAuthStore";
+import { useAuthContext } from "~/stores/useAuthContext";
 
 // constants
 import { QUERIES_KEY } from "~/constants/constant";
@@ -22,7 +22,7 @@ export function useUserQuery(
     "queryKey" | "queryFn"
   >
 ) {
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useAuthContext();
 
   const defaultOptions = {
     enabled: isLoggedIn,

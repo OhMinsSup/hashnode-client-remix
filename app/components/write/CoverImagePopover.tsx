@@ -8,17 +8,17 @@ import {
   ArrowPathIcon,
 } from "../ui/Icon";
 import { ImageGrid, UploadPanel } from "./_components";
-import { useWriteStore } from "~/stores/useWriteStore";
+import { UploadStatus, useWriteContext } from "~/stores/useWirteContext";
 
 interface CoverImagePopoverProps {}
 
 const CoverImagePopover: React.FC<CoverImagePopoverProps> = () => {
-  const { upload } = useWriteStore();
+  const { upload } = useWriteContext();
 
   return (
     <Popover>
       <Popover.Button className="mr-2 flex flex-row items-center justify-center rounded-full border border-gray-200 px-3 py-1 text-center text-sm font-medium text-gray-700 outline-none">
-        {upload.status === "uploading" ? (
+        {upload.status === UploadStatus.UPLOADING ? (
           <ArrowPathIcon className="mr-2 h-5 w-5 animate-spin fill-current" />
         ) : (
           <ImageIcon className="mr-2 h-5 w-5 fill-current" />
