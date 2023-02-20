@@ -16,10 +16,6 @@ import { useAuthContext } from "~/stores/useAuthContext";
 const UserMenuPopover = () => {
   const { currentProfile } = useAuthContext();
 
-  if (!currentProfile) {
-    return null;
-  }
-
   return (
     <div className="user-profile-popover">
       <div className="container">

@@ -78,8 +78,8 @@ export const PAGE_ENDPOINTS = {
   },
   ROOT: "/",
   AUTH: {
-    SIGNIN: "/auth/signin",
-    SIGNUP: "/auth/signup",
+    SIGNIN: "/signin",
+    SIGNUP: "/signup",
   },
   CREATE: {
     STORY: "/create/story",

@@ -44,7 +44,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-export default function PathLessRootLayout() {
+export default function App() {
   return (
     <RootTemplate>
       <Outlet />
