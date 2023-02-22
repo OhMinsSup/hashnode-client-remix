@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import classNames from "classnames";
 
 // components
@@ -38,7 +38,7 @@ const TabPostSetting = () => {
   );
 
   const onOpenChange = useCallback(
-    (isOpen) => {
+    (isOpen: boolean) => {
       if (isOpen) openViewType();
       else closeViewType();
     },
@@ -61,8 +61,10 @@ const TabPostSetting = () => {
     [changeViewType, viewType]
   );
 
-  const ViewTypeIcon =
-    viewType === "MODERN" ? ViewTypeModernIcon : ViewTypeClassicIcon;
+  const ViewTypeIcon = useMemo(
+    () => (viewType === "MODERN" ? ViewTypeModernIcon : ViewTypeClassicIcon),
+    [viewType]
+  );
 
   return (
     <div className="tabs-setting">
