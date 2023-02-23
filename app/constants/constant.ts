@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     ME: "users",
+    LOGOUT: "users/logout",
   },
   POSTS: {
     ROOT: "posts",

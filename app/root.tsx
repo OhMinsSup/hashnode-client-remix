@@ -1,12 +1,7 @@
 import "lazysizes";
 import "lazysizes/plugins/parent-fit/ls.parent-fit";
 import "lazysizes/plugins/blur-up/ls.blur-up";
-import {
-  json,
-  type LinksFunction,
-  type LoaderFunction,
-  type MetaFunction,
-} from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -23,11 +18,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "./stores/useAuthContext";
 
-import cookies from "cookie";
-
 // api
-import { getUserInfoApi } from "~/api/user/user";
-import { applyAuth } from "./libs/server/applyAuth";
+import { getSessionApi } from "~/api/user/user";
 
 // styles
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -37,6 +29,11 @@ import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
 
 // types
 import type { UserRespSchema } from "./api/schema/resp";
+import type {
+  LoaderArgs,
+  LinksFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [
@@ -53,35 +50,20 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const token = applyAuth(request);
-
-  let profile: UserRespSchema | null = null;
-
-  if (token) {
-    try {
-      const { result } = await getUserInfoApi({
-        hooks: {
-          beforeRequest: [
-            (request) => {
-              request.headers.set(
-                "Cookie",
-                cookies.serialize("access_token", token)
-              );
-              return request;
-            },
-          ],
-        },
-      });
-      profile = result.result;
-    } catch (error) {
-      profile = null;
-    }
+export const loader = async (args: LoaderArgs) => {
+  const { session, header: headers } = await getSessionApi(args);
+  const data = { isLoggedIn: false, currentProfile: null };
+  if (!session) {
+    return json(data, {
+      headers,
+    });
   }
-
-  return json({
-    isLoggedIn: !!token,
-    currentProfile: profile,
+  Object.assign(data, {
+    isLoggedIn: true,
+    currentProfile: session,
+  });
+  return json(data, {
+    headers,
   });
 };
 

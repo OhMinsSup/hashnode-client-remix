@@ -1,19 +1,20 @@
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 
 import AuthTemplate from "~/components/auth/AuthTemplate";
 import AuthInfoBox from "~/components/auth/AuthInfoBox";
 
+import { useMemo } from "react";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
+import { getSessionApi } from "~/api/user/user";
+
+// styles
 import authStylesheetUrl from "~/styles/auth.css";
 
 // types
-import type {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/cloudflare";
-import { useMemo } from "react";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStylesheetUrl }];
@@ -25,12 +26,20 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader: LoaderFunction = () => {
+export const loader = async (args: LoaderArgs) => {
   const content = `Remix is a full stack web framework that lets you focus on the user interface and work back through web standards to deliver a fast, 
   slick, and resilient user experience. People are gonna love using your stuff.`;
-
-  return json({
+  const data = {
     content,
+  };
+  const { session, header: headers } = await getSessionApi(args);
+  if (session) {
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers,
+    });
+  }
+  return json(data, {
+    headers,
   });
 };
 

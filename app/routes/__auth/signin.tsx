@@ -6,6 +6,7 @@ import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
 // components
 import { ValidationMessage } from "~/components/ui/error";
 import { LoadingIcon } from "~/components/ui/Icon";
+import Button from "~/components/ui/shared/Button";
 
 // api
 import { signinApi } from "~/api/auth/auth";
@@ -43,7 +44,7 @@ export default function Signin({ error }: Props) {
   const isLoading = useFormLoading();
 
   return (
-    <Form method="post" className="mb-4 mt-9 flex flex-col" replace>
+    <Form method="post" className="form__auth" replace>
       <div>
         <label className="font-semibold text-black">
           Email
@@ -53,7 +54,8 @@ export default function Signin({ error }: Props) {
             name="email"
             autoComplete="email"
             placeholder="Enter your email address"
-            className="mb-2 mt-2 w-full rounded-md border bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
+            defaultValue="mins5190@naver.com"
           />
         </label>
         {errors?.["email"] ? (
@@ -62,7 +64,7 @@ export default function Signin({ error }: Props) {
             error={errors?.["email"]}
           />
         ) : null}
-        <label className="font-semibold text-black">
+        <label className="mt-4 font-semibold text-black">
           Password
           <input
             id="password"
@@ -70,7 +72,8 @@ export default function Signin({ error }: Props) {
             name="password"
             autoComplete="password"
             placeholder="Enter your password"
-            className="mb-2 mt-2 w-full rounded-md border  bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
+            defaultValue="1q2w3e4r!@"
           />
         </label>
         {errors?.["password"] ? (
@@ -80,19 +83,16 @@ export default function Signin({ error }: Props) {
           />
         ) : null}
       </div>
-      <button
-        className={classNames(
-          "mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base",
-          {
-            "cursor-not-allowed": isLoading,
-          }
-        )}
+      <Button
         type="submit"
-        disabled={isLoading}
+        className={classNames("form__submit-btn", {
+          "cursor-not-allowed": isLoading,
+        })}
+        isDisabled={isLoading}
       >
         {isLoading && <LoadingIcon />}
         {isLoading ? "loading..." : "submit"}
-      </button>
+      </Button>
     </Form>
   );
 }
@@ -113,7 +113,6 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const parse = await signinSchema.parseAsync(form);
-
     const { header: headers } = await signinApi(parse);
 
     return redirect(PAGE_ENDPOINTS.ROOT, {
@@ -126,7 +125,6 @@ export const action: ActionFunction = async ({ request }) => {
         errors: nextError,
       });
     }
-
     const httpError = signinHTTPErrorWrapper(error);
     if (httpError) {
       return json({

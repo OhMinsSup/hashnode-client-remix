@@ -4,10 +4,10 @@ import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
 // components
 import { ValidationMessage } from "~/components/ui/error";
 import { LoadingIcon } from "~/components/ui/Icon";
+import Button from "~/components/ui/shared/Button";
 
 // hooks
 import { useFormLoading } from "~/libs/hooks/useFormLoading";
-import { useGoBack } from "~/libs/hooks/useGoBack";
 
 // api
 import { signupApi } from "~/api/auth";
@@ -38,7 +38,6 @@ interface Props {
 
 export default function Signup({ error }: Props) {
   const transition = useTransition();
-  const back = useGoBack();
   const actionData = useActionData<ActionData>();
 
   const errors = actionData?.errors;
@@ -46,7 +45,7 @@ export default function Signup({ error }: Props) {
   const isLoading = useFormLoading();
 
   return (
-    <Form method="post" className="mb-4 mt-9 flex flex-col" replace>
+    <Form method="post" className="form__auth" replace>
       <div>
         <label className="font-semibold text-black">
           Username
@@ -56,7 +55,7 @@ export default function Signup({ error }: Props) {
             name="username"
             autoComplete="username"
             placeholder="Enter your username"
-            className="mt-2 mb-2 w-full rounded-md border bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
             defaultValue="veloss"
           />
         </label>
@@ -75,7 +74,7 @@ export default function Signup({ error }: Props) {
             name="email"
             autoComplete="email"
             placeholder="Enter your email address"
-            className="mb-2 mt-2 w-full rounded-md border bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
             defaultValue="mins5190@naver.com"
           />
         </label>
@@ -92,7 +91,7 @@ export default function Signup({ error }: Props) {
             type="text"
             name="name"
             placeholder="Enter your name"
-            className="mb-2 mt-2 w-full rounded-md border bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
             defaultValue="tester"
           />
         </label>
@@ -110,7 +109,7 @@ export default function Signup({ error }: Props) {
             name="password"
             autoComplete="password"
             placeholder="Enter your password"
-            className="mb-2 mt-2 w-full rounded-md border  bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
             defaultValue="1q2w3e4r!@"
           />
         </label>
@@ -128,7 +127,7 @@ export default function Signup({ error }: Props) {
             name="confirmPassword"
             autoComplete="password"
             placeholder="Enter your password"
-            className="mb-2 mt-2 w-full rounded-md border bg-white p-3 outline outline-2 outline-offset-2 outline-transparent focus:border-blue-600 md:p-4 md:text-base"
+            className="form__input mb-4"
             defaultValue="1q2w3e4r!@"
           />
         </label>
@@ -139,19 +138,16 @@ export default function Signup({ error }: Props) {
           />
         ) : null}
       </div>
-      <button
-        className={classNames(
-          "mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base",
-          {
-            "cursor-not-allowed": isLoading,
-          }
-        )}
+      <Button
         type="submit"
-        disabled={isLoading}
+        className={classNames("form__submit-btn", {
+          "cursor-not-allowed": isLoading,
+        })}
+        isDisabled={isLoading}
       >
         {isLoading && <LoadingIcon />}
         {isLoading ? "loading..." : "submit"}
-      </button>
+      </Button>
     </Form>
   );
 }
