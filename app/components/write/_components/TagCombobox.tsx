@@ -10,7 +10,7 @@ import { getTagListApi } from "~/api/tags/tags";
 import { useFormContext } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/create";
+import type { FormFieldValues } from "~/routes/__draft";
 import type { MultiValue } from "react-select";
 import { scheduleMicrotask } from "~/libs/browser-utils";
 

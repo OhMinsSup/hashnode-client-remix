@@ -4,7 +4,7 @@ import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
-import type { FormFieldValues } from "~/routes/create";
+import type { FormFieldValues } from "~/routes/__draft";
 
 const Title = () => {
   const { control, formState } = useFormContext<FormFieldValues>();

@@ -12,7 +12,7 @@ const WriteButtonGroup: React.FC<WriteButtonGroupProps> = () => {
   return (
     <div className="write-button-group">
       <div className="write-button">
-        <Link to={PAGE_ENDPOINTS.CREATE.STORY}>
+        <Link to={PAGE_ENDPOINTS.DRAFT.ROOT}>
           <CreateIcon className="icon-sm mr-2" />
           <span>Write</span>
         </Link>

@@ -85,6 +85,9 @@ export const PAGE_ENDPOINTS = {
   CREATE: {
     STORY: "/create/story",
   },
+  DRAFT: {
+    ROOT: "/draft",
+  },
   ITEMS: {
     ID: (id: number | string) => `/items/${id}`,
   },

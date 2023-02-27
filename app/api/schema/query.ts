@@ -10,7 +10,7 @@ export interface TagListQuery extends PaginationQuery {
 
 export interface PostListQuery extends PaginationQuery {
   keyword?: string;
-  type?: "popular" | "recent" | "past" | "search";
+  type?: "recent" | "featured" | "past" | "personalized";
   startDate?: string;
   endDate?: string;
 }

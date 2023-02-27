@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "@remix-run/react";
 import TabPostSetting from "~/components/ui/main/TabPostSetting";
+import ListSearchFilter from "~/components/ui/main/ListSearchFilter";
 import {
   FeaturedOutline as FeaturedOutlineIcon,
   PersonalizedIcon,
@@ -19,32 +20,26 @@ const TabPostList: React.FC<TabPostListProps> = ({ children }) => {
   const match = useMemo(() => {
     const isIndex = location.pathname === "/";
     const isFeatured = location.pathname === "/featured";
-    const isRecent = location.pathname === "/recent";
 
     return {
       isIndex,
       isFeatured,
-      isRecent,
     };
   }, [location]);
 
   const matchId = useMemo(() => {
-    if (match.isIndex) return "tab-personalized";
+    if (match.isIndex) return "tab-recent";
     if (match.isFeatured) return "tab-featured";
-    if (match.isRecent) return "tab-recent";
   }, [match]);
 
   const onMoveToClick = useCallback(
     (dataKey: string) => {
       switch (dataKey) {
-        case "Personalized":
-          navigate("/");
-          break;
         case "Featured":
           navigate("/featured");
           break;
         case "Recent":
-          navigate("/recent");
+          navigate("/");
           break;
         default: {
           throw new Error("Invalid dataKey");
@@ -67,9 +62,9 @@ const TabPostList: React.FC<TabPostListProps> = ({ children }) => {
           >
             <TabItemButton
               tabIndex={match.isIndex ? 0 : -1}
-              name="Personalized"
-              dataKey="Personalized"
-              id="tab-personalized"
+              dataKey="Recent"
+              name="Recent"
+              id="tab-recent"
               aria-selected={match.isIndex ? "true" : "false"}
               onClick={onMoveToClick}
             />
@@ -82,19 +77,11 @@ const TabPostList: React.FC<TabPostListProps> = ({ children }) => {
               aria-selected={match.isFeatured ? "true" : "false"}
               onClick={onMoveToClick}
             />
-
-            <TabItemButton
-              tabIndex={match.isRecent ? 0 : -1}
-              dataKey="Recent"
-              name="Recent"
-              id="tab-recent"
-              aria-selected={match.isRecent ? "true" : "false"}
-              onClick={onMoveToClick}
-            />
           </div>
         </div>
         <TabPostSetting />
       </div>
+      <ListSearchFilter />
       <div id="tabpanel-post" aria-labelledby={matchId} role="tabpanel">
         {children}
       </div>

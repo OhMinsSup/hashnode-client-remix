@@ -66,6 +66,8 @@ const TabPostSetting = () => {
     [viewType]
   );
 
+  console.log("TabPostSetting render", isFilter);
+
   return (
     <div className="tabs-setting">
       <div className="filter-area">

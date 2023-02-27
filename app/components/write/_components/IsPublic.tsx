@@ -4,7 +4,7 @@ import { Switch } from "@headlessui/react";
 import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types
-import type { FormFieldValues } from "~/routes/create";
+import type { FormFieldValues } from "~/routes/__draft";
 
 const IsPublic = () => {
   const { control } = useFormContext<FormFieldValues>();

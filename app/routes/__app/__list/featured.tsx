@@ -24,6 +24,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const posts = await getPostsListApi({
     cursor,
     limit,
+    type: "featured",
   });
 
   return json({

@@ -1,9 +1,13 @@
 import React, { useMemo } from "react";
 import { Outlet } from "@remix-run/react";
+import { getSessionApi } from "~/api/user/user";
+import { json, redirect } from "@remix-run/cloudflare";
 
 // components
 import { WriteTemplate } from "~/components/write";
 import { WriterHeader } from "~/components/ui/header";
+
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // validation
 import { createPostSchema } from "~/api/posts/validation/create";
@@ -15,6 +19,7 @@ import { WriteProvider } from "~/stores/useWirteContext";
 
 // types
 import type { FileSchema } from "~/api/schema/file";
+import type { LoaderArgs, MetaFunction } from "@remix-run/cloudflare";
 
 export interface FormFieldValues {
   title: string;
@@ -28,6 +33,27 @@ export interface FormFieldValues {
   hasPublishedTime: boolean;
   publishingDate?: Date;
 }
+
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "New Remix App",
+  viewport: "width=device-width,initial-scale=1",
+});
+
+export const loader = async (args: LoaderArgs) => {
+  const { session, header: headers } = await getSessionApi(args);
+  if (!session) {
+    return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+      headers,
+    });
+  }
+  return json(
+    {},
+    {
+      headers,
+    }
+  );
+};
 
 export default function CreateRouteLayout() {
   const intialValues: FormFieldValues = useMemo(() => {

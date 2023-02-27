@@ -37,7 +37,7 @@ import { createDraftsApi, saveDraftsApi } from "~/api/drafts/drafts";
 // types
 import type { SubmitHandler } from "react-hook-form";
 import type { ActionFunction } from "@remix-run/cloudflare";
-import type { FormFieldValues } from "~/routes/create";
+import type { FormFieldValues } from "~/routes/__draft";
 
 export const action: ActionFunction = async ({ request }) => {
   const token = applyAuth(request);

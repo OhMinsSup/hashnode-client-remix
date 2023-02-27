@@ -6,7 +6,7 @@ import { getPostsListApi } from "~/api/posts/posts";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
-import { PersonalizedList } from "~/components/posts";
+import { RecentList } from "~/components/posts";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const params = parseUrlParams(request.url);
@@ -24,6 +24,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const posts = await getPostsListApi({
     cursor,
     limit,
+    type: "recent",
   });
 
   return json({
@@ -32,5 +33,5 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function IndexPage() {
-  return <PersonalizedList />;
+  return <RecentList />;
 }

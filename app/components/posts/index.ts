@@ -1,5 +1,4 @@
 export { default as FeaturedList } from "./FeaturedList";
-export { default as PersonalizedList } from "./PersonalizedList";
 export { default as RecentList } from "./RecentList";
 export { default as PostThumbnail } from "./PostThumbnail";
 export { default as PostTitle } from "./PostTitle";

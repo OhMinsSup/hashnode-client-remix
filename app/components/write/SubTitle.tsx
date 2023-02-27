@@ -6,7 +6,7 @@ import { Transition, useWriteContext } from "~/stores/useWirteContext";
 import { XIcon } from "../ui/Icon";
 
 // types
-import type { FormFieldValues } from "~/routes/create";
+import type { FormFieldValues } from "~/routes/__draft";
 
 const SubTitle = () => {
   const { setValue, control, formState } = useFormContext<FormFieldValues>();
