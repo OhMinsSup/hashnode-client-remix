@@ -17,9 +17,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { WriteProvider } from "~/stores/useWirteContext";
 
+import draftStylesheetUrl from "~/styles/draft.css";
+
+// types
+
 // types
 import type { FileSchema } from "~/api/schema/file";
-import type { LoaderArgs, MetaFunction } from "@remix-run/cloudflare";
+import type {
+  LoaderArgs,
+  MetaFunction,
+  LinksFunction,
+} from "@remix-run/cloudflare";
+import DraftTemplate from "~/components/draft/DraftTemplate";
 
 export interface FormFieldValues {
   title: string;
@@ -40,6 +49,10 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: draftStylesheetUrl }];
+};
+
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
   if (!session) {
@@ -48,14 +61,16 @@ export const loader = async (args: LoaderArgs) => {
     });
   }
   return json(
-    {},
+    {
+      session,
+    },
     {
       headers,
     }
   );
 };
 
-export default function CreateRouteLayout() {
+export default function DraftRouteLayout() {
   const intialValues: FormFieldValues = useMemo(() => {
     return {
       title: "",
@@ -79,9 +94,12 @@ export default function CreateRouteLayout() {
   return (
     <WriteProvider>
       <FormProvider {...methods}>
-        <WriteTemplate header={<WriterHeader />}>
+        {/* <WriteTemplate header={<WriterHeader />}>
           <Outlet />
-        </WriteTemplate>
+        </WriteTemplate> */}
+        <DraftTemplate>
+          <Outlet />
+        </DraftTemplate>
       </FormProvider>
     </WriteProvider>
   );

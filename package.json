@@ -29,6 +29,8 @@
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^1.0.6",
     "@hookform/resolvers": "^2.9.11",
+    "@radix-ui/react-collapsible": "^1.0.1",
+    "@radix-ui/react-scroll-area": "^1.0.2",
     "@remix-run/cloudflare": "^1.13.0",
     "@remix-run/cloudflare-workers": "^1.13.0",
     "@remix-run/react": "^1.13.0",

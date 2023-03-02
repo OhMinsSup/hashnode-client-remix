@@ -76,3 +76,10 @@ export const delayPromise = (ms: number) =>
 export const generateUniqueId = () => {
   return Math.floor(Math.random() * 1000000000000000);
 };
+
+export const firstLetterToUpperCase = (str?: string) => {
+  if (!str) {
+    return null;
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
