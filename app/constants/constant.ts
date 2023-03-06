@@ -64,6 +64,9 @@ export const QUERIES_KEY = {
       return keys;
     },
   },
+  DRAFTS: {
+    ROOT: ["getDraftListApi"],
+  },
 };
 
 export const ASSET_URL = {

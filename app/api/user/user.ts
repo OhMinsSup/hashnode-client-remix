@@ -2,8 +2,8 @@ import cookies from "cookie";
 import { apiClient } from "~/api/client";
 
 // server
-import { applyHeaders } from "~/libs/server/utils.server";
-import { createCookieHeaders } from "~/libs/server/cookie.server";
+import { applyHeaders } from "~/libs/server/utils";
+// import { createCookieHeaders } from "~/libs/server/cookie.server";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";

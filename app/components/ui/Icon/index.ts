@@ -36,3 +36,5 @@ export { default as MoreArrowIcon } from "./MoreArrow";
 export { default as FilterIcon } from "./Filter";
 export { default as ViewTypeModernIcon } from "./ViewTypeModern";
 export { default as ViewTypeClassicIcon } from "./ViewTypeClassic";
+export { default as EmptyFileIcon } from "./EmptyFile";
+export { default as AddFileIcon } from "./AddFile";

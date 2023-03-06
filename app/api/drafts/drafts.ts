@@ -2,14 +2,14 @@ import { apiClient } from "../client";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
-import { isEmpty } from "~/utils/assertion";
+import { applyHeaders } from "~/libs/server/utils";
 
 // types
 import type { Options } from "ky-universal";
 import type { DraftListRespSchema, DraftRespSchema } from "../schema/resp";
 import type { AppAPI } from "../schema/api";
 import type { PostBody } from "../schema/body";
-import type { PaginationQuery } from "../schema/query";
+import type { LoaderArgs } from "@remix-run/cloudflare";
 
 export async function createDraftsApi(
   body: Partial<PostBody>,
@@ -49,32 +49,64 @@ export async function saveDraftsApi(
 
 /// list
 
-export async function getDraftsListApi(
-  query?: PaginationQuery,
+interface GetDraftListApiSearchParams {
+  limit?: number;
+  cursor?: number;
+}
+
+interface GetDraftListApiParams extends LoaderArgs {}
+
+/**
+ * @description 초안 포스트 리스트 API
+ * @param {GetDraftListApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getDraftListApi(
+  query?: GetDraftListApiSearchParams,
   options?: Options
 ) {
-  const { headers, ...opts } = options ?? {};
-  const search = new URLSearchParams();
-
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const searchParams = new URLSearchParams();
   if (query?.limit) {
-    search.set("limit", query.limit.toString());
+    searchParams.set("limit", query.limit.toString());
+  } else {
+    searchParams.set("limit", "10");
   }
   if (query?.cursor) {
-    search.set("cursor", query.cursor.toString());
+    searchParams.set("cursor", query.cursor.toString());
   }
-
-  let url = API_ENDPOINTS.DRAFTS.ROOT;
-  if (!isEmpty(search.toString())) {
-    url += `?${search.toString()}`;
-  }
-
-  const response = await apiClient.get(url, {
+  const response = await apiClient.get(API_ENDPOINTS.DRAFTS.ROOT, {
     credentials: "include",
-    headers: {
-      "content-type": "application/json",
-      ...(headers ?? {}),
-    },
+    headers,
+    searchParams,
     ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description 초안 포스트 리스트 API
+ * @param {GetDraftListApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<{ result: AppAPI<DraftListRespSchema> }>}
+ */
+export async function getDraftsListApi(
+  query?: GetDraftListApiSearchParams,
+  args?: GetDraftListApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getDraftListApi(query, {
+    headers,
   });
   const result = await response.json<AppAPI<DraftListRespSchema>>();
   return { result };

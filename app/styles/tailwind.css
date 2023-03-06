@@ -1626,8 +1626,20 @@ video {
   fill: currentColor;
 }
 
+.fill-none {
+  fill: none;
+}
+
+.\!fill-none {
+  fill: none !important;
+}
+
 .stroke-current {
   stroke: currentColor;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .p-2 {

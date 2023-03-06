@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLoaderData } from "@remix-run/react";
-import { LeftArrowIcon } from "~/components/ui/Icon";
+import { AddFileIcon, LeftArrowIcon } from "~/components/ui/Icon";
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
 import { firstLetterToUpperCase } from "~/utils/util";
 
@@ -34,7 +34,12 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
       </div>
       <div className="draf-sidebar-search">검색</div>
       <MyDraftSidebar />
-      <div className="draft-sidebar-footer">Footer</div>
+      <div className="draft-sidebar-footer">
+        <button className="btn-new-draft">
+          <AddFileIcon className="icon mr-2 !fill-none stroke-current" />
+          <span>New draft</span>
+        </button>
+      </div>
     </div>
   );
 };

@@ -4,8 +4,8 @@ import { getSessionApi } from "~/api/user/user";
 import { json, redirect } from "@remix-run/cloudflare";
 
 // components
-import { WriteTemplate } from "~/components/write";
-import { WriterHeader } from "~/components/ui/header";
+// import { WriteTemplate } from "~/components/write";
+// import { WriterHeader } from "~/components/ui/header";
 
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
