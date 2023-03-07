@@ -34,7 +34,7 @@ const SearchForm = () => {
     <div className="header-search-area">
       <form>
         <span className="search-icon-container" {...labelProps}>
-          <SearchIcon className="icon" />
+          <SearchIcon className="icon-sm" />
         </span>
         <input {...inputProps} className="input-seach" />
         <span

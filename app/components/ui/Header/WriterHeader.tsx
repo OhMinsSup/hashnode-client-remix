@@ -3,7 +3,7 @@ import React from "react";
 // components
 import { Link } from "@remix-run/react";
 import { Logo as RemixLogo } from "~/components/ui/logo";
-import { Button } from "../shared";
+import Button from "~/components/ui/shared/Button";
 
 // hooks
 import { useWriteContext } from "~/stores/useWirteContext";

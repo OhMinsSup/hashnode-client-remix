@@ -4,8 +4,8 @@ import classNames from "classnames";
 import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
 
 // components
-import { ValidationMessage } from "~/components/ui/error";
 import { LoadingIcon } from "~/components/ui/Icon";
+import ValidationMessage from "~/components/ui/error/ValidationMessage";
 import Button from "~/components/ui/shared/Button";
 
 // api

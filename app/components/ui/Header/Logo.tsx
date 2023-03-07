@@ -4,7 +4,7 @@ import { Link } from "@remix-run/react";
 // components
 import { Logo as RemixLogo } from "~/components/ui/logo";
 import { MenuIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/shared";
+import Button from "~/components/ui/shared/Button";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";

@@ -66,7 +66,7 @@ const [Provider, useListContext] = createContext<ListContext>({
   defaultValue: initialState,
 });
 
-interface ListProps {
+interface Props {
   children: React.ReactNode;
 }
 
@@ -102,7 +102,7 @@ function reducer(state = initialState, action: ActionType) {
   }
 }
 
-function ListProvider({ children }: ListProps) {
+function ListProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const openFilter = () => dispatch({ type: Action.OPEN_FILTER });

@@ -2,7 +2,7 @@ import { XIcon } from "@heroicons/react/solid";
 import React, { useCallback, useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ScheduleIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/shared";
+import Button from "~/components/ui/shared/Button";
 import { Transition, useWriteContext } from "~/stores/useWirteContext";
 
 // types

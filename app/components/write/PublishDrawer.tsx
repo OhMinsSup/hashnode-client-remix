@@ -8,7 +8,7 @@ import Drawer from "rc-drawer";
 
 // components
 import { XIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/shared";
+import Button from "~/components/ui/shared/Button";
 import {
   Description,
   DisabledComment,

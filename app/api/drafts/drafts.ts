@@ -52,6 +52,7 @@ export async function saveDraftsApi(
 interface GetDraftListApiSearchParams {
   limit?: number;
   cursor?: number;
+  keyword?: string;
 }
 
 interface GetDraftListApiParams extends LoaderArgs {}
@@ -77,6 +78,9 @@ export async function _getDraftListApi(
   }
   if (query?.cursor) {
     searchParams.set("cursor", query.cursor.toString());
+  }
+  if (query?.keyword) {
+    searchParams.set("keyword", query.keyword);
   }
   const response = await apiClient.get(API_ENDPOINTS.DRAFTS.ROOT, {
     credentials: "include",

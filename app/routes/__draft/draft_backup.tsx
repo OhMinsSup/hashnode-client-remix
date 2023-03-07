@@ -7,7 +7,7 @@ import isEqual from "lodash-es/isEqual";
 // components
 import { Editor } from "~/components/ui/editor";
 import { TypographyIcon } from "~/components/ui/Icon";
-import { Button } from "~/components/ui/shared";
+import Button from "~/components/ui/shared/Button";
 import {
   CoverImage,
   CoverImagePopover,

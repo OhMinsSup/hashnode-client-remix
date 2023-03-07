@@ -65,7 +65,11 @@ export const QUERIES_KEY = {
     },
   },
   DRAFTS: {
-    ROOT: ["getDraftListApi"],
+    ROOT: (keyword?: string) => {
+      const keys: string[] = ["getDraftListApi"];
+      if (keyword) keys.push(keyword);
+      return keys;
+    },
   },
 };
 

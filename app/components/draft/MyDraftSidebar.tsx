@@ -1,9 +1,15 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
+
+// api
 import { getDraftsListApi } from "~/api/drafts/drafts";
-import { useInfiniteQuery } from "@tanstack/react-query";
+
+// constants
 import { QUERIES_KEY } from "~/constants/constant";
+
+// utils
+
 import { optimizeAnimation } from "~/utils/util";
 import {
   getClientHeight,
@@ -11,26 +17,31 @@ import {
   getScrollTop,
   getTargetElement,
 } from "~/libs/browser-utils";
+
+// hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
-import { ArrowUpIcon } from "@heroicons/react/solid";
-import { EmptyFileIcon } from "../ui/Icon";
+import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-const TAGS = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+// components
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
+import { EmptyFileIcon } from "~/components/ui/Icon";
+import Button from "~/components/ui/shared/Button";
 
-const MyDraftSidebar = () => {
-  useEffect(() => {
-    getDraftsListApi();
-  }, []);
-
+const MyDraftSidebar: React.FC = () => {
+  const [open, setOpen] = useState(true);
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const { keyword } = useDraftSidebarContext();
+
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    QUERIES_KEY.DRAFTS.ROOT,
-    async ({ pageParam = 0 }) => {
+    QUERIES_KEY.DRAFTS.ROOT(keyword),
+    async ({ pageParam = 0, queryKey }, ...t) => {
+      const [, keyword] = queryKey;
       const { result } = await getDraftsListApi({
         cursor: pageParam,
+        limit: 1000,
+        keyword,
       });
       return result.result;
     },
@@ -38,6 +49,10 @@ const MyDraftSidebar = () => {
       getNextPageParam: (lastPage) => lastPage.pageInfo.endCursor ?? undefined,
     }
   );
+
+  const totalCount = useMemo(() => {
+    return data?.pages?.[data.pages.length - 1]?.totalCount ?? 0;
+  }, [data]);
 
   const list = useMemo(() => {
     return data?.pages?.flatMap?.((page) => page.list) ?? [];
@@ -60,41 +75,48 @@ const MyDraftSidebar = () => {
 
   useEventListener("scroll", scrollMethod, { target: ref });
 
+  const onCollapsibleOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
+
   return (
     <ScrollArea.Root className="draft-sidebar-content">
-      {/* <div className="draft-sidebar-content__label" data-state="closed"></div>
-        <div style={{ padding: "15px 20px" }}>
-          <div className="Text">Tags</div>
-          {TAGS.map((tag) => (
-            <div className="Tag" key={tag}>
-              {tag}
-            </div>
-          ))}
-        </div> */}
       <Collapsible.Root
         className="draft-sidebar-content__label"
-        open={true}
-        onOpenChange={() => {}}
+        open={open}
+        onOpenChange={onCollapsibleOpenChange}
       >
         <Collapsible.Trigger asChild>
-          <button className="btn-trigger">
-            <span>My Drafts (23)</span>
+          <Button
+            className="btn-trigger"
+            aria-label="trigger collapsible button"
+            aria-expanded={open}
+          >
+            <span>
+              {keyword
+                ? `Showing results for: ${totalCount}`
+                : `My Drafts (${totalCount})`}
+            </span>
             <div className=" rounded-lg p-1">
-              <ArrowUpIcon className="icon-xs" />
+              {open ? (
+                <ArrowUpIcon className="icon-xs" />
+              ) : (
+                <ArrowDownIcon className="icon-xs" />
+              )}
             </div>
-          </button>
+          </Button>
         </Collapsible.Trigger>
 
         <Collapsible.Content>
           <ScrollArea.Viewport className="ScrollAreaViewport" ref={ref}>
-            {TAGS.map((tag, i) => (
-              <div className="my-draft-item" key={`${i}-${tag}`}>
-                <button className="my-draft-content">
+            {list.map((draft, i) => (
+              <div className="my-draft-item" key={`draft-${draft.id}-${i}`}>
+                <Button className="my-draft-content" aria-label="my draft item">
                   <div className="icon-wrapper">
-                    <EmptyFileIcon className="icon mr-2s flex-shrink-0 !fill-none stroke-current" />
+                    <EmptyFileIcon className="icon mr-2 flex-shrink-0 !fill-none stroke-current" />
                   </div>
-                  <div className="text">@radix-ui/colors</div>
-                </button>
+                  <div className="text">{draft.title || "Untitled"}</div>
+                </Button>
               </div>
             ))}
           </ScrollArea.Viewport>
