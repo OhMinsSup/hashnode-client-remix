@@ -73,6 +73,13 @@ export const QUERIES_KEY = {
   },
 };
 
+export const MUTATIONS_KEY = {
+  DRAFTS: {
+    SAVE_DRAFTS: "postSaveDraftApi",
+    NEW_DRAFTS: "postNewDraftApi",
+  },
+};
+
 export const ASSET_URL = {
   DEFAULT_AVATAR: "/images/qDAyv6PK_.png",
 };

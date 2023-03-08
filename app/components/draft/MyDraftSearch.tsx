@@ -8,6 +8,7 @@ import { useSearchField } from "react-aria";
 import { SearchIcon } from "~/components/ui/Icon";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { useDraftContext } from "~/context/useDraftContext";
 
 interface MyDraftSearchProps {}
 
@@ -15,9 +16,11 @@ const MyDraftSearch: React.FC<MyDraftSearchProps> = () => {
   const ref = useRef<HTMLInputElement>(null);
 
   const { keyword, changeKeyword } = useDraftSidebarContext();
+  const { changeDraftId } = useDraftContext();
 
   const debounced = useDebounceFn(
     (str: string) => {
+      changeDraftId(undefined);
       changeKeyword(str);
     },
     {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 
 // components
@@ -12,11 +12,65 @@ import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";
 
 // utils
 import { firstLetterToUpperCase } from "~/utils/util";
+import { scheduleMicrotask } from "~/libs/browser-utils";
+
+// hooks
+import { useFormContext } from "react-hook-form";
+import { useSaveDraftsMutation } from "~/api/drafts/hooks/useSaveDraftsMutation";
+import { useNewDraftsMutation } from "~/api/drafts/hooks/useNewDraftsMutation";
+import { Transition, useDraftContext } from "~/context/useDraftContext";
+
+// types
+import type { FormFieldValues } from "~/routes/__draft";
 
 interface DraftLeftSidebarProps {}
 
 const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
   const { session } = useLoaderData();
+
+  const { watch } = useFormContext<FormFieldValues>();
+
+  const { draftId, changeDraftId, changeTransition } = useDraftContext();
+
+  const mutation_save = useSaveDraftsMutation({
+    onSuccess: (data) => {
+      const {
+        result: { dataId },
+      } = data.result;
+      changeDraftId(dataId);
+      changeTransition(Transition.DONE);
+    },
+    onSettled: () => {
+      scheduleMicrotask(() => changeTransition(Transition.IDLE));
+    },
+  });
+
+  const mutation_new = useNewDraftsMutation({
+    onSuccess: (data) => {
+      const {
+        result: { dataId },
+      } = data.result;
+      changeDraftId(dataId);
+      changeTransition(Transition.DONE);
+    },
+    onSettled: () => {
+      scheduleMicrotask(() => changeTransition(Transition.IDLE));
+    },
+  });
+
+  const onNewOrSaveDraftClick = useCallback(async () => {
+    const input = watch();
+    const body = {
+      ...input,
+      thumbnail: input.thumbnail ? input.thumbnail.url : undefined,
+      ...(draftId && { draftId }),
+    };
+
+    if (!draftId) {
+      return mutation_new.mutateAsync(body);
+    }
+    return mutation_save.mutateAsync(body);
+  }, [draftId, mutation_new, mutation_save, watch]);
 
   return (
     <DraftSidebarProvider>
@@ -45,7 +99,12 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
         <MyDraftSearch />
         <MyDraftSidebar />
         <div className="draft-sidebar-footer">
-          <Button className="btn-new-draft" aria-label="new draft button">
+          <Button
+            className="btn-new-draft"
+            aria-label="new draft button"
+            onPress={onNewOrSaveDraftClick}
+            isDisabled={mutation_save.isLoading || mutation_new.isLoading}
+          >
             <AddFileIcon className="icon mr-2 !fill-none stroke-current" />
             <span>New draft</span>
           </Button>

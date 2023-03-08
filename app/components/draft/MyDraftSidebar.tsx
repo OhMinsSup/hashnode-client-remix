@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
+import classNames from "classnames";
 
 // api
 import { getDraftsListApi } from "~/api/drafts/drafts";
@@ -22,6 +23,7 @@ import {
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useDraftContext } from "~/context/useDraftContext";
 
 // components
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
@@ -33,6 +35,8 @@ const MyDraftSidebar: React.FC = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const { keyword } = useDraftSidebarContext();
+
+  const { changeDraftId, draftId } = useDraftContext();
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     QUERIES_KEY.DRAFTS.ROOT(keyword),
@@ -79,6 +83,13 @@ const MyDraftSidebar: React.FC = () => {
     setOpen(open);
   }, []);
 
+  const onDraftClick = useCallback(
+    (id: number) => {
+      changeDraftId(id);
+    },
+    [changeDraftId]
+  );
+
   return (
     <ScrollArea.Root className="draft-sidebar-content">
       <Collapsible.Root
@@ -110,8 +121,21 @@ const MyDraftSidebar: React.FC = () => {
         <Collapsible.Content>
           <ScrollArea.Viewport className="ScrollAreaViewport" ref={ref}>
             {list.map((draft, i) => (
-              <div className="my-draft-item" key={`draft-${draft.id}-${i}`}>
-                <Button className="my-draft-content" aria-label="my draft item">
+              <div
+                aria-selected={
+                  draftId ? (draftId === draft.id ? "true" : "false") : "false"
+                }
+                aria-label="my draft item"
+                className="my-draft-item"
+                key={`draft-${draft.id}-${i}`}
+              >
+                <Button
+                  className={classNames("my-draft-content", {
+                    active: draftId ? draftId === draft.id : false,
+                  })}
+                  aria-label="my draft item"
+                  onPress={() => onDraftClick(draft.id)}
+                >
                   <div className="icon-wrapper">
                     <EmptyFileIcon className="icon mr-2 flex-shrink-0 !fill-none stroke-current" />
                   </div>

@@ -185,6 +185,11 @@
   outline-offset: 2px !important;
 }
 
+.draft-sidebar .my-draft-item .my-draft-content.active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
 .draft-sidebar .my-draft-item .my-draft-content .icon-wrapper {
   grid-column: span 1 / span 1;
 }

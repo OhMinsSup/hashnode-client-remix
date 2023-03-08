@@ -29,6 +29,7 @@ import type {
   LinksFunction,
 } from "@remix-run/cloudflare";
 import DraftTemplate from "~/components/draft/DraftTemplate";
+import { DraftProvider } from "~/context/useDraftContext";
 
 export interface FormFieldValues {
   title: string;
@@ -92,15 +93,17 @@ export default function DraftRouteLayout() {
   });
 
   return (
-    <WriteProvider>
-      <FormProvider {...methods}>
-        {/* <WriteTemplate header={<WriterHeader />}>
+    <DraftProvider>
+      <WriteProvider>
+        <FormProvider {...methods}>
+          {/* <WriteTemplate header={<WriterHeader />}>
           <Outlet />
         </WriteTemplate> */}
-        <DraftTemplate>
-          <Outlet />
-        </DraftTemplate>
-      </FormProvider>
-    </WriteProvider>
+          <DraftTemplate>
+            <Outlet />
+          </DraftTemplate>
+        </FormProvider>
+      </WriteProvider>
+    </DraftProvider>
   );
 }
