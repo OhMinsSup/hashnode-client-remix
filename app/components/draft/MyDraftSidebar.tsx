@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import classNames from "classnames";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import classNames from "classnames";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 // api
 import { getDraftsListApi } from "~/api/drafts/drafts";
@@ -27,7 +28,7 @@ import { useDraftContext } from "~/context/useDraftContext";
 
 // components
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
-import { EmptyFileIcon } from "~/components/ui/Icon";
+import { EllipsisVerticalIcon, EmptyFileIcon } from "~/components/ui/Icon";
 import Button from "~/components/ui/shared/Button";
 
 const MyDraftSidebar: React.FC = () => {
@@ -141,6 +142,41 @@ const MyDraftSidebar: React.FC = () => {
                   </div>
                   <div className="text">{draft.title || "Untitled"}</div>
                 </Button>
+                <div className="my-draft-more">
+                  <div className="my-draft-more--container">
+                    <DropdownMenu.Root>
+                      <DropdownMenu.Trigger asChild>
+                        <button
+                          className="btn-more"
+                          aria-label="Customise options"
+                        >
+                          <EllipsisVerticalIcon className="icon" />
+                        </button>
+                      </DropdownMenu.Trigger>
+
+                      <DropdownMenu.Portal>
+                        <DropdownMenu.Content
+                          className="DropdownMenuContent"
+                          sideOffset={5}
+                        >
+                          <DropdownMenu.Item className="DropdownMenuItem">
+                            New Tab <div className="RightSlot">⌘+T</div>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item className="DropdownMenuItem">
+                            New Window <div className="RightSlot">⌘+N</div>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item
+                            className="DropdownMenuItem"
+                            disabled
+                          >
+                            New Private Window{" "}
+                            <div className="RightSlot">⇧+⌘+N</div>
+                          </DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Portal>
+                    </DropdownMenu.Root>
+                  </div>
+                </div>
               </div>
             ))}
           </ScrollArea.Viewport>
