@@ -24,20 +24,17 @@ import {
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useDraftContext } from "~/context/useDraftContext";
 
 // components
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
-import { EllipsisVerticalIcon, EmptyFileIcon } from "~/components/ui/Icon";
 import Button from "~/components/ui/shared/Button";
+import MyDraftItem from "~/components/draft/MyDraftItem";
 
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
   const ref = useRef<HTMLDivElement | null>(null);
 
   const { keyword } = useDraftSidebarContext();
-
-  const { changeDraftId, draftId } = useDraftContext();
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     QUERIES_KEY.DRAFTS.ROOT(keyword),
@@ -84,13 +81,6 @@ const MyDraftSidebar: React.FC = () => {
     setOpen(open);
   }, []);
 
-  const onDraftClick = useCallback(
-    (id: number) => {
-      changeDraftId(id);
-    },
-    [changeDraftId]
-  );
-
   return (
     <ScrollArea.Root className="draft-sidebar-content">
       <Collapsible.Root
@@ -122,62 +112,7 @@ const MyDraftSidebar: React.FC = () => {
         <Collapsible.Content>
           <ScrollArea.Viewport className="ScrollAreaViewport" ref={ref}>
             {list.map((draft, i) => (
-              <div
-                aria-selected={
-                  draftId ? (draftId === draft.id ? "true" : "false") : "false"
-                }
-                aria-label="my draft item"
-                className="my-draft-item"
-                key={`draft-${draft.id}-${i}`}
-              >
-                <Button
-                  className={classNames("my-draft-content", {
-                    active: draftId ? draftId === draft.id : false,
-                  })}
-                  aria-label="my draft item"
-                  onPress={() => onDraftClick(draft.id)}
-                >
-                  <div className="icon-wrapper">
-                    <EmptyFileIcon className="icon mr-2 flex-shrink-0 !fill-none stroke-current" />
-                  </div>
-                  <div className="text">{draft.title || "Untitled"}</div>
-                </Button>
-                <div className="my-draft-more">
-                  <div className="my-draft-more--container">
-                    <DropdownMenu.Root>
-                      <DropdownMenu.Trigger asChild>
-                        <button
-                          className="btn-more"
-                          aria-label="Customise options"
-                        >
-                          <EllipsisVerticalIcon className="icon" />
-                        </button>
-                      </DropdownMenu.Trigger>
-
-                      <DropdownMenu.Portal>
-                        <DropdownMenu.Content
-                          className="DropdownMenuContent"
-                          sideOffset={5}
-                        >
-                          <DropdownMenu.Item className="DropdownMenuItem">
-                            New Tab <div className="RightSlot">⌘+T</div>
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item className="DropdownMenuItem">
-                            New Window <div className="RightSlot">⌘+N</div>
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item
-                            className="DropdownMenuItem"
-                            disabled
-                          >
-                            New Private Window{" "}
-                            <div className="RightSlot">⇧+⌘+N</div>
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Portal>
-                    </DropdownMenu.Root>
-                  </div>
-                </div>
-              </div>
+              <MyDraftItem key={`my-draft-${draft.id}-${i}`} item={draft} />
             ))}
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar

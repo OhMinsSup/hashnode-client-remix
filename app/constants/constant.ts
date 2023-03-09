@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
     ROOT: "drafts",
     NEW: "drafts/new",
     SAVE_DATA: "drafts/save-data",
+    ID: (id: string | number) => `drafts/${id}`,
   },
 } as const;
 
@@ -77,6 +78,7 @@ export const MUTATIONS_KEY = {
   DRAFTS: {
     SAVE_DRAFTS: "postSaveDraftApi",
     NEW_DRAFTS: "postNewDraftApi",
+    DELETE: (id: string | number) => ["deleteDraftApi", { id }],
   },
 };
 

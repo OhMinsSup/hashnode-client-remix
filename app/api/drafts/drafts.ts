@@ -204,7 +204,7 @@ export async function _getDraftListApi(
 /**
  * @description 초안 포스트 리스트 API
  * @param {GetDraftListApiSearchParams?} query
- * @param {Options?} options
+ * @param {GetDraftListApiParams?} args
  * @returns {Promise<{ result: AppAPI<DraftListRespSchema> }>}
  */
 export async function getDraftsListApi(
@@ -223,5 +223,59 @@ export async function getDraftsListApi(
     headers,
   });
   const result = await response.json<AppAPI<DraftListRespSchema>>();
+  return { result };
+}
+
+// [Delete] Path: /api/v1/drafts/:draftId
+
+export type DeleteDraftApiReturnValue = {
+  result: AppAPI<boolean>;
+};
+
+interface DeleteDraftApiParams extends LoaderArgs {}
+
+/**
+ * @description 초안 포스트 삭제 API
+ * @param {string | number} draftId
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _deleteDraftApi(
+  draftId: string | number,
+  options?: Options
+) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const response = await apiClient.delete(API_ENDPOINTS.DRAFTS.ID(draftId), {
+    credentials: "include",
+    headers,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description 초안 포스트 삭제 API
+ * @param {string | number} draftId
+ * @param {DeleteDraftApiParams?} args
+ * @returns {Promise<SaveDraftApiReturnValue>}
+ */
+export async function deleteDraftApi(
+  draftId: string | number,
+  args?: DeleteDraftApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _deleteDraftApi(draftId, {
+    headers,
+  });
+  const result = await response.json<AppAPI<boolean>>();
   return { result };
 }

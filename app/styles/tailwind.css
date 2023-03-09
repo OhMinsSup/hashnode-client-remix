@@ -1630,6 +1630,10 @@ video {
   fill: currentColor;
 }
 
+.\!stroke-current {
+  stroke: currentColor !important;
+}
+
 .stroke-current {
   stroke: currentColor;
 }
