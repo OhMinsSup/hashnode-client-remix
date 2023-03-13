@@ -39,3 +39,5 @@ export { default as ViewTypeClassicIcon } from "./ViewTypeClassic";
 export { default as EmptyFileIcon } from "./EmptyFile";
 export { default as AddFileIcon } from "./AddFile";
 export { default as EllipsisVerticalIcon } from "./EllipsisVertical";
+export { default as SidebarMenuIcon } from "./SidebarMenu";
+export { default as TimeIcon } from "./Time";

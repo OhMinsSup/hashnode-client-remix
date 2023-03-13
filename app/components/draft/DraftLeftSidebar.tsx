@@ -22,6 +22,7 @@ import { Transition, useDraftContext } from "~/context/useDraftContext";
 
 // types
 import type { FormFieldValues } from "~/routes/__draft";
+import classNames from "classnames";
 
 interface DraftLeftSidebarProps {}
 
@@ -30,7 +31,8 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
 
   const { watch } = useFormContext<FormFieldValues>();
 
-  const { draftId, changeDraftId, changeTransition } = useDraftContext();
+  const { draftId, changeDraftId, changeTransition, visibility } =
+    useDraftContext();
 
   const mutation_save = useSaveDraftsMutation({
     onSuccess: (data) => {
@@ -74,7 +76,13 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
 
   return (
     <DraftSidebarProvider>
-      <div className="draft-sidebar">
+      <div
+        className={classNames("draft-sidebar", {
+          hidden: !visibility.isLeftSidebarVisible,
+        })}
+        id="draft-sidebar"
+        aria-hidden={!visibility.isLeftSidebarVisible}
+      >
         <div className="draft-sidebar-header">
           <div className="sidebar-header__btn-back">
             <Link to="/">

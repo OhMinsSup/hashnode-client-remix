@@ -10,6 +10,8 @@ export enum Transition {
 enum Action {
   CHANGE_DRAFT_ID = "CHANGE_DRAFT_ID",
   CHANGE_TRANSITION = "CHANGE_TRANSITION",
+  TOGGLE_LEFT_SIDEBAR = "TOGGLE_LEFT_SIDEBAR",
+  SET_FORM_INSTANCE = "SET_FORM_INSTANCE",
 }
 
 type ChangeDraftIdAction = {
@@ -22,22 +24,48 @@ type ChangeTransitionAction = {
   payload: Transition;
 };
 
-type ActionType = ChangeDraftIdAction | ChangeTransitionAction;
+type ToggleLeftSidebarAction = {
+  type: Action.TOGGLE_LEFT_SIDEBAR;
+  payload: boolean;
+};
+
+type SetFormInstanceAction = {
+  type: Action.SET_FORM_INSTANCE;
+  payload: HTMLFormElement | null;
+};
+
+type ActionType =
+  | ChangeDraftIdAction
+  | ChangeTransitionAction
+  | ToggleLeftSidebarAction
+  | SetFormInstanceAction;
+
+interface VisibilityState {
+  isLeftSidebarVisible: boolean;
+}
 
 interface DraftState {
+  visibility: VisibilityState;
   draftId: number | undefined;
   transition: Transition;
+  $form: HTMLFormElement | null;
 }
 
 interface DraftContext extends DraftState {
+  toggleLeftSidebar: (visible: boolean) => void;
   changeDraftId: (draftId: number | undefined) => void;
   changeTransition: (transition: Transition) => void;
+  setFormInstance: (form: HTMLFormElement | null) => void;
   dispatch: React.Dispatch<ActionType>;
 }
 
 const initialState: DraftState = {
+  visibility: {
+    isLeftSidebarVisible: true,
+  },
   draftId: undefined,
   transition: Transition.IDLE,
+  $form: null,
 };
 
 const [Provider, useDraftContext] = createContext<DraftContext>({
@@ -62,6 +90,19 @@ function reducer(state = initialState, action: ActionType) {
         ...state,
         transition: action.payload,
       };
+    case Action.TOGGLE_LEFT_SIDEBAR:
+      return {
+        ...state,
+        visibility: {
+          ...state.visibility,
+          isLeftSidebarVisible: action.payload,
+        },
+      };
+    case Action.SET_FORM_INSTANCE:
+      return {
+        ...state,
+        $form: action.payload,
+      };
     default:
       return state;
   }
@@ -84,11 +125,27 @@ function DraftProvider({ children }: Props) {
     });
   };
 
+  const toggleLeftSidebar = (visible: boolean) => {
+    dispatch({
+      type: Action.TOGGLE_LEFT_SIDEBAR,
+      payload: visible,
+    });
+  };
+
+  const setFormInstance = (form: HTMLFormElement | null) => {
+    dispatch({
+      type: Action.SET_FORM_INSTANCE,
+      payload: form,
+    });
+  };
+
   const actions = useMemo(
     () => ({
       ...state,
       changeDraftId,
       changeTransition,
+      toggleLeftSidebar,
+      setFormInstance,
       dispatch,
     }),
     [state]
