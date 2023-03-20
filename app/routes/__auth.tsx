@@ -1,50 +1,53 @@
-import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import classNames from "classnames";
+
+// components
+import { Icons } from "~/components/shared/Icons";
+
+// remix
+import { Outlet, useLocation } from "@remix-run/react";
 import { json, redirect } from "@remix-run/cloudflare";
 
-import AuthTemplate from "~/components/auth/AuthTemplate";
-import AuthInfoBox from "~/components/auth/AuthInfoBox";
-
 import { useMemo } from "react";
+
+// constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
+// api
 import { getSessionApi } from "~/api/user/user";
 
 // styles
-import authStylesheetUrl from "~/styles/auth.css";
+import authStyles from "~/styles/routes/auth.css";
 
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: authStylesheetUrl }];
+  return [{ rel: "stylesheet", href: authStyles }];
 };
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1",
+  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
 });
 
 export const loader = async (args: LoaderArgs) => {
-  const content = `Remix is a full stack web framework that lets you focus on the user interface and work back through web standards to deliver a fast, 
-  slick, and resilient user experience. People are gonna love using your stuff.`;
-  const data = {
-    content,
-  };
   const { session, header: headers } = await getSessionApi(args);
   if (session) {
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers,
     });
   }
-  return json(data, {
-    headers,
-  });
+  return json(
+    {},
+    {
+      headers,
+    }
+  );
 };
 
 export default function Auth() {
-  const { content } = useLoaderData();
   const location = useLocation();
 
   const isSigninPage = useMemo(() => {
@@ -52,11 +55,20 @@ export default function Auth() {
   }, [location]);
 
   return (
-    <AuthTemplate
-      isSigninPage={isSigninPage}
-      infoBox={<AuthInfoBox content={content} />}
+    <div
+      className={classNames({
+        "signup-page": !isSigninPage,
+      })}
     >
+      <header
+        className={classNames({
+          "auth-header__signin": isSigninPage,
+          "auth-header__signup": !isSigninPage,
+        })}
+      >
+        <Icons.Logo className="h-8" />
+      </header>
       <Outlet />
-    </AuthTemplate>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Link } from "@remix-run/react";
-import { CommentIcon, LikeIcon } from "../ui/Icon";
+import { CommentIcon, LikeIcon } from "../__ui/Icon";
 
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import type { PostDetailRespSchema } from "~/api/schema/resp";

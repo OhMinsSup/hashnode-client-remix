@@ -1288,10 +1288,6 @@ video {
   display: none;
 }
 
-.\!hidden {
-  display: none !important;
-}
-
 .h-10 {
   height: 2.5rem;
 }
@@ -1632,10 +1628,6 @@ video {
 
 .fill-current {
   fill: currentColor;
-}
-
-.fill-none {
-  fill: none;
 }
 
 .\!stroke-current {

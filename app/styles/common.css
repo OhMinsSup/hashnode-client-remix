@@ -220,7 +220,36 @@ input[type="search"]::-webkit-search-results-decoration {
   width: 100%;
   fill: currentColor;
 }
+
+.icon--base {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.icon--xs {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+.icon--sm {
+  height: 1rem;
+  width: 1rem;
+}
+
+.icon--md {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
 /* Icon */
+
+/* Error */
+
+.error-message {
+  @apply my-1 mx-1 text-sm text-red-500 duration-300 ease-in-out;
+}
+
+/* Error */
 
 /* Post Item Style */
 .post-item {

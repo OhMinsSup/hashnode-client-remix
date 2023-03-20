@@ -10,8 +10,8 @@ import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
 // components
 import { TrashIcon } from "@heroicons/react/solid";
-import { EllipsisVerticalIcon, EmptyFileIcon } from "~/components/ui/Icon";
-import Button from "~/components/ui/shared/Button";
+import { EllipsisVerticalIcon, EmptyFileIcon } from "~/components/__ui/Icon";
+import Button from "~/components/__ui/shared/Button";
 
 // constants
 import { QUERIES_KEY } from "~/constants/constant";

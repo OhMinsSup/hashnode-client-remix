@@ -1,153 +1,210 @@
-import { json, redirect } from "@remix-run/cloudflare";
-import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
+import React, { useMemo } from "react";
+import classNames from "classnames";
 
 // components
-import { LoadingIcon } from "~/components/ui/Icon";
-import ValidationMessage from "~/components/ui/error/ValidationMessage";
-import Button from "~/components/ui/shared/Button";
-
-// hooks
-import { useFormLoading } from "~/libs/hooks/useFormLoading";
-
-// api
-import { signupApi } from "~/api/auth";
-
-// utils
-import classNames from "classnames";
+import {
+  Form,
+  Link,
+  useCatch,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react";
+import ErrorMessage from "~/components/shared/ErrorMessage";
+import { Icons } from "~/components/shared/Icons";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-// types
-import type { HTTPError } from "ky-universal";
-import type { ActionFunction } from "@remix-run/cloudflare";
-import type { ThrownResponse } from "@remix-run/react";
+// remix
+import { json, redirect } from "@remix-run/cloudflare";
+
+// validation
 import {
-  signupHTTPErrorWrapper,
-  signupSchema,
-  signupValidationErrorWrapper,
-} from "~/api/auth/validation/signup";
+    signupHTTPErrorWrapper,
+    signupSchema,
+    signupValidationErrorWrapper,
+  } from "~/api/auth/validation/signup";
 
-interface ActionData {
-  errors?: Record<string, string> | null;
+// api
+import { signupApi } from "~/api/auth/auth";
+
+// types
+import type { ThrownResponse } from "@remix-run/react";
+import type { ActionArgs, MetaFunction } from "@remix-run/cloudflare";
+
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "Sign up to Hashnode",
+  description:
+    "Start your programming blog. Share your knowledge and build your own brand",
+  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+});
+
+export const action = async ({ request }: ActionArgs) => {
+  const formData = await request.formData();
+
+  const form = {
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  };
+
+  try {
+    const parse = await signupSchema.parseAsync(form);
+    const { header: headers } = await signupApi({
+        email: parse.email,
+        username: parse.username,
+        password: parse.password,
+    });
+
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers,
+    });
+  } catch (error) {
+    const error_validation = signupValidationErrorWrapper(error);
+    if (error_validation) {
+      return json(error_validation);
+    }
+    const error_http = await signupHTTPErrorWrapper(error);
+    if (error_http) {
+      return json(error_http.errors);
+    }
+
+    throw json(error);
+  }
+};
+
+interface SigninProps {
+  error?: Record<string, any>;
 }
 
-interface Props {
-  error?: HTTPError;
-}
-
-export default function Signup({ error }: Props) {
-  const transition = useTransition();
-  const actionData = useActionData<ActionData>();
-
-  const errors = actionData?.errors;
-
-  const isLoading = useFormLoading();
+export default function Signup(props: SigninProps) {
+  const errors = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = useMemo(
+    () => navigation.state === "submitting",
+    [navigation.state]
+  );
 
   return (
-    <Form method="post" className="form__auth" replace>
-      <div>
-        <label className="font-semibold text-black">
-          Username
+    <Form method="post" className="auth-form__container" replace>
+      <h1 className="auth-form__title">
+        Sign up for blog and start sharing your knowledge
+      </h1>
+      <div className="social-container signup">
+        <button
+          type="button"
+          aria-label="github login"
+          className="btn-social-signup__base btn-social-signup__github"
+        >
+          <span>
+            <Icons.Github className="icon__base fill-current" />
+          </span>
+          Continue with Github
+        </button>
+        <button
+          type="button"
+          aria-label="google login"
+          className="btn-social-signup__base btn-social-signup__google"
+        >
+          <span>
+            <Icons.Google className="icon__base fill-current" />
+          </span>
+          Continue with Google
+        </button>
+        <div className="or-container">
+          <p className="or-container__line"></p>
+          <span className="or-container__text">OR</span>
+        </div>
+      </div>
+
+      <div className="auth-form__form-item">
+        <div className="auth-form__form-item-inner mb-3">
+          <label className="text-sm" htmlFor="username">
+            What's your username?
+          </label>
           <input
-            id="username"
             type="text"
             name="username"
+            id="username"
             autoComplete="username"
-            placeholder="Enter your username"
-            className="form__input mb-4"
-            defaultValue="veloss"
+            aria-label="Username"
+            placeholder="Enter your username."
+            className={classNames("auth-form__input", {
+              error: !!errors?.username,
+            })}
           />
-        </label>
+          <ErrorMessage error={errors?.username} isSubmitting={isSubmitting} />
+        </div>
 
-        {errors?.["username"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["username"]}
-          />
-        ) : null}
-        <label className="font-semibold text-black">
-          Email
+        <div className="auth-form__form-item-inner mb-3">
+          <label className="text-sm" htmlFor="email">
+            What's your email?
+          </label>
           <input
-            id="email"
             type="email"
             name="email"
+            id="email"
+            aria-label="Email address"
             autoComplete="email"
-            placeholder="Enter your email address"
-            className="form__input mb-4"
-            defaultValue="mins5190@naver.com"
+            placeholder="Enter your email."
+            className={classNames("auth-form__input", {
+              error: !!errors?.email,
+            })}
           />
-        </label>
-        {errors?.["email"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["email"]}
-          />
-        ) : null}
-        <label className="font-semibold text-black">
-          name
+          <ErrorMessage error={errors?.email} isSubmitting={isSubmitting} />
+        </div>
+
+        <div className="auth-form__form-item-inner mb-3">
+          <label className="text-sm" htmlFor="password">
+            Create a password
+          </label>
           <input
-            id="name"
-            type="text"
-            name="name"
-            placeholder="Enter your name"
-            className="form__input mb-4"
-            defaultValue="tester"
-          />
-        </label>
-        {errors?.["name"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["name"]}
-          />
-        ) : null}
-        <label className="font-semibold text-black">
-          Password
-          <input
-            id="password"
             type="password"
             name="password"
-            autoComplete="password"
-            placeholder="Enter your password"
-            className="form__input mb-4"
-            defaultValue="1q2w3e4r!@"
+            id="password"
+            autoComplete="new-password"
+            aria-label="Password"
+            placeholder="Create a password."
+            className={classNames("auth-form__input", {
+              error: !!errors?.password,
+            })}
           />
-        </label>
-        {errors?.["password"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["password"]}
-          />
-        ) : null}
-        <label className="font-semibold text-black">
-          Confirm Password
+          <ErrorMessage error={errors?.password} isSubmitting={isSubmitting} />
+        </div>
+
+        <div className="auth-form__form-item-inner mb-3">
+          <label className="text-sm" htmlFor="passwordConfirm">
+            Confirm your password
+          </label>
           <input
-            id="confirmPassword"
             type="password"
-            name="confirmPassword"
-            autoComplete="password"
-            placeholder="Enter your password"
-            className="form__input mb-4"
-            defaultValue="1q2w3e4r!@"
+            name="passwordConfirm"
+            id="passwordConfirm"
+            autoComplete="new-password"
+            aria-label="passwordConfirm"
+            placeholder="Confirm your password."
+            className={classNames("auth-form__input", {
+              error: !!errors?.passwordConfirm,
+            })}
           />
-        </label>
-        {errors?.["confirmPassword"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["confirmPassword"]}
+          <ErrorMessage
+            error={errors?.passwordConfirm}
+            isSubmitting={isSubmitting}
           />
-        ) : null}
+        </div>
       </div>
-      <Button
-        type="submit"
-        className={classNames("form__submit-btn", {
-          "cursor-not-allowed": isLoading,
-        })}
-        isDisabled={isLoading}
-      >
-        {isLoading && <LoadingIcon />}
-        {isLoading ? "loading..." : "submit"}
-      </Button>
+
+      <div className="btn-login__container">
+        <button type="submit" className="btn-login" aria-label="Sign in">
+          Sign up
+        </button>
+      </div>
+
+      <div className="btn-signin__container">
+        Have an account? <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN}>Sign in</Link>.
+      </div>
     </Form>
   );
 }
@@ -157,45 +214,3 @@ export function CatchBoundary() {
 
   return <Signup error={caught.data} />;
 }
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-
-  const form = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    name: formData.get("name"),
-    confirmPassword: formData.get("confirmPassword"),
-  };
-
-  try {
-    const parse = await signupSchema.parseAsync(form);
-
-    const { header: headers } = await signupApi({
-      username: parse.username,
-      email: parse.email,
-      password: parse.password,
-    });
-
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers,
-    });
-  } catch (error) {
-    const nextError = signupValidationErrorWrapper(error);
-    if (nextError) {
-      return json({
-        errors: nextError,
-      });
-    }
-
-    const httpError = signupHTTPErrorWrapper(error);
-    if (httpError) {
-      return json({
-        errors: httpError,
-      });
-    }
-
-    throw json(error);
-  }
-};

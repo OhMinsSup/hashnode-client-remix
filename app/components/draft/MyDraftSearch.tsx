@@ -5,7 +5,7 @@ import { useSearchFieldState } from "react-stately";
 import { useSearchField } from "react-aria";
 
 // components
-import { SearchIcon } from "~/components/ui/Icon";
+import { SearchIcon } from "~/components/__ui/Icon";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useDraftContext } from "~/context/useDraftContext";

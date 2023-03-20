@@ -1,6 +1,3 @@
-import "lazysizes";
-import "lazysizes/plugins/parent-fit/ls.parent-fit";
-import "lazysizes/plugins/blur-up/ls.blur-up";
 import { json } from "@remix-run/cloudflare";
 import {
   Links,
@@ -9,39 +6,41 @@ import {
   LiveReload,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
-import { SSRProvider } from "react-aria";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AuthProvider } from "./stores/useAuthContext";
+import { LayoutProvider } from "./context/useLayoutContext";
 
 // api
-import { getSessionApi } from "~/api/user/user";
+import { getSessionApi, logoutApi } from "~/api/user/user";
 
 // styles
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import mainStylesheetUrl from "./styles/main.css";
-import commonStylesheetUrl from "./styles/common.css";
-import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
+// import tailwindStylesheetUrl from "./styles/tailwind.css";
+// import mainStylesheetUrl from "./styles/main.css";
+// import commonStylesheetUrl from "./styles/common.css";
+// import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
+import globalStyles from "~/styles/global.css";
 
 // types
-import type { UserRespSchema } from "./api/schema/resp";
 import type {
+  ActionArgs,
   LoaderArgs,
   LinksFunction,
   MetaFunction,
 } from "@remix-run/cloudflare";
 
+// export const links: LinksFunction = () => {
+//   return [
+//     { rel: "stylesheet", href: tailwindStylesheetUrl },
+//     { rel: "stylesheet", href: mainStylesheetUrl },
+//     { rel: "stylesheet", href: commonStylesheetUrl },
+//     { rel: "stylesheet", href: rcDrawerStylesheetUrl },
+//   ];
+// };
+
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: tailwindStylesheetUrl },
-    { rel: "stylesheet", href: mainStylesheetUrl },
-    { rel: "stylesheet", href: commonStylesheetUrl },
-    { rel: "stylesheet", href: rcDrawerStylesheetUrl },
-  ];
+  return [{ rel: "stylesheet", href: globalStyles }];
 };
 
 export const meta: MetaFunction = () => ({
@@ -67,31 +66,48 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export default function App() {
-  const { currentProfile, isLoggedIn } = useLoaderData<{
-    currentProfile: UserRespSchema | null;
-    isLoggedIn: boolean;
-  }>();
+export const action = async (args: ActionArgs) => {
+  const formData = await args.request.formData();
+  const type = formData.get("type");
+  switch (type) {
+    case "logout": {
+      try {
+        const resp = await logoutApi(args);
+        return json(
+          {},
+          resp?.header
+            ? {
+                headers: resp.header,
+              }
+            : undefined
+        );
+      } catch (error) {
+        return json({});
+      }
+    }
+    default: {
+      return json({});
+    }
+  }
+};
 
+export default function App() {
   return (
-    <AuthProvider currentProfile={currentProfile} isLoggedIn={isLoggedIn}>
-      <QueryClientProvider client={globalClient}>
-        <SSRProvider>
-          <html lang="kr">
-            <head>
-              <Meta />
-              <Links />
-            </head>
-            <body>
-              <Outlet />
-              <ScrollRestoration />
-              <Scripts />
-              <LiveReload />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </body>
-          </html>
-        </SSRProvider>
-      </QueryClientProvider>
-    </AuthProvider>
+    <QueryClientProvider client={globalClient}>
+      <LayoutProvider>
+        <html lang="kr">
+          <head>
+            <Meta />
+            <Links />
+          </head>
+          <body>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </body>
+        </html>
+      </LayoutProvider>
+    </QueryClientProvider>
   );
 }

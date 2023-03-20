@@ -2,10 +2,10 @@ import React, { useCallback } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 
 // components
-import { AddFileIcon, LeftArrowIcon } from "~/components/ui/Icon";
+import { AddFileIcon, LeftArrowIcon } from "~/components/__ui/Icon";
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
 import MyDraftSearch from "~/components/draft/MyDraftSearch";
-import Button from "~/components/ui/shared/Button";
+import Button from "~/components/__ui/shared/Button";
 
 // context
 import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";

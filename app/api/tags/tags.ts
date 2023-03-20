@@ -1,76 +1,83 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { apiClient } from "../client";
-import { API_ENDPOINTS, QUERIES_KEY } from "~/constants/constant";
-import { isEmpty } from "~/utils/assertion";
+import { API_ENDPOINTS } from "~/constants/constant";
+import { applyHeaders } from "~/libs/server/utils";
 
-import type { TagListQuery } from "../schema/query";
 import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
 import type { TagListRespSchema } from "../schema/resp";
+import type { LoaderArgs } from "@remix-run/cloudflare";
+import { delayPromise } from "~/utils/util";
 
-export async function getTagListApi(
-  query?: TagListQuery,
+// [Get] Path: /api/v1/tags
+
+interface GetTagListApiSearchParams {
+  limit?: number;
+  cursor?: number;
+  name?: string;
+  type?: string;
+}
+
+interface GetTagListApiParams extends LoaderArgs {}
+
+/**
+ * @description 태그 리스트 조회 API
+ * @param {GetDraftListApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getTagListApi(
+  query?: GetTagListApiSearchParams,
   options?: Options
-): Promise<ReturnValue> {
-  const { headers, ...opts } = options ?? {};
-  const search = new URLSearchParams();
-
+) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const searchParams = new URLSearchParams();
   if (query?.limit) {
-    search.set("limit", query.limit.toString());
+    searchParams.set("limit", query.limit.toString());
+  } else {
+    searchParams.set("limit", "10");
   }
   if (query?.cursor) {
-    search.set("cursor", query.cursor.toString());
+    searchParams.set("cursor", query.cursor.toString());
   }
   if (query?.name) {
-    search.set("name", query.name);
+    searchParams.set("name", query.name);
   }
-
   if (query?.type) {
-    search.set("type", query.type);
+    searchParams.set("type", query.type);
   }
-
-  let url = API_ENDPOINTS.TAGS.ROOT;
-  if (!isEmpty(search.toString())) {
-    url += `?${search.toString()}`;
-  }
-
-  const response = await apiClient.get(url, {
+  const response = await apiClient.get(API_ENDPOINTS.TAGS.ROOT, {
     credentials: "include",
-    headers: {
-      "content-type": "application/json",
-      ...(headers ?? {}),
-    },
+    headers,
+    searchParams,
     ...opts,
   });
+  return response;
+}
+
+/**
+ * @description 태그 리스트 조회 API
+ * @param {GetTagListApiSearchParams?} query
+ * @param {GetTagListApiParams?} args
+ * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
+ */
+export async function getTagListApi(
+  query?: GetTagListApiSearchParams,
+  args?: GetTagListApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getTagListApi(query, {
+    headers,
+  });
+  await delayPromise(3000);
   const result = await response.json<AppAPI<TagListRespSchema>>();
   return { result };
-}
-
-interface ReturnValue {
-  result: AppAPI<TagListRespSchema>;
-}
-
-interface QueryOptions<TQueryFnData, TError, TData>
-  extends Omit<
-    UseQueryOptions<TQueryFnData, TError, TData, string[]>,
-    "queryKey" | "queryFn"
-  > {
-  initialData: TQueryFnData | (() => TQueryFnData);
-}
-export function useTagQuery(
-  query?: TagListQuery,
-  options?: QueryOptions<ReturnValue, Record<string, any>, ReturnValue>
-) {
-  const resp = useQuery(
-    QUERIES_KEY.TAGS.ROOT(query?.name, query?.type),
-    (_key) => getTagListApi(query),
-    options
-  );
-
-  return {
-    ...resp,
-    get list() {
-      return resp.data?.result?.result?.list ?? [];
-    },
-  };
 }

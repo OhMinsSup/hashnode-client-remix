@@ -2,7 +2,6 @@ import { z } from "zod";
 import { HTTPError } from "ky-universal";
 import { STATUS_CODE } from "~/constants/constant";
 import { match, P } from "ts-pattern";
-
 import type { ErrorAPI } from "~/api/schema/api";
 
 /**
@@ -10,19 +9,17 @@ import type { ErrorAPI } from "~/api/schema/api";
  * @version 1.0.0
  * @description 로그인 시 사용되는 스키마입니다.
  */
-export const signinSchema = z
-  .object({
-    email: z.string().email({
-      message: "Email must be a valid email address",
+export const signinSchema = z.object({
+  email: z.string().email({
+    message: "Email must be a valid email address",
+  }),
+  password: z
+    .string()
+    .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+      message:
+        "Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter",
     }),
-    password: z
-      .string()
-      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
-        message:
-          "Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter",
-      }),
-  })
-  .required();
+});
 
 /**
  * Signin error wrapper
@@ -50,7 +47,7 @@ export const signinValidationErrorWrapper = (error: unknown) => {
  * @version 1.0.0
  * @description 로그인 시 사용되는 스키마의 에러를 처리합니다. (HTTPError)
  * @param {unknown} error
- * @returns {Record<string, string> | null}
+ * @returns {Promise<Record<string, string> | null>}
  */
 export const signinHTTPErrorWrapper = async (error: unknown) => {
   if (error instanceof HTTPError) {

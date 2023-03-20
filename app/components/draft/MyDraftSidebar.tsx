@@ -27,7 +27,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 // components
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
-import Button from "~/components/ui/shared/Button";
+import Button from "~/components/__ui/shared/Button";
 import MyDraftItem from "~/components/draft/MyDraftItem";
 
 const MyDraftSidebar: React.FC = () => {

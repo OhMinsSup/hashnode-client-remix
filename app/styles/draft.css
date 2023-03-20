@@ -576,6 +576,41 @@
   height: 100%;
 }
 
+.editor-toolbar-header {
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-weight: 600;
+}
+
+.editor-toolbar-header .btn-toolbar {
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  -webkit-box-pack: center;
+  justify-content: center;
+  text-align: center;
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.editor-title {
+  position: relative;
+}
+
 @media (min-width: 640px) {
   .draft-sidebar .draft-sidebar-footer .btn-new-draft {
     padding-top: 0.75rem;

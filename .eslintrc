@@ -1,6 +1,0 @@
-{
-  "extends": ["@remix-run/eslint-config", "prettier"],
-  "rules": {
-    "react/display-name": "off"
-  }
-}

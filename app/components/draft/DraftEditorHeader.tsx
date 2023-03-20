@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
-import Button from "~/components/ui/shared/Button";
+import Button from "~/components/__ui/shared/Button";
 import { useDraftContext } from "~/context/useDraftContext";
-import { SidebarMenuIcon, TimeIcon } from "~/components/ui/Icon";
+import { SidebarMenuIcon, TimeIcon } from "~/components/__ui/Icon";
 
 const DraftEditorHeader = () => {
   const { toggleLeftSidebar, visibility } = useDraftContext();

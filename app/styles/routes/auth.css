@@ -1,0 +1,124 @@
+.signup-page {
+  @apply flex h-full w-full flex-col items-center px-3 sm:px-8;
+}
+
+.auth-header__signin {
+  @apply flex w-full items-center justify-center border-b py-6;
+}
+
+.auth-header__signup {
+  @apply mt-10 flex w-full items-center justify-center;
+}
+
+.auth-form__container {
+  @apply m-auto flex w-full flex-col items-center justify-center py-8 sm:w-[450px];
+}
+
+.auth-form__container .auth-form__title {
+  @apply text-center font-bold tracking-tighter text-black;
+}
+
+.auth-form__container .social-container {
+  @apply flex w-full flex-col items-center py-3 px-3 sm:px-8;
+}
+
+.auth-form__container .social-container.signup {
+  @apply py-8;
+}
+
+.auth-form__container .social-container .btn-social__base {
+  @apply mt-4 flex w-full items-center justify-center rounded-full py-3 font-medium transition-transform hover:scale-105;
+}
+
+.auth-form__container .social-container .btn-social-signup__base {
+  @apply mt-4 flex w-full items-center justify-center rounded-full py-3 font-medium text-white transition-transform hover:scale-105;
+}
+
+.auth-form__container .social-container .btn-social__github {
+  @apply mt-2 bg-black text-white;
+}
+
+.auth-form__container .social-container .btn-social-signup__github {
+  @apply mt-2 bg-black text-white;
+}
+
+.auth-form__container .social-container .btn-social__google {
+  @apply border border-slate-500 bg-white text-slate-500;
+}
+
+.auth-form__container .social-container .btn-social-signup__google {
+  @apply border-2 border-slate-700 bg-white text-black;
+}
+
+.btn-social__base span {
+  @apply mr-3 flex items-center justify-center;
+}
+
+.btn-social-signup__base span {
+  @apply mr-3 flex items-center justify-center;
+}
+
+.or-container {
+  @apply relative mt-8 mb-2 flex w-full items-center justify-center;
+}
+
+.or-container__line {
+  @apply h-[0.05rem] w-full bg-slate-400;
+}
+
+.or-container__text {
+  @apply absolute mx-4 flex h-6 w-14 items-center justify-center bg-white  font-sans text-slate-400;
+}
+
+.auth-form__form-item {
+  @apply flex w-full flex-col items-center px-4 sm:px-8;
+}
+
+.auth-form__form-item .auth-form__form-item-inner {
+  @apply flex w-full flex-col font-bold;
+}
+
+.auth-form__form-item .auth-form__form-item-inner .auth-form__input {
+  @apply mt-2 rounded-md border border-slate-500 py-3 pl-4 font-sans outline-none transition-all placeholder:text-slate-500 focus:border-2 focus:border-black;
+}
+
+.auth-form__form-item .auth-form__form-item-inner .auth-form__input.error {
+  @apply border-2 border-red-500;
+}
+
+.auth-form__form-item .forget-password {
+  @apply mt-4 w-full cursor-pointer font-sans text-black underline transition-colors hover:text-slate-500;
+}
+
+.auth-form__container .btn-login__container {
+  @apply flex w-full flex-col items-center px-4 pt-8 pb-3 sm:px-8;
+}
+
+.auth-form__container .btn-login {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+  @apply w-full rounded-full px-12 py-3 font-bold uppercase text-white transition-transform hover:scale-105;
+}
+
+.auth-form__container .btn-signup__container {
+  @apply flex w-full flex-col items-center px-8 pt-4 pb-16 font-sans;
+}
+
+.auth-form__container .btn-signin__container {
+  @apply flex w-full justify-center pt-4  pb-16 font-sans;
+}
+
+.auth-form__container .btn-signin__container a {
+  --tw-bg-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-bg-opacity));
+  @apply ml-1.5 cursor-pointer font-sans underline transition-colors;
+}
+
+.auth-form__container .btn-signin__container a:hover {
+  --tw-bg-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.auth-form__container .btn-signup {
+  @apply mt-6 flex w-full items-center justify-center rounded-full border border-slate-500 bg-white  py-3 font-medium text-slate-500 transition-transform hover:scale-105;
+}

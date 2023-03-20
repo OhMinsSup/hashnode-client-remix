@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "@remix-run/react";
-import { BookmarkIcon, CommentIcon, LikeIcon } from "~/components/ui/Icon";
-import Button from "~/components/ui/shared/Button";
+import { BookmarkIcon, CommentIcon, LikeIcon } from "~/components/__ui/Icon";
+import Button from "~/components/__ui/shared/Button";
 
 import { isEmpty } from "~/utils/assertion";
 import { getDateFormat } from "~/libs/date";

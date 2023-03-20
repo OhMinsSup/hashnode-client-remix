@@ -1,109 +1,45 @@
-import { json, redirect } from "@remix-run/cloudflare";
-import classNames from "classnames";
-
-import { Form, useActionData, useCatch, useTransition } from "@remix-run/react";
+import React, { useMemo } from "react";
 
 // components
-import { LoadingIcon } from "~/components/ui/Icon";
-import ValidationMessage from "~/components/ui/error/ValidationMessage";
-import Button from "~/components/ui/shared/Button";
-
-// api
-import { signinApi } from "~/api/auth/auth";
 import {
-  signinValidationErrorWrapper,
-  signinHTTPErrorWrapper,
-  signinSchema,
-} from "~/api/auth/validation/signin";
-
-// hooks
-import { useFormLoading } from "~/libs/hooks/useFormLoading";
+  Form,
+  Link,
+  useCatch,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react";
+import { Icons } from "~/components/shared/Icons";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
+// remix
+import { json, redirect } from "@remix-run/cloudflare";
+
+// validation
+import {
+  signinHTTPErrorWrapper,
+  signinSchema,
+  signinValidationErrorWrapper,
+} from "~/api/auth/validation/signin";
+
+// api
+import { signinApi } from "~/api/auth/auth";
+
 // types
-import type { ActionFunction } from "@remix-run/cloudflare";
 import type { ThrownResponse } from "@remix-run/react";
-import type { HTTPError } from "ky-universal";
+import type { ActionArgs, MetaFunction } from "@remix-run/cloudflare";
+import classNames from "classnames";
+import ErrorMessage from "~/components/shared/ErrorMessage";
 
-interface ActionData {
-  errors?: Record<string, string> | null;
-}
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "Sign in to Hashnode",
+  description: "Start your programming blog. Share your knowledge and build your own brand",
+  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+});
 
-interface Props {
-  error?: HTTPError;
-}
-
-export default function Signin({ error }: Props) {
-  const transition = useTransition();
-  const actionData = useActionData<ActionData>();
-
-  const errors = actionData?.errors;
-
-  const isLoading = useFormLoading();
-
-  return (
-    <Form method="post" className="form__auth" replace>
-      <div>
-        <label className="font-semibold text-black">
-          Email
-          <input
-            id="email"
-            type="email"
-            name="email"
-            autoComplete="email"
-            placeholder="Enter your email address"
-            className="form__input mb-4"
-            defaultValue="mins5190@naver.com"
-          />
-        </label>
-        {errors?.["email"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["email"]}
-          />
-        ) : null}
-        <label className="mt-4 font-semibold text-black">
-          Password
-          <input
-            id="password"
-            type="password"
-            name="password"
-            autoComplete="password"
-            placeholder="Enter your password"
-            className="form__input mb-4"
-            defaultValue="1q2w3e4r!@"
-          />
-        </label>
-        {errors?.["password"] ? (
-          <ValidationMessage
-            isSubmitting={transition.state === "submitting"}
-            error={errors?.["password"]}
-          />
-        ) : null}
-      </div>
-      <Button
-        type="submit"
-        className={classNames("form__submit-btn", {
-          "cursor-not-allowed": isLoading,
-        })}
-        isDisabled={isLoading}
-      >
-        {isLoading && <LoadingIcon />}
-        {isLoading ? "loading..." : "submit"}
-      </Button>
-    </Form>
-  );
-}
-
-export function CatchBoundary() {
-  const caught = useCatch<ThrownResponse<number, any>>();
-
-  return <Signin error={caught.data} />;
-}
-
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
 
   const form = {
@@ -119,19 +55,128 @@ export const action: ActionFunction = async ({ request }) => {
       headers,
     });
   } catch (error) {
-    const nextError = signinValidationErrorWrapper(error);
-    if (nextError) {
-      return json({
-        errors: nextError,
-      });
+    const error_validation = signinValidationErrorWrapper(error);
+    if (error_validation) {
+      return json(error_validation);
     }
-    const httpError = signinHTTPErrorWrapper(error);
-    if (httpError) {
-      return json({
-        errors: httpError,
-      });
+    const error_http = await signinHTTPErrorWrapper(error);
+    if (error_http) {
+      return json(error_http.errors);
     }
 
     throw json(error);
   }
 };
+
+interface SigninProps {
+  error?: Record<string, any>;
+}
+
+export default function Signin(props: SigninProps) {
+  const errors = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = useMemo(
+    () => navigation.state === "submitting",
+    [navigation.state]
+  );
+
+  return (
+    <Form method="post" className="auth-form__container" replace>
+      <h1 className="auth-form__title">To continue, Sign in to hashnode.</h1>
+      <div className="social-container">
+        <button
+          type="button"
+          aria-label="github login"
+          className="btn-social__base btn-social__github"
+        >
+          <span>
+            <Icons.Github className="icon__base fill-current" />
+          </span>
+          Continue with Github
+        </button>
+        <button
+          type="button"
+          aria-label="google login"
+          className="btn-social__base btn-social__google"
+        >
+          <span>
+            <Icons.Google className="icon__base fill-current" />
+          </span>
+          Continue with Google
+        </button>
+        <div className="or-container">
+          <p className="or-container__line"></p>
+          <span className="or-container__text">OR</span>
+        </div>
+      </div>
+
+      <div className="auth-form__form-item">
+        <div className="auth-form__form-item-inner mb-3">
+          <label className="text-sm" htmlFor="email">
+            Email address
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            aria-label="Email address"
+            autoComplete="email"
+            placeholder="Email address."
+            className={classNames("auth-form__input", {
+              error: !!errors?.email,
+            })}
+          />
+          <ErrorMessage error={errors?.email} isSubmitting={isSubmitting} />
+        </div>
+
+        <div className="auth-form__form-item-inner">
+          <label className="text-sm" htmlFor="password">
+            Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            autoComplete="current-password"
+            aria-label="Password"
+            placeholder="Password."
+            className={classNames("auth-form__input", {
+              error: !!errors?.password,
+            })}
+          />
+          <ErrorMessage error={errors?.password} isSubmitting={isSubmitting} />
+        </div>
+
+        <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN} className="forget-password">
+          Forgot your password?
+        </Link>
+      </div>
+
+      <div className="btn-login__container">
+        <button type="submit" className="btn-login" aria-label="Sign in">
+          Sign in
+        </button>
+      </div>
+
+      <div className="btn-signup__container">
+        <p className="or-container__line"></p>
+
+        <h1 className="mt-6 text-xl font-bold">Don&apos;t have an account?</h1>
+
+        <Link
+          aria-label="Sign up"
+          to={PAGE_ENDPOINTS.AUTH.SIGNUP}
+          className="btn-signup"
+        >
+          Signup for hashnode
+        </Link>
+      </div>
+    </Form>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch<ThrownResponse<number, any>>();
+
+  return <Signin error={caught.data} />;
+}
