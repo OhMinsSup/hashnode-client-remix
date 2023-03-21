@@ -20,10 +20,10 @@ import { json, redirect } from "@remix-run/cloudflare";
 
 // validation
 import {
-    signupHTTPErrorWrapper,
-    signupSchema,
-    signupValidationErrorWrapper,
-  } from "~/api/auth/validation/signup";
+  signupHTTPErrorWrapper,
+  signupSchema,
+  signupValidationErrorWrapper,
+} from "~/api/auth/validation/signup";
 
 // api
 import { signupApi } from "~/api/auth/auth";
@@ -33,11 +33,7 @@ import type { ThrownResponse } from "@remix-run/react";
 import type { ActionArgs, MetaFunction } from "@remix-run/cloudflare";
 
 export const meta: MetaFunction = () => ({
-  charset: "utf-8",
   title: "Sign up to Hashnode",
-  description:
-    "Start your programming blog. Share your knowledge and build your own brand",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
 });
 
 export const action = async ({ request }: ActionArgs) => {
@@ -53,9 +49,9 @@ export const action = async ({ request }: ActionArgs) => {
   try {
     const parse = await signupSchema.parseAsync(form);
     const { header: headers } = await signupApi({
-        email: parse.email,
-        username: parse.username,
-        password: parse.password,
+      email: parse.email,
+      username: parse.username,
+      password: parse.password,
     });
 
     return redirect(PAGE_ENDPOINTS.ROOT, {

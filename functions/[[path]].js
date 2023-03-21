@@ -3914,7 +3914,7 @@ var require_react_development = __commonJS({
           value: source
         }), Object.freeze && (Object.freeze(element.props), Object.freeze(element)), element;
       };
-      function createElement13(type, config, children) {
+      function createElement14(type, config, children) {
         var propName, props = {}, key = null, ref = null, self2 = null, source = null;
         if (config != null) {
           hasValidRef(config) && (ref = config.ref, warnIfStringRefCannotBeAutoConverted(config)), hasValidKey(config) && (checkKeyStringCoercion(config.key), key = "" + config.key), self2 = config.__self === void 0 ? null : config.__self, source = config.__source === void 0 ? null : config.__source;
@@ -4065,7 +4065,7 @@ var require_react_development = __commonJS({
           throw new Error("React.Children.only expected to receive a single React element child.");
         return children;
       }
-      function createContext5(defaultValue) {
+      function createContext7(defaultValue) {
         var context = {
           $$typeof: REACT_CONTEXT_TYPE,
           _currentValue: defaultValue,
@@ -4263,7 +4263,7 @@ Your code should look like:
 3. You might have more than one copy of React in the same app
 See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.`), dispatcher;
       }
-      function useContext6(Context) {
+      function useContext8(Context) {
         var dispatcher = resolveDispatcher();
         if (Context._context !== void 0) {
           var realContext = Context._context;
@@ -4271,7 +4271,7 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
         }
         return dispatcher.useContext(Context);
       }
-      function useState16(initialState2) {
+      function useState18(initialState2) {
         var dispatcher = resolveDispatcher();
         return dispatcher.useState(initialState2);
       }
@@ -4283,7 +4283,7 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
         var dispatcher = resolveDispatcher();
         return dispatcher.useRef(initialValue);
       }
-      function useEffect15(create, deps) {
+      function useEffect17(create, deps) {
         var dispatcher = resolveDispatcher();
         return dispatcher.useEffect(create, deps);
       }
@@ -4295,11 +4295,11 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
         var dispatcher = resolveDispatcher();
         return dispatcher.useLayoutEffect(create, deps);
       }
-      function useCallback7(callback, deps) {
+      function useCallback10(callback, deps) {
         var dispatcher = resolveDispatcher();
         return dispatcher.useCallback(callback, deps);
       }
-      function useMemo15(create, deps) {
+      function useMemo17(create, deps) {
         var dispatcher = resolveDispatcher();
         return dispatcher.useMemo(create, deps);
       }
@@ -4313,7 +4313,7 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
           return dispatcher.useDebugValue(value, formatterFn);
         }
       }
-      function useTransition2() {
+      function useTransition3() {
         var dispatcher = resolveDispatcher();
         return dispatcher.useTransition();
       }
@@ -4325,7 +4325,7 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
         var dispatcher = resolveDispatcher();
         return dispatcher.useId();
       }
-      function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
+      function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
         var dispatcher = resolveDispatcher();
         return dispatcher.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
       }
@@ -4659,7 +4659,7 @@ Check the top-level render call using <` + parentName + ">.");
           var typeString;
           type === null ? typeString = "null" : isArray(type) ? typeString = "array" : type !== void 0 && type.$$typeof === REACT_ELEMENT_TYPE ? (typeString = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />", info = " Did you accidentally export a JSX literal instead of a component?") : typeString = typeof type, error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
         }
-        var element = createElement13.apply(this, arguments);
+        var element = createElement14.apply(this, arguments);
         if (element == null)
           return element;
         if (validType)
@@ -4810,7 +4810,7 @@ Check the top-level render call using <` + parentName + ">.");
         toArray,
         only: onlyChild
       };
-      exports.Children = Children3, exports.Component = Component2, exports.Fragment = REACT_FRAGMENT_TYPE, exports.Profiler = REACT_PROFILER_TYPE, exports.PureComponent = PureComponent, exports.StrictMode = REACT_STRICT_MODE_TYPE, exports.Suspense = REACT_SUSPENSE_TYPE, exports.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactSharedInternals, exports.cloneElement = cloneElement$1, exports.createContext = createContext5, exports.createElement = createElement$1, exports.createFactory = createFactory, exports.createRef = createRef, exports.forwardRef = forwardRef5, exports.isValidElement = isValidElement2, exports.lazy = lazy, exports.memo = memo, exports.startTransition = startTransition, exports.unstable_act = act, exports.useCallback = useCallback7, exports.useContext = useContext6, exports.useDebugValue = useDebugValue2, exports.useDeferredValue = useDeferredValue, exports.useEffect = useEffect15, exports.useId = useId, exports.useImperativeHandle = useImperativeHandle, exports.useInsertionEffect = useInsertionEffect, exports.useLayoutEffect = useLayoutEffect6, exports.useMemo = useMemo15, exports.useReducer = useReducer2, exports.useRef = useRef13, exports.useState = useState16, exports.useSyncExternalStore = useSyncExternalStore2, exports.useTransition = useTransition2, exports.version = ReactVersion, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
+      exports.Children = Children3, exports.Component = Component2, exports.Fragment = REACT_FRAGMENT_TYPE, exports.Profiler = REACT_PROFILER_TYPE, exports.PureComponent = PureComponent, exports.StrictMode = REACT_STRICT_MODE_TYPE, exports.Suspense = REACT_SUSPENSE_TYPE, exports.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactSharedInternals, exports.cloneElement = cloneElement$1, exports.createContext = createContext7, exports.createElement = createElement$1, exports.createFactory = createFactory, exports.createRef = createRef, exports.forwardRef = forwardRef5, exports.isValidElement = isValidElement2, exports.lazy = lazy, exports.memo = memo, exports.startTransition = startTransition, exports.unstable_act = act, exports.useCallback = useCallback10, exports.useContext = useContext8, exports.useDebugValue = useDebugValue2, exports.useDeferredValue = useDeferredValue, exports.useEffect = useEffect17, exports.useId = useId, exports.useImperativeHandle = useImperativeHandle, exports.useInsertionEffect = useInsertionEffect, exports.useLayoutEffect = useLayoutEffect6, exports.useMemo = useMemo17, exports.useReducer = useReducer2, exports.useRef = useRef13, exports.useState = useState18, exports.useSyncExternalStore = useSyncExternalStore3, exports.useTransition = useTransition3, exports.version = ReactVersion, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
     })();
   }
 });
@@ -6116,12 +6116,96 @@ var React2, defaultMethod, defaultEncType, _excluded, _excluded2, _excluded3, is
   }
 });
 
+// node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js
+var require_use_sync_external_store_shim_development = __commonJS({
+  "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js"(exports) {
+    "use strict";
+    (function() {
+      "use strict";
+      typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
+      var React29 = require_react(), ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      function error(format) {
+        {
+          for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
+            args[_key2 - 1] = arguments[_key2];
+          printWarning("error", format, args);
+        }
+      }
+      function printWarning(level, format, args) {
+        {
+          var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame, stack = ReactDebugCurrentFrame.getStackAddendum();
+          stack !== "" && (format += "%s", args = args.concat([stack]));
+          var argsWithFormat = args.map(function(item) {
+            return String(item);
+          });
+          argsWithFormat.unshift("Warning: " + format), Function.prototype.apply.call(console[level], console, argsWithFormat);
+        }
+      }
+      function is2(x, y2) {
+        return x === y2 && (x !== 0 || 1 / x === 1 / y2) || x !== x && y2 !== y2;
+      }
+      var objectIs = typeof Object.is == "function" ? Object.is : is2, useState18 = React29.useState, useEffect17 = React29.useEffect, useLayoutEffect6 = React29.useLayoutEffect, useDebugValue2 = React29.useDebugValue, didWarnOld18Alpha2 = !1, didWarnUncachedGetSnapshot2 = !1;
+      function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
+        didWarnOld18Alpha2 || React29.startTransition !== void 0 && (didWarnOld18Alpha2 = !0, error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."));
+        var value = getSnapshot();
+        if (!didWarnUncachedGetSnapshot2) {
+          var cachedValue = getSnapshot();
+          objectIs(value, cachedValue) || (error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot2 = !0);
+        }
+        var _useState = useState18({
+          inst: {
+            value,
+            getSnapshot
+          }
+        }), inst = _useState[0].inst, forceUpdate = _useState[1];
+        return useLayoutEffect6(function() {
+          inst.value = value, inst.getSnapshot = getSnapshot, checkIfSnapshotChanged2(inst) && forceUpdate({
+            inst
+          });
+        }, [subscribe, value, getSnapshot]), useEffect17(function() {
+          checkIfSnapshotChanged2(inst) && forceUpdate({
+            inst
+          });
+          var handleStoreChange = function() {
+            checkIfSnapshotChanged2(inst) && forceUpdate({
+              inst
+            });
+          };
+          return subscribe(handleStoreChange);
+        }, [subscribe]), useDebugValue2(value), value;
+      }
+      function checkIfSnapshotChanged2(inst) {
+        var latestGetSnapshot = inst.getSnapshot, prevValue = inst.value;
+        try {
+          var nextValue = latestGetSnapshot();
+          return !objectIs(prevValue, nextValue);
+        } catch {
+          return !0;
+        }
+      }
+      function useSyncExternalStore$13(subscribe, getSnapshot, getServerSnapshot) {
+        return getSnapshot();
+      }
+      var canUseDOM3 = typeof window < "u" && typeof window.document < "u" && typeof window.document.createElement < "u", isServerEnvironment2 = !canUseDOM3, shim2 = isServerEnvironment2 ? useSyncExternalStore$13 : useSyncExternalStore3, useSyncExternalStore$22 = React29.useSyncExternalStore !== void 0 ? React29.useSyncExternalStore : shim2;
+      exports.useSyncExternalStore = useSyncExternalStore$22, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
+    })();
+  }
+});
+
+// node_modules/use-sync-external-store/shim/index.js
+var require_shim = __commonJS({
+  "node_modules/use-sync-external-store/shim/index.js"(exports, module) {
+    "use strict";
+    module.exports = require_use_sync_external_store_shim_development();
+  }
+});
+
 // node_modules/react-router-dom/server.js
 var require_server = __commonJS({
   "node_modules/react-router-dom/server.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: !0 });
-    var React22 = require_react(), router = (init_router(), __toCommonJS(router_exports)), reactRouterDom = (init_dist2(), __toCommonJS(dist_exports));
+    var React29 = require_react(), router = (init_router(), __toCommonJS(router_exports)), reactRouterDom = (init_dist2(), __toCommonJS(dist_exports));
     function _interopNamespace(e2) {
       if (e2 && e2.__esModule)
         return e2;
@@ -6138,7 +6222,7 @@ var require_server = __commonJS({
         }
       }), n2.default = e2, Object.freeze(n2);
     }
-    var React__namespace = /* @__PURE__ */ _interopNamespace(React22);
+    var React__namespace = /* @__PURE__ */ _interopNamespace(React29);
     function StaticRouter({
       basename,
       children,
@@ -6347,7 +6431,7 @@ var require_react_dom_server_legacy_browser_development = __commonJS({
     "use strict";
     (function() {
       "use strict";
-      var React22 = require_react(), ReactVersion = "18.2.0", ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      var React29 = require_react(), ReactVersion = "18.2.0", ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
       function warn(format) {
         {
           for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
@@ -7744,7 +7828,7 @@ var require_react_dom_server_legacy_browser_development = __commonJS({
       }
       function flattenOptionChildren(children) {
         var content = "";
-        return React22.Children.forEach(children, function(child) {
+        return React29.Children.forEach(children, function(child) {
           child != null && (content += child, !didWarnInvalidOptionChildren && typeof child != "string" && typeof child != "number" && (didWarnInvalidOptionChildren = !0, error("Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>.")));
         }), content;
       }
@@ -8879,13 +8963,13 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       function readContext$1(context) {
         return isInHookUserCodeInDev && error("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo()."), readContext(context);
       }
-      function useContext6(context) {
+      function useContext8(context) {
         return currentHookNameInDev = "useContext", resolveCurrentlyRenderingComponent(), readContext(context);
       }
       function basicStateReducer(state, action4) {
         return typeof action4 == "function" ? action4(state) : action4;
       }
-      function useState16(initialState2) {
+      function useState18(initialState2) {
         return currentHookNameInDev = "useState", useReducer2(
           basicStateReducer,
           initialState2
@@ -8918,7 +9002,7 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
           return [workInProgressHook.memoizedState, _dispatch];
         }
       }
-      function useMemo15(nextCreate, deps) {
+      function useMemo17(nextCreate, deps) {
         currentlyRenderingComponent = resolveCurrentlyRenderingComponent(), workInProgressHook = createWorkInProgressHook();
         var nextDeps = deps === void 0 ? null : deps;
         if (workInProgressHook !== null) {
@@ -8967,15 +9051,15 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
           }
         }
       }
-      function useCallback7(callback, deps) {
-        return useMemo15(function() {
+      function useCallback10(callback, deps) {
+        return useMemo17(function() {
           return callback;
         }, deps);
       }
       function useMutableSource(source, getSnapshot, subscribe) {
         return resolveCurrentlyRenderingComponent(), getSnapshot(source._source);
       }
-      function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
+      function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
         if (getServerSnapshot === void 0)
           throw new Error("Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.");
         return getServerSnapshot();
@@ -8986,7 +9070,7 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       function unsupportedStartTransition() {
         throw new Error("startTransition cannot be called during server rendering.");
       }
-      function useTransition2() {
+      function useTransition3() {
         return resolveCurrentlyRenderingComponent(), [!1, unsupportedStartTransition];
       }
       function useId() {
@@ -9000,22 +9084,22 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       }
       var Dispatcher = {
         readContext: readContext$1,
-        useContext: useContext6,
-        useMemo: useMemo15,
+        useContext: useContext8,
+        useMemo: useMemo17,
         useReducer: useReducer2,
         useRef: useRef13,
-        useState: useState16,
+        useState: useState18,
         useInsertionEffect: noop2,
         useLayoutEffect: useLayoutEffect6,
-        useCallback: useCallback7,
+        useCallback: useCallback10,
         useImperativeHandle: noop2,
         useEffect: noop2,
         useDebugValue: noop2,
         useDeferredValue,
-        useTransition: useTransition2,
+        useTransition: useTransition3,
         useId,
         useMutableSource,
-        useSyncExternalStore: useSyncExternalStore2
+        useSyncExternalStore: useSyncExternalStore3
       }, currentResponseState = null;
       function setCurrentResponseState(responseState) {
         currentResponseState = responseState;
@@ -9808,7 +9892,7 @@ var require_react_dom_server_browser_development = __commonJS({
     "use strict";
     (function() {
       "use strict";
-      var React22 = require_react(), ReactVersion = "18.2.0", ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      var React29 = require_react(), ReactVersion = "18.2.0", ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
       function warn(format) {
         {
           for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++)
@@ -11220,7 +11304,7 @@ var require_react_dom_server_browser_development = __commonJS({
       }
       function flattenOptionChildren(children) {
         var content = "";
-        return React22.Children.forEach(children, function(child) {
+        return React29.Children.forEach(children, function(child) {
           child != null && (content += child, !didWarnInvalidOptionChildren && typeof child != "string" && typeof child != "number" && (didWarnInvalidOptionChildren = !0, error("Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>.")));
         }), content;
       }
@@ -12314,13 +12398,13 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       function readContext$1(context) {
         return isInHookUserCodeInDev && error("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo()."), readContext(context);
       }
-      function useContext6(context) {
+      function useContext8(context) {
         return currentHookNameInDev = "useContext", resolveCurrentlyRenderingComponent(), readContext(context);
       }
       function basicStateReducer(state, action4) {
         return typeof action4 == "function" ? action4(state) : action4;
       }
-      function useState16(initialState2) {
+      function useState18(initialState2) {
         return currentHookNameInDev = "useState", useReducer2(
           basicStateReducer,
           initialState2
@@ -12353,7 +12437,7 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
           return [workInProgressHook.memoizedState, _dispatch];
         }
       }
-      function useMemo15(nextCreate, deps) {
+      function useMemo17(nextCreate, deps) {
         currentlyRenderingComponent = resolveCurrentlyRenderingComponent(), workInProgressHook = createWorkInProgressHook();
         var nextDeps = deps === void 0 ? null : deps;
         if (workInProgressHook !== null) {
@@ -12402,15 +12486,15 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
           }
         }
       }
-      function useCallback7(callback, deps) {
-        return useMemo15(function() {
+      function useCallback10(callback, deps) {
+        return useMemo17(function() {
           return callback;
         }, deps);
       }
       function useMutableSource(source, getSnapshot, subscribe) {
         return resolveCurrentlyRenderingComponent(), getSnapshot(source._source);
       }
-      function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
+      function useSyncExternalStore3(subscribe, getSnapshot, getServerSnapshot) {
         if (getServerSnapshot === void 0)
           throw new Error("Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.");
         return getServerSnapshot();
@@ -12421,7 +12505,7 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       function unsupportedStartTransition() {
         throw new Error("startTransition cannot be called during server rendering.");
       }
-      function useTransition2() {
+      function useTransition3() {
         return resolveCurrentlyRenderingComponent(), [!1, unsupportedStartTransition];
       }
       function useId() {
@@ -12435,22 +12519,22 @@ Incoming: %s`, currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prev
       }
       var Dispatcher = {
         readContext: readContext$1,
-        useContext: useContext6,
-        useMemo: useMemo15,
+        useContext: useContext8,
+        useMemo: useMemo17,
         useReducer: useReducer2,
         useRef: useRef13,
-        useState: useState16,
+        useState: useState18,
         useInsertionEffect: noop2,
         useLayoutEffect: useLayoutEffect6,
-        useCallback: useCallback7,
+        useCallback: useCallback10,
         useImperativeHandle: noop2,
         useEffect: noop2,
         useDebugValue: noop2,
         useDeferredValue,
-        useTransition: useTransition2,
+        useTransition: useTransition3,
         useId,
         useMutableSource,
-        useSyncExternalStore: useSyncExternalStore2
+        useSyncExternalStore: useSyncExternalStore3
       }, currentResponseState = null;
       function setCurrentResponseState(responseState) {
         currentResponseState = responseState;
@@ -13262,14 +13346,14 @@ var require_react_jsx_dev_runtime_development = __commonJS({
     "use strict";
     (function() {
       "use strict";
-      var React22 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, FAUX_ITERATOR_SYMBOL = "@@iterator";
+      var React29 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, FAUX_ITERATOR_SYMBOL = "@@iterator";
       function getIteratorFn(maybeIterable) {
         if (maybeIterable === null || typeof maybeIterable != "object")
           return null;
         var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
         return typeof maybeIterator == "function" ? maybeIterator : null;
       }
-      var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      var ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
       function error(format) {
         {
           for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
@@ -13663,7 +13747,7 @@ var require_react_jsx_dev_runtime_development = __commonJS({
           value: source
         }), Object.freeze && (Object.freeze(element.props), Object.freeze(element)), element;
       };
-      function jsxDEV15(type, config, maybeKey, source, self2) {
+      function jsxDEV21(type, config, maybeKey, source, self2) {
         {
           var propName, props = {}, key = null, ref = null;
           maybeKey !== void 0 && (checkKeyStringCoercion(maybeKey), key = "" + maybeKey), hasValidKey(config) && (checkKeyStringCoercion(config.key), key = "" + config.key), hasValidRef(config) && (ref = config.ref, warnIfStringRefCannotBeAutoConverted(config, self2));
@@ -13808,7 +13892,7 @@ Check the top-level render call using <` + parentName + ">.");
             var typeString;
             type === null ? typeString = "null" : isArray(type) ? typeString = "array" : type !== void 0 && type.$$typeof === REACT_ELEMENT_TYPE ? (typeString = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />", info = " Did you accidentally export a JSX literal instead of a component?") : typeString = typeof type, error("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
           }
-          var element = jsxDEV15(type, props, key, source, self2);
+          var element = jsxDEV21(type, props, key, source, self2);
           if (element == null)
             return element;
           if (validType) {
@@ -14132,7 +14216,7 @@ var require_react_dom_development = __commonJS({
     (function() {
       "use strict";
       typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
-      var React22 = require_react(), Scheduler = require_scheduler(), ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, suppressWarning = !1;
+      var React29 = require_react(), Scheduler = require_scheduler(), ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, suppressWarning = !1;
       function setSuppressWarning(newSuppressWarning) {
         suppressWarning = newSuppressWarning;
       }
@@ -14160,7 +14244,7 @@ var require_react_dom_development = __commonJS({
           argsWithFormat.unshift("Warning: " + format), Function.prototype.apply.call(console[level], console, argsWithFormat);
         }
       }
-      var FunctionComponent = 0, ClassComponent = 1, IndeterminateComponent = 2, HostRoot = 3, HostPortal = 4, HostComponent = 5, HostText = 6, Fragment7 = 7, Mode = 8, ContextConsumer = 9, ContextProvider = 10, ForwardRef = 11, Profiler = 12, SuspenseComponent = 13, MemoComponent = 14, SimpleMemoComponent = 15, LazyComponent = 16, IncompleteClassComponent = 17, DehydratedFragment = 18, SuspenseListComponent = 19, ScopeComponent = 21, OffscreenComponent = 22, LegacyHiddenComponent = 23, CacheComponent = 24, TracingMarkerComponent = 25, enableClientRenderFallbackOnTextMismatch = !0, enableNewReconciler = !1, enableLazyContextPropagation = !1, enableLegacyHidden = !1, enableSuspenseAvoidThisFallback = !1, disableCommentsAsDOMContainers = !0, enableCustomElementPropertySupport = !1, warnAboutStringRefs = !1, enableSchedulingProfiler = !0, enableProfilerTimer = !0, enableProfilerCommitHooks = !0, allNativeEvents = /* @__PURE__ */ new Set(), registrationNameDependencies = {}, possibleRegistrationNames = {};
+      var FunctionComponent = 0, ClassComponent = 1, IndeterminateComponent = 2, HostRoot = 3, HostPortal = 4, HostComponent = 5, HostText = 6, Fragment8 = 7, Mode = 8, ContextConsumer = 9, ContextProvider = 10, ForwardRef = 11, Profiler = 12, SuspenseComponent = 13, MemoComponent = 14, SimpleMemoComponent = 15, LazyComponent = 16, IncompleteClassComponent = 17, DehydratedFragment = 18, SuspenseListComponent = 19, ScopeComponent = 21, OffscreenComponent = 22, LegacyHiddenComponent = 23, CacheComponent = 24, TracingMarkerComponent = 25, enableClientRenderFallbackOnTextMismatch = !0, enableNewReconciler = !1, enableLazyContextPropagation = !1, enableLegacyHidden = !1, enableSuspenseAvoidThisFallback = !1, disableCommentsAsDOMContainers = !0, enableCustomElementPropertySupport = !1, warnAboutStringRefs = !1, enableSchedulingProfiler = !0, enableProfilerTimer = !0, enableProfilerCommitHooks = !0, allNativeEvents = /* @__PURE__ */ new Set(), registrationNameDependencies = {}, possibleRegistrationNames = {};
       function registerTwoPhaseEvent(registrationName, dependencies) {
         registerDirectEvent(registrationName, dependencies), registerDirectEvent(registrationName + "Capture", dependencies);
       }
@@ -14931,7 +15015,7 @@ Error generating stack: ` + x.message + `
             return "DehydratedFragment";
           case ForwardRef:
             return getWrappedName$1(type, type.render, "ForwardRef");
-          case Fragment7:
+          case Fragment8:
             return "Fragment";
           case HostComponent:
             return type;
@@ -15172,7 +15256,7 @@ Error generating stack: ` + x.message + `
       }
       var didWarnSelectedSetOnOption = !1, didWarnInvalidChild = !1, didWarnInvalidInnerHTML = !1;
       function validateProps(element, props) {
-        props.value == null && (typeof props.children == "object" && props.children !== null ? React22.Children.forEach(props.children, function(child) {
+        props.value == null && (typeof props.children == "object" && props.children !== null ? React29.Children.forEach(props.children, function(child) {
           child != null && (typeof child == "string" || typeof child == "number" || didWarnInvalidChild || (didWarnInvalidChild = !0, error("Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>.")));
         }) : props.dangerouslySetInnerHTML != null && (didWarnInvalidInnerHTML || (didWarnInvalidInnerHTML = !0, error("Pass a `value` prop if you set dangerouslyInnerHTML so React knows which value should be selected.")))), props.selected != null && !didWarnSelectedSetOnOption && (error("Use the `defaultValue` or `value` props on <select> instead of setting `selected` on <option>."), didWarnSelectedSetOnOption = !0);
       }
@@ -18645,7 +18729,7 @@ Check the render method of \`` + ownerName + "`." : "";
           propKey === STYLE ? setValueForStyles(domElement, propValue) : propKey === DANGEROUSLY_SET_INNER_HTML ? setInnerHTML(domElement, propValue) : propKey === CHILDREN ? setTextContent(domElement, propValue) : setValueForProperty(domElement, propKey, propValue, isCustomComponentTag);
         }
       }
-      function createElement13(type, props, rootContainerElement, parentNamespace) {
+      function createElement14(type, props, rootContainerElement, parentNamespace) {
         var isCustomComponentTag, ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement), domElement, namespaceURI = parentNamespace;
         if (namespaceURI === HTML_NAMESPACE && (namespaceURI = getIntrinsicNamespace(type)), namespaceURI === HTML_NAMESPACE) {
           if (isCustomComponentTag = isCustomComponent(type, props), !isCustomComponentTag && type !== type.toLowerCase() && error("<%s /> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.", type), type === "script") {
@@ -19178,7 +19262,7 @@ Check the render method of \`` + ownerName + "`." : "";
           }
           parentNamespace = hostContextDev.namespace;
         }
-        var domElement = createElement13(type, props, rootContainerInstance, parentNamespace);
+        var domElement = createElement14(type, props, rootContainerInstance, parentNamespace);
         return precacheFiberNode(internalInstanceHandle, domElement), updateFiberProps(domElement, props), domElement;
       }
       function appendInitialChild(parentInstance, child) {
@@ -20586,7 +20670,7 @@ Learn more about this warning here: https://reactjs.org/link/legacy-context`, so
             callback !== null && (effect.callback = null, callCallback(callback, instance));
           }
       }
-      var fakeInternalInstance = {}, emptyRefsObject = new React22.Component().refs, didWarnAboutStateAssignmentForComponent, didWarnAboutUninitializedState, didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate, didWarnAboutLegacyLifecyclesAndDerivedState, didWarnAboutUndefinedDerivedState, warnOnUndefinedDerivedState, warnOnInvalidCallback, didWarnAboutDirectlyAssigningPropsToState, didWarnAboutContextTypeAndContextTypes, didWarnAboutInvalidateContextType;
+      var fakeInternalInstance = {}, emptyRefsObject = new React29.Component().refs, didWarnAboutStateAssignmentForComponent, didWarnAboutUninitializedState, didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate, didWarnAboutLegacyLifecyclesAndDerivedState, didWarnAboutUndefinedDerivedState, warnOnUndefinedDerivedState, warnOnInvalidCallback, didWarnAboutDirectlyAssigningPropsToState, didWarnAboutContextTypeAndContextTypes, didWarnAboutInvalidateContextType;
       {
         didWarnAboutStateAssignmentForComponent = /* @__PURE__ */ new Set(), didWarnAboutUninitializedState = /* @__PURE__ */ new Set(), didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate = /* @__PURE__ */ new Set(), didWarnAboutLegacyLifecyclesAndDerivedState = /* @__PURE__ */ new Set(), didWarnAboutDirectlyAssigningPropsToState = /* @__PURE__ */ new Set(), didWarnAboutUndefinedDerivedState = /* @__PURE__ */ new Set(), didWarnAboutContextTypeAndContextTypes = /* @__PURE__ */ new Set(), didWarnAboutInvalidateContextType = /* @__PURE__ */ new Set();
         var didWarnOnInvalidCallback = /* @__PURE__ */ new Set();
@@ -20960,7 +21044,7 @@ See https://reactjs.org/link/refs-must-have-owner for more information.`);
           }
         }
         function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-          if (current2 === null || current2.tag !== Fragment7) {
+          if (current2 === null || current2.tag !== Fragment8) {
             var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
             return created.return = returnFiber, created;
           } else {
@@ -21187,7 +21271,7 @@ See https://reactjs.org/link/refs-must-have-owner for more information.`);
             if (child.key === key) {
               var elementType = element.type;
               if (elementType === REACT_FRAGMENT_TYPE) {
-                if (child.tag === Fragment7) {
+                if (child.tag === Fragment8) {
                   deleteRemainingChildren(returnFiber, child.sibling);
                   var existing = useFiber(child, element.props.children);
                   return existing.return = returnFiber, existing._debugSource = element._source, existing._debugOwner = element._owner, existing;
@@ -23222,7 +23306,7 @@ Check the render method of \`` + ownerName + "`.");
       }
       function updateSuspenseComponent(current2, workInProgress2, renderLanes2) {
         var nextProps = workInProgress2.pendingProps;
-        shouldSuspend(workInProgress2) && (workInProgress2.flags |= DidCapture);
+        shouldSuspend2(workInProgress2) && (workInProgress2.flags |= DidCapture);
         var suspenseContext = suspenseStackCursor.current, showFallback = !1, didSuspend = (workInProgress2.flags & DidCapture) !== NoFlags;
         if (didSuspend || shouldRemainOnFallback(suspenseContext, current2) ? (showFallback = !0, workInProgress2.flags &= ~DidCapture) : (current2 === null || current2.memoizedState !== null) && (suspenseContext = addSubtreeSuspenseContext(suspenseContext, InvisibleParentSuspenseContext)), suspenseContext = setDefaultShallowSuspenseContext(suspenseContext), pushSuspenseContext(workInProgress2, suspenseContext), current2 === null) {
           tryToClaimNextHydratableInstance(workInProgress2);
@@ -23708,7 +23792,7 @@ Check the render method of \`` + ownerName + "`.");
             var type = workInProgress2.type, _unresolvedProps2 = workInProgress2.pendingProps, _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
             return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
           }
-          case Fragment7:
+          case Fragment8:
             return updateFragment(current2, workInProgress2, renderLanes2);
           case Mode:
             return updateMode(current2, workInProgress2, renderLanes2);
@@ -23859,7 +23943,7 @@ Check the render method of \`` + ownerName + "`.");
           case SimpleMemoComponent:
           case FunctionComponent:
           case ForwardRef:
-          case Fragment7:
+          case Fragment8:
           case Mode:
           case Profiler:
           case ContextConsumer:
@@ -26376,7 +26460,7 @@ Check the render method of \`` + ownerName + "`.");
         return fiber._debugSource = element._source, fiber._debugOwner = element._owner, fiber;
       }
       function createFiberFromFragment(elements, mode, lanes, key) {
-        var fiber = createFiber(Fragment7, elements, key, mode);
+        var fiber = createFiber(Fragment8, elements, key, mode);
         return fiber.lanes = lanes, fiber;
       }
       function createFiberFromProfiler(pendingProps, mode, lanes, key) {
@@ -26610,7 +26694,7 @@ Check the render method of %s.`, getComponentNameFromFiber(current) || "Unknown"
       var shouldSuspendImpl = function(fiber) {
         return !1;
       };
-      function shouldSuspend(fiber) {
+      function shouldSuspend2(fiber) {
         return shouldSuspendImpl(fiber);
       }
       var overrideHookState = null, overrideHookStateDeletePath = null, overrideHookStateRenamePath = null, overrideProps = null, overridePropsDeletePath = null, overridePropsRenamePath = null, scheduleUpdate = null, setErrorHandler = null, setSuspenseHandler = null;
@@ -29199,6 +29283,14 @@ function replaceEqualDeep(a2, b2) {
   }
   return b2;
 }
+function shallowEqualObjects(a2, b2) {
+  if (a2 && !b2 || b2 && !a2)
+    return !1;
+  for (let key in a2)
+    if (a2[key] !== b2[key])
+      return !1;
+  return !0;
+}
 function isPlainArray(value) {
   return Array.isArray(value) && value.length === Object.keys(value).length;
 }
@@ -30326,12 +30418,279 @@ var QueryClient = class {
   }
 };
 
+// node_modules/@tanstack/query-core/build/lib/queryObserver.mjs
+var QueryObserver = class extends Subscribable {
+  constructor(client, options) {
+    super(), this.client = client, this.options = options, this.trackedProps = /* @__PURE__ */ new Set(), this.selectError = null, this.bindMethods(), this.setOptions(options);
+  }
+  bindMethods() {
+    this.remove = this.remove.bind(this), this.refetch = this.refetch.bind(this);
+  }
+  onSubscribe() {
+    this.listeners.length === 1 && (this.currentQuery.addObserver(this), shouldFetchOnMount(this.currentQuery, this.options) && this.executeFetch(), this.updateTimers());
+  }
+  onUnsubscribe() {
+    this.listeners.length || this.destroy();
+  }
+  shouldFetchOnReconnect() {
+    return shouldFetchOn(this.currentQuery, this.options, this.options.refetchOnReconnect);
+  }
+  shouldFetchOnWindowFocus() {
+    return shouldFetchOn(this.currentQuery, this.options, this.options.refetchOnWindowFocus);
+  }
+  destroy() {
+    this.listeners = [], this.clearStaleTimeout(), this.clearRefetchInterval(), this.currentQuery.removeObserver(this);
+  }
+  setOptions(options, notifyOptions) {
+    let prevOptions = this.options, prevQuery = this.currentQuery;
+    if (this.options = this.client.defaultQueryOptions(options), typeof (options == null ? void 0 : options.isDataEqual) < "u" && this.client.getLogger().error("The isDataEqual option has been deprecated and will be removed in the next major version. You can achieve the same functionality by passing a function as the structuralSharing option"), shallowEqualObjects(prevOptions, this.options) || this.client.getQueryCache().notify({
+      type: "observerOptionsUpdated",
+      query: this.currentQuery,
+      observer: this
+    }), typeof this.options.enabled < "u" && typeof this.options.enabled != "boolean")
+      throw new Error("Expected enabled to be a boolean");
+    this.options.queryKey || (this.options.queryKey = prevOptions.queryKey), this.updateQuery();
+    let mounted = this.hasListeners();
+    mounted && shouldFetchOptionally(this.currentQuery, prevQuery, this.options, prevOptions) && this.executeFetch(), this.updateResult(notifyOptions), mounted && (this.currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || this.options.staleTime !== prevOptions.staleTime) && this.updateStaleTimeout();
+    let nextRefetchInterval = this.computeRefetchInterval();
+    mounted && (this.currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || nextRefetchInterval !== this.currentRefetchInterval) && this.updateRefetchInterval(nextRefetchInterval);
+  }
+  getOptimisticResult(options) {
+    let query = this.client.getQueryCache().build(this.client, options);
+    return this.createResult(query, options);
+  }
+  getCurrentResult() {
+    return this.currentResult;
+  }
+  trackResult(result) {
+    let trackedResult = {};
+    return Object.keys(result).forEach((key) => {
+      Object.defineProperty(trackedResult, key, {
+        configurable: !1,
+        enumerable: !0,
+        get: () => (this.trackedProps.add(key), result[key])
+      });
+    }), trackedResult;
+  }
+  getCurrentQuery() {
+    return this.currentQuery;
+  }
+  remove() {
+    this.client.getQueryCache().remove(this.currentQuery);
+  }
+  refetch({
+    refetchPage,
+    ...options
+  } = {}) {
+    return this.fetch({
+      ...options,
+      meta: {
+        refetchPage
+      }
+    });
+  }
+  fetchOptimistic(options) {
+    let defaultedOptions = this.client.defaultQueryOptions(options), query = this.client.getQueryCache().build(this.client, defaultedOptions);
+    return query.isFetchingOptimistic = !0, query.fetch().then(() => this.createResult(query, defaultedOptions));
+  }
+  fetch(fetchOptions) {
+    var _fetchOptions$cancelR;
+    return this.executeFetch({
+      ...fetchOptions,
+      cancelRefetch: (_fetchOptions$cancelR = fetchOptions.cancelRefetch) != null ? _fetchOptions$cancelR : !0
+    }).then(() => (this.updateResult(), this.currentResult));
+  }
+  executeFetch(fetchOptions) {
+    this.updateQuery();
+    let promise = this.currentQuery.fetch(this.options, fetchOptions);
+    return fetchOptions != null && fetchOptions.throwOnError || (promise = promise.catch(noop)), promise;
+  }
+  updateStaleTimeout() {
+    if (this.clearStaleTimeout(), isServer2 || this.currentResult.isStale || !isValidTimeout(this.options.staleTime))
+      return;
+    let timeout2 = timeUntilStale(this.currentResult.dataUpdatedAt, this.options.staleTime) + 1;
+    this.staleTimeoutId = setTimeout(() => {
+      this.currentResult.isStale || this.updateResult();
+    }, timeout2);
+  }
+  computeRefetchInterval() {
+    var _this$options$refetch;
+    return typeof this.options.refetchInterval == "function" ? this.options.refetchInterval(this.currentResult.data, this.currentQuery) : (_this$options$refetch = this.options.refetchInterval) != null ? _this$options$refetch : !1;
+  }
+  updateRefetchInterval(nextInterval) {
+    this.clearRefetchInterval(), this.currentRefetchInterval = nextInterval, !(isServer2 || this.options.enabled === !1 || !isValidTimeout(this.currentRefetchInterval) || this.currentRefetchInterval === 0) && (this.refetchIntervalId = setInterval(() => {
+      (this.options.refetchIntervalInBackground || focusManager.isFocused()) && this.executeFetch();
+    }, this.currentRefetchInterval));
+  }
+  updateTimers() {
+    this.updateStaleTimeout(), this.updateRefetchInterval(this.computeRefetchInterval());
+  }
+  clearStaleTimeout() {
+    this.staleTimeoutId && (clearTimeout(this.staleTimeoutId), this.staleTimeoutId = void 0);
+  }
+  clearRefetchInterval() {
+    this.refetchIntervalId && (clearInterval(this.refetchIntervalId), this.refetchIntervalId = void 0);
+  }
+  createResult(query, options) {
+    let prevQuery = this.currentQuery, prevOptions = this.options, prevResult = this.currentResult, prevResultState = this.currentResultState, prevResultOptions = this.currentResultOptions, queryChange = query !== prevQuery, queryInitialState = queryChange ? query.state : this.currentQueryInitialState, prevQueryResult = queryChange ? this.currentResult : this.previousQueryResult, {
+      state
+    } = query, {
+      dataUpdatedAt,
+      error,
+      errorUpdatedAt,
+      fetchStatus,
+      status
+    } = state, isPreviousData = !1, isPlaceholderData = !1, data;
+    if (options._optimisticResults) {
+      let mounted = this.hasListeners(), fetchOnMount = !mounted && shouldFetchOnMount(query, options), fetchOptionally = mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
+      (fetchOnMount || fetchOptionally) && (fetchStatus = canFetch(query.options.networkMode) ? "fetching" : "paused", dataUpdatedAt || (status = "loading")), options._optimisticResults === "isRestoring" && (fetchStatus = "idle");
+    }
+    if (options.keepPreviousData && !state.dataUpdatedAt && prevQueryResult != null && prevQueryResult.isSuccess && status !== "error")
+      data = prevQueryResult.data, dataUpdatedAt = prevQueryResult.dataUpdatedAt, status = prevQueryResult.status, isPreviousData = !0;
+    else if (options.select && typeof state.data < "u")
+      if (prevResult && state.data === (prevResultState == null ? void 0 : prevResultState.data) && options.select === this.selectFn)
+        data = this.selectResult;
+      else
+        try {
+          this.selectFn = options.select, data = options.select(state.data), data = replaceData(prevResult == null ? void 0 : prevResult.data, data, options), this.selectResult = data, this.selectError = null;
+        } catch (selectError) {
+          this.client.getLogger().error(selectError), this.selectError = selectError;
+        }
+    else
+      data = state.data;
+    if (typeof options.placeholderData < "u" && typeof data > "u" && status === "loading") {
+      let placeholderData;
+      if (prevResult != null && prevResult.isPlaceholderData && options.placeholderData === (prevResultOptions == null ? void 0 : prevResultOptions.placeholderData))
+        placeholderData = prevResult.data;
+      else if (placeholderData = typeof options.placeholderData == "function" ? options.placeholderData() : options.placeholderData, options.select && typeof placeholderData < "u")
+        try {
+          placeholderData = options.select(placeholderData), this.selectError = null;
+        } catch (selectError) {
+          this.client.getLogger().error(selectError), this.selectError = selectError;
+        }
+      typeof placeholderData < "u" && (status = "success", data = replaceData(prevResult == null ? void 0 : prevResult.data, placeholderData, options), isPlaceholderData = !0);
+    }
+    this.selectError && (error = this.selectError, data = this.selectResult, errorUpdatedAt = Date.now(), status = "error");
+    let isFetching = fetchStatus === "fetching", isLoading = status === "loading", isError2 = status === "error";
+    return {
+      status,
+      fetchStatus,
+      isLoading,
+      isSuccess: status === "success",
+      isError: isError2,
+      isInitialLoading: isLoading && isFetching,
+      data,
+      dataUpdatedAt,
+      error,
+      errorUpdatedAt,
+      failureCount: state.fetchFailureCount,
+      failureReason: state.fetchFailureReason,
+      errorUpdateCount: state.errorUpdateCount,
+      isFetched: state.dataUpdateCount > 0 || state.errorUpdateCount > 0,
+      isFetchedAfterMount: state.dataUpdateCount > queryInitialState.dataUpdateCount || state.errorUpdateCount > queryInitialState.errorUpdateCount,
+      isFetching,
+      isRefetching: isFetching && !isLoading,
+      isLoadingError: isError2 && state.dataUpdatedAt === 0,
+      isPaused: fetchStatus === "paused",
+      isPlaceholderData,
+      isPreviousData,
+      isRefetchError: isError2 && state.dataUpdatedAt !== 0,
+      isStale: isStale(query, options),
+      refetch: this.refetch,
+      remove: this.remove
+    };
+  }
+  updateResult(notifyOptions) {
+    let prevResult = this.currentResult, nextResult = this.createResult(this.currentQuery, this.options);
+    if (this.currentResultState = this.currentQuery.state, this.currentResultOptions = this.options, shallowEqualObjects(nextResult, prevResult))
+      return;
+    this.currentResult = nextResult;
+    let defaultNotifyOptions = {
+      cache: !0
+    }, shouldNotifyListeners = () => {
+      if (!prevResult)
+        return !0;
+      let {
+        notifyOnChangeProps
+      } = this.options;
+      if (notifyOnChangeProps === "all" || !notifyOnChangeProps && !this.trackedProps.size)
+        return !0;
+      let includedProps = new Set(notifyOnChangeProps ?? this.trackedProps);
+      return this.options.useErrorBoundary && includedProps.add("error"), Object.keys(this.currentResult).some((key) => {
+        let typedKey = key;
+        return this.currentResult[typedKey] !== prevResult[typedKey] && includedProps.has(typedKey);
+      });
+    };
+    (notifyOptions == null ? void 0 : notifyOptions.listeners) !== !1 && shouldNotifyListeners() && (defaultNotifyOptions.listeners = !0), this.notify({
+      ...defaultNotifyOptions,
+      ...notifyOptions
+    });
+  }
+  updateQuery() {
+    let query = this.client.getQueryCache().build(this.client, this.options);
+    if (query === this.currentQuery)
+      return;
+    let prevQuery = this.currentQuery;
+    this.currentQuery = query, this.currentQueryInitialState = query.state, this.previousQueryResult = this.currentResult, this.hasListeners() && (prevQuery == null || prevQuery.removeObserver(this), query.addObserver(this));
+  }
+  onQueryUpdate(action4) {
+    let notifyOptions = {};
+    action4.type === "success" ? notifyOptions.onSuccess = !action4.manual : action4.type === "error" && !isCancelledError(action4.error) && (notifyOptions.onError = !0), this.updateResult(notifyOptions), this.hasListeners() && this.updateTimers();
+  }
+  notify(notifyOptions) {
+    notifyManager.batch(() => {
+      if (notifyOptions.onSuccess) {
+        var _this$options$onSucce, _this$options, _this$options$onSettl, _this$options2;
+        (_this$options$onSucce = (_this$options = this.options).onSuccess) == null || _this$options$onSucce.call(_this$options, this.currentResult.data), (_this$options$onSettl = (_this$options2 = this.options).onSettled) == null || _this$options$onSettl.call(_this$options2, this.currentResult.data, null);
+      } else if (notifyOptions.onError) {
+        var _this$options$onError, _this$options3, _this$options$onSettl2, _this$options4;
+        (_this$options$onError = (_this$options3 = this.options).onError) == null || _this$options$onError.call(_this$options3, this.currentResult.error), (_this$options$onSettl2 = (_this$options4 = this.options).onSettled) == null || _this$options$onSettl2.call(_this$options4, void 0, this.currentResult.error);
+      }
+      notifyOptions.listeners && this.listeners.forEach((listener) => {
+        listener(this.currentResult);
+      }), notifyOptions.cache && this.client.getQueryCache().notify({
+        query: this.currentQuery,
+        type: "observerResultsUpdated"
+      });
+    });
+  }
+};
+function shouldLoadOnMount(query, options) {
+  return options.enabled !== !1 && !query.state.dataUpdatedAt && !(query.state.status === "error" && options.retryOnMount === !1);
+}
+function shouldFetchOnMount(query, options) {
+  return shouldLoadOnMount(query, options) || query.state.dataUpdatedAt > 0 && shouldFetchOn(query, options, options.refetchOnMount);
+}
+function shouldFetchOn(query, options, field) {
+  if (options.enabled !== !1) {
+    let value = typeof field == "function" ? field(query) : field;
+    return value === "always" || value !== !1 && isStale(query, options);
+  }
+  return !1;
+}
+function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
+  return options.enabled !== !1 && (query !== prevQuery || prevOptions.enabled === !1) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
+}
+function isStale(query, options) {
+  return query.isStaleByTime(options.staleTime);
+}
+
+// node_modules/@tanstack/react-query/build/lib/useSyncExternalStore.mjs
+var import_shim = __toESM(require_shim(), 1), useSyncExternalStore2 = import_shim.useSyncExternalStore;
+
 // node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs
 var React7 = __toESM(require_react(), 1), defaultContext = /* @__PURE__ */ React7.createContext(void 0), QueryClientSharingContext = /* @__PURE__ */ React7.createContext(!1);
 function getQueryClientContext(context, contextSharing) {
   return context || (contextSharing && typeof window < "u" ? (window.ReactQueryClientContext || (window.ReactQueryClientContext = defaultContext), window.ReactQueryClientContext) : defaultContext);
 }
-var QueryClientProvider = ({
+var useQueryClient = ({
+  context
+} = {}) => {
+  let queryClient = React7.useContext(getQueryClientContext(context, React7.useContext(QueryClientSharingContext)));
+  if (!queryClient)
+    throw new Error("No QueryClient set, use QueryClientProvider to set one");
+  return queryClient;
+}, QueryClientProvider = ({
   client,
   children,
   context,
@@ -30347,6 +30706,89 @@ var QueryClientProvider = ({
     value: client
   }, children));
 };
+
+// node_modules/@tanstack/react-query/build/lib/isRestoring.mjs
+var React8 = __toESM(require_react(), 1), IsRestoringContext = /* @__PURE__ */ React8.createContext(!1), useIsRestoring = () => React8.useContext(IsRestoringContext), IsRestoringProvider = IsRestoringContext.Provider;
+
+// node_modules/@tanstack/react-query/build/lib/QueryErrorResetBoundary.mjs
+var React9 = __toESM(require_react(), 1);
+function createValue() {
+  let isReset = !1;
+  return {
+    clearReset: () => {
+      isReset = !1;
+    },
+    reset: () => {
+      isReset = !0;
+    },
+    isReset: () => isReset
+  };
+}
+var QueryErrorResetBoundaryContext = /* @__PURE__ */ React9.createContext(createValue()), useQueryErrorResetBoundary = () => React9.useContext(QueryErrorResetBoundaryContext);
+
+// node_modules/@tanstack/react-query/build/lib/errorBoundaryUtils.mjs
+var React10 = __toESM(require_react(), 1);
+
+// node_modules/@tanstack/react-query/build/lib/utils.mjs
+function shouldThrowError(_useErrorBoundary, params) {
+  return typeof _useErrorBoundary == "function" ? _useErrorBoundary(...params) : !!_useErrorBoundary;
+}
+
+// node_modules/@tanstack/react-query/build/lib/errorBoundaryUtils.mjs
+var ensurePreventErrorBoundaryRetry = (options, errorResetBoundary) => {
+  (options.suspense || options.useErrorBoundary) && (errorResetBoundary.isReset() || (options.retryOnMount = !1));
+}, useClearResetErrorBoundary = (errorResetBoundary) => {
+  React10.useEffect(() => {
+    errorResetBoundary.clearReset();
+  }, [errorResetBoundary]);
+}, getHasError = ({
+  result,
+  errorResetBoundary,
+  useErrorBoundary,
+  query
+}) => result.isError && !errorResetBoundary.isReset() && !result.isFetching && shouldThrowError(useErrorBoundary, [result.error, query]);
+
+// node_modules/@tanstack/react-query/build/lib/suspense.mjs
+var ensureStaleTime = (defaultedOptions) => {
+  defaultedOptions.suspense && typeof defaultedOptions.staleTime != "number" && (defaultedOptions.staleTime = 1e3);
+}, willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring, shouldSuspend = (defaultedOptions, result, isRestoring) => (defaultedOptions == null ? void 0 : defaultedOptions.suspense) && willFetch(result, isRestoring), fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).then(({
+  data
+}) => {
+  defaultedOptions.onSuccess == null || defaultedOptions.onSuccess(data), defaultedOptions.onSettled == null || defaultedOptions.onSettled(data, null);
+}).catch((error) => {
+  errorResetBoundary.clearReset(), defaultedOptions.onError == null || defaultedOptions.onError(error), defaultedOptions.onSettled == null || defaultedOptions.onSettled(void 0, error);
+});
+
+// node_modules/@tanstack/react-query/build/lib/useBaseQuery.mjs
+var React11 = __toESM(require_react(), 1);
+function useBaseQuery(options, Observer) {
+  let queryClient = useQueryClient({
+    context: options.context
+  }), isRestoring = useIsRestoring(), errorResetBoundary = useQueryErrorResetBoundary(), defaultedOptions = queryClient.defaultQueryOptions(options);
+  defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : "optimistic", defaultedOptions.onError && (defaultedOptions.onError = notifyManager.batchCalls(defaultedOptions.onError)), defaultedOptions.onSuccess && (defaultedOptions.onSuccess = notifyManager.batchCalls(defaultedOptions.onSuccess)), defaultedOptions.onSettled && (defaultedOptions.onSettled = notifyManager.batchCalls(defaultedOptions.onSettled)), ensureStaleTime(defaultedOptions), ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary), useClearResetErrorBoundary(errorResetBoundary);
+  let [observer] = React11.useState(() => new Observer(queryClient, defaultedOptions)), result = observer.getOptimisticResult(defaultedOptions);
+  if (useSyncExternalStore2(React11.useCallback((onStoreChange) => isRestoring ? () => {
+  } : observer.subscribe(notifyManager.batchCalls(onStoreChange)), [observer, isRestoring]), () => observer.getCurrentResult(), () => observer.getCurrentResult()), React11.useEffect(() => {
+    observer.setOptions(defaultedOptions, {
+      listeners: !1
+    });
+  }, [defaultedOptions, observer]), shouldSuspend(defaultedOptions, result, isRestoring))
+    throw fetchOptimistic(defaultedOptions, observer, errorResetBoundary);
+  if (getHasError({
+    result,
+    errorResetBoundary,
+    useErrorBoundary: defaultedOptions.useErrorBoundary,
+    query: observer.getCurrentQuery()
+  }))
+    throw result.error;
+  return defaultedOptions.notifyOnChangeProps ? result : observer.trackResult(result);
+}
+
+// node_modules/@tanstack/react-query/build/lib/useQuery.mjs
+function useQuery(arg1, arg2, arg3) {
+  let parsedOptions = parseQueryArgs(arg1, arg2, arg3);
+  return useBaseQuery(parsedOptions, QueryObserver);
+}
 
 // node_modules/ky/distribution/errors/HTTPError.js
 var HTTPError = class extends Error {
@@ -30718,7 +31160,7 @@ var import_react4 = __toESM(require_react());
 
 // app/libs/react-utils/context.ts
 var import_react3 = __toESM(require_react());
-function createContext4(options = {}) {
+function createContext6(options = {}) {
   let {
     strict = !0,
     errorMessage = "useContext: `context` is undefined. Seems you forgot to wrap component within the Provider",
@@ -30726,20 +31168,28 @@ function createContext4(options = {}) {
     defaultValue = void 0
   } = options, Context = import_react3.default.createContext(defaultValue);
   Context.displayName = name;
-  function useContext6() {
+  function useContext8() {
     var _a;
     let context = import_react3.default.useContext(Context);
     if (!context && strict) {
       let error = new Error(errorMessage);
-      throw error.name = "ContextError", (_a = Error.captureStackTrace) == null || _a.call(Error, error, useContext6), error;
+      throw error.name = "ContextError", (_a = Error.captureStackTrace) == null || _a.call(Error, error, useContext8), error;
     }
     return context;
   }
   return [
     Context.Provider,
-    useContext6,
+    useContext8,
     Context
   ];
+}
+
+// app/utils/assertion.ts
+function isUndefined(value) {
+  return typeof value > "u" || value === void 0;
+}
+function isNull(value) {
+  return value == null;
 }
 
 // app/context/useLayoutContext.tsx
@@ -30748,7 +31198,7 @@ var initialState = {
   search: {
     keyword: ""
   }
-}, [Provider, useLayoutContext] = createContext4({
+}, [Provider, useLayoutContext] = createContext6({
   name: "useLayoutContext",
   errorMessage: "useLayoutContext: `context` is undefined.",
   defaultValue: initialState
@@ -30834,8 +31284,38 @@ var API_ENDPOINTS = {
     SAVE_DATA: "drafts/save-data",
     ID: (id) => `drafts/${id}`
   }
+}, QUERIES_KEY = {
+  ME: ["getUserInfoApi"],
+  FILE: {
+    ROOT: ["getFileListApi"]
+  },
+  POSTS: {
+    ROOT: (query) => {
+      let keys = ["getPostsListApi"];
+      return query && (keys = [...keys, query]), keys;
+    },
+    GET_TOP_POSTS: (duration) => ["getTopPostsApi", { duration }],
+    ID: (id) => {
+      let keys = ["getPostApi"];
+      return id && keys.push(id), keys;
+    }
+  },
+  TAGS: {
+    ROOT: (keyword, type) => {
+      let keys = ["getTagListApi"];
+      return keyword && keys.push(keyword), type && keys.push(type), keys;
+    }
+  },
+  DRAFTS: {
+    ROOT: (keyword) => {
+      let keys = ["getDraftListApi"];
+      return keyword && keys.push(keyword), keys;
+    }
+  }
 };
-var PAGE_ENDPOINTS = {
+var ASSET_URL = {
+  DEFAULT_AVATAR: "/images/qDAyv6PK_.png"
+}, PAGE_ENDPOINTS = {
   BOOKMARKS: {
     ROOT: "/bookmarks"
   },
@@ -30945,13 +31425,14 @@ async function getSessionApi(args) {
 }
 
 // app/styles/global.css
-var global_default = "/build/_assets/global-GBESWJXL.css";
+var global_default = "/build/_assets/global-ZCQYRW5N.css";
 
 // app/root.tsx
 var import_jsx_dev_runtime3 = __toESM(require_jsx_dev_runtime()), links = () => [{ rel: "stylesheet", href: global_default }], meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1"
+  title: "Hashnode - Blogging community for developers, and people in tech",
+  description: "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
+  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
 }), loader = async (args) => {
   let { session, header: headers } = await getSessionApi(args), data = { isLoggedIn: !1, currentProfile: null };
   return session ? (Object.assign(data, {
@@ -30985,56 +31466,56 @@ function App() {
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("head", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(Meta, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 100,
+        lineNumber: 102,
         columnNumber: 13
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(Links, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 101,
+        lineNumber: 103,
         columnNumber: 13
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 99,
+      lineNumber: 101,
       columnNumber: 11
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("body", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(Outlet, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 104,
+        lineNumber: 106,
         columnNumber: 13
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(ScrollRestoration2, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 105,
+        lineNumber: 107,
         columnNumber: 13
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(Scripts, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 106,
+        lineNumber: 108,
         columnNumber: 13
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(LiveReload, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 107,
+        lineNumber: 109,
         columnNumber: 13
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 103,
+      lineNumber: 105,
       columnNumber: 11
     }, this)
   ] }, void 0, !0, {
     fileName: "app/root.tsx",
-    lineNumber: 98,
+    lineNumber: 100,
     columnNumber: 9
   }, this) }, void 0, !1, {
     fileName: "app/root.tsx",
-    lineNumber: 97,
+    lineNumber: 99,
     columnNumber: 7
   }, this) }, void 0, !1, {
     fileName: "app/root.tsx",
-    lineNumber: 96,
+    lineNumber: 98,
     columnNumber: 5
   }, this);
 }
@@ -31734,9 +32215,7 @@ var auth_default = "/build/_assets/auth-JBJPPE4Q.css";
 
 // app/routes/__auth.tsx
 var import_jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime()), links2 = () => [{ rel: "stylesheet", href: auth_default }], meta2 = () => ({
-  charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
+  description: "Start your programming blog. Share your knowledge and build your own brand"
 }), loader2 = async (args) => {
   let { session, header: headers } = await getSessionApi(args);
   return session ? (0, import_cloudflare3.redirect)(PAGE_ENDPOINTS.ROOT, {
@@ -31766,7 +32245,7 @@ function Auth() {
             }),
             children: /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)(Icons.Logo, { className: "h-8" }, void 0, !1, {
               fileName: "app/routes/__auth.tsx",
-              lineNumber: 69,
+              lineNumber: 68,
               columnNumber: 9
             }, this)
           },
@@ -31774,14 +32253,14 @@ function Auth() {
           !1,
           {
             fileName: "app/routes/__auth.tsx",
-            lineNumber: 63,
+            lineNumber: 62,
             columnNumber: 7
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)(Outlet, {}, void 0, !1, {
           fileName: "app/routes/__auth.tsx",
-          lineNumber: 71,
+          lineNumber: 70,
           columnNumber: 7
         }, this)
       ]
@@ -31790,7 +32269,7 @@ function Auth() {
     !0,
     {
       fileName: "app/routes/__auth.tsx",
-      lineNumber: 58,
+      lineNumber: 57,
       columnNumber: 5
     },
     this
@@ -34716,10 +35195,7 @@ var ErrorMessage_default = ErrorMessage;
 
 // app/routes/__auth/signin.tsx
 var import_jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime()), meta3 = () => ({
-  charset: "utf-8",
-  title: "Sign in to Hashnode",
-  description: "Start your programming blog. Share your knowledge and build your own brand",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
+  title: "Sign in to Hashnode"
 }), action2 = async ({ request }) => {
   let formData = await request.formData(), form = {
     email: formData.get("email"),
@@ -34748,7 +35224,7 @@ function Signin(props) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Form, { method: "post", className: "auth-form__container", replace: !0, children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("h1", { className: "auth-form__title", children: "To continue, Sign in to hashnode." }, void 0, !1, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 85,
+      lineNumber: 82,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "social-container", children: [
@@ -34761,11 +35237,11 @@ function Signin(props) {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("span", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Icons.Github, { className: "icon__base fill-current" }, void 0, !1, {
               fileName: "app/routes/__auth/signin.tsx",
-              lineNumber: 93,
+              lineNumber: 90,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/__auth/signin.tsx",
-              lineNumber: 92,
+              lineNumber: 89,
               columnNumber: 11
             }, this),
             "Continue with Github"
@@ -34775,7 +35251,7 @@ function Signin(props) {
         !0,
         {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 87,
+          lineNumber: 84,
           columnNumber: 9
         },
         this
@@ -34789,11 +35265,11 @@ function Signin(props) {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("span", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Icons.Google, { className: "icon__base fill-current" }, void 0, !1, {
               fileName: "app/routes/__auth/signin.tsx",
-              lineNumber: 103,
+              lineNumber: 100,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/__auth/signin.tsx",
-              lineNumber: 102,
+              lineNumber: 99,
               columnNumber: 11
             }, this),
             "Continue with Google"
@@ -34803,7 +35279,7 @@ function Signin(props) {
         !0,
         {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 97,
+          lineNumber: 94,
           columnNumber: 9
         },
         this
@@ -34811,29 +35287,29 @@ function Signin(props) {
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "or-container", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("p", { className: "or-container__line" }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 108,
+          lineNumber: 105,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("span", { className: "or-container__text", children: "OR" }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 109,
+          lineNumber: 106,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 107,
+        lineNumber: 104,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 86,
+      lineNumber: 83,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "auth-form__form-item", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "auth-form__form-item-inner mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("label", { className: "text-sm", htmlFor: "email", children: "Email address" }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 115,
+          lineNumber: 112,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
@@ -34853,25 +35329,25 @@ function Signin(props) {
           !1,
           {
             fileName: "app/routes/__auth/signin.tsx",
-            lineNumber: 118,
+            lineNumber: 115,
             columnNumber: 11
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(ErrorMessage_default, { error: errors == null ? void 0 : errors.email, isSubmitting }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 129,
+          lineNumber: 126,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 114,
+        lineNumber: 111,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "auth-form__form-item-inner", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("label", { className: "text-sm", htmlFor: "password", children: "Password" }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 133,
+          lineNumber: 130,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
@@ -34891,49 +35367,49 @@ function Signin(props) {
           !1,
           {
             fileName: "app/routes/__auth/signin.tsx",
-            lineNumber: 136,
+            lineNumber: 133,
             columnNumber: 11
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(ErrorMessage_default, { error: errors == null ? void 0 : errors.password, isSubmitting }, void 0, !1, {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 147,
+          lineNumber: 144,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 132,
+        lineNumber: 129,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Link2, { to: PAGE_ENDPOINTS.AUTH.SIGNIN, className: "forget-password", children: "Forgot your password?" }, void 0, !1, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 150,
+        lineNumber: 147,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 113,
+      lineNumber: 110,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "btn-login__container", children: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("button", { type: "submit", className: "btn-login", "aria-label": "Sign in", children: "Sign in" }, void 0, !1, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 156,
+      lineNumber: 153,
       columnNumber: 9
     }, this) }, void 0, !1, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 155,
+      lineNumber: 152,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "btn-signup__container", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("p", { className: "or-container__line" }, void 0, !1, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 162,
+        lineNumber: 159,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("h1", { className: "mt-6 text-xl font-bold", children: "Don't have an account?" }, void 0, !1, {
         fileName: "app/routes/__auth/signin.tsx",
-        lineNumber: 164,
+        lineNumber: 161,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
@@ -34948,19 +35424,19 @@ function Signin(props) {
         !1,
         {
           fileName: "app/routes/__auth/signin.tsx",
-          lineNumber: 166,
+          lineNumber: 163,
           columnNumber: 9
         },
         this
       )
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signin.tsx",
-      lineNumber: 161,
+      lineNumber: 158,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/__auth/signin.tsx",
-    lineNumber: 84,
+    lineNumber: 81,
     columnNumber: 5
   }, this);
 }
@@ -34968,7 +35444,7 @@ function CatchBoundary() {
   let caught = useCatch();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Signin, { error: caught.data }, void 0, !1, {
     fileName: "app/routes/__auth/signin.tsx",
-    lineNumber: 181,
+    lineNumber: 178,
     columnNumber: 10
   }, this);
 }
@@ -35034,10 +35510,7 @@ var signupSchema = z.object({
 
 // app/routes/__auth/signup.tsx
 var import_jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime()), meta4 = () => ({
-  charset: "utf-8",
-  title: "Sign up to Hashnode",
-  description: "Start your programming blog. Share your knowledge and build your own brand",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
+  title: "Sign up to Hashnode"
 }), action3 = async ({ request }) => {
   let formData = await request.formData(), form = {
     username: formData.get("username"),
@@ -35072,7 +35545,7 @@ function Signup(props) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Form, { method: "post", className: "auth-form__container", replace: !0, children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("h1", { className: "auth-form__title", children: "Sign up for blog and start sharing your knowledge" }, void 0, !1, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 92,
+      lineNumber: 88,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "social-container signup", children: [
@@ -35085,11 +35558,11 @@ function Signup(props) {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("span", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Icons.Github, { className: "icon__base fill-current" }, void 0, !1, {
               fileName: "app/routes/__auth/signup.tsx",
-              lineNumber: 102,
+              lineNumber: 98,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/__auth/signup.tsx",
-              lineNumber: 101,
+              lineNumber: 97,
               columnNumber: 11
             }, this),
             "Continue with Github"
@@ -35099,7 +35572,7 @@ function Signup(props) {
         !0,
         {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 96,
+          lineNumber: 92,
           columnNumber: 9
         },
         this
@@ -35113,11 +35586,11 @@ function Signup(props) {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("span", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Icons.Google, { className: "icon__base fill-current" }, void 0, !1, {
               fileName: "app/routes/__auth/signup.tsx",
-              lineNumber: 112,
+              lineNumber: 108,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/__auth/signup.tsx",
-              lineNumber: 111,
+              lineNumber: 107,
               columnNumber: 11
             }, this),
             "Continue with Google"
@@ -35127,7 +35600,7 @@ function Signup(props) {
         !0,
         {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 106,
+          lineNumber: 102,
           columnNumber: 9
         },
         this
@@ -35135,29 +35608,29 @@ function Signup(props) {
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "or-container", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("p", { className: "or-container__line" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 117,
+          lineNumber: 113,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("span", { className: "or-container__text", children: "OR" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 118,
+          lineNumber: 114,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 116,
+        lineNumber: 112,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 95,
+      lineNumber: 91,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "auth-form__form-item", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "auth-form__form-item-inner mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("label", { className: "text-sm", htmlFor: "username", children: "What's your username?" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 124,
+          lineNumber: 120,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(
@@ -35177,25 +35650,25 @@ function Signup(props) {
           !1,
           {
             fileName: "app/routes/__auth/signup.tsx",
-            lineNumber: 127,
+            lineNumber: 123,
             columnNumber: 11
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(ErrorMessage_default, { error: errors == null ? void 0 : errors.username, isSubmitting }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 138,
+          lineNumber: 134,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 123,
+        lineNumber: 119,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "auth-form__form-item-inner mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("label", { className: "text-sm", htmlFor: "email", children: "What's your email?" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 142,
+          lineNumber: 138,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(
@@ -35215,25 +35688,25 @@ function Signup(props) {
           !1,
           {
             fileName: "app/routes/__auth/signup.tsx",
-            lineNumber: 145,
+            lineNumber: 141,
             columnNumber: 11
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(ErrorMessage_default, { error: errors == null ? void 0 : errors.email, isSubmitting }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 156,
+          lineNumber: 152,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 141,
+        lineNumber: 137,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "auth-form__form-item-inner mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("label", { className: "text-sm", htmlFor: "password", children: "Create a password" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 160,
+          lineNumber: 156,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(
@@ -35253,25 +35726,25 @@ function Signup(props) {
           !1,
           {
             fileName: "app/routes/__auth/signup.tsx",
-            lineNumber: 163,
+            lineNumber: 159,
             columnNumber: 11
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(ErrorMessage_default, { error: errors == null ? void 0 : errors.password, isSubmitting }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 174,
+          lineNumber: 170,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 159,
+        lineNumber: 155,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "auth-form__form-item-inner mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("label", { className: "text-sm", htmlFor: "passwordConfirm", children: "Confirm your password" }, void 0, !1, {
           fileName: "app/routes/__auth/signup.tsx",
-          lineNumber: 178,
+          lineNumber: 174,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(
@@ -35291,7 +35764,7 @@ function Signup(props) {
           !1,
           {
             fileName: "app/routes/__auth/signup.tsx",
-            lineNumber: 181,
+            lineNumber: 177,
             columnNumber: 11
           },
           this
@@ -35306,46 +35779,46 @@ function Signup(props) {
           !1,
           {
             fileName: "app/routes/__auth/signup.tsx",
-            lineNumber: 192,
+            lineNumber: 188,
             columnNumber: 11
           },
           this
         )
       ] }, void 0, !0, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 177,
+        lineNumber: 173,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 122,
+      lineNumber: 118,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "btn-login__container", children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("button", { type: "submit", className: "btn-login", "aria-label": "Sign in", children: "Sign up" }, void 0, !1, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 200,
+      lineNumber: 196,
       columnNumber: 9
     }, this) }, void 0, !1, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 199,
+      lineNumber: 195,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "btn-signin__container", children: [
       "Have an account? ",
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Link2, { to: PAGE_ENDPOINTS.AUTH.SIGNIN, children: "Sign in" }, void 0, !1, {
         fileName: "app/routes/__auth/signup.tsx",
-        lineNumber: 206,
+        lineNumber: 202,
         columnNumber: 26
       }, this),
       "."
     ] }, void 0, !0, {
       fileName: "app/routes/__auth/signup.tsx",
-      lineNumber: 205,
+      lineNumber: 201,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/__auth/signup.tsx",
-    lineNumber: 91,
+    lineNumber: 87,
     columnNumber: 5
   }, this);
 }
@@ -35353,7 +35826,7 @@ function CatchBoundary2() {
   let caught = useCatch();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Signup, { error: caught.data }, void 0, !1, {
     fileName: "app/routes/__auth/signup.tsx",
-    lineNumber: 215,
+    lineNumber: 211,
     columnNumber: 10
   }, this);
 }
@@ -35367,17 +35840,6 @@ __export(app_exports, {
   meta: () => meta5
 });
 var import_cloudflare6 = __toESM(require_dist());
-
-// app/utils/util.ts
-function optimizeAnimation(callback) {
-  let ticking = !1;
-  return () => {
-    ticking || (ticking = !0, requestAnimationFrame(() => {
-      callback(), ticking = !1;
-    }));
-  };
-}
-var delayPromise = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // app/api/tags/tags.ts
 async function _getTagListApi(query, options) {
@@ -35397,10 +35859,9 @@ async function getTagListApi(query, args) {
     let { request } = args, cookie = request.headers.get("Cookie") ?? null;
     cookie && headers.append("Cookie", cookie);
   }
-  let response = await _getTagListApi(query, {
+  return { result: await (await _getTagListApi(query, {
     headers
-  });
-  return await delayPromise(3e3), { result: await response.json() };
+  })).json() };
 }
 
 // app/api/posts/posts.ts
@@ -36051,7 +36512,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
         value
       }, children);
     }
-    function useContext6(consumerName, scope) {
+    function useContext8(consumerName, scope) {
       let Context = (scope == null ? void 0 : scope[scopeName][index2]) || BaseContext, context = (0, import_react15.useContext)(Context);
       if (context)
         return context;
@@ -36061,7 +36522,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     }
     return Provider2.displayName = rootComponentName + "Provider", [
       Provider2,
-      useContext6
+      useContext8
     ];
   }
   let createScope = () => {
@@ -37454,7 +37915,7 @@ var computePosition2 = (reference, floating, options) => computePosition(referen
 });
 
 // node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-var React13 = __toESM(require_react(), 1), import_react24 = __toESM(require_react(), 1), ReactDOM = __toESM(require_react_dom(), 1), index = typeof document < "u" ? import_react24.useLayoutEffect : import_react24.useEffect;
+var React17 = __toESM(require_react(), 1), import_react24 = __toESM(require_react(), 1), ReactDOM = __toESM(require_react_dom(), 1), index = typeof document < "u" ? import_react24.useLayoutEffect : import_react24.useEffect;
 function deepEqual(a2, b2) {
   if (a2 === b2)
     return !0;
@@ -37487,7 +37948,7 @@ function deepEqual(a2, b2) {
   return a2 !== a2 && b2 !== b2;
 }
 function useLatestRef(value) {
-  let ref = React13.useRef(value);
+  let ref = React17.useRef(value);
   return index(() => {
     ref.current = value;
   }), ref;
@@ -37498,13 +37959,13 @@ function useFloating(_temp) {
     placement = "bottom",
     strategy = "absolute",
     whileElementsMounted
-  } = _temp === void 0 ? {} : _temp, reference = React13.useRef(null), floating = React13.useRef(null), whileElementsMountedRef = useLatestRef(whileElementsMounted), cleanupRef = React13.useRef(null), [data, setData] = React13.useState({
+  } = _temp === void 0 ? {} : _temp, reference = React17.useRef(null), floating = React17.useRef(null), whileElementsMountedRef = useLatestRef(whileElementsMounted), cleanupRef = React17.useRef(null), [data, setData] = React17.useState({
     x: null,
     y: null,
     strategy,
     placement,
     middlewareData: {}
-  }), [latestMiddleware, setLatestMiddleware] = React13.useState(middleware);
+  }), [latestMiddleware, setLatestMiddleware] = React17.useState(middleware);
   deepEqual(latestMiddleware == null ? void 0 : latestMiddleware.map((_ref) => {
     let {
       options
@@ -37516,7 +37977,7 @@ function useFloating(_temp) {
     } = _ref2;
     return options;
   })) || setLatestMiddleware(middleware);
-  let update = React13.useCallback(() => {
+  let update = React17.useCallback(() => {
     !reference.current || !floating.current || computePosition2(reference.current, floating.current, {
       middleware: latestMiddleware,
       placement,
@@ -37530,26 +37991,26 @@ function useFloating(_temp) {
   index(() => {
     isMountedRef.current && update();
   }, [update]);
-  let isMountedRef = React13.useRef(!1);
+  let isMountedRef = React17.useRef(!1);
   index(() => (isMountedRef.current = !0, () => {
     isMountedRef.current = !1;
   }), []);
-  let runElementMountCallback = React13.useCallback(() => {
+  let runElementMountCallback = React17.useCallback(() => {
     if (typeof cleanupRef.current == "function" && (cleanupRef.current(), cleanupRef.current = null), reference.current && floating.current)
       if (whileElementsMountedRef.current) {
         let cleanupFn = whileElementsMountedRef.current(reference.current, floating.current, update);
         cleanupRef.current = cleanupFn;
       } else
         update();
-  }, [update, whileElementsMountedRef]), setReference = React13.useCallback((node) => {
+  }, [update, whileElementsMountedRef]), setReference = React17.useCallback((node) => {
     reference.current = node, runElementMountCallback();
-  }, [runElementMountCallback]), setFloating = React13.useCallback((node) => {
+  }, [runElementMountCallback]), setFloating = React17.useCallback((node) => {
     floating.current = node, runElementMountCallback();
-  }, [runElementMountCallback]), refs = React13.useMemo(() => ({
+  }, [runElementMountCallback]), refs = React17.useMemo(() => ({
     reference,
     floating
   }), []);
-  return React13.useMemo(() => ({
+  return React17.useMemo(() => ({
     ...data,
     update,
     refs,
@@ -38008,10 +38469,10 @@ var import_tslib = __toESM(require_tslib(), 1), {
 } = import_tslib.default;
 
 // node_modules/react-remove-scroll/dist/es2015/Combination.js
-var React19 = __toESM(require_react());
+var React23 = __toESM(require_react());
 
 // node_modules/react-remove-scroll/dist/es2015/UI.js
-var React15 = __toESM(require_react());
+var React19 = __toESM(require_react());
 
 // node_modules/react-remove-scroll-bar/dist/es2015/constants.js
 var zeroRightClassName = "right-scroll-bar-position", fullWidthClassName = "width-before-scroll-bar", noScrollbarsClassName = "with-scroll-bars-hidden", removedBarSizeVariable = "--removed-body-scroll-bar-size";
@@ -38117,14 +38578,14 @@ function createSidecarMedium(options) {
 }
 
 // node_modules/use-sidecar/dist/es2015/exports.js
-var React14 = __toESM(require_react()), SideCar = function(_a) {
+var React18 = __toESM(require_react()), SideCar = function(_a) {
   var sideCar = _a.sideCar, rest = __rest(_a, ["sideCar"]);
   if (!sideCar)
     throw new Error("Sidecar: please provide `sideCar` property to import the right car");
   var Target = sideCar.read();
   if (!Target)
     throw new Error("Sidecar medium not found");
-  return React14.createElement(Target, __assign({}, rest));
+  return React18.createElement(Target, __assign({}, rest));
 };
 SideCar.isSideCarExport = !0;
 function exportSidecar(medium, exported) {
@@ -38136,17 +38597,17 @@ var effectCar = createSidecarMedium();
 
 // node_modules/react-remove-scroll/dist/es2015/UI.js
 var nothing = function() {
-}, RemoveScroll = React15.forwardRef(function(props, parentRef) {
-  var ref = React15.useRef(null), _a = React15.useState({
+}, RemoveScroll = React19.forwardRef(function(props, parentRef) {
+  var ref = React19.useRef(null), _a = React19.useState({
     onScrollCapture: nothing,
     onWheelCapture: nothing,
     onTouchMoveCapture: nothing
   }), callbacks = _a[0], setCallbacks = _a[1], forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b = props.as, Container = _b === void 0 ? "div" : _b, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]), SideCar2 = sideCar, containerRef = useMergeRefs([ref, parentRef]), containerProps = __assign(__assign({}, rest), callbacks);
-  return React15.createElement(
-    React15.Fragment,
+  return React19.createElement(
+    React19.Fragment,
     null,
-    enabled && React15.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref }),
-    forwardProps ? React15.cloneElement(React15.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : React15.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
+    enabled && React19.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref }),
+    forwardProps ? React19.cloneElement(React19.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : React19.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
   );
 });
 RemoveScroll.defaultProps = {
@@ -38160,13 +38621,13 @@ RemoveScroll.classNames = {
 };
 
 // node_modules/react-remove-scroll/dist/es2015/SideEffect.js
-var React18 = __toESM(require_react());
+var React22 = __toESM(require_react());
 
 // node_modules/react-remove-scroll-bar/dist/es2015/component.js
-var React17 = __toESM(require_react());
+var React21 = __toESM(require_react());
 
 // node_modules/react-style-singleton/dist/es2015/hook.js
-var React16 = __toESM(require_react());
+var React20 = __toESM(require_react());
 
 // node_modules/get-nonce/dist/es2015/index.js
 var currentNonce;
@@ -38209,7 +38670,7 @@ var stylesheetSingleton = function() {
 var styleHookSingleton = function() {
   var sheet = stylesheetSingleton();
   return function(styles, isDynamic) {
-    React16.useEffect(function() {
+    React20.useEffect(function() {
       return sheet.add(styles), function() {
         sheet.remove();
       };
@@ -38295,10 +38756,10 @@ var Style = styleSingleton(), getStyles = function(_a, allowRelative, gapMode, i
   }
 `);
 }, RemoveScrollBar = function(props) {
-  var noRelative = props.noRelative, noImportant = props.noImportant, _a = props.gapMode, gapMode = _a === void 0 ? "margin" : _a, gap = React17.useMemo(function() {
+  var noRelative = props.noRelative, noImportant = props.noImportant, _a = props.gapMode, gapMode = _a === void 0 ? "margin" : _a, gap = React21.useMemo(function() {
     return getGapWidth(gapMode);
   }, [gapMode]);
-  return React17.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, noImportant ? "" : "!important") });
+  return React21.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, noImportant ? "" : "!important") });
 };
 
 // node_modules/react-remove-scroll/dist/es2015/aggresiveCapture.js
@@ -38383,12 +38844,12 @@ var getTouchXY = function(event) {
 `);
 }, idCounter = 0, lockStack = [];
 function RemoveScrollSideCar(props) {
-  var shouldPreventQueue = React18.useRef([]), touchStartRef = React18.useRef([0, 0]), activeAxis = React18.useRef(), id = React18.useState(idCounter++)[0], Style2 = React18.useState(function() {
+  var shouldPreventQueue = React22.useRef([]), touchStartRef = React22.useRef([0, 0]), activeAxis = React22.useRef(), id = React22.useState(idCounter++)[0], Style2 = React22.useState(function() {
     return styleSingleton();
-  })[0], lastProps = React18.useRef(props);
-  React18.useEffect(function() {
+  })[0], lastProps = React22.useRef(props);
+  React22.useEffect(function() {
     lastProps.current = props;
-  }, [props]), React18.useEffect(function() {
+  }, [props]), React22.useEffect(function() {
     if (props.inert) {
       document.body.classList.add("block-interactivity-".concat(id));
       var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), !0).filter(Boolean);
@@ -38401,7 +38862,7 @@ function RemoveScrollSideCar(props) {
       };
     }
   }, [props.inert, props.lockRef.current, props.shards]);
-  var shouldCancelEvent = React18.useCallback(function(event, parent) {
+  var shouldCancelEvent = React22.useCallback(function(event, parent) {
     if ("touches" in event && event.touches.length === 2)
       return !lastProps.current.allowPinchZoom;
     var touch = getTouchXY(event), touchStart = touchStartRef.current, deltaX = "deltaX" in event ? event.deltaX : touchStart[0] - touch[0], deltaY = "deltaY" in event ? event.deltaY : touchStart[1] - touch[1], currentAxis, target = event.target, moveDirection = Math.abs(deltaX) > Math.abs(deltaY) ? "h" : "v";
@@ -38416,7 +38877,7 @@ function RemoveScrollSideCar(props) {
       return !0;
     var cancelingAxis = activeAxis.current || currentAxis;
     return handleScroll(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY, !0);
-  }, []), shouldPrevent = React18.useCallback(function(_event) {
+  }, []), shouldPrevent = React22.useCallback(function(_event) {
     var event = _event;
     if (!(!lockStack.length || lockStack[lockStack.length - 1] !== Style2)) {
       var delta = "deltaY" in event ? getDeltaXY(event) : getTouchXY(event), sourceEvent = shouldPreventQueue.current.filter(function(e2) {
@@ -38433,21 +38894,21 @@ function RemoveScrollSideCar(props) {
         shouldStop && event.cancelable && event.preventDefault();
       }
     }
-  }, []), shouldCancel = React18.useCallback(function(name, delta, target, should) {
+  }, []), shouldCancel = React22.useCallback(function(name, delta, target, should) {
     var event = { name, delta, target, should };
     shouldPreventQueue.current.push(event), setTimeout(function() {
       shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e2) {
         return e2 !== event;
       });
     }, 1);
-  }, []), scrollTouchStart = React18.useCallback(function(event) {
+  }, []), scrollTouchStart = React22.useCallback(function(event) {
     touchStartRef.current = getTouchXY(event), activeAxis.current = void 0;
-  }, []), scrollWheel = React18.useCallback(function(event) {
+  }, []), scrollWheel = React22.useCallback(function(event) {
     shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
-  }, []), scrollTouchMove = React18.useCallback(function(event) {
+  }, []), scrollTouchMove = React22.useCallback(function(event) {
     shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
   }, []);
-  React18.useEffect(function() {
+  React22.useEffect(function() {
     return lockStack.push(Style2), props.setCallbacks({
       onScrollCapture: scrollWheel,
       onWheelCapture: scrollWheel,
@@ -38459,11 +38920,11 @@ function RemoveScrollSideCar(props) {
     };
   }, []);
   var removeScrollBar = props.removeScrollBar, inert = props.inert;
-  return React18.createElement(
-    React18.Fragment,
+  return React22.createElement(
+    React22.Fragment,
     null,
-    inert ? React18.createElement(Style2, { styles: generateStyle(id) }) : null,
-    removeScrollBar ? React18.createElement(RemoveScrollBar, { gapMode: "margin" }) : null
+    inert ? React22.createElement(Style2, { styles: generateStyle(id) }) : null,
+    removeScrollBar ? React22.createElement(RemoveScrollBar, { gapMode: "margin" }) : null
   );
 }
 
@@ -38471,8 +38932,8 @@ function RemoveScrollSideCar(props) {
 var sidecar_default = exportSidecar(effectCar, RemoveScrollSideCar);
 
 // node_modules/react-remove-scroll/dist/es2015/Combination.js
-var ReactRemoveScroll = React19.forwardRef(function(props, ref) {
-  return React19.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: sidecar_default }));
+var ReactRemoveScroll = React23.forwardRef(function(props, ref) {
+  return React23.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: sidecar_default }));
 });
 ReactRemoveScroll.classNames = RemoveScroll.classNames;
 var Combination_default = ReactRemoveScroll;
@@ -39357,10 +39818,10 @@ Header.MenuForUser = function() {
 };
 
 // app/styles/routes/home.css
-var home_default = "/build/_assets/home-XIJN5V27.css";
+var home_default = "/build/_assets/home-QYVAOYEJ.css";
 
 // app/components/home/Sidebar.tsx
-var import_react44 = __toESM(require_react());
+var import_react49 = __toESM(require_react());
 
 // app/libs/browser-utils/dom.ts
 function canUseDOM2() {
@@ -39471,6 +39932,16 @@ function useEventListener(eventName, handler, options = {}) {
   );
 }
 
+// app/utils/util.ts
+function optimizeAnimation(callback) {
+  let ticking = !1;
+  return () => {
+    ticking || (ticking = !0, requestAnimationFrame(() => {
+      callback(), ticking = !1;
+    }));
+  };
+}
+
 // app/components/home/SidebarNavLink.tsx
 var import_classnames5 = __toESM(require_classnames()), import_jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime()), SidebarNavLink = (props) => {
   let { to, text, icon, ...resetProps } = props;
@@ -39546,17 +40017,310 @@ SidebarTrendingTag.Skeleton = function() {
   }, this);
 };
 
+// app/components/home/RightSidebarContentBox.tsx
+var import_jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime()), RightSidebarContentBox = ({
+  to,
+  title,
+  children
+}) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "right-sidebar__content-box", children: [
+  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "right-sidebar__content-box-header", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "title", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("h2", { children: title }, void 0, !1, {
+      fileName: "app/components/home/RightSidebarContentBox.tsx",
+      lineNumber: 20,
+      columnNumber: 11
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/RightSidebarContentBox.tsx",
+      lineNumber: 19,
+      columnNumber: 9
+    }, this),
+    to && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "btn__more", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Link2, { to, "aria-label": "See all", children: "See all" }, void 0, !1, {
+      fileName: "app/components/home/RightSidebarContentBox.tsx",
+      lineNumber: 25,
+      columnNumber: 13
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/RightSidebarContentBox.tsx",
+      lineNumber: 24,
+      columnNumber: 11
+    }, this)
+  ] }, void 0, !0, {
+    fileName: "app/components/home/RightSidebarContentBox.tsx",
+    lineNumber: 17,
+    columnNumber: 7
+  }, this),
+  children
+] }, void 0, !0, {
+  fileName: "app/components/home/RightSidebarContentBox.tsx",
+  lineNumber: 16,
+  columnNumber: 5
+}, this), RightSidebarContentBox_default = RightSidebarContentBox;
+
+// app/components/home/TabTrendingPostButton.tsx
+var import_react45 = __toESM(require_react()), import_jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime()), TabTrendingPostButton = ({
+  id,
+  currentDuration,
+  duration,
+  label,
+  onTabClick
+}) => {
+  let [isPending, startTransition] = (0, import_react45.useTransition)(), onClick = (0, import_react45.useCallback)(() => {
+    startTransition(() => {
+      onTabClick(duration);
+    });
+  }, [duration, onTabClick]);
+  return isPending ? /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(
+    "div",
+    {
+      className: "tab-button",
+      tabIndex: 0,
+      "data-key": duration.toString(),
+      id,
+      "aria-selected": "true",
+      role: "tab",
+      children: label
+    },
+    void 0,
+    !1,
+    {
+      fileName: "app/components/home/TabTrendingPostButton.tsx",
+      lineNumber: 28,
+      columnNumber: 7
+    },
+    this
+  ) : /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(
+    "div",
+    {
+      className: "tab-button",
+      tabIndex: duration === currentDuration ? 0 : -1,
+      "data-key": duration.toString(),
+      id,
+      "aria-selected": duration === currentDuration ? "true" : "false",
+      role: "tab",
+      onClick,
+      children: label
+    },
+    void 0,
+    !1,
+    {
+      fileName: "app/components/home/TabTrendingPostButton.tsx",
+      lineNumber: 42,
+      columnNumber: 5
+    },
+    this
+  );
+}, TabTrendingPostButton_default = TabTrendingPostButton;
+
+// app/components/home/TabTrendingPostsList.tsx
+var import_react48 = __toESM(require_react());
+
+// app/components/home/TabTrendingPostsItem.tsx
+var import_react46 = __toESM(require_react());
+
+// app/components/__ui/Icon/Comment.tsx
+var import_jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime()), Comment = (props) => /* @__PURE__ */ (0, import_jsx_dev_runtime14.jsxDEV)("svg", { ...props, viewBox: "0 0 640 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime14.jsxDEV)("path", { d: "M416 176C416 78.8 322.9 0 208 0S0 78.8 0 176c0 41.48 17.07 79.54 45.44 109.6-15.17 32.34-38.65 58.07-38.95 58.38-6.514 6.836-8.309 16.91-4.568 25.67C5.754 378.4 14.26 384 23.66 384c54.19 0 97.76-20.73 125.9-39.17C168.1 349.4 187.7 352 208 352c114.9 0 208-78.8 208-176zM208 320c-16.96 0-34.04-2.098-50.75-6.232L143.7 310.4l-11.7 7.7c-20.43 13.38-51.58 28.99-89.85 32.97 9.377-12.11 22.3-30.63 32.24-51.82l9.242-19.71L68.72 263.7C44.7 238.2 32 207.9 32 176c0-79.4 78.1-144 176-144s176 64.6 176 144-79 144-176 144zm398.4 115.4c21.2-28.3 33.6-62.5 33.6-99.4 0-97.2-86-176-192-176-.315 0-.62.041-.934.043C447.5 165.3 448 170.6 448 176c0 5.43-.467 10.76-.941 16.09.341.01.641-.09.941-.09 88.22 0 160 64.6 160 144 0 28.69-9.424 56.45-27.25 80.26l-13.08 17.47 11.49 18.55c6.568 10.61 13.18 19.74 18.61 26.74-18.26-1.91-36.45-6.625-54.3-14.09l-12.69-5.305-12.58 5.557C495.9 475 472.3 480 448 480c-75.05 0-137.7-46.91-154.9-109.7-10.1 3.336-20.5 6.132-31.2 8.271C282.7 455.1 357.1 512 448 512c29.82 0 57.94-6.414 83.12-17.54C555 504.5 583.7 512 616.3 512c9.398 0 17.91-5.57 21.73-14.32 3.74-8.758 1.945-18.84-4.568-25.67-.162-.21-13.862-15.21-27.062-36.61z" }, void 0, !1, {
+  fileName: "app/components/__ui/Icon/Comment.tsx",
+  lineNumber: 6,
+  columnNumber: 7
+}, this) }, void 0, !1, {
+  fileName: "app/components/__ui/Icon/Comment.tsx",
+  lineNumber: 5,
+  columnNumber: 5
+}, this), Comment_default = Comment;
+
+// app/components/__ui/Icon/Like.tsx
+var import_jsx_dev_runtime15 = __toESM(require_jsx_dev_runtime()), Like = (props) => /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("svg", { ...props, viewBox: "0 0 512 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("path", { d: "M88 192H40c-22.06 0-40 17.9-40 40v208c0 22.1 17.94 40 40 40h48c22.1 0 40-17.9 40-40V232c0-22.1-17.9-40-40-40zm8 248c0 4.4-3.59 8-8 8H40c-4.41 0-8-3.6-8-8V232c0-4.4 3.59-8 8-8h48c4.41 0 8 3.6 8 8v208zm416-218.5c0-33.9-27.6-61.5-61.5-61.5H348c11.98-27.06 18.83-53.48 18.83-67.33C366.9 62.84 343.6 32 304.9 32c-41.22 0-50.7 29.11-59.12 54.81C218.1 171.1 160 184.8 160 208c0 9.1 7.5 16 16 16 4.1 0 8.2-1.6 11.3-4.7 52.68-53.04 67.02-56.11 88.81-122.5C285.3 68.95 288.2 64 304.9 64c20.66 0 29.94 16.77 29.94 28.67 0 10.09-8.891 43.95-26.62 75.48a15.976 15.976 0 0 0-2.046 7.83C306.2 185.5 314 192 322.2 192h128.3c16.3 0 29.5 13.2 29.5 29.5 0 15.33-12.08 28.16-27.48 29.2-8.462.581-14.91 7.649-14.91 15.96 0 12.19 12.06 12.86 12.06 30.63 0 14.14-10.11 26.3-24.03 28.89-5.778 1.082-13.06 6.417-13.06 15.75 0 8.886 6.765 10.72 6.765 23.56 0 31.02-31.51 22.12-31.51 43.05 0 3.526 1.185 5.13 1.185 10.01C389 434.8 375.8 448 359.5 448h-55.6c-82.01 0-108.3-64.02-127.9-64.02-8.873 0-16 7.193-16 15.96-.9 16.36 64.6 80.06 143.9 80.06h55.63c33.91 0 61.5-27.58 61.5-61.47 18.55-10.86 30.33-31 30.33-53.06 0-4.797-.594-9.594-1.734-14.27 19.31-10.52 32.06-30.97 32.06-53.94 0-7.219-1.281-14.31-3.75-20.98C498.2 266.2 512 245.3 512 221.5z" }, void 0, !1, {
+  fileName: "app/components/__ui/Icon/Like.tsx",
+  lineNumber: 6,
+  columnNumber: 7
+}, this) }, void 0, !1, {
+  fileName: "app/components/__ui/Icon/Like.tsx",
+  lineNumber: 5,
+  columnNumber: 5
+}, this), Like_default = Like;
+
+// app/components/home/TabTrendingPostsItem.tsx
+var import_jsx_dev_runtime16 = __toESM(require_jsx_dev_runtime()), TabTrendingPostsItem = ({
+  id,
+  title,
+  subTitle,
+  user
+}) => {
+  let avatarUrl = (0, import_react46.useMemo)(() => {
+    var _a;
+    return ((_a = user == null ? void 0 : user.profile) == null ? void 0 : _a.avatarUrl) ?? ASSET_URL.DEFAULT_AVATAR;
+  }, [user]);
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "tab-trending-post-item", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "mr-3", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Link2, { to: PAGE_ENDPOINTS.ITEMS.ID(id), className: "user-profile-image", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "h-full w-full", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "image-wrapper", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("img", { src: avatarUrl, alt: "thumbnail" }, void 0, !1, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 27,
+      columnNumber: 15
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 26,
+      columnNumber: 13
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 25,
+      columnNumber: 11
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 24,
+      columnNumber: 9
+    }, this) }, void 0, !1, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 23,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "flex-1", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("h3", { className: "title", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Link2, { to: PAGE_ENDPOINTS.ITEMS.ID(id), children: title }, void 0, !1, {
+        fileName: "app/components/home/TabTrendingPostsItem.tsx",
+        lineNumber: 36,
+        columnNumber: 11
+      }, this) }, void 0, !1, {
+        fileName: "app/components/home/TabTrendingPostsItem.tsx",
+        lineNumber: 35,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("p", { className: "description", children: /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Link2, { to: PAGE_ENDPOINTS.ITEMS.ID(id), children: subTitle }, void 0, !1, {
+        fileName: "app/components/home/TabTrendingPostsItem.tsx",
+        lineNumber: 39,
+        columnNumber: 11
+      }, this) }, void 0, !1, {
+        fileName: "app/components/home/TabTrendingPostsItem.tsx",
+        lineNumber: 38,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("div", { className: "footer", children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Link2, { to: "/", className: "action-btn", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Like_default, { className: "icon mr-2" }, void 0, !1, {
+            fileName: "app/components/home/TabTrendingPostsItem.tsx",
+            lineNumber: 44,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("span", { children: "66" }, void 0, !1, {
+            fileName: "app/components/home/TabTrendingPostsItem.tsx",
+            lineNumber: 45,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/components/home/TabTrendingPostsItem.tsx",
+          lineNumber: 43,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Link2, { to: "/", className: "action-btn", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)(Comment_default, { className: "icon mr-2" }, void 0, !1, {
+            fileName: "app/components/home/TabTrendingPostsItem.tsx",
+            lineNumber: 49,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime16.jsxDEV)("span", { children: "6" }, void 0, !1, {
+            fileName: "app/components/home/TabTrendingPostsItem.tsx",
+            lineNumber: 50,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/components/home/TabTrendingPostsItem.tsx",
+          lineNumber: 48,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, !0, {
+        fileName: "app/components/home/TabTrendingPostsItem.tsx",
+        lineNumber: 41,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, !0, {
+      fileName: "app/components/home/TabTrendingPostsItem.tsx",
+      lineNumber: 34,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, !0, {
+    fileName: "app/components/home/TabTrendingPostsItem.tsx",
+    lineNumber: 21,
+    columnNumber: 5
+  }, this);
+}, TabTrendingPostsItem_default = TabTrendingPostsItem;
+
+// app/api/posts/hooks/useGetTopPostsQuery.tsx
+function useGetTopPostsQuery(query, options) {
+  let resp = useQuery(
+    QUERIES_KEY.POSTS.GET_TOP_POSTS(query.duration),
+    (_key) => {
+      let [_, { duration }] = _key.queryKey;
+      return getTopPostsApi({
+        duration
+      });
+    },
+    options
+  );
+  return {
+    ...resp,
+    get result() {
+      var _a, _b;
+      return (_b = (_a = resp.data) == null ? void 0 : _a.result) == null ? void 0 : _b.result;
+    }
+  };
+}
+
+// app/components/home/TabTrendingPostsList.tsx
+var import_jsx_dev_runtime17 = __toESM(require_jsx_dev_runtime()), TabTrendingPostsList = ({
+  duration,
+  initialData,
+  enabled
+}) => {
+  let { data } = useGetTopPostsQuery(
+    {
+      duration: Number(duration)
+    },
+    {
+      suspense: !0,
+      enabled,
+      initialData
+    }
+  ), posts = (0, import_react48.useMemo)(() => {
+    var _a, _b;
+    return ((_b = (_a = data == null ? void 0 : data.result) == null ? void 0 : _a.result) == null ? void 0 : _b.posts) ?? [];
+  }, [data]);
+  return isNull(posts) || isUndefined(posts) ? null : /* @__PURE__ */ (0, import_jsx_dev_runtime17.jsxDEV)(import_jsx_dev_runtime17.Fragment, { children: posts == null ? void 0 : posts.map((item) => /* @__PURE__ */ (0, import_jsx_dev_runtime17.jsxDEV)(
+    import_react48.default.Fragment,
+    {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime17.jsxDEV)(TabTrendingPostsItem_default, { ...item }, void 0, !1, {
+          fileName: "app/components/home/TabTrendingPostsList.tsx",
+          lineNumber: 40,
+          columnNumber: 11
+        }, this),
+        posts.at(-1) !== item && /* @__PURE__ */ (0, import_jsx_dev_runtime17.jsxDEV)("hr", { className: "custom-divide-my" }, void 0, !1, {
+          fileName: "app/components/home/TabTrendingPostsList.tsx",
+          lineNumber: 41,
+          columnNumber: 37
+        }, this)
+      ]
+    },
+    `trending-simple-post-${duration}-item-${item.id}`,
+    !0,
+    {
+      fileName: "app/components/home/TabTrendingPostsList.tsx",
+      lineNumber: 37,
+      columnNumber: 9
+    },
+    this
+  )) }, void 0, !1, {
+    fileName: "app/components/home/TabTrendingPostsList.tsx",
+    lineNumber: 35,
+    columnNumber: 5
+  }, this);
+}, TabTrendingPostsList_default = TabTrendingPostsList;
+
 // app/components/home/Sidebar.tsx
-var import_jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime());
+var import_jsx_dev_runtime18 = __toESM(require_jsx_dev_runtime());
 function Sidebar() {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { children: "Sidebar" }, void 0, !1, {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { children: "Sidebar" }, void 0, !1, {
     fileName: "app/components/home/Sidebar.tsx",
-    lineNumber: 26,
+    lineNumber: 29,
     columnNumber: 10
   }, this);
 }
 Sidebar.Left = function() {
-  let data = useLoaderData2(), isWide = useMedia_default("(min-width: 1260px)", !1), $container = (0, import_react44.useRef)(null), GAP_SIZE = (0, import_react44.useMemo)(() => 32, []), [isSticky, setIsSticky] = (0, import_react44.useState)(!1), [width, setWidth] = (0, import_react44.useState)(null), handleScroll2 = optimizeAnimation(() => {
+  let data = useLoaderData2(), isWide = useMedia_default("(min-width: 1260px)", !1), $container = (0, import_react49.useRef)(null), GAP_SIZE = (0, import_react49.useMemo)(() => 32, []), [isSticky, setIsSticky] = (0, import_react49.useState)(!1), [width, setWidth] = (0, import_react49.useState)(null), handleScroll2 = optimizeAnimation(() => {
     if (!getTargetElement($container))
       return;
     if ((document.documentElement.scrollTop || document.body.scrollTop) <= 90)
@@ -39575,14 +40339,14 @@ Sidebar.Left = function() {
   });
   return useEventListener("scroll", handleScroll2, {
     passive: !0
-  }), /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+  }), /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
     "div",
     {
       className: "main__left-sidebar",
       style: {
         minHeight: isWide ? "710px" : "750px"
       },
-      children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+      children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
         "div",
         {
           ref: $container,
@@ -39594,16 +40358,16 @@ Sidebar.Left = function() {
               ...width && { width: `${width}px` }
             }
           },
-          children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "left-sidebar__container", children: [
-            /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "left-sidebar__wrapper", children: [
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+          children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "left-sidebar__container", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "left-sidebar__wrapper", children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                 SidebarNavLink_default,
                 {
                   text: "My Feed",
                   to: PAGE_ENDPOINTS.ROOT,
-                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Icons.MyFeed, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
+                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Icons.MyFeed, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 98,
+                    lineNumber: 101,
                     columnNumber: 21
                   }, this),
                   end: !0
@@ -39612,19 +40376,19 @@ Sidebar.Left = function() {
                 !1,
                 {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 95,
+                  lineNumber: 98,
                   columnNumber: 13
                 },
                 this
               ),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                 SidebarNavLink_default,
                 {
                   text: "Drafts",
                   to: "/drafts",
-                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Icons.MyDraft, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
+                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Icons.MyDraft, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 104,
+                    lineNumber: 107,
                     columnNumber: 21
                   }, this)
                 },
@@ -39632,19 +40396,19 @@ Sidebar.Left = function() {
                 !1,
                 {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 101,
+                  lineNumber: 104,
                   columnNumber: 13
                 },
                 this
               ),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                 SidebarNavLink_default,
                 {
                   text: "Bookmarks",
                   to: "/bookmarks",
-                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Icons.MyBookmark, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
+                  icon: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Icons.MyBookmark, { className: "flex-shrink-0 fill-current" }, void 0, !1, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 109,
+                    lineNumber: 112,
                     columnNumber: 21
                   }, this)
                 },
@@ -39652,65 +40416,65 @@ Sidebar.Left = function() {
                 !1,
                 {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 106,
+                  lineNumber: 109,
                   columnNumber: 13
                 },
                 this
               ),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "px-4", children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("hr", { className: "my-5 border-gray-200" }, void 0, !1, {
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "px-4", children: [
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("hr", { className: "my-5 border-gray-200" }, void 0, !1, {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 112,
+                  lineNumber: 115,
                   columnNumber: 15
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("h5", { children: [
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { children: "TrendingTags" }, void 0, !1, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("h5", { children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("span", { children: "TrendingTags" }, void 0, !1, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 114,
+                    lineNumber: 117,
                     columnNumber: 17
                   }, this),
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Icons.Trending, { className: "icon__base ml-2 opacity-50" }, void 0, !1, {
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Icons.Trending, { className: "icon__base ml-2 opacity-50" }, void 0, !1, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 115,
+                    lineNumber: 118,
                     columnNumber: 17
                   }, this)
                 ] }, void 0, !0, {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 113,
+                  lineNumber: 116,
                   columnNumber: 15
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "left-sidebar__tags", children: [
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                    import_react44.Suspense,
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "left-sidebar__tags", children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+                    import_react49.Suspense,
                     {
-                      fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: Array.from({ length: 5 }).map((_, index2) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                      fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(import_jsx_dev_runtime18.Fragment, { children: Array.from({ length: 5 }).map((_, index2) => /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                         SidebarTrendingTag_default.Skeleton,
                         {},
                         `skeleton-sidebar-trending-tag-${index2}`,
                         !1,
                         {
                           fileName: "app/components/home/Sidebar.tsx",
-                          lineNumber: 122,
+                          lineNumber: 125,
                           columnNumber: 25
                         },
                         this
                       )) }, void 0, !1, {
                         fileName: "app/components/home/Sidebar.tsx",
-                        lineNumber: 120,
+                        lineNumber: 123,
                         columnNumber: 21
                       }, this),
-                      children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                      children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                         Await2,
                         {
                           resolve: data.trendingTag,
-                          errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
+                          errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
                             fileName: "app/components/home/Sidebar.tsx",
-                            lineNumber: 131,
+                            lineNumber: 134,
                             columnNumber: 35
                           }, this),
                           children: (data2) => {
                             var _a, _b, _c;
-                            return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: (_c = (_b = (_a = data2.result) == null ? void 0 : _a.result) == null ? void 0 : _b.list) == null ? void 0 : _c.map((tag) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                            return /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(import_jsx_dev_runtime18.Fragment, { children: (_c = (_b = (_a = data2.result) == null ? void 0 : _a.result) == null ? void 0 : _b.list) == null ? void 0 : _c.map((tag) => /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                               SidebarTrendingTag_default,
                               {
                                 id: tag.id,
@@ -39721,13 +40485,13 @@ Sidebar.Left = function() {
                               !1,
                               {
                                 fileName: "app/components/home/Sidebar.tsx",
-                                lineNumber: 136,
+                                lineNumber: 139,
                                 columnNumber: 27
                               },
                               this
                             )) }, void 0, !1, {
                               fileName: "app/components/home/Sidebar.tsx",
-                              lineNumber: 134,
+                              lineNumber: 137,
                               columnNumber: 23
                             }, this);
                           }
@@ -39736,7 +40500,7 @@ Sidebar.Left = function() {
                         !1,
                         {
                           fileName: "app/components/home/Sidebar.tsx",
-                          lineNumber: 129,
+                          lineNumber: 132,
                           columnNumber: 19
                         },
                         this
@@ -39746,45 +40510,45 @@ Sidebar.Left = function() {
                     !1,
                     {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 118,
+                      lineNumber: 121,
                       columnNumber: 17
                     },
                     this
                   ),
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Link2, { to: "/tags", className: "sell-all-tags", children: [
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { children: "See all" }, void 0, !1, {
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Link2, { to: "/tags", className: "sell-all-tags", children: [
+                    /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("span", { children: "See all" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 148,
+                      lineNumber: 151,
                       columnNumber: 19
                     }, this),
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Icons.ArrowRight, { className: "icon__xs ml-2" }, void 0, !1, {
+                    /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Icons.ArrowRight, { className: "icon__xs ml-2" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 149,
+                      lineNumber: 152,
                       columnNumber: 19
                     }, this)
                   ] }, void 0, !0, {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 147,
+                    lineNumber: 150,
                     columnNumber: 17
                   }, this)
                 ] }, void 0, !0, {
                   fileName: "app/components/home/Sidebar.tsx",
-                  lineNumber: 117,
+                  lineNumber: 120,
                   columnNumber: 15
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/components/home/Sidebar.tsx",
-                lineNumber: 111,
+                lineNumber: 114,
                 columnNumber: 13
               }, this)
             ] }, void 0, !0, {
               fileName: "app/components/home/Sidebar.tsx",
-              lineNumber: 94,
+              lineNumber: 97,
               columnNumber: 11
             }, this),
-            /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "left-sidebar__footer", children: [
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "footer-social-group", children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "left-sidebar__footer", children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "footer-social-group", children: [
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                   "a",
                   {
                     href: "https://twitter.com/hashnode",
@@ -39792,13 +40556,13 @@ Sidebar.Left = function() {
                     rel: "noopener noreferrer",
                     "aria-label": "Follow Hashnode on Twitter",
                     className: "social",
-                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 512 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("path", { d: "M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" }, void 0, !1, {
+                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 512 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("path", { d: "M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 164,
+                      lineNumber: 167,
                       columnNumber: 19
                     }, this) }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 163,
+                      lineNumber: 166,
                       columnNumber: 17
                     }, this)
                   },
@@ -39806,12 +40570,12 @@ Sidebar.Left = function() {
                   !1,
                   {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 156,
+                    lineNumber: 159,
                     columnNumber: 15
                   },
                   this
                 ),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                   "a",
                   {
                     href: "https://linkedin.com/company/hashnode",
@@ -39819,13 +40583,13 @@ Sidebar.Left = function() {
                     rel: "noopener noreferrer",
                     "aria-label": "Follow Hashnode on LinkedIn",
                     className: "social",
-                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 448 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("path", { d: "M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z" }, void 0, !1, {
+                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 448 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("path", { d: "M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 175,
+                      lineNumber: 178,
                       columnNumber: 19
                     }, this) }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 174,
+                      lineNumber: 177,
                       columnNumber: 17
                     }, this)
                   },
@@ -39833,12 +40597,12 @@ Sidebar.Left = function() {
                   !1,
                   {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 167,
+                    lineNumber: 170,
                     columnNumber: 15
                   },
                   this
                 ),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                   "a",
                   {
                     href: "https://instagram.com/hashnode",
@@ -39846,13 +40610,13 @@ Sidebar.Left = function() {
                     rel: "noopener noreferrer",
                     "aria-label": "Follow Hashnode on Instagram",
                     className: "social",
-                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("path", { d: "M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z" }, void 0, !1, {
+                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("path", { d: "M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 186,
+                      lineNumber: 189,
                       columnNumber: 19
                     }, this) }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 185,
+                      lineNumber: 188,
                       columnNumber: 17
                     }, this)
                   },
@@ -39860,12 +40624,12 @@ Sidebar.Left = function() {
                   !1,
                   {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 178,
+                    lineNumber: 181,
                     columnNumber: 15
                   },
                   this
                 ),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
                   "a",
                   {
                     href: "https://discord.gg/hashnode",
@@ -39873,13 +40637,13 @@ Sidebar.Left = function() {
                     rel: "noopener noreferrer",
                     "aria-label": "Join Hashnode's Discord Community",
                     className: "social",
-                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 448 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("path", { d: "M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z" }, void 0, !1, {
+                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("svg", { className: "icon__base fill-current", viewBox: "0 0 448 512", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("path", { d: "M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z" }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 197,
+                      lineNumber: 200,
                       columnNumber: 19
                     }, this) }, void 0, !1, {
                       fileName: "app/components/home/Sidebar.tsx",
-                      lineNumber: 196,
+                      lineNumber: 199,
                       columnNumber: 17
                     }, this)
                   },
@@ -39887,38 +40651,38 @@ Sidebar.Left = function() {
                   !1,
                   {
                     fileName: "app/components/home/Sidebar.tsx",
-                    lineNumber: 189,
+                    lineNumber: 192,
                     columnNumber: 15
                   },
                   this
                 )
               ] }, void 0, !0, {
                 fileName: "app/components/home/Sidebar.tsx",
-                lineNumber: 155,
+                lineNumber: 158,
                 columnNumber: 13
               }, this),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("hr", { className: "my-5 h-[1px] w-[25%]" }, void 0, !1, {
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("hr", { className: "my-5 h-[1px] w-[25%]" }, void 0, !1, {
                 fileName: "app/components/home/Sidebar.tsx",
-                lineNumber: 201,
+                lineNumber: 204,
                 columnNumber: 13
               }, this),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("p", { children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("p", { children: [
                 "\xA9 ",
                 new Date().getFullYear(),
                 " Remix"
               ] }, void 0, !0, {
                 fileName: "app/components/home/Sidebar.tsx",
-                lineNumber: 202,
+                lineNumber: 205,
                 columnNumber: 13
               }, this)
             ] }, void 0, !0, {
               fileName: "app/components/home/Sidebar.tsx",
-              lineNumber: 154,
+              lineNumber: 157,
               columnNumber: 11
             }, this)
           ] }, void 0, !0, {
             fileName: "app/components/home/Sidebar.tsx",
-            lineNumber: 93,
+            lineNumber: 96,
             columnNumber: 9
           }, this)
         },
@@ -39926,7 +40690,7 @@ Sidebar.Left = function() {
         !1,
         {
           fileName: "app/components/home/Sidebar.tsx",
-          lineNumber: 82,
+          lineNumber: 85,
           columnNumber: 7
         },
         this
@@ -39936,22 +40700,189 @@ Sidebar.Left = function() {
     !1,
     {
       fileName: "app/components/home/Sidebar.tsx",
-      lineNumber: 76,
+      lineNumber: 79,
       columnNumber: 5
     },
     this
   );
 };
 Sidebar.Right = function() {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("aside", { className: "main__right-sidebar", children: "right" }, void 0, !1, {
+  let [duration, setDuration] = (0, import_react49.useState)(7), onTabClick = (0, import_react49.useCallback)((duration2) => {
+    setDuration(duration2);
+  }, []);
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("aside", { className: "main__right-sidebar", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "right-sidebar__container", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+      RightSidebarContentBox_default,
+      {
+        title: "Trending",
+        to: PAGE_ENDPOINTS.EXPLORE.ROOT,
+        children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(import_react49.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("h1", { children: "\u{1F300} Loading..." }, void 0, !1, {
+          fileName: "app/components/home/Sidebar.tsx",
+          lineNumber: 227,
+          columnNumber: 31
+        }, this), children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { className: "tab-content__trenidng", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+              TabTrendingPostButton_default,
+              {
+                label: "1 week",
+                duration: 7,
+                currentDuration: duration,
+                id: "tabs-trending-duration-7",
+                onTabClick
+              },
+              void 0,
+              !1,
+              {
+                fileName: "app/components/home/Sidebar.tsx",
+                lineNumber: 229,
+                columnNumber: 15
+              },
+              this
+            ),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+              TabTrendingPostButton_default,
+              {
+                label: "1 months",
+                duration: 30,
+                currentDuration: duration,
+                id: "tabs-trending-duration-30",
+                onTabClick
+              },
+              void 0,
+              !1,
+              {
+                fileName: "app/components/home/Sidebar.tsx",
+                lineNumber: 236,
+                columnNumber: 15
+              },
+              this
+            ),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+              TabTrendingPostButton_default,
+              {
+                label: "3 months",
+                duration: 90,
+                currentDuration: duration,
+                id: "tabs-trending-duration-90",
+                onTabClick
+              },
+              void 0,
+              !1,
+              {
+                fileName: "app/components/home/Sidebar.tsx",
+                lineNumber: 243,
+                columnNumber: 15
+              },
+              this
+            ),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+              TabTrendingPostButton_default,
+              {
+                label: "6 months",
+                duration: 180,
+                currentDuration: duration,
+                id: "tabs-trending-duration-180",
+                onTabClick
+              },
+              void 0,
+              !1,
+              {
+                fileName: "app/components/home/Sidebar.tsx",
+                lineNumber: 250,
+                columnNumber: 15
+              },
+              this
+            )
+          ] }, void 0, !0, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 228,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(TabTrendingPostsList_default, { enabled: !0, duration: "7" }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 260,
+            columnNumber: 17
+          }, this) }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 259,
+            columnNumber: 15
+          }, this) }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 258,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/components/home/Sidebar.tsx",
+          lineNumber: 227,
+          columnNumber: 11
+        }, this)
+      },
+      void 0,
+      !1,
+      {
+        fileName: "app/components/home/Sidebar.tsx",
+        lineNumber: 223,
+        columnNumber: 9
+      },
+      this
+    ),
+    /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(
+      RightSidebarContentBox_default,
+      {
+        title: "Bookmarks",
+        to: PAGE_ENDPOINTS.BOOKMARKS.ROOT,
+        children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("h3", { className: "bookmark-desc", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Link2, { to: "/", children: "Instantly Solving SEO and Providing SSR for Modern JavaScript Websites Independently of Frontend and Backend Stacks" }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 272,
+            columnNumber: 17
+          }, this) }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 271,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)("p", { className: "username", children: /* @__PURE__ */ (0, import_jsx_dev_runtime18.jsxDEV)(Link2, { to: "/", "aria-label": "Post info", children: "eron" }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 278,
+            columnNumber: 17
+          }, this) }, void 0, !1, {
+            fileName: "app/components/home/Sidebar.tsx",
+            lineNumber: 277,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/components/home/Sidebar.tsx",
+          lineNumber: 270,
+          columnNumber: 13
+        }, this) }, void 0, !1, {
+          fileName: "app/components/home/Sidebar.tsx",
+          lineNumber: 269,
+          columnNumber: 11
+        }, this)
+      },
+      void 0,
+      !1,
+      {
+        fileName: "app/components/home/Sidebar.tsx",
+        lineNumber: 265,
+        columnNumber: 9
+      },
+      this
+    )
+  ] }, void 0, !0, {
     fileName: "app/components/home/Sidebar.tsx",
-    lineNumber: 211,
-    columnNumber: 10
+    lineNumber: 222,
+    columnNumber: 7
+  }, this) }, void 0, !1, {
+    fileName: "app/components/home/Sidebar.tsx",
+    lineNumber: 221,
+    columnNumber: 5
   }, this);
 };
 
 // app/routes/__app.tsx
-var import_jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime()), meta5 = () => ({
+var import_jsx_dev_runtime19 = __toESM(require_jsx_dev_runtime()), meta5 = () => ({
   charset: "utf-8",
   title: "Hashnode - Blogging community for developers, and people in tech",
   description: "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
@@ -39974,36 +40905,36 @@ var import_jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime()), meta5 = () =>
   });
 };
 function App2() {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)("div", { className: "container__base", children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(Header_default, {}, void 0, !1, {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)("div", { className: "container__base", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(Header_default, {}, void 0, !1, {
       fileName: "app/routes/__app.tsx",
-      lineNumber: 61,
+      lineNumber: 63,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)("main", { children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(Sidebar.Left, {}, void 0, !1, {
-        fileName: "app/routes/__app.tsx",
-        lineNumber: 63,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(Outlet, {}, void 0, !1, {
-        fileName: "app/routes/__app.tsx",
-        lineNumber: 64,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime13.jsxDEV)(Sidebar.Right, {}, void 0, !1, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)("main", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(Sidebar.Left, {}, void 0, !1, {
         fileName: "app/routes/__app.tsx",
         lineNumber: 65,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(Outlet, {}, void 0, !1, {
+        fileName: "app/routes/__app.tsx",
+        lineNumber: 66,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(Sidebar.Right, {}, void 0, !1, {
+        fileName: "app/routes/__app.tsx",
+        lineNumber: 67,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/__app.tsx",
-      lineNumber: 62,
+      lineNumber: 64,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/__app.tsx",
-    lineNumber: 60,
+    lineNumber: 62,
     columnNumber: 5
   }, this);
 }
@@ -40013,9 +40944,9 @@ var app_exports2 = {};
 __export(app_exports2, {
   default: () => Index
 });
-var import_jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime());
+var import_jsx_dev_runtime20 = __toESM(require_jsx_dev_runtime());
 function Index() {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime14.jsxDEV)("div", { children: "index" }, void 0, !1, {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { children: "index" }, void 0, !1, {
     fileName: "app/routes/__app/index.tsx",
     lineNumber: 4,
     columnNumber: 10
@@ -40023,7 +40954,7 @@ function Index() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "e27ff466", entry: { module: "/build/entry.client-LQOFRNIK.js", imports: ["/build/_shared/chunk-AZPU6RDF.js", "/build/_shared/chunk-Y7WJVBWW.js", "/build/_shared/chunk-56THQXCK.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-2WZX7HPU.js", imports: ["/build/_shared/chunk-UQHWD3FE.js", "/build/_shared/chunk-UJIINXDK.js"], hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__app": { id: "routes/__app", parentId: "root", path: void 0, index: void 0, caseSensitive: void 0, module: "/build/routes/__app-2IJG23OD.js", imports: ["/build/_shared/chunk-SX4HYKSG.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__app/index": { id: "routes/__app/index", parentId: "routes/__app", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/__app/index-SVAGPZDV.js", imports: void 0, hasAction: !1, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__auth": { id: "routes/__auth", parentId: "root", path: void 0, index: void 0, caseSensitive: void 0, module: "/build/routes/__auth-Q32F7AES.js", imports: ["/build/_shared/chunk-SX4HYKSG.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__auth/signin": { id: "routes/__auth/signin", parentId: "routes/__auth", path: "signin", index: void 0, caseSensitive: void 0, module: "/build/routes/__auth/signin-3AIFMA5F.js", imports: ["/build/_shared/chunk-DO74V4J7.js", "/build/_shared/chunk-UJIINXDK.js"], hasAction: !0, hasLoader: !1, hasCatchBoundary: !0, hasErrorBoundary: !1 }, "routes/__auth/signup": { id: "routes/__auth/signup", parentId: "routes/__auth", path: "signup", index: void 0, caseSensitive: void 0, module: "/build/routes/__auth/signup-NHQ64C5I.js", imports: ["/build/_shared/chunk-DO74V4J7.js", "/build/_shared/chunk-UJIINXDK.js"], hasAction: !0, hasLoader: !1, hasCatchBoundary: !0, hasErrorBoundary: !1 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-E27FF466.js" };
+var assets_manifest_default = { version: "537f1e4c", entry: { module: "/build/entry.client-DEB76YTC.js", imports: ["/build/_shared/chunk-AZPU6RDF.js", "/build/_shared/chunk-YU72IXJ3.js", "/build/_shared/chunk-56THQXCK.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-MK6536AL.js", imports: ["/build/_shared/chunk-QU7APPHN.js", "/build/_shared/chunk-W6U2ISQ3.js"], hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__app": { id: "routes/__app", parentId: "root", path: void 0, index: void 0, caseSensitive: void 0, module: "/build/routes/__app-MDHO2MIX.js", imports: ["/build/_shared/chunk-KKYNK5BS.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__app/index": { id: "routes/__app/index", parentId: "routes/__app", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/__app/index-SVAGPZDV.js", imports: void 0, hasAction: !1, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__auth": { id: "routes/__auth", parentId: "root", path: void 0, index: void 0, caseSensitive: void 0, module: "/build/routes/__auth-2TZQH44M.js", imports: ["/build/_shared/chunk-KKYNK5BS.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/__auth/signin": { id: "routes/__auth/signin", parentId: "routes/__auth", path: "signin", index: void 0, caseSensitive: void 0, module: "/build/routes/__auth/signin-EHDFMPP4.js", imports: ["/build/_shared/chunk-DO74V4J7.js", "/build/_shared/chunk-W6U2ISQ3.js"], hasAction: !0, hasLoader: !1, hasCatchBoundary: !0, hasErrorBoundary: !1 }, "routes/__auth/signup": { id: "routes/__auth/signup", parentId: "routes/__auth", path: "signup", index: void 0, caseSensitive: void 0, module: "/build/routes/__auth/signup-ABIH7GZS.js", imports: ["/build/_shared/chunk-DO74V4J7.js", "/build/_shared/chunk-W6U2ISQ3.js"], hasAction: !0, hasLoader: !1, hasCatchBoundary: !0, hasErrorBoundary: !1 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-537F1E4C.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !0, unstable_vanillaExtract: !1, v2_errorBoundary: !1, v2_meta: !1, v2_routeConvention: !1 }, publicPath = "/build/", entry = { module: entry_server_cloudflare_exports }, routes = {

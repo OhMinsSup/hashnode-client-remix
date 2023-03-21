@@ -6,7 +6,6 @@ import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
 import type { TagListRespSchema } from "../schema/resp";
 import type { LoaderArgs } from "@remix-run/cloudflare";
-import { delayPromise } from "~/utils/util";
 
 // [Get] Path: /api/v1/tags
 
@@ -77,7 +76,6 @@ export async function getTagListApi(
   const response = await _getTagListApi(query, {
     headers,
   });
-  await delayPromise(3000);
   const result = await response.json<AppAPI<TagListRespSchema>>();
   return { result };
 }

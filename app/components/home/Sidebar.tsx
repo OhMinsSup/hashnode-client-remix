@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo, useRef, useState } from "react";
+import React, { Suspense, useCallback, useMemo, useRef, useState } from "react";
 
 // remix
 import { Await, Link, useLoaderData } from "@remix-run/react";
@@ -18,9 +18,12 @@ import { optimizeAnimation } from "~/utils/util";
 import { Icons } from "~/components/shared/Icons";
 import SidebarNavLink from "~/components/home/SidebarNavLink";
 import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
+import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
 
 // types
 import type { HomeLoaderData } from "~/routes/__app";
+import TabTrendingPostButton from "./TabTrendingPostButton";
+import TabTrendingPostsList from "./TabTrendingPostsList";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;
@@ -208,5 +211,78 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.Right = function Right() {
-  return <aside className="main__right-sidebar">right</aside>;
+  const [duration, setDuration] = useState(7);
+
+  const onTabClick = useCallback((duration: number) => {
+    setDuration(duration);
+  }, []);
+
+  return (
+    <aside className="main__right-sidebar">
+      <div className="right-sidebar__container">
+        <RightSidebarContentBox
+          title="Trending"
+          to={PAGE_ENDPOINTS.EXPLORE.ROOT}
+        >
+          <Suspense fallback={<h1>🌀 Loading...</h1>}>
+            <div className="tab-content__trenidng">
+              <TabTrendingPostButton
+                label="1 week"
+                duration={7}
+                currentDuration={duration}
+                id={"tabs-trending-duration-7"}
+                onTabClick={onTabClick}
+              />
+              <TabTrendingPostButton
+                label="1 months"
+                duration={30}
+                currentDuration={duration}
+                id={"tabs-trending-duration-30"}
+                onTabClick={onTabClick}
+              />
+              <TabTrendingPostButton
+                label="3 months"
+                duration={90}
+                currentDuration={duration}
+                id={"tabs-trending-duration-90"}
+                onTabClick={onTabClick}
+              />
+              <TabTrendingPostButton
+                label="6 months"
+                duration={180}
+                currentDuration={duration}
+                id={"tabs-trending-duration-180"}
+                onTabClick={onTabClick}
+              />
+            </div>
+            <div>
+              <div>
+                <TabTrendingPostsList enabled duration="7" />
+              </div>
+            </div>
+          </Suspense>
+        </RightSidebarContentBox>
+        <RightSidebarContentBox
+          title="Bookmarks"
+          to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
+        >
+          <div>
+            <div>
+              <h3 className="bookmark-desc">
+                <Link to="/">
+                  Instantly Solving SEO and Providing SSR for Modern JavaScript
+                  Websites Independently of Frontend and Backend Stacks
+                </Link>
+              </h3>
+              <p className="username">
+                <Link to="/" aria-label="Post info">
+                  eron
+                </Link>
+              </p>
+            </div>
+          </div>
+        </RightSidebarContentBox>
+      </div>
+    </aside>
+  );
 };

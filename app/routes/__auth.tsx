@@ -27,9 +27,8 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+  description:
+    "Start your programming blog. Share your knowledge and build your own brand",
 });
 
 export const loader = async (args: LoaderArgs) => {

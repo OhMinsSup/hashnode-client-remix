@@ -47,6 +47,8 @@ export const loader = (args: LoaderArgs) => {
     args
   );
 
+  // TODO: Server Side Widget API Call Bookmarks
+
   return defer({
     trendingTag: trendingTagPromise,
     topPosts: topPostsPromise,

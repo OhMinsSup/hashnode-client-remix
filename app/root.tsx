@@ -45,8 +45,10 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1",
+  title: "Hashnode - Blogging community for developers, and people in tech",
+  description:
+    "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
+  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
 });
 
 export const loader = async (args: LoaderArgs) => {

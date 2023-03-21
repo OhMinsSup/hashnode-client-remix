@@ -33,10 +33,7 @@ import classNames from "classnames";
 import ErrorMessage from "~/components/shared/ErrorMessage";
 
 export const meta: MetaFunction = () => ({
-  charset: "utf-8",
   title: "Sign in to Hashnode",
-  description: "Start your programming blog. Share your knowledge and build your own brand",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
 });
 
 export const action = async ({ request }: ActionArgs) => {
