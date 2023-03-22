@@ -10,7 +10,7 @@ import { parseUrlParams } from "~/utils/util";
 // components
 import PostsList from "~/components/home/PostsList";
 
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderArgs, MetaFunction } from "@remix-run/cloudflare";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const params = parseUrlParams(request.url);
@@ -35,6 +35,12 @@ export const loader = async ({ request }: LoaderArgs) => {
     posts: posts.result?.result,
   });
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Featured posts on Hashnode",
+  description:
+    "Hashnode is a free developer blogging platform that allows you to publish articles on your own domain and helps you stay connected with a global developer community.",
+});
 
 export default function IndexPage() {
   return <PostsList />;

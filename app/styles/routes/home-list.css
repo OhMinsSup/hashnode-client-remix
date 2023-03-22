@@ -2,6 +2,57 @@
   @apply relative col-span-7 min-w-0 pt-5 pb-24;
 }
 
+.main__list-container .main__list-container__trending-users {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  @apply relative mb-5 rounded-lg border;
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area {
+  @apply relative h-auto w-full flex-nowrap overflow-auto px-6 py-5;
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area
+  .trending-users-scroll-area__container {
+  flex-flow: row nowrap;
+  @apply flex h-auto w-full items-center;
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area
+  .trending-users-scroll-area__container
+  .user-container {
+  @apply relative mr-3;
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area
+  .trending-users-scroll-area__container
+  .user-container
+  .thumbnail-container {
+  @apply relative block h-14 w-14 flex-shrink-0 rounded-full p-[1px];
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area
+  .trending-users-scroll-area__container
+  .user-container
+  .thumbnail-container
+  .thumbnail {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+  @apply relative z-20 h-full w-full overflow-hidden rounded-full border-2;
+}
+
 .main__list-container .main__list-container__tabs {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -50,7 +101,192 @@
   color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 
-/* Post Card */
+/* Future Post Card */
+
+.main-post-card {
+  @apply border-b py-3 px-5;
+}
+
+.main-post-card .main-post-card__header {
+  @apply relative mb-2;
+}
+
+.main-post-card .main-post-card__header .main-post-card__header-container {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  @apply flex flex-row items-center;
+}
+
+.main-post-card__header .main-post-card__header-container .thumbnail-container {
+  @apply relative mr-3 block rounded-full;
+}
+
+.main-post-card__header .main-post-card__header-container .userinfo-container {
+  @apply text-sm;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .thumbnail-container
+  .thumbnail-container__link {
+  @apply relative z-10 block rounded-full border;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .thumbnail-container
+  .thumbnail-container__link
+  .thumbnail {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  @apply relative z-20 h-9 w-9 rounded-full;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .userinfo-container
+  .userinfo-container__username {
+  @apply flex flex-row flex-wrap items-center;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .userinfo-container
+  .userinfo-container__username:nth-child(1) {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply font-semibold;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .userinfo-container
+  .userinfo-container__other {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply hidden flex-row flex-wrap items-center;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .userinfo-container
+  .userinfo-container__other
+  span {
+  @apply mx-2 flex flex-row items-center font-semibold;
+}
+
+.main-post-card__header
+  .main-post-card__header-container
+  .userinfo-container
+  .userinfo-container__other
+  .createAt {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+.main-post-card .main-post-card__content {
+  @apply flex flex-row flex-wrap items-start;
+}
+
+.main-post-card .main-post-card__content .main-post-card__content-container {
+  @apply mb-3 w-full;
+}
+
+.main-post-card
+  .main-post-card__content
+  .main-post-card__content-image-container {
+  @apply w-full flex-shrink-0;
+}
+
+.main-post-card
+  .main-post-card__content
+  .main-post-card__content-image-container
+  .cover-image {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.main-post-card__content
+  .main-post-card__content-container
+  .main-post-card__content-container__title {
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  word-break: normal;
+  overflow-wrap: anywhere;
+  @apply mb-2 text-lg font-bold;
+}
+
+.main-post-card__content
+  .main-post-card__content-container
+  .main-post-card__content-container__description {
+  line-height: 1.375;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.main-post-card .main-post-card__footer {
+  @apply mt-3 flex flex-col-reverse flex-wrap items-center justify-between;
+}
+
+.main-post-card .main-post-card__footer .main-post-card__footer-left {
+  @apply mt-3 flex w-full flex-row;
+}
+
+.main-post-card__footer-left .footer-left__container {
+  @apply flex flex-1 flex-row;
+}
+
+.main-post-card__footer-left .footer-left__container .btn-bookmark {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  @apply flex h-10 w-10 flex-row items-center justify-center rounded-full border border-transparent px-1 py-3 text-center text-base font-medium leading-[1.625] outline-none;
+}
+
+.main-post-card__footer-left .footer-left__container .tag-container {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  @apply mr-2 flex flex-row items-center text-sm font-medium;
+}
+
+.main-post-card__footer-left .footer-left__container .tag-container .tag {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply mr-1 block w-20 truncate rounded-lg border px-2 py-1 text-center leading-[1.625];
+}
+
+.main-post-card .main-post-card__footer .main-post-card__footer-right {
+  @apply flex w-full flex-row items-center;
+}
+
+.main-post-card__footer-right .footer-right__container {
+  @apply flex w-full flex-row  items-center;
+}
+
+.main-post-card__footer-right .footer-right__container .footer-right__wrapper {
+  @apply flex flex-row flex-wrap items-center;
+}
+
+.main-post-card__footer-right
+  .footer-right__container
+  .footer-right__wrapper
+  .btn-base {
+  @apply flex flex-row items-center justify-center rounded-full border border-transparent px-1 py-3 text-center text-base font-medium leading-[1.625] outline-none;
+}
+
+/* Future Post Card */
+
+/* Old Post Card */
 .post-item {
   @apply border-b py-3 px-5;
 }
@@ -213,7 +449,7 @@
 .post-footer .footer-right-wrapper .right-items-wrapper .icon-wrapper {
   --tw-text-opacity: 1;
   color: rgb(51 65 85 / var(--tw-text-opacity));
-  @apply border border-transparent rounded-full font-medium px-2 py-1  text-sm outline-none text-center justify-center items-center flex-row inline-flex
+  @apply inline-flex flex-row items-center justify-center rounded-full border  border-transparent px-2 py-1 text-center text-sm font-medium outline-none;
 }
 
 /* Tags */
@@ -252,5 +488,49 @@
 
   .post-item .post-body .image-wrapper {
     @apply w-48;
+  }
+
+  .main-post-card .main-post-card__content {
+    @apply flex-nowrap;
+  }
+
+  .main-post-card .main-post-card__footer {
+    @apply flex-row;
+  }
+
+  .main-post-card__header
+    .main-post-card__header-container
+    .userinfo-container
+    .userinfo-container__other {
+    @apply flex;
+  }
+
+  .main-post-card .main-post-card__content .main-post-card__content-container {
+    @apply mb-0 flex-1 pr-5;
+  }
+
+  .main-post-card
+    .main-post-card__content
+    .main-post-card__content-image-container {
+    @apply w-48;
+  }
+
+  .main-post-card
+    .main-post-card__footer
+    .main-post-card
+    .main-post-card__footer-left {
+    @apply flex-1;
+  }
+
+  .main-post-card
+    .main-post-card__footer
+    .main-post-card
+    .main-post-card__footer-right {
+    @apply w-auto pl-0;
+  }
+
+  .main-post-card__footer-left .footer-left__container,
+  .main-post-card__footer-right .footer-right__container {
+    @apply flex-auto;
   }
 }

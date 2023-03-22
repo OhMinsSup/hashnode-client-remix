@@ -30,6 +30,9 @@ export const API_ENDPOINTS = {
     SAVE_DATA: "drafts/save-data",
     ID: (id: string | number) => `drafts/${id}`,
   },
+  WIDGET: {
+    ARTICLE_CIRCLES: "widget/article-circles",
+  },
 } as const;
 
 export const QUERIES_KEY = {

@@ -10,7 +10,7 @@ import { parseUrlParams } from "~/utils/util";
 // components
 import PostsList from "~/components/home/PostsList";
 
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderArgs, MetaFunction } from "@remix-run/cloudflare";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const params = parseUrlParams(request.url);
@@ -35,6 +35,11 @@ export const loader = async ({ request }: LoaderArgs) => {
     posts: posts.result?.result,
   });
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Recent posts on Hashnode",
+  description: "Recent developer posts on Hashnode",
+});
 
 export default function IndexPage() {
   return <PostsList />;
