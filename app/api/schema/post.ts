@@ -9,9 +9,9 @@ export interface PostSchema {
   content: string;
   description: string;
   thumbnail: Nullable<string>;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Nullable<Date>;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  deletedAt: Nullable<Date | string>;
   userId: number;
   user: UserSchema;
   tags: TagSchema[];

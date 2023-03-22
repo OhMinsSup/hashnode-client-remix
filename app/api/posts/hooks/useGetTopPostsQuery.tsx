@@ -5,16 +5,16 @@ import { getTopPostsApi } from "../posts";
 import { QUERIES_KEY } from "~/constants/constant";
 
 // types
-import type { GetTopPostsRespSchema } from "../../schema/resp";
-import type { AppAPI } from "../../schema/api";
-import type { GetTopPostsQuery } from "../../schema/query";
+import type { GetTopPostsRespSchema } from "~/api/schema/resp";
+import type { AppAPI } from "~/api/schema/api";
+import type { GetTopPostsQuery } from "~/api/schema/query";
 import type { UseQueryOptions } from "@tanstack/react-query";
 
-interface GetTopPostsRespReturnValue {
+export interface ReturnValue {
   result: AppAPI<GetTopPostsRespSchema>;
 }
 
-interface GetTopPostsQueryOptions<TQueryFnData, TError, TData>
+interface QueryOptions<TQueryFnData, TError, TData>
   extends Omit<
     UseQueryOptions<TQueryFnData, TError, TData, [string, GetTopPostsQuery]>,
     "queryKey" | "queryFn"
@@ -23,11 +23,7 @@ interface GetTopPostsQueryOptions<TQueryFnData, TError, TData>
 }
 export function useGetTopPostsQuery(
   query: GetTopPostsQuery,
-  options?: GetTopPostsQueryOptions<
-    GetTopPostsRespReturnValue,
-    Record<string, any>,
-    GetTopPostsRespReturnValue
-  >
+  options?: QueryOptions<ReturnValue, Record<string, any>, ReturnValue>
 ) {
   const resp = useQuery(
     QUERIES_KEY.POSTS.GET_TOP_POSTS(query.duration) as unknown as [
@@ -42,10 +38,5 @@ export function useGetTopPostsQuery(
     },
     options
   );
-  return {
-    ...resp,
-    get result() {
-      return resp.data?.result?.result;
-    },
-  };
+  return resp;
 }

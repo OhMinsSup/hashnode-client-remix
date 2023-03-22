@@ -2,10 +2,11 @@ import React, { useMemo } from "react";
 import TabTrendingPostsItem from "~/components/home/TabTrendingPostsItem";
 import { isNull, isUndefined } from "~/utils/assertion";
 import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
+import classNames from "classnames";
 
 interface TabTrendingPostsListProps {
-  enabled: boolean;
-  duration: string;
+  duration: number;
+  enabled?: boolean;
   initialData?: any;
 }
 
@@ -16,12 +17,14 @@ const TabTrendingPostsList: React.FC<TabTrendingPostsListProps> = ({
 }) => {
   const { data } = useGetTopPostsQuery(
     {
-      duration: Number(duration),
+      duration: duration,
     },
     {
       suspense: true,
       enabled,
       initialData,
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: 1000 * 60 * 60 * 24,
     }
   );
 
@@ -32,16 +35,20 @@ const TabTrendingPostsList: React.FC<TabTrendingPostsListProps> = ({
   if (isNull(posts) || isUndefined(posts)) return null;
 
   return (
-    <>
-      {posts?.map((item) => (
-        <React.Fragment
-          key={`trending-simple-post-${duration}-item-${item.id}`}
-        >
+    <div
+      className={classNames({
+        hidden: !enabled,
+      })}
+    >
+      {posts?.map((item, index) => (
+        <React.Fragment key={`tab-trending-post-${duration}-item-${item.id}`}>
           <TabTrendingPostsItem {...item} />
-          {posts.at(-1) !== item && <hr className="custom-divide-my" />}
+          {index !== posts.length - 1 && (
+            <hr className="custom-divide__tab-treding" />
+          )}
         </React.Fragment>
       ))}
-    </>
+    </div>
   );
 };
 

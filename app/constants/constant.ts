@@ -94,6 +94,7 @@ export const PAGE_ENDPOINTS = {
     ROOT: "/explore",
   },
   ROOT: "/",
+  FEATURED: "/featured",
   AUTH: {
     SIGNIN: "/signin",
     SIGNUP: "/signup",

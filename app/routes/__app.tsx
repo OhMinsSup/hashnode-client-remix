@@ -19,6 +19,7 @@ import type {
   LinksFunction,
 } from "@remix-run/cloudflare";
 import Sidebar from "~/components/home/Sidebar";
+import { parseUrlParams } from "~/utils/util";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -33,6 +34,9 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = (args: LoaderArgs) => {
+  const params = parseUrlParams(args.request.url);
+  console.log("params", params);
+
   const trendingTagPromise = getTagListApi(
     {
       type: "popular",

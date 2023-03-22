@@ -13,17 +13,18 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // utils
 import { getTargetElement } from "~/libs/browser-utils";
 import { optimizeAnimation } from "~/utils/util";
+import { isString } from "~/utils/assertion";
 
 // components
 import { Icons } from "~/components/shared/Icons";
 import SidebarNavLink from "~/components/home/SidebarNavLink";
 import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
 import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
+import TabTrendingPostButton from "./TabTrendingPostButton";
+import TabTrendingPostsList from "./TabTrendingPostsList";
 
 // types
 import type { HomeLoaderData } from "~/routes/__app";
-import TabTrendingPostButton from "./TabTrendingPostButton";
-import TabTrendingPostsList from "./TabTrendingPostsList";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;
@@ -98,18 +99,20 @@ Sidebar.Left = function Left() {
             <SidebarNavLink
               text="My Feed"
               to={PAGE_ENDPOINTS.ROOT}
+              applyActiveLinks={[PAGE_ENDPOINTS.FEATURED]}
               icon={<Icons.MyFeed className="flex-shrink-0 fill-current" />}
-              end
             />
             <SidebarNavLink
               text="Drafts"
               to="/drafts"
               icon={<Icons.MyDraft className="flex-shrink-0 fill-current" />}
+              end
             />
             <SidebarNavLink
               text="Bookmarks"
               to="/bookmarks"
               icon={<Icons.MyBookmark className="flex-shrink-0 fill-current" />}
+              end
             />
             <div className="px-4">
               <hr className="my-5 border-gray-200"></hr>
@@ -131,7 +134,7 @@ Sidebar.Left = function Left() {
                 >
                   <Await
                     resolve={data.trendingTag}
-                    errorElement={<p>Error loading package location!</p>}
+                    errorElement={<>Error loading package location!</>}
                   >
                     {(data) => (
                       <>
@@ -211,9 +214,14 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.Right = function Right() {
+  const data = useLoaderData<HomeLoaderData>();
+
   const [duration, setDuration] = useState(7);
 
-  const onTabClick = useCallback((duration: number) => {
+  const onTabClick = useCallback((duration: number | string) => {
+    if (isString(duration)) {
+      duration = parseInt(duration);
+    }
     setDuration(duration);
   }, []);
 
@@ -225,7 +233,11 @@ Sidebar.Right = function Right() {
           to={PAGE_ENDPOINTS.EXPLORE.ROOT}
         >
           <Suspense fallback={<h1>🌀 Loading...</h1>}>
-            <div className="tab-content__trenidng">
+            <div
+              className="tab-content__trenidng"
+              role="tablist"
+              aria-orientation="horizontal"
+            >
               <TabTrendingPostButton
                 label="1 week"
                 duration={7}
@@ -256,8 +268,51 @@ Sidebar.Right = function Right() {
               />
             </div>
             <div>
-              <div>
-                <TabTrendingPostsList enabled duration="7" />
+              <div
+                tabIndex={duration === 7 ? 0 : -1}
+                data-key="7"
+                aria-controls="tabs-trending-duration-7"
+                role="tabpanel"
+              >
+                <Await
+                  resolve={data.topPosts}
+                  errorElement={<>Error loading package location!</>}
+                >
+                  {(data) => (
+                    <TabTrendingPostsList
+                      duration={7}
+                      enabled={duration === 7}
+                      initialData={data}
+                    />
+                  )}
+                </Await>
+              </div>
+              <div
+                tabIndex={duration === 30 ? 0 : -1}
+                data-key="30"
+                aria-controls="tabs-trending-duration-30"
+                role="tabpanel"
+              >
+                <TabTrendingPostsList enabled={duration === 30} duration={30} />
+              </div>
+              <div
+                tabIndex={duration === 90 ? 0 : -1}
+                data-key="90"
+                aria-controls="tabs-trending-duration-90"
+                role="tabpanel"
+              >
+                <TabTrendingPostsList enabled={duration === 90} duration={90} />
+              </div>
+              <div
+                tabIndex={duration === 180 ? 0 : -1}
+                data-key="180"
+                aria-controls="tabs-trending-duration-180"
+                role="tabpanel"
+              >
+                <TabTrendingPostsList
+                  enabled={duration === 180}
+                  duration={180}
+                />
               </div>
             </div>
           </Suspense>

@@ -1,0 +1,256 @@
+.main__list-container {
+  @apply relative col-span-7 min-w-0 pt-5 pb-24;
+}
+
+.main__list-container .main__list-container__tabs {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  @apply rounded-lg border;
+}
+
+.main__list-container .main__list-container__tabs .tab-routes__tab-container {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  @apply relative z-20 flex max-w-full flex-row justify-between border-b px-5 pt-3 font-medium;
+}
+
+.tab-routes__tab-container .tab-routes__tab-routes-btn-groups {
+  @apply flex flex-row items-center overflow-auto;
+}
+
+.tab-routes__tab-container
+  .tab-routes__tab-routes-btn-groups
+  .tab-routes__tab-routes-tab-list {
+  @apply flex flex-row items-center overflow-auto;
+}
+
+.tab-routes__tab-container
+  .tab-routes__tab-routes-btn-groups
+  .tab-routes__tab-routes-tab-list
+  .tab-routes-button {
+  @apply mr-2 flex cursor-pointer flex-row flex-nowrap items-center rounded-tl rounded-tr border-b-2 border-transparent px-2 py-3 font-medium;
+}
+
+.tab-routes__tab-container
+  .tab-routes__tab-routes-btn-groups
+  .tab-routes__tab-routes-tab-list
+  .tab-routes-button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
+.tab-routes__tab-container
+  .tab-routes__tab-routes-btn-groups
+  .tab-routes__tab-routes-tab-list
+  .tab-routes-button[role="tab"][aria-selected="true"] {
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+/* Post Card */
+.post-item {
+  @apply border-b py-3 px-5;
+}
+
+.post-item .post-header {
+  @apply relative mb-2;
+}
+
+.post-item .post-header .user-wrapper {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  @apply flex flex-row items-center;
+}
+
+.post-item .post-header .user-wrapper .thumbnail-wrapper {
+  position: relative;
+  @apply relative mr-3 block rounded-full;
+}
+
+.post-item .post-header .user-wrapper .thumbnail-wrapper .thumbnail {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  @apply relative z-20 h-9 w-9 rounded-full;
+}
+
+.post-item .post-header .user-wrapper .info-wrapper {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.post-item .post-header .user-wrapper .info-wrapper .username {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.post-item .post-header .user-wrapper .info-wrapper .username a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
+.post-item .post-header .user-wrapper .info-wrapper .other {
+  display: none;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+.post-item .post-header .user-wrapper .info-wrapper .other span {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  display: block;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity));
+}
+
+.post-item
+  .post-header
+  .user-wrapper
+  .info-wrapper
+  .other
+  a:nth-last-of-type(1) {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+.post-item .post-body {
+  @apply flex flex-row flex-wrap items-start;
+}
+
+.post-item .post-body .content-wrapper {
+  @apply mb-3 w-full;
+}
+
+.post-item .post-body .content-wrapper .title {
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  word-break: normal;
+  overflow-wrap: anywhere;
+  @apply mb-2 text-lg font-bold;
+}
+
+.post-item .post-body .content-wrapper .title a {
+  @apply block;
+}
+
+.post-item .post-body .content-wrapper .content {
+  line-height: 1.375;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.post-item .post-body .content-wrapper .content a {
+  @apply block;
+}
+
+.post-item .post-body .image-wrapper {
+  @apply w-full flex-shrink-0;
+}
+
+.post-item .post-body .image-wrapper a {
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  @apply block w-full overflow-hidden rounded-xl border;
+}
+
+.post-footer {
+  @apply mt-3 flex flex-col-reverse flex-wrap items-center justify-between;
+}
+
+.post-footer .footer-left-wrapper {
+  @apply mt-3 flex w-full flex-row;
+}
+
+.post-footer .footer-left-wrapper .left-items-wrapper {
+  @apply flex flex-1 flex-row;
+}
+
+.post-footer .footer-left-wrapper .left-items-wrapper .btn-bookmark {
+  @apply flex h-10 w-10 flex-row items-center rounded-full border border-transparent px-1 py-3 text-center text-base font-medium leading-[1.625] outline-none;
+}
+
+.post-footer .footer-right-wrapper {
+  @apply flex w-full flex-row items-center;
+}
+
+.post-footer .footer-right-wrapper .right-items-wrapper {
+  @apply flex flex-row flex-wrap items-center;
+}
+
+.post-footer .footer-right-wrapper .right-items-wrapper .icon-wrapper {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  @apply border border-transparent rounded-full font-medium px-2 py-1  text-sm outline-none text-center justify-center items-center flex-row inline-flex
+}
+
+/* Tags */
+
+.post-card-tags {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  @apply mr-2 flex flex-row items-center text-sm font-medium;
+}
+
+.post-card-tag-item {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply mr-1 block w-20 truncate rounded-lg border px-2 py-1 text-center leading-[1.625];
+}
+
+.post-card-tags-num {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply mr-1 block truncate rounded-lg border px-2 py-1 text-center leading-[1.625];
+}
+
+/* Post Card */
+@media (min-width: 768px) {
+  .post-item .post-header .user-wrapper .info-wrapper .other {
+    @apply flex;
+  }
+
+  .post-item .post-body {
+    @apply flex-nowrap;
+  }
+
+  .post-item .post-body .content-wrapper {
+    @apply mb-0 flex-1 pr-5;
+  }
+
+  .post-item .post-body .image-wrapper {
+    @apply w-48;
+  }
+}

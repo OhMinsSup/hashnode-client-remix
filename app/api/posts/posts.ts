@@ -3,6 +3,7 @@ import { apiClient } from "../client";
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 import { isEmpty } from "~/utils/assertion";
+import { applyHeaders } from "~/libs/server/utils";
 
 // types
 import type { Options } from "ky-universal";
@@ -15,9 +16,8 @@ import type {
 } from "../schema/resp";
 import type { AppAPI } from "../schema/api";
 import type { PostBody } from "../schema/body";
-import type { PostListQuery, GetTopPostsQuery } from "../schema/query";
+import type { PostListQuery } from "../schema/query";
 import type { LoaderArgs } from "@remix-run/cloudflare";
-import { applyHeaders } from "~/libs/server/utils";
 
 /// create
 
@@ -181,6 +181,7 @@ export async function getTopPostsApi(
   const response = await _getTopPostsApi(query, {
     headers,
   });
+
   const result = await response.json<AppAPI<GetTopPostsRespSchema>>();
   return { result };
 }

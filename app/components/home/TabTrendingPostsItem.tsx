@@ -1,8 +1,15 @@
 import React, { useMemo } from "react";
-import { Link } from "@remix-run/react";
-import { CommentIcon, LikeIcon } from "../__ui/Icon";
 
+// remix
+import { Link } from "@remix-run/react";
+
+// components
+import { Icons } from "~/components/shared/Icons";
+
+// constants
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+
+// types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
 
 interface TabTrendingPostsItemProps extends PostDetailRespSchema {}
@@ -41,12 +48,12 @@ const TabTrendingPostsItem: React.FC<TabTrendingPostsItemProps> = ({
         <div className="footer">
           {/* Like */}
           <Link to="/" className="action-btn">
-            <LikeIcon className="icon mr-2" />
+            <Icons.LinkHandler className="icon__base mr-2 fill-current" />
             <span>66</span>
           </Link>
           {/* Comment */}
           <Link to="/" className="action-btn">
-            <CommentIcon className="icon mr-2" />
+            <Icons.Comment className="icon__base mr-2 fill-current" />
             <span>6</span>
           </Link>
         </div>

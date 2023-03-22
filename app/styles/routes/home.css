@@ -188,7 +188,7 @@
   align-items: flex-start;
 }
 
-.tab-trending-post-item.user-profile-image {
+.tab-trending-post-item .user-profile-image {
   display: block;
   height: 2.5rem;
   width: 2.5rem;

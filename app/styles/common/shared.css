@@ -32,6 +32,16 @@
 
 /* Icon */
 
+/* Divide */
+
+.custom-divide__tab-treding {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+  @apply my-4 h-[1px];
+}
+
+/* Divide */
+
 /* Error */
 
 .error-message {

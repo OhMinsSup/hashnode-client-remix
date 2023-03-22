@@ -27,10 +27,10 @@ const TabTrendingPostButton: React.FC<TabTrendingPostButtonProps> = ({
     return (
       <div
         className="tab-button"
-        tabIndex={0}
+        tabIndex={-1}
         data-key={duration.toString()}
         id={id}
-        aria-selected="true"
+        aria-selected="false"
         role="tab"
       >
         {label}

@@ -28,7 +28,5 @@ export function useTagQuery(
     options
   );
 
-  return {
-    ...resp,
-  };
+  return resp;
 }
