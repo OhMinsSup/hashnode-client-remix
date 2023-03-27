@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 // remix
 import { Link } from "@remix-run/react";
@@ -7,7 +7,7 @@ import { Link } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
 
 // constants
-import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
@@ -20,10 +20,6 @@ const TabTrendingPostsItem: React.FC<TabTrendingPostsItemProps> = ({
   subTitle,
   user,
 }) => {
-  const avatarUrl = useMemo(() => {
-    return user?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
-  }, [user]);
-
   return (
     <div className="tab-trending-post-item">
       {/* Thubmnail */}
@@ -31,7 +27,7 @@ const TabTrendingPostsItem: React.FC<TabTrendingPostsItemProps> = ({
         <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)} className="user-profile-image">
           <div className="h-full w-full">
             <div className="image-wrapper">
-              <img src={avatarUrl} alt="thumbnail" />
+              <img src="/images/default_profile.png" alt="thumbnail" />
             </div>
           </div>
         </Link>

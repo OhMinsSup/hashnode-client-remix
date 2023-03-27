@@ -1,6 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import classNames from "classnames";
+
+// components
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Icons } from "~/components/shared/Icons";
 
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
@@ -8,14 +11,11 @@ import { useDeleteDraftsMutation } from "~/api/drafts/hooks/useDeleteDraftsMutat
 import { useQueryClient } from "@tanstack/react-query";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
-// components
-
 // constants
 import { QUERIES_KEY } from "~/constants/constant";
 
 // types
 import type { DraftSchema } from "~/api/schema/draft";
-import { Icons } from "../shared/Icons";
 
 interface MyDraftItemProps {
   item: DraftSchema;
@@ -23,6 +23,7 @@ interface MyDraftItemProps {
 
 const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
   const { changeDraftId, draftId } = useDraftContext();
+  const [open, setOpen] = useState(false);
   const { keyword } = useDraftSidebarContext();
 
   const queryClient = useQueryClient();
@@ -54,10 +55,12 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
         draftId ? (draftId === item.id ? "true" : "false") : "false"
       }
       aria-label="my draft item"
-      className="my-draft-item"
+      className={classNames("my-draft-item", {
+        active: draftId ? draftId === item.id : false,
+      })}
     >
       <button
-        className={classNames("my-draft-content", {
+        className={classNames("my-draft-content w-full", {
           active: draftId ? draftId === item.id : false,
         })}
         aria-label="my draft item"
@@ -70,7 +73,18 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
       </button>
       <div className="my-draft-more">
         <div className="my-draft-more--container">
-          <DropdownMenu.Root>
+          <DropdownMenu.Root
+            open={open}
+            onOpenChange={(open) => {
+              setOpen(open);
+
+              if (open) {
+                changeDraftId(item.id);
+              } else {
+                changeDraftId(undefined);
+              }
+            }}
+          >
             <DropdownMenu.Trigger asChild>
               <button className="btn-more" aria-label="Customise options">
                 <Icons.EllipsisVertical className="icon__sm stroke-current" />

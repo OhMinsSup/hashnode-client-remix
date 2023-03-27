@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
+import classNames from "classnames";
 
 // components
-import { AddFileIcon, LeftArrowIcon } from "~/components/__ui/Icon";
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
-import MyDraftSearch from "~/components/draft/MyDraftSearch";
+import { Icons } from "~/components/shared/Icons";
 
 // context
 import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";
@@ -21,7 +21,6 @@ import { Transition, useDraftContext } from "~/context/useDraftContext";
 
 // types
 import type { FormFieldValues } from "~/routes/__draft";
-import classNames from "classnames";
 
 interface DraftLeftSidebarProps {}
 
@@ -77,22 +76,22 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
     <DraftSidebarProvider>
       <div
         className={classNames("draft-sidebar", {
-          hidden: !visibility.isLeftSidebarVisible,
+          "!hidden": !visibility.isLeftSidebarVisible,
         })}
         id="draft-sidebar"
         aria-hidden={!visibility.isLeftSidebarVisible}
       >
         <div className="draft-sidebar-header">
           <div className="sidebar-header__btn-back">
-            <Link to="/">
-              <LeftArrowIcon className="icon-sm flex-shrink-0" />
+            <Link to="/" className="btn-back__icon">
+              <Icons.ArrowLeft className="icon__sm flex-shrink-0 stroke-current" />
             </Link>
           </div>
           <div className="sidebar-header__title">
             <div className="sidebar-header__title-container">
               <div className="sidebar-header__title-icon">
                 <div className="relative h-8 w-full">
-                  <img src="/images/logo.png" alt="logo" className="icon-sm" />
+                  <img src="/images/logo.png" alt="logo" className="ico__sm" />
                 </div>
               </div>
               <div className="sidebar-header__title-text">
@@ -103,8 +102,9 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
             </div>
           </div>
         </div>
-        <MyDraftSearch />
-        <MyDraftSidebar />
+        <React.Suspense fallback={<>🌀 Loading...</>}>
+          <MyDraftSidebar />
+        </React.Suspense>
         <div className="draft-sidebar-footer">
           <button
             className="btn-new-draft"
@@ -112,7 +112,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
             onClick={onNewOrSaveDraftClick}
             disabled={mutation_save.isLoading || mutation_new.isLoading}
           >
-            <AddFileIcon className="icon__base mr-2 stroke-current" />
+            <Icons.AddFile className="icon__base mr-2 stroke-current" />
             <span>New draft</span>
           </button>
         </div>

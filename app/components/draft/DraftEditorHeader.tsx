@@ -19,7 +19,7 @@ const DraftEditorHeader = () => {
             aria-expanded={visibility.isLeftSidebarVisible}
             onClick={onToggleLeftSidebar}
           >
-            <SidebarMenuIcon className="icon flex-shrink-0 !fill-none !stroke-current" />
+            <SidebarMenuIcon className="icon__base flex-shrink-0 !fill-none !stroke-current" />
           </button>
         </div>
         <div className="header--right">
@@ -28,7 +28,7 @@ const DraftEditorHeader = () => {
               className="btn-revision-history"
               aria-label="Revision history"
             >
-              <TimeIcon className="icon" />
+              <TimeIcon className="icon__base" />
             </button>
           </div>
           <button className="btn-publish" aria-label="Publish">

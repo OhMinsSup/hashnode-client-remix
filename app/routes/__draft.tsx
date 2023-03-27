@@ -1,8 +1,16 @@
 import React, { useMemo } from "react";
-import { Outlet } from "@remix-run/react";
-import { getSessionApi } from "~/api/user/user";
+
+// remix
 import { json, redirect } from "@remix-run/cloudflare";
 
+// api
+import { getSessionApi } from "~/api/user/user";
+
+// components
+import DraftTemplate from "~/components/draft/DraftTemplate";
+import { Outlet } from "@remix-run/react";
+
+// constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // validation
@@ -12,10 +20,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // hooks
 import { FormProvider, useForm } from "react-hook-form";
 import { WriteProvider } from "~/stores/useWirteContext";
+import { DraftProvider } from "~/context/useDraftContext";
 
+// styles
 import draftStyles from "~/styles/routes/draft.css";
-
-// types
 
 // types
 import type { FileSchema } from "~/api/schema/file";
@@ -24,8 +32,6 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { DraftProvider } from "~/context/useDraftContext";
-import DraftTemplate from "~/components/draft/DraftTemplate";
 
 export interface FormFieldValues {
   title: string;
@@ -89,6 +95,7 @@ export const loader = async (args: LoaderArgs) => {
       headers,
     });
   }
+
   return json(
     {
       session,
