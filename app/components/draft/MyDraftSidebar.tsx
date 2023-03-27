@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import classNames from "classnames";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 // api
 import { getDraftsListApi } from "~/api/drafts/drafts";
@@ -26,9 +24,8 @@ import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 // components
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/solid";
-import Button from "~/components/__ui/shared/Button";
 import MyDraftItem from "~/components/draft/MyDraftItem";
+import { Icons } from "../shared/Icons";
 
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -89,7 +86,7 @@ const MyDraftSidebar: React.FC = () => {
         onOpenChange={onCollapsibleOpenChange}
       >
         <Collapsible.Trigger asChild>
-          <Button
+          <button
             className="btn-trigger"
             aria-label="trigger collapsible button"
             aria-expanded={open}
@@ -101,12 +98,12 @@ const MyDraftSidebar: React.FC = () => {
             </span>
             <div className=" rounded-lg p-1">
               {open ? (
-                <ArrowUpIcon className="icon-xs" />
+                <Icons.Arrowup className="icon__sm stroke-current" />
               ) : (
-                <ArrowDownIcon className="icon-xs" />
+                <Icons.ArrowDown className="icon__sm stroke-current" />
               )}
             </div>
-          </Button>
+          </button>
         </Collapsible.Trigger>
 
         <Collapsible.Content>

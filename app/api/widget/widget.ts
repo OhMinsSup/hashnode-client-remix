@@ -7,6 +7,7 @@ import { isString } from "~/utils/assertion";
 import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
 import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { GetAritcleCirclesRespSchema } from "../schema/resp";
 
 // [Get] Path: /api/v1/widget/aritcle-circles
 
@@ -51,9 +52,7 @@ export async function _getAritcleCirclesApi(
  * @description 태그 리스트 조회 API
  * @param {GetTagListApiSearchParams?} query
  * @param {GetAritcleCirclesApiParams?} args
- * @returns {Promise<{ result: AppAPI<{
- * circles: any[]
- * }> }>}
+ * @returns {Promise<{ result: AppAPI<GetAritcleCirclesRespSchema> }>}
  */
 export async function getAritcleCirclesApi(
   query?: GetAritcleCirclesApiSearchParams,
@@ -67,10 +66,9 @@ export async function getAritcleCirclesApi(
       headers.append("Cookie", cookie);
     }
   }
-  console.log("headers??");
   const response = await _getAritcleCirclesApi(query, {
     headers,
   });
-  const result = await response.json<AppAPI<{ circles: any[] }>>();
+  const result = await response.json<AppAPI<GetAritcleCirclesRespSchema>>();
   return { result };
 }

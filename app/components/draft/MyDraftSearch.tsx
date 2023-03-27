@@ -1,14 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-
-// hooks
-import { useSearchFieldState } from "react-stately";
-import { useSearchField } from "react-aria";
+import React, { useRef, useState } from "react";
 
 // components
-import { SearchIcon } from "~/components/__ui/Icon";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useDraftContext } from "~/context/useDraftContext";
+import { Icons } from "../shared/Icons";
 
 interface MyDraftSearchProps {}
 
@@ -31,33 +27,11 @@ const MyDraftSearch: React.FC<MyDraftSearchProps> = () => {
 
   const [value, setValue] = useState(keyword);
 
-  const state = useSearchFieldState({
-    value,
-    onChange: setValue,
-  });
-
-  const { labelProps, inputProps } = useSearchField(
-    {
-      label: "Search",
-      placeholder: "Search drafts…",
-      "aria-label": "Search",
-      "aria-autocomplete": "list",
-      "aria-labelledby": "search-info",
-      onSubmit: setValue,
-    },
-    state,
-    ref
-  );
-
-  useEffect(() => {
-    debounced.run(value);
-  }, [value]);
-
   return (
     <div className="draft-sidebar-search">
-      <input {...inputProps} className="input-seach" />
-      <span className="input-search--icon" {...labelProps}>
-        <SearchIcon className="icon-sm" />
+      <input className="input-seach" />
+      <span className="input-search--icon">
+        <Icons.Search className="icon__sm" />
       </span>
     </div>
   );

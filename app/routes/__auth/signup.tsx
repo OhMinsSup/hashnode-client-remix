@@ -30,11 +30,7 @@ import { signupApi } from "~/api/auth/auth";
 
 // types
 import type { ThrownResponse } from "@remix-run/react";
-import type { ActionArgs, MetaFunction } from "@remix-run/cloudflare";
-
-export const meta: MetaFunction = () => ({
-  title: "Sign up to Hashnode",
-});
+import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();

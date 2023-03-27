@@ -1,8 +1,8 @@
 import type { AppAPI } from "./api";
-import type { SimpleTrendingPostsRespSchema, TagListRespSchema } from "./resp";
+import type { TagListRespSchema } from "./resp";
 
 export interface RootLoaderData {
   trendingTag: AppAPI<TagListRespSchema>;
-  simpleTrending: AppAPI<SimpleTrendingPostsRespSchema>;
+  simpleTrending: AppAPI<any>;
   personalizedPosts: any[];
 }

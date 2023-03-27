@@ -14,5 +14,6 @@ module.exports = {
     unstable_postcss: true,
     unstable_tailwind: true,
     unstable_dev: true,
+    v2_meta: true,
   },
 };

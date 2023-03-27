@@ -26,7 +26,6 @@ const ScrollAreaTrendingUsers = () => {
                 errorElement={<>Error loading package location!</>}
               >
                 {(data) => {
-                  console.log(data);
                   const circles = data.result?.result?.circles ?? [];
                   return (
                     <>

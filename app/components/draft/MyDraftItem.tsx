@@ -9,15 +9,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
 // components
-import { TrashIcon } from "@heroicons/react/solid";
-import { EllipsisVerticalIcon, EmptyFileIcon } from "~/components/__ui/Icon";
-import Button from "~/components/__ui/shared/Button";
 
 // constants
 import { QUERIES_KEY } from "~/constants/constant";
 
 // types
 import type { DraftSchema } from "~/api/schema/draft";
+import { Icons } from "../shared/Icons";
 
 interface MyDraftItemProps {
   item: DraftSchema;
@@ -58,24 +56,24 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
       aria-label="my draft item"
       className="my-draft-item"
     >
-      <Button
+      <button
         className={classNames("my-draft-content", {
           active: draftId ? draftId === item.id : false,
         })}
         aria-label="my draft item"
-        onPress={onSelectedDraft}
+        onClick={onSelectedDraft}
       >
         <div className="icon-wrapper">
-          <EmptyFileIcon className="icon mr-2 flex-shrink-0 !fill-none stroke-current" />
+          <Icons.EmptyFile className="icon__sm mr-2 flex-shrink-0 stroke-current" />
         </div>
         <div className="text">{item.title || "Untitled"}</div>
-      </Button>
+      </button>
       <div className="my-draft-more">
         <div className="my-draft-more--container">
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <button className="btn-more" aria-label="Customise options">
-                <EllipsisVerticalIcon className="icon" />
+                <Icons.EllipsisVertical className="icon__sm stroke-current" />
               </button>
             </DropdownMenu.Trigger>
 
@@ -90,7 +88,7 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
                   className="dropdown-menu-item--my-draft"
                   onClick={onClickDelete}
                 >
-                  <TrashIcon className="icon mr-2 !stroke-current" />
+                  <Icons.Trash className="icon__sm mr-2 stroke-current" />
                   <span>Delete</span>
                 </DropdownMenu.Item>
               </DropdownMenu.Content>

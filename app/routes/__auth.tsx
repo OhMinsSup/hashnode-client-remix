@@ -20,16 +20,48 @@ import authStyles from "~/styles/routes/auth.css";
 
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
-import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, V2_MetaFunction } from "@remix-run/cloudflare";
+
+const Seo = {
+  signin: "Sign in to Hashnode",
+  signup: "Sign up to Hashnode",
+  description:
+    "Start your programming blog. Share your knowledge and build your own brand",
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
 };
 
-export const meta: MetaFunction = () => ({
-  description:
-    "Start your programming blog. Share your knowledge and build your own brand",
-});
+export const meta: V2_MetaFunction = ({ location, matches }) => {
+  const isSigninPage = location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
+  const title = isSigninPage ? Seo.signin : Seo.signup;
+  return [
+    {
+      title,
+    },
+    {
+      name: "og:title",
+      content: title,
+    },
+    {
+      name: "twitter:title",
+      content: title,
+    },
+    {
+      name: "description",
+      content: Seo.description,
+    },
+    {
+      name: "og:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:description",
+      content: Seo.description,
+    },
+  ];
+};
 
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);

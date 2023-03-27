@@ -16,8 +16,8 @@ import type {
 } from "../schema/resp";
 import type { AppAPI } from "../schema/api";
 import type { PostBody } from "../schema/body";
-import type { PostListQuery } from "../schema/query";
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { PaginationQuery, PostListQuery } from "../schema/query";
+import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 
 /// create
 
@@ -126,6 +126,83 @@ export async function getPostApi(id: number | string, options?: Options) {
   return { result };
 }
 
+//  [Get] Path: app/api/posts
+
+interface GetPostsApiSearchParams extends PaginationQuery {
+  keyword?: string;
+  type?: "recent" | "featured" | "past" | "personalized";
+  startDate?: string;
+  endDate?: string;
+}
+
+interface GetPostsApiParams extends LoaderArgs {}
+
+/**
+ * @description Get posts
+ * @param {GetPostsApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getPostsApi(
+  query?: GetPostsApiSearchParams,
+  options?: Options
+) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const searchParams = new URLSearchParams();
+  if (query?.limit) {
+    searchParams.set("limit", query.limit.toString());
+  } else {
+    searchParams.set("limit", "15");
+  }
+  if (query?.cursor) {
+    searchParams.set("cursor", query.cursor.toString());
+  }
+  if (query?.keyword) {
+    searchParams.set("keyword", query.keyword);
+  }
+  if (query?.type) {
+    searchParams.set("type", query.type);
+  }
+  if (query?.startDate && query?.endDate) {
+    searchParams.set("startDate", query.startDate);
+    searchParams.set("endDate", query.endDate);
+  }
+  const response = await apiClient.get(API_ENDPOINTS.POSTS.ROOT, {
+    credentials: "include",
+    headers,
+    searchParams,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description Get posts
+ * @param {GetPostsApiSearchParams?} query
+ * @param {GetPostsApiParams?} args
+ * @returns {Promise<{ result: AppAPI<PostListRespSchema> }>}
+ */
+export async function getPostsApi(
+  query?: GetPostsApiSearchParams,
+  args?: GetPostsApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getPostsApi(query, {
+    headers,
+  });
+  const result = await response.json<AppAPI<PostListRespSchema>>();
+  return { result };
+}
+
 // [Get] Path: app/api/posts/get-top-posts
 
 interface GetTopPostsApiSearchParams {
@@ -183,5 +260,56 @@ export async function getTopPostsApi(
   });
 
   const result = await response.json<AppAPI<GetTopPostsRespSchema>>();
+  return { result };
+}
+
+// [Post] Path: app/api/posts
+
+interface PostPostsApiBody extends PostBody {}
+
+interface PostPostsApiParams extends ActionArgs {}
+
+/**
+ * @description Get top posts
+ * @param {PostPostsApiBody?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _postPostsApi(body: PostPostsApiBody, options?: Options) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const response = await apiClient.post(API_ENDPOINTS.POSTS.ROOT, {
+    credentials: "include",
+    headers,
+    json: body,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description Get top posts
+ * @param {PostPostsApiBody?} query
+ * @param {PostPostsApiParams?} args
+ * @returns {Promise<{ result: AppAPI<PostRespSchema> }>}
+ */
+export async function postPostsApi(
+  body: PostPostsApiBody,
+  args?: PostPostsApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _postPostsApi(body, {
+    headers,
+  });
+
+  const result = await response.json<AppAPI<PostRespSchema>>();
   return { result };
 }

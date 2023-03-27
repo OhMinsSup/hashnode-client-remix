@@ -341,7 +341,7 @@ const LikeIcon = (props: IconProps) => (
   </svg>
 );
 
-const PostComment = (props: IconProps) => (
+const PostCommentIcon = (props: IconProps) => (
   <svg {...props} viewBox="0 0 24 24" fill="none">
     <path
       d="M9 14H13M9 10.5H16M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.1971 3.23374 14.3397 3.65806 15.3845C3.73927 15.5845 3.77988 15.6845 3.798 15.7653C3.81572 15.8443 3.8222 15.9028 3.82221 15.9839C3.82222 16.0667 3.80718 16.1569 3.77711 16.3374L3.18413 19.8952C3.12203 20.2678 3.09098 20.4541 3.14876 20.5888C3.19933 20.7067 3.29328 20.8007 3.41118 20.8512C3.54589 20.909 3.73218 20.878 4.10476 20.8159L7.66265 20.2229C7.84309 20.1928 7.9333 20.1778 8.01613 20.1778C8.09715 20.1778 8.15566 20.1843 8.23472 20.202C8.31554 20.2201 8.41552 20.2607 8.61549 20.3419C9.6603 20.7663 10.8029 21 12 21Z"
@@ -352,6 +352,68 @@ const PostComment = (props: IconProps) => (
     ></path>
   </svg>
 );
+
+const ArrowupIcon = (props: IconProps) => (
+  <svg {...props} fill="none" viewBox="0 0 24 24">
+    <path
+      d="m6 15 6-6 6 6"
+      stroke="stroke-current"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>
+  </svg>
+);
+
+const ArrowDownIcon = (props: IconProps) => (
+  <svg {...props} fill="none" viewBox="0 0 20 20">
+    <path
+      d="m5 7.5 5 5 5-5"
+      stroke="stroke-current"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>
+  </svg>
+);
+
+const TrashIcon = (props: IconProps) => (
+  <svg {...props} fill="none" viewBox="0 0 18 18">
+    <path
+      d="m3 3.75.484 8.232c.094 1.59.14 2.385.48 2.989a3 3 0 0 0 1.3 1.226c.622.303 1.419.303 3.012.303h1.448c1.593 0 2.39 0 3.012-.303a3 3 0 0 0 1.3-1.226c.34-.604.386-1.399.48-2.99L15 3.75m-12 0H1.5m1.5 0h12m0 0h1.5m-4.5 0-.203-.609c-.197-.59-.295-.885-.478-1.103a1.5 1.5 0 0 0-.601-.434C10.453 1.5 10.142 1.5 9.52 1.5H8.48c-.622 0-.933 0-1.198.104a1.5 1.5 0 0 0-.602.434c-.182.218-.28.513-.477 1.103L6 3.75M7.5 7.5v5.25m3-5.25v5.25"
+      stroke="stroke-current"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>
+  </svg>
+);
+
+const EmptyFileIcon = (props: IconProps) => (
+  <svg {...props} fill="none" viewBox="0 0 18 18">
+    <path
+      d="M10.5 1.875V4.2c0 .63 0 .945.123 1.186.107.211.28.384.491.491C11.354 6 11.67 6 12.3 6h2.325M6.75 9h4.5m-4.5 3h3M15 6.244V12.9c0 1.26 0 1.89-.245 2.371-.216.424-.56.768-.984.984-.48.245-1.11.245-2.371.245H6.6c-1.26 0-1.89 0-2.371-.245a2.25 2.25 0 0 1-.984-.983C3 14.79 3 14.16 3 12.9V5.1c0-1.26 0-1.89.245-2.371a2.25 2.25 0 0 1 .984-.984C4.709 1.5 5.339 1.5 6.6 1.5h3.656c.367 0 .55 0 .723.041.153.037.3.098.433.18.152.093.281.223.54.482l2.345 2.344c.26.26.39.39.482.54.082.135.143.281.18.434.041.173.041.356.041.723Z"
+      stroke="stroke-current"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>
+  </svg>
+);
+
+const EllipsisVerticalIcon = (props: IconProps) => {
+  return (
+    <svg {...props} fill="none" viewBox="0 0 4 16">
+      <path
+        d="M2 8.834a.833.833 0 1 0 0-1.667.833.833 0 0 0 0 1.667ZM2 14.667A.833.833 0 1 0 2 13a.833.833 0 0 0 0 1.667ZM2 3a.833.833 0 1 0 0-1.666A.833.833 0 0 0 2 3Z"
+        stroke="stroke-outline"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></path>
+    </svg>
+  );
+};
 
 export const Icons = {
   Media: MediaIcon,
@@ -381,5 +443,10 @@ export const Icons = {
   Recent: RecentIcon,
   Bookmark: BookmarkIcon,
   Like: LikeIcon,
-  PostComment: PostComment,
+  PostComment: PostCommentIcon,
+  Arrowup: ArrowupIcon,
+  ArrowDown: ArrowDownIcon,
+  Trash: TrashIcon,
+  EmptyFile: EmptyFileIcon,
+  EllipsisVertical: EllipsisVerticalIcon,
 };

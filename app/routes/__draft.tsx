@@ -3,10 +3,6 @@ import { Outlet } from "@remix-run/react";
 import { getSessionApi } from "~/api/user/user";
 import { json, redirect } from "@remix-run/cloudflare";
 
-// components
-// import { WriteTemplate } from "~/components/write";
-// import { WriterHeader } from "~/components/ui/header";
-
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // validation
@@ -17,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { WriteProvider } from "~/stores/useWirteContext";
 
-import draftStylesheetUrl from "~/styles/draft.css";
+import draftStyles from "~/styles/routes/draft.css";
 
 // types
 
@@ -25,11 +21,11 @@ import draftStylesheetUrl from "~/styles/draft.css";
 import type { FileSchema } from "~/api/schema/file";
 import type {
   LoaderArgs,
-  MetaFunction,
   LinksFunction,
+  V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import DraftTemplate from "~/components/draft/DraftTemplate";
 import { DraftProvider } from "~/context/useDraftContext";
+import DraftTemplate from "~/components/draft/DraftTemplate";
 
 export interface FormFieldValues {
   title: string;
@@ -44,14 +40,46 @@ export interface FormFieldValues {
   publishingDate?: Date;
 }
 
-// export const meta: MetaFunction = () => ({
-//   charset: "utf-8",
-//   title: "New Remix App",
-//   viewport: "width=device-width,initial-scale=1",
-// });
+const Seo = {
+  title: "Editing Article",
+  description: "description",
+  image: "/images/seo_image.png",
+};
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    {
+      title: Seo.title,
+    },
+    {
+      name: "description",
+      content: Seo.description,
+    },
+    {
+      name: "og:title",
+      content: Seo.title,
+    },
+    {
+      name: "og:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:title",
+      content: Seo.title,
+    },
+    {
+      name: "twitter:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:image",
+      content: Seo.image,
+    },
+  ];
+};
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: draftStylesheetUrl }];
+  return [{ rel: "stylesheet", href: draftStyles }];
 };
 
 export const loader = async (args: LoaderArgs) => {
@@ -96,9 +124,6 @@ export default function DraftRouteLayout() {
     <DraftProvider>
       <WriteProvider>
         <FormProvider {...methods}>
-          {/* <WriteTemplate header={<WriterHeader />}>
-          <Outlet />
-        </WriteTemplate> */}
           <DraftTemplate>
             <Outlet />
           </DraftTemplate>

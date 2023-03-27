@@ -16,10 +16,6 @@ import { LayoutProvider } from "./context/useLayoutContext";
 import { getSessionApi, logoutApi } from "~/api/user/user";
 
 // styles
-// import tailwindStylesheetUrl from "./styles/tailwind.css";
-// import mainStylesheetUrl from "./styles/main.css";
-// import commonStylesheetUrl from "./styles/common.css";
-// import rcDrawerStylesheetUrl from "rc-drawer/assets/index.css";
 import globalStyles from "~/styles/global.css";
 
 // types
@@ -27,29 +23,11 @@ import type {
   ActionArgs,
   LoaderArgs,
   LinksFunction,
-  MetaFunction,
 } from "@remix-run/cloudflare";
-
-// export const links: LinksFunction = () => {
-//   return [
-//     { rel: "stylesheet", href: tailwindStylesheetUrl },
-//     { rel: "stylesheet", href: mainStylesheetUrl },
-//     { rel: "stylesheet", href: commonStylesheetUrl },
-//     { rel: "stylesheet", href: rcDrawerStylesheetUrl },
-//   ];
-// };
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: globalStyles }];
 };
-
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Hashnode - Blogging community for developers, and people in tech",
-  description:
-    "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-});
 
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
@@ -99,6 +77,17 @@ export default function App() {
       <LayoutProvider>
         <html lang="kr">
           <head>
+            <meta charSet="utf-8" />
+            <meta property="og:site_name" content="Hashnode" />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="https://hashnode.com/" />
+            <meta property="twitter:card" content="summary_large_image" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            />
+            <meta name="msapplication-TileColor" content="#ffffff" />
+            <meta name="theme-color" content="#0F172A" />
             <Meta />
             <Links />
           </head>

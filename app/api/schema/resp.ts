@@ -61,3 +61,25 @@ export interface GetTopPostsRespSchema {
 }
 
 export interface DraftListRespSchema extends ListRespSchema<DraftSchema> {}
+
+export interface GetAritcleCircleRespSchema {
+  id: number;
+  username: string;
+  email: string;
+  name: string;
+  bio: Nullable<string>;
+  avatarUrl: Nullable<string>;
+  location: Nullable<string>;
+  website: Nullable<string>;
+  availableText: Nullable<string>;
+  post_count: number;
+  total_likes: number;
+  latest_post_id: number;
+  latest_post_title: string;
+  latest_post_subtitle: string;
+  latest_post_description: string;
+}
+
+export interface GetAritcleCirclesRespSchema {
+  circles: GetAritcleCircleRespSchema[];
+}

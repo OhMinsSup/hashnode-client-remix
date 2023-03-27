@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
+import React, { Suspense, useCallback, useMemo } from "react";
 import { Link } from "@remix-run/react";
+import { Icons } from "~/components/shared/Icons";
+import SuspenseImage from "~/components/shared/SuspenseImage";
+import { ClientOnly } from "remix-utils";
 
 import { isEmpty } from "~/utils/assertion";
 import { getDateFormat } from "~/libs/date";
-import { ASSET_URL } from "~/constants/constant";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
-import { Icons } from "../shared/Icons";
 
 interface PostCardProps {
   post: PostDetailRespSchema;
@@ -18,14 +19,6 @@ function PostCard({ post }: PostCardProps) {
     return post?.tags ?? [];
   }, [post]);
 
-  const thumbnailUrl = useMemo(() => {
-    return post?.thumbnail ?? undefined;
-  }, [post]);
-
-  const avatarUrl = useMemo(() => {
-    return post?.user?.profile?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR;
-  }, [post]);
-
   return (
     <div className="main-post-card">
       <div className="main-post-card__header">
@@ -34,7 +27,7 @@ function PostCard({ post }: PostCardProps) {
             <Link to="/" className="thumbnail-container__link">
               <div className="h-full w-full">
                 <div className="thumbnail">
-                  <img src={avatarUrl} alt="thumbnail" />
+                  <PostCard.Profile post={post} />
                 </div>
               </div>
             </Link>
@@ -72,11 +65,7 @@ function PostCard({ post }: PostCardProps) {
             className="cover-image"
             aria-label="Solve Problems like a Developer"
           >
-            <img
-              src={thumbnailUrl}
-              className="min-h-[100px] w-full"
-              alt="thumbnail"
-            />
+            <PostCard.Thumbnail post={post} />
           </Link>
         </div>
       </div>
@@ -140,5 +129,63 @@ PostCard.Tags = function PostTags({ tags }: PostTagsProps) {
         </Link>
       )}
     </div>
+  );
+};
+
+PostCard.Profile = function PostProfile({ post }: PostCardProps) {
+  const profileData = useMemo(() => {
+    if (!post) return null;
+    const url = post.user?.profile?.avatarUrl;
+    return {
+      id: `profile-${post.user?.id}`,
+      url: url || "/images/default_profile.png",
+    };
+  }, [post]);
+
+  const renderSkeleton = useCallback(() => {
+    return <img className="scale-110 blur-2xl grayscale" alt="thumbnail" />;
+  }, []);
+
+  return (
+    <ClientOnly fallback={renderSkeleton()}>
+      {() => (
+        <Suspense fallback={renderSkeleton()}>
+          <SuspenseImage data={profileData} alt="thumbnail" />
+        </Suspense>
+      )}
+    </ClientOnly>
+  );
+};
+
+PostCard.Thumbnail = function PostThumbnail({ post }: PostCardProps) {
+  const thumbnailData = useMemo(() => {
+    if (!post) return null;
+    return {
+      id: `post-thumbnail-${post.id}`,
+      url: post.thumbnail ?? undefined,
+    };
+  }, [post]);
+
+  const renderSkeleton = useCallback(() => {
+    return (
+      <img
+        className="min-h-[100px] w-full scale-110 blur-2xl grayscale"
+        alt="thumbnail"
+      />
+    );
+  }, []);
+
+  return (
+    <ClientOnly fallback={renderSkeleton()}>
+      {() => (
+        <Suspense fallback={renderSkeleton()}>
+          <SuspenseImage
+            data={thumbnailData}
+            className="min-h-[100px] w-full"
+            alt="thumbnail"
+          />
+        </Suspense>
+      )}
+    </ClientOnly>
   );
 };

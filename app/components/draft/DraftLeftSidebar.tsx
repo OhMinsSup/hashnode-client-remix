@@ -5,7 +5,6 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { AddFileIcon, LeftArrowIcon } from "~/components/__ui/Icon";
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
 import MyDraftSearch from "~/components/draft/MyDraftSearch";
-import Button from "~/components/__ui/shared/Button";
 
 // context
 import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";
@@ -107,15 +106,15 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
         <MyDraftSearch />
         <MyDraftSidebar />
         <div className="draft-sidebar-footer">
-          <Button
+          <button
             className="btn-new-draft"
             aria-label="new draft button"
-            onPress={onNewOrSaveDraftClick}
-            isDisabled={mutation_save.isLoading || mutation_new.isLoading}
+            onClick={onNewOrSaveDraftClick}
+            disabled={mutation_save.isLoading || mutation_new.isLoading}
           >
-            <AddFileIcon className="icon mr-2 !fill-none stroke-current" />
+            <AddFileIcon className="icon__base mr-2 stroke-current" />
             <span>New draft</span>
-          </Button>
+          </button>
         </div>
       </div>
     </DraftSidebarProvider>

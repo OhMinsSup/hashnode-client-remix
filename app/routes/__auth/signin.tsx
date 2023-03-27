@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import classNames from "classnames";
 
 // components
 import {
@@ -9,6 +10,7 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
+import ErrorMessage from "~/components/shared/ErrorMessage";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -28,13 +30,7 @@ import { signinApi } from "~/api/auth/auth";
 
 // types
 import type { ThrownResponse } from "@remix-run/react";
-import type { ActionArgs, MetaFunction } from "@remix-run/cloudflare";
-import classNames from "classnames";
-import ErrorMessage from "~/components/shared/ErrorMessage";
-
-export const meta: MetaFunction = () => ({
-  title: "Sign in to Hashnode",
-});
+import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
