@@ -225,6 +225,57 @@ Sidebar.Right = function Right() {
     setDuration(duration);
   }, []);
 
+  const renderSkeleton = useCallback(() => {
+    return (
+      <>
+        <div
+          className="tab-content__trenidng"
+          role="tablist"
+          aria-orientation="horizontal"
+        >
+          <TabTrendingPostButton.Skeleton />
+          <TabTrendingPostButton.Skeleton />
+          <TabTrendingPostButton.Skeleton />
+          <TabTrendingPostButton.Skeleton />
+        </div>
+        <div>
+          <div
+            tabIndex={-1}
+            data-key="7"
+            aria-controls="tabs-trending-duration-7"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList.Skeleton dataKey="7" />
+          </div>
+          <div
+            tabIndex={-1}
+            data-key="30"
+            aria-controls="tabs-trending-duration-30"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList.Skeleton dataKey="30" />
+          </div>
+          <div
+            tabIndex={-1}
+            data-key="90"
+            aria-controls="tabs-trending-duration-90"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList.Skeleton dataKey="90" />
+          </div>
+          <div
+            tabIndex={-1}
+            data-key="180"
+            aria-controls="tabs-trending-duration-180"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList.Skeleton dataKey="180" />
+          </div>
+        </div>
+      </>
+    );
+  }, []);
+
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">
@@ -232,7 +283,7 @@ Sidebar.Right = function Right() {
           title="Trending"
           to={PAGE_ENDPOINTS.EXPLORE.ROOT}
         >
-          <Suspense fallback={<h1>🌀 Loading...</h1>}>
+          <Suspense fallback={<>{renderSkeleton()}</>}>
             <div
               className="tab-content__trenidng"
               role="tablist"
@@ -274,18 +325,22 @@ Sidebar.Right = function Right() {
                 aria-controls="tabs-trending-duration-7"
                 role="tabpanel"
               >
-                <Await
-                  resolve={data.topPosts}
-                  errorElement={<>Error loading package location!</>}
+                <Suspense
+                  fallback={<TabTrendingPostsList.Skeleton dataKey="7" />}
                 >
-                  {(data) => (
-                    <TabTrendingPostsList
-                      duration={7}
-                      enabled={duration === 7}
-                      initialData={data}
-                    />
-                  )}
-                </Await>
+                  <Await
+                    resolve={data.topPosts}
+                    errorElement={<>Error loading package location!</>}
+                  >
+                    {(data) => (
+                      <TabTrendingPostsList
+                        duration={7}
+                        enabled={duration === 7}
+                        initialData={data}
+                      />
+                    )}
+                  </Await>
+                </Suspense>
               </div>
               <div
                 tabIndex={duration === 30 ? 0 : -1}
@@ -293,7 +348,14 @@ Sidebar.Right = function Right() {
                 aria-controls="tabs-trending-duration-30"
                 role="tabpanel"
               >
-                <TabTrendingPostsList enabled={duration === 30} duration={30} />
+                <Suspense
+                  fallback={<TabTrendingPostsList.Skeleton dataKey="30" />}
+                >
+                  <TabTrendingPostsList
+                    enabled={duration === 30}
+                    duration={30}
+                  />
+                </Suspense>
               </div>
               <div
                 tabIndex={duration === 90 ? 0 : -1}
@@ -301,7 +363,14 @@ Sidebar.Right = function Right() {
                 aria-controls="tabs-trending-duration-90"
                 role="tabpanel"
               >
-                <TabTrendingPostsList enabled={duration === 90} duration={90} />
+                <Suspense
+                  fallback={<TabTrendingPostsList.Skeleton dataKey="90" />}
+                >
+                  <TabTrendingPostsList
+                    enabled={duration === 90}
+                    duration={90}
+                  />
+                </Suspense>
               </div>
               <div
                 tabIndex={duration === 180 ? 0 : -1}
@@ -309,10 +378,14 @@ Sidebar.Right = function Right() {
                 aria-controls="tabs-trending-duration-180"
                 role="tabpanel"
               >
-                <TabTrendingPostsList
-                  enabled={duration === 180}
-                  duration={180}
-                />
+                <Suspense
+                  fallback={<TabTrendingPostsList.Skeleton dataKey="180" />}
+                >
+                  <TabTrendingPostsList
+                    enabled={duration === 180}
+                    duration={180}
+                  />
+                </Suspense>
               </div>
             </div>
           </Suspense>

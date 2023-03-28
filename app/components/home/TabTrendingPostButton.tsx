@@ -8,13 +8,13 @@ interface TabTrendingPostButtonProps {
   onTabClick: (duration: number) => void;
 }
 
-const TabTrendingPostButton: React.FC<TabTrendingPostButtonProps> = ({
+function TabTrendingPostButton({
   id,
   currentDuration,
   duration,
   label,
   onTabClick,
-}) => {
+}: TabTrendingPostButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   const onClick = useCallback(() => {
@@ -51,6 +51,21 @@ const TabTrendingPostButton: React.FC<TabTrendingPostButtonProps> = ({
       {label}
     </div>
   );
-};
+}
 
 export default TabTrendingPostButton;
+
+TabTrendingPostButton.Skeleton = function TabTrendingPostButtonSkeleton() {
+  return (
+    <div
+      className="tab-button animate-pulse"
+      tabIndex={-1}
+      data-key="0"
+      id="tab-0"
+      aria-selected="false"
+      role="tab"
+    >
+      <span className="h-4 w-16 rounded-full bg-gray-200" />
+    </div>
+  );
+};

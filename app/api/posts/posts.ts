@@ -18,6 +18,7 @@ import type { AppAPI } from "../schema/api";
 import type { PostBody } from "../schema/body";
 import type { PaginationQuery, PostListQuery } from "../schema/query";
 import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
+import { delayPromise } from "~/utils/util";
 
 /// create
 
@@ -261,6 +262,23 @@ export async function getTopPostsApi(
 
   const result = await response.json<AppAPI<GetTopPostsRespSchema>>();
   return { result };
+}
+
+/**
+ * @description Get top posts with delay
+ * @param {GetTopPostsApiSearchParams?} query
+ * @param {GetTopPostsApiParams?} args
+ * @param {number} delay
+ * @returns {Promise<{ result: AppAPI<GetTopPostsRespSchema> }>}
+ */
+export async function getTopPostsDelayedApi(
+  query?: GetTopPostsApiSearchParams,
+  args?: GetTopPostsApiParams,
+  delay = 1000
+) {
+  const response = await getTopPostsApi(query, args);
+  await delayPromise(delay);
+  return response;
 }
 
 // [Post] Path: app/api/posts

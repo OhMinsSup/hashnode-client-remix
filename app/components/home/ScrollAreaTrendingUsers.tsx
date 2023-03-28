@@ -1,7 +1,13 @@
 import React, { Suspense } from "react";
+
+// components
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { Await } from "react-router";
+import { Await } from "@remix-run/react";
+
+// hooks
 import { useLoaderData } from "@remix-run/react";
+
+// types
 import type { LoaderData } from "~/routes/__app/__list";
 
 const ScrollAreaTrendingUsers = () => {
@@ -15,8 +21,10 @@ const ScrollAreaTrendingUsers = () => {
             <Suspense
               fallback={
                 <>
-                  {Array.from({ length: 10 }).map((_, index) => (
-                    <ScrollAreaTrendingUsers.Skeleton key={index} />
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <ScrollAreaTrendingUsers.Skeleton
+                      key={`ScrollAreaTrendingUsers-${index}`}
+                    />
                   ))}
                 </>
               }
@@ -41,9 +49,6 @@ const ScrollAreaTrendingUsers = () => {
         </div>
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar orientation="vertical">
-        <ScrollArea.Thumb className="ScrollAreaThumb" />
-      </ScrollArea.Scrollbar>
-      <ScrollArea.Scrollbar orientation="horizontal">
         <ScrollArea.Thumb className="ScrollAreaThumb" />
       </ScrollArea.Scrollbar>
       <ScrollArea.Corner className="ScrollAreaCorner" />
@@ -72,7 +77,11 @@ ScrollAreaTrendingUsers.Skeleton = function Skeleton() {
       <div className="thumbnail-container">
         <div className="h-full w-full">
           <div className="thumbnail">
-            <img src="/images/default_profile.png" alt="thumbnail" />
+            <img
+              src="/images/default_profile.png"
+              alt="thumbnail"
+              className="scale-110 blur-2xl grayscale duration-700 ease-in-out group-hover:opacity-75"
+            />
           </div>
         </div>
       </div>

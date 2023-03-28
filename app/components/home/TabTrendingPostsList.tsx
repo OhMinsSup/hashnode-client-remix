@@ -10,11 +10,11 @@ interface TabTrendingPostsListProps {
   initialData?: any;
 }
 
-const TabTrendingPostsList: React.FC<TabTrendingPostsListProps> = ({
+function TabTrendingPostsList({
   duration,
   initialData,
   enabled,
-}) => {
+}: TabTrendingPostsListProps) {
   const { data } = useGetTopPostsQuery(
     {
       duration: duration,
@@ -50,6 +50,25 @@ const TabTrendingPostsList: React.FC<TabTrendingPostsListProps> = ({
       ))}
     </div>
   );
-};
+}
 
 export default TabTrendingPostsList;
+
+TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
+  dataKey,
+}: {
+  dataKey: string;
+}) {
+  return (
+    <div>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <>
+          <TabTrendingPostsItem.Skeleton
+            key={`TabTrendingPostsItem-${dataKey}-${index}`}
+          />
+          {index !== 4 && <hr className="custom-divide__tab-treding" />}
+        </>
+      ))}
+    </div>
+  );
+};

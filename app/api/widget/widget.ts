@@ -3,6 +3,7 @@ import { apiClient } from "../client";
 import { API_ENDPOINTS } from "~/constants/constant";
 import { applyHeaders } from "~/libs/server/utils";
 import { isString } from "~/utils/assertion";
+import { delayPromise } from "~/utils/util";
 
 import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
@@ -71,4 +72,21 @@ export async function getAritcleCirclesApi(
   });
   const result = await response.json<AppAPI<GetAritcleCirclesRespSchema>>();
   return { result };
+}
+
+/**
+ * @description article-circles 조회 API (delay 1s)
+ * @param {GetTagListApiSearchParams?} query
+ * @param {GetAritcleCirclesApiParams?} args
+ * @param {number?} delay - delay time (ms)
+ * @returns {Promise<{ result: AppAPI<GetAritcleCirclesRespSchema> }>}
+ */
+export async function getAritcleCirclesDelayedApi(
+  query?: GetAritcleCirclesApiSearchParams,
+  args?: GetAritcleCirclesApiParams,
+  delay = 1000
+) {
+  const response = await getAritcleCirclesApi(query, args);
+  await delayPromise(delay);
+  return response;
 }

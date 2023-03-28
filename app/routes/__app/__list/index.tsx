@@ -9,7 +9,6 @@ import { parseUrlParams } from "~/utils/util";
 
 // components
 import PostsList from "~/components/home/PostsList";
-// import PostsList from "~/components/home/PostsList.future";
 
 import type {
   LoaderArgs,

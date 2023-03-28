@@ -6,6 +6,7 @@ import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
 import type { TagListRespSchema } from "../schema/resp";
 import type { LoaderArgs } from "@remix-run/cloudflare";
+import { delayPromise } from "~/utils/util";
 
 // [Get] Path: /api/v1/tags
 
@@ -78,4 +79,21 @@ export async function getTagListApi(
   });
   const result = await response.json<AppAPI<TagListRespSchema>>();
   return { result };
+}
+
+/**
+ * @description 태그 리스트 조회 API (delay)
+ * @param {GetTagListApiSearchParams?} query
+ * @param {GetTagListApiParams?} args
+ * @param {number} delay
+ * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
+ */
+export async function getTagListDelayedApi(
+  query?: GetTagListApiSearchParams,
+  args?: GetTagListApiParams,
+  delay = 1000
+) {
+  const response = await getTagListApi(query, args);
+  await delayPromise(delay);
+  return response;
 }

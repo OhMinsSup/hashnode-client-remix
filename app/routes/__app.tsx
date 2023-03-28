@@ -2,8 +2,8 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getTagListApi } from "~/api/tags/tags";
-import { getTopPostsApi } from "~/api/posts/posts";
+import { getTagListDelayedApi } from "~/api/tags/tags";
+import { getTopPostsDelayedApi } from "~/api/posts/posts";
 
 // components
 import { Outlet } from "@remix-run/react";
@@ -12,6 +12,7 @@ import Sidebar from "~/components/home/Sidebar";
 
 // styles
 import homeStyles from "~/styles/routes/home.css";
+import homeListStyle from "~/styles/routes/home-list.css";
 
 // types
 import type {
@@ -64,25 +65,27 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: homeStyles }];
+  return [
+    { rel: "stylesheet", href: homeStyles },
+    { rel: "stylesheet", href: homeListStyle },
+  ];
 };
 
 export const loader = (args: LoaderArgs) => {
-  const trendingTagPromise = getTagListApi(
+  const trendingTagPromise = getTagListDelayedApi(
     {
       type: "popular",
     },
     args
   );
 
-  const topPostsPromise = getTopPostsApi(
+  const topPostsPromise = getTopPostsDelayedApi(
     {
       duration: 7,
     },
     args
   );
 
-  // TODO: Server Side Widget API Call Bookmarks
   return defer({
     trendingTag: trendingTagPromise,
     topPosts: topPostsPromise,
