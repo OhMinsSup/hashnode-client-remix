@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
 import { Virtuoso } from "react-virtuoso";
 import PostsCard from "~/components/home/PostsCard";
+import ReachedEnd from "~/components/shared/ReachedEnd";
 
 import type { PostLikeRespSchema } from "~/api/schema/resp";
 import type { DataLoader } from "~/routes/__app/__bookmarks/bookmarks";
@@ -13,8 +14,15 @@ const LikedPostsList = () => {
     posts.list ?? []
   );
 
-  const transition = useNavigation();
+  const navigation = useNavigation();
   const fetcher = useFetcher();
+
+  const hasNextPage = useMemo(() => {
+    if (fetcher.data) {
+      return fetcher.data.posts?.pageInfo?.hasNextPage ?? false;
+    }
+    return posts?.pageInfo?.hasNextPage ?? false;
+  }, [posts, fetcher.data]);
 
   const loadMore = useCallback(
     (index: number) => {
@@ -53,8 +61,12 @@ const LikedPostsList = () => {
       data={items}
       endReached={loadMore}
       components={{
-        Footer: (props) =>
-          transition.state === "loading" ? <>Loading more...</> : null,
+        Footer: (props) => {
+          if (!hasNextPage) {
+            return <ReachedEnd />;
+          }
+          return navigation.state === "loading" ? <>Loading more...</> : null;
+        },
       }}
       overscan={5}
       itemContent={(_, data) => {

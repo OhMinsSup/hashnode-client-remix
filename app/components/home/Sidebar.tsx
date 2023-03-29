@@ -105,7 +105,7 @@ Sidebar.Left = function Left() {
             />
             <SidebarNavLink
               text="Drafts"
-              to="/drafts"
+              to="/draft"
               icon={<Icons.MyDraft className="flex-shrink-0 fill-current" />}
               end
             />
