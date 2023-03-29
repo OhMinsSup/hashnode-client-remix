@@ -104,6 +104,12 @@ Sidebar.Left = function Left() {
               icon={<Icons.MyFeed className="flex-shrink-0 fill-current" />}
             />
             <SidebarNavLink
+              text="Explore"
+              to="/explore"
+              icon={<Icons.Explore className="flex-shrink-0 fill-current" />}
+              end
+            />
+            <SidebarNavLink
               text="Drafts"
               to="/draft"
               icon={<Icons.MyDraft className="flex-shrink-0 fill-current" />}
