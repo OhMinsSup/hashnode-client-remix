@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useDraftContext } from "~/context/useDraftContext";
-import { SidebarMenuIcon, TimeIcon } from "~/components/__ui/Icon";
+import { TimeIcon } from "~/components/__ui/Icon";
+import { Icons } from "../shared/Icons";
 
 const DraftEditorHeader = () => {
   const { toggleLeftSidebar, visibility } = useDraftContext();
@@ -19,7 +20,7 @@ const DraftEditorHeader = () => {
             aria-expanded={visibility.isLeftSidebarVisible}
             onClick={onToggleLeftSidebar}
           >
-            <SidebarMenuIcon className="icon__base flex-shrink-0 !fill-none !stroke-current" />
+            <Icons.EditorSidebar className="icon__base flex-shrink-0 stroke-current" />
           </button>
         </div>
         <div className="header--right">
@@ -28,9 +29,15 @@ const DraftEditorHeader = () => {
               className="btn-revision-history"
               aria-label="Revision history"
             >
-              <TimeIcon className="icon__base" />
+              <Icons.Time className="icon__base fill-current" />
             </button>
           </div>
+          <div
+            data-orientation="vertical"
+            aria-orientation="vertical"
+            role="separator"
+            className="separator mr-2"
+          ></div>
           <button className="btn-publish" aria-label="Publish">
             <span>Publish</span>
           </button>

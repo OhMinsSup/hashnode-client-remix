@@ -434,6 +434,11 @@
   color: rgb(71 85 105 / var(--tw-text-opacity));
 }
 
+.draft-editor--header .header-wrapper .header--left button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
 .draft-editor--header .header-wrapper .header--right {
   position: relative;
   grid-column: span 6 / span 6;
@@ -555,8 +560,64 @@
   outline-offset: 2px !important;
 }
 
+.editor-toolbar-header .btn-toolbar:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
 .editor-title {
   position: relative;
+}
+
+.popover__cover {
+  @apply w-screen;
+}
+
+.popover__cover .horizontal__container {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+    0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  @apply z-50 w-full rounded-lg border;
+}
+
+.popover__cover .horizontal__container .tabs__cover {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  @apply flex flex-row gap-4 border-b px-4 py-2 align-baseline text-sm font-medium;
+}
+
+.popover__cover .horizontal__container .tabs__cover .tab__item {
+  @apply relative inline-flex flex-row items-center justify-center rounded px-1 py-2 text-center text-sm font-medium outline-none;
+}
+
+.popover__cover
+  .horizontal__container
+  .tabs__cover
+  .tab__item[data-state="active"] {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+  @apply font-semibold;
+}
+
+.popover__cover
+  .horizontal__container
+  .tabs__cover
+  .tab__item[data-state="active"]::after {
+  content: " ";
+  bottom: -0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+  @apply pointer-events-none absolute h-[0.125rem] w-full;
+}
+
+.popover__cover .horizontal__container .tabs__cover .tab__item:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
 }
 
 @media (min-width: 640px) {
@@ -616,6 +677,10 @@
     max-width: 768px;
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .popover__cover {
+    width: 725px;
   }
 }
 

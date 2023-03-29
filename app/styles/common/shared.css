@@ -35,13 +35,13 @@
 .reached-end {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  @apply my-4 w-full p-6
+  @apply my-4 w-full p-6;
 }
 
 .reached-end-text {
   --tw-text-opacity: 1;
   color: rgb(51 65 85 / var(--tw-text-opacity));
-  @apply text-center text-xl
+  @apply text-center text-xl;
 }
 
 /* Divide */
@@ -50,6 +50,12 @@
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
   @apply my-4 h-[1px];
+}
+
+.separator {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+  @apply ml-2 min-h-full w-[1px];
 }
 
 /* Divide */
