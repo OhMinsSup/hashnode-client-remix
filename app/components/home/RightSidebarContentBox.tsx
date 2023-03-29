@@ -7,11 +7,11 @@ interface RightSidebarContentBoxProps {
   to?: string;
 }
 
-const RightSidebarContentBox: React.FC<RightSidebarContentBoxProps> = ({
+function RightSidebarContentBox({
   to,
   title,
   children,
-}) => {
+}: RightSidebarContentBoxProps) {
   return (
     <div className="right-sidebar__content-box">
       <div className="right-sidebar__content-box-header">
@@ -32,6 +32,32 @@ const RightSidebarContentBox: React.FC<RightSidebarContentBoxProps> = ({
       {/* Content */}
     </div>
   );
-};
+}
 
 export default RightSidebarContentBox;
+
+RightSidebarContentBox.Skeleton = function RightSidebarContentBoxSkeleton({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="right-sidebar__content-box">
+      <div className="right-sidebar__content-box-header">
+        {/* Title */}
+        <div className="title">
+          <h2 className="h-6 w-32 rounded-full border bg-gray-200 !text-transparent">
+            Loading...
+          </h2>
+        </div>
+        <div className="btn__more">
+          <a href="#" className="btn__more">
+            See all
+          </a>
+        </div>
+      </div>
+      {/* Content */}
+      {children}
+    </div>
+  );
+};

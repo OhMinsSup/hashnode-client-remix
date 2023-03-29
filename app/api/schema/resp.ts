@@ -83,3 +83,16 @@ export interface GetAritcleCircleRespSchema {
 export interface GetAritcleCirclesRespSchema {
   circles: GetAritcleCircleRespSchema[];
 }
+
+
+export interface GetWidgetBookmarkRespSchema {
+  id: number;
+  title: string;
+  user: {
+    id: number;
+    username: string;
+  };
+}
+
+export interface GetWidgetBookmarksRespSchema
+  extends Array<GetWidgetBookmarkRespSchema> {}

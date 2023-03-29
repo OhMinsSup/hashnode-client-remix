@@ -12,7 +12,17 @@ import { Outlet } from "@remix-run/react";
 import TabRoutesPosts from "~/components/home/TabRoutesPosts";
 import ScrollAreaTrendingUsers from "~/components/home/ScrollAreaTrendingUsers";
 
-import type { LoaderArgs } from "@remix-run/cloudflare";
+// styles
+import homeListStyle from "~/styles/routes/home-list.css";
+
+import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
+
+export const links: LinksFunction = () => {
+  return [
+    { rel: "stylesheet", href: homeListStyle },
+  ];
+};
+
 
 export const loader = (args: LoaderArgs) => {
   const getAricleCirclePromise = getAritcleCirclesDelayedApi(undefined, args);

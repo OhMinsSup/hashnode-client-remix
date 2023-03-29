@@ -20,7 +20,7 @@ function TabTrendingPostsList({
       duration: duration,
     },
     {
-      suspense: true,
+      suspense: duration !== 7,
       enabled,
       initialData,
       staleTime: 1000 * 60 * 60 * 24,
@@ -56,15 +56,19 @@ export default TabTrendingPostsList;
 
 TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
   dataKey,
+  prefix,
 }: {
   dataKey: string;
+  prefix?: string;
 }) {
   return (
     <div>
       {Array.from({ length: 5 }).map((_, index) => (
         <>
           <TabTrendingPostsItem.Skeleton
-            key={`TabTrendingPostsItem-${dataKey}-${index}`}
+            key={`${
+              prefix ? `${prefix}-` : ""
+            }TabTrendingPostsItem-${dataKey}-${index}`}
           />
           {index !== 4 && <hr className="custom-divide__tab-treding" />}
         </>

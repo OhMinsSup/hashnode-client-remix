@@ -4,15 +4,19 @@ import { defer } from "@remix-run/cloudflare";
 // api
 import { getTagListDelayedApi } from "~/api/tags/tags";
 import { getTopPostsDelayedApi } from "~/api/posts/posts";
+import { getWidgetBookmarksDelayedApi } from "~/api/widget/widget";
+import { getSessionApi } from "~/api/user/user";
 
 // components
 import { Outlet } from "@remix-run/react";
 import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
 
+// utils
+import { noopPromiseResponse } from "~/utils/util";
+
 // styles
 import homeStyles from "~/styles/routes/home.css";
-import homeListStyle from "~/styles/routes/home-list.css";
 
 // types
 import type {
@@ -65,13 +69,10 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: homeStyles },
-    { rel: "stylesheet", href: homeListStyle },
-  ];
+  return [{ rel: "stylesheet", href: homeStyles }];
 };
 
-export const loader = (args: LoaderArgs) => {
+export const loader = async (args: LoaderArgs) => {
   const trendingTagPromise = getTagListDelayedApi(
     {
       type: "popular",
@@ -86,9 +87,19 @@ export const loader = (args: LoaderArgs) => {
     args
   );
 
+  const data = await getSessionApi(args);
+  let bookmarksPromise: ReturnType<typeof getWidgetBookmarksDelayedApi> | null =
+    null;
+  if (data && data.type === "session") {
+    bookmarksPromise = getWidgetBookmarksDelayedApi(undefined, args);
+  } else {
+    bookmarksPromise = noopPromiseResponse([]);
+  }
+
   return defer({
     trendingTag: trendingTagPromise,
     topPosts: topPostsPromise,
+    bookmarks: bookmarksPromise,
   });
 };
 

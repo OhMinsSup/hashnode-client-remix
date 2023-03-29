@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
   },
   WIDGET: {
     ARTICLE_CIRCLES: "widget/article-circles",
+    BOOKMARKS: "widget/bookmarks",
   },
 } as const;
 

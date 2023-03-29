@@ -331,3 +331,63 @@ export async function postPostsApi(
   const result = await response.json<AppAPI<PostRespSchema>>();
   return { result };
 }
+
+//  [Get]: Path: app/api/posts/get-likes
+
+interface GetLikePostsApiSearchParams extends PaginationQuery {}
+
+interface GetLikePostsApiParams extends LoaderArgs {}
+
+/**
+ * @description Get top posts
+ * @param {GetLikePostsApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getLikePostsApi(
+  query?: GetLikePostsApiSearchParams,
+  options?: Options
+) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const searchParams = new URLSearchParams();
+  if (query?.cursor) {
+    searchParams.set("cursor", query.cursor.toString());
+  }
+  if (query?.limit) {
+    searchParams.set("limit", query.limit.toString());
+  }
+  const response = await apiClient.get(API_ENDPOINTS.POSTS.GET_LIKES, {
+    credentials: "include",
+    headers,
+    searchParams,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description Get posts
+ * @param {GetPostsApiSearchParams?} query
+ * @param {GetPostsApiParams?} args
+ * @returns {Promise<{ result: AppAPI<PostLikeListRespSchema> }>}
+ */
+export async function getLikePostsApi(
+  query?: GetLikePostsApiSearchParams,
+  args?: GetLikePostsApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getLikePostsApi(query, {
+    headers,
+  });
+  const result = await response.json<AppAPI<PostLikeListRespSchema>>();
+  return { result };
+}

@@ -126,7 +126,6 @@ export const MediaResource = (data: ResourceSchema) => {
   const resourceData = resource.get();
 
   if (resourceData && data.url !== resourceData.url) {
-    console.log("resourceData", resourceData);
     // 이미 한번 로드된 데이터인데 이미지가 변경된 경우 다시 로드하도록 한다.
     resource = new Resource({
       data,

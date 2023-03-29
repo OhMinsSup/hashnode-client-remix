@@ -83,3 +83,14 @@ export const firstLetterToUpperCase = (str?: string) => {
   }
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const noopPromiseResponse = (data: any) => {
+  return Promise.resolve({
+    result: {
+      message: undefined,
+      result: data,
+      resultCode: 0,
+      error: undefined,
+    },
+  });
+};

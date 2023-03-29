@@ -515,17 +515,11 @@
     @apply w-48;
   }
 
-  .main-post-card
-    .main-post-card__footer
-    .main-post-card
-    .main-post-card__footer-left {
-    @apply flex-1;
+  .main-post-card .main-post-card__footer .main-post-card__footer-left {
+    @apply mt-0 flex-1;
   }
 
-  .main-post-card
-    .main-post-card__footer
-    .main-post-card
-    .main-post-card__footer-right {
+  .main-post-card .main-post-card__footer .main-post-card__footer-right {
     @apply w-auto pl-0;
   }
 

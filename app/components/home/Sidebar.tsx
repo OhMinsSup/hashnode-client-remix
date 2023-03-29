@@ -22,6 +22,7 @@ import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
 import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
 import TabTrendingPostButton from "./TabTrendingPostButton";
 import TabTrendingPostsList from "./TabTrendingPostsList";
+import WidgetBookmark from "./WidgetBookmark";
 
 // types
 import type { HomeLoaderData } from "~/routes/__app";
@@ -214,6 +215,17 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.Right = function Right() {
+  return (
+    <aside className="main__right-sidebar">
+      <div className="right-sidebar__container">
+        <Sidebar.RightWidgetForTrening />
+        <Sidebar.RightWidgetForBookmarks />
+      </div>
+    </aside>
+  );
+};
+
+Sidebar.RightWidgetForTrening = function RightWidgetForTrening() {
   const data = useLoaderData<HomeLoaderData>();
 
   const [duration, setDuration] = useState(7);
@@ -225,9 +237,97 @@ Sidebar.Right = function Right() {
     setDuration(duration);
   }, []);
 
-  const renderSkeleton = useCallback(() => {
+  return (
+    <Suspense fallback={<Sidebar.RightWidgetForTreningSkeleton />}>
+      <RightSidebarContentBox title="Trending" to={PAGE_ENDPOINTS.EXPLORE.ROOT}>
+        <div
+          className="tab-content__trenidng"
+          role="tablist"
+          aria-orientation="horizontal"
+        >
+          <TabTrendingPostButton
+            label="1 week"
+            duration={7}
+            currentDuration={duration}
+            id={"tabs-trending-duration-7"}
+            onTabClick={onTabClick}
+          />
+          <TabTrendingPostButton
+            label="1 months"
+            duration={30}
+            currentDuration={duration}
+            id={"tabs-trending-duration-30"}
+            onTabClick={onTabClick}
+          />
+          <TabTrendingPostButton
+            label="3 months"
+            duration={90}
+            currentDuration={duration}
+            id={"tabs-trending-duration-90"}
+            onTabClick={onTabClick}
+          />
+          <TabTrendingPostButton
+            label="6 months"
+            duration={180}
+            currentDuration={duration}
+            id={"tabs-trending-duration-180"}
+            onTabClick={onTabClick}
+          />
+        </div>
+        <div>
+          <div
+            tabIndex={duration === 7 ? 0 : -1}
+            data-key="7"
+            aria-controls="tabs-trending-duration-7"
+            role="tabpanel"
+          >
+            <Await
+              resolve={data.topPosts}
+              errorElement={<>Error loading package location!</>}
+            >
+              {(data) => (
+                <TabTrendingPostsList
+                  duration={7}
+                  enabled={duration === 7}
+                  initialData={data}
+                />
+              )}
+            </Await>
+          </div>
+          <div
+            tabIndex={duration === 30 ? 0 : -1}
+            data-key="30"
+            aria-controls="tabs-trending-duration-30"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList enabled={duration === 30} duration={30} />
+          </div>
+          <div
+            tabIndex={duration === 90 ? 0 : -1}
+            data-key="90"
+            aria-controls="tabs-trending-duration-90"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList enabled={duration === 90} duration={90} />
+          </div>
+          <div
+            tabIndex={duration === 180 ? 0 : -1}
+            data-key="180"
+            aria-controls="tabs-trending-duration-180"
+            role="tabpanel"
+          >
+            <TabTrendingPostsList enabled={duration === 180} duration={180} />
+          </div>
+        </div>
+      </RightSidebarContentBox>
+    </Suspense>
+  );
+};
+
+Sidebar.RightWidgetForTreningSkeleton =
+  function RightWidgetForTreningSkeleton() {
     return (
-      <>
+      <RightSidebarContentBox.Skeleton>
         <div
           className="tab-content__trenidng"
           role="tablist"
@@ -245,172 +345,72 @@ Sidebar.Right = function Right() {
             aria-controls="tabs-trending-duration-7"
             role="tabpanel"
           >
-            <TabTrendingPostsList.Skeleton dataKey="7" />
+            <TabTrendingPostsList.Skeleton prefix="duration" dataKey="7" />
           </div>
           <div
             tabIndex={-1}
             data-key="30"
             aria-controls="tabs-trending-duration-30"
             role="tabpanel"
-          >
-            <TabTrendingPostsList.Skeleton dataKey="30" />
-          </div>
+          ></div>
           <div
             tabIndex={-1}
             data-key="90"
             aria-controls="tabs-trending-duration-90"
             role="tabpanel"
-          >
-            <TabTrendingPostsList.Skeleton dataKey="90" />
-          </div>
+          ></div>
           <div
             tabIndex={-1}
             data-key="180"
             aria-controls="tabs-trending-duration-180"
             role="tabpanel"
-          >
-            <TabTrendingPostsList.Skeleton dataKey="180" />
-          </div>
+          ></div>
         </div>
-      </>
+      </RightSidebarContentBox.Skeleton>
     );
-  }, []);
+  };
+
+Sidebar.RightWidgetForBookmarks = function RightWidgetForBookmarks() {
+  const data = useLoaderData<HomeLoaderData>();
 
   return (
-    <aside className="main__right-sidebar">
-      <div className="right-sidebar__container">
-        <RightSidebarContentBox
-          title="Trending"
-          to={PAGE_ENDPOINTS.EXPLORE.ROOT}
-        >
-          <Suspense fallback={<>{renderSkeleton()}</>}>
-            <div
-              className="tab-content__trenidng"
-              role="tablist"
-              aria-orientation="horizontal"
+    <Suspense fallback={<Sidebar.RightWidgetForBookmarksSkeleton />}>
+      <Await
+        resolve={data.bookmarks}
+        errorElement={<>Error loading package location!</>}
+      >
+        {(data) => {
+          const bookmarks = data.result?.result ?? [];
+          return (
+            <RightSidebarContentBox
+              title="Bookmarks"
+              to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
             >
-              <TabTrendingPostButton
-                label="1 week"
-                duration={7}
-                currentDuration={duration}
-                id={"tabs-trending-duration-7"}
-                onTabClick={onTabClick}
-              />
-              <TabTrendingPostButton
-                label="1 months"
-                duration={30}
-                currentDuration={duration}
-                id={"tabs-trending-duration-30"}
-                onTabClick={onTabClick}
-              />
-              <TabTrendingPostButton
-                label="3 months"
-                duration={90}
-                currentDuration={duration}
-                id={"tabs-trending-duration-90"}
-                onTabClick={onTabClick}
-              />
-              <TabTrendingPostButton
-                label="6 months"
-                duration={180}
-                currentDuration={duration}
-                id={"tabs-trending-duration-180"}
-                onTabClick={onTabClick}
-              />
-            </div>
-            <div>
-              <div
-                tabIndex={duration === 7 ? 0 : -1}
-                data-key="7"
-                aria-controls="tabs-trending-duration-7"
-                role="tabpanel"
-              >
-                <Suspense
-                  fallback={<TabTrendingPostsList.Skeleton dataKey="7" />}
-                >
-                  <Await
-                    resolve={data.topPosts}
-                    errorElement={<>Error loading package location!</>}
-                  >
-                    {(data) => (
-                      <TabTrendingPostsList
-                        duration={7}
-                        enabled={duration === 7}
-                        initialData={data}
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
-              <div
-                tabIndex={duration === 30 ? 0 : -1}
-                data-key="30"
-                aria-controls="tabs-trending-duration-30"
-                role="tabpanel"
-              >
-                <Suspense
-                  fallback={<TabTrendingPostsList.Skeleton dataKey="30" />}
-                >
-                  <TabTrendingPostsList
-                    enabled={duration === 30}
-                    duration={30}
-                  />
-                </Suspense>
-              </div>
-              <div
-                tabIndex={duration === 90 ? 0 : -1}
-                data-key="90"
-                aria-controls="tabs-trending-duration-90"
-                role="tabpanel"
-              >
-                <Suspense
-                  fallback={<TabTrendingPostsList.Skeleton dataKey="90" />}
-                >
-                  <TabTrendingPostsList
-                    enabled={duration === 90}
-                    duration={90}
-                  />
-                </Suspense>
-              </div>
-              <div
-                tabIndex={duration === 180 ? 0 : -1}
-                data-key="180"
-                aria-controls="tabs-trending-duration-180"
-                role="tabpanel"
-              >
-                <Suspense
-                  fallback={<TabTrendingPostsList.Skeleton dataKey="180" />}
-                >
-                  <TabTrendingPostsList
-                    enabled={duration === 180}
-                    duration={180}
-                  />
-                </Suspense>
-              </div>
-            </div>
-          </Suspense>
-        </RightSidebarContentBox>
-        <RightSidebarContentBox
-          title="Bookmarks"
-          to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
-        >
-          <div>
-            <div>
-              <h3 className="bookmark-desc">
-                <Link to="/">
-                  Instantly Solving SEO and Providing SSR for Modern JavaScript
-                  Websites Independently of Frontend and Backend Stacks
-                </Link>
-              </h3>
-              <p className="username">
-                <Link to="/" aria-label="Post info">
-                  eron
-                </Link>
-              </p>
-            </div>
-          </div>
-        </RightSidebarContentBox>
-      </div>
-    </aside>
+              {bookmarks.map((item, index) => (
+                <WidgetBookmark
+                  key={`widget-bookmark-${item.id}`}
+                  bookmark={item}
+                  index={index}
+                />
+              ))}
+            </RightSidebarContentBox>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 };
+
+Sidebar.RightWidgetForBookmarksSkeleton =
+  function RightWidgetForBookmarksSkeleton() {
+    return (
+      <RightSidebarContentBox.Skeleton>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <WidgetBookmark.Skeleton
+            key={`widget-bookmark-${index}`}
+            index={index}
+          />
+        ))}
+      </RightSidebarContentBox.Skeleton>
+    );
+  };
