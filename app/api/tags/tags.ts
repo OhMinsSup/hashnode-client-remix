@@ -91,7 +91,7 @@ export async function getTagListApi(
 export async function getTagListDelayedApi(
   query?: GetTagListApiSearchParams,
   args?: GetTagListApiParams,
-  delay = 1000
+  delay = 200
 ) {
   const response = await getTagListApi(query, args);
   await delayPromise(delay);

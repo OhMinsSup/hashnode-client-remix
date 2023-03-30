@@ -94,7 +94,7 @@ export const meta: V2_MetaFunction = () => {
 export default function Bookmarks() {
   return (
     <div className="relative col-span-7 min-w-0 pt-5 pb-5">
-      <div className="bookmarks-info-box">
+      <div className="content-info-box">
         <h1>Bookmarks</h1>
         <p>All articles you have bookmarked on Hashnode</p>
       </div>

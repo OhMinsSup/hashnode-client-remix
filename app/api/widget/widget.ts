@@ -87,7 +87,7 @@ export async function getAritcleCirclesApi(
 export async function getAritcleCirclesDelayedApi(
   query?: GetAritcleCirclesApiSearchParams,
   args?: GetAritcleCirclesApiParams,
-  delay = 1000
+  delay = 200
 ) {
   const response = await getAritcleCirclesApi(query, args);
   await delayPromise(delay);
@@ -159,7 +159,7 @@ export async function getWidgetBookmarksApi(
 export async function getWidgetBookmarksDelayedApi(
   query?: GetWidgetBookmarksApiSearchParams,
   args?: GetWidgetBookmarksApiParams,
-  delay = 1000
+  delay = 200
 ) {
   const response = await getWidgetBookmarksApi(query, args);
   await delayPromise(delay);

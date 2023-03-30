@@ -96,15 +96,14 @@ export const PAGE_ENDPOINTS = {
   },
   EXPLORE: {
     ROOT: "/explore",
+    TAGS: "/explore/tags",
+    POSTS: "/explore/posts",
   },
   ROOT: "/",
   FEATURED: "/featured",
   AUTH: {
     SIGNIN: "/signin",
     SIGNUP: "/signup",
-  },
-  CREATE: {
-    STORY: "/create/story",
   },
   DRAFT: {
     ROOT: "/draft",

@@ -10,6 +10,7 @@ import type {
 
 // styles
 import homeExploreStyle from "~/styles/routes/home-explore.css";
+import TabRoutesExplore from "~/components/explore/TabRoutesExplore";
 
 const Seo = {
   title: "Explore Popular Tech Blogs and Topics - Hashnode",
@@ -72,7 +73,7 @@ export const meta: V2_MetaFunction = () => {
 export default function Explore() {
   return (
     <div className="relative col-span-7 min-w-0 pt-5 pb-5">
-      <div className="explore-info-box">
+      <div className="content-info-box">
         <h1>Explore Tech Blogs &amp; Tags</h1>
         <p>
           Everything that's… Hashnode. Explore the most popular tech blogs from
@@ -80,8 +81,9 @@ export default function Explore() {
           the best minds in tech.
         </p>
       </div>
-
-      <Outlet />
+      <TabRoutesExplore>
+        <Outlet />
+      </TabRoutesExplore>
     </div>
   );
 }

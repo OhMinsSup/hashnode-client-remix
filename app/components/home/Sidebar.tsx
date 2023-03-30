@@ -107,6 +107,10 @@ Sidebar.Left = function Left() {
               text="Explore"
               to="/explore"
               icon={<Icons.Explore className="flex-shrink-0 fill-current" />}
+              applyActiveLinks={[
+                PAGE_ENDPOINTS.EXPLORE.TAGS,
+                PAGE_ENDPOINTS.EXPLORE.POSTS,
+              ]}
               end
             />
             <SidebarNavLink

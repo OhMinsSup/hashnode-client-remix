@@ -274,7 +274,7 @@ export async function getTopPostsApi(
 export async function getTopPostsDelayedApi(
   query?: GetTopPostsApiSearchParams,
   args?: GetTopPostsApiParams,
-  delay = 1000
+  delay = 200
 ) {
   const response = await getTopPostsApi(query, args);
   await delayPromise(delay);

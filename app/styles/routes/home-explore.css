@@ -1,144 +1,33 @@
-.explore-info-box {
-  margin-bottom: 1.25rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 2.5rem;
-  padding-bottom: 1.25rem;
-}
-
-.explore-info-box h1 {
-  margin-bottom: 0.5rem;
-  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
-  font-size: 1.125rem;
-  line-height: 1.375;
-  font-weight: 800;
-  text-transform: capitalize;
-  --tw-text-opacity: 1;
-  color: rgb(15 23 42 / var(--tw-text-opacity));
-}
-
-.explore-info-box p {
-  max-width: 42rem;
-  line-height: 1.375;
-  --tw-text-opacity: 1;
-  color: rgb(51 65 85 / var(--tw-text-opacity));
-}
-
 .explore {
-  border-radius: 0.5rem;
-  border-width: 1px;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  @apply rounded-lg border;
 }
 
 .explore-tab-area {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  max-width: 100vw;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  overflow: auto;
-  white-space: nowrap;
-  border-bottom-width: 1px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  padding-top: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
+  @apply flex max-w-[100vw] flex-row items-center overflow-hidden whitespace-nowrap border-b px-2 pt-3 text-sm font-medium;
 }
 
-.explore-tab-area .explore-link-active {
-  margin-right: 0.5rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex-wrap: nowrap;
-  -webkit-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-  border-bottom-width: 2px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  --tw-border-opacity: 1;
-  border-color: rgb(52 102 246 / var(--tw-border-opacity));
+.explore-tab-area .tab__item {
+  @apply flex flex-row flex-nowrap items-center rounded-tr rounded-tl border-b-2 border-transparent px-2 py-3;
+}
+
+.explore-tab-area .tab__item[aria-selected="true"] {
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
   font-weight: 700;
   --tw-text-opacity: 1;
-  color: rgb(52 102 246 / var(--tw-text-opacity));
-}
-
-.explore-tab-area .explore-link {
-  margin-right: 0.5rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex-wrap: nowrap;
-  -webkit-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-  border-bottom-width: 2px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-color: transparent;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+  @apply font-bold;
 }
 
 .explore-tab-content {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  @apply px-4 py-6;
 }
 
 .explore-trending-tags {
-  border-bottom-width: 1px;
-  padding-bottom: 1.25rem;
+  @apply border-b pb-5;
 }
 
 .explore-trending-tags .title-wrapper {
@@ -427,10 +316,7 @@
 
 @media (min-width: 640px) {
   .explore-tab-area {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
+    @apply justify-center;
   }
 }
 

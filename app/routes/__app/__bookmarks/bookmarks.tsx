@@ -13,7 +13,7 @@ import { getLikePostsApi } from "~/api/posts/posts";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
 // styles
-import LikedPostsList from "~/components/home/LikedPostsList";
+import LikedPostsList from "~/components/bookmarks/LikedPostsList";
 
 export const loader = async (args: LoaderArgs) => {
   const params = parseUrlParams(args.request.url);
