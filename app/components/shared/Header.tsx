@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 
 // components
-import { Link, useFetcher, useRevalidator } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
 import { If, Else, Then } from "react-if";
 import * as Popover from "@radix-ui/react-popover";

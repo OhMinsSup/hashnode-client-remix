@@ -7,25 +7,47 @@ import { Icons } from "~/components/shared/Icons";
 
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
+import { useDeleteDraftsMutation } from "~/api/drafts/hooks/useDeleteDraftsMutation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
+
+// constants
+import { QUERIES_KEY } from "~/constants/constant";
 
 // types
-import type { Draft } from "~/libs/db/db";
+import type { DraftSchema } from "~/api/schema/draft";
 
 interface MyDraftItemProps {
-  item: Partial<Draft>;
+  item: DraftSchema;
 }
 
 const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
   const { changeDraftId, draftId } = useDraftContext();
   const [open, setOpen] = useState(false);
+  const { keyword } = useDraftSidebarContext();
+
+  const queryClient = useQueryClient();
+
+  const mutation = useDeleteDraftsMutation(item.id, {
+    onSuccess: () => {
+      // 리스트 쿼리를 다시 불러옴
+      queryClient.invalidateQueries(QUERIES_KEY.DRAFTS.ROOT(keyword));
+      // 현재 선택한 아이템이 삭제하는 아이템과 같다면 draftId를 undefined로 변경
+      if (draftId === item.id) {
+        changeDraftId(undefined);
+      }
+    },
+  });
 
   const onSelectedDraft = useCallback(() => {
     changeDraftId(item.id);
   }, [changeDraftId, item.id]);
 
   const onClickDelete = useCallback(() => {
-    console.log("delete");
-  }, [item.id]);
+    mutation.mutate({
+      id: item.id,
+    });
+  }, [item.id, mutation]);
 
   return (
     <div

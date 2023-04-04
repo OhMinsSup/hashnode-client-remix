@@ -19,7 +19,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // hooks
 import { FormProvider, useForm } from "react-hook-form";
-import { WriteProvider } from "~/stores/useWirteContext";
 import { DraftProvider } from "~/context/useDraftContext";
 
 // styles
@@ -129,13 +128,11 @@ export default function DraftRouteLayout() {
 
   return (
     <DraftProvider>
-      <WriteProvider>
-        <FormProvider {...methods}>
-          <DraftTemplate>
-            <Outlet />
-          </DraftTemplate>
-        </FormProvider>
-      </WriteProvider>
+      <FormProvider {...methods}>
+        <DraftTemplate>
+          <Outlet />
+        </DraftTemplate>
+      </FormProvider>
     </DraftProvider>
   );
 }

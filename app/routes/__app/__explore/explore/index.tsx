@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import React from "react";
-import ExploreTredingTagItem from "~/components/__main/ExploreTredingTagItem";
-import NewlyAddedTags from "~/components/__main/NewlyAddedTags";
+import ExploreTredingTagItem from "~/components/explore/ExploreTredingTagItem";
+import NewlyAddedTags from "~/components/explore/NewlyAddedTags";
 
 export default function Page() {
   return (

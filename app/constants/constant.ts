@@ -84,6 +84,10 @@ export const MUTATIONS_KEY = {
     NEW_DRAFTS: "postNewDraftApi",
     DELETE: (id: string | number) => ["deleteDraftApi", { id }],
   },
+  POSTS: {},
+  FILES: {
+    UPLOAD: "postImageUploadApi",
+  },
 };
 
 export const ASSET_URL = {

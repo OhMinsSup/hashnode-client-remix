@@ -7,9 +7,17 @@ export enum Transition {
   DONE = "DONE",
 }
 
+export enum UploadStatus {
+  IDLE = "IDLE",
+  UPLOADING = "UPLOADING",
+  SUCCESS = "SUCCESS",
+  ERROR = "ERROR",
+}
+
 enum Action {
   CHANGE_DRAFT_ID = "CHANGE_DRAFT_ID",
   CHANGE_TRANSITION = "CHANGE_TRANSITION",
+  CHANGE_UPLOAD_STATUS = "CHANGE_UPLOAD_STATUS",
   TOGGLE_LEFT_SIDEBAR = "TOGGLE_LEFT_SIDEBAR",
   SET_FORM_INSTANCE = "SET_FORM_INSTANCE",
 }
@@ -34,20 +42,31 @@ type SetFormInstanceAction = {
   payload: HTMLFormElement | null;
 };
 
+type ChangeUploadStatusAction = {
+  type: Action.CHANGE_UPLOAD_STATUS;
+  payload: UploadStatus;
+};
+
 type ActionType =
   | ChangeDraftIdAction
   | ChangeTransitionAction
   | ToggleLeftSidebarAction
-  | SetFormInstanceAction;
+  | SetFormInstanceAction
+  | ChangeUploadStatusAction;
 
 interface VisibilityState {
   isLeftSidebarVisible: boolean;
+}
+
+interface UploadState {
+  status: UploadStatus;
 }
 
 interface DraftState {
   visibility: VisibilityState;
   draftId: number | undefined;
   transition: Transition;
+  upload: UploadState;
   $form: HTMLFormElement | null;
 }
 
@@ -55,17 +74,21 @@ interface DraftContext extends DraftState {
   toggleLeftSidebar: (visible: boolean) => void;
   changeDraftId: (draftId: number | undefined) => void;
   changeTransition: (transition: Transition) => void;
+  changeUploadStatus: (status: UploadStatus) => void;
   setFormInstance: (form: HTMLFormElement | null) => void;
   dispatch: React.Dispatch<ActionType>;
 }
 
 const initialState: DraftState = {
+  $form: null,
+  transition: Transition.IDLE,
   visibility: {
-    isLeftSidebarVisible: true,
+    isLeftSidebarVisible: false,
+  },
+  upload: {
+    status: UploadStatus.IDLE,
   },
   draftId: undefined,
-  transition: Transition.IDLE,
-  $form: null,
 };
 
 const [Provider, useDraftContext] = createContext<DraftContext>({
@@ -103,6 +126,14 @@ function reducer(state = initialState, action: ActionType) {
         ...state,
         $form: action.payload,
       };
+    case Action.CHANGE_UPLOAD_STATUS:
+      return {
+        ...state,
+        upload: {
+          ...state.upload,
+          status: action.payload,
+        },
+      };
     default:
       return state;
   }
@@ -125,6 +156,13 @@ function DraftProvider({ children }: Props) {
     });
   };
 
+  const changeUploadStatus = (status: UploadStatus) => {
+    dispatch({
+      type: Action.CHANGE_UPLOAD_STATUS,
+      payload: status,
+    });
+  };
+
   const toggleLeftSidebar = (visible: boolean) => {
     dispatch({
       type: Action.TOGGLE_LEFT_SIDEBAR,
@@ -144,6 +182,7 @@ function DraftProvider({ children }: Props) {
       ...state,
       changeDraftId,
       changeTransition,
+      changeUploadStatus,
       toggleLeftSidebar,
       setFormInstance,
       dispatch,

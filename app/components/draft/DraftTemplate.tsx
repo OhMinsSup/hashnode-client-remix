@@ -1,5 +1,6 @@
 import React from "react";
 import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
+import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";
 
 interface DraftTemplateProps {
   children: React.ReactNode;
@@ -8,7 +9,9 @@ interface DraftTemplateProps {
 const DraftTemplate: React.FC<DraftTemplateProps> = ({ children }) => {
   return (
     <div className="draft-template">
-      <DraftLeftSidebar />
+      <DraftSidebarProvider>
+        <DraftLeftSidebar />
+      </DraftSidebarProvider>
       {children}
     </div>
   );

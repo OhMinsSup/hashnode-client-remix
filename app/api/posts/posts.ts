@@ -289,7 +289,7 @@ interface PostPostsApiParams extends ActionArgs {}
 
 /**
  * @description Get top posts
- * @param {PostPostsApiBody?} query
+ * @param {PostPostsApiBody?} body
  * @param {Options?} options
  * @returns {Promise<import('ky-universal').KyResponse>}
  */
@@ -308,7 +308,7 @@ export async function _postPostsApi(body: PostPostsApiBody, options?: Options) {
 
 /**
  * @description Get top posts
- * @param {PostPostsApiBody?} query
+ * @param {PostPostsApiBody?} body
  * @param {PostPostsApiParams?} args
  * @returns {Promise<{ result: AppAPI<PostRespSchema> }>}
  */
