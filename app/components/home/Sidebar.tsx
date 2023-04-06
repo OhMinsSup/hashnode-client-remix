@@ -6,6 +6,7 @@ import { Await, Link, useLoaderData } from "@remix-run/react";
 // hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { useMedia } from "react-use";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -225,11 +226,12 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.Right = function Right() {
+  const session = useOptionalSession();
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">
         <Sidebar.RightWidgetForTrening />
-        <Sidebar.RightWidgetForBookmarks />
+        {session ? <Sidebar.RightWidgetForBookmarks /> : null}
       </div>
     </aside>
   );
