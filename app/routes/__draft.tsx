@@ -23,6 +23,7 @@ import { DraftProvider } from "~/context/useDraftContext";
 
 // styles
 import draftStyles from "~/styles/routes/draft.css";
+import drawerStyles from "~/styles/components/draft-drawer.css";
 
 // types
 import type { FileSchema } from "~/api/schema/file";
@@ -84,7 +85,10 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: draftStyles }];
+  return [
+    { rel: "stylesheet", href: draftStyles },
+    { rel: "stylesheet", href: drawerStyles },
+  ];
 };
 
 export const loader = async (args: LoaderArgs) => {

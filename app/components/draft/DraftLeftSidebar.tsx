@@ -92,8 +92,6 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
     [changeKeyword]
   );
 
-  console.log("DraftLeftSidebar", isPending);
-
   return (
     <div
       className={classNames("draft-sidebar", {
@@ -103,7 +101,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
       aria-hidden={!visibility.isLeftSidebarVisible}
     >
       <div className="draft-sidebar-header">
-        <div className="sidebar-header__btn-back">
+        <div className="sidebar-header__btn-back mr-2">
           <Link to="/" className="btn-back__icon" replace>
             <Icons.ArrowLeft className="icon__sm flex-shrink-0 stroke-current" />
           </Link>

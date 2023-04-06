@@ -7,6 +7,8 @@ import ReachedEnd from "~/components/shared/ReachedEnd";
 import type { PostDetailRespSchema } from "~/api/schema/resp";
 import type { DataLoader } from "~/routes/__app/__list/index";
 
+const _PAGE_SIZE = 25;
+
 const PostsList = () => {
   const { posts } = useLoaderData<DataLoader>();
   const navigation = useNavigation();
@@ -16,10 +18,11 @@ const PostsList = () => {
 
   const totalCount = useMemo(() => posts?.totalCount ?? 0, [posts]);
 
-  const intialItemCount = useMemo(() => {
-    const currentItemCount = posts.list?.length ?? 0;
-    return currentItemCount < 25 ? currentItemCount : 25;
-  }, [posts]);
+  // const intialItemCount = useMemo(() => {
+  //   const currentItemCount = posts.list?.length ?? 0;
+  //   // return currentItemCount < 25 ? currentItemCount : 25;
+  //   return currentItemCount < _PAGE_SIZE ? currentItemCount : _PAGE_SIZE;
+  // }, [posts]);
 
   const hasNextPage = useMemo(() => {
     if (fetcher.data) {
@@ -39,10 +42,10 @@ const PostsList = () => {
         const { posts } = fetcher.data;
         const { hasNextPage } = posts?.pageInfo ?? {};
         if (hasNextPage) {
-          fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
+          fetcher.load(`?index&cursor=${lastItem.id}&limit=${_PAGE_SIZE}`);
         }
       } else {
-        fetcher.load(`?index&cursor=${lastItem.id}&limit=25`);
+        fetcher.load(`?index&cursor=${lastItem.id}&limit=${_PAGE_SIZE}`);
       }
     },
     [fetcher, items]
@@ -58,18 +61,22 @@ const PostsList = () => {
 
   return (
     <Virtuoso
-      useWindowScroll
+      useWindowScroll={true}
       style={{ height: "100%" }}
       data={items}
       totalCount={totalCount}
-      initialItemCount={intialItemCount}
+      // initialItemCount={intialItemCount}
       endReached={loadMore}
       components={{
         Footer: (props) => {
           if (!hasNextPage) {
             return <ReachedEnd />;
           }
-          return navigation.state === "loading" ? <>Loading more...</> : null;
+          return navigation.state === "loading" ? (
+            <>Loading more...</>
+          ) : (
+            <div></div>
+          );
         },
       }}
       overscan={5}

@@ -8,13 +8,9 @@ import { getPostsApi } from "~/api/posts/posts";
 import { parseUrlParams } from "~/utils/util";
 
 // components
-import PostsList from "~/components/home/PostsList";
+import PostsList from "~/components/home/PostsList.unstable";
 
-import type {
-  LoaderArgs,
-  V2_MetaFunction,
-  HeadersFunction,
-} from "@remix-run/cloudflare";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 
 const Seo = {
   title: "Featured posts on Hashnode",
@@ -30,7 +26,7 @@ export const loader = async (args: LoaderArgs) => {
     cursor = parseInt(params.cursor);
   }
 
-  let limit = 25;
+  let limit = undefined;
   if (params.limit) {
     limit = parseInt(params.limit);
   }
@@ -44,15 +40,16 @@ export const loader = async (args: LoaderArgs) => {
     args
   );
 
-  return json({
-    posts: posts.result?.result,
-  });
-};
-
-export const header: HeadersFunction = () => {
-  return {
-    "Cache-Control": "public, max-age=120",
-  };
+  return json(
+    {
+      posts: posts.result?.result,
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=120",
+      },
+    }
+  );
 };
 
 export const meta: V2_MetaFunction<typeof loader> = () => {

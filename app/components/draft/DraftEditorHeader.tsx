@@ -4,11 +4,15 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { Icons } from "../shared/Icons";
 
 const DraftEditorHeader = () => {
-  const { toggleLeftSidebar, visibility } = useDraftContext();
+  const { toggleLeftSidebar, visibility, togglePublish } = useDraftContext();
 
   const onToggleLeftSidebar = useCallback(() => {
     toggleLeftSidebar(!visibility.isLeftSidebarVisible);
   }, [toggleLeftSidebar, visibility.isLeftSidebarVisible]);
+
+  const onTogglePublish = useCallback(() => {
+    togglePublish(!visibility.isPublishVisible);
+  }, [togglePublish, visibility.isPublishVisible]);
 
   return (
     <div className="draft-editor--header">
@@ -38,7 +42,11 @@ const DraftEditorHeader = () => {
             role="separator"
             className="separator mr-2"
           ></div>
-          <button className="btn-publish" aria-label="Publish">
+          <button
+            className="btn-publish"
+            aria-label="Publish"
+            onClick={onTogglePublish}
+          >
             <span>Publish</span>
           </button>
         </div>

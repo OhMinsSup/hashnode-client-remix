@@ -5,6 +5,10 @@ import DraftEditorHeader from "~/components/draft/DraftEditorHeader";
 import DraftEdtiorContent from "~/components/draft/DraftEdtiorContent";
 import { useDraftContext } from "~/context/useDraftContext";
 
+const DraftPublishDrawer = React.lazy(
+  () => import("~/components/draft/DraftPublishDrawer")
+);
+
 const DraftEditor = () => {
   const { visibility } = useDraftContext();
 
@@ -20,6 +24,9 @@ const DraftEditor = () => {
     >
       <DraftEditorHeader />
       <DraftEdtiorContent />
+      <React.Suspense fallback={<>Loading....</>}>
+        <DraftPublishDrawer />
+      </React.Suspense>
     </div>
   );
 };

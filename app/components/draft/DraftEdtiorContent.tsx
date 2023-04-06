@@ -2,14 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // hooks
 import { useFormContext } from "react-hook-form";
-import { useDraftContext } from "~/context/useDraftContext";
+import { Transition, useDraftContext } from "~/context/useDraftContext";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 
 // utils
-import { getTargetElement } from "~/libs/browser-utils";
+import { getTargetElement, scheduleMicrotask } from "~/libs/browser-utils";
 
 // components
 import { Icons } from "../shared/Icons";
 import DraftImageCoverPopover from "./DraftImageCoverPopover";
+import Editor from "../shared/Editor";
 
 // types
 import type { FormFieldValues } from "~/routes/__draft";
@@ -17,16 +19,36 @@ import type { FormFieldValues } from "~/routes/__draft";
 const DraftEdtiorContent = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [usedSubtitle, setUsedSubTitle] = useState(false);
-  const { setFormInstance } = useDraftContext();
-  const { register, setValue, clearErrors, watch } =
+  const { setFormInstance, changeTransition, setEditorJSInstance, $editorJS } =
+    useDraftContext();
+  const { register, setValue, clearErrors, watch, formState } =
     useFormContext<FormFieldValues>();
 
   const watchThumbnail = watch("thumbnail");
+  const watchSubTitle = watch("subTitle");
+  const watchTitle = watch("title");
 
   useEffect(() => {
     const $ = getTargetElement(formRef);
     if ($) setFormInstance($);
   }, []);
+
+  const syncEditorContent = useCallback(async () => {
+    const blocks = await $editorJS?.save();
+    const data = JSON.stringify(blocks);
+
+    setValue("content", data, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    return data;
+  }, [$editorJS, setValue]);
+
+  const onChangeEditor = useCallback(async () => {
+    await syncEditorContent();
+    changeTransition(Transition.UPDATING);
+  }, [changeTransition, syncEditorContent]);
 
   const onToggleSubtitle = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -42,7 +64,32 @@ const DraftEdtiorContent = () => {
   const onRemoveCover = useCallback(() => {
     setValue("thumbnail", null);
     clearErrors("thumbnail");
+    scheduleMicrotask(() => {
+      changeTransition(Transition.UPDATING);
+    });
   }, [clearErrors, setValue]);
+
+  const debounced = useDebounceFn(
+    () => {
+      changeTransition(Transition.UPDATING);
+    },
+    {
+      wait: 200,
+      trailing: true,
+    }
+  );
+
+  useEffect(() => {
+    if (!formState.dirtyFields.title) return;
+    debounced.run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchTitle, formState.dirtyFields.title]);
+
+  useEffect(() => {
+    if (!formState.dirtyFields.subTitle) return;
+    debounced.run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchSubTitle, formState.dirtyFields.subTitle]);
 
   return (
     <div className="draft-editor--content">
@@ -119,7 +166,9 @@ const DraftEdtiorContent = () => {
             )}
           </div>
           {/* editor content */}
-          DraftEdtiorContent
+          <div className="relative z-20">
+            <Editor onReady={setEditorJSInstance} onChange={onChangeEditor} />
+          </div>
         </form>
       </div>
     </div>

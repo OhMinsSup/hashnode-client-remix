@@ -1,5 +1,6 @@
 import React, { useReducer, useMemo } from "react";
 import { createContext } from "~/libs/react-utils";
+import type EditorJS from "@editorjs/editorjs";
 
 export enum Transition {
   IDLE = "IDLE",
@@ -19,7 +20,9 @@ enum Action {
   CHANGE_TRANSITION = "CHANGE_TRANSITION",
   CHANGE_UPLOAD_STATUS = "CHANGE_UPLOAD_STATUS",
   TOGGLE_LEFT_SIDEBAR = "TOGGLE_LEFT_SIDEBAR",
+  TOGGLE_PUBLISH = "TOGGLE_PUBLISH",
   SET_FORM_INSTANCE = "SET_FORM_INSTANCE",
+  SET_EDITORJS_INSTANCE = "SET_EDITORJS_INSTANCE",
 }
 
 type ChangeDraftIdAction = {
@@ -37,9 +40,19 @@ type ToggleLeftSidebarAction = {
   payload: boolean;
 };
 
+type TogglePublishAction = {
+  type: Action.TOGGLE_PUBLISH;
+  payload: boolean;
+};
+
 type SetFormInstanceAction = {
   type: Action.SET_FORM_INSTANCE;
   payload: HTMLFormElement | null;
+};
+
+type SetEditorJSInstanceAction = {
+  type: Action.SET_EDITORJS_INSTANCE;
+  payload: EditorJS | null;
 };
 
 type ChangeUploadStatusAction = {
@@ -52,10 +65,13 @@ type ActionType =
   | ChangeTransitionAction
   | ToggleLeftSidebarAction
   | SetFormInstanceAction
-  | ChangeUploadStatusAction;
+  | ChangeUploadStatusAction
+  | TogglePublishAction
+  | SetEditorJSInstanceAction;
 
 interface VisibilityState {
   isLeftSidebarVisible: boolean;
+  isPublishVisible: boolean;
 }
 
 interface UploadState {
@@ -68,22 +84,27 @@ interface DraftState {
   transition: Transition;
   upload: UploadState;
   $form: HTMLFormElement | null;
+  $editorJS: EditorJS | null;
 }
 
 interface DraftContext extends DraftState {
   toggleLeftSidebar: (visible: boolean) => void;
+  togglePublish: (visible: boolean) => void;
   changeDraftId: (draftId: number | undefined) => void;
   changeTransition: (transition: Transition) => void;
   changeUploadStatus: (status: UploadStatus) => void;
   setFormInstance: (form: HTMLFormElement | null) => void;
+  setEditorJSInstance: (editor: EditorJS | null) => void;
   dispatch: React.Dispatch<ActionType>;
 }
 
 const initialState: DraftState = {
   $form: null,
+  $editorJS: null,
   transition: Transition.IDLE,
   visibility: {
     isLeftSidebarVisible: false,
+    isPublishVisible: false,
   },
   upload: {
     status: UploadStatus.IDLE,
@@ -121,6 +142,14 @@ function reducer(state = initialState, action: ActionType) {
           isLeftSidebarVisible: action.payload,
         },
       };
+    case Action.TOGGLE_PUBLISH:
+      return {
+        ...state,
+        visibility: {
+          ...state.visibility,
+          isPublishVisible: action.payload,
+        },
+      };
     case Action.SET_FORM_INSTANCE:
       return {
         ...state,
@@ -133,6 +162,11 @@ function reducer(state = initialState, action: ActionType) {
           ...state.upload,
           status: action.payload,
         },
+      };
+    case Action.SET_EDITORJS_INSTANCE:
+      return {
+        ...state,
+        $editorJS: action.payload,
       };
     default:
       return state;
@@ -170,10 +204,24 @@ function DraftProvider({ children }: Props) {
     });
   };
 
+  const togglePublish = (visible: boolean) => {
+    dispatch({
+      type: Action.TOGGLE_PUBLISH,
+      payload: visible,
+    });
+  };
+
   const setFormInstance = (form: HTMLFormElement | null) => {
     dispatch({
       type: Action.SET_FORM_INSTANCE,
       payload: form,
+    });
+  };
+
+  const setEditorJSInstance = (editor: EditorJS | null) => {
+    dispatch({
+      type: Action.SET_EDITORJS_INSTANCE,
+      payload: editor,
     });
   };
 
@@ -184,7 +232,9 @@ function DraftProvider({ children }: Props) {
       changeTransition,
       changeUploadStatus,
       toggleLeftSidebar,
+      togglePublish,
       setFormInstance,
+      setEditorJSInstance,
       dispatch,
     }),
     [state]

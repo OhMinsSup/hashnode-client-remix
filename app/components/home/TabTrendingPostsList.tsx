@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useId, useMemo } from "react";
 import TabTrendingPostsItem from "~/components/home/TabTrendingPostsItem";
 import { isNull, isUndefined } from "~/utils/assertion";
 import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
@@ -20,7 +20,7 @@ function TabTrendingPostsList({
       duration: duration,
     },
     {
-      suspense: duration !== 7,
+      suspense: true,
       enabled,
       initialData,
       staleTime: 1000 * 60 * 60 * 24,
@@ -61,6 +61,7 @@ TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
   dataKey: string;
   prefix?: string;
 }) {
+  const id = useId();
   return (
     <div>
       {Array.from({ length: 5 }).map((_, index) => (
@@ -68,7 +69,7 @@ TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
           <TabTrendingPostsItem.Skeleton
             key={`${
               prefix ? `${prefix}-` : ""
-            }TabTrendingPostsItem-${dataKey}-${index}`}
+            }TabTrendingPostsItem-${dataKey}-${index}-${id}`}
           />
           {index !== 4 && <hr className="custom-divide__tab-treding" />}
         </>

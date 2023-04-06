@@ -96,11 +96,11 @@ export async function getAritcleCirclesDelayedApi(
 
 // [Get] Path: /api/v1/widget/bookmarks
 
-interface GetWidgetBookmarksApiSearchParams {
+export interface GetWidgetBookmarksApiSearchParams {
   userId?: string | number;
 }
 
-interface GetWidgetBookmarksApiParams extends LoaderArgs {}
+export interface GetWidgetBookmarksApiParams extends LoaderArgs {}
 
 /**
  * @description Bookmarks 조회 API
