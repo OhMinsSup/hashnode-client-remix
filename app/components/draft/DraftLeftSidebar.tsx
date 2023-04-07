@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useTransition } from "react";
+import React, { useCallback } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 
@@ -34,8 +34,6 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
     visibility,
     toggleLeftSidebar,
   } = useDraftContext();
-
-  const [isPending, startTransition] = useTransition();
 
   const { keyword, changeKeyword } = useDraftSidebarContext();
 
@@ -85,9 +83,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
 
   const onChangeKeyword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      startTransition(() => {
-        changeKeyword(e.target.value);
-      });
+      changeKeyword(e.target.value);
     },
     [changeKeyword]
   );

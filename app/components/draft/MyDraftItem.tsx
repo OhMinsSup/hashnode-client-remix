@@ -7,25 +7,40 @@ import { Icons } from "~/components/shared/Icons";
 
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
+import { useFormContext } from "react-hook-form";
 
 // types
-import type { Draft } from "~/libs/db/db";
+import { type Draft, hashnodeDB } from "~/libs/db/db";
+import type { FormFieldValues } from "~/routes/__draft";
+import { isString } from "~/utils/assertion";
 
 interface MyDraftItemProps {
   item: Partial<Draft>;
 }
 
 const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
-  const { changeDraftId, draftId } = useDraftContext();
+  const { changeDraftId, draftId, $editorJS } = useDraftContext();
   const [open, setOpen] = useState(false);
+  const methods = useFormContext<FormFieldValues>();
 
-  const onSelectedDraft = useCallback(() => {
+  const onSelectedDraft = useCallback(async () => {
+    if (!item.id) return;
+    const draft = await hashnodeDB.getDraft(item.id);
+    if (!draft) return;
     changeDraftId(item.id);
-  }, [changeDraftId, item.id]);
+    methods.reset(draft);
+    if (draft.content && isString(draft.content)) {
+      const data = JSON.parse(draft.content);
+      if (!data) return;
+      $editorJS?.render(data);
+    }
+  }, [changeDraftId, item.id, methods, $editorJS]);
 
-  const onClickDelete = useCallback(() => {
-    console.log("delete");
-  }, [item.id]);
+  const onClickDelete = useCallback(async () => {
+    if (!item.id) return;
+    changeDraftId(undefined);
+    await hashnodeDB.deleteDraft(item.id);
+  }, [changeDraftId, item.id]);
 
   return (
     <div

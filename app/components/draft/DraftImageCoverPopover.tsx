@@ -61,7 +61,7 @@ function DraftImageCoverPopover() {
           <span>Add Cover</span>
         </button>
       </Popover.Trigger>
-      <Popover.Portal>
+      <Popover.Portal className="popover__cover-portal">
         <Popover.Content className="popover__cover" sideOffset={5}>
           <DraftImageCoverPopover.Tabs onChangeOpenState={onChangeOpenState} />
         </Popover.Content>

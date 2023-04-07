@@ -12,43 +12,50 @@ import { getTargetElement, scheduleMicrotask } from "~/libs/browser-utils";
 import { Icons } from "../shared/Icons";
 import DraftImageCoverPopover from "./DraftImageCoverPopover";
 import Editor from "../shared/Editor";
+import { ClientOnly } from "remix-utils";
 
 // types
+import type { API } from "@editorjs/editorjs";
 import type { FormFieldValues } from "~/routes/__draft";
 
 const DraftEdtiorContent = () => {
-  const formRef = useRef<HTMLFormElement>(null);
+  const $form = useRef<HTMLFormElement>(null);
   const [usedSubtitle, setUsedSubTitle] = useState(false);
-  const { setFormInstance, changeTransition, setEditorJSInstance, $editorJS } =
-    useDraftContext();
-  const { register, setValue, clearErrors, watch, formState } =
-    useFormContext<FormFieldValues>();
+
+  const ctx = useDraftContext();
+
+  const methods = useFormContext<FormFieldValues>();
+
+  const { register, setValue, clearErrors, watch, formState } = methods;
 
   const watchThumbnail = watch("thumbnail");
   const watchSubTitle = watch("subTitle");
   const watchTitle = watch("title");
 
   useEffect(() => {
-    const $ = getTargetElement(formRef);
-    if ($) setFormInstance($);
+    const $ = getTargetElement($form);
+    if ($) ctx.setFormInstance($);
   }, []);
 
-  const syncEditorContent = useCallback(async () => {
-    const blocks = await $editorJS?.save();
-    const data = JSON.stringify(blocks);
+  const onChangeEditor = useCallback(
+    async (api: API) => {
+      const blocks = await api.saver.save();
+      if (!blocks) return;
+      const data = JSON.stringify(blocks);
 
-    setValue("content", data, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+      setValue("content", data, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
 
-    return data;
-  }, [$editorJS, setValue]);
+      scheduleMicrotask(() => {
+        ctx.changeTransition(Transition.UPDATING);
+      });
 
-  const onChangeEditor = useCallback(async () => {
-    await syncEditorContent();
-    changeTransition(Transition.UPDATING);
-  }, [changeTransition, syncEditorContent]);
+      return data;
+    },
+    [ctx.changeTransition, setValue]
+  );
 
   const onToggleSubtitle = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -64,14 +71,15 @@ const DraftEdtiorContent = () => {
   const onRemoveCover = useCallback(() => {
     setValue("thumbnail", null);
     clearErrors("thumbnail");
+
     scheduleMicrotask(() => {
-      changeTransition(Transition.UPDATING);
+      ctx.changeTransition(Transition.UPDATING);
     });
-  }, [clearErrors, setValue]);
+  }, [clearErrors, ctx.changeTransition, setValue]);
 
   const debounced = useDebounceFn(
     () => {
-      changeTransition(Transition.UPDATING);
+      ctx.changeTransition(Transition.UPDATING);
     },
     {
       wait: 200,
@@ -94,7 +102,7 @@ const DraftEdtiorContent = () => {
   return (
     <div className="draft-editor--content">
       <div className="content-wrapper">
-        <form className="content" ref={formRef}>
+        <form className="content" ref={$form}>
           <div>
             <div className="editor-toolbar-header">
               <DraftImageCoverPopover />
@@ -166,8 +174,15 @@ const DraftEdtiorContent = () => {
             )}
           </div>
           {/* editor content */}
-          <div className="relative z-20">
-            <Editor onReady={setEditorJSInstance} onChange={onChangeEditor} />
+          <div className="relative z-20 px-4">
+            <ClientOnly>
+              {() => (
+                <Editor
+                  onReady={ctx.setEditorJSInstance}
+                  onChange={onChangeEditor}
+                />
+              )}
+            </ClientOnly>
           </div>
         </form>
       </div>

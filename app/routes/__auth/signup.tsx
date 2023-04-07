@@ -5,9 +5,10 @@ import classNames from "classnames";
 import {
   Form,
   Link,
-  useCatch,
   useActionData,
   useNavigation,
+  useRouteError,
+  isRouteErrorResponse,
 } from "@remix-run/react";
 import ErrorMessage from "~/components/shared/ErrorMessage";
 import { Icons } from "~/components/shared/Icons";
@@ -29,7 +30,6 @@ import {
 import { signupApi } from "~/api/auth/auth";
 
 // types
-import type { ThrownResponse } from "@remix-run/react";
 import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request }: ActionArgs) => {
@@ -67,11 +67,7 @@ export const action = async ({ request }: ActionArgs) => {
   }
 };
 
-interface SigninProps {
-  error?: Record<string, any>;
-}
-
-export default function Signup(props: SigninProps) {
+export default function Signup() {
   const errors = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = useMemo(
@@ -201,8 +197,14 @@ export default function Signup(props: SigninProps) {
   );
 }
 
-export function CatchBoundary() {
-  const caught = useCatch<ThrownResponse<number, any>>();
+export function ErrorBoundary() {
+  let error = useRouteError();
 
-  return <Signup error={caught.data} />;
+  if (isRouteErrorResponse(error)) {
+    return <Signup />;
+  } else if (error instanceof Error) {
+    return <Signup />;
+  }
+
+  return <Signup />;
 }

@@ -232,9 +232,14 @@ Sidebar.Right = function Right() {
       <div className="right-sidebar__container">
         <Sidebar.RightWidgetForTrening />
         {session ? <Sidebar.RightWidgetForBookmarks /> : null}
+        <Sidebar.RightOtherBox />
       </div>
     </aside>
   );
+};
+
+Sidebar.RightOtherBox = function RightOtherBox() {
+  return <RightSidebarContentBox title="Others">??</RightSidebarContentBox>;
 };
 
 Sidebar.RightWidgetForTrening = function RightWidgetForTrening() {

@@ -16,6 +16,7 @@ const DraftEditor = () => {
 
   return (
     <div
+      data-hydrating-signal
       className={classNames({
         "draft-editor": visibility.isLeftSidebarVisible,
         "draft-editor--close-sidebar": !visibility.isLeftSidebarVisible,

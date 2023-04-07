@@ -9,7 +9,7 @@ import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 // components
 import MyDraftItem from "~/components/draft/MyDraftItem";
 import { Icons } from "~/components/shared/Icons";
-import { db } from "~/libs/db/db";
+import { hashnodeDB } from "~/libs/db/db";
 
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -17,11 +17,7 @@ const MyDraftSidebar: React.FC = () => {
   const { keyword } = useDraftSidebarContext();
 
   const data = useLiveQuery(async () => {
-    const [_list, _totalCount] = await Promise.all([
-      db.drafts.where("title").above(keyword).toArray(),
-      db.drafts.where("title").above(keyword).count(),
-    ]);
-    return { list: _list, totalCount: _totalCount };
+    return hashnodeDB.getHashTitleDrafts(keyword);
   }, [keyword]);
 
   const onCollapsibleOpenChange = useCallback((open: boolean) => {

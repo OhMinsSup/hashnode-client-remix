@@ -1,11 +1,12 @@
 import Dexie, { type Table, type IndexableType } from "dexie";
+import type { FileSchema } from "~/api/schema/file";
 
 export interface Draft {
   id?: number;
   title: string;
   subTitle: string;
   content: string;
-  thumbnail: string;
+  thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
   description: string;
   disabledComment: boolean;
   publishingDate: Date;
@@ -44,6 +45,18 @@ export class HashnodeDexie extends Dexie {
       return this.drafts.delete(key);
     });
   }
+
+  async getDraft(key: IndexableType) {
+    return this.drafts.get(key);
+  }
+
+  async getHashTitleDrafts(keyword?: string) {
+    const [_list, _totalCount] = await Promise.all([
+      hashnodeDB.drafts.where("title").above(keyword).toArray(),
+      hashnodeDB.drafts.where("title").above(keyword).count(),
+    ]);
+    return { list: _list, totalCount: _totalCount };
+  }
 }
 
-export const db = new HashnodeDexie();
+export const hashnodeDB = new HashnodeDexie();

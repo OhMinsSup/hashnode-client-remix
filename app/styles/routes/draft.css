@@ -3,6 +3,11 @@
     max-width: unset !important;
 }
 
+/* [data-radix-popper-content-wrapper] 자식 요소에 .popover__cover가 존재하는 경우 z-index 50 */
+[data-radix-popper-content-wrapper]:has(.popover__cover) {
+  @apply !z-50;
+}
+
 .draft-template {
   @apply relative mx-auto grid max-w-[1536px] grid-cols-10;
 }

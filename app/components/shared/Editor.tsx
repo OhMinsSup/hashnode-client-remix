@@ -75,6 +75,7 @@ const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
     const InlineCode = (await import("@editorjs/inline-code")).default;
     // @ts-ignore
     const ImageTool = (await import("@editorjs/image")).default;
+
     if (!ref.current) {
       const data = isString(props.initialData)
         ? JSON.parse(props.initialData) || undefined
