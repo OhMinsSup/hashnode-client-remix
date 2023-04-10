@@ -18,7 +18,7 @@ import { scheduleMicrotask } from "~/libs/browser-utils";
 import { getTagListApi } from "~/api/tags/tags";
 
 // types
-import type { FormFieldValues } from "~/routes/__draft";
+import type { FormFieldValues } from "~/routes/draft";
 import type { MultiValue } from "react-select";
 
 function InternalDraftPublishDrawer() {
@@ -28,6 +28,16 @@ function InternalDraftPublishDrawer() {
     togglePublish(false);
   }, [togglePublish]);
 
+  // const onSubmit = useCallback(() => {
+  //   const ele = getTargetElement($form);
+  //   ele?.dispatchEvent(
+  //     new Event("submit", {
+  //       cancelable: true,
+  //       bubbles: true,
+  //     })
+  //   );
+  // }, [$form]);
+
   return (
     <div className="drawer-container">
       <div className="drawer-header">
@@ -35,7 +45,7 @@ function InternalDraftPublishDrawer() {
           <Icons.X className="icon__base mr-2 fill-current" />
           <span>Close</span>
         </button>
-        <button type="button" className="btn-submit">
+        <button type="submit" className="btn-submit">
           Publish
         </button>
       </div>
@@ -76,7 +86,7 @@ interface Props {
 InternalDraftPublishDrawer.Container = function DraftPublishDrawerContainer({
   children,
 }: Props) {
-  return <div className="px-5 pt-4 pb-5">{children}</div>;
+  return <div className="px-5 pb-5 pt-4">{children}</div>;
 };
 
 InternalDraftPublishDrawer.Tags = function DraftPublishDrawerTags() {
@@ -130,6 +140,31 @@ InternalDraftPublishDrawer.Tags = function DraftPublishDrawerTags() {
 };
 
 InternalDraftPublishDrawer.Title = function DraftPublishDrawerTitle() {
+  const { register, formState, control } = useFormContext<FormFieldValues>();
+
+  const { changeTransition } = useDraftContext();
+
+  const watchTitle = useWatch<FormFieldValues, "seo.title">({
+    name: "seo.title",
+    control,
+  });
+
+  const debounced = useDebounceFn(
+    () => {
+      changeTransition(Transition.UPDATING);
+    },
+    {
+      wait: 200,
+      trailing: true,
+    }
+  );
+
+  useEffect(() => {
+    if (!formState.dirtyFields.seo?.title) return;
+    debounced.run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchTitle, formState.dirtyFields.seo?.title]);
+
   return (
     <>
       <h3 className="title mb-3">SEO TITLE (OPTIONAL)</h3>
@@ -141,11 +176,11 @@ InternalDraftPublishDrawer.Title = function DraftPublishDrawerTitle() {
       </p>
       <div className="relative">
         <textarea
-          name="seoTitle"
           maxLength={70}
           placeholder="Enter meta title"
           className="textarea"
           style={{ height: "58px !important" }}
+          {...register("seo.desc")}
         ></textarea>
       </div>
     </>
@@ -158,13 +193,13 @@ InternalDraftPublishDrawer.Description =
 
     const { changeTransition } = useDraftContext();
 
-    const watchDescription = useWatch<FormFieldValues, "description">({
-      name: "description",
+    const watchDescription = useWatch<FormFieldValues, "seo.desc">({
+      name: "seo.desc",
       control,
     });
 
     const debounced = useDebounceFn(
-      (description: string) => {
+      () => {
         changeTransition(Transition.UPDATING);
       },
       {
@@ -174,10 +209,10 @@ InternalDraftPublishDrawer.Description =
     );
 
     useEffect(() => {
-      if (!formState.dirtyFields.description) return;
-      debounced.run(watchDescription);
+      if (!formState.dirtyFields.seo?.desc) return;
+      debounced.run();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [watchDescription, formState.dirtyFields.description]);
+    }, [watchDescription, formState.dirtyFields.seo?.desc]);
 
     return (
       <>
@@ -193,7 +228,7 @@ InternalDraftPublishDrawer.Description =
             placeholder="Enter meta description…"
             className="textarea"
             style={{ height: "58px !important" }}
-            {...register("description")}
+            {...register("seo.desc")}
           ></textarea>
         </div>
       </>
@@ -211,22 +246,15 @@ InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
     control,
   });
 
-  const hasPublishedTime = useWatch<FormFieldValues, "hasPublishedTime">({
-    name: "hasPublishedTime",
-    control,
-  });
-
   const onRemoveSchedule = useCallback(() => {
-    const options = {
+    setValue("publishingDate", undefined, {
       shouldDirty: true,
       shouldTouch: true,
-    };
-    setValue("hasPublishedTime", false, options);
-    setValue("publishingDate", undefined, options);
+    });
   }, [setValue]);
 
   const onSetSchedule = useCallback(() => {
-    setValue("hasPublishedTime", true, {
+    setValue("publishingDate", new Date(), {
       shouldDirty: true,
       shouldTouch: true,
     });
@@ -245,7 +273,7 @@ InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
         Select a publishing date/time (Based on your local time zone)
       </p>
       <div className="mb-3">
-        {hasPublishedTime ? (
+        {publishingDate ? (
           <>
             <div className="flex w-full flex-row items-center justify-between rounded-lg border bg-gray-50 p-4 text-base text-gray-900 outline-none">
               <input

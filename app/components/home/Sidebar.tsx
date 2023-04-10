@@ -26,7 +26,7 @@ import TabTrendingPostsList from "./TabTrendingPostsList";
 import WidgetBookmark from "./WidgetBookmark";
 
 // types
-import type { HomeLoaderData } from "~/routes/__app";
+import type { HomeLoaderData } from "~/routes/_main";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;

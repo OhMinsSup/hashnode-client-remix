@@ -33,17 +33,21 @@ import type {
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
 
+export interface SeoFormFieldValues {
+  title: string;
+  desc: string;
+  image: string;
+}
+
 export interface FormFieldValues {
   title: string;
   subTitle?: string;
-  description: string;
   content: string;
   thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
   tags?: string[];
   disabledComment: boolean;
-  isPublic: boolean;
-  hasPublishedTime: boolean;
   publishingDate?: Date;
+  seo?: Partial<SeoFormFieldValues>;
 }
 
 const Seo = {
@@ -114,14 +118,16 @@ export default function DraftRouteLayout() {
     return {
       title: "",
       subTitle: undefined,
-      description: "",
       content: "",
       thumbnail: null,
       tags: undefined,
       disabledComment: false,
-      isPublic: false,
-      hasPublishedTime: false,
       publishingDate: undefined,
+      seo: {
+        title: "",
+        desc: "",
+        image: "",
+      },
     };
   }, []);
 

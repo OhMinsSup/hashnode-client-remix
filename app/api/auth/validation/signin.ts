@@ -21,6 +21,8 @@ export const signinSchema = z.object({
     }),
 });
 
+export type SigninBody = z.infer<typeof signinSchema>;
+
 /**
  * Signin error wrapper
  * @version 1.0.0

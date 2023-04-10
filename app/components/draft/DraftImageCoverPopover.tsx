@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useMemo } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
-import { Icons } from "../shared/Icons";
+import { Icons } from "~/components/shared/Icons";
 
 // utils
 import { isEmpty } from "~/utils/assertion";

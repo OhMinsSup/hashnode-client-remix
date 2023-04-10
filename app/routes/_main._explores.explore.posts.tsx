@@ -7,9 +7,9 @@ export default function Page() {
   return (
     <div className="explore-trending-tags">
       <div className="title-wrapper">
-        <h2>Trending Tags</h2>
-        <Link to="/explore/tags" className="see-all-link">
-          See all tags
+        <h2>Trending Posts</h2>
+        <Link to="/explore/posts" className="see-all-link">
+          See all Posts
         </Link>
       </div>
       <div className="content-wrapper">

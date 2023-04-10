@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDraftContext } from "~/context/useDraftContext";
 // import { TimeIcon } from "~/components/__ui/Icon";
-import { Icons } from "../shared/Icons";
+import { Icons } from "~/components/shared/Icons";
 
 const DraftEditorHeader = () => {
   const { toggleLeftSidebar, visibility, togglePublish } = useDraftContext();
@@ -19,6 +19,7 @@ const DraftEditorHeader = () => {
       <div className="header-wrapper">
         <div className="header--left">
           <button
+            type="button"
             aria-controls="draft-sidebar"
             aria-label="toggle sidebar menu"
             aria-expanded={visibility.isLeftSidebarVisible}
@@ -30,6 +31,7 @@ const DraftEditorHeader = () => {
         <div className="header--right">
           <div>
             <button
+              type="button"
               className="btn-revision-history"
               aria-label="Revision history"
             >
@@ -43,6 +45,7 @@ const DraftEditorHeader = () => {
             className="separator mr-2"
           ></div>
           <button
+            type="button"
             className="btn-publish"
             aria-label="Publish"
             onClick={onTogglePublish}
