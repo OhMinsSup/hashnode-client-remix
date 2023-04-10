@@ -7,18 +7,25 @@ import type { ErrorAPI } from "~/api/schema/api";
 export const createPostSchema = z.object({
   title: z.string().max(100),
   subTitle: z.string().max(100).optional().nullable(),
-  description: z.string().min(140).max(156),
   content: z.string(),
   thumbnail: z.object({
     idx: z.number().optional().nullable(),
     url: z.string().url(),
   }),
-  tags: z.array(z.string()).max(5).nullable().optional(),
   disabledComment: z.boolean().optional(),
-  isPublic: z.boolean().optional(),
-  hasPublishedTime: z.boolean().optional(),
   publishingDate: z.date().min(new Date()).optional().nullable(),
+  tags: z.array(z.string()).max(5).nullable().optional(),
+  seo: z
+    .object({
+      title: z.string().max(50).optional().nullable(),
+      desc: z.string().max(156).optional().nullable(),
+      image: z.string().url().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
 });
+
+export type CreatePostBody = z.infer<typeof createPostSchema>;
 
 /**
  * Signin error wrapper

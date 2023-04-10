@@ -1,13 +1,18 @@
 import { apiClient } from "../client";
 import { API_ENDPOINTS } from "~/constants/constant";
-
+import { applyHeaders } from "~/libs/server/utils";
 import type { Options } from "ky-universal";
 import type { AppAPI } from "../schema/api";
-import type { UploadBody } from "../schema/body";
 import type { FileListRespSchema, UploadRespSchema } from "../schema/resp";
 import type { PaginationQuery } from "../schema/query";
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
-import { applyHeaders } from "~/libs/server/utils";
+import type { MediaType, UploadType } from "../schema/file";
+
+export interface UploadBody {
+  file: File;
+  uploadType: UploadType;
+  mediaType: MediaType;
+}
 
 // [Post] Path: /api/files/upload
 

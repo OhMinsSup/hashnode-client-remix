@@ -9,9 +9,10 @@ import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { Options } from "ky-universal";
-import type { SignupBody, SigninBody } from "~/api/schema/body";
 import type { AuthRespSchema } from "~/api/schema/resp";
 import type { AppAPI } from "~/api/schema/api";
+import type { SignupBody } from "./validation/signup";
+import type { SigninBody } from "./validation/signin";
 
 /**
  * @description 회원가입 API

@@ -18,7 +18,7 @@ import { Transition, useDraftContext } from "~/context/useDraftContext";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
 // types
-import type { FormFieldValues } from "~/routes/__draft";
+import type { FormFieldValues } from "~/routes/draft";
 
 interface DraftLeftSidebarProps {}
 

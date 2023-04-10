@@ -55,6 +55,7 @@
     "react-virtuoso": "^4.2.0",
     "remix-utils": "^6.1.0",
     "resize-observer-polyfill": "^1.5.1",
+    "superjson": "^1.12.2",
     "tailwindcss-animate": "^1.0.5",
     "ts-pattern": "^4.2.2",
     "use-debounce": "^9.0.4",

@@ -12,7 +12,6 @@ import { Outlet } from "@remix-run/react";
 import TabRoutesPosts from "~/components/home/TabRoutesPosts";
 import ScrollAreaTrendingUsers from "~/components/home/ScrollAreaTrendingUsers";
 
-
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
 

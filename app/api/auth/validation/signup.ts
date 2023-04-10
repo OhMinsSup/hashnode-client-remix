@@ -42,6 +42,8 @@ export const signupSchema = z
     path: ["confirmPassword"], // path of error
   });
 
+export type SignupBody = z.infer<typeof signupSchema>;
+
 /**
  * Signup error wrapper
  * @version 1.0.0

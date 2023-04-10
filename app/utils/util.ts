@@ -1,4 +1,4 @@
-import { isNullOrUndefined, isObject, isUndefined } from "./assertion";
+import { isNull, isNullOrUndefined, isObject, isUndefined } from "./assertion";
 
 const DEFAULT_REDIRECT = "/";
 
@@ -93,4 +93,17 @@ export const noopPromiseResponse = (data: any) => {
       error: undefined,
     },
   });
+};
+
+export const valueToBoolean = (value: any) => {
+  if (value === "true") {
+    return true;
+  }
+  if (value === "false") {
+    return false;
+  }
+  if (isNull(value) || isUndefined(value)) {
+    return false;
+  }
+  return value;
 };

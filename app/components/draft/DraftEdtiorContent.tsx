@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // hooks
 import { useFormContext } from "react-hook-form";
@@ -6,20 +6,20 @@ import { Transition, useDraftContext } from "~/context/useDraftContext";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 
 // utils
-import { getTargetElement, scheduleMicrotask } from "~/libs/browser-utils";
+import { scheduleMicrotask } from "~/libs/browser-utils";
 
 // components
-import { Icons } from "../shared/Icons";
+import { Icons } from "~/components/shared/Icons";
 import DraftImageCoverPopover from "./DraftImageCoverPopover";
-import Editor from "../shared/Editor";
+import Editor from "~/components/shared/Editor";
 import { ClientOnly } from "remix-utils";
 
 // types
 import type { API } from "@editorjs/editorjs";
-import type { FormFieldValues } from "~/routes/__draft";
+import type { FormFieldValues } from "~/routes/draft";
 
 const DraftEdtiorContent = () => {
-  const $form = useRef<HTMLFormElement>(null);
+  // const $form = useRef<HTMLFormElement>(null);
   const [usedSubtitle, setUsedSubTitle] = useState(false);
 
   const ctx = useDraftContext();
@@ -32,10 +32,10 @@ const DraftEdtiorContent = () => {
   const watchSubTitle = watch("subTitle");
   const watchTitle = watch("title");
 
-  useEffect(() => {
-    const $ = getTargetElement($form);
-    if ($) ctx.setFormInstance($);
-  }, []);
+  // useEffect(() => {
+  //   const $ = getTargetElement($form);
+  //   if ($) ctx.setFormInstance($);
+  // }, []);
 
   const onChangeEditor = useCallback(
     async (api: API) => {
@@ -102,7 +102,7 @@ const DraftEdtiorContent = () => {
   return (
     <div className="draft-editor--content">
       <div className="content-wrapper">
-        <form className="content" ref={$form}>
+        <div className="content">
           <div>
             <div className="editor-toolbar-header">
               <DraftImageCoverPopover />
@@ -184,7 +184,7 @@ const DraftEdtiorContent = () => {
               )}
             </ClientOnly>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

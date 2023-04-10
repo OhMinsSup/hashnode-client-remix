@@ -11,7 +11,7 @@ import { useFormContext } from "react-hook-form";
 
 // types
 import { type Draft, hashnodeDB } from "~/libs/db/db";
-import type { FormFieldValues } from "~/routes/__draft";
+import type { FormFieldValues } from "~/routes/draft";
 import { isString } from "~/utils/assertion";
 
 interface MyDraftItemProps {

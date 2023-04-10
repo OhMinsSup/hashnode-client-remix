@@ -1,52 +1,31 @@
 import React from "react";
-import { json, redirect } from "@remix-run/cloudflare";
 import { Outlet } from "@remix-run/react";
-
-// constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-
-// api
-import { getSessionApi } from "~/api/user/user";
 
 // types
 import type {
-  LoaderArgs,
   V2_MetaFunction,
   HeadersFunction,
   LinksFunction,
 } from "@remix-run/cloudflare";
 
 // styles
-import homeListStyle from "~/styles/routes/home-list.css";
-import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
+import homeExploreStyle from "~/styles/routes/home-explore.css";
+import TabRoutesExplore from "~/components/explore/TabRoutesExplore";
 
 const Seo = {
-  title: "Bookmarks - Hashnode",
-  description: "Bookmarks - Hashnode",
+  title: "Explore Popular Tech Blogs and Topics - Hashnode",
+  description:
+    "Explore the most popular tech blogs from the Hashnode community. A constantly updating list of the best minds in tech.",
   image: "/images/seo_image.png",
 };
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: homeListStyle },
-    { rel: "stylesheet", href: homeBookmarkStyle },
-  ];
-};
-
-export const loader = async (args: LoaderArgs) => {
-  const { session, header: headers } = await getSessionApi(args);
-  if (!session) {
-    return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-      headers,
-    });
-  }
-
-  return json(
-    {},
     {
-      headers,
-    }
-  );
+      rel: "stylesheet",
+      href: homeExploreStyle,
+    },
+  ];
 };
 
 export const header: HeadersFunction = () => {
@@ -91,16 +70,20 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export default function Bookmarks() {
+export default function Explore() {
   return (
-    <div className="relative col-span-7 min-w-0 pt-5 pb-5">
+    <div className="relative col-span-7 min-w-0 pb-5 pt-5">
       <div className="content-info-box">
-        <h1>Bookmarks</h1>
-        <p>All articles you have bookmarked on Hashnode</p>
+        <h1>Explore Tech Blogs &amp; Tags</h1>
+        <p>
+          Everything that's… Hashnode. Explore the most popular tech blogs from
+          the Hashnode community. A constantly updating list of popular tags and
+          the best minds in tech.
+        </p>
       </div>
-      <div className="overflow-hidden rounded-lg border bg-white">
+      <TabRoutesExplore>
         <Outlet />
-      </div>
+      </TabRoutesExplore>
     </div>
   );
 }

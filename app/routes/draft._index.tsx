@@ -7,6 +7,10 @@ import React, {
 } from "react";
 import DraftEditor from "~/components/draft/DraftEditor";
 import isEqual from "lodash-es/isEqual";
+import Json from "superjson";
+import { redirect, json } from "@remix-run/cloudflare";
+import { postPostsApi } from "~/api/posts/posts";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // hooks
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
@@ -15,39 +19,46 @@ import { useBeforeUnload } from "@remix-run/react";
 
 import { isBrowser } from "~/libs/browser-utils";
 import { hashnodeDB } from "~/libs/db/db";
+import {
+  createPostSchema,
+  postHTTPErrorWrapper,
+  postValidationErrorWrapper,
+} from "~/api/posts/validation/create";
 
 // types
 import { Transition, useDraftContext } from "~/context/useDraftContext";
 import type { ActionFunction } from "@remix-run/cloudflare";
-import type { FormFieldValues } from "../__draft";
 
-export const action: ActionFunction = async ({ request }) => {};
+import type { FormFieldValues } from "./draft";
 
-const useSnapShot = <T extends Record<string, any>>() => {
-  const ref = useRef<T>();
+export const action: ActionFunction = async (ctx) => {
+  const formData = await ctx.request.formData();
 
-  const setSnapShot = useCallback((value: T) => {
-    ref.current = value;
-  }, []);
+  const _input_body = formData.get("body")?.toString();
+  if (!_input_body) {
+    return;
+  }
+  const _input_json_body = Json.parse<FormFieldValues>(_input_body);
 
-  const getSnapShot = useCallback(() => {
-    return ref.current;
-  }, []);
-
-  return {
-    setSnapShot,
-    getSnapShot,
-  };
+  try {
+    const body = await createPostSchema.safeParseAsync(_input_json_body);
+    if (!body.success) {
+      return json(body.error, { status: 400 });
+    }
+    const { result } = await postPostsApi(body.data, ctx);
+    return redirect(PAGE_ENDPOINTS.ROOT);
+  } catch (error) {
+    const error_validation = postValidationErrorWrapper(error);
+    if (error_validation) {
+      return json(error_validation);
+    }
+    const error_http = await postHTTPErrorWrapper(error);
+    if (error_http) {
+      return json(error_http.errors);
+    }
+    throw json(error);
+  }
 };
-
-function useIsHydrating(queryString: string) {
-  const [isHydrating] = useState(
-    () => isBrowser && Boolean(document.querySelector(queryString))
-  );
-  return isHydrating;
-}
-
-const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
 
 export default function DraftPage() {
   const { watch } = useFormContext<FormFieldValues>();
@@ -139,3 +150,29 @@ export default function DraftPage() {
 export function CatchBoundary() {
   return <DraftPage />;
 }
+
+const useSnapShot = <T extends Record<string, any>>() => {
+  const ref = useRef<T>();
+
+  const setSnapShot = useCallback((value: T) => {
+    ref.current = value;
+  }, []);
+
+  const getSnapShot = useCallback(() => {
+    return ref.current;
+  }, []);
+
+  return {
+    setSnapShot,
+    getSnapShot,
+  };
+};
+
+function useIsHydrating(queryString: string) {
+  const [isHydrating] = useState(
+    () => isBrowser && Boolean(document.querySelector(queryString))
+  );
+  return isHydrating;
+}
+
+const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
