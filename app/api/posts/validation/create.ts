@@ -13,13 +13,26 @@ export const createPostSchema = z.object({
     url: z.string().url(),
   }),
   disabledComment: z.boolean().optional(),
-  publishingDate: z.date().min(new Date()).optional().nullable(),
+  // isoDate 값으로 넘어온다.
+  publishingDate: z
+    .date()
+    .optional()
+    .nullable()
+    .refine((date) => {
+      if (!date) {
+        return true;
+      }
+      const now = new Date();
+      const diff = date.getTime() - now.getTime();
+      return diff > 0;
+    }),
   tags: z.array(z.string()).max(5).nullable().optional(),
   seo: z
     .object({
       title: z.string().max(50).optional().nullable(),
       desc: z.string().max(156).optional().nullable(),
-      image: z.string().url().optional().nullable(),
+      // image: z.string().url().optional().nullable(),
+      image: z.string().optional().nullable(),
     })
     .optional()
     .nullable(),

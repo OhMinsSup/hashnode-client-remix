@@ -29,7 +29,7 @@ import {
 } from "~/context/useDraftContext";
 
 // types
-import type { FormFieldValues } from "~/routes/__draft";
+import type { FormFieldValues } from "~/routes/draft";
 import type { FileSchema } from "~/api/schema/file";
 
 function DraftImageCoverPopover() {
@@ -181,7 +181,6 @@ DraftImageCoverPopover.TabContentUpload =
 
     const onClick = useCallback(
       (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        console.log("onClick", e);
         const $ = getTargetElement($ipt);
         if ($) $.click();
       },

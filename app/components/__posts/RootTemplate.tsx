@@ -1,6 +1,6 @@
 import React from "react";
-import Main from "~/components/__ui/main/Main";
-import Header from "~/components/__ui/header/Header";
+// import Main from "~/components/__ui/main/Main";
+// import Header from "~/components/__ui/header/Header";
 
 interface RootTemplateProps {
   children: React.ReactNode;
@@ -9,9 +9,10 @@ interface RootTemplateProps {
 const RootTemplate: React.FC<RootTemplateProps> = ({ children }) => {
   return (
     <div className="main-container">
-      <Header />
+      {/* <Header /> */}
       <main>
-        <Main>{children}</Main>
+        {/* <Main>{children}</Main> */}
+        {children}
       </main>
     </div>
   );

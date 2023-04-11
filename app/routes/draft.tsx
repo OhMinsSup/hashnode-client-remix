@@ -134,6 +134,7 @@ export default function DraftRouteLayout() {
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: intialValues,
+    reValidateMode: "onChange",
   });
 
   return (

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 
 // hooks
 import { useFormContext } from "react-hook-form";
@@ -19,9 +19,6 @@ import type { API } from "@editorjs/editorjs";
 import type { FormFieldValues } from "~/routes/draft";
 
 const DraftEdtiorContent = () => {
-  // const $form = useRef<HTMLFormElement>(null);
-  const [usedSubtitle, setUsedSubTitle] = useState(false);
-
   const ctx = useDraftContext();
 
   const methods = useFormContext<FormFieldValues>();
@@ -31,11 +28,6 @@ const DraftEdtiorContent = () => {
   const watchThumbnail = watch("thumbnail");
   const watchSubTitle = watch("subTitle");
   const watchTitle = watch("title");
-
-  // useEffect(() => {
-  //   const $ = getTargetElement($form);
-  //   if ($) ctx.setFormInstance($);
-  // }, []);
 
   const onChangeEditor = useCallback(
     async (api: API) => {
@@ -54,18 +46,18 @@ const DraftEdtiorContent = () => {
 
       return data;
     },
-    [ctx.changeTransition, setValue]
+    [ctx, setValue]
   );
 
   const onToggleSubtitle = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      setUsedSubTitle((prev) => !prev);
+      ctx.toggleSubTitle(true);
       if (e.currentTarget.id === "btn-remove-subtitle") {
         setValue("subTitle", "");
         clearErrors("subTitle");
       }
     },
-    [clearErrors, setValue]
+    [clearErrors, ctx, setValue]
   );
 
   const onRemoveCover = useCallback(() => {
@@ -75,7 +67,7 @@ const DraftEdtiorContent = () => {
     scheduleMicrotask(() => {
       ctx.changeTransition(Transition.UPDATING);
     });
-  }, [clearErrors, ctx.changeTransition, setValue]);
+  }, [clearErrors, ctx, setValue]);
 
   const debounced = useDebounceFn(
     () => {
@@ -106,7 +98,7 @@ const DraftEdtiorContent = () => {
           <div>
             <div className="editor-toolbar-header">
               <DraftImageCoverPopover />
-              {usedSubtitle ? null : (
+              {ctx.visibility.usedSubTitle ? null : (
                 <button
                   type="button"
                   id="btn-add-subtitle"
@@ -151,7 +143,7 @@ const DraftEdtiorContent = () => {
                 {...register("title")}
               ></textarea>
             </div>
-            {usedSubtitle && (
+            {ctx.visibility.usedSubTitle && (
               <div className="editor-subtitle">
                 <textarea
                   maxLength={130}

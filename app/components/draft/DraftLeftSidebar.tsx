@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useTransition } from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 
@@ -8,17 +8,15 @@ import { Icons } from "~/components/shared/Icons";
 
 // utils
 import { firstLetterToUpperCase } from "~/utils/util";
-import { scheduleMicrotask } from "~/libs/browser-utils";
 
 // hooks
 import { useFormContext } from "react-hook-form";
-import { useSaveDraftsMutation } from "~/api/drafts/hooks/useSaveDraftsMutation";
-import { useNewDraftsMutation } from "~/api/drafts/hooks/useNewDraftsMutation";
-import { Transition, useDraftContext } from "~/context/useDraftContext";
+import { useDraftContext } from "~/context/useDraftContext";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
+import { hashnodeDB } from "~/libs/db/db";
 
 interface DraftLeftSidebarProps {}
 
@@ -27,13 +25,9 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
 
   const { watch } = useFormContext<FormFieldValues>();
 
-  const {
-    draftId,
-    changeDraftId,
-    changeTransition,
-    visibility,
-    toggleLeftSidebar,
-  } = useDraftContext();
+  const [isPending, startTransition] = useTransition();
+
+  const { draftId, visibility, toggleLeftSidebar } = useDraftContext();
 
   const { keyword, changeKeyword } = useDraftSidebarContext();
 
@@ -41,45 +35,17 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
     toggleLeftSidebar(!visibility.isLeftSidebarVisible);
   }, [toggleLeftSidebar, visibility.isLeftSidebarVisible]);
 
-  const mutation_save = useSaveDraftsMutation({
-    onSuccess: (data) => {
-      const {
-        result: { dataId },
-      } = data.result;
-      changeDraftId(dataId);
-      changeTransition(Transition.DONE);
-    },
-    onSettled: () => {
-      scheduleMicrotask(() => changeTransition(Transition.IDLE));
-    },
-  });
-
-  const mutation_new = useNewDraftsMutation({
-    onSuccess: (data) => {
-      const {
-        result: { dataId },
-      } = data.result;
-      changeDraftId(dataId);
-      changeTransition(Transition.DONE);
-    },
-    onSettled: () => {
-      scheduleMicrotask(() => changeTransition(Transition.IDLE));
-    },
-  });
-
   const onNewOrSaveDraftClick = useCallback(async () => {
     const input = watch();
-    const body = {
-      ...input,
-      thumbnail: input.thumbnail ? input.thumbnail.url : undefined,
-      ...(draftId && { draftId }),
-    };
 
-    if (!draftId) {
-      return mutation_new.mutateAsync(body);
-    }
-    return mutation_save.mutateAsync(body);
-  }, [draftId, mutation_new, mutation_save, watch]);
+    startTransition(() => {
+      if (!draftId) {
+        hashnodeDB.addDraft(input);
+      } else {
+        hashnodeDB.updateDraft(draftId, input);
+      }
+    });
+  }, [draftId, watch]);
 
   const onChangeKeyword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +116,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
           className="btn-new-draft"
           aria-label="new draft button"
           onClick={onNewOrSaveDraftClick}
-          disabled={mutation_save.isLoading || mutation_new.isLoading}
+          disabled={isPending}
         >
           <Icons.AddFile className="icon__base mr-2 stroke-current" />
           <span>New draft</span>
