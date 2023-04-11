@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useCallback,
-  useRef,
-  useState,
-  useLayoutEffect,
-} from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import DraftEditor from "~/components/draft/DraftEditor";
 import isEqual from "lodash-es/isEqual";
 import Json from "superjson";
@@ -15,9 +9,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // hooks
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useFormContext } from "react-hook-form";
-import { useBeforeUnload } from "@remix-run/react";
 
-import { isBrowser } from "~/libs/browser-utils";
 import { hashnodeDB } from "~/libs/db/db";
 import {
   createPostSchema,
@@ -53,6 +45,7 @@ export const action: ActionFunction = async (ctx) => {
       return json(error_validation);
     }
     const error_http = await postHTTPErrorWrapper(error);
+    console.log(error_http);
     if (error_http) {
       return json(error_http.errors);
     }
@@ -66,8 +59,6 @@ export default function DraftPage() {
   const { transition, draftId, changeDraftId, changeTransition } =
     useDraftContext();
   const { getSnapShot, setSnapShot } = useSnapShot<FormFieldValues>();
-
-  const hydrating = useIsHydrating("[data-hydrating-signal]");
 
   const watchAll = watch();
 
@@ -120,30 +111,6 @@ export default function DraftPage() {
     }
   }, [transition, watchAll]);
 
-  useBeforeUnload(
-    useCallback(() => {
-      if (draftId) {
-        // sessionStorage.setItem("hashnode:draftId", draftId.toString());
-      }
-    }, [draftId])
-  );
-
-  useSSRLayoutEffect(() => {
-    if (!hydrating) return;
-
-    // const _draftId = sessionStorage.getItem("hashnode:draftId");
-    // if (!_draftId) return;
-
-    // const draftId = parseInt(_draftId, 10);
-    // if (Number.isNaN(draftId)) return;
-
-    // changeDraftId(draftId);
-
-    // return () => {
-    //   sessionStorage.removeItem("hashnode:draftId");
-    // };
-  }, [hydrating]);
-
   return <DraftEditor />;
 }
 
@@ -167,12 +134,3 @@ const useSnapShot = <T extends Record<string, any>>() => {
     getSnapShot,
   };
 };
-
-function useIsHydrating(queryString: string) {
-  const [isHydrating] = useState(
-    () => isBrowser && Boolean(document.querySelector(queryString))
-  );
-  return isHydrating;
-}
-
-const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;

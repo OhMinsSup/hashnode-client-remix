@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 // components
 import * as ScrollArea from "@radix-ui/react-scroll-area";
@@ -7,7 +7,7 @@ import AsyncCreatableSelect from "react-select/async-creatable";
 
 // hooks
 import { Transition, useDraftContext } from "~/context/useDraftContext";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext, useWatch, useController } from "react-hook-form";
 import { useDebouncedCallback } from "use-debounce";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 
@@ -180,7 +180,7 @@ InternalDraftPublishDrawer.Title = function DraftPublishDrawerTitle() {
           placeholder="Enter meta title"
           className="textarea"
           style={{ height: "58px !important" }}
-          {...register("seo.desc")}
+          {...register("seo.title")}
         ></textarea>
       </div>
     </>
@@ -236,12 +236,11 @@ InternalDraftPublishDrawer.Description =
   };
 
 InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
-  const { setValue, register, formState, control } =
-    useFormContext<FormFieldValues>();
+  const { setValue, formState, control } = useFormContext<FormFieldValues>();
 
   const { changeTransition } = useDraftContext();
 
-  const publishingDate = useWatch<FormFieldValues, "publishingDate">({
+  const { field } = useController({
     name: "publishingDate",
     control,
   });
@@ -264,7 +263,35 @@ InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
     if (!formState.dirtyFields.publishingDate) return;
     changeTransition(Transition.UPDATING);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publishingDate, formState.dirtyFields.publishingDate]);
+  }, [field.value, formState.dirtyFields.publishingDate]);
+
+  const value = useMemo(() => {
+    if (!field.value) {
+      return undefined;
+    }
+    if (field.value instanceof Date) {
+      const offset = field.value.getTimezoneOffset() * 60000;
+      const isoString = new Date(field.value.getTime() - offset).toISOString();
+      return isoString.substring(0, isoString.indexOf("T") + 6);
+    }
+    return undefined;
+  }, [field.value]);
+
+  const min = useMemo(() => {
+    const offset = new Date().getTimezoneOffset() * 60000;
+    const isoString = new Date(new Date().getTime() - offset).toISOString();
+    return isoString.substring(0, isoString.indexOf("T") + 6);
+  }, []);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateTime = e.target.value;
+    if (!dateTime) {
+      field.onChange(undefined);
+      return;
+    }
+    const date = new Date(dateTime);
+    field.onChange(date);
+  };
 
   return (
     <>
@@ -273,13 +300,18 @@ InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
         Select a publishing date/time (Based on your local time zone)
       </p>
       <div className="mb-3">
-        {publishingDate ? (
+        {field.value ? (
           <>
             <div className="flex w-full flex-row items-center justify-between rounded-lg border bg-gray-50 p-4 text-base text-gray-900 outline-none">
               <input
                 type="datetime-local"
                 className="flex-1 bg-gray-50"
-                {...register("publishingDate", { valueAsDate: true })}
+                name={field.name}
+                ref={field.ref}
+                value={value}
+                onChange={onChange}
+                min={min}
+                onBlur={field.onBlur}
               />
             </div>
             <button

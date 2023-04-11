@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import React, { useMemo } from "react";
 import { FORMAT, getDateFormat } from "~/libs/date";
-import { BookIcon } from "../__ui/Icon";
+// import { BookIcon } from "../__ui/Icon";
 
 import type { Nullable } from "~/api/schema/api";
 
@@ -44,7 +44,7 @@ const PostWriteInfo: React.FC<PostWriteInfoProps> = ({
         </Link>
         <span className=" ml-3 mr-3 font-bold text-gray-500 md:block">·</span>
         <p className="flex flex-row items-center text-gray-700">
-          <BookIcon className=" mr-2 h-5 w-5 fill-current opacity-75" />
+          {/* <BookIcon className=" mr-2 h-5 w-5 fill-current opacity-75" /> */}
           <span>20 min read</span>
         </p>
       </div>

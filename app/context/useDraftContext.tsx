@@ -21,6 +21,7 @@ enum Action {
   CHANGE_UPLOAD_STATUS = "CHANGE_UPLOAD_STATUS",
   TOGGLE_LEFT_SIDEBAR = "TOGGLE_LEFT_SIDEBAR",
   TOGGLE_PUBLISH = "TOGGLE_PUBLISH",
+  TOGGLE_SUBTITLE = "TOGGLE_SUBTITLE",
   SET_FORM_INSTANCE = "SET_FORM_INSTANCE",
   SET_EDITORJS_INSTANCE = "SET_EDITORJS_INSTANCE",
 }
@@ -45,6 +46,11 @@ type TogglePublishAction = {
   payload: boolean;
 };
 
+type ToggleSubTitleAction = {
+  type: Action.TOGGLE_SUBTITLE;
+  payload: boolean;
+};
+
 type SetFormInstanceAction = {
   type: Action.SET_FORM_INSTANCE;
   payload: HTMLFormElement | null;
@@ -64,6 +70,7 @@ type ActionType =
   | ChangeDraftIdAction
   | ChangeTransitionAction
   | ToggleLeftSidebarAction
+  | ToggleSubTitleAction
   | SetFormInstanceAction
   | ChangeUploadStatusAction
   | TogglePublishAction
@@ -72,6 +79,7 @@ type ActionType =
 interface VisibilityState {
   isLeftSidebarVisible: boolean;
   isPublishVisible: boolean;
+  usedSubTitle: boolean;
 }
 
 interface UploadState {
@@ -90,6 +98,7 @@ interface DraftState {
 interface DraftContext extends DraftState {
   toggleLeftSidebar: (visible: boolean) => void;
   togglePublish: (visible: boolean) => void;
+  toggleSubTitle: (used: boolean) => void;
   changeDraftId: (draftId: number | undefined) => void;
   changeTransition: (transition: Transition) => void;
   changeUploadStatus: (status: UploadStatus) => void;
@@ -105,6 +114,7 @@ const initialState: DraftState = {
   visibility: {
     isLeftSidebarVisible: false,
     isPublishVisible: false,
+    usedSubTitle: false,
   },
   upload: {
     status: UploadStatus.IDLE,
@@ -148,6 +158,14 @@ function reducer(state = initialState, action: ActionType) {
         visibility: {
           ...state.visibility,
           isPublishVisible: action.payload,
+        },
+      };
+    case Action.TOGGLE_SUBTITLE:
+      return {
+        ...state,
+        visibility: {
+          ...state.visibility,
+          usedSubTitle: action.payload,
         },
       };
     case Action.SET_FORM_INSTANCE:
@@ -211,6 +229,13 @@ function DraftProvider({ children }: Props) {
     });
   };
 
+  const toggleSubTitle = (used: boolean) => {
+    dispatch({
+      type: Action.TOGGLE_SUBTITLE,
+      payload: used,
+    });
+  };
+
   const setFormInstance = (form: HTMLFormElement | null) => {
     dispatch({
       type: Action.SET_FORM_INSTANCE,
@@ -233,6 +258,7 @@ function DraftProvider({ children }: Props) {
       changeUploadStatus,
       toggleLeftSidebar,
       togglePublish,
+      toggleSubTitle,
       setFormInstance,
       setEditorJSInstance,
       dispatch,

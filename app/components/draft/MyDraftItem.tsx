@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import classNames from "classnames";
+import { isString } from "~/utils/assertion";
 
 // components
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -12,14 +13,14 @@ import { useFormContext } from "react-hook-form";
 // types
 import { type Draft, hashnodeDB } from "~/libs/db/db";
 import type { FormFieldValues } from "~/routes/draft";
-import { isString } from "~/utils/assertion";
 
 interface MyDraftItemProps {
   item: Partial<Draft>;
 }
 
 const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
-  const { changeDraftId, draftId, $editorJS } = useDraftContext();
+  const { changeDraftId, draftId, $editorJS, toggleSubTitle } =
+    useDraftContext();
   const [open, setOpen] = useState(false);
   const methods = useFormContext<FormFieldValues>();
 
@@ -28,19 +29,25 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
     const draft = await hashnodeDB.getDraft(item.id);
     if (!draft) return;
     changeDraftId(item.id);
+    if (draft.subTitle) {
+      toggleSubTitle(true);
+    }
     methods.reset(draft);
     if (draft.content && isString(draft.content)) {
       const data = JSON.parse(draft.content);
       if (!data) return;
       $editorJS?.render(data);
     }
-  }, [changeDraftId, item.id, methods, $editorJS]);
+  }, [item.id, changeDraftId, methods, toggleSubTitle, $editorJS]);
 
   const onClickDelete = useCallback(async () => {
     if (!item.id) return;
     changeDraftId(undefined);
+    if (item.subTitle) {
+      toggleSubTitle(false);
+    }
     await hashnodeDB.deleteDraft(item.id);
-  }, [changeDraftId, item.id]);
+  }, [changeDraftId, item.id, item.subTitle, toggleSubTitle]);
 
   return (
     <div
