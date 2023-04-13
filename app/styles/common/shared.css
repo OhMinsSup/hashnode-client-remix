@@ -205,17 +205,20 @@
   @apply flex flex-row items-center justify-end;
 }
 
+.header__setting .btn__theme,
 .header__right-area .header__subnavs .btn__theme {
   --tw-text-opacity: 1;
   color: rgb(51 65 85 / var(--tw-text-opacity));
   @apply relative flex h-10 w-10 flex-row items-center justify-center rounded-full focus:outline-none;
 }
 
+.header__setting .btn__theme:hover,
 .header__right-area .header__subnavs .btn__theme:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
 }
 
+.header__setting .notification,
 .header__right-area .header__subnavs .notification {
   @apply mr-4 hidden h-10 w-10;
 }
@@ -474,6 +477,7 @@
     @apply block;
   }
 
+  .header__setting .notification,
   .header__right-area .header__subnavs .notification {
     @apply block;
   }
