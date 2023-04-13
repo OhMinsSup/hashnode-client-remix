@@ -1,9 +1,7 @@
 import React from "react";
-import cookies from "cookie";
 
 // utils
 import { json } from "@remix-run/cloudflare";
-import { applyAuth } from "~/libs/server/applyAuth";
 
 // hooks
 import { useLoaderData } from "@remix-run/react";
@@ -20,15 +18,14 @@ import {
   PostTags,
   PostWriterFooter,
 } from "~/components/__posts";
+import Header from "~/components/shared/Header";
 import Editor from "~/components/shared/Editor";
 
 // types
-import type { PostDetailRespSchema } from "~/api/schema/resp";
-import type { LoaderFunction } from "@remix-run/cloudflare";
-import Header from "~/components/shared/Header";
+import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const id = params.itemId;
+export const loader = async (args: LoaderArgs) => {
+  const id = args.params.itemId;
 
   if (!id) {
     throw new Response("Not Found", {
@@ -44,30 +41,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     });
   }
 
-  const token = applyAuth(request);
-  const { result } = await getPostApi(itemId, {
-    hooks: {
-      beforeRequest: [
-        (request) => {
-          if (token) {
-            request.headers.set(
-              "Cookie",
-              cookies.serialize("access_token", token)
-            );
-          }
-          return request;
-        },
-      ],
-    },
-  });
+  const { result } = await getPostApi(itemId, args);
 
   return json({
     item: result.result,
   });
 };
 
+export type ItemLoaderData = typeof loader;
+
 const StoriesDetail = () => {
-  const { item } = useLoaderData<{ item: PostDetailRespSchema }>();
+  const { item } = useLoaderData<ItemLoaderData>();
 
   console.log(item.content);
 

@@ -11,6 +11,7 @@ import { parseUrlParams } from "~/utils/util";
 import PostsList from "~/components/home/PostsList.unstable";
 
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 const Seo = {
   title: "Featured posts on Hashnode",
@@ -82,4 +83,29 @@ export const meta: V2_MetaFunction<typeof loader> = () => {
 
 export default function IndexPage() {
   return <PostsList />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

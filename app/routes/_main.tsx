@@ -8,7 +8,7 @@ import { getWidgetBookmarksDelayedApi } from "~/api/widget/widget";
 import { getSessionApi } from "~/api/user/user";
 
 // components
-import { Outlet } from "@remix-run/react";
+import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
 
@@ -116,4 +116,29 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }
