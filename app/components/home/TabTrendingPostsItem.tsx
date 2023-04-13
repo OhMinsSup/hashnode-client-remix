@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // remix
 import { Link } from "@remix-run/react";
@@ -20,11 +20,15 @@ function TabTrendingPostsItem({
   subTitle,
   user,
 }: TabTrendingPostsItemProps) {
+  const to = useMemo(() => {
+    return PAGE_ENDPOINTS.ITEMS.ID(id);
+  }, [id]);
+
   return (
     <div className="tab-trending-post-item">
       {/* Thubmnail */}
       <div className="mr-3">
-        <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)} className="user-profile-image">
+        <Link to={to} className="user-profile-image">
           <div className="h-full w-full">
             <div className="image-wrapper">
               <img src="/images/default_profile.png" alt="thumbnail" />
@@ -36,10 +40,10 @@ function TabTrendingPostsItem({
       {/* Content */}
       <div className="flex-1">
         <h3 className="title">
-          <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)}>{title}</Link>
+          <Link to={to}>{title}</Link>
         </h3>
         <p className="description">
-          <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)}>{subTitle}</Link>
+          <Link to={to}>{subTitle}</Link>
         </p>
         <div className="footer">
           {/* Like */}

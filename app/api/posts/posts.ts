@@ -2,7 +2,6 @@ import { apiClient } from "../client";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
-import { isEmpty } from "~/utils/assertion";
 import { applyHeaders } from "~/libs/server/utils";
 import { delayPromise } from "~/utils/util";
 
@@ -20,16 +19,45 @@ import type { PaginationQuery } from "../schema/query";
 import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 import type { CreatePostBody } from "./validation/create";
 
-// detail item
+//  [Get] Path: app/api/posts/:id
 
-export async function getPostApi(id: number | string, options?: Options) {
-  const { headers, ...opts } = options ?? {};
+interface GetPostApiParams extends LoaderArgs {}
+
+/**
+ * @description Get post
+ * @param {number} id
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getPostApi(id: number, options?: Options) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
   const response = await apiClient.get(API_ENDPOINTS.POSTS.ID(id), {
-    headers: {
-      "content-type": "application/json",
-      ...(headers ?? {}),
-    },
+    credentials: "include",
+    headers,
     ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description Get post
+ * @param {number} id
+ * @param {GetPostApiParams?} args
+ * @returns {Promise<{ result: AppAPI<PostDetailRespSchema> }>}
+ */
+export async function getPostApi(id: number, args?: GetPostsApiParams) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getPostApi(id, {
+    headers,
   });
   const result = await response.json<AppAPI<PostDetailRespSchema>>();
   return { result };

@@ -1,5 +1,6 @@
 import { useLocation } from "@remix-run/react";
 import React from "react";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 import TabExploreButton from "./TabExploreButton";
 
 interface TabRoutesExploreProps {
@@ -15,30 +16,30 @@ function TabRoutesExplore({ children }: TabRoutesExploreProps) {
           id="explore-trending-tab"
           label="Trending"
           currentPathname={location.pathname}
-          path="/explore"
+          path={PAGE_ENDPOINTS.EXPLORE.ROOT}
         />
         <TabExploreButton
           id="explore-tags-tab"
           label="Tags"
           currentPathname={location.pathname}
-          path="/explore/tags"
+          path={PAGE_ENDPOINTS.EXPLORE.TAGS}
         />
         <TabExploreButton
           id="explore-posts-tab"
           label="Posts"
           currentPathname={location.pathname}
-          path="/explore/posts"
+          path={PAGE_ENDPOINTS.EXPLORE.POSTS}
         />
       </div>
       <div
         className="explore-tab-content"
         id="tabpanel-post"
         aria-labelledby={(function () {
-          if (location.pathname === "/explore") {
+          if (location.pathname === PAGE_ENDPOINTS.EXPLORE.ROOT) {
             return "explore-trending-tab";
-          } else if (location.pathname === "/explore/tags") {
+          } else if (location.pathname === PAGE_ENDPOINTS.EXPLORE.TAGS) {
             return "explore-tags-tab";
-          } else if (location.pathname === "/explore/posts") {
+          } else if (location.pathname === PAGE_ENDPOINTS.EXPLORE.POSTS) {
             return "explore-posts-tab";
           } else {
             return "explore-trending-tab";

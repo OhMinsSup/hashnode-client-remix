@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 
 // types
 import type { GetWidgetBookmarkRespSchema } from "~/api/schema/resp";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface WidgetBookmarkProps {
   bookmark: GetWidgetBookmarkRespSchema;
@@ -14,15 +15,20 @@ function WidgetBookmark({ bookmark, index }: WidgetBookmarkProps) {
     const maxItemCount = 5;
     return index !== 0 && index <= maxItemCount;
   }, [index]);
+
+  const to = useMemo(() => {
+    return PAGE_ENDPOINTS.ITEMS.ID(bookmark.id);
+  }, [bookmark.id]);
+
   return (
     <div>
       {displayDivide ? <hr className="custom-divide__tab-treding" /> : null}
       <div>
         <h3 className="bookmark-desc">
-          <Link to="/">{bookmark.title}</Link>
+          <Link to={to}>{bookmark.title}</Link>
         </h3>
         <p className="username">
-          <Link to="/" aria-label="Post info">
+          <Link to={to} aria-label="Post info">
             {bookmark.user.username}
           </Link>
         </p>

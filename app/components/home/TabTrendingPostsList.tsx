@@ -65,14 +65,14 @@ TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
   return (
     <div>
       {Array.from({ length: 5 }).map((_, index) => (
-        <>
-          <TabTrendingPostsItem.Skeleton
-            key={`${
-              prefix ? `${prefix}-` : ""
-            }TabTrendingPostsItem-${dataKey}-${index}-${id}`}
-          />
+        <React.Fragment
+          key={`${
+            prefix ? `${prefix}-` : ""
+          }TabTrendingPosts-${dataKey}-${index}-${id}`}
+        >
+          <TabTrendingPostsItem.Skeleton />
           {index !== 4 && <hr className="custom-divide__tab-treding" />}
-        </>
+        </React.Fragment>
       ))}
     </div>
   );

@@ -106,7 +106,7 @@ Sidebar.Left = function Left() {
             />
             <SidebarNavLink
               text="Explore"
-              to="/explore"
+              to={PAGE_ENDPOINTS.EXPLORE.ROOT}
               icon={<Icons.Explore className="flex-shrink-0 fill-current" />}
               applyActiveLinks={[
                 PAGE_ENDPOINTS.EXPLORE.TAGS,
@@ -116,13 +116,13 @@ Sidebar.Left = function Left() {
             />
             <SidebarNavLink
               text="Drafts"
-              to="/draft"
+              to={PAGE_ENDPOINTS.DRAFT.ROOT}
               icon={<Icons.MyDraft className="flex-shrink-0 fill-current" />}
               end
             />
             <SidebarNavLink
               text="Bookmarks"
-              to="/bookmarks"
+              to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
               icon={<Icons.MyBookmark className="flex-shrink-0 fill-current" />}
               end
             />
@@ -162,7 +162,10 @@ Sidebar.Left = function Left() {
                     )}
                   </Await>
                 </Suspense>
-                <Link to="/tags" className="sell-all-tags">
+                <Link
+                  to={PAGE_ENDPOINTS.EXPLORE.TAGS}
+                  className="sell-all-tags"
+                >
                   <span>See all</span>
                   <Icons.ArrowRight className="icon__xs ml-2" />
                 </Link>

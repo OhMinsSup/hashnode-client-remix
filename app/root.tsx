@@ -6,11 +6,14 @@ import {
   LiveReload,
   Scripts,
   ScrollRestoration,
+  useRouteError,
+  isRouteErrorResponse,
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { LayoutProvider } from "./context/useLayoutContext";
+import NotFoundPage from "./components/errors/NotFoundPage";
 
 // api
 import { getSessionApi, logoutApi } from "~/api/user/user";
@@ -100,5 +103,23 @@ export default function App() {
         </html>
       </LayoutProvider>
     </QueryClientProvider>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <NotFoundPage />
+        <Scripts />
+      </body>
+    </html>
   );
 }

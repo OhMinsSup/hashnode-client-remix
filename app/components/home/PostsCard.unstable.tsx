@@ -9,6 +9,7 @@ import { getDateFormat } from "~/libs/date";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface PostCardProps {
   post: PostDetailRespSchema;
@@ -20,12 +21,16 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
     return post?.tags ?? [];
   }, [post]);
 
+  const to = useMemo(() => {
+    return PAGE_ENDPOINTS.ITEMS.ID(post.id);
+  }, [post]);
+
   return (
     <div className="main-post-card" ref={ref} {...props}>
       <div className="main-post-card__header">
         <div className="main-post-card__header-container">
           <div className="thumbnail-container">
-            <Link to="/" className="thumbnail-container__link">
+            <Link to={to} className="thumbnail-container__link">
               <div className="h-full w-full">
                 <div className="thumbnail">
                   <PostCard.Profile post={post} />
@@ -50,19 +55,19 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
       <div className="main-post-card__content">
         <div className="main-post-card__content-container">
           <h1 className="main-post-card__content-container__title">
-            <Link to="/" className="block">
+            <Link to={to} className="block">
               {post?.title}
             </Link>
           </h1>
           <p className="main-post-card__content-container__description">
-            <Link to="/" className="block">
+            <Link to={to} className="block">
               {post?.description}
             </Link>
           </p>
         </div>
         <div className="main-post-card__content-image-container">
           <Link
-            to="/"
+            to={to}
             className="cover-image"
             aria-label="Solve Problems like a Developer"
           >

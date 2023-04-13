@@ -23,6 +23,42 @@ function Header() {
 
 export default Header;
 
+Header.SettingPage = function HeaderSettingPage() {
+  return (
+    <div className="relative z-50">
+      <div className="relative z-20 flex w-full border-b bg-white py-4">
+        <div className="container mx-auto grid min-w-full grid-cols-12 gap-4 px-4 lg:min-w-0 lg:max-w-full lg:px-6 xl:max-w-full xl:px-8 2xl:px-4">
+          <div className="col-span-8 flex flex-row items-center justify-start lg:col-span-8 xl:col-span-9">
+            <button
+              aria-label="menu button"
+              aira-haspopup="menu"
+              aria-expanded={false}
+              className="relative rounded-lg px-2 py-1 text-slate-900 hover:bg-slate-200 lg:hidden"
+            >
+              <Icons.Menu className="icon__base fill-current" />
+            </button>
+            <span>
+              <Link
+                to={PAGE_ENDPOINTS.ROOT}
+                className="block w-36 text-slate-900 md:w-44 xl:w-44 xl:pr-2"
+              >
+                <Icons.Logo className="icon__logo" />
+              </Link>
+            </span>
+          </div>
+          <div className="col-span-4 flex flex-row items-center justify-end lg:col-span-4 lg:justify-between xl:col-span-3">
+            <div className="header__setting flex w-full flex-row items-center justify-end">
+              <Header.ControlTheme />
+              <Header.ControlNotification />
+              <Header.ControlMenuForUser />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 Header.Desktop = function HeaderDesktop() {
   return (
     <div className="header__desktop">
@@ -112,16 +148,6 @@ Header.Search = function HeaderSearch() {
 };
 
 Header.RightArea = function HeaderRightArea() {
-  const [toggle, setToggle] = useState(false);
-  const forceUpdate = useForceUpdate();
-
-  const $notify = useRef<HTMLDivElement | null>(null);
-  const $menu = useRef<HTMLDivElement | null>(null);
-
-  const onClick = useCallback(() => {
-    setToggle((prev) => !prev);
-  }, []);
-
   return (
     <div className="header__right-area">
       <div className="btns-group__drafts">
@@ -133,78 +159,72 @@ Header.RightArea = function HeaderRightArea() {
         </div>
       </div>
       <div className="header__subnavs">
-        <button
-          type="button"
-          title={toggle ? "Toggle light mode" : "Toggle dark mode"}
-          aria-label="Toggle theme"
-          className="btn__theme"
-          onClick={onClick}
-        >
-          <If condition={toggle}>
-            <Then>
-              <Icons.Sun className="icon__md stroke-current" />
-            </Then>
-            <Else>
-              <Icons.Moon className="icon__md stroke-current" />
-            </Else>
-          </If>
-        </button>
-        <div
-          className="notification"
-          ref={(ref) => {
-            if (!$notify.current) {
-              $notify.current = ref;
-              forceUpdate();
-            }
-          }}
-        >
-          <Popover.Root>
-            <Popover.Trigger asChild>
-              <button
-                className="btn__notification"
-                type="button"
-                aria-label="Notifications"
-              >
-                <Icons.Notification className="icon__md stroke-current" />
-                <span className="notification__count">1</span>
-              </button>
-            </Popover.Trigger>
-            <Popover.Portal container={$notify.current}>
-              <Popover.Content className="popover__notification" sideOffset={5}>
-                <Header.Notification />
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
-        </div>
-        <div
-          className="menu"
-          ref={(ref) => {
-            if (!$menu.current) {
-              $menu.current = ref;
-              forceUpdate();
-            }
-          }}
-        >
-          <Popover.Root>
-            <Popover.Trigger asChild>
-              <button
-                className="btn__profile"
-                type="button"
-                aria-label="Profile Dropdown"
-              >
-                <div className="img__container">
-                  <img src="/images/default_profile.png" alt="profile" />
-                </div>
-              </button>
-            </Popover.Trigger>
-            <Popover.Portal container={$menu.current}>
-              <Popover.Content className="popover__menu" sideOffset={5}>
-                <Header.MenuForUser />
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
-        </div>
+        <Header.ControlTheme />
+        <Header.ControlNotification />
+        <Header.ControlMenuForUser />
       </div>
+    </div>
+  );
+};
+
+Header.ControlTheme = function HeaderControlTheme() {
+  const [toggle, setToggle] = useState(false);
+
+  const onClick = useCallback(() => {
+    setToggle((prev) => !prev);
+  }, []);
+
+  return (
+    <button
+      type="button"
+      title={toggle ? "Toggle light mode" : "Toggle dark mode"}
+      aria-label="Toggle theme"
+      className="btn__theme"
+      onClick={onClick}
+    >
+      <If condition={toggle}>
+        <Then>
+          <Icons.Sun className="icon__md stroke-current" />
+        </Then>
+        <Else>
+          <Icons.Moon className="icon__md stroke-current" />
+        </Else>
+      </If>
+    </button>
+  );
+};
+
+Header.ControlNotification = function HeaderControlNotification() {
+  const forceUpdate = useForceUpdate();
+
+  const $notify = useRef<HTMLDivElement | null>(null);
+  return (
+    <div
+      className="notification"
+      ref={(ref) => {
+        if (!$notify.current) {
+          $notify.current = ref;
+          forceUpdate();
+        }
+      }}
+    >
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <button
+            className="btn__notification"
+            type="button"
+            aria-label="Notifications"
+          >
+            <Icons.Notification className="icon__md stroke-current" />
+            <span className="notification__count">1</span>
+          </button>
+        </Popover.Trigger>
+        <Popover.Portal container={$notify.current}>
+          <Popover.Content className="popover__notification" sideOffset={5}>
+            <Header.Notification />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };
@@ -227,6 +247,43 @@ Header.Notification = function HeaderNotification() {
           <span>Let's start!</span>
         </Link>
       </div>
+    </div>
+  );
+};
+
+Header.ControlMenuForUser = function HeaderControlMenuForUser() {
+  const forceUpdate = useForceUpdate();
+
+  const $menu = useRef<HTMLDivElement | null>(null);
+
+  return (
+    <div
+      className="menu"
+      ref={(ref) => {
+        if (!$menu.current) {
+          $menu.current = ref;
+          forceUpdate();
+        }
+      }}
+    >
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <button
+            className="btn__profile"
+            type="button"
+            aria-label="Profile Dropdown"
+          >
+            <div className="img__container">
+              <img src="/images/default_profile.png" alt="profile" />
+            </div>
+          </button>
+        </Popover.Trigger>
+        <Popover.Portal container={$menu.current}>
+          <Popover.Content className="popover__menu" sideOffset={5}>
+            <Header.MenuForUser />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };
@@ -289,7 +346,11 @@ Header.MenuForUser = function HeaderMenuForUser() {
                   <Icons.MenuBookmark className="icon__base mr-2 fill-current" />
                   <span>My Bookmarks</span>
                 </Link>
-                <Link to="/" data-type="link" aria-label="Account Settings">
+                <Link
+                  to={PAGE_ENDPOINTS.SETTINGS.ROOT}
+                  data-type="link"
+                  aria-label="Account Settings"
+                >
                   <Icons.MenuAccount className="icon__base mr-2 fill-current" />
                   <span>Account Settings</span>
                 </Link>
