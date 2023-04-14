@@ -5,10 +5,12 @@ interface RightSidebarContentBoxProps {
   title: string;
   children: React.ReactNode;
   to?: string;
+  toText?: string;
 }
 
 function RightSidebarContentBox({
   to,
+  toText = "See all",
   title,
   children,
 }: RightSidebarContentBoxProps) {
@@ -23,7 +25,7 @@ function RightSidebarContentBox({
         {to && (
           <div className="btn__more">
             <Link to={to} aria-label="See all">
-              See all
+              {toText}
             </Link>
           </div>
         )}

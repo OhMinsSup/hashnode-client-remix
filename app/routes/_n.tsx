@@ -1,17 +1,23 @@
 import React from "react";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import { defer } from "@remix-run/cloudflare";
+
+import Header from "~/components/shared/Header";
+import Sidebar from "~/components/home/Sidebar";
+
+// api
+import { getTagListDelayedApi } from "~/api/tags/tags";
 
 // types
 import type {
-  V2_MetaFunction,
   HeadersFunction,
   LinksFunction,
+  LoaderArgs,
 } from "@remix-run/cloudflare";
 
 // styles
-import homeListStyle from "~/styles/routes/home-list.css";
-import homeNStyle from "~/styles/routes/home-n.css";
-import TabRoutesTagPosts from "~/components/n/TabRoutesTagPosts";
+import homeStyle from "~/styles/routes/home.css";
+import nStyle from "~/styles/routes/n.css";
 
 const Seo = {
   title: "Explore Popular Tech Blogs and Topics - Hashnode",
@@ -24,14 +30,29 @@ export const links: LinksFunction = () => {
   return [
     {
       rel: "stylesheet",
-      href: homeListStyle,
+      href: homeStyle,
     },
     {
       rel: "stylesheet",
-      href: homeNStyle,
+      href: nStyle,
     },
   ];
 };
+
+export const loader = async (args: LoaderArgs) => {
+  const trendingTagPromise = getTagListDelayedApi(
+    {
+      type: "popular",
+    },
+    args
+  );
+
+  return defer({
+    trendingTag: trendingTagPromise,
+  });
+};
+
+export type HomeLoaderData = typeof loader;
 
 export const header: HeadersFunction = () => {
   return {
@@ -41,20 +62,13 @@ export const header: HeadersFunction = () => {
 
 export default function N() {
   return (
-    <div className="main__list-container">
-      <div className="content-info-box">
-        <h1>Explore Tech Blogs &amp; Tags</h1>
-        <p>
-          Everything that's… Hashnode. Explore the most popular tech blogs from
-          the Hashnode community. A constantly updating list of popular tags and
-          the best minds in tech.
-        </p>
-      </div>
-      <div className="main__list-container__tabs">
-        <TabRoutesTagPosts>
-          <Outlet />
-        </TabRoutesTagPosts>
-      </div>
+    <div className="container__base">
+      <Header />
+      <main>
+        <Sidebar.Left />
+        <Outlet />
+        <Sidebar.TagRight />
+      </main>
     </div>
   );
 }

@@ -36,7 +36,7 @@ export async function _getTagListApi(
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
   } else {
-    searchParams.set("limit", "10");
+    searchParams.set("limit", "5");
   }
   if (query?.cursor) {
     searchParams.set("cursor", query.cursor.toString());

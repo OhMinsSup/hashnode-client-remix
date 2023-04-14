@@ -5,7 +5,7 @@ import PostsCard from "~/components/home/PostsCard";
 import ReachedEnd from "~/components/shared/ReachedEnd";
 
 import type { PostDetailRespSchema } from "~/api/schema/resp";
-import type { DataLoader } from "~/routes/__app/__list/index";
+import type { DataLoader } from "~/routes/_main._feeds._index";
 
 const _PAGE_SIZE = 25;
 

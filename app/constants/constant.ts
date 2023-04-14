@@ -126,6 +126,9 @@ export const PAGE_ENDPOINTS = {
   ITEMS: {
     ID: (id: number | string) => `/items/${id}`,
   },
+  N: {
+    TAG: (tag: string) => `/n/${tag}`,
+  },
   SETTINGS: {
     ROOT: "/settings",
     ACCOUNT: "/settings/account",

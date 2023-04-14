@@ -12,7 +12,7 @@ import PostsCard from "~/components/home/PostsCard.unstable";
 import ReachedEnd from "~/components/shared/ReachedEnd";
 import uniqBy from "lodash-es/uniqBy";
 
-import type { DataLoader } from "~/routes/__app/__list/index";
+import type { DataLoader } from "~/routes/_main._feeds._index";
 
 const LIMIT = 15;
 

@@ -23,6 +23,8 @@ import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
 import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
 import TabTrendingPostButton from "./TabTrendingPostButton";
 import TabTrendingPostsList from "./TabTrendingPostsList";
+import RightTagTrendingSidebar from "../n/RightTagWeekTrendingSidebar";
+import RightTagAllTimeTrendingSidebar from "../n/RightTagAllTimeTrendingSidebar";
 import WidgetBookmark from "./WidgetBookmark";
 
 // types
@@ -225,6 +227,29 @@ Sidebar.Left = function Left() {
         </div>
       </div>
     </div>
+  );
+};
+
+Sidebar.TagRight = function TagRight() {
+  return (
+    <aside className="main__right-sidebar">
+      <div className="right-sidebar__container">
+        <RightSidebarContentBox title="About this tag">
+          <div className="box__about-tag">
+            <p>
+              Python is an interpreted, object-oriented, high-level programming
+              language with dynamic semantics. Its high-level built-in data
+              structures, combined with dynamic typing and dynamic binding, make
+              it very attractive for Rapid Application Development, as well as
+              for use as a scripting or glue language to connect existing
+              components together.
+            </p>
+          </div>
+        </RightSidebarContentBox>
+        <RightTagTrendingSidebar />
+        <RightTagAllTimeTrendingSidebar />
+      </div>
+    </aside>
   );
 };
 

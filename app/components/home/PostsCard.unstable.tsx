@@ -8,8 +8,8 @@ import { isEmpty } from "~/utils/assertion";
 import { getDateFormat } from "~/libs/date";
 
 // types
-import type { PostDetailRespSchema } from "~/api/schema/resp";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import type { PostDetailRespSchema } from "~/api/schema/resp";
 
 interface PostCardProps {
   post: PostDetailRespSchema;
@@ -45,7 +45,7 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
             <div className="userinfo-container__other">
               <Link to="/">{post?.user?.profile?.name}</Link>
               <span>·</span>
-              <Link to="/" className="createAt">
+              <Link to={to} className="createAt">
                 {getDateFormat(post?.createdAt)}
               </Link>
             </div>
@@ -112,7 +112,7 @@ interface PostTagsProps {
   tags: PostDetailRespSchema["tags"];
 }
 
-PostCard.Tags = function PostTags({ tags }: PostTagsProps) {
+PostCard.Tags = function PostTags({ tags, id }: PostTagsProps) {
   const visibleTags = useMemo(() => {
     return tags.slice(0, 2);
   }, [tags]);
@@ -125,12 +125,16 @@ PostCard.Tags = function PostTags({ tags }: PostTagsProps) {
   return (
     <div className="tag-container">
       {visibleTags?.map((tag) => (
-        <Link to="/" key={`post-item-tag-${tag.id}`} className="tag">
+        <Link
+          to={PAGE_ENDPOINTS.N.TAG(tag.name)}
+          key={`post-item-tag-${tag.id}`}
+          className="tag"
+        >
           {tag.name}
         </Link>
       ))}
       {tagCount > 0 && (
-        <Link to="/" className="tag">
+        <Link to={PAGE_ENDPOINTS.ITEMS.ID(id)} className="tag">
           {`+${tagCount}`}
         </Link>
       )}

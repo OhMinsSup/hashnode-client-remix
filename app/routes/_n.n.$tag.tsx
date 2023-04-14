@@ -19,5 +19,5 @@ export const loader = async (args: LoaderArgs) => {
 export type DataLoader = typeof loader;
 
 export default function Bookmarks() {
-  return <></>;
+  return <>Tags</>;
 }

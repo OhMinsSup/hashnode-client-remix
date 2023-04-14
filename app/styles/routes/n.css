@@ -1,0 +1,69 @@
+.main__right-sidebar .right-sidebar__container .box__about-tag {
+  color: rgb(17, 17, 17);
+  font-size: 1rem;
+  @apply max-w-[65ch] break-words leading-[1.375];
+}
+
+.right-tag-trending__item {
+  @apply mb-5 flex flex-row items-center;
+}
+
+.right-tag-trending__item .right-tag-trending__item-img {
+  @apply mr-3 h-10 w-10 flex-shrink-0;
+}
+
+.right-tag-trending__item
+  .right-tag-trending__item-img
+  .right-tag-trending__item-img-container {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  @apply block h-10 w-10 overflow-hidden rounded;
+}
+
+.right-tag-trending__item .right-tag-trending__item-content {
+  @apply min-w-0 flex-1;
+}
+
+.right-tag-trending__item
+  .right-tag-trending__item-content
+  .right-tag-trending__item-title {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply text-base font-bold;
+}
+
+.right-tag-trending__item
+  .right-tag-trending__item-content
+  .right-tag-trending__item-count {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply text-sm;
+}
+
+.tag__list-container {
+  @apply relative col-span-7 min-w-0 pb-24 pt-5;
+}
+
+.tag-detail-info-box {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  @apply mb-5 flex flex-col items-center rounded-lg border p-10;
+}
+
+.tag-detail-info-box .tag-detail-info-box__header {
+  @apply flex flex-col items-center;
+}
+
+.tag-detail-info-box .tag-detail-info-box__body {
+  @apply flex flex-row items-center mb-5;
+}
+
+.tag-detail-info-box .tag-detail-info-box__footer {
+  @apply flex flex-row flex-wrap items-center justify-center;
+}
+
+@media (min-width: 768px) {
+  .tag-detail-info-box .tag-detail-info-box__header {
+    @apply flex-row flex-nowrap;
+  }
+}

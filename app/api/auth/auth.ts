@@ -16,11 +16,14 @@ import type { SigninBody } from "./validation/signin";
 
 /**
  * @description 회원가입 API
- * @param {SignupBody} body
+ * @param {Omit<SignupBody, 'confirmPassword'>} body
  * @param {Options?} options
  * @returns {Promise<import('ky-universal').KyResponse>}
  */
-export async function _signupApi(body: SignupBody, options?: Options) {
+export async function _signupApi(
+  body: Omit<SignupBody, "confirmPassword">,
+  options?: Options
+) {
   const { headers: h, ...opts } = options ?? {};
   const headers = applyHeaders(h);
   headers.append("content-type", "application/json");
@@ -34,11 +37,14 @@ export async function _signupApi(body: SignupBody, options?: Options) {
 
 /**
  * @description 회원가입 API
- * @param {SignupBody} body
+ * @param {Omit<SignupBody, 'confirmPassword'>} body
  * @param {Options?} options
  * @returns {Promise<{ result: AppAPI<AuthRespSchema>; header: Headers }>}
  */
-export async function signupApi(body: SignupBody, options?: Options) {
+export async function signupApi(
+  body: Omit<SignupBody, "confirmPassword">,
+  options?: Options
+) {
   const response = await _signupApi(body, options);
   const result = await response.json<AppAPI<AuthRespSchema>>();
   const cookieHeader = response.headers.get("set-cookie");
