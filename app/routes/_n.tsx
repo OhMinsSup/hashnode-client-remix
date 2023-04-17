@@ -9,22 +9,11 @@ import Sidebar from "~/components/home/Sidebar";
 import { getTagListDelayedApi } from "~/api/tags/tags";
 
 // types
-import type {
-  HeadersFunction,
-  LinksFunction,
-  LoaderArgs,
-} from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
 
 // styles
 import homeStyle from "~/styles/routes/home.css";
 import nStyle from "~/styles/routes/n.css";
-
-const Seo = {
-  title: "Explore Popular Tech Blogs and Topics - Hashnode",
-  description:
-    "Explore the most popular tech blogs from the Hashnode community. A constantly updating list of the best minds in tech.",
-  image: "/images/seo_image.png",
-};
 
 export const links: LinksFunction = () => {
   return [
@@ -52,13 +41,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type HomeLoaderData = typeof loader;
-
-export const header: HeadersFunction = () => {
-  return {
-    "Cache-Control": "public, max-age=120",
-  };
-};
+export type NRootLoaderData = typeof loader;
 
 export default function N() {
   return (

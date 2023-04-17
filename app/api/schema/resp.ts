@@ -40,6 +40,19 @@ export interface FileListRespSchema
 export interface TagListRespSchema
   extends ListRespSchema<TagWithPostCountSchema> {}
 
+export interface TagDetailRespSchema {
+  id: number;
+  name: string;
+  postCount: number;
+  followCount: number;
+  isFollowing: boolean;
+}
+
+export interface TagFollowRespSchema {
+  dataId: number;
+  count: number;
+}
+
 export interface PostDetailRespSchema extends PostSchema {
   count: {
     postLike: number;

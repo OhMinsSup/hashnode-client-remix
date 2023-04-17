@@ -24,6 +24,8 @@ export const API_ENDPOINTS = {
   },
   TAGS: {
     ROOT: "tags",
+    TAG: (tag: string) => `tags/${tag}`,
+    TAG_FOLLOW: (tag: string) => `tags/${tag}/follow`,
   },
   DRAFTS: {
     ROOT: "drafts",
