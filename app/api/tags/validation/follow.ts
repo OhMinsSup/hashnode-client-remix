@@ -66,8 +66,14 @@ export const tagFollowHTTPErrorWrapper = async (error: unknown) => {
         statusCode: resp.status,
         errors: state.errors,
       };
+    } else {
+      return {
+        statusCode: resp.status,
+        errors: {
+          error: "알 수 없는 에러가 발생했습니다.",
+        },
+      };
     }
-
-    return null;
   }
+  return null;
 };

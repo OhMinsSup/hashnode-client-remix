@@ -1,11 +1,19 @@
-import { Link } from "@remix-run/react";
 import React, { useMemo } from "react";
+import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-const RightTagTrendingItem = () => {
+// types
+import type { TagWithPostCountSchema } from "~/api/schema/resp";
+
+interface RightTagTrendingItemProps {
+  tag: TagWithPostCountSchema;
+}
+
+function RightTagTrendingItem({ tag }: RightTagTrendingItemProps) {
   const to = useMemo(() => {
-    return PAGE_ENDPOINTS.N.TAG("tagName");
-  }, []);
+    return PAGE_ENDPOINTS.N.TAG(tag.name);
+  }, [tag.name]);
+
   return (
     <div>
       <div className="right-tag-trending__item">
@@ -19,8 +27,8 @@ const RightTagTrendingItem = () => {
         </div>
         <div className="right-tag-trending__item-content">
           <h3 className="right-tag-trending__item-title">
-            <Link to={to} aria-label="Tag name">
-              #javascript
+            <Link to={to} aria-label={tag.name}>
+              #{tag.name}
             </Link>
           </h3>
           <Link
@@ -28,12 +36,34 @@ const RightTagTrendingItem = () => {
             aria-label="Total articles count"
             className="right-tag-trending__item-count"
           >
-            + 347 articles this week
+            + {tag.postsCount} articles this week
           </Link>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default RightTagTrendingItem;
+
+RightTagTrendingItem.Skeleton = function RightTagTrendingItemSkeleton() {
+  return (
+    <div>
+      <div className="right-tag-trending__item">
+        <div className="right-tag-trending__item-img">
+          <div className="right-tag-trending__item-img-container">
+            <div className="right-tag-trending__item-img-container__img" />
+          </div>
+        </div>
+        <div className="right-tag-trending__item-content">
+          <div className="right-tag-trending__item-title">
+            <div className="right-tag-trending__item-title__text" />
+          </div>
+          <div className="right-tag-trending__item-count">
+            <div className="right-tag-trending__item-count__text" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

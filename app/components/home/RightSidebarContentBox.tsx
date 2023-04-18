@@ -40,8 +40,10 @@ export default RightSidebarContentBox;
 
 RightSidebarContentBox.Skeleton = function RightSidebarContentBoxSkeleton({
   children,
+  toText = "See all",
 }: {
   children: React.ReactNode;
+  toText?: string;
 }) {
   return (
     <div className="right-sidebar__content-box">
@@ -54,7 +56,7 @@ RightSidebarContentBox.Skeleton = function RightSidebarContentBoxSkeleton({
         </div>
         <div className="btn__more">
           <a href="#" className="btn__more">
-            See all
+            {toText}
           </a>
         </div>
       </div>

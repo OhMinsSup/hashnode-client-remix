@@ -4,16 +4,15 @@ import {
   useSubmit,
   useLoaderData,
   useNavigation,
-  useActionData,
 } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { numberToEnglishUnit } from "~/utils/util";
 
 // tyeps
-import type { NDataLoader, NDataAction } from "~/routes/_n.n";
-import { numberToEnglishUnit } from "~/utils/util";
+import type { NDataLoader } from "~/routes/_n.n.$tag";
 
 function TagDetailInfoBox() {
   return (
@@ -62,7 +61,6 @@ TagDetailInfoBox.Header = function TagDetailInfoBoxHeader() {
 TagDetailInfoBox.Body = function TagDetailInfoBoxBody() {
   const submit = useSubmit();
   const { tagInfo } = useLoaderData<NDataLoader>();
-  const data = useActionData<NDataAction>();
   const navigation = useNavigation();
 
   const onTagFollow = useCallback(() => {
@@ -71,6 +69,7 @@ TagDetailInfoBox.Body = function TagDetailInfoBoxBody() {
     submit(formData, {
       replace: true,
       method: tagInfo.isFollowing ? "DELETE" : "POST",
+      action: PAGE_ENDPOINTS.N.TAG(tagInfo.name),
     });
   }, [submit, tagInfo.isFollowing, tagInfo.name]);
 

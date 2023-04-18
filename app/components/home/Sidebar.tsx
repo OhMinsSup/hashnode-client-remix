@@ -23,12 +23,12 @@ import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
 import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
 import TabTrendingPostButton from "./TabTrendingPostButton";
 import TabTrendingPostsList from "./TabTrendingPostsList";
-import RightTagTrendingSidebar from "../n/RightTagWeekTrendingSidebar";
-import RightTagAllTimeTrendingSidebar from "../n/RightTagAllTimeTrendingSidebar";
+import RightTagTrendingSidebar from "../n/RightTagTrendingSidebar";
 import WidgetBookmark from "./WidgetBookmark";
 
 // types
 import type { HomeLoaderData } from "~/routes/_main";
+import type { NRootLoader } from "~/routes/_n";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;
@@ -231,6 +231,7 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.TagRight = function TagRight() {
+  const data = useLoaderData<NRootLoader>();
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">
@@ -246,8 +247,28 @@ Sidebar.TagRight = function TagRight() {
             </p>
           </div>
         </RightSidebarContentBox>
-        <RightTagTrendingSidebar />
-        <RightTagAllTimeTrendingSidebar />
+        <Suspense fallback={<RightTagTrendingSidebar.Skeleton />}>
+          <Await resolve={data.trendingTagsWeek}>
+            {(data) => (
+              <RightTagTrendingSidebar
+                title="Trending Weekly"
+                toText="All tags"
+                tags={data.result.result?.list ?? []}
+              />
+            )}
+          </Await>
+        </Suspense>
+        <Suspense fallback={<RightTagTrendingSidebar.Skeleton />}>
+          <Await resolve={data.trendingTagsAll}>
+            {(data) => (
+              <RightTagTrendingSidebar
+                title="Trending All-time"
+                toText="All tags"
+                tags={data.result.result?.list ?? []}
+              />
+            )}
+          </Await>
+        </Suspense>
       </div>
     </aside>
   );

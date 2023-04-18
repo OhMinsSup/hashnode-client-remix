@@ -53,8 +53,6 @@ export type ItemLoaderData = typeof loader;
 const StoriesDetail = () => {
   const { item } = useLoaderData<ItemLoaderData>();
 
-  console.log(item.content);
-
   return (
     <div className="container__base">
       <Header />

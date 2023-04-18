@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@remix-run/react";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface SidebarTrendingTagProps {
   id: number;
@@ -9,9 +10,13 @@ interface SidebarTrendingTagProps {
 
 function SidebarTrendingTag({ id, name, count }: SidebarTrendingTagProps) {
   return (
-    <Link to="/" className="trending-tag-item" aria-label="Tag">
+    <Link
+      to={PAGE_ENDPOINTS.N.TAG(name)}
+      className="trending-tag-item"
+      aria-label={name}
+    >
       <span className="mr-1 block flex-1 truncate">{name}</span>
-      <span className=" rounded-full border py-1 px-2 text-xs font-bold leading-[1.25]">
+      <span className=" rounded-full border px-2 py-1 text-xs font-bold leading-[1.25]">
         +{count}
       </span>
     </Link>

@@ -1,151 +1,87 @@
 import React from "react";
-import { json, redirect } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import { defer, redirect } from "@remix-run/cloudflare";
+
+import Header from "~/components/shared/Header";
+import Sidebar from "~/components/home/Sidebar";
 
 // api
 import {
-  getTagApi,
-  postTagFollowApi,
-  deleteTagFollowApi,
+  getTagListDelayedApi,
+  getTagTrendingListDelayedApi,
 } from "~/api/tags/tags";
-import {
-  tagFollowSchema,
-  tagFollowHTTPErrorWrapper,
-  tagFollowValidationErrorWrapper,
-} from "~/api/tags/validation/follow";
-
-// components
-import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
 
 // types
-import type {
-  LoaderArgs,
-  ActionArgs,
-  V2_MetaFunction,
-} from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const tag = args.params.tag?.toString();
-  if (!tag) {
-    throw new Response("Not Found", { status: 404 });
-  }
+// styles
+import homeStyle from "~/styles/routes/home.css";
+import nStyle from "~/styles/routes/n.css";
 
-  const { result } = await getTagApi(tag, args);
-
-  const tagInfo = result?.result;
-
-  if (!tagInfo) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  return json({
-    tagInfo,
-  });
-};
-
-export type NDataLoader = typeof loader;
-
-export const action = async (args: ActionArgs) => {
-  const formData = await args.request.formData();
-
-  const form = {
-    tag: formData.get("tag")?.toString(),
-  };
-
-  try {
-    const parse = await tagFollowSchema.parseAsync(form);
-    switch (args.request.method) {
-      case "POST":
-        await postTagFollowApi(parse.tag, args);
-        break;
-      case "DELETE":
-        await deleteTagFollowApi(parse.tag, args);
-        break;
-      default:
-        return redirect(PAGE_ENDPOINTS.N.TAG(parse.tag));
-    }
-
-    return redirect(PAGE_ENDPOINTS.N.TAG(parse.tag));
-  } catch (error) {
-    const error_validation = tagFollowValidationErrorWrapper(error);
-    if (error_validation) {
-      return json(
-        { success: false, errors: error_validation },
-        { status: 404 }
-      );
-    }
-    const error_http = await tagFollowHTTPErrorWrapper(error);
-    if (error_http) {
-      return json(
-        {
-          success: false,
-          errors: error_http.errors,
-        },
-        {
-          status: error_http.statusCode,
-        }
-      );
-    }
-  }
-};
-
-export type NDataAction = typeof action;
-
-export const meta: V2_MetaFunction<NDataLoader> = ({ params, data }) => {
-  const tagInfo = data?.tagInfo ?? null;
-  const title = `#${params.tag?.toString()} on Hashnode`;
-  const description = `${tagInfo?.name} (${
-    tagInfo?.followCount ?? 0
-  } followers · ${
-    tagInfo?.postCount ?? 0
-  } posts) On Hashnode, you can follow your favorite topics and get notified when new posts are published.`;
-  const image = "/images/seo_image.png";
+export const links: LinksFunction = () => {
   return [
-    { title },
     {
-      name: "description",
-      content: description,
+      rel: "stylesheet",
+      href: homeStyle,
     },
     {
-      property: "og:title",
-      content: title,
-    },
-    {
-      name: "og:description",
-      content: description,
-    },
-    {
-      name: "og:image",
-      content: image,
-    },
-    {
-      name: "twitter:title",
-      content: title,
-    },
-    {
-      name: "twitter:description",
-      content: description,
-    },
-    {
-      name: "twitter:image",
-      content: image,
+      rel: "stylesheet",
+      href: nStyle,
     },
   ];
 };
 
-export default function Tag() {
+export const loader = async (args: LoaderArgs) => {
+  const tag = args.params.tag?.toString();
+  if (!tag) {
+    throw redirect("/", 302);
+  }
+
+  const trendingTagPromise = getTagListDelayedApi(
+    {
+      type: "popular",
+    },
+    args
+  );
+
+  const trendingTagsWeekPromise = getTagTrendingListDelayedApi(
+    {
+      category: "week",
+    },
+    args
+  );
+
+  const trendingTagsAllPromise = getTagTrendingListDelayedApi(
+    {
+      category: "all",
+    },
+    args
+  );
+
+  return defer({
+    trendingTag: trendingTagPromise,
+    trendingTagsWeek: trendingTagsWeekPromise,
+    trendingTagsAll: trendingTagsAllPromise,
+  });
+};
+
+export type NRootLoader = typeof loader;
+
+export default function N() {
   return (
-    <div className="tag__list-container">
-      <TagDetailInfoBox />
-      <Outlet />
+    <div className="container__base">
+      <Header />
+      <main>
+        <Sidebar.Left />
+        <Outlet />
+        <Sidebar.TagRight />
+      </main>
     </div>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.error(error);
   if (isRouteErrorResponse(error)) {
     return (
       <div>

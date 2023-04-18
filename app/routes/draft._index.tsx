@@ -44,7 +44,6 @@ export const action: ActionFunction = async (ctx) => {
       return json(error_validation);
     }
     const error_http = await postHTTPErrorWrapper(error);
-    console.log(error_http);
     if (error_http) {
       return json(error_http.errors);
     }

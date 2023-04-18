@@ -12,6 +12,97 @@ import type {
 import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 import { delayPromise } from "~/utils/util";
 
+// [Get] Path: /api/v1/tags/trending
+
+interface GetTagTrendingApiSearchParams {
+  limit?: number;
+  cursor?: number;
+  category: "week" | "all" | "month" | "year";
+}
+
+interface GetTagTrendingApiParams extends LoaderArgs {}
+
+/**
+ * @description 태그 인기 리스트 조회 API
+ * @param {GetTagTrendingApiSearchParams?} query
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _getTagTrendingListApi(
+  query?: GetTagTrendingApiSearchParams,
+  options?: Options
+) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const searchParams = new URLSearchParams();
+  if (query?.limit) {
+    searchParams.set("limit", query.limit.toString());
+  } else {
+    searchParams.set("limit", "5");
+  }
+
+  if (query?.cursor) {
+    searchParams.set("cursor", query.cursor.toString());
+  }
+
+  if (query?.category) {
+    searchParams.set("category", query.category.toString());
+  } else {
+    searchParams.set("category", "all");
+  }
+
+  const response = await apiClient.get(API_ENDPOINTS.TAGS.TAG_TRENDING, {
+    credentials: "include",
+    headers,
+    searchParams,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description 태그 인기 리스트 조회 API
+ * @param {GetTagTrendingApiSearchParams?} query
+ * @param {GetTagTrendingApiParams?} args
+ * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
+ */
+export async function getTagTrendingListApi(
+  query?: GetTagTrendingApiSearchParams,
+  args?: GetTagTrendingApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _getTagTrendingListApi(query, {
+    headers,
+  });
+  const result = await response.json<AppAPI<TagListRespSchema>>();
+  return { result };
+}
+
+/**
+ * @description 태그 인기 리스트 조회 API (delay)
+ * @param {GetTagTrendingApiSearchParams?} query
+ * @param {GetTagTrendingApiParams?} args
+ * @param {number} delay
+ * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
+ */
+export async function getTagTrendingListDelayedApi(
+  query?: GetTagTrendingApiSearchParams,
+  args?: GetTagTrendingApiParams,
+  delay = 200
+) {
+  const response = await getTagTrendingListApi(query, args);
+  await delayPromise(delay);
+  return response;
+}
+
 // [Get] Path: /api/v1/tags
 
 interface GetTagListApiSearchParams {
