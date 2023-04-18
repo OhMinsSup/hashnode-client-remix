@@ -16,6 +16,7 @@ import {
 
 // components
 import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
+import TabRoutesTags from "~/components/n/TabRoutesTags";
 
 // types
 import type {
@@ -137,7 +138,10 @@ export default function Tag() {
   return (
     <div className="tag__list-container">
       <TagDetailInfoBox />
-      <Outlet />
+      <div className="tab-routes__container">
+        <TabRoutesTags />
+        <Outlet />
+      </div>
     </div>
   );
 }
