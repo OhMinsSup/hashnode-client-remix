@@ -70,6 +70,7 @@ interface GetPostsApiSearchParams extends PaginationQuery {
   type?: "recent" | "featured" | "past" | "personalized";
   startDate?: string;
   endDate?: string;
+  tag?: string;
 }
 
 interface GetPostsApiParams extends LoaderArgs {}
@@ -105,6 +106,9 @@ export async function _getPostsApi(
   if (query?.startDate && query?.endDate) {
     searchParams.set("startDate", query.startDate);
     searchParams.set("endDate", query.endDate);
+  }
+  if (query?.tag) {
+    searchParams.set("tag", query.tag);
   }
   const response = await apiClient.get(API_ENDPOINTS.POSTS.ROOT, {
     credentials: "include",

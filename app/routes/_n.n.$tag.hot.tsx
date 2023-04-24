@@ -36,11 +36,13 @@ export const loader = async (args: LoaderArgs) => {
     {
       cursor,
       limit,
-      type: "recent",
+      type: "featured",
       tag,
     },
     args
   );
+
+  console.log(posts)
 
   return json(
     {

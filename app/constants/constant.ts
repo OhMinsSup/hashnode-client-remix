@@ -131,6 +131,7 @@ export const PAGE_ENDPOINTS = {
   },
   N: {
     TAG: (tag: string) => `/n/${tag}`,
+    TAG_HOT: (tag: string) => `/n/${tag}/hot`,
   },
   SETTINGS: {
     ROOT: "/settings",
