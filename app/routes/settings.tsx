@@ -27,7 +27,7 @@ export const links: LinksFunction = () => {
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
   if (!session) {
-    return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
       headers,
     });
   }
@@ -41,6 +41,8 @@ export const loader = async (args: LoaderArgs) => {
     }
   );
 };
+
+export type SettingsLoader = typeof loader;
 
 export default function Setting() {
   return (

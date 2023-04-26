@@ -27,15 +27,15 @@ import RightTagTrendingSidebar from "../n/RightTagTrendingSidebar";
 import WidgetBookmark from "./WidgetBookmark";
 
 // types
-import type { HomeLoaderData } from "~/routes/_main";
-import type { NRootLoader } from "~/routes/_n";
+import type { HomeLoader } from "~/routes/_main";
+import type { NLoader } from "~/routes/_n.n";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;
 }
 
 Sidebar.Left = function Left() {
-  const data = useLoaderData<HomeLoaderData>();
+  const data = useLoaderData<HomeLoader>();
 
   const isWide = useMedia("(min-width: 1260px)", false);
   const $container = useRef<HTMLDivElement | null>(null);
@@ -231,7 +231,7 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.TagRight = function TagRight() {
-  const data = useLoaderData<NRootLoader>();
+  const data = useLoaderData<NLoader>();
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">
@@ -292,7 +292,7 @@ Sidebar.RightOtherBox = function RightOtherBox() {
 };
 
 Sidebar.RightWidgetForTrening = function RightWidgetForTrening() {
-  const data = useLoaderData<HomeLoaderData>();
+  const data = useLoaderData<HomeLoader>();
 
   const [duration, setDuration] = useState(7);
 
@@ -437,7 +437,7 @@ Sidebar.RightWidgetForTreningSkeleton =
   };
 
 Sidebar.RightWidgetForBookmarks = function RightWidgetForBookmarks() {
-  const data = useLoaderData<HomeLoaderData>();
+  const data = useLoaderData<HomeLoader>();
 
   return (
     <Suspense fallback={<Sidebar.RightWidgetForBookmarksSkeleton />}>

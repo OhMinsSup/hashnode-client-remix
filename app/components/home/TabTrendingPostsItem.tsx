@@ -19,6 +19,7 @@ function TabTrendingPostsItem({
   title,
   subTitle,
   user,
+  count,
 }: TabTrendingPostsItemProps) {
   const to = useMemo(() => {
     return PAGE_ENDPOINTS.ITEMS.ID(id);
@@ -49,7 +50,7 @@ function TabTrendingPostsItem({
           {/* Like */}
           <Link to="/" className="action-btn">
             <Icons.LinkHandler className="icon__base mr-2 fill-current" />
-            <span>66</span>
+            <span>{count.postLike}</span>
           </Link>
           {/* Comment */}
           <Link to="/" className="action-btn">

@@ -4,7 +4,7 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getAritcleCirclesDelayedApi } from "~/api/widget/widget";
+import { getAritcleCirclesApi } from "~/api/widget/widget";
 
 // provider
 import { ListProvider } from "~/context/useListContext";
@@ -22,13 +22,13 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = (args: LoaderArgs) => {
-  const getAricleCirclePromise = getAritcleCirclesDelayedApi(undefined, args);
+  const getAricleCirclePromise = getAritcleCirclesApi(undefined, args);
   return defer({
     getAricleCircle: getAricleCirclePromise,
   });
 };
 
-export type LoaderData = ReturnType<typeof loader>;
+export type MainFeedsLoader = ReturnType<typeof loader>;
 
 export default function IndexPage() {
   return (
@@ -71,4 +71,3 @@ export function ErrorBoundary() {
     return <h1>Unknown Error</h1>;
   }
 }
-

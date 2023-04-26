@@ -1,5 +1,6 @@
 import React from "react";
 import { json } from "@remix-run/cloudflare";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
 import { getPostsApi } from "~/api/posts/posts";
@@ -11,7 +12,6 @@ import { parseUrlParams } from "~/utils/util";
 import PostsList from "~/components/home/PostsList.unstable";
 
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 const Seo = {
   title: "Recent posts on Hashnode",
@@ -52,9 +52,9 @@ export const loader = async (args: LoaderArgs) => {
   );
 };
 
-export type DataLoader = typeof loader;
+export type MainFeedsIndexLoader = typeof loader;
 
-export const meta: V2_MetaFunction<DataLoader> = () => {
+export const meta: V2_MetaFunction<MainFeedsIndexLoader> = () => {
   return [
     {
       title: Seo.title,

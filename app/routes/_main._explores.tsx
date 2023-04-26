@@ -28,12 +28,6 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const header: HeadersFunction = () => {
-  return {
-    "Cache-Control": "public, max-age=120",
-  };
-};
-
 export const meta: V2_MetaFunction = () => {
   return [
     {

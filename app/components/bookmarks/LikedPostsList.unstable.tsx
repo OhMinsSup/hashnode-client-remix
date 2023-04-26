@@ -18,7 +18,7 @@ const LIMIT = 15;
 
 const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
 
-const PostsList = () => {
+const LikedPostsList = () => {
   const data = useLoaderData<MainFeedsIndexLoader>();
   const fetcher = useFetcher<MainFeedsIndexLoader>();
 
@@ -69,7 +69,7 @@ const PostsList = () => {
         canFetchMore &&
         fetcher.state === "idle"
       ) {
-        fetcher.load(`/?index&cursor=${cursor.current}&limit=${LIMIT}`);
+        fetcher.load(`/bookmarks?cursor=${cursor.current}&limit=${LIMIT}`);
         return;
       }
     };
@@ -132,4 +132,4 @@ const PostsList = () => {
   );
 };
 
-export default PostsList;
+export default LikedPostsList;

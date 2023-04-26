@@ -36,7 +36,7 @@ export const links: LinksFunction = () => {
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
   if (!session) {
-    return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
       headers,
     });
   }
@@ -47,12 +47,6 @@ export const loader = async (args: LoaderArgs) => {
       headers,
     }
   );
-};
-
-export const header: HeadersFunction = () => {
-  return {
-    "Cache-Control": "public, max-age=120",
-  };
 };
 
 export const meta: V2_MetaFunction = () => {

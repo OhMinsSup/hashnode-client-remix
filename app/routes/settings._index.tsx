@@ -1,7 +1,15 @@
 import React from "react";
 import { Icons } from "~/components/shared/Icons";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
+
+// types
+import type { ActionArgs } from "@remix-run/cloudflare";
+
+export const action = (args: ActionArgs) => { }
 
 export default function Profile() {
+  const session = useOptionalSession()
+  console.log(session)
   return (
     <div className="content">
       <div className="flex flex-row flex-wrap">

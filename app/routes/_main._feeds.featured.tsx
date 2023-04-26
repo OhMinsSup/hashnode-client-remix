@@ -53,6 +53,8 @@ export const loader = async (args: LoaderArgs) => {
   );
 };
 
+export type MainFeedsFeaturedLoader = typeof loader;
+
 export const meta: V2_MetaFunction<typeof loader> = () => {
   return [
     {

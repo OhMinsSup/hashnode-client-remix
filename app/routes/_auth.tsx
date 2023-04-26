@@ -33,7 +33,7 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
 };
 
-export const meta: V2_MetaFunction = ({ location, matches }) => {
+export const meta: V2_MetaFunction = ({ location }) => {
   const isSigninPage = location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
   const title = isSigninPage ? Seo.signin : Seo.signup;
   return [
@@ -66,10 +66,11 @@ export const meta: V2_MetaFunction = ({ location, matches }) => {
 export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
   if (session) {
-    return redirect(PAGE_ENDPOINTS.ROOT, {
+    throw redirect(PAGE_ENDPOINTS.ROOT, {
       headers,
     });
   }
+  
   return json(
     {},
     {

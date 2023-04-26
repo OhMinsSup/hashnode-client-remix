@@ -1,8 +1,8 @@
 import type { Nullable } from "./api";
 import type { FileSchema } from "./file";
-import type { UserSchema } from "./user";
+import type { UserSchema, UserProfileSchema } from "./user";
 import type { TagSchema } from "./tag";
-import type { PostSchema } from "./post";
+import type { PostSchema, PostCountSchema } from "./post";
 import type { DraftSchema } from "./draft";
 
 export interface ListRespSchema<Item = Record<string, any>> {
@@ -54,9 +54,7 @@ export interface TagFollowRespSchema {
 }
 
 export interface PostDetailRespSchema extends PostSchema {
-  count: {
-    postLike: number;
-  };
+  count: PostCountSchema;
 }
 
 export interface PostLikeRespSchema extends PostDetailRespSchema {
@@ -79,24 +77,14 @@ export interface GetAritcleCircleRespSchema {
   id: number;
   username: string;
   email: string;
-  name: string;
-  bio: Nullable<string>;
-  avatarUrl: Nullable<string>;
-  location: Nullable<string>;
-  website: Nullable<string>;
-  availableText: Nullable<string>;
-  post_count: number;
-  total_likes: number;
-  latest_post_id: number;
-  latest_post_title: string;
-  latest_post_subtitle: string;
-  latest_post_description: string;
+  profile: Pick<UserProfileSchema, "name" | "bio" | "avatarUrl" | "tagline">;
+  count: PostCountSchema;
+  lastPost: Pick<PostSchema, 'id' | 'title' | 'createdAt'>
 }
 
 export interface GetAritcleCirclesRespSchema {
   circles: GetAritcleCircleRespSchema[];
 }
-
 
 export interface GetWidgetBookmarkRespSchema {
   id: number;

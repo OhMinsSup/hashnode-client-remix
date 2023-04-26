@@ -1,20 +1,18 @@
 import React from "react";
 import { json } from "@remix-run/cloudflare";
 
-// constants
+// components
+import LikedPostsList from "~/components/bookmarks/LikedPostsList.unstable";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
 import { getLikePostsApi } from "~/api/posts/posts";
 
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
-
-// styles
-import LikedPostsList from "~/components/bookmarks/LikedPostsList";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 export const loader = async (args: LoaderArgs) => {
   const params = parseUrlParams(args.request.url);
@@ -42,7 +40,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type DataLoader = typeof loader;
+export type MainBookmarksLoader = typeof loader;
 
 export default function Bookmarks() {
   return <LikedPostsList />;

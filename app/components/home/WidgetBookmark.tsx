@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { Link } from "@remix-run/react";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { GetWidgetBookmarkRespSchema } from "~/api/schema/resp";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface WidgetBookmarkProps {
   bookmark: GetWidgetBookmarkRespSchema;

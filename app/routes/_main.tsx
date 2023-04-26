@@ -32,42 +32,6 @@ const Seo = {
   image: "/images/seo_image.png",
 };
 
-export const meta: V2_MetaFunction = () => {
-  return [
-    {
-      title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "og:image",
-      content: Seo.image,
-    },
-    {
-      name: "twitter:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
-    },
-  ];
-};
-
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeStyles }];
 };
@@ -103,7 +67,43 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type HomeLoaderData = typeof loader;
+export type HomeLoader = typeof loader;
+
+export const meta: V2_MetaFunction<HomeLoader> = () => {
+  return [
+    {
+      title: Seo.title,
+    },
+    {
+      name: "description",
+      content: Seo.description,
+    },
+    {
+      name: "og:title",
+      content: Seo.title,
+    },
+    {
+      name: "og:description",
+      content: Seo.description,
+    },
+    {
+      name: "og:image",
+      content: Seo.image,
+    },
+    {
+      name: "twitter:title",
+      content: Seo.title,
+    },
+    {
+      name: "twitter:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:image",
+      content: Seo.image,
+    },
+  ];
+};
 
 export default function App() {
   return (

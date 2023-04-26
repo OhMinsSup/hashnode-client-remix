@@ -1,8 +1,8 @@
 import React, { useId, useMemo } from "react";
+import classNames from "classnames";
 import TabTrendingPostsItem from "~/components/home/TabTrendingPostsItem";
 import { isNull, isUndefined } from "~/utils/assertion";
 import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
-import classNames from "classnames";
 
 interface TabTrendingPostsListProps {
   duration: number;

@@ -1,6 +1,6 @@
 import type { Nullable } from "./api";
 
-export interface TechStackSchema {
+export interface SkillSchema {
   id: number;
   name: string;
   createdAt: number;
@@ -12,31 +12,30 @@ export interface UserProfileSchema {
   id: number;
   userId: number;
   name: string;
-  bio?: Nullable<string>;
+  tagline?: Nullable<string>;
   avatarUrl?: Nullable<string>;
-  availableText?: Nullable<string>;
   location?: Nullable<string>;
-  website?: Nullable<string>;
+  bio?: Nullable<string>;
+  availableText?: Nullable<string>;
   createdAt: number;
   updatedAt: number;
   deletedAt?: Nullable<number>;
 }
 
-export interface ProfileOnTechStacks {
-  id: number;
-  profileId: number;
-  techStackId: number;
-  profile: UserProfileSchema;
-  techStack: TechStackSchema;
+export interface UserSocialSchema {
+  github: Nullable<string>;
+  twitter: Nullable<string>;
+  facebook: Nullable<string>;
+  instagram: Nullable<string>;
+  website: Nullable<string>;
 }
 
 export interface UserSchema {
   id: number;
   email: string;
   username: string;
-  profile: UserProfileSchema;
-  profileOnTechStacks: ProfileOnTechStacks[];
-  createdAt: number;
-  updatedAt: number;
-  deletedAt?: Nullable<number>;
+  profile: Pick<
+    UserProfileSchema,
+    "name" | "bio" | "avatarUrl" | "availableText"
+  >;
 }

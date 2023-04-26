@@ -1,5 +1,5 @@
 .main__list-container {
-  @apply relative col-span-7 min-w-0 pt-5 pb-24;
+  @apply relative col-span-7 min-w-0 pb-24 pt-5;
 }
 
 .main__list-container .main__list-container__trending-users {
@@ -28,6 +28,20 @@
   .trending-users-scroll-area__container
   .user-container {
   @apply relative mr-3;
+}
+
+.main__list-container
+  .main__list-container__trending-users
+  .trending-users-scroll-area
+  .trending-users-scroll-area__container
+  .user-container
+  .thumbnail-container:hover {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+    0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .main__list-container
@@ -104,7 +118,7 @@
 /* Future Post Card */
 
 .main-post-card {
-  @apply border-b py-3 px-5;
+  @apply border-b px-5 py-3;
 }
 
 .main-post-card .main-post-card__header {
@@ -288,7 +302,7 @@
 
 /* Old Post Card */
 .post-item {
-  @apply border-b py-3 px-5;
+  @apply border-b px-5 py-3;
 }
 
 .post-item .post-header {
