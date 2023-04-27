@@ -13,6 +13,8 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // hooks
 import { useLoaderData } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
+import { useDraftContext } from "~/context/useDraftContext";
+import { isString } from "~/utils/assertion";
 
 // api
 import { getPostApi, postPostsApi } from "~/api/posts/posts";
@@ -24,8 +26,6 @@ import {
 
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
 import type { FormFieldValues } from "./draft";
-import { useDraftContext } from "~/context/useDraftContext";
-import { isString } from "~/utils/assertion";
 
 export const loader = async (args: LoaderArgs) => {
   const id = args.params.itemId;
@@ -45,7 +45,6 @@ export const loader = async (args: LoaderArgs) => {
   }
 
   const { result } = await getPostApi(itemId, args);
-
   return json({
     item: result.result,
   });
@@ -95,8 +94,8 @@ export default function DraftPage() {
         content: item.content,
         thumbnail: item.thumbnail
           ? {
-              url: item.thumbnail,
-            }
+            url: item.thumbnail,
+          }
           : undefined,
         tags: item.tags ? item.tags.map((tag) => tag.name) : undefined,
         disabledComment: false,

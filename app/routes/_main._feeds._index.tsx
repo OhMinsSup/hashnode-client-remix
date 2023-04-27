@@ -40,16 +40,9 @@ export const loader = async (args: LoaderArgs) => {
     args
   );
 
-  return json(
-    {
-      posts: posts.result?.result,
-    },
-    {
-      headers: {
-        "Cache-Control": "public, max-age=120",
-      },
-    }
-  );
+  return json({
+    posts: posts.result?.result,
+  });
 };
 
 export type MainFeedsIndexLoader = typeof loader;

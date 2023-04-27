@@ -34,8 +34,7 @@ export interface UserSchema {
   id: number;
   email: string;
   username: string;
-  profile: Pick<
-    UserProfileSchema,
-    "name" | "bio" | "avatarUrl" | "availableText"
-  >;
+  profile: Omit<UserProfileSchema, "id" | "userId" | "createdAt" | "updatedAt" | "deletedAt">;
+  skills: Pick<SkillSchema, 'id' | 'name'>[];
+  socials: UserSocialSchema;
 }

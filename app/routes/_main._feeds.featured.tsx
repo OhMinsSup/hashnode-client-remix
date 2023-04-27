@@ -1,5 +1,6 @@
 import React from "react";
 import { json } from "@remix-run/cloudflare";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
 import { getPostsApi } from "~/api/posts/posts";
@@ -11,7 +12,6 @@ import { parseUrlParams } from "~/utils/util";
 import PostsList from "~/components/home/PostsList.unstable";
 
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 const Seo = {
   title: "Featured posts on Hashnode",
@@ -41,21 +41,14 @@ export const loader = async (args: LoaderArgs) => {
     args
   );
 
-  return json(
-    {
-      posts: posts.result?.result,
-    },
-    {
-      headers: {
-        "Cache-Control": "public, max-age=120",
-      },
-    }
-  );
+  return json({
+    posts: posts.result?.result,
+  });
 };
 
 export type MainFeedsFeaturedLoader = typeof loader;
 
-export const meta: V2_MetaFunction<typeof loader> = () => {
+export const meta: V2_MetaFunction<MainFeedsFeaturedLoader> = () => {
   return [
     {
       title: Seo.title,

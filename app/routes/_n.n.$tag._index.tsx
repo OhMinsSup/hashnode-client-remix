@@ -42,11 +42,9 @@ export const loader = async (args: LoaderArgs) => {
     args
   );
 
-  return json(
-    {
-      posts: posts.result?.result,
-    },
-  );
+  return json({
+    posts: posts.result?.result,
+  });
 };
 
 export type DataLoader = typeof loader;
@@ -57,7 +55,6 @@ export default function Tag() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.error(error);
   if (isRouteErrorResponse(error)) {
     return (
       <div>

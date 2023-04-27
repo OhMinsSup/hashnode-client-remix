@@ -28,7 +28,7 @@ import WidgetBookmark from "./WidgetBookmark";
 
 // types
 import type { HomeLoader } from "~/routes/_main";
-import type { NLoader } from "~/routes/_n.n";
+import type { nLoader } from "~/routes/_n.n";
 
 export default function Sidebar() {
   return <div>Sidebar</div>;
@@ -231,7 +231,7 @@ Sidebar.Left = function Left() {
 };
 
 Sidebar.TagRight = function TagRight() {
-  const data = useLoaderData<NLoader>();
+  const data = useLoaderData<nLoader>();
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">

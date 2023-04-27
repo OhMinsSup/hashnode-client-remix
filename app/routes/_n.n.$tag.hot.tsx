@@ -42,16 +42,12 @@ export const loader = async (args: LoaderArgs) => {
     args
   );
 
-  console.log(posts)
-
-  return json(
-    {
-      posts: posts.result?.result,
-    },
-  );
+  return json({
+    posts: posts.result?.result,
+  });
 };
 
-export type DataLoader = typeof loader;
+export type nTagHotLoader = typeof loader;
 
 export default function Tag() {
   return <PostsList />;

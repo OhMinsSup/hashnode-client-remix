@@ -65,7 +65,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type NLoader = typeof loader;
+export type nLoader = typeof loader;
 
 export default function N() {
   return (

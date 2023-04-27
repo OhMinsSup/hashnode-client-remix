@@ -9,12 +9,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { getSessionApi } from "~/api/user/user";
 
 // types
-import type {
-  LoaderArgs,
-  V2_MetaFunction,
-  HeadersFunction,
-  LinksFunction,
-} from "@remix-run/cloudflare";
+import type { LoaderArgs, V2_MetaFunction, LinksFunction } from "@remix-run/cloudflare";
 
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
@@ -40,7 +35,6 @@ export const loader = async (args: LoaderArgs) => {
       headers,
     });
   }
-
   return json(
     {},
     {

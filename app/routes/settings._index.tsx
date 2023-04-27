@@ -1,17 +1,183 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
+import { json } from "@remix-run/cloudflare";
+
+import Json from "superjson";
+
+// api
+import { UserUpdateBody, userUpdateHTTPErrorWrapper, userUpdateSchema, userUpdateValidationErrorWrapper } from "~/api/user/validation/update";
+import { putUserUpdateApi } from "~/api/user/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getTagListApi } from "~/api/tags/tags";
+
+// components
 import { Icons } from "~/components/shared/Icons";
+import AsyncCreatableSelect from "react-select/async-creatable";
+import ProfileImage from "~/components/setting/ProfileImage";
+
+// hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useForm } from "react-hook-form";
+import { useActionData, useFetcher } from "@remix-run/react";
+import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
+import { useDebouncedCallback } from "use-debounce";
 
 // types
+import type { SubmitHandler } from "react-hook-form";
 import type { ActionArgs } from "@remix-run/cloudflare";
+import type { MultiValue } from "react-select";
 
-export const action = (args: ActionArgs) => { }
+export const action = async (args: ActionArgs) => {
+  const formData = await args.request.formData();
+  const _input_body = formData.get("body")?.toString();
+  if (!_input_body) {
+    return;
+  }
+  const _input_json_body = Json.parse<FormFieldValues>(_input_body);
+  try {
+    const body = await userUpdateSchema.safeParseAsync(_input_json_body);
+    if (!body.success) {
+      return json(body.error, { status: 400 });
+    }
+    await putUserUpdateApi(body.data, args);
+    return json({ success: true });
+  } catch (error) {
+    const error_validation = userUpdateValidationErrorWrapper(error);
+    if (error_validation) {
+      return json(error_validation);
+    }
+    const error_http = await userUpdateHTTPErrorWrapper(error);
+    if (error_http) {
+      return json(error_http.errors);
+    }
+    throw json(error);
+  }
+}
+
+export type SettingAction = typeof action;
+
+export type FormFieldValues = UserUpdateBody
 
 export default function Profile() {
+  const fetcher = useFetcher();
+  const [inputValue, setInputValue] = useState("");
+  const error = useActionData<SettingAction>();
   const session = useOptionalSession()
-  console.log(session)
+
+  const { register, watch, setValue, handleSubmit } = useForm({
+    resolver: zodResolver(userUpdateSchema),
+    defaultValues: {
+      name: session?.profile?.name ?? '',
+      username: session?.username ?? '',
+      email: session?.email ?? '',
+      tagline: session?.profile?.tagline ?? undefined,
+      avatarUrl: session?.profile?.avatarUrl ?? undefined,
+      location: session?.profile?.location ?? undefined,
+      bio: session?.profile?.bio ?? undefined,
+      skills: session?.skills?.map((skill) => skill.name) ?? [],
+      availableText: session?.profile?.availableText ?? undefined,
+      socials: {
+        github: session?.socials?.github ?? undefined,
+        facebook: session?.socials?.facebook ?? undefined,
+        twitter: session?.socials?.twitter ?? undefined,
+        instagram: session?.socials?.instagram ?? undefined,
+        website: session?.socials?.website ?? undefined,
+      },
+    },
+    reValidateMode: "onChange",
+  });
+
+  const { isLoading, mutate } = useImageUploadMutation({
+    onSuccess(data) {
+      const { result } = data.result;
+      setValue("avatarUrl", result.url, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    onError() {
+      setValue("avatarUrl", undefined, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
+    fetcher.submit(
+      {
+        body: Json.stringify(input),
+      },
+      {
+        method: "POST",
+        action: "/settings?index",
+      }
+    );
+  };
+
+  const watchAvailableText = watch('availableText');
+  const watchAvatarUrl = watch('avatarUrl');
+  const watchSkills = watch("skills");
+
+  const onImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      throw new Error("No file selected");
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    // validation checj file sizes 1600 x 800 px
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = (e) => reject(e);
+      img.src = objectUrl;
+    });
+
+
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+    }
+
+    if (image.width > 1600 || image.height > 800) {
+      throw new Error("Image size is too small");
+    }
+
+    mutate({
+      file,
+      uploadType: "PROFILE",
+      mediaType: "IMAGE",
+    });
+  }, [mutate]);
+
+  const onImageDelete = useCallback(() => {
+    setValue("avatarUrl", undefined, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [setValue]);
+
+  const loadOptions = useDebouncedCallback(async (inputValue) => {
+    const { result } = await getTagListApi({
+      name: inputValue,
+      limit: 10,
+    });
+    const list = result?.result?.list ?? [];
+    return list.map((tag) => ({
+      label: tag.name,
+      value: tag.name,
+    }));
+  }, 250);
+
+  const onChangeTags = useCallback(
+    (value: MultiValue<any>) => {
+      const tags = value.map((item) => item.value);
+      setValue("skills", tags, { shouldValidate: true, shouldDirty: true });
+    },
+    [setValue]
+  );
+
   return (
-    <div className="content">
+    <form className="content" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row flex-wrap">
         <div className="w-full lg:w-1/2 lg:pr-10">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Basic Info</h4>
@@ -24,7 +190,7 @@ export default function Profile() {
               className="input-text "
               id="nameField"
               placeholder="Enter your full name"
-              value=""
+              {...register('name')}
             />
           </div>
           <div className="mb-6">
@@ -36,25 +202,22 @@ export default function Profile() {
               className="input-text"
               id="tagline"
               placeholder="Software Developer @ …"
-              value=""
+              {...register('tagline')}
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="nameField" className="input-label">
+            <label htmlFor="customFile" className="input-label">
               Profile Photo
             </label>
-            <label className="input-upload" id="customFile">
-              <Icons.Cloud className="h-10 w-10 fill-current" />
-              <span className="mt-2 text-xs font-semibold leading-normal">
-                Upload Photo
-              </span>
-              <input
-                type="file"
-                accept=".png, .jpg, .jpeg, .gif"
-                className="hidden"
-                id="customFile"
-              ></input>
-            </label>
+            {isLoading && (
+              <ProfileImage.Loading />
+            )}
+            {!isLoading && watchAvatarUrl && (
+              <ProfileImage.Success url={watchAvatarUrl} onDelete={onImageDelete} />
+            )}
+            {!isLoading && !watchAvatarUrl && (
+              <ProfileImage onChange={onImageUpload} />
+            )}
           </div>
           <div className="mb-6">
             <label htmlFor="location" className="input-label">
@@ -65,7 +228,7 @@ export default function Profile() {
               className="input-text"
               id="location"
               placeholder="California, US"
-              value=""
+              {...register('location')}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -79,18 +242,24 @@ export default function Profile() {
               className="input-text min-h-30"
               id="moreAboutYou"
               placeholder="I am a developer from …"
-              value=""
+              {...register('bio')}
             />
           </div>
           <div className="mb-6">
             <label htmlFor="skills" className="input-label">
               Tech Stack
             </label>
-            <textarea
-              className="input-text min-h-30"
-              id="skills"
+            <AsyncCreatableSelect
+              inputValue={inputValue}
+              isClearable
+              cacheOptions
+              isMulti
+              className="min-h-30"
               placeholder="Search technologies, topics, more…"
-              value=""
+              loadOptions={loadOptions}
+              onChange={onChangeTags}
+              onInputChange={(newValue) => setInputValue(newValue)}
+              value={watchSkills?.map((tag) => ({ label: tag, value: tag }))}
             />
           </div>
           <div className="mb-6">
@@ -101,10 +270,10 @@ export default function Profile() {
               className="input-text min-h-30"
               id="availableFor"
               placeholder="I am available for mentoring, …"
-              value=""
+              {...register('availableText')}
             />
             <small className="ml-2 mt-1 block leading-tight text-slate-600">
-              140/140
+              {watchAvailableText?.length ?? 0}/140
             </small>
           </div>
         </div>
@@ -120,7 +289,7 @@ export default function Profile() {
               className="input-text"
               id="twitter"
               placeholder="https://twitter.com/johndoe"
-              value=""
+              {...register('socials.twitter')}
             />
           </div>
           <div className="mb-6">
@@ -133,7 +302,7 @@ export default function Profile() {
               className="input-text"
               id="instagram"
               placeholder="https://instagram.com/johndoe"
-              value=""
+              {...register('socials.instagram')}
             />
           </div>
           <div className="mb-6">
@@ -146,7 +315,7 @@ export default function Profile() {
               className="input-text"
               id="github"
               placeholder="https://github.com/hashnode"
-              value=""
+              {...register('socials.github')}
             />
           </div>
           <div className="mb-6">
@@ -159,7 +328,7 @@ export default function Profile() {
               className="input-text"
               id="facebook"
               placeholder="https://facebook.com/johndoe"
-              value=""
+              {...register('socials.facebook')}
             />
           </div>
           <div className="mb-6">
@@ -171,7 +340,7 @@ export default function Profile() {
               className="input-text"
               id="website"
               placeholder="https://johndoe.com"
-              value=""
+              {...register('socials.website')}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -189,8 +358,7 @@ export default function Profile() {
                 type="text"
                 className="input-text "
                 id="username"
-                placeholder=""
-                value="veloss990"
+                {...register('username')}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
             </div>
@@ -209,8 +377,7 @@ export default function Profile() {
                 type="email"
                 className="input-text"
                 id="email"
-                placeholder=""
-                value=""
+                {...register('email')}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
             </div>
@@ -218,8 +385,8 @@ export default function Profile() {
         </div>
       </div>
       <div className="mt-5 pt-4">
-        <button className="btn-submit">Update</button>
+        <button className="btn-submit" type="submit">Update</button>
       </div>
-    </div>
+    </form>
   );
 }

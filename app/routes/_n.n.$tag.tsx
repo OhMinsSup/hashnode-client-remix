@@ -45,7 +45,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type NDataLoader = typeof loader;
+export type nTagLoader = typeof loader;
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -64,7 +64,7 @@ export const action = async (args: ActionArgs) => {
         await deleteTagFollowApi(parse.tag, args);
         return json({ success: true });
       default:
-        return redirect(PAGE_ENDPOINTS.N.TAG(parse.tag));
+        throw new Response("Not Found", { status: 404 });
     }
   } catch (error) {
     const error_validation = tagFollowValidationErrorWrapper(error);
@@ -92,14 +92,12 @@ export const action = async (args: ActionArgs) => {
 
 export type NDataAction = typeof action;
 
-export const meta: V2_MetaFunction<NDataLoader> = ({ params, data }) => {
+export const meta: V2_MetaFunction<nTagLoader> = ({ params, data }) => {
   const tagInfo = data?.tagInfo ?? null;
   const title = `#${params.tag?.toString()} on Hashnode`;
-  const description = `${tagInfo?.name} (${
-    tagInfo?.followCount ?? 0
-  } followers · ${
-    tagInfo?.postCount ?? 0
-  } posts) On Hashnode, you can follow your favorite topics and get notified when new posts are published.`;
+  const description = `${tagInfo?.name} (${tagInfo?.followCount ?? 0
+    } followers · ${tagInfo?.postCount ?? 0
+    } posts) On Hashnode, you can follow your favorite topics and get notified when new posts are published.`;
   const image = "/images/seo_image.png";
   return [
     { title },

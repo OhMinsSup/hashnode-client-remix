@@ -36,9 +36,6 @@ export const loader = async (args: LoaderArgs) => {
     {
       session,
     },
-    {
-      headers,
-    }
   );
 };
 

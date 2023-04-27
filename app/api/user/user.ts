@@ -15,7 +15,8 @@ import { HTTPError } from "ky-universal";
 import type { Options } from "ky-universal";
 import type { UserRespSchema } from "~/api/schema/resp";
 import type { AppAPI } from "~/api/schema/api";
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
+import type { UserUpdateBody } from "./validation/update";
 
 /**
  * @description 로그아웃 API
@@ -34,7 +35,7 @@ export async function _logoutApi(options?: Options) {
   return response;
 }
 
-interface LogoutApiParams extends LoaderArgs {}
+interface LogoutApiParams extends LoaderArgs { }
 
 export async function logoutApi({ request }: LogoutApiParams) {
   const cookie = request.headers.get("Cookie") ?? null;
@@ -67,7 +68,7 @@ export async function _getSessionApi(options?: Options) {
   return response;
 }
 
-interface GetSessionApiParams extends LoaderArgs {}
+interface GetSessionApiParams extends LoaderArgs { }
 
 /**
  * @description 유저 세션을 가져옵니다.
@@ -123,4 +124,55 @@ export async function getSessionApi(args: GetSessionApiParams) {
       header: undefined,
     };
   }
+}
+
+
+// [Put] Path: app/api/users
+
+interface PutUserUpdateApiBody extends UserUpdateBody { }
+
+interface PutUserUpdateApiParams extends ActionArgs { }
+
+/**
+ * @description 유저 정보 업데이트 API
+ * @param {PutUserUpdateApiBody?} body
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _putUserUpdateApi(body: PutUserUpdateApiBody, options?: Options) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const response = await apiClient.post(API_ENDPOINTS.USERS.ME, {
+    credentials: "include",
+    headers,
+    json: body,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description 유저 정보 업데이트 API
+ * @param {PutUserUpdateApiBody?} body
+ * @param {PutUserUpdateApiParams?} args
+ * @returns {Promise<{ result: AppAPI<null> }>}
+ */
+export async function putUserUpdateApi(
+  body: PutUserUpdateApiBody,
+  args?: PutUserUpdateApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _putUserUpdateApi(body, {
+    headers,
+  });
+  const result = await response.json<AppAPI<null>>();
+  return { result };
 }

@@ -70,7 +70,7 @@ export const loader = async (args: LoaderArgs) => {
       headers,
     });
   }
-  
+
   return json(
     {},
     {
