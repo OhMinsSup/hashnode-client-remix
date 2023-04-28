@@ -6,10 +6,7 @@ import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
 
 // api
-import {
-  getTagListDelayedApi,
-  getTagTrendingListDelayedApi,
-} from "~/api/tags/tags";
+import { getTagListApi, getTagTrendingListApi } from "~/api/tags/tags";
 
 // types
 import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
@@ -37,21 +34,21 @@ export const loader = async (args: LoaderArgs) => {
     throw redirect("/", 302);
   }
 
-  const trendingTagPromise = getTagListDelayedApi(
+  const trendingTagPromise = getTagListApi(
     {
       type: "popular",
     },
     args
   );
 
-  const trendingTagsWeekPromise = getTagTrendingListDelayedApi(
+  const trendingTagsWeekPromise = getTagTrendingListApi(
     {
       category: "week",
     },
     args
   );
 
-  const trendingTagsAllPromise = getTagTrendingListDelayedApi(
+  const trendingTagsAllPromise = getTagTrendingListApi(
     {
       category: "all",
     },

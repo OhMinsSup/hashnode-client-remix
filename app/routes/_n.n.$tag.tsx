@@ -24,7 +24,6 @@ import type {
   ActionArgs,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export const loader = async (args: LoaderArgs) => {
   const tag = args.params.tag?.toString();
@@ -64,7 +63,7 @@ export const action = async (args: ActionArgs) => {
         await deleteTagFollowApi(parse.tag, args);
         return json({ success: true });
       default:
-        throw new Response("Not Found", { status: 404 });
+        throw new Response("Method not allowed", { status: 405 });
     }
   } catch (error) {
     const error_validation = tagFollowValidationErrorWrapper(error);

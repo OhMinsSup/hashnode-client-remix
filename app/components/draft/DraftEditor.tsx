@@ -4,7 +4,8 @@ import json from "superjson";
 
 // hooks
 import { useFetcher } from "@remix-run/react";
-import { useMedia } from "react-use";
+import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
+
 import { useDraftContext } from "~/context/useDraftContext";
 import { useFormContext } from "react-hook-form";
 
@@ -31,7 +32,7 @@ const DraftEditor: React.FC<DraftEditorProps> = ({
   const { visibility, setFormInstance, $form } = useDraftContext();
   const { handleSubmit } = useFormContext<FormFieldValues>();
 
-  const isMobile = useMedia("(max-width: 768px)", false);
+  const isMobile = useMediaQuery("(max-width: 768px)", false);
 
   const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
     fetcher.submit(

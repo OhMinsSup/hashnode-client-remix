@@ -4,7 +4,6 @@ import classNames from "classnames";
 // components
 import { Link, useFetcher } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
-import { If, Else, Then } from "react-if";
 import * as Popover from "@radix-ui/react-popover";
 
 // constants
@@ -131,16 +130,15 @@ Header.Search = function HeaderSearch() {
             active: isSearchActive,
           })}
         >
-          <If condition={isSearchActive}>
-            <Then>
+          {isSearchActive ? (
+            <>
               <p>Press</p>
               <span>↵</span>
               <p>to see all results</p>
-            </Then>
-            <Else>
-              <span className="slash">/</span>
-            </Else>
-          </If>
+            </>
+          ) : (
+            <span className="slash">/</span>
+          )}
         </span>
       </form>
     </div>
@@ -182,14 +180,11 @@ Header.ControlTheme = function HeaderControlTheme() {
       className="btn__theme"
       onClick={onClick}
     >
-      <If condition={toggle}>
-        <Then>
-          <Icons.Sun className="icon__md stroke-current" />
-        </Then>
-        <Else>
-          <Icons.Moon className="icon__md stroke-current" />
-        </Else>
-      </If>
+      {toggle ? (
+        <Icons.Sun className="icon__md stroke-current" />
+      ) : (
+        <Icons.Moon className="icon__md stroke-current" />
+      )}
     </button>
   );
 };

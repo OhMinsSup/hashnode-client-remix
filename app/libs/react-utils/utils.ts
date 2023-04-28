@@ -5,8 +5,8 @@ import {
   type DependencyList,
   type EffectCallback,
 } from "react";
-import { useUnmount } from "react-use";
 import { type BasicTarget, getTargetElement } from "../browser-utils";
+import { useUnmount } from "../hooks/useUnmount";
 
 export function depsAreSame(
   oldDeps: DependencyList,

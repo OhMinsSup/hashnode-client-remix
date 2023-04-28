@@ -7,7 +7,6 @@ import { defer } from "@remix-run/cloudflare";
 import { getAritcleCirclesApi } from "~/api/widget/widget";
 
 // provider
-import { ListProvider } from "~/context/useListContext";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import TabRoutesPosts from "~/components/home/TabRoutesPosts";
 import ScrollAreaTrendingUsers from "~/components/home/ScrollAreaTrendingUsers";
@@ -37,11 +36,9 @@ export default function IndexPage() {
         <ScrollAreaTrendingUsers />
       </div>
       <div className="main__list-container__tabs">
-        <ListProvider>
-          <TabRoutesPosts>
-            <Outlet />
-          </TabRoutesPosts>
-        </ListProvider>
+        <TabRoutesPosts>
+          <Outlet />
+        </TabRoutesPosts>
       </div>
     </div>
   );

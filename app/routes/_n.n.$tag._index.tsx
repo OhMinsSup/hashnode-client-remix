@@ -47,7 +47,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type DataLoader = typeof loader;
+export type nTagIndexLoader = typeof loader;
 
 export default function Tag() {
   return <PostsList />;

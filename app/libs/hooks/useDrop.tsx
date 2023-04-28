@@ -16,7 +16,7 @@ export interface Options {
   onPaste?: (event?: React.ClipboardEvent) => void;
 }
 
-const useDrop = (target: BasicTarget, options: Options = {}) => {
+export const useDrop = (target: BasicTarget, options: Options = {}) => {
   const optionsRef = useLatest(options);
 
   // https://stackoverflow.com/a/26459269
@@ -123,5 +123,3 @@ const useDrop = (target: BasicTarget, options: Options = {}) => {
     target
   );
 };
-
-export default useDrop;

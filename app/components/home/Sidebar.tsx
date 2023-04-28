@@ -5,8 +5,8 @@ import { Await, Link, useLoaderData } from "@remix-run/react";
 
 // hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
-import { useMedia } from "react-use";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -37,7 +37,7 @@ export default function Sidebar() {
 Sidebar.Left = function Left() {
   const data = useLoaderData<HomeLoader>();
 
-  const isWide = useMedia("(min-width: 1260px)", false);
+  const isWide = useMediaQuery("(min-width: 1260px)", false);
   const $container = useRef<HTMLDivElement | null>(null);
   const GAP_SIZE = useMemo(() => 32, []);
 

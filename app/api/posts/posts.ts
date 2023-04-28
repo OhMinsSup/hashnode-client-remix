@@ -204,23 +204,6 @@ export async function getTopPostsApi(
   return { result };
 }
 
-/**
- * @description Get top posts with delay
- * @param {GetTopPostsApiSearchParams?} query
- * @param {GetTopPostsApiParams?} args
- * @param {number} delay
- * @returns {Promise<{ result: AppAPI<GetTopPostsRespSchema> }>}
- */
-export async function getTopPostsDelayedApi(
-  query?: GetTopPostsApiSearchParams,
-  args?: GetTopPostsApiParams,
-  delay = 200
-) {
-  const response = await getTopPostsApi(query, args);
-  await delayPromise(delay);
-  return response;
-}
-
 // [Post] Path: app/api/posts
 
 interface PostPostsApiBody extends CreatePostBody {}

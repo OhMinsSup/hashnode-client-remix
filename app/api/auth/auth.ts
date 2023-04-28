@@ -1,7 +1,7 @@
 import { apiClient } from "~/api/client";
 
 // server
-import { createCookieHeaders } from "~/libs/server/cookie";
+import { createCookieHeaders } from "~/libs/server/utils";
 import { applyHeaders } from "~/libs/server/utils";
 
 // constants

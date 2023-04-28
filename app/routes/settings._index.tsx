@@ -4,20 +4,23 @@ import { json } from "@remix-run/cloudflare";
 import Json from "superjson";
 
 // api
-import { UserUpdateBody, userUpdateHTTPErrorWrapper, userUpdateSchema, userUpdateValidationErrorWrapper } from "~/api/user/validation/update";
+import {
+  userUpdateHTTPErrorWrapper,
+  userUpdateSchema,
+  userUpdateValidationErrorWrapper,
+} from "~/api/user/validation/update";
 import { putUserUpdateApi } from "~/api/user/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getTagListApi } from "~/api/tags/tags";
 
 // components
-import { Icons } from "~/components/shared/Icons";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import ProfileImage from "~/components/setting/ProfileImage";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useForm } from "react-hook-form";
-import { useActionData, useFetcher } from "@remix-run/react";
+import { isRouteErrorResponse, useActionData, useFetcher, useRouteError } from "@remix-run/react";
 import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -25,6 +28,7 @@ import { useDebouncedCallback } from "use-debounce";
 import type { SubmitHandler } from "react-hook-form";
 import type { ActionArgs } from "@remix-run/cloudflare";
 import type { MultiValue } from "react-select";
+import type { UserUpdateBody } from "~/api/user/validation/update";
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -39,7 +43,7 @@ export const action = async (args: ActionArgs) => {
       return json(body.error, { status: 400 });
     }
     await putUserUpdateApi(body.data, args);
-    return json({ success: true });
+    return json({});
   } catch (error) {
     const error_validation = userUpdateValidationErrorWrapper(error);
     if (error_validation) {
@@ -51,24 +55,24 @@ export const action = async (args: ActionArgs) => {
     }
     throw json(error);
   }
-}
+};
 
 export type SettingAction = typeof action;
 
-export type FormFieldValues = UserUpdateBody
+export type FormFieldValues = UserUpdateBody;
 
 export default function Profile() {
   const fetcher = useFetcher();
   const [inputValue, setInputValue] = useState("");
   const error = useActionData<SettingAction>();
-  const session = useOptionalSession()
+  const session = useOptionalSession();
 
   const { register, watch, setValue, handleSubmit } = useForm({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      name: session?.profile?.name ?? '',
-      username: session?.username ?? '',
-      email: session?.email ?? '',
+      name: session?.profile?.name ?? "",
+      username: session?.username ?? "",
+      email: session?.email ?? "",
       tagline: session?.profile?.tagline ?? undefined,
       avatarUrl: session?.profile?.avatarUrl ?? undefined,
       location: session?.profile?.location ?? undefined,
@@ -114,40 +118,42 @@ export default function Profile() {
     );
   };
 
-  const watchAvailableText = watch('availableText');
-  const watchAvatarUrl = watch('avatarUrl');
+  const watchAvailableText = watch("availableText");
+  const watchAvatarUrl = watch("avatarUrl");
   const watchSkills = watch("skills");
 
-  const onImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      throw new Error("No file selected");
-    }
+  const onImageUpload = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) {
+        throw new Error("No file selected");
+      }
 
-    const objectUrl = URL.createObjectURL(file);
-    // validation checj file sizes 1600 x 800 px
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = (e) => reject(e);
-      img.src = objectUrl;
-    });
+      const objectUrl = URL.createObjectURL(file);
+      // validation checj file sizes 1600 x 800 px
+      const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+        img.src = objectUrl;
+      });
 
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
 
-    if (objectUrl) {
-      URL.revokeObjectURL(objectUrl);
-    }
+      if (image.width > 1600 || image.height > 800) {
+        throw new Error("Image size is too small");
+      }
 
-    if (image.width > 1600 || image.height > 800) {
-      throw new Error("Image size is too small");
-    }
-
-    mutate({
-      file,
-      uploadType: "PROFILE",
-      mediaType: "IMAGE",
-    });
-  }, [mutate]);
+      mutate({
+        file,
+        uploadType: "PROFILE",
+        mediaType: "IMAGE",
+      });
+    },
+    [mutate]
+  );
 
   const onImageDelete = useCallback(() => {
     setValue("avatarUrl", undefined, {
@@ -190,7 +196,7 @@ export default function Profile() {
               className="input-text "
               id="nameField"
               placeholder="Enter your full name"
-              {...register('name')}
+              {...register("name")}
             />
           </div>
           <div className="mb-6">
@@ -202,18 +208,19 @@ export default function Profile() {
               className="input-text"
               id="tagline"
               placeholder="Software Developer @ …"
-              {...register('tagline')}
+              {...register("tagline")}
             />
           </div>
           <div className="mb-6">
             <label htmlFor="customFile" className="input-label">
               Profile Photo
             </label>
-            {isLoading && (
-              <ProfileImage.Loading />
-            )}
+            {isLoading && <ProfileImage.Loading />}
             {!isLoading && watchAvatarUrl && (
-              <ProfileImage.Success url={watchAvatarUrl} onDelete={onImageDelete} />
+              <ProfileImage.Success
+                url={watchAvatarUrl}
+                onDelete={onImageDelete}
+              />
             )}
             {!isLoading && !watchAvatarUrl && (
               <ProfileImage onChange={onImageUpload} />
@@ -228,7 +235,7 @@ export default function Profile() {
               className="input-text"
               id="location"
               placeholder="California, US"
-              {...register('location')}
+              {...register("location")}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -242,7 +249,7 @@ export default function Profile() {
               className="input-text min-h-30"
               id="moreAboutYou"
               placeholder="I am a developer from …"
-              {...register('bio')}
+              {...register("bio")}
             />
           </div>
           <div className="mb-6">
@@ -270,7 +277,7 @@ export default function Profile() {
               className="input-text min-h-30"
               id="availableFor"
               placeholder="I am available for mentoring, …"
-              {...register('availableText')}
+              {...register("availableText")}
             />
             <small className="ml-2 mt-1 block leading-tight text-slate-600">
               {watchAvailableText?.length ?? 0}/140
@@ -289,7 +296,7 @@ export default function Profile() {
               className="input-text"
               id="twitter"
               placeholder="https://twitter.com/johndoe"
-              {...register('socials.twitter')}
+              {...register("socials.twitter")}
             />
           </div>
           <div className="mb-6">
@@ -302,7 +309,7 @@ export default function Profile() {
               className="input-text"
               id="instagram"
               placeholder="https://instagram.com/johndoe"
-              {...register('socials.instagram')}
+              {...register("socials.instagram")}
             />
           </div>
           <div className="mb-6">
@@ -315,7 +322,7 @@ export default function Profile() {
               className="input-text"
               id="github"
               placeholder="https://github.com/hashnode"
-              {...register('socials.github')}
+              {...register("socials.github")}
             />
           </div>
           <div className="mb-6">
@@ -328,7 +335,7 @@ export default function Profile() {
               className="input-text"
               id="facebook"
               placeholder="https://facebook.com/johndoe"
-              {...register('socials.facebook')}
+              {...register("socials.facebook")}
             />
           </div>
           <div className="mb-6">
@@ -340,7 +347,7 @@ export default function Profile() {
               className="input-text"
               id="website"
               placeholder="https://johndoe.com"
-              {...register('socials.website')}
+              {...register("socials.website")}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -358,7 +365,7 @@ export default function Profile() {
                 type="text"
                 className="input-text "
                 id="username"
-                {...register('username')}
+                {...register("username")}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
             </div>
@@ -377,7 +384,7 @@ export default function Profile() {
                 type="email"
                 className="input-text"
                 id="email"
-                {...register('email')}
+                {...register("email")}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
             </div>
@@ -385,8 +392,36 @@ export default function Profile() {
         </div>
       </div>
       <div className="mt-5 pt-4">
-        <button className="btn-submit" type="submit">Update</button>
+        <button className="btn-submit" type="submit">
+          Update
+        </button>
       </div>
     </form>
   );
+}
+
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

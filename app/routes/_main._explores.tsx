@@ -2,11 +2,7 @@ import React from "react";
 import { Outlet } from "@remix-run/react";
 
 // types
-import type {
-  V2_MetaFunction,
-  HeadersFunction,
-  LinksFunction,
-} from "@remix-run/cloudflare";
+import type { V2_MetaFunction, LinksFunction } from "@remix-run/cloudflare";
 
 // styles
 import homeExploreStyle from "~/styles/routes/home-explore.css";

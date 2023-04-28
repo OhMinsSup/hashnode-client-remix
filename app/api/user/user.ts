@@ -3,7 +3,6 @@ import { apiClient } from "~/api/client";
 
 // server
 import { applyHeaders } from "~/libs/server/utils";
-// import { createCookieHeaders } from "~/libs/server/cookie.server";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
@@ -17,6 +16,8 @@ import type { UserRespSchema } from "~/api/schema/resp";
 import type { AppAPI } from "~/api/schema/api";
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
 import type { UserUpdateBody } from "./validation/update";
+
+// [Post] Path: app/api/users/logout
 
 /**
  * @description 로그아웃 API
@@ -35,7 +36,7 @@ export async function _logoutApi(options?: Options) {
   return response;
 }
 
-interface LogoutApiParams extends LoaderArgs { }
+interface LogoutApiParams extends LoaderArgs {}
 
 export async function logoutApi({ request }: LogoutApiParams) {
   const cookie = request.headers.get("Cookie") ?? null;
@@ -50,6 +51,8 @@ export async function logoutApi({ request }: LogoutApiParams) {
   const result = await response.json<AppAPI<null>>();
   return { result, header: response.headers };
 }
+
+// [Get] Path: app/api/users
 
 /**
  * @description 유저 정보 API
@@ -68,7 +71,7 @@ export async function _getSessionApi(options?: Options) {
   return response;
 }
 
-interface GetSessionApiParams extends LoaderArgs { }
+interface GetSessionApiParams extends LoaderArgs {}
 
 /**
  * @description 유저 세션을 가져옵니다.
@@ -126,12 +129,11 @@ export async function getSessionApi(args: GetSessionApiParams) {
   }
 }
 
-
 // [Put] Path: app/api/users
 
-interface PutUserUpdateApiBody extends UserUpdateBody { }
+interface PutUserUpdateApiBody extends UserUpdateBody {}
 
-interface PutUserUpdateApiParams extends ActionArgs { }
+interface PutUserUpdateApiParams extends ActionArgs {}
 
 /**
  * @description 유저 정보 업데이트 API
@@ -139,11 +141,14 @@ interface PutUserUpdateApiParams extends ActionArgs { }
  * @param {Options?} options
  * @returns {Promise<import('ky-universal').KyResponse>}
  */
-export async function _putUserUpdateApi(body: PutUserUpdateApiBody, options?: Options) {
+export async function _putUserUpdateApi(
+  body: PutUserUpdateApiBody,
+  options?: Options
+) {
   const { headers: h, ...opts } = options ?? {};
   const headers = applyHeaders(h);
   headers.append("content-type", "application/json");
-  const response = await apiClient.post(API_ENDPOINTS.USERS.ME, {
+  const response = await apiClient.put(API_ENDPOINTS.USERS.ME, {
     credentials: "include",
     headers,
     json: body,
@@ -171,6 +176,48 @@ export async function putUserUpdateApi(
     }
   }
   const response = await _putUserUpdateApi(body, {
+    headers,
+  });
+  const result = await response.json<AppAPI<null>>();
+  return { result };
+}
+
+// [Delete] Path: app/api/users
+
+interface DeleteUserApiParams extends ActionArgs {}
+
+/**
+ * @description 유저 정보 업데이트 API
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _deleteUserApi(options?: Options) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const response = await apiClient.delete(API_ENDPOINTS.USERS.ME, {
+    credentials: "include",
+    headers,
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description 유저 정보 업데이트 API
+ * @param {DeleteUserApiParams?} args
+ * @returns {Promise<{ result: AppAPI<null> }>}
+ */
+export async function deleteUserApi(args?: DeleteUserApiParams) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _deleteUserApi({
     headers,
   });
   const result = await response.json<AppAPI<null>>();

@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { useDraftContext } from "~/context/useDraftContext";
-// import { TimeIcon } from "~/components/__ui/Icon";
 import { Icons } from "~/components/shared/Icons";
 
 const DraftEditorHeader = () => {

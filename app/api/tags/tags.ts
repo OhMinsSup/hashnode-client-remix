@@ -86,23 +86,6 @@ export async function getTagTrendingListApi(
   return { result };
 }
 
-/**
- * @description 태그 인기 리스트 조회 API (delay)
- * @param {GetTagTrendingApiSearchParams?} query
- * @param {GetTagTrendingApiParams?} args
- * @param {number} delay
- * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
- */
-export async function getTagTrendingListDelayedApi(
-  query?: GetTagTrendingApiSearchParams,
-  args?: GetTagTrendingApiParams,
-  delay = 200
-) {
-  const response = await getTagTrendingListApi(query, args);
-  await delayPromise(delay);
-  return response;
-}
-
 // [Get] Path: /api/v1/tags
 
 interface GetTagListApiSearchParams {
@@ -176,22 +159,6 @@ export async function getTagListApi(
   return { result };
 }
 
-/**
- * @description 태그 리스트 조회 API (delay)
- * @param {GetTagListApiSearchParams?} query
- * @param {GetTagListApiParams?} args
- * @param {number} delay
- * @returns {Promise<{ result: AppAPI<TagListRespSchema> }>}
- */
-export async function getTagListDelayedApi(
-  query?: GetTagListApiSearchParams,
-  args?: GetTagListApiParams,
-  delay = 200
-) {
-  const response = await getTagListApi(query, args);
-  await delayPromise(delay);
-  return response;
-}
 
 // [Get] Path: /api/v1/tags/:tag
 

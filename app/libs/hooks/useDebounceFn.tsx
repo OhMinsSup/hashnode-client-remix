@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useUnmount, useUpdateEffect } from "react-use";
+import { useMemo, useRef } from "react";
+import { useUnmount } from "./useUnmount";
 import debounce from "lodash-es/debounce";
 
 type noop = (...args: any) => any;
@@ -42,22 +42,4 @@ export function useDebounceFn<T extends noop>(
     cancel: debounced.cancel,
     flush: debounced.flush,
   };
-}
-
-export function useDebounceEffect(
-  effect: React.EffectCallback,
-  deps?: React.DependencyList,
-  options?: DebounceOptions
-) {
-  const [flag, setFlag] = useState({});
-
-  const { run } = useDebounceFn(() => {
-    setFlag({});
-  }, options);
-
-  useEffect(() => {
-    return run();
-  }, deps);
-
-  useUpdateEffect(effect, [flag]);
 }

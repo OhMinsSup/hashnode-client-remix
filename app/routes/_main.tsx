@@ -2,9 +2,9 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getTagListDelayedApi } from "~/api/tags/tags";
-import { getTopPostsDelayedApi } from "~/api/posts/posts";
-import { getWidgetBookmarksDelayedApi } from "~/api/widget/widget";
+import { getTagListApi } from "~/api/tags/tags";
+import { getTopPostsApi } from "~/api/posts/posts";
+import { getWidgetBookmarksApi } from "~/api/widget/widget";
 import { getSessionApi } from "~/api/user/user";
 
 // components
@@ -37,14 +37,14 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const trendingTagPromise = getTagListDelayedApi(
+  const trendingTagPromise = getTagListApi(
     {
       type: "popular",
     },
     args
   );
 
-  const topPostsPromise = getTopPostsDelayedApi(
+  const topPostsPromise = getTopPostsApi(
     {
       duration: 7,
     },
@@ -52,10 +52,9 @@ export const loader = async (args: LoaderArgs) => {
   );
 
   const data = await getSessionApi(args);
-  let bookmarksPromise: ReturnType<typeof getWidgetBookmarksDelayedApi> | null =
-    null;
+  let bookmarksPromise: ReturnType<typeof getWidgetBookmarksApi> | null = null;
   if (data && data.type === "session") {
-    bookmarksPromise = getWidgetBookmarksDelayedApi(undefined, args);
+    bookmarksPromise = getWidgetBookmarksApi(undefined, args);
   } else {
     bookmarksPromise = noopPromiseResponse([]);
   }

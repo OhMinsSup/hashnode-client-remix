@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { useUnmount } from "react-use";
+import { useUnmount } from "./useUnmount";
 import type { Dispatch, SetStateAction } from "react";
 
 function useRafState<S>(

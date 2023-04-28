@@ -6,8 +6,6 @@ import {
   LiveReload,
   Scripts,
   ScrollRestoration,
-  useRouteError,
-  isRouteErrorResponse,
 } from "@remix-run/react";
 import { globalClient } from "./api/client";
 
@@ -48,6 +46,8 @@ export const loader = async (args: LoaderArgs) => {
     headers,
   });
 };
+
+export type RootLoader = typeof loader;
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -107,12 +107,21 @@ export default function App() {
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
-  console.error(error);
   return (
     <html>
       <head>
         <title>Oops!</title>
+        <meta charSet="utf-8" />
+        <meta property="og:site_name" content="Hashnode" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hashnode.com/" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="theme-color" content="#0F172A" />
         <Meta />
         <Links />
       </head>

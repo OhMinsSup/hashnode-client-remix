@@ -9,4 +9,5 @@ node_modules
 build
 .cache
 
-_backup_routes/
+# cloudflare
+functions/**/*

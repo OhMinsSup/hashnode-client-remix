@@ -16,7 +16,7 @@ import {
 } from "~/libs/browser-utils";
 
 // hooks
-import useDrop from "~/libs/hooks/useDrop";
+import { useDrop } from "~/libs/hooks/useDrop";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useImageFilesQuery } from "~/api/files/hooks/useImageFilesQuery";
 import { useEventListener } from "~/libs/hooks/useEventListener";

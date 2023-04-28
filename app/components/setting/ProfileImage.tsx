@@ -45,13 +45,22 @@ interface SuccessProps {
 
 ProfileImage.Success = function Success({ url, onDelete }: SuccessProps) {
   return (
-    <div className="relative block w-40 h-40 bg-slate-100 rounded-full shadow-xl">
-      <a className="block overflow-hidden rounded-full" href={url} target="_blank">
+    <div className="relative block h-40 w-40 rounded-full bg-slate-100 shadow-xl">
+      <a
+        className="block overflow-hidden rounded-full"
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+      >
         <img className="block" src={url} />
       </a>
-      <button type="button" onClick={onDelete} className="absolute top-0 right-0 z-10 p-2 text-slate-700 bg-white border rounded-full">
-        <Icons.Trash className="w-4 h-4 stroke-current" />
+      <button
+        type="button"
+        onClick={onDelete}
+        className="absolute right-0 top-0 z-10 rounded-full border bg-white p-2 text-slate-700"
+      >
+        <Icons.Trash className="h-4 w-4 stroke-current" />
       </button>
     </div>
-  )
+  );
 }

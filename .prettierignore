@@ -1,7 +1,12 @@
+# Node.js
 node_modules
 
+# Build files
 /build
 /public/build
-.env
 
+# styles
 /app/styles/tailwind.css
+
+# cloudflare
+functions/**/*
