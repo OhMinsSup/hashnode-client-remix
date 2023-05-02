@@ -23,7 +23,7 @@ import { json, redirect } from "@remix-run/cloudflare";
 import { signupSchema } from "~/api/auth/validation/signup";
 
 // api
-import { signupApi } from "~/api/auth/auth";
+import { signupApi } from "~/api/auth/signup.server";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";

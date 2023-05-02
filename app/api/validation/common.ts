@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { HTTPError } from "ky-universal";
 import { STATUS_CODE } from "~/constants/constant";
 import { match, P } from "ts-pattern";
+import { HTTPError } from "../client.next";
 
 // types
 import type { ErrorAPI } from "~/api/schema/api";
@@ -11,7 +11,6 @@ import type { ErrorAPI } from "~/api/schema/api";
  * @version 1.0.0
  * @description 태그 팔로우시 사용되는 스키마의 에러를 처리합니다.
  * @param {unknown} error
- * @returns {Record<string, string> | null}
  */
 export const ValidationErrorWrapper = (error: unknown) => {
   if (error instanceof z.ZodError) {
@@ -35,7 +34,6 @@ export const ValidationErrorWrapper = (error: unknown) => {
  * @version 1.0.0
  * @description 태그 팔로우시 사용되는 HTTP 에러를 처리합니다.
  * @param {unknown} error
- * @returns {Promise<Record<string, string> | null>}
  */
 export const HTTPErrorWrapper = async (error: unknown) => {
   if (error instanceof HTTPError) {
@@ -45,6 +43,8 @@ export const HTTPErrorWrapper = async (error: unknown) => {
       STATUS_CODE.BAD_REQUEST,
       STATUS_CODE.NOT_FOUND,
     ] as number[];
+
+    console.log('data', data);
 
     if (checkStatusCode.includes(resp.status)) {
       const errorKey = data.error;

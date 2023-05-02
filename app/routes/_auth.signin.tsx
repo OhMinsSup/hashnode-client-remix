@@ -23,7 +23,7 @@ import { json, redirect } from "@remix-run/cloudflare";
 import { signinSchema } from "~/api/auth/validation/signin";
 
 // api
-import { signinApi } from "~/api/auth/auth";
+import { signinApi } from "~/api/auth/signin.server";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
@@ -43,7 +43,6 @@ export const action = async ({ request }: ActionArgs) => {
   try {
     const parse = await signinSchema.parseAsync(form);
     const { header: headers } = await signinApi(parse);
-
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers,
     });
