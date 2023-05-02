@@ -1,9 +1,8 @@
 import { apiClient } from "../client";
-
+import omit from "lodash-es/omit";
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 import { applyHeaders } from "~/libs/server/utils";
-import { delayPromise } from "~/utils/util";
 
 // types
 import type { Options } from "ky-universal";
@@ -18,6 +17,7 @@ import type { AppAPI } from "../schema/api";
 import type { PaginationQuery } from "../schema/query";
 import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 import type { CreatePostBody } from "./validation/create";
+import type { UpdatePostBody } from "./validation/update";
 
 //  [Get] Path: app/api/posts/:id
 
@@ -248,6 +248,57 @@ export async function postPostsApi(
     }
   }
   const response = await _postPostsApi(body, {
+    headers,
+  });
+
+  const result = await response.json<AppAPI<PostRespSchema>>();
+  return { result };
+}
+
+// [Put] Path: app/api/posts
+
+interface PutPostsApiBody extends UpdatePostBody {}
+
+interface PutPostsApiParams extends ActionArgs {}
+
+/**
+ * @description Get top posts
+ * @param {PutPostsApiBody?} body
+ * @param {Options?} options
+ * @returns {Promise<import('ky-universal').KyResponse>}
+ */
+export async function _putPostsApi(body: PutPostsApiBody, options?: Options) {
+  const { headers: h, ...opts } = options ?? {};
+  const headers = applyHeaders(h);
+  headers.append("content-type", "application/json");
+  const response = await apiClient.post(API_ENDPOINTS.POSTS.ID(body.id), {
+    credentials: "include",
+    headers,
+    json: omit(body, ["id"]),
+    ...opts,
+  });
+  return response;
+}
+
+/**
+ * @description Get top posts
+ * @param {PutPostsApiBody?} body
+ * @param {PutPostsApiParams?} args
+ * @returns {Promise<{ result: AppAPI<PostRespSchema> }>}
+ */
+export async function putPostsApi(
+  body: PutPostsApiBody,
+  args?: PutPostsApiParams
+) {
+  const headers = new Headers();
+  if (args && args.request) {
+    const { request } = args;
+    const cookie = request.headers.get("Cookie") ?? null;
+    if (cookie) {
+      headers.append("Cookie", cookie);
+    }
+  }
+  const response = await _putPostsApi(body, {
     headers,
   });
 

@@ -105,7 +105,10 @@ export const MUTATIONS_KEY = {
 };
 
 export const ASSET_URL = {
-  DEFAULT_AVATAR: "/images/qDAyv6PK_.png",
+  DEFAULT_AVATAR: "/images/default_profile.png",
+  LOGO: "/images/logo.png",
+  PLACEHOLDER: "/images/placeholder.png",
+  SEO_IMAGE: "/images/seo_image.png",
 };
 
 export const PAGE_ENDPOINTS = {

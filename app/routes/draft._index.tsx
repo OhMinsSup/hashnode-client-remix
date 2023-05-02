@@ -8,19 +8,19 @@ import Json from "superjson";
 import { redirect, json } from "@remix-run/cloudflare";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 
 // api
-import {
-  createPostSchema,
-  postHTTPErrorWrapper,
-  postValidationErrorWrapper,
-} from "~/api/posts/validation/create";
+import { createPostSchema } from "~/api/posts/validation/create";
 import { postPostsApi } from "~/api/posts/posts";
 
 // types
 import type { ActionFunction } from "@remix-run/cloudflare";
 import type { FormFieldValues } from "./draft";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 export const action: ActionFunction = async (ctx) => {
   const formData = await ctx.request.formData();
@@ -34,18 +34,22 @@ export const action: ActionFunction = async (ctx) => {
   try {
     const body = await createPostSchema.safeParseAsync(_input_json_body);
     if (!body.success) {
-      return json(body.error, { status: 400 });
+      return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
     await postPostsApi(body.data, ctx);
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
-    const error_validation = postValidationErrorWrapper(error);
+    const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
-      return json(error_validation);
+      return json(error_validation.errors, {
+        status: error_validation.statusCode,
+      });
     }
-    const error_http = await postHTTPErrorWrapper(error);
+    const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
-      return json(error_http.errors);
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
     }
     throw json(error);
   }

@@ -10,18 +10,29 @@ import { useFetcher } from "@remix-run/react";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
+import { HTTPErrorWrapper } from "~/api/validation/common";
 
 export const action = async (args: ActionArgs) => {
   try {
-    switch (args.request.method) {
-      case "DELETE":
-        await deleteUserApi(args);
-        break;
-      default:
-        throw new Response("Method not allowed", { status: 405 });
+    try {
+      switch (args.request.method) {
+        case "DELETE":
+          await deleteUserApi(args);
+          break;
+        default:
+          throw new Response("Method not allowed", { status: 405 });
+      }
+      return json({ ok: true });
+    } catch (error) {
+      throw json(error);
     }
-    return json({});
   } catch (error) {
+    const error_http = await HTTPErrorWrapper(error);
+    if (error_http) {
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
+    }
     throw json(error);
   }
 };

@@ -4,11 +4,7 @@ import { json } from "@remix-run/cloudflare";
 import Json from "superjson";
 
 // api
-import {
-  userUpdateHTTPErrorWrapper,
-  userUpdateSchema,
-  userUpdateValidationErrorWrapper,
-} from "~/api/user/validation/update";
+import { userUpdateSchema } from "~/api/user/validation/update";
 import { putUserUpdateApi } from "~/api/user/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getTagListApi } from "~/api/tags/tags";
@@ -20,7 +16,12 @@ import ProfileImage from "~/components/setting/ProfileImage";
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useForm } from "react-hook-form";
-import { isRouteErrorResponse, useActionData, useFetcher, useRouteError } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useActionData,
+  useFetcher,
+  useRouteError,
+} from "@remix-run/react";
 import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -29,6 +30,10 @@ import type { SubmitHandler } from "react-hook-form";
 import type { ActionArgs } from "@remix-run/cloudflare";
 import type { MultiValue } from "react-select";
 import type { UserUpdateBody } from "~/api/user/validation/update";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -45,13 +50,17 @@ export const action = async (args: ActionArgs) => {
     await putUserUpdateApi(body.data, args);
     return json({});
   } catch (error) {
-    const error_validation = userUpdateValidationErrorWrapper(error);
+    const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
-      return json(error_validation);
+      return json(error_validation.errors, {
+        status: error_validation.statusCode,
+      });
     }
-    const error_http = await userUpdateHTTPErrorWrapper(error);
+    const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
-      return json(error_http.errors);
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
     }
     throw json(error);
   }
@@ -185,7 +194,7 @@ export default function Profile() {
   return (
     <form className="content" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row flex-wrap">
-        <div className="w-full lg:w-1/2 lg:pr-10">
+        <div className="lg:w-1/2 w-full lg:pr-10">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Basic Info</h4>
           <div className="mb-6">
             <label htmlFor="nameField" className="input-label">
@@ -284,7 +293,7 @@ export default function Profile() {
             </small>
           </div>
         </div>
-        <div className="w-full lg:w-1/2">
+        <div className="lg:w-1/2 w-full">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Social</h4>
           <div className="mb-6">
             <label htmlFor="url" className="input-label">
@@ -399,7 +408,6 @@ export default function Profile() {
     </form>
   );
 }
-
 
 export function ErrorBoundary() {
   const error = useRouteError();

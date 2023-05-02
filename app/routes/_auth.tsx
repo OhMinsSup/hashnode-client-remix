@@ -4,13 +4,13 @@ import classNames from "classnames";
 import { Icons } from "~/components/shared/Icons";
 
 // remix
-import { Outlet, useLocation } from "@remix-run/react";
+import { Outlet, useLocation, useNavigate } from "@remix-run/react";
 import { json, redirect } from "@remix-run/cloudflare";
 
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
 // api
 import { getSessionApi } from "~/api/user/user";
@@ -22,45 +22,8 @@ import authStyles from "~/styles/routes/auth.css";
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import type { LinksFunction, V2_MetaFunction } from "@remix-run/cloudflare";
 
-const Seo = {
-  signin: "Sign in to Hashnode",
-  signup: "Sign up to Hashnode",
-  description:
-    "Start your programming blog. Share your knowledge and build your own brand",
-};
-
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
-};
-
-export const meta: V2_MetaFunction = ({ location }) => {
-  const isSigninPage = location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
-  const title = isSigninPage ? Seo.signin : Seo.signup;
-  return [
-    {
-      title,
-    },
-    {
-      name: "og:title",
-      content: title,
-    },
-    {
-      name: "twitter:title",
-      content: title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-  ];
 };
 
 export const loader = async (args: LoaderArgs) => {
@@ -68,23 +31,84 @@ export const loader = async (args: LoaderArgs) => {
   if (session) {
     throw redirect(PAGE_ENDPOINTS.ROOT, {
       headers,
+      status: 302,
     });
   }
-
-  return json(
-    {},
-    {
-      headers,
-    }
-  );
+  return json({ ok: true });
 };
+
+export const meta: V2_MetaFunction = ({ location, matches }) => {
+  const Seo = {
+    signin: "Sign in to Hashnode",
+    signup: "Sign up to Hashnode",
+    description:
+      "Start your programming blog. Share your knowledge and build your own brand",
+  };
+  const isSigninPage = location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
+  const title = isSigninPage ? Seo.signin : Seo.signup;
+  // @ts-ignore
+  const rootMeta = (matches ?? []).find((match) => match.id === "root")?.meta;
+  return [
+    {
+      title,
+    },
+    {
+      name: "description",
+      content: Seo.description,
+    },
+    {
+      name: "image",
+      content: ASSET_URL.SEO_IMAGE,
+    },
+    {
+      name: "og:title",
+      content: title,
+    },
+    {
+      name: "og:description",
+      content: Seo.description,
+    },
+    {
+      name: "og:type",
+      content: "website",
+    },
+    {
+      name: "og:image",
+      content: ASSET_URL.SEO_IMAGE,
+    },
+    {
+      name: "twitter:title",
+      content: title,
+    },
+    {
+      name: "twitter:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      name: "twitter:image",
+      content: ASSET_URL.SEO_IMAGE,
+    },
+    ...(rootMeta ?? []),
+  ];
+};
+
+export type AuthLoader = typeof loader;
 
 export default function Auth() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isSigninPage = useMemo(() => {
     return location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
   }, [location]);
+
+  const onClick = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.ROOT);
+  }, [navigate]);
 
   return (
     <div
@@ -98,7 +122,7 @@ export default function Auth() {
           "auth-header__signup": !isSigninPage,
         })}
       >
-        <Icons.Logo className="h-8" />
+        <Icons.Logo onClick={onClick} className="h-8 cursor-pointer" />
       </header>
       <Outlet />
     </div>

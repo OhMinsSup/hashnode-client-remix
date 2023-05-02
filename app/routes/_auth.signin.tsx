@@ -20,17 +20,17 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { json, redirect } from "@remix-run/cloudflare";
 
 // validation
-import {
-  signinHTTPErrorWrapper,
-  signinSchema,
-  signinValidationErrorWrapper,
-} from "~/api/auth/validation/signin";
+import { signinSchema } from "~/api/auth/validation/signin";
 
 // api
 import { signinApi } from "~/api/auth/auth";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -48,15 +48,18 @@ export const action = async ({ request }: ActionArgs) => {
       headers,
     });
   } catch (error) {
-    const error_validation = signinValidationErrorWrapper(error);
+    const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
-      return json(error_validation);
+      return json(error_validation.errors, {
+        status: error_validation.statusCode,
+      });
     }
-    const error_http = await signinHTTPErrorWrapper(error);
+    const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
-      return json(error_http.errors);
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
     }
-
     throw json(error);
   }
 };
@@ -166,12 +169,10 @@ export default function Signin() {
 
 export function ErrorBoundary() {
   let error = useRouteError();
-
   if (isRouteErrorResponse(error)) {
     return <Signin />;
   } else if (error instanceof Error) {
     return <Signin />;
   }
-
   return <Signin />;
 }

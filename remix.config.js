@@ -10,9 +10,10 @@ module.exports = {
   serverMinify: true,
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
+  tailwind: true,
+  postcss: true,
   future: {
-    unstable_postcss: true,
-    unstable_tailwind: true,
+    unstable_dev: true,
     v2_meta: true,
     v2_errorBoundary: true,
     v2_normalizeFormMethod: true,

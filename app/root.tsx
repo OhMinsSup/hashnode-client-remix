@@ -24,6 +24,7 @@ import type {
   ActionArgs,
   LoaderArgs,
   LinksFunction,
+  V2_MetaFunction,
 } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
@@ -48,6 +49,17 @@ export const loader = async (args: LoaderArgs) => {
 };
 
 export type RootLoader = typeof loader;
+
+export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
+  const origin = "http://localhost:8788";
+  return [
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: `${origin}${location.pathname}`,
+    },
+  ];
+};
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -78,21 +90,30 @@ export default function App() {
   return (
     <QueryClientProvider client={globalClient}>
       <LayoutProvider>
-        <html lang="kr">
+        <html lang="en">
           <head>
-            <meta charSet="utf-8" />
-            <meta property="og:site_name" content="Hashnode" />
-            <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://hashnode.com/" />
-            <meta property="twitter:card" content="summary_large_image" />
+            <meta charSet="UTF-8" />
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
             <meta name="msapplication-TileColor" content="#ffffff" />
             <meta name="theme-color" content="#0F172A" />
             <Meta />
             <Links />
+            <link
+              rel="preconnect"
+              href="https://fonts.gstatic.com"
+              crossOrigin="anonymous"
+            />
+            <link rel="manifest" href="/manifest.json" />
+            <link
+              rel="search"
+              href="/opensearch.xml"
+              type="application/opensearchdescription+xml"
+              title="Hashnode"
+            />
           </head>
           <body>
             <Outlet />
@@ -111,17 +132,6 @@ export function ErrorBoundary() {
     <html>
       <head>
         <title>Oops!</title>
-        <meta charSet="utf-8" />
-        <meta property="og:site_name" content="Hashnode" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hashnode.com/" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="theme-color" content="#0F172A" />
         <Meta />
         <Links />
       </head>

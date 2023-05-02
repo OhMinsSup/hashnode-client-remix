@@ -8,7 +8,7 @@ import DraftEditor from "~/components/draft/DraftEditor";
 import DraftShardActionFn from "~/components/draft/DraftShardActionFn";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 
 // hooks
 import { useLoaderData } from "@remix-run/react";
@@ -17,15 +17,15 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { isString } from "~/utils/assertion";
 
 // api
-import { getPostApi, postPostsApi } from "~/api/posts/posts";
-import {
-  createPostSchema,
-  postHTTPErrorWrapper,
-  postValidationErrorWrapper,
-} from "~/api/posts/validation/create";
+import { getPostApi, putPostsApi } from "~/api/posts/posts";
+import { updatePostSchema } from "~/api/posts/validation/update";
 
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
 import type { FormFieldValues } from "./draft";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 export const loader = async (args: LoaderArgs) => {
   const id = args.params.itemId;
@@ -60,20 +60,24 @@ export const action = async (args: ActionArgs) => {
   const _input_json_body = Json.parse<FormFieldValues>(_input_body);
 
   try {
-    const body = await createPostSchema.safeParseAsync(_input_json_body);
+    const body = await updatePostSchema.safeParseAsync(_input_json_body);
     if (!body.success) {
-      return json(body.error, { status: 400 });
+      return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
-    await postPostsApi(body.data, args);
+    await putPostsApi(body.data, args);
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
-    const error_validation = postValidationErrorWrapper(error);
+    const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
-      return json(error_validation);
+      return json(error_validation.errors, {
+        status: error_validation.statusCode,
+      });
     }
-    const error_http = await postHTTPErrorWrapper(error);
+    const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
-      return json(error_http.errors);
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
     }
     throw json(error);
   }
@@ -94,8 +98,8 @@ export default function DraftPage() {
         content: item.content,
         thumbnail: item.thumbnail
           ? {
-            url: item.thumbnail,
-          }
+              url: item.thumbnail,
+            }
           : undefined,
         tags: item.tags ? item.tags.map((tag) => tag.name) : undefined,
         disabledComment: false,
