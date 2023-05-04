@@ -15,20 +15,20 @@ import { LayoutProvider } from "./context/useLayoutContext";
 import NotFoundPage from "./components/errors/NotFoundPage";
 
 // api
-import { getSessionApi, logoutApi } from "~/api/user/user";
 import Json from "superjson";
+import { getSessionApi } from "~/libs/server/session.server";
+import { ApiService } from "./api/client.next";
+import { ASSET_URL } from "./constants/constant";
 
 // styles
 import globalStyles from "~/styles/global.css";
 
 // types
 import type {
-  ActionArgs,
   LoaderArgs,
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { ApiService } from "./api/client.next";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: globalStyles }];
@@ -42,58 +42,87 @@ export const loader = async (args: LoaderArgs) => {
   const env = {
     API_BASE_URL: ApiService.baseUrl,
   };
-  const data = { isLoggedIn: false, currentProfile: null, env };
   const { session, header: headers } = await getSessionApi(args);
   if (!session) {
-    return json(data, {
-      headers,
-    });
+    return json(
+      { currentProfile: null, env },
+      {
+        headers,
+      }
+    );
   }
-  Object.assign(data, {
-    isLoggedIn: true,
-    currentProfile: session,
-  });
-  return json(data, {
-    headers,
-  });
+  return json(
+    { currentProfile: session, env },
+    {
+      headers,
+    }
+  );
 };
 
 export type RootLoader = typeof loader;
 
 export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
-  const origin = "http://localhost:8788";
+  const url = new URL(location.pathname, "http://localhost:8788");
+  const Seo = {
+    title: "Hashnode - Blogging community for developers, and people in tech",
+    description:
+      "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
+    image: ASSET_URL.SEO_IMAGE,
+  };
   return [
     {
       tagName: "link",
       rel: "canonical",
-      href: `${origin}${location.pathname}`,
+      href: url.href,
+    },
+    {
+      title: Seo.title,
+    },
+    {
+      name: "description",
+      content: Seo.description,
+    },
+    {
+      name: "og:title",
+      content: Seo.title,
+    },
+    {
+      name: "og:description",
+      content: Seo.description,
+    },
+    {
+      name: "og:type",
+      content: "website",
+    },
+    {
+      name: "og:site_name",
+      content: "Hashnode",
+    },
+    {
+      name: "og:url",
+      content: url.href,
+    },
+    {
+      name: "og:image",
+      content: Seo.image,
+    },
+    {
+      name: "twitter:title",
+      content: Seo.title,
+    },
+    {
+      name: "twitter:description",
+      content: Seo.description,
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
+    },
+    {
+      name: "twitter:image",
+      content: Seo.image,
     },
   ];
-};
-
-export const action = async (args: ActionArgs) => {
-  const formData = await args.request.formData();
-  const type = formData.get("type");
-  switch (type) {
-    case "logout": {
-      try {
-        const resp = await logoutApi(args);
-        return json(
-          {},
-          resp?.header
-            ? {
-              headers: resp.header,
-            }
-            : undefined
-        );
-      } catch (error) {
-        return json({});
-      }
-    }
-    default: {
-      return json({});
-    }
-  }
 };
 
 export default function App() {

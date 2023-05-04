@@ -47,6 +47,7 @@ export const action = async ({ request }: ActionArgs) => {
       headers,
     });
   } catch (error) {
+    console.log(error);
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
       return json(error_validation.errors, {

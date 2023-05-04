@@ -29,7 +29,7 @@ function TabTrendingPostsList({
   );
 
   const posts = useMemo(() => {
-    return data?.result?.result?.posts ?? [];
+    return data?.json?.result?.posts ?? [];
   }, [data]);
 
   if (isNull(posts) || isUndefined(posts)) return null;

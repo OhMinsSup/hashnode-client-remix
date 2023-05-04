@@ -1,5 +1,9 @@
-import { isBrowser } from "~/libs/browser-utils";
+// utils
 import cookies from "cookie";
+import { isBrowser } from "~/libs/browser-utils";
+import { isNull, isString, isUndefined } from "~/utils/assertion";
+
+// types
 import type { Nullable } from "./schema/api";
 import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 
@@ -53,6 +57,22 @@ export class ApiService {
     this.baseUrl = url;
   }
 
+  static middlewareSetAuthticated = (options?: BaseApiOptions) => {
+    const _options = {
+      ...options,
+    };
+    if (
+      (options?.custom && isUndefined(options.custom.isAuthticated)) ||
+      isNull(options?.custom?.isAuthticated)
+    ) {
+      _options.custom = Object.assign({}, _options.custom, {
+        isAuthticated: true,
+      });
+      return _options;
+    }
+    return _options;
+  };
+
   static middlewareForAuth = (options?: BaseApiOptions) => {
     const isAuthticated = options?.custom?.isAuthticated ?? false;
     if (!isAuthticated) {
@@ -65,38 +85,46 @@ export class ApiService {
 
     // 클라이언트
     if (isBrowser) {
-      _options.init = Object.assign({}, _options?.init, {
+      _options.init = {
+        ..._options?.init,
         credentials: "include",
-      });
+      };
+      return _options;
     } else {
       // 서버
       let _token: string | null = null;
       if (options?.loaderArgs) {
         const { request } = options.loaderArgs;
-        const cookie = request.headers.get("Cookie") ?? null;
+        const cookie = request.headers.get("cookie") ?? null;
         if (cookie) {
           const { access_token } = cookies.parse(cookie);
-          if (access_token) _token = access_token;
+          if (access_token) {
+            _token = access_token;
+          }
         }
       } else if (options?.actionArgs) {
         const { request } = options.actionArgs;
-        const cookie = request.headers.get("Cookie") ?? null;
+        const cookie = request.headers.get("cookie") ?? null;
         if (cookie) {
           const { access_token } = cookies.parse(cookie);
-          if (access_token) _token = access_token;
+          if (access_token) {
+            _token = access_token;
+          }
         }
       }
 
       if (!_token) {
         return options;
       }
-
-      const header = new Headers();
-      _options.init = Object.assign({}, _options?.init, {
-        headers: header,
+      const args = options?.loaderArgs || options?.actionArgs;
+      const headers = args?.request?.headers ?? undefined;
+      _options.init = {
+        ..._options?.init,
         credentials: "include",
-      });
+        headers: headers,
+      };
     }
+
     return _options;
   };
 
@@ -107,36 +135,77 @@ export class ApiService {
     return new URL(concatPathname, ApiService.baseUrl);
   };
 
+  static middlewareForSearchParams = (
+    url: ApiRoutes | string,
+    params?: URLSearchParams | string
+  ) => {
+    if (!params) {
+      return url;
+    }
+    const textSearchParams = isString(params)
+      ? params.replace(/^\?/, "")
+      : new URLSearchParams(params).toString();
+    const searchParams = "?" + textSearchParams;
+    const toStringUrl = isString(url) ? url : url.toString();
+    return toStringUrl.replace(/(?:\?.*?)?(?=#|$)/, searchParams);
+  };
+
+  static headerJSON = (options?: BaseApiOptions["init"]) => {
+    const headers = new Headers();
+    if (options?.headers && options.headers instanceof Headers) {
+      headers.append("Content-Type", "application/json");
+      for (const [key, value] of options.headers.entries()) {
+        headers.append(key, value);
+      }
+    } else {
+      headers.append("Content-Type", "application/json");
+    }
+    return headers;
+  };
+
+  static headerFormData = (options?: BaseApiOptions["init"]) => {
+    const headers = new Headers();
+    if (options?.headers && options.headers instanceof Headers) {
+      headers.append("Content-Type", "multipart/form-data");
+      for (const [key, value] of options.headers.entries()) {
+        headers.append(key, value);
+      }
+    } else {
+      headers.append("Content-Type", "multipart/form-data");
+    }
+    return headers;
+  };
+
   static async get(
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
     const input = this.middlewareForUrl(pathname);
-    const _opts = Object.assign({}, options, {
+    const requset = new Request(input, {
+      ...options,
       method: "GET",
     });
-    const requset = new Request(input, _opts);
     const response = await fetch(requset);
     if (!response.ok) {
-      throw new HTTPError(response, requset, _opts);
+      throw new HTTPError(response, requset, options);
     }
     return response;
   }
 
   static async post(
     pathname: ApiRoutes,
-    body: any,
+    body?: any,
     options?: BaseApiOptions["init"] | undefined
   ) {
     const input = this.middlewareForUrl(pathname);
-    const _opts = Object.assign({}, options, {
+    const requset = new Request(input, {
+      ...options,
       method: "POST",
-      body: JSON.stringify(body),
+      body: body ? JSON.stringify(body) : undefined,
     });
-    const requset = new Request(input, _opts);
     const response = await fetch(requset);
     if (!response.ok) {
-      throw new HTTPError(response, requset, _opts);
+      throw new HTTPError(response, requset, options);
     }
     return response;
   }
@@ -146,31 +215,31 @@ export class ApiService {
     options?: BaseApiOptions["init"] | undefined
   ) {
     const input = this.middlewareForUrl(pathname);
-    const _opts = Object.assign({}, options, {
+    const requset = new Request(input, {
+      ...options,
       method: "DELETE",
     });
-    const requset = new Request(input, _opts);
     const response = await fetch(requset);
     if (!response.ok) {
-      throw new HTTPError(response, requset, _opts);
+      throw new HTTPError(response, requset, options);
     }
     return response;
   }
 
   static async put(
     pathname: ApiRoutes,
-    body: any,
+    body?: any,
     options?: BaseApiOptions["init"] | undefined
   ) {
     const input = this.middlewareForUrl(pathname);
-    const _opts = Object.assign({}, options, {
+    const requset = new Request(input, {
+      ...options,
       method: "PUT",
-      body: JSON.stringify(body),
+      body: body ? JSON.stringify(body) : undefined,
     });
-    const requset = new Request(input, _opts);
     const response = await fetch(requset);
     if (!response.ok) {
-      throw new HTTPError(response, requset, _opts);
+      throw new HTTPError(response, requset, options);
     }
     return response;
   }
@@ -180,13 +249,13 @@ export class ApiService {
     options?: BaseApiOptions["init"] | undefined
   ) {
     const input = this.middlewareForUrl(pathname);
-    const _opts = Object.assign({}, options, {
+    const requset = new Request(input, {
+      ...options,
       method: "PATCH",
     });
-    const requset = new Request(input, _opts);
     const response = await fetch(requset);
     if (!response.ok) {
-      throw new HTTPError(response, requset, _opts);
+      throw new HTTPError(response, requset, options);
     }
     return response;
   }
@@ -195,7 +264,11 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const response = await this.get(pathname, options);
+    const headers = this.headerJSON(options);
+    const response = await this.get(pathname, {
+      ...options,
+      headers,
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");
@@ -212,17 +285,16 @@ export class ApiService {
     body: Body,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    const response = await this.post(pathname, body, Object.assign({}, options, {
+    const headers = this.headerJSON(options);
+    const response = await this.post(pathname, body, {
+      ...options,
       headers,
-    }));
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");
     }
     const data = await response.json();
-    console.log('data', data);
     return {
       json: data as BaseResponse<R>,
       response,
@@ -236,11 +308,11 @@ export class ApiService {
   ) {
     const body =
       formData instanceof FormData ? formData : new FormData(formData);
-    const headers = new Headers();
-    headers.append("Content-Type", "multipart/form-data");
-    const response = await this.post(pathname, body, Object.assign({}, options ?? {}, {
+    const headers = this.headerFormData(options);
+    const response = await this.post(pathname, body, {
+      ...options,
       headers,
-    }));
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");
@@ -256,11 +328,11 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    const response = await this.delete(pathname, Object.assign({}, options, {
+    const headers = this.headerJSON(options);
+    const response = await this.delete(pathname, {
+      ...options,
       headers,
-    }));
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");
@@ -277,12 +349,11 @@ export class ApiService {
     body: Body,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    const _opts = Object.assign({}, options ?? {}, Object.assign({}, options, {
+    const headers = this.headerJSON(options);
+    const response = await this.put(pathname, body, {
+      ...options,
       headers,
-    })) as BaseApiOptions["init"];
-    const response = await this.put(pathname, body, _opts);
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");
@@ -301,11 +372,11 @@ export class ApiService {
   ) {
     const body =
       formData instanceof FormData ? formData : new FormData(formData);
-    const headers = new Headers();
-    headers.append("Content-Type", "multipart/form-data");
-    const response = await this.put(pathname, body, Object.assign({}, options ?? {}, {
+    const headers = this.headerFormData(options);
+    const response = await this.put(pathname, body, {
+      ...options,
       headers,
-    }));
+    });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!");

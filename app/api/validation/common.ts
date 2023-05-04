@@ -44,8 +44,6 @@ export const HTTPErrorWrapper = async (error: unknown) => {
       STATUS_CODE.NOT_FOUND,
     ] as number[];
 
-    console.log('data', data);
-
     if (checkStatusCode.includes(resp.status)) {
       const errorKey = data.error;
       const state = match(data.message)

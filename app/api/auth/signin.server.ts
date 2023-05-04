@@ -15,7 +15,7 @@ import type { BaseApiOptions } from "../client.next";
 /**
  * @description 로그인 API
  * @param {SigninBody} body
- * @param {Options?} options
+ * @param {BaseApiOptions?} options
  */
 export async function signinApi(body: SigninBody, options?: BaseApiOptions) {
   const { json, response } = await ApiService.postJson<

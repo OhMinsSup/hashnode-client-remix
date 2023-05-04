@@ -2,109 +2,70 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getTagListApi } from "~/api/tags/tags";
-import { getTopPostsApi } from "~/api/posts/posts";
-import { getWidgetBookmarksApi } from "~/api/widget/widget";
-import { getSessionApi } from "~/api/user/user";
+import { getTagListApi } from "~/api/tags/tags.server";
+import { getTopPostsApi } from "~/api/posts/top-posts";
+import { getWidgetBookmarksApi } from "~/api/widget/widget-bookmarks.server";
+import { getSessionApi } from "~/libs/server/session.server";
+import { noopPromiseResponse } from "~/libs/server/response.server";
 
 // components
-import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import {
+  Outlet,
+  useRouteError,
+  isRouteErrorResponse,
+  useMatches,
+} from "@remix-run/react";
 import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
-
-// utils
-import { noopPromiseResponse } from "~/utils/util";
 
 // styles
 import homeStyles from "~/styles/routes/home.css";
 
 // types
-import type {
-  LoaderArgs,
-  V2_MetaFunction,
-  LinksFunction,
-} from "@remix-run/cloudflare";
-
-const Seo = {
-  title: "Hashnode - Blogging community for developers, and people in tech",
-  description:
-    "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
-  image: "/images/seo_image.png",
-};
+import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeStyles }];
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const trendingTagPromise = getTagListApi(
-    {
-      type: "popular",
-    },
-    args
-  );
-
-  const topPostsPromise = getTopPostsApi(
-    {
-      duration: 7,
-    },
-    args
-  );
-
   const data = await getSessionApi(args);
   let bookmarksPromise: ReturnType<typeof getWidgetBookmarksApi> | null = null;
-  if (data && data.type === "session") {
-    bookmarksPromise = getWidgetBookmarksApi(undefined, args);
+  if (data.type === "session") {
+    bookmarksPromise = getWidgetBookmarksApi(undefined, {
+      loaderArgs: args,
+    });
   } else {
-    bookmarksPromise = noopPromiseResponse([]);
+    bookmarksPromise = noopPromiseResponse([]) as ReturnType<
+      typeof getWidgetBookmarksApi
+    >;
   }
-
   return defer({
-    trendingTag: trendingTagPromise,
-    topPosts: topPostsPromise,
+    trendingTag: getTagListApi(
+      {
+        type: "popular",
+      },
+      {
+        loaderArgs: args,
+      }
+    ),
+    topPosts: getTopPostsApi(
+      {
+        duration: 7,
+      },
+      {
+        loaderArgs: args,
+      }
+    ),
     bookmarks: bookmarksPromise,
   });
 };
 
 export type HomeLoader = typeof loader;
 
-export const meta: V2_MetaFunction<HomeLoader> = () => {
-  return [
-    {
-      title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "og:image",
-      content: Seo.image,
-    },
-    {
-      name: "twitter:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
-    },
-  ];
-};
-
-export default function App() {
+export default function Main() {
+  const matchs = useMatches();
+  console.log(matchs);
   return (
     <div className="container__base">
       <Header />

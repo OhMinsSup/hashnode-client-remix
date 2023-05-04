@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTopPostsApi } from "../posts";
+import { getTopPostsApi } from "../top-posts";
 
 // constants
 import { QUERIES_KEY } from "~/constants/constant";
@@ -11,7 +11,7 @@ import type { GetTopPostsQuery } from "~/api/schema/query";
 import type { UseQueryOptions } from "@tanstack/react-query";
 
 export interface ReturnValue {
-  result: AppAPI<GetTopPostsRespSchema>;
+  json: AppAPI<GetTopPostsRespSchema>;
 }
 
 interface QueryOptions<TQueryFnData, TError, TData>

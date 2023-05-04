@@ -2,12 +2,12 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 
 // components
-import { Link, useFetcher } from "@remix-run/react";
+import { Link, useFetcher, useMatches } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
 import * as Popover from "@radix-ui/react-popover";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { useLayoutContext } from "~/context/useLayoutContext";
 import { useForceUpdate } from "~/libs/hooks/useForceUpdate";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
@@ -269,7 +269,7 @@ Header.ControlMenuForUser = function HeaderControlMenuForUser() {
             aria-label="Profile Dropdown"
           >
             <div className="img__container">
-              <img src="/images/default_profile.png" alt="profile" />
+              <img src={ASSET_URL.DEFAULT_AVATAR} alt="profile" />
             </div>
           </button>
         </Popover.Trigger>
@@ -294,12 +294,9 @@ Header.MenuForUser = function HeaderMenuForUser() {
         const error = new Error("Session is not exist");
         throw error;
       }
-
-      const formData = new FormData();
-      formData.append("type", "logout");
-      fetcher.submit(formData, {
-        method: "post",
-        action: "/",
+      fetcher.submit(null, {
+        method: "POST",
+        action: "/action/logout",
         replace: true,
       });
     },
@@ -313,10 +310,14 @@ Header.MenuForUser = function HeaderMenuForUser() {
           <div className="default-size">
             <div className="popover__menu-session-wrapper">
               <section className="session-menu">
-                <Link to="/" aria-label="User Profile" data-type="profile">
+                <Link
+                  to={PAGE_ENDPOINTS.ROOT}
+                  aria-label="User Profile"
+                  data-type="profile"
+                >
                   <div className="image-container">
                     <div className="image-wrapper">
-                      <img src="/images/default_profile.png" alt="Profile" />
+                      <img src={ASSET_URL.DEFAULT_AVATAR} alt="Profile" />
                     </div>
                   </div>
                   <div className="text-container">
@@ -373,7 +374,7 @@ Header.MenuForUser = function HeaderMenuForUser() {
     <div className="popover__menu-container">
       <div className="popover__menu-wrapper">
         <div className="img-wrapper">
-          <img src="/images/default_profile.png" alt="profile" />
+          <img src={ASSET_URL.DEFAULT_AVATAR} alt="profile" />
         </div>
         <h1 className="no-auth">Sign up or log in to your Hashnode account.</h1>
         <p className="no-auth">Takes less than a few seconds.</p>

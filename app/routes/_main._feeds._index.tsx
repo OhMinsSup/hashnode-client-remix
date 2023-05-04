@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
-import { getPostsApi } from "~/api/posts/posts";
+import { getPostListApi } from "~/api/posts/posts.server";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -11,12 +11,7 @@ import { parseUrlParams } from "~/utils/util";
 // components
 import PostsList from "~/components/home/PostsList.unstable";
 
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-
-const Seo = {
-  title: "Recent posts on Hashnode",
-  description: "Recent developer posts on Hashnode",
-};
+import type { LoaderArgs } from "@remix-run/cloudflare";
 
 export const loader = async (args: LoaderArgs) => {
   const params = parseUrlParams(args.request.url);
@@ -31,51 +26,25 @@ export const loader = async (args: LoaderArgs) => {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getPostsApi(
+  const posts = await getPostListApi(
     {
       cursor,
       limit,
       type: "recent",
     },
-    args
+    {
+      loaderArgs: args,
+    }
   );
 
   return json({
-    posts: posts.result?.result,
+    posts: posts.json?.result,
   });
 };
 
 export type MainFeedsIndexLoader = typeof loader;
 
-export const meta: V2_MetaFunction<MainFeedsIndexLoader> = () => {
-  return [
-    {
-      title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-  ];
-};
-
-export default function IndexPage() {
+export default function MainFeedsIndexPage() {
   return <PostsList />;
 }
 

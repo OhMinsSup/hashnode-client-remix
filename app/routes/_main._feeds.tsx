@@ -4,7 +4,7 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getAritcleCirclesApi } from "~/api/widget/widget";
+import { getAritcleCirclesApi } from "~/api/widget/aritcle-circles.server";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
@@ -20,20 +20,22 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeListStyle }];
 };
 
-export const loader = (args: LoaderArgs) => {
-  const getAricleCirclePromise = getAritcleCirclesApi(undefined, args);
-  return defer({
-    getAricleCircle: getAricleCirclePromise,
-  });
-};
+// export const loader = (args: LoaderArgs) => {
+//   const getAricleCirclePromise = getAritcleCirclesApi(undefined, {
+//     loaderArgs: args,
+//   });
+//   return defer({
+//     getAricleCircle: getAricleCirclePromise,
+//   });
+// };
 
-export type MainFeedsLoader = ReturnType<typeof loader>;
+// export type MainFeedsLoader = ReturnType<typeof loader>;
 
-export default function IndexPage() {
+export default function MainFeedsPage() {
   return (
     <div className="main__list-container">
       <div className="main__list-container__trending-users">
-        <ScrollAreaTrendingUsers />
+        {/* <ScrollAreaTrendingUsers /> */}
       </div>
       <div className="main__list-container__tabs">
         <TabRoutesPosts>

@@ -21,16 +21,16 @@ import { json, redirect } from "@remix-run/cloudflare";
 
 // validation
 import { signupSchema } from "~/api/auth/validation/signup";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 // api
 import { signupApi } from "~/api/auth/signup.server";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();

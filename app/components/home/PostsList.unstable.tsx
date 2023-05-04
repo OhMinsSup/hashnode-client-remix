@@ -5,22 +5,31 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+// hooks
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { isBrowser } from "~/libs/browser-utils";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import PostsCard from "~/components/home/PostsCard.unstable";
-import ReachedEnd from "~/components/shared/ReachedEnd";
+
+// utils
+import { isBrowser } from "~/libs/browser-utils";
 import uniqBy from "lodash-es/uniqBy";
 
+// components
+import PostsCard from "~/components/home/PostsCard.unstable";
+import ReachedEnd from "~/components/shared/ReachedEnd";
+
 import type { MainFeedsIndexLoader } from "~/routes/_main._feeds._index";
+import type { MainFeedsFeaturedLoader } from "~/routes/_main._feeds.featured";
 
 const LIMIT = 15;
 
 const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
 
+type Loader = MainFeedsIndexLoader | MainFeedsFeaturedLoader;
+
 const PostsList = () => {
-  const data = useLoaderData<MainFeedsIndexLoader>();
-  const fetcher = useFetcher<MainFeedsIndexLoader>();
+  const data = useLoaderData<Loader>();
+  const fetcher = useFetcher<Loader>();
 
   const [list, setList] = useState(data.posts.list);
 

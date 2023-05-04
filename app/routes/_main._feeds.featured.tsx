@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
-import { getPostsApi } from "~/api/posts/posts";
+import { getPostListApi } from "~/api/posts/posts.server";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -12,12 +12,6 @@ import { parseUrlParams } from "~/utils/util";
 import PostsList from "~/components/home/PostsList.unstable";
 
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-
-const Seo = {
-  title: "Featured posts on Hashnode",
-  description:
-    "Hashnode is a free developer blogging platform that allows you to publish articles on your own domain and helps you stay connected with a global developer community.",
-};
 
 export const loader = async (args: LoaderArgs) => {
   const params = parseUrlParams(args.request.url);
@@ -32,51 +26,56 @@ export const loader = async (args: LoaderArgs) => {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getPostsApi(
+  const posts = await getPostListApi(
     {
       cursor,
       limit,
       type: "featured",
     },
-    args
+    {
+      loaderArgs: args,
+    }
   );
 
   return json({
-    posts: posts.result?.result,
+    posts: posts.json?.result,
   });
 };
 
 export type MainFeedsFeaturedLoader = typeof loader;
 
-export const meta: V2_MetaFunction<MainFeedsFeaturedLoader> = () => {
+export const meta: V2_MetaFunction<MainFeedsFeaturedLoader> = ({
+  data,
+  matches,
+}) => {
+  const title = "Featured posts on Hashnode";
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "og:title" &&
+      meta.name !== "twitter:title" &&
+      !("title" in meta)
+  );
   return [
+    ...rootMetas,
     {
-      title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
+      title,
     },
     {
       name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
+      content: title,
     },
     {
       name: "twitter:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
+      content: title,
     },
   ];
 };
 
-export default function IndexPage() {
+export default function MainFeedsFeaturedPage() {
   return <PostsList />;
 }
 

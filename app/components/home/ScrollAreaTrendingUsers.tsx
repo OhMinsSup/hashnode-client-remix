@@ -25,7 +25,7 @@ function ScrollAreaTrendingUsers(_props: ScrollAreaTrendingUsersProps) {
           >
             {(data) => (
               <ScrollAreaTrendingUsers.AricleCircleList
-                data={data.result?.result}
+                data={data.json?.result}
               />
             )}
           </Await>

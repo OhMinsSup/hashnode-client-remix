@@ -152,7 +152,7 @@ Sidebar.Left = function Left() {
                   >
                     {(data) => (
                       <>
-                        {data.result?.result?.list?.map((tag: any) => (
+                        {data.json?.result?.list?.map((tag: any) => (
                           <SidebarTrendingTag
                             key={`sidebar-trending-tag-${tag.id}`}
                             id={tag.id}
@@ -446,7 +446,7 @@ Sidebar.RightWidgetForBookmarks = function RightWidgetForBookmarks() {
         errorElement={<>Error loading package location!</>}
       >
         {(data) => {
-          const bookmarks = data.result?.result ?? [];
+          const bookmarks = data.json?.result ?? [];
           return (
             <RightSidebarContentBox
               title="Bookmarks"

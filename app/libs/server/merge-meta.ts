@@ -1,10 +1,13 @@
-import type { V2_HtmlMetaDescriptor, V2_MetaFunction } from "@remix-run/cloudflare";
+import type {
+  V2_HtmlMetaDescriptor,
+  V2_MetaFunction,
+} from "@remix-run/cloudflare";
 
-export const mergeMeta = (
-  overrideFn: V2_MetaFunction,
-  appendFn?: V2_MetaFunction,
+export const mergeMeta = <Loader = any>(
+  overrideFn: V2_MetaFunction<Loader>,
+  appendFn?: V2_MetaFunction<Loader>
 ): V2_MetaFunction => {
-  return arg => {
+  return (arg) => {
     // get meta from parent routes
     let mergedMeta = arg.matches.reduce((acc, match) => {
       // @ts-ignore
@@ -15,14 +18,14 @@ export const mergeMeta = (
     let overrides = overrideFn(arg);
     for (let override of overrides) {
       let index = mergedMeta.findIndex(
-        meta =>
+        (meta) =>
           ("name" in meta &&
             "name" in override &&
             meta.name === override.name) ||
           ("property" in meta &&
             "property" in override &&
             meta.property === override.property) ||
-          ("title" in meta && "title" in override),
+          ("title" in meta && "title" in override)
       );
       if (index !== -1) {
         mergedMeta.splice(index, 1, override);

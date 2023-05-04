@@ -1,6 +1,5 @@
 import type { Nullable } from "~/api/schema/api";
 import type { PostListQuery } from "~/api/schema/query";
-import type { GetWidgetBookmarksApiSearchParams } from "~/api/widget/widget";
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -55,16 +54,6 @@ export const QUERIES_KEY = {
     ID: (id?: Nullable<string | number>) => {
       const keys: any[] = ["getPostApi"];
       if (id) keys.push(id);
-      return keys;
-    },
-  },
-  WIDGET: {
-    ARTICLE_CIRCLES: (query?: GetWidgetBookmarksApiSearchParams) => {
-      const keys: any[] = ["getAritcleCirclesApi"];
-      if (!query) return keys;
-      if (query.userId) {
-        keys.push({ userId: query.userId });
-      }
       return keys;
     },
   },
