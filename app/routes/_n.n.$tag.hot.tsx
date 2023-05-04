@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
-import { getPostsApi } from "~/api/posts/posts";
+import { getPostListApi } from "~/api/posts/posts.server";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -32,30 +32,31 @@ export const loader = async (args: LoaderArgs) => {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getPostsApi(
+  const posts = await getPostListApi(
     {
       cursor,
       limit,
       type: "featured",
       tag,
     },
-    args
+    {
+      loaderArgs: args,
+    }
   );
 
   return json({
-    posts: posts.result?.result,
+    posts: posts.json?.result,
   });
 };
 
 export type nTagHotLoader = typeof loader;
 
-export default function Tag() {
+export default function NTagHotPage() {
   return <PostsList />;
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.error(error);
   if (isRouteErrorResponse(error)) {
     return (
       <div>

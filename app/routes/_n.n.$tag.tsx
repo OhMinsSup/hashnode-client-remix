@@ -3,12 +3,14 @@ import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // api
-import {
-  getTagApi,
-  postTagFollowApi,
-  deleteTagFollowApi,
-} from "~/api/tags/tags";
+import { getTagApi } from "~/api/tags/tag.server";
+import { postTagFollowApi } from "~/api/tags/follow.server";
+import { deleteTagFollowApi } from "~/api/tags/unfollow.server";
 import { tagFollowSchema } from "~/api/tags/validation/follow";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 // components
 import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
@@ -20,27 +22,20 @@ import type {
   ActionArgs,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
 
 export const loader = async (args: LoaderArgs) => {
   const tag = args.params.tag?.toString();
   if (!tag) {
     throw new Response("Not Found", { status: 404 });
   }
-
-  const { result } = await getTagApi(tag, args);
-
-  const tagInfo = result?.result;
-
-  if (!tagInfo) {
+  const { json: data } = await getTagApi(tag, {
+    loaderArgs: args,
+  });
+  if (!data?.result) {
     throw new Response("Not Found", { status: 404 });
   }
-
   return json({
-    tagInfo,
+    tagInfo: data?.result,
   });
 };
 
@@ -57,41 +52,42 @@ export const action = async (args: ActionArgs) => {
     const parse = await tagFollowSchema.parseAsync(form);
     switch (args.request.method) {
       case "POST":
-        await postTagFollowApi(parse.tag, args);
-        return json({ success: true });
+        await postTagFollowApi(parse.tag, {
+          actionArgs: args,
+        });
+        return json({ ok: true });
       case "DELETE":
-        await deleteTagFollowApi(parse.tag, args);
-        return json({ success: true });
+        await deleteTagFollowApi(parse.tag, {
+          actionArgs: args,
+        });
+        return json({ ok: true });
       default:
         throw new Response("Method not allowed", { status: 405 });
     }
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
-      return json(
-        { success: false, errors: error_validation.errors },
-        { status: error_validation.statusCode }
-      );
+      return json(error_validation.errors, {
+        status: error_validation.statusCode,
+      });
     }
     const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
-      return json(
-        {
-          success: false,
-          errors: error_http.errors,
-        },
-        {
-          status: error_http.statusCode,
-        }
-      );
+      return json(error_http.errors, {
+        status: error_http.statusCode,
+      });
     }
-    throw new Response("Not Found", { status: 404 });
+    throw json(error, { status: 500 });
   }
 };
 
 export type NDataAction = typeof action;
 
-export const meta: V2_MetaFunction<nTagLoader> = ({ params, data }) => {
+export const meta: V2_MetaFunction<nTagLoader> = ({
+  params,
+  data,
+  matches,
+}) => {
   const tagInfo = data?.tagInfo ?? null;
   const title = `#${params.tag?.toString()} on Hashnode`;
   const description = `${tagInfo?.name} (${
@@ -99,8 +95,21 @@ export const meta: V2_MetaFunction<nTagLoader> = ({ params, data }) => {
   } followers · ${
     tagInfo?.postCount ?? 0
   } posts) On Hashnode, you can follow your favorite topics and get notified when new posts are published.`;
-  const image = "/images/seo_image.png";
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
   return [
+    ...rootMetas,
     { title },
     {
       name: "description",
@@ -115,10 +124,6 @@ export const meta: V2_MetaFunction<nTagLoader> = ({ params, data }) => {
       content: description,
     },
     {
-      name: "og:image",
-      content: image,
-    },
-    {
       name: "twitter:title",
       content: title,
     },
@@ -126,14 +131,10 @@ export const meta: V2_MetaFunction<nTagLoader> = ({ params, data }) => {
       name: "twitter:description",
       content: description,
     },
-    {
-      name: "twitter:image",
-      content: image,
-    },
   ];
 };
 
-export default function Tag() {
+export default function NTagMainPage() {
   return (
     <div className="tag__list-container">
       <TagDetailInfoBox />
@@ -147,7 +148,6 @@ export default function Tag() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.error(error);
   if (isRouteErrorResponse(error)) {
     return (
       <div>

@@ -12,7 +12,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { numberToEnglishUnit } from "~/utils/util";
 
 // tyeps
-import type { NDataLoader } from "~/routes/_n.n.$tag";
+import type { nTagLoader } from "~/routes/_n.n.$tag";
 
 function TagDetailInfoBox() {
   return (
@@ -27,7 +27,7 @@ function TagDetailInfoBox() {
 export default TagDetailInfoBox;
 
 TagDetailInfoBox.Header = function TagDetailInfoBoxHeader() {
-  const { tagInfo } = useLoaderData<NDataLoader>();
+  const { tagInfo } = useLoaderData<nTagLoader>();
 
   const to = useMemo(() => {
     if (!tagInfo.name) return PAGE_ENDPOINTS.ROOT;
@@ -60,7 +60,7 @@ TagDetailInfoBox.Header = function TagDetailInfoBoxHeader() {
 
 TagDetailInfoBox.Body = function TagDetailInfoBoxBody() {
   const submit = useSubmit();
-  const { tagInfo } = useLoaderData<NDataLoader>();
+  const { tagInfo } = useLoaderData<nTagLoader>();
   const navigation = useNavigation();
 
   const onTagFollow = useCallback(() => {
@@ -106,7 +106,7 @@ TagDetailInfoBox.Body = function TagDetailInfoBoxBody() {
 };
 
 TagDetailInfoBox.Footer = function TagDetailInfoBoxFooter() {
-  const { tagInfo } = useLoaderData<NDataLoader>();
+  const { tagInfo } = useLoaderData<nTagLoader>();
   return (
     <div className="tag-detail-info-box__footer">
       <div className="count-container">

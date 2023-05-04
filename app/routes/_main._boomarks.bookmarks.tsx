@@ -9,7 +9,7 @@ import { parseUrlParams } from "~/utils/util";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // api
-import { getLikePostsApi } from "~/api/posts/posts";
+import { getLikePostListApi } from "~/api/posts/like-posts.server";
 
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
@@ -27,22 +27,24 @@ export const loader = async (args: LoaderArgs) => {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getLikePostsApi(
+  const posts = await getLikePostListApi(
     {
       cursor,
       limit,
     },
-    args
+    {
+      loaderArgs: args,
+    }
   );
 
   return json({
-    posts: posts.result?.result,
+    posts: posts.json?.result,
   });
 };
 
 export type MainBookmarksLoader = typeof loader;
 
-export default function Bookmarks() {
+export default function MainBookmarksIndexPage() {
   return <LikedPostsList />;
 }
 

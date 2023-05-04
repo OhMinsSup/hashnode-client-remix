@@ -20,12 +20,18 @@ import ReachedEnd from "~/components/shared/ReachedEnd";
 
 import type { MainFeedsIndexLoader } from "~/routes/_main._feeds._index";
 import type { MainFeedsFeaturedLoader } from "~/routes/_main._feeds.featured";
+import type { nTagIndexLoader } from "~/routes/_n.n.$tag._index";
+import type { nTagHotLoader } from "~/routes/_n.n.$tag.hot";
 
 const LIMIT = 15;
 
 const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
 
-type Loader = MainFeedsIndexLoader | MainFeedsFeaturedLoader;
+type Loader =
+  | MainFeedsIndexLoader
+  | MainFeedsFeaturedLoader
+  | nTagIndexLoader
+  | nTagHotLoader;
 
 const PostsList = () => {
   const data = useLoaderData<Loader>();

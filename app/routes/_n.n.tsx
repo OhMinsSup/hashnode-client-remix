@@ -1,12 +1,13 @@
 import React from "react";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import { defer, redirect } from "@remix-run/cloudflare";
+import { defer } from "@remix-run/cloudflare";
 
 import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
 
 // api
-import { getTagListApi, getTagTrendingListApi } from "~/api/tags/tags";
+import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
+import { getTagListApi } from "~/api/tags/tagList";
 
 // types
 import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
@@ -29,42 +30,37 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const tag = args.params.tag?.toString();
-  if (!tag) {
-    throw redirect("/", 302);
-  }
-
-  const trendingTagPromise = getTagListApi(
-    {
-      type: "popular",
-    },
-    args
-  );
-
-  const trendingTagsWeekPromise = getTagTrendingListApi(
-    {
-      category: "week",
-    },
-    args
-  );
-
-  const trendingTagsAllPromise = getTagTrendingListApi(
-    {
-      category: "all",
-    },
-    args
-  );
-
   return defer({
-    trendingTag: trendingTagPromise,
-    trendingTagsWeek: trendingTagsWeekPromise,
-    trendingTagsAll: trendingTagsAllPromise,
+    trendingTag: getTagListApi(
+      {
+        type: "popular",
+      },
+      {
+        loaderArgs: args,
+      }
+    ),
+    trendingTagsWeek: getTagTrendingListApi(
+      {
+        category: "week",
+      },
+      {
+        loaderArgs: args,
+      }
+    ),
+    trendingTagsAll: getTagTrendingListApi(
+      {
+        category: "all",
+      },
+      {
+        loaderArgs: args,
+      }
+    ),
   });
 };
 
 export type nLoader = typeof loader;
 
-export default function N() {
+export default function NTagPage() {
   return (
     <div className="container__base">
       <Header />

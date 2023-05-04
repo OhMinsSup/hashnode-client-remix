@@ -9,17 +9,15 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { getSessionApi } from "~/api/user/user";
 
 // types
-import type { LoaderArgs, V2_MetaFunction, LinksFunction } from "@remix-run/cloudflare";
+import type {
+  LoaderArgs,
+  V2_MetaFunction,
+  LinksFunction,
+} from "@remix-run/cloudflare";
 
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
 import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
-
-const Seo = {
-  title: "Bookmarks - Hashnode",
-  description: "Bookmarks - Hashnode",
-  image: "/images/seo_image.png",
-};
 
 export const links: LinksFunction = () => {
   return [
@@ -29,22 +27,38 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const { session, header: headers } = await getSessionApi(args);
-  if (!session) {
+  const { type, header: headers } = await getSessionApi(args);
+  if (type !== "session") {
     throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
       headers,
+      status: 302,
     });
   }
-  return json(
-    {},
-    {
-      headers,
-    }
-  );
+  return json({ ok: true });
 };
 
-export const meta: V2_MetaFunction = () => {
+export type BookmarksLoader = typeof loader;
+
+export const meta: V2_MetaFunction<BookmarksLoader> = ({ data, matches }) => {
+  const Seo = {
+    title: "Bookmarks - Hashnode",
+    description: "Bookmarks - Hashnode",
+  };
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
   return [
+    ...rootMetas,
     {
       title: Seo.title,
     },
@@ -61,20 +75,12 @@ export const meta: V2_MetaFunction = () => {
       content: Seo.description,
     },
     {
-      name: "og:image",
-      content: Seo.image,
-    },
-    {
       name: "twitter:title",
       content: Seo.title,
     },
     {
       name: "twitter:description",
       content: Seo.description,
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
     },
   ];
 };

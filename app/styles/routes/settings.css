@@ -45,6 +45,10 @@
   @apply w-full rounded-lg border p-4 text-base outline-none;
 }
 
+.input-text.error {
+  @apply border-2 border-red-500;
+}
+
 .input-help {
   @apply -mt-2 mb-2 block text-base italic text-slate-500;
 }
@@ -63,5 +67,5 @@
 .btn-transparent {
   --tw-text-opacity: 1;
   color: rgb(51 65 85 / var(--tw-text-opacity));
-  @apply rounded-lg border border-transparent py-1 px-3 text-base font-medium leading-[1.625];
+  @apply rounded-lg border border-transparent px-3 py-1 text-base font-medium leading-[1.625];
 }

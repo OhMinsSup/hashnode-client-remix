@@ -2,30 +2,61 @@ import React, { useCallback } from "react";
 import { json } from "@remix-run/cloudflare";
 
 // api
-import { deleteUserApi } from "~/api/user/user";
+import { deleteUserApi } from "~/api/user/delete.server";
+import { HTTPErrorWrapper } from "~/api/validation/common";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useFetcher } from "@remix-run/react";
 
 // types
-import type { ActionArgs } from "@remix-run/cloudflare";
-import { HTTPErrorWrapper } from "~/api/validation/common";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+
+export const meta: V2_MetaFunction = ({ matches }) => {
+  const Seo = {
+    title: "Account Settings — Hashnode",
+  };
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
+  return [
+    ...rootMetas,
+    {
+      title: Seo.title,
+    },
+    {
+      name: "og:title",
+      content: Seo.title,
+    },
+    {
+      name: "twitter:title",
+      content: Seo.title,
+    },
+  ];
+};
 
 export const action = async (args: ActionArgs) => {
   try {
-    try {
-      switch (args.request.method) {
-        case "DELETE":
-          await deleteUserApi(args);
-          break;
-        default:
-          throw new Response("Method not allowed", { status: 405 });
-      }
-      return json({ ok: true });
-    } catch (error) {
-      throw json(error);
+    switch (args.request.method) {
+      case "DELETE":
+        await deleteUserApi({
+          actionArgs: args,
+        });
+        break;
+      default:
+        throw new Response("Method not allowed", { status: 405 });
     }
+    return json({ ok: true });
   } catch (error) {
     const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
@@ -33,7 +64,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error);
+    return json({ ok: false }, { status: 500 });
   }
 };
 
@@ -46,9 +77,10 @@ export default function Account() {
       "Are you sure you want to delete your account?"
     );
     if (confirmDelete) {
-      fetcher.submit({
-        method: "delete",
+      fetcher.submit(null, {
+        method: "DELETE",
         action: "/settings/account",
+        replace: true,
       });
     }
   }, [fetcher]);

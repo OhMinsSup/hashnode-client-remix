@@ -253,7 +253,7 @@ Sidebar.TagRight = function TagRight() {
               <RightTagTrendingSidebar
                 title="Trending Weekly"
                 toText="All tags"
-                tags={data.result.result?.list ?? []}
+                tags={data.json.result?.list ?? []}
               />
             )}
           </Await>
@@ -264,7 +264,7 @@ Sidebar.TagRight = function TagRight() {
               <RightTagTrendingSidebar
                 title="Trending All-time"
                 toText="All tags"
-                tags={data.result.result?.list ?? []}
+                tags={data.json.result?.list ?? []}
               />
             )}
           </Await>

@@ -7,7 +7,7 @@ import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 
 // api
-import { getPostApi } from "~/api/posts/posts";
+import { getPostApi } from "~/api/posts/post.server";
 
 // components
 import {
@@ -41,10 +41,12 @@ export const loader = async (args: LoaderArgs) => {
     });
   }
 
-  const { result } = await getPostApi(itemId, args);
+  const { json: data } = await getPostApi(itemId, {
+    loaderArgs: args,
+  });
 
   return json({
-    item: result.result,
+    item: data.result,
   });
 };
 

@@ -1,25 +1,30 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { json } from "@remix-run/cloudflare";
-
 import Json from "superjson";
+import classNames from "classnames";
 
 // api
 import { userUpdateSchema } from "~/api/user/validation/update";
-import { putUserUpdateApi } from "~/api/user/user";
+import { putUserApi } from "~/api/user/update.server";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getTagListApi } from "~/api/tags/tags";
+import { getTagListApi } from "~/api/tags/tagList";
+import {
+  HTTPErrorWrapper,
+  ValidationErrorWrapper,
+} from "~/api/validation/common";
 
 // components
 import AsyncCreatableSelect from "react-select/async-creatable";
 import ProfileImage from "~/components/setting/ProfileImage";
+import ErrorMessage from "~/components/shared/ErrorMessage";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useForm } from "react-hook-form";
 import {
   isRouteErrorResponse,
-  useActionData,
   useFetcher,
+  useNavigation,
   useRouteError,
 } from "@remix-run/react";
 import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
@@ -27,28 +32,60 @@ import { useDebouncedCallback } from "use-debounce";
 
 // types
 import type { SubmitHandler } from "react-hook-form";
-import type { ActionArgs } from "@remix-run/cloudflare";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 import type { MultiValue } from "react-select";
 import type { UserUpdateBody } from "~/api/user/validation/update";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
+
+export const meta: V2_MetaFunction = ({ matches }) => {
+  const Seo = {
+    title: "Change settings — Hashnode",
+  };
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
+  return [
+    ...rootMetas,
+    {
+      title: Seo.title,
+    },
+    {
+      name: "og:title",
+      content: Seo.title,
+    },
+    {
+      name: "twitter:title",
+      content: Seo.title,
+    },
+  ];
+};
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
   const _input_body = formData.get("body")?.toString();
-  if (!_input_body) {
-    return;
-  }
-  const _input_json_body = Json.parse<FormFieldValues>(_input_body);
+
   try {
+    if (!_input_body) {
+      throw new Response("Missing body", { status: 400 });
+    }
+    const _input_json_body = Json.parse<FormFieldValues>(_input_body);
     const body = await userUpdateSchema.safeParseAsync(_input_json_body);
     if (!body.success) {
       return json(body.error, { status: 400 });
     }
-    await putUserUpdateApi(body.data, args);
-    return json({});
+    await putUserApi(body.data, {
+      actionArgs: args,
+    });
+    return json({ ok: true });
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
@@ -73,10 +110,15 @@ export type FormFieldValues = UserUpdateBody;
 export default function Profile() {
   const fetcher = useFetcher();
   const [inputValue, setInputValue] = useState("");
-  const error = useActionData<SettingAction>();
   const session = useOptionalSession();
+  const navigation = useNavigation();
 
-  const { register, watch, setValue, handleSubmit } = useForm({
+  const isSubmitting = useMemo(
+    () => navigation.state === "submitting",
+    [navigation.state]
+  );
+
+  const { register, watch, setValue, handleSubmit, formState } = useForm({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
       name: session?.profile?.name ?? "",
@@ -123,6 +165,7 @@ export default function Profile() {
       {
         method: "POST",
         action: "/settings?index",
+        replace: true,
       }
     );
   };
@@ -172,7 +215,7 @@ export default function Profile() {
   }, [setValue]);
 
   const loadOptions = useDebouncedCallback(async (inputValue) => {
-    const { result } = await getTagListApi({
+    const { json: result } = await getTagListApi({
       name: inputValue,
       limit: 10,
     });
@@ -194,7 +237,7 @@ export default function Profile() {
   return (
     <form className="content" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row flex-wrap">
-        <div className="lg:w-1/2 w-full lg:pr-10">
+        <div className="w-full lg:w-1/2 lg:pr-10">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Basic Info</h4>
           <div className="mb-6">
             <label htmlFor="nameField" className="input-label">
@@ -202,10 +245,16 @@ export default function Profile() {
             </label>
             <input
               type="text"
-              className="input-text "
+              className={classNames("input-text", {
+                error: !!formState.errors.name,
+              })}
               id="nameField"
               placeholder="Enter your full name"
               {...register("name")}
+            />
+            <ErrorMessage
+              error={formState.errors.name?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -214,10 +263,16 @@ export default function Profile() {
             </label>
             <input
               type="text"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.tagline,
+              })}
               id="tagline"
               placeholder="Software Developer @ …"
               {...register("tagline")}
+            />
+            <ErrorMessage
+              error={formState.errors.tagline?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -234,6 +289,10 @@ export default function Profile() {
             {!isLoading && !watchAvatarUrl && (
               <ProfileImage onChange={onImageUpload} />
             )}
+            <ErrorMessage
+              error={formState.errors.avatarUrl?.message}
+              isSubmitting={isSubmitting}
+            />
           </div>
           <div className="mb-6">
             <label htmlFor="location" className="input-label">
@@ -241,10 +300,16 @@ export default function Profile() {
             </label>
             <input
               type="text"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.location,
+              })}
               id="location"
               placeholder="California, US"
               {...register("location")}
+            />
+            <ErrorMessage
+              error={formState.errors.location?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -255,10 +320,16 @@ export default function Profile() {
               Profile Bio (About you)
             </label>
             <textarea
-              className="input-text min-h-30"
+              className={classNames("input-text min-h-30", {
+                error: !!formState.errors.bio,
+              })}
               id="moreAboutYou"
               placeholder="I am a developer from …"
               {...register("bio")}
+            />
+            <ErrorMessage
+              error={formState.errors.bio?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -270,12 +341,18 @@ export default function Profile() {
               isClearable
               cacheOptions
               isMulti
-              className="min-h-30"
+              className={classNames("min-h-30", {
+                error: !!formState.errors.skills,
+              })}
               placeholder="Search technologies, topics, more…"
               loadOptions={loadOptions}
               onChange={onChangeTags}
               onInputChange={(newValue) => setInputValue(newValue)}
               value={watchSkills?.map((tag) => ({ label: tag, value: tag }))}
+            />
+            <ErrorMessage
+              error={formState.errors.skills?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -283,17 +360,23 @@ export default function Profile() {
               Available for
             </label>
             <textarea
-              className="input-text min-h-30"
+              className={classNames("input-text min-h-30", {
+                error: !!formState.errors.availableText,
+              })}
               id="availableFor"
               placeholder="I am available for mentoring, …"
               {...register("availableText")}
+            />
+            <ErrorMessage
+              error={formState.errors.availableText?.message}
+              isSubmitting={isSubmitting}
             />
             <small className="ml-2 mt-1 block leading-tight text-slate-600">
               {watchAvailableText?.length ?? 0}/140
             </small>
           </div>
         </div>
-        <div className="lg:w-1/2 w-full">
+        <div className="w-full lg:w-1/2">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Social</h4>
           <div className="mb-6">
             <label htmlFor="url" className="input-label">
@@ -302,10 +385,16 @@ export default function Profile() {
             <input
               type="url"
               pattern="(http|https)://twitter\.com\/(.+)|(http|https)://www\.twitter\.com\/(.+)"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.socials?.twitter,
+              })}
               id="twitter"
               placeholder="https://twitter.com/johndoe"
               {...register("socials.twitter")}
+            />
+            <ErrorMessage
+              error={formState.errors.socials?.twitter?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -315,10 +404,16 @@ export default function Profile() {
             <input
               type="url"
               pattern="(http|https)://instagram\.com\/(.+)|(http|https)://www\.instagram\.com\/(.+)"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.socials?.instagram,
+              })}
               id="instagram"
               placeholder="https://instagram.com/johndoe"
               {...register("socials.instagram")}
+            />
+            <ErrorMessage
+              error={formState.errors.socials?.instagram?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -328,10 +423,16 @@ export default function Profile() {
             <input
               type="url"
               pattern="(http|https)://github\.com\/(.+)|(http|https)://www\.github\.com\/(.+)"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.socials?.github,
+              })}
               id="github"
               placeholder="https://github.com/hashnode"
               {...register("socials.github")}
+            />
+            <ErrorMessage
+              error={formState.errors.socials?.github?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -341,10 +442,16 @@ export default function Profile() {
             <input
               type="url"
               pattern="(http|https)://facebook\.com\/(.+)|(http|https)://www\.facebook\.com\/(.+)|(http|https)://fb\.com\/(.+)|(http|https)://www\.fb\.com\/(.+)"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.socials?.facebook,
+              })}
               id="facebook"
               placeholder="https://facebook.com/johndoe"
               {...register("socials.facebook")}
+            />
+            <ErrorMessage
+              error={formState.errors.socials?.facebook?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className="mb-6">
@@ -353,10 +460,16 @@ export default function Profile() {
             </label>
             <input
               type="url"
-              className="input-text"
+              className={classNames("input-text", {
+                error: !!formState.errors.socials?.website,
+              })}
               id="website"
               placeholder="https://johndoe.com"
               {...register("socials.website")}
+            />
+            <ErrorMessage
+              error={formState.errors.socials?.website?.message}
+              isSubmitting={isSubmitting}
             />
           </div>
           <h4 className="mb-5 mt-10 text-xl font-bold text-slate-900">
@@ -372,11 +485,17 @@ export default function Profile() {
             <div className="relative">
               <input
                 type="text"
-                className="input-text "
+                className={classNames("input-text", {
+                  error: !!formState.errors.username,
+                })}
                 id="username"
                 {...register("username")}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
+              <ErrorMessage
+                error={formState.errors.username?.message}
+                isSubmitting={isSubmitting}
+              />
             </div>
           </div>
           <div className="mb-6">
@@ -391,11 +510,17 @@ export default function Profile() {
             <div className="relative">
               <input
                 type="email"
-                className="input-text"
+                className={classNames("input-text", {
+                  error: !!formState.errors.email,
+                })}
                 id="email"
                 {...register("email")}
               />
               <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
+              <ErrorMessage
+                error={formState.errors.email?.message}
+                isSubmitting={isSubmitting}
+              />
             </div>
           </div>
         </div>

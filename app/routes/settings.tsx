@@ -25,13 +25,14 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const { session, header: headers } = await getSessionApi(args);
-  if (!session) {
+  const { type, header: headers } = await getSessionApi(args);
+  if (type !== "session") {
     throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
       headers,
+      status: 302,
     });
   }
-  return json({});
+  return json({ ok: true });
 };
 
 export type SettingsLoader = typeof loader;
@@ -48,7 +49,7 @@ export default function Setting() {
             </div>
             <div className="menu__sidebar-menu">
               <NavLink
-                to="/settings"
+                to={PAGE_ENDPOINTS.SETTINGS.ROOT}
                 end
                 className={({ isActive }) => {
                   return classNames("menu__sidebar-item", {
@@ -60,7 +61,7 @@ export default function Setting() {
                 <span>Profile</span>
               </NavLink>
               <NavLink
-                to="/settings/account"
+                to={PAGE_ENDPOINTS.SETTINGS.ACCOUNT}
                 end
                 className={({ isActive }) => {
                   return classNames("menu__sidebar-item", {

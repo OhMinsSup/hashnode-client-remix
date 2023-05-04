@@ -12,15 +12,15 @@ import PostsCard from "~/components/home/PostsCard.unstable";
 import ReachedEnd from "~/components/shared/ReachedEnd";
 import uniqBy from "lodash-es/uniqBy";
 
-import type { MainFeedsIndexLoader } from "~/routes/_main._feeds._index";
+import type { MainBookmarksLoader } from "~/routes/_main._boomarks.bookmarks";
 
 const LIMIT = 15;
 
 const useSSRLayoutEffect = !isBrowser ? () => {} : useLayoutEffect;
 
 const LikedPostsList = () => {
-  const data = useLoaderData<MainFeedsIndexLoader>();
-  const fetcher = useFetcher<MainFeedsIndexLoader>();
+  const data = useLoaderData<MainBookmarksLoader>();
+  const fetcher = useFetcher<MainBookmarksLoader>();
 
   const [list, setList] = useState(data.posts.list);
 
