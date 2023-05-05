@@ -8,7 +8,7 @@ import DraftEditor from "~/components/draft/DraftEditor";
 import DraftShardActionFn from "~/components/draft/DraftShardActionFn";
 
 // constants
-import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // hooks
 import { useLoaderData } from "@remix-run/react";
@@ -17,7 +17,8 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { isString } from "~/utils/assertion";
 
 // api
-import { getPostApi, putPostsApi } from "~/api/posts/posts";
+import { updatePostApi } from "~/api/posts/update.server";
+import { getPostApi } from "~/api/posts/post.server";
 import { updatePostSchema } from "~/api/posts/validation/update";
 
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
@@ -44,9 +45,16 @@ export const loader = async (args: LoaderArgs) => {
     });
   }
 
-  const { result } = await getPostApi(itemId, args);
+  const { json: data } = await getPostApi(itemId, {
+    loaderArgs: args,
+  });
+  if (data.resultCode !== RESULT_CODE.OK) {
+    throw new Response("Not Found", {
+      status: 404,
+    });
+  }
   return json({
-    item: result.result,
+    item: data.result,
   });
 };
 
@@ -54,17 +62,19 @@ export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
 
   const _input_body = formData.get("body")?.toString();
-  if (!_input_body) {
-    return;
-  }
-  const _input_json_body = Json.parse<FormFieldValues>(_input_body);
 
   try {
+    if (!_input_body) {
+      throw new Response("Missing body", { status: 400 });
+    }
+    const _input_json_body = Json.parse<FormFieldValues>(_input_body);
     const body = await updatePostSchema.safeParseAsync(_input_json_body);
     if (!body.success) {
       return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
-    await putPostsApi(body.data, args);
+    await updatePostApi(body.data, {
+      actionArgs: args,
+    });
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);

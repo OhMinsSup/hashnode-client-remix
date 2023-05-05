@@ -9,7 +9,7 @@ import Header from "~/components/shared/Header";
 import { redirect, json } from "@remix-run/cloudflare";
 
 // api
-import { getSessionApi } from "~/api/user/user";
+import { getSessionApi } from "~/libs/server/session.server";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";

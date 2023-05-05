@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { json, redirect } from "@remix-run/cloudflare";
 
 // api
-import { getSessionApi } from "~/api/user/user";
+import { getSessionApi } from "~/libs/server/session.server";
 
 // components
 import DraftTemplate from "~/components/draft/DraftTemplate";
@@ -50,40 +50,35 @@ export interface FormFieldValues {
   seo?: Partial<SeoFormFieldValues>;
 }
 
-const Seo = {
-  title: "Editing Article",
-  description: "description",
-  image: "/images/seo_image.png",
-};
-
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction = ({ matches }) => {
+  const Seo = {
+    title: "Editing Article",
+  };
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
   return [
+    ...rootMetas,
     {
       title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
     },
     {
       name: "og:title",
       content: Seo.title,
     },
     {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
       name: "twitter:title",
       content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
     },
   ];
 };
@@ -96,21 +91,14 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async (args: LoaderArgs) => {
-  const { session, header: headers } = await getSessionApi(args);
-  if (!session) {
-    return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+  const { type, header: headers } = await getSessionApi(args);
+  if (type !== "session") {
+    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
       headers,
+      status: 302,
     });
   }
-
-  return json(
-    {
-      session,
-    },
-    {
-      headers,
-    }
-  );
+  return json({ ok: true });
 };
 
 export default function DraftRouteLayout() {

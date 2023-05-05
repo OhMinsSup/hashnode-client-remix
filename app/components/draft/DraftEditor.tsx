@@ -42,6 +42,7 @@ const DraftEditor: React.FC<DraftEditorProps> = ({
       {
         method: "POST",
         action,
+        replace: true,
       }
     );
   };

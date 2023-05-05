@@ -4,7 +4,7 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/cloudflare";
 import cookies from "cookie";
-import { uploadApi } from "~/api/files/upload.server";
+import { uploadApi } from "~/api/files/upload";
 import { uploadSchema } from "~/api/files/validation/upload";
 import { RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 import {

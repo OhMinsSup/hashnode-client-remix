@@ -6,7 +6,7 @@ import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // api
-import { getSessionApi } from "~/api/user/user";
+import { getSessionApi } from "~/libs/server/session.server";
 
 // types
 import type {

@@ -12,31 +12,32 @@ import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 
 // api
 import { createPostSchema } from "~/api/posts/validation/create";
-import { postPostsApi } from "~/api/posts/posts";
+import { createPostApi } from "~/api/posts/create.server";
 
 // types
-import type { ActionFunction } from "@remix-run/cloudflare";
+import type { ActionArgs } from "@remix-run/cloudflare";
 import type { FormFieldValues } from "./draft";
 import {
   HTTPErrorWrapper,
   ValidationErrorWrapper,
 } from "~/api/validation/common";
 
-export const action: ActionFunction = async (ctx) => {
-  const formData = await ctx.request.formData();
-
+export const action = async (args: ActionArgs) => {
+  const formData = await args.request.formData();
   const _input_body = formData.get("body")?.toString();
-  if (!_input_body) {
-    return;
-  }
-  const _input_json_body = Json.parse<FormFieldValues>(_input_body);
 
   try {
+    if (!_input_body) {
+      throw new Response("Missing body", { status: 400 });
+    }
+    const _input_json_body = Json.parse<FormFieldValues>(_input_body);
     const body = await createPostSchema.safeParseAsync(_input_json_body);
     if (!body.success) {
       return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
-    await postPostsApi(body.data, ctx);
+    await createPostApi(body.data, {
+      actionArgs: args,
+    });
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);

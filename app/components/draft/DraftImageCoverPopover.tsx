@@ -121,7 +121,7 @@ DraftImageCoverPopover.TabContentUpload =
 
     const { isLoading, mutate } = useImageUploadMutation({
       onSuccess(data) {
-        const { result } = data.result;
+        const { result } = data.json;
 
         setValue("thumbnail", result, {
           shouldValidate: true,

@@ -15,7 +15,7 @@ import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { scheduleMicrotask } from "~/libs/browser-utils";
 
 // api
-import { getTagListApi } from "~/api/tags/tags";
+import { getTagListApi } from "~/api/tags/tagList";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
@@ -98,11 +98,11 @@ InternalDraftPublishDrawer.Tags = function DraftPublishDrawerTags() {
   const { changeTransition } = useDraftContext();
 
   const loadOptions = useDebouncedCallback(async (inputValue) => {
-    const { result } = await getTagListApi({
+    const { json } = await getTagListApi({
       name: inputValue,
       limit: 10,
     });
-    const list = result?.result?.list ?? [];
+    const list = json?.result?.list ?? [];
     return list.map((tag) => ({
       label: tag.name,
       value: tag.name,

@@ -51,7 +51,7 @@ export type BaseResponse<Data = any> = {
 export class ApiService {
   static baseUrl = !isBrowser
     ? "http://localhost:8080/api/v1"
-    : window.ENV?.API_BASE_URL ?? "http://localhost:8080/api/v1";
+    : window.ENV?.json?.API_BASE_URL ?? "http://localhost:8080/api/v1";
 
   static setBaseUrl(url: string) {
     this.baseUrl = url;

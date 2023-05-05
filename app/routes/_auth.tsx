@@ -14,7 +14,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { mergeMeta } from "~/libs/server/merge-meta";
 
 // api
-import { getSessionApi } from "~/api/user/user";
+import { getSessionApi } from "~/libs/server/session.server";
 
 // styles
 import authStyles from "~/styles/routes/auth.css";

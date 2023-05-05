@@ -10,7 +10,7 @@ import type { UploadBody } from "./validation/upload";
 import type { UploadRespSchema } from "../schema/resp";
 
 export type ImageUploadApiReturnValue = {
-  result: BaseResponse<UploadRespSchema>;
+  json: BaseResponse<UploadRespSchema>;
 };
 
 /**

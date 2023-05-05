@@ -1,13 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { postImageUploadApi } from "~/api/files/files";
+import { uploadApi } from "~/api/files/upload";
 
 // constants
 import { MUTATIONS_KEY } from "~/constants/constant";
 
-import type {
-  ImageUploadApiReturnValue,
-  PostImageUploadApiBody,
-} from "~/api/files/files";
+import type { ImageUploadApiReturnValue } from "~/api/files/upload";
+import type { UploadBody } from "../validation/upload";
 import type {
   MutationFunction,
   UseMutationOptions,
@@ -15,23 +13,17 @@ import type {
 
 interface UseImageUploadMutationOptions
   extends Omit<
-    UseMutationOptions<
-      ImageUploadApiReturnValue,
-      unknown,
-      PostImageUploadApiBody,
-      unknown
-    >,
+    UseMutationOptions<ImageUploadApiReturnValue, unknown, UploadBody, unknown>,
     "mutationKey" | "mutationFn"
   > {}
 
 export function useImageUploadMutation(
   options?: UseImageUploadMutationOptions
 ) {
-  const action: MutationFunction<
-    ImageUploadApiReturnValue,
-    PostImageUploadApiBody
-  > = (body) => {
-    return postImageUploadApi(body);
+  const action: MutationFunction<ImageUploadApiReturnValue, UploadBody> = (
+    body
+  ) => {
+    return uploadApi(body);
   };
   return useMutation([MUTATIONS_KEY.FILES.UPLOAD], action, options);
 }
