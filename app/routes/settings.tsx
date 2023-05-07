@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 import { Icons } from "~/components/shared/Icons";
 import { NavLink, Outlet } from "@remix-run/react";
-import Header from "~/components/shared/Header";
+import SettingHeader from "~/components/setting/SettingHeader";
 
 // remix
 import { redirect, json } from "@remix-run/cloudflare";
@@ -40,7 +40,7 @@ export type SettingsLoader = typeof loader;
 export default function Setting() {
   return (
     <div className="bg-slate-100">
-      <Header.SettingPage />
+      <SettingHeader />
       <div className="setting__container">
         <div className="wrapper">
           <div className="menu__sidebar">

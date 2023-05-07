@@ -1,7 +1,7 @@
 // utils
 import cookies from "cookie";
 import { isBrowser } from "~/libs/browser-utils";
-import { isNull, isString, isUndefined } from "~/utils/assertion";
+import { isEmpty, isNull, isString, isUndefined } from "~/utils/assertion";
 
 // types
 import type { Nullable } from "./schema/api";
@@ -201,7 +201,7 @@ export class ApiService {
     const requset = new Request(input, {
       ...options,
       method: "POST",
-      body: body ? JSON.stringify(body) : undefined,
+      body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
     });
     const response = await fetch(requset);
     if (!response.ok) {
@@ -235,7 +235,7 @@ export class ApiService {
     const requset = new Request(input, {
       ...options,
       method: "PUT",
-      body: body ? JSON.stringify(body) : undefined,
+      body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
     });
     const response = await fetch(requset);
     if (!response.ok) {

@@ -8,9 +8,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { globalClient } from "./api/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { QueryClientProvider } from "@tanstack/react-query";
 import { LayoutProvider } from "./context/useLayoutContext";
 import NotFoundPage from "./components/errors/NotFoundPage";
 
@@ -29,6 +28,7 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
+import { useMemo } from "react";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: globalStyles }];
@@ -127,8 +127,18 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
 
 export default function App() {
   const { env } = useLoaderData<RootLoader>();
+  const client = useMemo(() => {
+    return new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
+  }, []);
+
   return (
-    <QueryClientProvider client={globalClient}>
+    <QueryClientProvider client={client}>
       <LayoutProvider>
         <html lang="en">
           <head>

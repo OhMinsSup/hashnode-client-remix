@@ -33,7 +33,7 @@ const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
           throw new Error("No file");
         }
 
-        const { result } = await mutateAsync({
+        const { json: result } = await mutateAsync({
           file,
           uploadType: "IMAGE",
           mediaType: "IMAGE",

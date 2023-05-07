@@ -64,9 +64,7 @@ TagDetailInfoBox.Body = function TagDetailInfoBoxBody() {
   const navigation = useNavigation();
 
   const onTagFollow = useCallback(() => {
-    const formData = new FormData();
-    formData.append("tag", tagInfo.name);
-    submit(formData, {
+    submit(null, {
       replace: true,
       method: tagInfo.isFollowing ? "DELETE" : "POST",
       action: PAGE_ENDPOINTS.N.TAG(tagInfo.name),

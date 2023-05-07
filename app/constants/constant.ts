@@ -129,6 +129,9 @@ export const PAGE_ENDPOINTS = {
     ROOT: "/settings",
     ACCOUNT: "/settings/account",
   },
+  USERS: {
+    ID: (username: string) => `/@${username}`
+  }
 } as const;
 
 export const STATUS_CODE = {

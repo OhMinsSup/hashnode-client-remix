@@ -1,5 +1,5 @@
 import React from "react";
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // api
@@ -22,6 +22,7 @@ import type {
   ActionArgs,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export const loader = async (args: LoaderArgs) => {
   const tag = args.params.tag?.toString();
@@ -42,29 +43,29 @@ export const loader = async (args: LoaderArgs) => {
 export type nTagLoader = typeof loader;
 
 export const action = async (args: ActionArgs) => {
-  const formData = await args.request.formData();
-
-  const form = {
-    tag: formData.get("tag")?.toString(),
-  };
-
   try {
-    const parse = await tagFollowSchema.parseAsync(form);
+    const parse = await tagFollowSchema.parseAsync({
+      tag: args.params.tag?.toString(),
+    });
+    console.log("parse", parse);
     switch (args.request.method) {
-      case "POST":
+      case "POST": {
         await postTagFollowApi(parse.tag, {
           actionArgs: args,
         });
-        return json({ ok: true });
-      case "DELETE":
+        return redirect(PAGE_ENDPOINTS.N.TAG(parse.tag));
+      }
+      case "DELETE": {
         await deleteTagFollowApi(parse.tag, {
           actionArgs: args,
         });
         return json({ ok: true });
+      }
       default:
         throw new Response("Method not allowed", { status: 405 });
     }
   } catch (error) {
+    console.log("error", error);
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
       return json(error_validation.errors, {

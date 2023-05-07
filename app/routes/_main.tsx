@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
@@ -13,7 +13,7 @@ import {
   Outlet,
   useRouteError,
   isRouteErrorResponse,
-  useMatches,
+  useLocation,
 } from "@remix-run/react";
 import Header from "~/components/shared/Header";
 import Sidebar from "~/components/home/Sidebar";
@@ -64,15 +64,27 @@ export const loader = async (args: LoaderArgs) => {
 export type HomeLoader = typeof loader;
 
 export default function Main() {
-  const matchs = useMatches();
-  console.log(matchs);
+  const location = useLocation();
+  const visibleRightSidebar = useMemo(() => {
+    return [
+      // 정규식 "/"
+      /^\/$/,
+      // 정규식 "/featured" 를 포함하는 경우"
+      /^\/featured/,
+      // 정규식 "/bookmarks 를 포함하는 경우"
+      /^\/bookmarks/,
+      // 정규식 "/explore 를 포함하는 경우"
+      /^\/explore/,
+    ].some((regex) => regex.test(location.pathname));
+  }, [location.pathname]);
+
   return (
     <div className="container__base">
       <Header />
       <main>
         <Sidebar.Left />
         <Outlet />
-        <Sidebar.Right />
+        {visibleRightSidebar ? <Sidebar.Right /> : null}
       </main>
     </div>
   );
