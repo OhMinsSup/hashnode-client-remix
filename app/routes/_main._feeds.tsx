@@ -20,22 +20,22 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeListStyle }];
 };
 
-// export const loader = (args: LoaderArgs) => {
-//   const getAricleCirclePromise = getAritcleCirclesApi(undefined, {
-//     loaderArgs: args,
-//   });
-//   return defer({
-//     getAricleCircle: getAricleCirclePromise,
-//   });
-// };
+export const loader = (args: LoaderArgs) => {
+  const getAricleCirclePromise = getAritcleCirclesApi(undefined, {
+    loaderArgs: args,
+  });
+  return defer({
+    getAricleCircle: getAricleCirclePromise,
+  });
+};
 
-// export type MainFeedsLoader = ReturnType<typeof loader>;
+export type MainFeedsLoader = ReturnType<typeof loader>;
 
 export default function MainFeedsPage() {
   return (
     <div className="main__list-container">
       <div className="main__list-container__trending-users">
-        {/* <ScrollAreaTrendingUsers /> */}
+        <ScrollAreaTrendingUsers />
       </div>
       <div className="main__list-container__tabs">
         <TabRoutesPosts>

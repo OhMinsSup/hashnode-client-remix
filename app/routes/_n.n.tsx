@@ -3,7 +3,8 @@ import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { defer } from "@remix-run/cloudflare";
 
 import Header from "~/components/shared/Header";
-import Sidebar from "~/components/home/Sidebar";
+import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
+import AppRightTags from "~/components/n/AppRightTags";
 
 // api
 import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
@@ -65,9 +66,9 @@ export default function NTagPage() {
     <div className="container__base">
       <Header />
       <main>
-        <Sidebar.Left />
+        <AppLeftSidebar />
         <Outlet />
-        <Sidebar.TagRight />
+        <AppRightTags />
       </main>
     </div>
   );

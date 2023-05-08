@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useLocation } from "@remix-run/react";
 import classNames from "classnames";
 
-interface SidebarNavLinkProps {
+interface AppLeftSidebarNavLinkProps {
   to: string;
   text: string;
   applyActiveLinks?: string[];
@@ -10,7 +10,9 @@ interface SidebarNavLinkProps {
   icon?: React.ReactNode;
 }
 
-const SidebarNavLink: React.FC<SidebarNavLinkProps> = (props) => {
+export default function AppLeftSidebarNavLink(
+  props: AppLeftSidebarNavLinkProps
+) {
   const { to, text, icon, applyActiveLinks, ...resetProps } = props;
 
   const location = useLocation();
@@ -30,6 +32,4 @@ const SidebarNavLink: React.FC<SidebarNavLinkProps> = (props) => {
       <span>{text}</span>
     </NavLink>
   );
-};
-
-export default SidebarNavLink;
+}

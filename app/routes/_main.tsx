@@ -3,7 +3,6 @@ import { defer } from "@remix-run/cloudflare";
 
 // api
 import { getTagListApi } from "~/api/tags/tagList";
-import { getTopPostsApi } from "~/api/posts/top-posts";
 import { getWidgetBookmarksApi } from "~/api/widget/widget-bookmarks.server";
 import { getSessionApi } from "~/libs/server/session.server";
 import { noopPromiseResponse } from "~/libs/server/response.server";
@@ -16,7 +15,8 @@ import {
   useLocation,
 } from "@remix-run/react";
 import Header from "~/components/shared/Header";
-import Sidebar from "~/components/home/Sidebar";
+import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
+import AppRightSidebar from "~/components/shared/AppRightSidebar";
 
 // styles
 import homeStyles from "~/styles/routes/home.css";
@@ -49,14 +49,6 @@ export const loader = async (args: LoaderArgs) => {
         loaderArgs: args,
       }
     ),
-    topPosts: getTopPostsApi(
-      {
-        duration: 7,
-      },
-      {
-        loaderArgs: args,
-      }
-    ),
     bookmarks: bookmarksPromise,
   });
 };
@@ -82,9 +74,9 @@ export default function Main() {
     <div className="container__base">
       <Header />
       <main>
-        <Sidebar.Left />
+        <AppLeftSidebar />
         <Outlet />
-        {visibleRightSidebar ? <Sidebar.Right /> : null}
+        {visibleRightSidebar ? <AppRightSidebar /> : null}
       </main>
     </div>
   );

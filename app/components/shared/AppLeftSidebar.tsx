@@ -1,11 +1,10 @@
-import React, { Suspense, useCallback, useMemo, useRef, useState } from "react";
+import React, { Suspense, useMemo, useRef, useState } from "react";
 
 // remix
 import { Await, Link, useLoaderData } from "@remix-run/react";
 
 // hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
-import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 // constants
@@ -14,27 +13,15 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // utils
 import { getTargetElement } from "~/libs/browser-utils";
 import { optimizeAnimation } from "~/utils/util";
-import { isString } from "~/utils/assertion";
 
 // components
 import { Icons } from "~/components/shared/Icons";
-import SidebarNavLink from "~/components/home/SidebarNavLink";
-import SidebarTrendingTag from "~/components/home/SidebarTrendingTag";
-import RightSidebarContentBox from "~/components/home/RightSidebarContentBox";
-import TabTrendingPostButton from "./TabTrendingPostButton";
-import TabTrendingPostsList from "./TabTrendingPostsList";
-import RightTagTrendingSidebar from "../n/RightTagTrendingSidebar";
-import WidgetBookmark from "./WidgetBookmark";
+import AppLeftSidebarNavLink from "./AppLeftSidebarNavLink";
+import AppLeftSidebarTrendingTag from "./AppLeftSidebarTrendingTag";
 
-// types
 import type { HomeLoader } from "~/routes/_main";
-import type { nLoader } from "~/routes/_n.n";
 
-export default function Sidebar() {
-  return <div>Sidebar</div>;
-}
-
-Sidebar.Left = function Left() {
+export default function AppLeftSidebar() {
   const data = useLoaderData<HomeLoader>();
 
   const isWide = useMediaQuery("(min-width: 1260px)", false);
@@ -100,13 +87,13 @@ Sidebar.Left = function Left() {
       >
         <div className="left-sidebar__container">
           <div className="left-sidebar__wrapper">
-            <SidebarNavLink
+            <AppLeftSidebarNavLink
               text="My Feed"
               to={PAGE_ENDPOINTS.ROOT}
               applyActiveLinks={[PAGE_ENDPOINTS.FEATURED]}
               icon={<Icons.MyFeed className="flex-shrink-0 fill-current" />}
             />
-            <SidebarNavLink
+            <AppLeftSidebarNavLink
               text="Explore"
               to={PAGE_ENDPOINTS.EXPLORE.ROOT}
               icon={<Icons.Explore className="flex-shrink-0 fill-current" />}
@@ -116,13 +103,13 @@ Sidebar.Left = function Left() {
               ]}
               end
             />
-            <SidebarNavLink
+            <AppLeftSidebarNavLink
               text="Drafts"
               to={PAGE_ENDPOINTS.DRAFT.ROOT}
               icon={<Icons.MyDraft className="flex-shrink-0 fill-current" />}
               end
             />
-            <SidebarNavLink
+            <AppLeftSidebarNavLink
               text="Bookmarks"
               to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
               icon={<Icons.MyBookmark className="flex-shrink-0 fill-current" />}
@@ -135,25 +122,15 @@ Sidebar.Left = function Left() {
                 <Icons.Trending className="icon__base ml-2 opacity-50" />
               </h5>
               <div className="left-sidebar__tags">
-                <Suspense
-                  fallback={
-                    <>
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <SidebarTrendingTag.Skeleton
-                          key={`skeleton-sidebar-trending-tag-${index}`}
-                        />
-                      ))}
-                    </>
-                  }
-                >
+                <Suspense fallback={<>Loading package location...</>}>
                   <Await
                     resolve={data.trendingTag}
                     errorElement={<>Error loading package location!</>}
                   >
                     {(data) => (
                       <>
-                        {data.json?.result?.list?.map((tag: any) => (
-                          <SidebarTrendingTag
+                        {data.json?.result?.list?.map((tag) => (
+                          <AppLeftSidebarTrendingTag
                             key={`sidebar-trending-tag-${tag.id}`}
                             id={tag.id}
                             name={tag.name}
@@ -228,255 +205,4 @@ Sidebar.Left = function Left() {
       </div>
     </div>
   );
-};
-
-Sidebar.TagRight = function TagRight() {
-  const data = useLoaderData<nLoader>();
-  return (
-    <aside className="main__right-sidebar">
-      <div className="right-sidebar__container">
-        <RightSidebarContentBox title="About this tag">
-          <div className="box__about-tag">
-            <p>
-              Python is an interpreted, object-oriented, high-level programming
-              language with dynamic semantics. Its high-level built-in data
-              structures, combined with dynamic typing and dynamic binding, make
-              it very attractive for Rapid Application Development, as well as
-              for use as a scripting or glue language to connect existing
-              components together.
-            </p>
-          </div>
-        </RightSidebarContentBox>
-        <Suspense fallback={<RightTagTrendingSidebar.Skeleton />}>
-          <Await resolve={data.trendingTagsWeek}>
-            {(data) => (
-              <RightTagTrendingSidebar
-                title="Trending Weekly"
-                toText="All tags"
-                tags={data.json.result?.list ?? []}
-              />
-            )}
-          </Await>
-        </Suspense>
-        <Suspense fallback={<RightTagTrendingSidebar.Skeleton />}>
-          <Await resolve={data.trendingTagsAll}>
-            {(data) => (
-              <RightTagTrendingSidebar
-                title="Trending All-time"
-                toText="All tags"
-                tags={data.json.result?.list ?? []}
-              />
-            )}
-          </Await>
-        </Suspense>
-      </div>
-    </aside>
-  );
-};
-
-Sidebar.Right = function Right() {
-  const session = useOptionalSession();
-  return (
-    <aside className="main__right-sidebar">
-      <div className="right-sidebar__container">
-        <Sidebar.RightWidgetForTrening />
-        {session ? <Sidebar.RightWidgetForBookmarks /> : null}
-        <Sidebar.RightOtherBox />
-      </div>
-    </aside>
-  );
-};
-
-Sidebar.RightOtherBox = function RightOtherBox() {
-  return <RightSidebarContentBox title="Others">??</RightSidebarContentBox>;
-};
-
-Sidebar.RightWidgetForTrening = function RightWidgetForTrening() {
-  const data = useLoaderData<HomeLoader>();
-
-  const [duration, setDuration] = useState(7);
-
-  const onTabClick = useCallback((duration: number | string) => {
-    if (isString(duration)) {
-      duration = parseInt(duration);
-    }
-    setDuration(duration);
-  }, []);
-
-  return (
-    <Suspense fallback={<Sidebar.RightWidgetForTreningSkeleton />}>
-      <RightSidebarContentBox title="Trending" to={PAGE_ENDPOINTS.EXPLORE.ROOT}>
-        <div
-          className="tab-content__trenidng"
-          role="tablist"
-          aria-orientation="horizontal"
-        >
-          <TabTrendingPostButton
-            label="1 week"
-            duration={7}
-            currentDuration={duration}
-            id={"tabs-trending-duration-7"}
-            onTabClick={onTabClick}
-          />
-          <TabTrendingPostButton
-            label="1 months"
-            duration={30}
-            currentDuration={duration}
-            id={"tabs-trending-duration-30"}
-            onTabClick={onTabClick}
-          />
-          <TabTrendingPostButton
-            label="3 months"
-            duration={90}
-            currentDuration={duration}
-            id={"tabs-trending-duration-90"}
-            onTabClick={onTabClick}
-          />
-          <TabTrendingPostButton
-            label="6 months"
-            duration={180}
-            currentDuration={duration}
-            id={"tabs-trending-duration-180"}
-            onTabClick={onTabClick}
-          />
-        </div>
-        <div>
-          <div
-            tabIndex={duration === 7 ? 0 : -1}
-            data-key="7"
-            aria-controls="tabs-trending-duration-7"
-            role="tabpanel"
-          >
-            <Await
-              resolve={data.topPosts}
-              errorElement={<>Error loading package location!</>}
-            >
-              {(data) => (
-                <TabTrendingPostsList
-                  duration={7}
-                  enabled={duration === 7}
-                  initialData={data}
-                />
-              )}
-            </Await>
-          </div>
-          <div
-            tabIndex={duration === 30 ? 0 : -1}
-            data-key="30"
-            aria-controls="tabs-trending-duration-30"
-            role="tabpanel"
-          >
-            <TabTrendingPostsList enabled={duration === 30} duration={30} />
-          </div>
-          <div
-            tabIndex={duration === 90 ? 0 : -1}
-            data-key="90"
-            aria-controls="tabs-trending-duration-90"
-            role="tabpanel"
-          >
-            <TabTrendingPostsList enabled={duration === 90} duration={90} />
-          </div>
-          <div
-            tabIndex={duration === 180 ? 0 : -1}
-            data-key="180"
-            aria-controls="tabs-trending-duration-180"
-            role="tabpanel"
-          >
-            <TabTrendingPostsList enabled={duration === 180} duration={180} />
-          </div>
-        </div>
-      </RightSidebarContentBox>
-    </Suspense>
-  );
-};
-
-Sidebar.RightWidgetForTreningSkeleton =
-  function RightWidgetForTreningSkeleton() {
-    return (
-      <RightSidebarContentBox.Skeleton>
-        <div
-          className="tab-content__trenidng"
-          role="tablist"
-          aria-orientation="horizontal"
-        >
-          <TabTrendingPostButton.Skeleton />
-          <TabTrendingPostButton.Skeleton />
-          <TabTrendingPostButton.Skeleton />
-          <TabTrendingPostButton.Skeleton />
-        </div>
-        <div>
-          <div
-            tabIndex={-1}
-            data-key="7"
-            aria-controls="tabs-trending-duration-7"
-            role="tabpanel"
-          >
-            <TabTrendingPostsList.Skeleton prefix="duration" dataKey="7" />
-          </div>
-          <div
-            tabIndex={-1}
-            data-key="30"
-            aria-controls="tabs-trending-duration-30"
-            role="tabpanel"
-          ></div>
-          <div
-            tabIndex={-1}
-            data-key="90"
-            aria-controls="tabs-trending-duration-90"
-            role="tabpanel"
-          ></div>
-          <div
-            tabIndex={-1}
-            data-key="180"
-            aria-controls="tabs-trending-duration-180"
-            role="tabpanel"
-          ></div>
-        </div>
-      </RightSidebarContentBox.Skeleton>
-    );
-  };
-
-Sidebar.RightWidgetForBookmarks = function RightWidgetForBookmarks() {
-  const data = useLoaderData<HomeLoader>();
-
-  return (
-    <Suspense fallback={<Sidebar.RightWidgetForBookmarksSkeleton />}>
-      <Await
-        resolve={data.bookmarks}
-        errorElement={<>Error loading package location!</>}
-      >
-        {(data) => {
-          const bookmarks = data.json?.result ?? [];
-          return (
-            <RightSidebarContentBox
-              title="Bookmarks"
-              to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
-            >
-              {bookmarks.map((item, index) => (
-                <WidgetBookmark
-                  key={`widget-bookmark-${item.id}`}
-                  bookmark={item}
-                  index={index}
-                />
-              ))}
-            </RightSidebarContentBox>
-          );
-        }}
-      </Await>
-    </Suspense>
-  );
-};
-
-Sidebar.RightWidgetForBookmarksSkeleton =
-  function RightWidgetForBookmarksSkeleton() {
-    return (
-      <RightSidebarContentBox.Skeleton>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <WidgetBookmark.Skeleton
-            key={`widget-bookmark-${index}`}
-            index={index}
-          />
-        ))}
-      </RightSidebarContentBox.Skeleton>
-    );
-  };
+}

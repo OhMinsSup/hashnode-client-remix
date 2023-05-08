@@ -1,26 +1,25 @@
-import React, { useId, useMemo } from "react";
+import React, { useMemo } from "react";
 import classNames from "classnames";
-import TabTrendingPostsItem from "~/components/home/TabTrendingPostsItem";
 import { isNull, isUndefined } from "~/utils/assertion";
 import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
+import AppRightTabTrendingPost from "./AppRightTabTrendingPost";
 
-interface TabTrendingPostsListProps {
+interface AppRightTabTrendingPostListProps {
   duration: number;
   enabled?: boolean;
   initialData?: any;
 }
 
-function TabTrendingPostsList({
+export default function AppRightTabTrendingPostList({
   duration,
   initialData,
   enabled,
-}: TabTrendingPostsListProps) {
+}: AppRightTabTrendingPostListProps) {
   const { data } = useGetTopPostsQuery(
     {
       duration: duration,
     },
     {
-      suspense: true,
       enabled,
       initialData,
       staleTime: 1000 * 60 * 60 * 24,
@@ -42,7 +41,7 @@ function TabTrendingPostsList({
     >
       {posts?.map((item, index) => (
         <React.Fragment key={`tab-trending-post-${duration}-item-${item.id}`}>
-          <TabTrendingPostsItem {...item} />
+          <AppRightTabTrendingPost {...item} />
           {index !== posts.length - 1 && (
             <hr className="custom-divide__tab-treding" />
           )}
@@ -51,29 +50,3 @@ function TabTrendingPostsList({
     </div>
   );
 }
-
-export default TabTrendingPostsList;
-
-TabTrendingPostsList.Skeleton = function TabTrendingPostsListSkeleton({
-  dataKey,
-  prefix,
-}: {
-  dataKey: string;
-  prefix?: string;
-}) {
-  const id = useId();
-  return (
-    <div>
-      {Array.from({ length: 5 }).map((_, index) => (
-        <React.Fragment
-          key={`${
-            prefix ? `${prefix}-` : ""
-          }TabTrendingPosts-${dataKey}-${index}-${id}`}
-        >
-          <TabTrendingPostsItem.Skeleton />
-          {index !== 4 && <hr className="custom-divide__tab-treding" />}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-};

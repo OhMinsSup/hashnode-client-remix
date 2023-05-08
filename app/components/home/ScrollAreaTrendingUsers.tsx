@@ -1,4 +1,4 @@
-import React, { Suspense, useId, useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 
 // types
 import { Await, Link } from "@remix-run/react";
@@ -9,16 +9,16 @@ import { useLoaderData } from "@remix-run/react";
 // types
 import type { MainFeedsLoader } from "~/routes/_main._feeds";
 import type { GetAritcleCirclesRespSchema } from "~/api/schema/resp";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface ScrollAreaTrendingUsersProps {}
 
 function ScrollAreaTrendingUsers(_props: ScrollAreaTrendingUsersProps) {
   const data = useLoaderData<MainFeedsLoader>();
-
   return (
     <div className="trending-users-scroll-area">
       <div className="trending-users-scroll-area__container">
-        <Suspense fallback={<ScrollAreaTrendingUsers.SkeletonGroup />}>
+        <Suspense fallback={<>Loading package location...</>}>
           <Await
             resolve={data.getAricleCircle}
             errorElement={<>Error loading package location!</>}
@@ -69,7 +69,10 @@ ScrollAreaTrendingUsers.AricleCircle = function AricleCircle({
 }: AricleCircleProps) {
   return (
     <div className="user-container">
-      <Link to="/" className="thumbnail-container">
+      <Link
+        to={PAGE_ENDPOINTS.USERS.ID(circle.username)}
+        className="thumbnail-container"
+      >
         <div className="h-full w-full hover:cursor-pointer hover:opacity-80">
           <div className="thumbnail">
             <img
@@ -79,38 +82,6 @@ ScrollAreaTrendingUsers.AricleCircle = function AricleCircle({
           </div>
         </div>
       </Link>
-    </div>
-  );
-};
-
-ScrollAreaTrendingUsers.SkeletonGroup = function SkeletonGroup() {
-  const id = useId();
-
-  return (
-    <>
-      {Array.from({ length: 5 }).map((_, index) => (
-        <ScrollAreaTrendingUsers.Skeleton
-          key={`ScrollAreaTrendingUsers-${index}-${id}`}
-        />
-      ))}
-    </>
-  );
-};
-
-ScrollAreaTrendingUsers.Skeleton = function Skeleton() {
-  return (
-    <div className="user-container">
-      <div className="thumbnail-container">
-        <div className="h-full w-full">
-          <div className="thumbnail">
-            <img
-              src="/images/default_profile.png"
-              alt="thumbnail"
-              className="scale-110 blur-2xl grayscale duration-700 ease-in-out group-hover:opacity-75"
-            />
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
