@@ -1,9 +1,15 @@
 import type { Nullable } from "./api";
-import type { UserSchema, UserSocialSchema } from "./user";
+import type { UserSchema } from "./user";
 import type { TagSchema } from "./tag";
 
 export interface PostCountSchema {
   postLike: number;
+}
+
+export interface PostSeoSchema {
+  title: Nullable<string>;
+  desc: Nullable<string>;
+  image: Nullable<string>;
 }
 
 export interface PostSchema {
@@ -19,6 +25,6 @@ export interface PostSchema {
   updatedAt: Date | string;
   user: UserSchema;
   tags: Pick<TagSchema, "id" | "name">[];
-  seo?: UserSocialSchema;
+  seo?: PostSeoSchema;
   count: PostCountSchema;
 }

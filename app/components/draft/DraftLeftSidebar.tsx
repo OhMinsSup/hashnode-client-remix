@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 // components
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
+import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
 import { Icons } from "~/components/shared/Icons";
 
 // utils
@@ -13,10 +14,10 @@ import { firstLetterToUpperCase } from "~/utils/util";
 import { useFormContext } from "react-hook-form";
 import { useDraftContext } from "~/context/useDraftContext";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
+import { hashnodeDB } from "~/libs/db/db";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
-import { hashnodeDB } from "~/libs/db/db";
 
 interface DraftLeftSidebarProps {}
 
@@ -109,6 +110,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
       </div>
 
       <MyDraftSidebar />
+      <WriteDraftSidebar />
 
       <div className="draft-sidebar-footer">
         <button

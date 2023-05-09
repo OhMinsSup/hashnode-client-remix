@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import Json from "superjson";
 import { redirect, json } from "@remix-run/cloudflare";
@@ -11,7 +11,7 @@ import DraftShardActionFn from "~/components/draft/DraftShardActionFn";
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // hooks
-import { useLoaderData } from "@remix-run/react";
+import { isRouteErrorResponse, useLoaderData, useParams, useRouteError } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 import { useDraftContext } from "~/context/useDraftContext";
 import { isString } from "~/utils/assertion";
@@ -96,12 +96,17 @@ export const action = async (args: ActionArgs) => {
 export type ItemLoaderData = typeof loader;
 
 export default function DraftPage() {
+  const { itemId } = useParams<{ itemId: string }>();
   const { item } = useLoaderData<ItemLoaderData>();
   const methods = useFormContext<FormFieldValues>();
   const ctx = useDraftContext();
 
   useEffect(() => {
-    if (item) {
+    function startFetching() {
+      if (!item) return;
+      const publishingDate = item.publishingDate
+        ? new Date(item.publishingDate)
+        : new Date();
       methods.reset({
         title: item.title,
         subTitle: item.subTitle || undefined,
@@ -112,24 +117,29 @@ export default function DraftPage() {
             }
           : undefined,
         tags: item.tags ? item.tags.map((tag) => tag.name) : undefined,
-        disabledComment: false,
-        publishingDate: undefined,
+        disabledComment:
+          typeof item.disabledComment === "boolean"
+            ? item.disabledComment
+            : false,
+        publishingDate,
         seo: {
-          title: "",
-          desc: "",
-          image: "",
+          title: item.seo?.title ?? "",
+          desc: item.seo?.desc ?? "",
+          image: item.seo?.image ?? "",
         },
       });
       if (item.content && isString(item.content)) {
         const data = JSON.parse(item.content);
         if (!data) return;
-        ctx.$editorJS?.render(data);
+        ctx.$editorJS?.render?.(data);
       }
       if (item.subTitle) {
         ctx.toggleSubTitle(true);
       }
     }
-  }, [item]);
+
+    startFetching();
+  }, [item, ctx.$editorJS, itemId]);
 
   return (
     <DraftShardActionFn>
@@ -138,6 +148,27 @@ export default function DraftPage() {
   );
 }
 
-export function CatchBoundary() {
-  return <DraftPage />;
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

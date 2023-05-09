@@ -1,3 +1,4 @@
+import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts";
 import type { Nullable } from "~/api/schema/api";
 import type { PostListQuery } from "~/api/schema/query";
 
@@ -9,6 +10,7 @@ export const API_ENDPOINTS = {
   USERS: {
     ME: "users",
     LOGOUT: "users/logout",
+    MY_POSTS: "users/my-posts",
   },
   POSTS: {
     ROOT: "posts",
@@ -40,42 +42,19 @@ export const API_ENDPOINTS = {
 } as const;
 
 export const QUERIES_KEY = {
-  ME: ["getUserInfoApi"],
   FILE: {
     ROOT: ["getFileListApi"],
   },
   POSTS: {
-    ROOT: (query?: PostListQuery) => {
-      let keys: any[] = ["getPostsListApi"];
-      if (query) keys = [...keys, query];
-      return keys;
+    GET_MY_POSTS: (query?: GetMyPostListApiSearchParams) => {
+      let keys: any[] = ["getMyPostsListApi"];
+      if (!query) return keys;
+      return [...keys, query];
     },
     GET_TOP_POSTS: (duration: number) => ["getTopPostsApi", { duration }],
     ID: (id?: Nullable<string | number>) => {
       const keys: any[] = ["getPostApi"];
       if (id) keys.push(id);
-      return keys;
-    },
-  },
-  TAGS: {
-    ROOT: (keyword?: string, type?: string) => {
-      let keys = ["getTagListApi"];
-
-      if (keyword) {
-        keys.push(keyword);
-      }
-
-      if (type) {
-        keys.push(type);
-      }
-
-      return keys;
-    },
-  },
-  DRAFTS: {
-    ROOT: (keyword?: string) => {
-      const keys: string[] = ["getDraftListApi"];
-      if (keyword) keys.push(keyword);
       return keys;
     },
   },
@@ -117,6 +96,7 @@ export const PAGE_ENDPOINTS = {
   },
   DRAFT: {
     ROOT: "/draft",
+    ID: (id: string | number) => `/draft/${id}`,
   },
   ITEMS: {
     ID: (id: number | string) => `/items/${id}`,
@@ -130,8 +110,8 @@ export const PAGE_ENDPOINTS = {
     ACCOUNT: "/settings/account",
   },
   USERS: {
-    ID: (username: string) => `/@${username}`
-  }
+    ID: (username: string) => `/@${username}`,
+  },
 } as const;
 
 export const STATUS_CODE = {

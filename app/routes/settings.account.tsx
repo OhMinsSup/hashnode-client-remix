@@ -64,7 +64,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    return json({ ok: false }, { status: 500 });
+    throw json(error);
   }
 };
 

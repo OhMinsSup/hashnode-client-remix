@@ -8,7 +8,6 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export default function AppRightTags() {
   const data = useLoaderData<nLoader>();
-  console.log(data);
   return (
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">

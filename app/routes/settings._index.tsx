@@ -143,7 +143,7 @@ export default function Profile() {
 
   const { isLoading, mutate } = useImageUploadMutation({
     onSuccess(data) {
-      const { result } = data.result;
+      const { result } = data.json;
       setValue("avatarUrl", result.url, {
         shouldValidate: true,
         shouldDirty: true,
