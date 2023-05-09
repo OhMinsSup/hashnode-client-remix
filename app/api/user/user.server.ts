@@ -6,19 +6,18 @@ import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { BaseApiOptions } from "../client.next";
+import type { UserRespSchema } from "../schema/resp";
 
 /**
- * @description 유저 삭제 API
+ * @description 유저 정보 API
+ * @param {string} username
  * @param {BaseApiOptions?} options
  */
-export async function logoutApi(options?: BaseApiOptions) {
+export async function getUserApi(username: string, options?: BaseApiOptions) {
   const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
-  const { json, response } = await ApiService.postJson(
-    API_ENDPOINTS.USERS.LOGOUT,
-    undefined,
+  const { json, response } = await ApiService.getJson<UserRespSchema>(
+    API_ENDPOINTS.USERS.USERNAME(username),
     __nextOpts?.init
   );
-  console.log("response", response);
-  const header = response.headers;
-  return { json, header };
+  return { json, response };
 }

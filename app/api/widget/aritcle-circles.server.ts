@@ -22,8 +22,7 @@ export async function getAritcleCirclesApi(
   query?: GetAritcleCirclesApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
   let searchParams: URLSearchParams | undefined = undefined;
   if (query?.userId) {
     searchParams = new URLSearchParams();

@@ -1,13 +1,11 @@
 import React from "react";
 
 // provider
-import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 
-export default function MainUsersPage() {
+export default function MainUserPage() {
   return (
-    <>
-      <Outlet />
-    </>
+    <>???</>
   );
 }
 

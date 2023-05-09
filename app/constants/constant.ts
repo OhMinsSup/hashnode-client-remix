@@ -1,6 +1,5 @@
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts";
 import type { Nullable } from "~/api/schema/api";
-import type { PostListQuery } from "~/api/schema/query";
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -11,6 +10,7 @@ export const API_ENDPOINTS = {
     ME: "users",
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
+    USERNAME: (username: string) => `users/${username}`,
   },
   POSTS: {
     ROOT: "posts",

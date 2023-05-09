@@ -17,8 +17,7 @@ export async function putUserApi(
   body: UserUpdateBody,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
   const { json } = await ApiService.putJson<null, UserUpdateBody>(
     API_ENDPOINTS.USERS.ME,
     body,
