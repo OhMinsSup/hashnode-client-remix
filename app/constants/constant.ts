@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
     USERNAME: (username: string) => `users/${username}`,
+    USERNAME_POSTS: (username: string) => `users/${username}/posts`,
   },
   POSTS: {
     ROOT: "posts",

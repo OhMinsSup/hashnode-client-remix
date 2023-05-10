@@ -22,8 +22,9 @@ export async function updatePostApi(
   body: UpdatePostApiBody,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(
+    ApiService.middlewareSetAuthticated(options)
+  );
   const { json } = await ApiService.putJson<PostRespSchema>(
     API_ENDPOINTS.POSTS.ID(body.id),
     omit(body, ["id"]),

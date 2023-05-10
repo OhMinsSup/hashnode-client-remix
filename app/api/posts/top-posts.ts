@@ -21,8 +21,9 @@ export async function getTopPostsApi(
   query?: GetTopPostsApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(
+    ApiService.middlewareSetAuthticated(options)
+  );
   const searchParams = new URLSearchParams();
   if (query?.duration) {
     searchParams.set("duration", query.duration.toString());

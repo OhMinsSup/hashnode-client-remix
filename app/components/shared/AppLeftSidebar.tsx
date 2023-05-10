@@ -5,7 +5,6 @@ import { Await, Link, useLoaderData } from "@remix-run/react";
 
 // hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
-import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -24,7 +23,6 @@ import type { HomeLoader } from "~/routes/_main";
 export default function AppLeftSidebar() {
   const data = useLoaderData<HomeLoader>();
 
-  const isWide = useMediaQuery("(min-width: 1260px)", false);
   const $container = useRef<HTMLDivElement | null>(null);
   const GAP_SIZE = useMemo(() => 32, []);
 
@@ -68,12 +66,7 @@ export default function AppLeftSidebar() {
   });
 
   return (
-    <div
-      className="main__left-sidebar"
-      style={{
-        minHeight: isWide ? "710px" : "750px",
-      }}
-    >
+    <div className="main__left-sidebar">
       <div
         ref={$container}
         style={{

@@ -20,8 +20,9 @@ export async function createPostApi(
   body: CreatePostApiBody,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(
+    ApiService.middlewareSetAuthticated(options)
+  );
   const { json } = await ApiService.postJson<PostRespSchema>(
     API_ENDPOINTS.POSTS.ROOT,
     body,

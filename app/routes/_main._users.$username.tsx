@@ -1,21 +1,25 @@
 import React from "react";
 
 // provider
-import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
+import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import UserProfileBox from "~/components/users/UserProfileBox";
-import { LoaderArgs, json } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
 import { getUserApi } from "~/api/user/user.server";
 
 // styles
-import styles from "~/styles/routes/home-users.css";
+import homeListStyle from "~/styles/routes/home-list.css";
+import homeUsersStyles from "~/styles/routes/home-users.css";
 
 // types
+import type { LoaderArgs } from "@remix-run/cloudflare";
 import type { LinksFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }];
+  return [
+    { rel: "stylesheet", href: homeListStyle },
+    { rel: "stylesheet", href: homeUsersStyles },
+  ];
 };
-
 
 export const loader = async (args: LoaderArgs) => {
   const username = args.params.username?.toString();
@@ -33,18 +37,17 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type UserLoader = typeof loader;
+export type MainUserLoader = typeof loader;
 
 export default function MainUserPage() {
-  const { userInfo } = useLoaderData<UserLoader>();
-  console.log(userInfo);
   return (
     <div className="relative col-span-7 min-w-0 pb-5 pt-5">
       <div className="content-info-box">
-        <h1>{userInfo.username}</h1>
-        <p>{userInfo.profile?.tagline}</p>
+        <UserProfileBox />
       </div>
-      <Outlet />
+      <div className="overflow-hidden rounded-lg border bg-white">
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -40,10 +40,14 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
           </div>
           <div className="userinfo-container">
             <div className="userinfo-container__username">
-              <Link to="/">{post?.user?.username}</Link>
+              <Link to={PAGE_ENDPOINTS.USERS.ID(post?.user?.username)}>
+                {post?.user?.username}
+              </Link>
             </div>
             <div className="userinfo-container__other">
-              <Link to="/">{post?.user?.profile?.name}</Link>
+              <Link to={PAGE_ENDPOINTS.USERS.ID(post?.user?.username)}>
+                {post?.user?.profile?.name}
+              </Link>
               <span>·</span>
               <Link to={to} className="createAt">
                 {getDateFormat(post?.createdAt)}

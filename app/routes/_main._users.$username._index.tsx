@@ -1,12 +1,55 @@
 import React from "react";
 
 // provider
-import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
-export default function MainUserPage() {
-  return (
-    <>???</>
+// components
+import PostsList from "~/components/home/PostsList.unstable";
+
+import { json } from "@remix-run/cloudflare";
+import { parseUrlParams } from "~/utils/util";
+import { getUserPostListApi } from "~/api/user/user-posts.server";
+
+import type { LoaderArgs } from "@remix-run/cloudflare";
+
+export const loader = async (args: LoaderArgs) => {
+  const username = args.params.username?.toString();
+  if (!username) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const params = parseUrlParams(args.request.url);
+
+  let cursor = undefined;
+  if (params.cursor) {
+    cursor = parseInt(params.cursor);
+  }
+
+  let limit = undefined;
+  if (params.limit) {
+    limit = parseInt(params.limit);
+  }
+
+  const posts = await getUserPostListApi(
+    username,
+    {
+      cursor,
+      limit,
+    },
+    {
+      loaderArgs: args,
+    }
   );
+
+  return json({
+    posts: posts.json?.result,
+  });
+};
+
+export type MainUserPostsIndexLoader = typeof loader;
+
+export default function MainUserPostsPage() {
+  return <PostsList />;
 }
 
 export function ErrorBoundary() {

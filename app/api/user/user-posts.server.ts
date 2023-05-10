@@ -9,23 +9,20 @@ import type { BaseApiOptions } from "../client.next";
 import type { PostListRespSchema } from "../schema/resp";
 import type { PaginationQuery } from "../schema/query";
 
-export interface GetMyPostListApiSearchParams extends PaginationQuery {
-  keyword?: string;
-  isDeleted?: boolean;
-}
+export interface GetUserPostListApiSearchParams extends PaginationQuery {}
 
 /**
  * @description 내가 작성한 포스트 리스트 조회 API
- * @param {GetMyPostListApiSearchParams?} query
+ * @param {GetUserPostListApiSearchParams?} query
  * @param {BaseApiOptions?} options
  */
-export async function getMyPostListApi(
-  query?: GetMyPostListApiSearchParams,
+export async function getUserPostListApi(
+  username: string,
+  query?: GetUserPostListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const __nextOpts = ApiService.middlewareForAuth(
-    ApiService.middlewareSetAuthticated(options)
-  );
+  const _nextOpts = ApiService.middlewareSetAuthticated(options);
+  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -35,16 +32,10 @@ export async function getMyPostListApi(
   if (query?.cursor) {
     searchParams.set("cursor", query.cursor.toString());
   }
-  if (query?.keyword) {
-    searchParams.set("keyword", query.keyword);
-  }
-  if (query?.isDeleted) {
-    searchParams.set("isDeleted", query.isDeleted.toString());
-  }
 
   const { json } = await ApiService.getJson<PostListRespSchema>(
     ApiService.middlewareForSearchParams(
-      API_ENDPOINTS.USERS.MY_POSTS,
+      API_ENDPOINTS.USERS.USERNAME_POSTS(username),
       searchParams
     ),
     __nextOpts?.init

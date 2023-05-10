@@ -22,6 +22,7 @@ import type { MainFeedsIndexLoader } from "~/routes/_main._feeds._index";
 import type { MainFeedsFeaturedLoader } from "~/routes/_main._feeds.featured";
 import type { nTagIndexLoader } from "~/routes/_n.n.$tag._index";
 import type { nTagHotLoader } from "~/routes/_n.n.$tag.hot";
+import type { MainUserPostsIndexLoader } from "~/routes/_main._users.$username._index";
 
 const LIMIT = 15;
 
@@ -31,7 +32,8 @@ type Loader =
   | MainFeedsIndexLoader
   | MainFeedsFeaturedLoader
   | nTagIndexLoader
-  | nTagHotLoader;
+  | nTagHotLoader
+  | MainUserPostsIndexLoader;
 
 const PostsList = () => {
   const data = useLoaderData<Loader>();

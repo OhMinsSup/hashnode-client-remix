@@ -26,8 +26,9 @@ export async function getPostListApi(
   query?: GetPostListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+  const __nextOpts = ApiService.middlewareForAuth(
+    ApiService.middlewareSetAuthticated(options)
+  );
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
