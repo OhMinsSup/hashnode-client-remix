@@ -13,10 +13,10 @@ import { clearCookie } from "~/libs/server/cookie.server";
  * @param {BaseApiOptions?} options
  */
 export async function deleteUserApi(options?: BaseApiOptions) {
-  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
   const { json, response } = await ApiService.deleteJson(
     API_ENDPOINTS.USERS.ME,
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   const header = clearCookie(response.headers, "access_token");
   return { json, header };

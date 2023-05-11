@@ -14,12 +14,11 @@ import type { TagFollowRespSchema } from "../schema/resp";
  * @param {BaseApiOptions?} options
  */
 export async function postTagFollowApi(tag: string, options?: BaseApiOptions) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const { json } = await ApiService.postJson<TagFollowRespSchema>(
     API_ENDPOINTS.TAGS.TAG_FOLLOW(tag),
     {},
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

@@ -1,14 +1,11 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 
 // components
 import { Icons } from "./Icons";
 
-// hooks
-import { useLayoutContext } from "~/context/useLayoutContext";
-
 export default function HeaderSearch() {
-  const { search, changeSearchKeyword } = useLayoutContext();
+  const [search, changeSearchKeyword] = useState({ keyword: "" });
   const isSearchActive = useMemo(() => !!search.keyword, [search.keyword]);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

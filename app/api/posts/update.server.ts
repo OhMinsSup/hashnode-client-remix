@@ -22,13 +22,11 @@ export async function updatePostApi(
   body: UpdatePostApiBody,
   options?: BaseApiOptions
 ) {
-  const __nextOpts = ApiService.middlewareForAuth(
-    ApiService.middlewareSetAuthticated(options)
-  );
   const { json } = await ApiService.putJson<PostRespSchema>(
     API_ENDPOINTS.POSTS.ID(body.id),
     omit(body, ["id"]),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

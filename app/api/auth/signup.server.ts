@@ -21,11 +21,10 @@ export async function signupApi(
   body: Omit<SignupBody, "confirmPassword">,
   options?: BaseApiOptions
 ) {
-  const nextOptions = ApiService.middlewareForAuth(options);
   const { json, response } = await ApiService.postJson<
     AuthRespSchema,
     Omit<SignupBody, "confirmPassword">
-  >(API_ENDPOINTS.AUTH.SIGNIN, body, nextOptions?.init);
+  >(API_ENDPOINTS.AUTH.SIGNIN, body, options?.init);
   const cookieHeader = response.headers.get("set-cookie");
   const header = createCookieHeaders(cookieHeader ? [cookieHeader] : undefined);
   return { json, header };

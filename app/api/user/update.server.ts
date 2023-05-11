@@ -13,15 +13,12 @@ import type { BaseApiOptions } from "../client.next";
  * @param {UserUpdateBody} body
  * @param {BaseApiOptions?} options
  */
-export async function putUserApi(
-  body: UserUpdateBody,
-  options?: BaseApiOptions
-) {
-  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
+export async function putUserApi(body: UserUpdateBody, options?: BaseApiOptions) {
   const { json } = await ApiService.putJson<null, UserUpdateBody>(
     API_ENDPOINTS.USERS.ME,
     body,
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

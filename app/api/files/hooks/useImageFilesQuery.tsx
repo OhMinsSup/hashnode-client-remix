@@ -6,24 +6,28 @@ import { QUERIES_KEY } from "~/constants/constant";
 
 // types
 import type { GetImageFilesApiSearchParams } from "../images";
-import type { GetTopPostsRespSchema } from "~/api/schema/resp";
-import type { AppAPI } from "~/api/schema/api";
+import type { FileListRespSchema } from "~/api/schema/resp";
 import type { UseInfiniteQueryOptions } from "@tanstack/react-query";
 
-export interface ReturnValue {
-  result: AppAPI<GetTopPostsRespSchema>;
-}
+type ReturnValue = FileListRespSchema;
+
+type QueryKey = string[];
 
 interface QueryOptions<TQueryFnData, TError, TData>
   extends Omit<
-    UseInfiniteQueryOptions<TQueryFnData, TError, TData, unknown, string[]>,
-    "queryKey" | "queryFn" | "initialData"
-  > {
-  initialData?: TQueryFnData | (() => TQueryFnData);
-}
+    UseInfiniteQueryOptions<
+      TQueryFnData,
+      TError,
+      TData,
+      TQueryFnData,
+      QueryKey
+    >,
+    "queryKey" | "queryFn"
+  > {}
+
 export function useImageFilesQuery(
   query?: GetImageFilesApiSearchParams,
-  options?: QueryOptions<ReturnValue, Record<string, any>, ReturnValue>
+  options?: QueryOptions<ReturnValue, unknown, ReturnValue>
 ) {
   const resp = useInfiniteQuery(
     QUERIES_KEY.FILE.ROOT,
@@ -36,6 +40,7 @@ export function useImageFilesQuery(
     },
     {
       getNextPageParam: (lastPage) => lastPage.pageInfo.endCursor ?? undefined,
+      ...options,
     }
   );
   return resp;

@@ -10,7 +10,6 @@ import {
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { LayoutProvider } from "./context/useLayoutContext";
 import NotFoundPage from "./components/errors/NotFoundPage";
 
 // api
@@ -139,45 +138,43 @@ export default function App() {
 
   return (
     <QueryClientProvider client={client}>
-      <LayoutProvider>
-        <html lang="en">
-          <head>
-            <meta charSet="UTF-8" />
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1, shrink-to-fit=no"
-            />
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <meta name="msapplication-TileColor" content="#ffffff" />
-            <meta name="theme-color" content="#0F172A" />
-            <Meta />
-            <Links />
-            <link
-              rel="preconnect"
-              href="https://fonts.gstatic.com"
-              crossOrigin="anonymous"
-            />
-            <link rel="manifest" href="/manifest.json" />
-            <link
-              rel="search"
-              href="/opensearch.xml"
-              type="application/opensearchdescription+xml"
-              title="Hashnode"
-            />
-          </head>
-          <body>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `window.ENV = ${Json.stringify(env)}`,
-              }}
-            />
-            <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-          </body>
-        </html>
-      </LayoutProvider>
+      <html lang="en">
+        <head>
+          <meta charSet="UTF-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+          />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="theme-color" content="#0F172A" />
+          <Meta />
+          <Links />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
+          <link rel="manifest" href="/manifest.json" />
+          <link
+            rel="search"
+            href="/opensearch.xml"
+            type="application/opensearchdescription+xml"
+            title="Hashnode"
+          />
+        </head>
+        <body>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.ENV = ${Json.stringify(env)}`,
+            }}
+          />
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
     </QueryClientProvider>
   );
 }

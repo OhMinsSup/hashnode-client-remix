@@ -1,17 +1,14 @@
-import React, { useMemo } from "react";
-import classNames from "classnames";
+import React from "react";
 
 // components
 import {
   Form,
   Link,
-  useActionData,
-  useNavigation,
   useRouteError,
   isRouteErrorResponse,
 } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
-import ErrorMessage from "~/components/shared/ErrorMessage";
+import Input from "~/components/auth/Input";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -47,7 +44,6 @@ export const action = async ({ request }: ActionArgs) => {
       headers,
     });
   } catch (error) {
-    console.log(error);
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
       return json(error_validation.errors, {
@@ -64,14 +60,9 @@ export const action = async ({ request }: ActionArgs) => {
   }
 };
 
-export default function Signin() {
-  const errors = useActionData<typeof action>();
-  const navigation = useNavigation();
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
+export type SigninAction = typeof action;
 
+export default function Signin() {
   return (
     <Form method="post" className="auth-form__container" replace>
       <h1 className="auth-form__title">To continue, Sign in to hashnode.</h1>
@@ -103,42 +94,24 @@ export default function Signin() {
       </div>
 
       <div className="auth-form__form-item">
-        <div className="auth-form__form-item-inner mb-3">
-          <label className="text-sm" htmlFor="email">
-            Email address
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            aria-label="Email address"
-            autoComplete="email"
-            placeholder="Email address."
-            className={classNames("auth-form__input", {
-              error: !!errors?.email,
-            })}
-          />
-          <ErrorMessage error={errors?.email} isSubmitting={isSubmitting} />
-        </div>
-
-        <div className="auth-form__form-item-inner">
-          <label className="text-sm" htmlFor="password">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            autoComplete="current-password"
-            aria-label="Password"
-            placeholder="Password."
-            className={classNames("auth-form__input", {
-              error: !!errors?.password,
-            })}
-          />
-          <ErrorMessage error={errors?.password} isSubmitting={isSubmitting} />
-        </div>
-
+        <Input
+          text="Email address"
+          type="email"
+          name="email"
+          id="email"
+          aria-label="Email address"
+          autoComplete="email"
+          placeholder="Email address."
+        />
+        <Input
+          text="Password"
+          type="password"
+          name="password"
+          id="password"
+          autoComplete="current-password"
+          aria-label="Password"
+          placeholder="Password."
+        />
         <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN} className="forget-password">
           Forgot your password?
         </Link>

@@ -14,11 +14,10 @@ import type { TagDetailRespSchema } from "../schema/resp";
  * @param {BaseApiOptions?} options
  */
 export async function getTagApi(tag: string, options?: BaseApiOptions) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const { json } = await ApiService.getJson<TagDetailRespSchema>(
     API_ENDPOINTS.TAGS.TAG(tag),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

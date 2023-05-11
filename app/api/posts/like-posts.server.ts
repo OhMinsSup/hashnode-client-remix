@@ -20,9 +20,6 @@ export async function getLikePostListApi(
   query?: GetLikePostListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const __nextOpts = ApiService.middlewareForAuth(
-    ApiService.middlewareSetAuthticated(options)
-  );
   const searchParams = new URLSearchParams();
   if (query?.cursor) {
     searchParams.set("cursor", query.cursor.toString());
@@ -37,7 +34,8 @@ export async function getLikePostListApi(
       API_ENDPOINTS.POSTS.GET_LIKES,
       searchParams
     ),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

@@ -13,15 +13,11 @@ import type { TagFollowRespSchema } from "../schema/resp";
  * @param {string} tag
  * @param {BaseApiOptions?} options
  */
-export async function deleteTagFollowApi(
-  tag: string,
-  options?: BaseApiOptions
-) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
+export async function deleteTagFollowApi(tag: string, options?: BaseApiOptions) {
   const { json } = await ApiService.deleteJson<TagFollowRespSchema>(
     API_ENDPOINTS.TAGS.TAG_FOLLOW(tag),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

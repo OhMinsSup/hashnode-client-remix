@@ -12,13 +12,12 @@ import type { BaseApiOptions } from "../client.next";
  * @param {BaseApiOptions?} options
  */
 export async function logoutApi(options?: BaseApiOptions) {
-  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
   const { json, response } = await ApiService.postJson(
     API_ENDPOINTS.USERS.LOGOUT,
     undefined,
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
-  console.log("response", response);
   const header = response.headers;
   return { json, header };
 }

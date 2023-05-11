@@ -5,13 +5,9 @@ import { ApiService } from "../client.next";
 import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { BaseApiOptions, BaseResponse } from "../client.next";
+import type { BaseApiOptions } from "../client.next";
 import type { UploadBody } from "./validation/upload";
 import type { UploadRespSchema } from "../schema/resp";
-
-export type ImageUploadApiReturnValue = {
-  json: BaseResponse<UploadRespSchema>;
-};
 
 /**
  * @description 파일 업로드 API
@@ -19,8 +15,6 @@ export type ImageUploadApiReturnValue = {
  * @param {BaseApiOptions?} options
  */
 export async function uploadApi(body: UploadBody, options?: BaseApiOptions) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const formData = new FormData();
   formData.append("file", body.file);
   formData.append("uploadType", body.uploadType);
@@ -29,7 +23,8 @@ export async function uploadApi(body: UploadBody, options?: BaseApiOptions) {
   const { json } = await ApiService.postFormData<UploadRespSchema>(
     API_ENDPOINTS.FILES.UPLOAD,
     formData,
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

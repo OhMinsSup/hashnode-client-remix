@@ -13,10 +13,10 @@ import type { UserRespSchema } from "../schema/resp";
  * @param {BaseApiOptions?} options
  */
 export async function getMeApi(options?: BaseApiOptions) {
-  const __nextOpts = ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options));
   const { json, response } = await ApiService.getJson<UserRespSchema>(
     API_ENDPOINTS.USERS.ME,
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json, response };
 }

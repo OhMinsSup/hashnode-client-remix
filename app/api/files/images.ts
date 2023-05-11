@@ -22,8 +22,6 @@ export async function getImageFilesApi(
   query?: GetImageFilesApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -38,7 +36,8 @@ export async function getImageFilesApi(
       API_ENDPOINTS.FILES.ROOT,
       searchParams
     ),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json, response };
 }

@@ -1,17 +1,14 @@
-import React, { useMemo } from "react";
-import classNames from "classnames";
+import React from "react";
 
 // components
 import {
   Form,
   Link,
-  useActionData,
-  useNavigation,
   useRouteError,
   isRouteErrorResponse,
 } from "@remix-run/react";
-import ErrorMessage from "~/components/shared/ErrorMessage";
 import { Icons } from "~/components/shared/Icons";
+import Input from "~/components/auth/Input";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -69,14 +66,9 @@ export const action = async ({ request }: ActionArgs) => {
   }
 };
 
-export default function Signup() {
-  const errors = useActionData<typeof action>();
-  const navigation = useNavigation();
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
+export type SignupAction = typeof action;
 
+export default function Signup() {
   return (
     <Form method="post" className="auth-form__container" replace>
       <h1 className="auth-form__title">
@@ -110,80 +102,42 @@ export default function Signup() {
       </div>
 
       <div className="auth-form__form-item">
-        <div className="auth-form__form-item-inner mb-3">
-          <label className="text-sm" htmlFor="username">
-            What's your username?
-          </label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            autoComplete="username"
-            aria-label="Username"
-            placeholder="Enter your username."
-            className={classNames("auth-form__input", {
-              error: !!errors?.username,
-            })}
-          />
-          <ErrorMessage error={errors?.username} isSubmitting={isSubmitting} />
-        </div>
-
-        <div className="auth-form__form-item-inner mb-3">
-          <label className="text-sm" htmlFor="email">
-            What's your email?
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            aria-label="Email address"
-            autoComplete="email"
-            placeholder="Enter your email."
-            className={classNames("auth-form__input", {
-              error: !!errors?.email,
-            })}
-          />
-          <ErrorMessage error={errors?.email} isSubmitting={isSubmitting} />
-        </div>
-
-        <div className="auth-form__form-item-inner mb-3">
-          <label className="text-sm" htmlFor="password">
-            Create a password
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            autoComplete="new-password"
-            aria-label="Password"
-            placeholder="Create a password."
-            className={classNames("auth-form__input", {
-              error: !!errors?.password,
-            })}
-          />
-          <ErrorMessage error={errors?.password} isSubmitting={isSubmitting} />
-        </div>
-
-        <div className="auth-form__form-item-inner mb-3">
-          <label className="text-sm" htmlFor="passwordConfirm">
-            Confirm your password
-          </label>
-          <input
-            type="password"
-            name="passwordConfirm"
-            id="passwordConfirm"
-            autoComplete="new-password"
-            aria-label="passwordConfirm"
-            placeholder="Confirm your password."
-            className={classNames("auth-form__input", {
-              error: !!errors?.passwordConfirm,
-            })}
-          />
-          <ErrorMessage
-            error={errors?.passwordConfirm}
-            isSubmitting={isSubmitting}
-          />
-        </div>
+        <Input
+          id="username"
+          text="What's your username?"
+          type="text"
+          name="username"
+          autoComplete="username"
+          aria-label="Username"
+          placeholder="Enter your username."
+        />
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          text="What's your email?"
+          aria-label="Email address"
+          autoComplete="email"
+          placeholder="Enter your email."
+        />
+        <Input
+          text="Create a password"
+          type="password"
+          name="password"
+          id="password"
+          autoComplete="new-password"
+          aria-label="Password"
+          placeholder="Create a password."
+        />
+        <Input
+          text="Confirm your password"
+          type="password"
+          name="passwordConfirm"
+          id="passwordConfirm"
+          autoComplete="new-password"
+          aria-label="passwordConfirm"
+          placeholder="Confirm your password."
+        />
       </div>
 
       <div className="btn-login__container">

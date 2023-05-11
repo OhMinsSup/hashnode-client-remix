@@ -26,9 +26,6 @@ export async function getPostListApi(
   query?: GetPostListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const __nextOpts = ApiService.middlewareForAuth(
-    ApiService.middlewareSetAuthticated(options)
-  );
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -56,7 +53,8 @@ export async function getPostListApi(
       API_ENDPOINTS.POSTS.ROOT,
       searchParams
     ),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

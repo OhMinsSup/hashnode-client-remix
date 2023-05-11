@@ -22,8 +22,6 @@ export async function getTagTrendingListApi(
   query?: GetTagTrendingApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -43,7 +41,8 @@ export async function getTagTrendingListApi(
       API_ENDPOINTS.TAGS.TAG_TRENDING,
       searchParams
     ),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

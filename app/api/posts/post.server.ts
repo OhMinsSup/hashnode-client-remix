@@ -14,12 +14,10 @@ import type { PostDetailRespSchema } from "../schema/resp";
  * @param {BaseApiOptions?} options
  */
 export async function getPostApi(id: number, options?: BaseApiOptions) {
-  const __nextOpts = ApiService.middlewareForAuth(
-    ApiService.middlewareSetAuthticated(options)
-  );
   const { json } = await ApiService.getJson<PostDetailRespSchema>(
     API_ENDPOINTS.POSTS.ID(id),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

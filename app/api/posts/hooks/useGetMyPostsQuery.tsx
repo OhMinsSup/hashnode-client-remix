@@ -7,23 +7,27 @@ import { QUERIES_KEY } from "~/constants/constant";
 // types
 import type { GetMyPostListApiSearchParams } from "../my-posts";
 import type { PostListRespSchema } from "~/api/schema/resp";
-import type { AppAPI } from "~/api/schema/api";
 import type { UseInfiniteQueryOptions } from "@tanstack/react-query";
 
-export interface ReturnValue {
-  result: AppAPI<PostListRespSchema>;
-}
+type ReturnValue = PostListRespSchema;
+
+type QueryKey = ReturnType<typeof QUERIES_KEY.POSTS.GET_MY_POSTS>;
 
 interface QueryOptions<TQueryFnData, TError, TData>
   extends Omit<
-    UseInfiniteQueryOptions<TQueryFnData, TError, TData, unknown, string[]>,
-    "queryKey" | "queryFn" | "initialData"
-  > {
-  initialData?: TQueryFnData | (() => TQueryFnData);
-}
+    UseInfiniteQueryOptions<
+      TQueryFnData,
+      TError,
+      TData,
+      TQueryFnData,
+      QueryKey
+    >,
+    "queryKey" | "queryFn"
+  > {}
+
 export function useGetMyPostsQuery(
   query?: GetMyPostListApiSearchParams,
-  options?: QueryOptions<ReturnValue, Record<string, any>, ReturnValue>
+  options?: QueryOptions<ReturnValue, unknown, ReturnValue>
 ) {
   const resp = useInfiniteQuery(
     QUERIES_KEY.POSTS.GET_MY_POSTS(query),
@@ -36,6 +40,7 @@ export function useGetMyPostsQuery(
     },
     {
       getNextPageParam: (lastPage) => lastPage.pageInfo.endCursor ?? undefined,
+      ...options,
     }
   );
   return resp;

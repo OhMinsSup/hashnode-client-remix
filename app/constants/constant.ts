@@ -47,14 +47,21 @@ export const QUERIES_KEY = {
     ROOT: ["getFileListApi"],
   },
   POSTS: {
-    GET_MY_POSTS: (query?: GetMyPostListApiSearchParams) => {
-      let keys: any[] = ["getMyPostsListApi"];
-      if (!query) return keys;
-      return [...keys, query];
+    GET_MY_POSTS: (
+      query?: GetMyPostListApiSearchParams
+    ): [string, GetMyPostListApiSearchParams?] => {
+      const keys: [string, GetMyPostListApiSearchParams?] = [
+        "getMyPostListApi",
+      ];
+      if (query) keys.push(query);
+      return keys;
     },
-    GET_TOP_POSTS: (duration: number) => ["getTopPostsApi", { duration }],
-    ID: (id?: Nullable<string | number>) => {
-      const keys: any[] = ["getPostApi"];
+    GET_TOP_POSTS: (duration: number): [string, { duration: number }] => [
+      "getTopPostsApi",
+      { duration },
+    ],
+    ID: (id?: Nullable<string | number>): [string, number?] => {
+      const keys: [string, number?] = ["getPostApi"];
       if (id) keys.push(id);
       return keys;
     },
@@ -62,12 +69,6 @@ export const QUERIES_KEY = {
 };
 
 export const MUTATIONS_KEY = {
-  DRAFTS: {
-    SAVE_DRAFTS: "postSaveDraftApi",
-    NEW_DRAFTS: "postNewDraftApi",
-    DELETE: (id: string | number) => ["deleteDraftApi", { id }],
-  },
-  POSTS: {},
   FILES: {
     UPLOAD: "postImageUploadApi",
   },

@@ -21,8 +21,6 @@ export async function getUserPostListApi(
   query?: GetUserPostListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -38,7 +36,8 @@ export async function getUserPostListApi(
       API_ENDPOINTS.USERS.USERNAME_POSTS(username),
       searchParams
     ),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }

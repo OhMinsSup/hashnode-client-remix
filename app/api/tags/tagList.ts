@@ -23,8 +23,6 @@ export async function getTagListApi(
   query?: GetTagListApiSearchParams,
   options?: BaseApiOptions
 ) {
-  const _nextOpts = ApiService.middlewareSetAuthticated(options);
-  const __nextOpts = ApiService.middlewareForAuth(_nextOpts);
   const searchParams = new URLSearchParams();
   if (query?.limit) {
     searchParams.set("limit", query.limit.toString());
@@ -42,7 +40,8 @@ export async function getTagListApi(
   }
   const { json } = await ApiService.getJson<TagListRespSchema>(
     ApiService.middlewareForSearchParams(API_ENDPOINTS.TAGS.ROOT, searchParams),
-    __nextOpts?.init
+    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
+      ?.init
   );
   return { json };
 }
