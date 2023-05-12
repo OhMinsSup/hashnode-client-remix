@@ -1,5 +1,5 @@
 import React from "react";
-import { json, redirect } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // api
@@ -11,6 +11,7 @@ import {
   HTTPErrorWrapper,
   ValidationErrorWrapper,
 } from "~/api/validation/common";
+import { RESULT_CODE } from "~/constants/constant";
 
 // components
 import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
@@ -22,7 +23,6 @@ import type {
   ActionArgs,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export const loader = async (args: LoaderArgs) => {
   const tag = args.params.tag?.toString();
@@ -47,25 +47,29 @@ export const action = async (args: ActionArgs) => {
     const parse = await tagFollowSchema.parseAsync({
       tag: args.params.tag?.toString(),
     });
-    console.log("parse", parse);
     switch (args.request.method) {
       case "POST": {
-        await postTagFollowApi(parse.tag, {
+        const { json: data } = await postTagFollowApi(parse.tag, {
           actionArgs: args,
         });
-        return redirect(PAGE_ENDPOINTS.N.TAG(parse.tag));
+        return json({
+          ok: data.resultCode == RESULT_CODE.OK,
+          respData: data,
+        });
       }
       case "DELETE": {
-        await deleteTagFollowApi(parse.tag, {
+        const { json: data } = await deleteTagFollowApi(parse.tag, {
           actionArgs: args,
         });
-        return json({ ok: true });
+        return json({
+          ok: data.resultCode == RESULT_CODE.OK,
+          respData: data,
+        });
       }
       default:
         throw new Response("Method not allowed", { status: 405 });
     }
   } catch (error) {
-    console.log("error", error);
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
       return json(error_validation.errors, {
@@ -78,7 +82,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error, { status: 500 });
+    throw error;
   }
 };
 

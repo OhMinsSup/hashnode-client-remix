@@ -12,6 +12,7 @@ export const action = async (args: ActionArgs) => {
       return json(
         {
           ok: false,
+          respData: null,
         },
         {
           status: 401,
@@ -24,6 +25,7 @@ export const action = async (args: ActionArgs) => {
       return json(
         {
           ok: false,
+          respData: null,
         },
         {
           status: 401,
@@ -41,11 +43,13 @@ export const action = async (args: ActionArgs) => {
     } else {
       return json({
         ok: false,
+        respData: data,
       });
     }
   } catch (error) {
     return json({
       ok: false,
+      respData: null,
     });
   }
 };
