@@ -32,7 +32,7 @@ export const loader = async (args: LoaderArgs) => {
       status: 302,
     });
   }
-  return json({ ok: true });
+  return json({ ok: true, respData: null });
 };
 
 export type SettingsLoader = typeof loader;

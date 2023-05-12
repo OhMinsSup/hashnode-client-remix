@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { json } from "@remix-run/cloudflare";
 import Json from "superjson";
 import classNames from "classnames";
+import { RESULT_CODE } from "~/constants/constant";
 
 // api
 import { userUpdateSchema } from "~/api/user/validation/update";
@@ -82,10 +83,13 @@ export const action = async (args: ActionArgs) => {
     if (!body.success) {
       return json(body.error, { status: 400 });
     }
-    await putUserApi(body.data, {
+    const { json: data } = await putUserApi(body.data, {
       actionArgs: args,
     });
-    return json({ ok: true });
+    if (data.resultCode !== RESULT_CODE.OK) {
+      return json({ ok: false, respData: data });
+    }
+    return json({ ok: true, respData: data });
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {
@@ -99,7 +103,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error);
+    throw error;
   }
 };
 

@@ -7,10 +7,13 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
+  isRouteErrorResponse,
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import NotFoundPage from "./components/errors/NotFoundPage";
+import InternalServerPage from "./components/errors/InternalServerPage";
 
 // api
 import Json from "superjson";
@@ -180,6 +183,8 @@ export default function App() {
 }
 
 export function ErrorBoundary() {
+  const error = useRouteError();
+
   return (
     <html lang="en">
       <head>
@@ -202,6 +207,15 @@ export function ErrorBoundary() {
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
+        <>
+          {isRouteErrorResponse(error) ? (
+            <>
+              {error.status !== 500 ? <NotFoundPage /> : <InternalServerPage />}
+            </>
+          ) : (
+            <InternalServerPage />
+          )}
+        </>
         <NotFoundPage />
         <Scripts />
       </body>

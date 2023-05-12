@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 
 // api
 import { deleteUserApi } from "~/api/user/delete.server";
@@ -7,7 +7,14 @@ import { HTTPErrorWrapper } from "~/api/validation/common";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
-import { useFetcher } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useFetcher,
+  useRouteError,
+} from "@remix-run/react";
+
+// constants
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
@@ -47,16 +54,23 @@ export const meta: V2_MetaFunction = ({ matches }) => {
 
 export const action = async (args: ActionArgs) => {
   try {
-    switch (args.request.method) {
-      case "DELETE":
-        await deleteUserApi({
-          actionArgs: args,
-        });
-        break;
-      default:
-        throw new Response("Method not allowed", { status: 405 });
+    if (args.request.method !== "DELETE") {
+      throw new Response(
+        "Method not allowed. Only DELETE requests are allowed.",
+        { status: 405 }
+      );
     }
-    return json({ ok: true });
+
+    const { json: data, header } = await deleteUserApi({
+      actionArgs: args,
+    });
+
+    if (data.resultCode !== RESULT_CODE.OK) {
+      return json({ ok: false, respData: data });
+    }
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: header,
+    });
   } catch (error) {
     const error_http = await HTTPErrorWrapper(error);
     if (error_http) {
@@ -64,7 +78,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error);
+    throw error;
   }
 };
 
@@ -76,6 +90,7 @@ export default function Account() {
     const confirmDelete = confirm(
       "Are you sure you want to delete your account?"
     );
+
     if (confirmDelete) {
       fetcher.submit(null, {
         method: "DELETE",
@@ -110,4 +125,29 @@ export default function Account() {
       <div className="h-screen" />
     </>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }
