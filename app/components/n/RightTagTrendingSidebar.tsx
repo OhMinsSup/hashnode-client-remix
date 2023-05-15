@@ -3,7 +3,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { isEmpty } from "~/utils/assertion";
 
 // components
-import RightSidebarContentBox from "../home/RightSidebarContentBox";
+import AppRightSidebarContentBox from "~/components/shared/AppRightSidebarContentBox";
 import RightTagTrendingItem from "./RightTagTrendingItem";
 
 // types
@@ -15,7 +15,7 @@ interface RightTagTrendingSidebarProps {
   tags: TagWithPostCountSchema[];
 }
 
-function RightTagTrendingSidebar({
+export default function RightTagTrendingSidebar({
   title,
   tags,
   toText,
@@ -23,9 +23,8 @@ function RightTagTrendingSidebar({
   if (isEmpty(tags)) {
     return null;
   }
-
   return (
-    <RightSidebarContentBox
+    <AppRightSidebarContentBox
       title={title}
       to={PAGE_ENDPOINTS.EXPLORE.TAGS}
       toText={toText}
@@ -38,21 +37,6 @@ function RightTagTrendingSidebar({
           />
         ))}
       </div>
-    </RightSidebarContentBox>
+    </AppRightSidebarContentBox>
   );
 }
-
-export default RightTagTrendingSidebar;
-
-RightTagTrendingSidebar.Skeleton = function RightTagTrendingSidebarSkeleton() {
-  return (
-    <RightSidebarContentBox.Skeleton toText="All tags">
-      <div>
-        <RightTagTrendingItem.Skeleton />
-        <RightTagTrendingItem.Skeleton />
-        <RightTagTrendingItem.Skeleton />
-        <RightTagTrendingItem.Skeleton />
-      </div>
-    </RightSidebarContentBox.Skeleton>
-  );
-};

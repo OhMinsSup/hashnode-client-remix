@@ -70,7 +70,7 @@ export type SignupAction = typeof action;
 
 export default function Signup() {
   return (
-    <Form method="post" className="auth-form__container" replace>
+    <Form method="POST" className="auth-form__container" replace>
       <h1 className="auth-form__title">
         Sign up for blog and start sharing your knowledge
       </h1>
@@ -139,7 +139,6 @@ export default function Signup() {
           placeholder="Confirm your password."
         />
       </div>
-
       <div className="btn-login__container">
         <button type="submit" className="btn-login" aria-label="Sign in">
           Sign up

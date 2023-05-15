@@ -1,4 +1,5 @@
 import React from "react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // components
 import DraftEditor from "~/components/draft/DraftEditor";
@@ -8,20 +9,19 @@ import Json from "superjson";
 import { redirect, json } from "@remix-run/cloudflare";
 
 // constants
-import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // api
 import { createPostSchema } from "~/api/posts/validation/create";
 import { createPostApi } from "~/api/posts/create.server";
-
-// types
-import type { ActionArgs } from "@remix-run/cloudflare";
-import type { FormFieldValues } from "./draft";
 import {
   HTTPErrorWrapper,
   ValidationErrorWrapper,
 } from "~/api/validation/common";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+
+// types
+import type { ActionArgs } from "@remix-run/cloudflare";
+import type { FormFieldValues } from "./draft";
 
 export const action = async (args: ActionArgs) => {
   const formData = await args.request.formData();
@@ -36,9 +36,12 @@ export const action = async (args: ActionArgs) => {
     if (!body.success) {
       return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
-    await createPostApi(body.data, {
+    const { json: data } = await createPostApi(body.data, {
       actionArgs: args,
     });
+    if (data.resultCode !== RESULT_CODE.OK) {
+      return json({ ok: false, respData: data });
+    }
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
@@ -53,7 +56,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error);
+    throw error;
   }
 };
 

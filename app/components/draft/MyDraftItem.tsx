@@ -18,7 +18,7 @@ interface MyDraftItemProps {
   item: Partial<Draft>;
 }
 
-const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
+export default function MyDraftItem({ item }: MyDraftItemProps) {
   const { changeDraftId, draftId, $editorJS, toggleSubTitle } =
     useDraftContext();
   const [open, setOpen] = useState(false);
@@ -114,4 +114,3 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
   );
 };
 
-export default MyDraftItem;

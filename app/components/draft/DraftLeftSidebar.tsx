@@ -3,8 +3,6 @@ import { Link, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 
 // components
-import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
-import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
 import { Icons } from "~/components/shared/Icons";
 
 // utils
@@ -16,12 +14,22 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { hashnodeDB } from "~/libs/db/db";
 
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { ASSET_URL } from "~/constants/constant";
+
 // types
 import type { FormFieldValues } from "~/routes/draft";
 
-interface DraftLeftSidebarProps {}
+interface DraftLeftSidebarProps {
+  myDrafts: React.JSX.Element;
+  writeDraft: React.JSX.Element;
+}
 
-const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
+export default function DraftLeftSidebar({
+  myDrafts,
+  writeDraft,
+}: DraftLeftSidebarProps) {
   const { session } = useLoaderData();
 
   const { watch } = useFormContext<FormFieldValues>();
@@ -65,7 +73,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
     >
       <div className="draft-sidebar-header">
         <div className="sidebar-header__btn-back mr-2">
-          <Link to="/" className="btn-back__icon" replace>
+          <Link to={PAGE_ENDPOINTS.ROOT} className="btn-back__icon" replace>
             <Icons.ArrowLeft className="icon__sm flex-shrink-0 stroke-current" />
           </Link>
         </div>
@@ -73,7 +81,7 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
           <div className="sidebar-header__title-container">
             <div className="sidebar-header__title-icon">
               <div className="relative h-8 w-full">
-                <img src="/images/logo.png" alt="logo" className="ico__sm" />
+                <img src={ASSET_URL.LOGO} alt="logo" className="ico__sm" />
               </div>
             </div>
             <div className="sidebar-header__title-text">
@@ -108,10 +116,8 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
           <Icons.Search className="icon__sm" />
         </span>
       </div>
-
-      <MyDraftSidebar />
-      <WriteDraftSidebar />
-
+      {myDrafts}
+      {writeDraft}
       <div className="draft-sidebar-footer">
         <button
           type="button"
@@ -128,4 +134,3 @@ const DraftLeftSidebar: React.FC<DraftLeftSidebarProps> = () => {
   );
 };
 
-export default DraftLeftSidebar;

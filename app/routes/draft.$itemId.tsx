@@ -20,13 +20,13 @@ import { isString } from "~/utils/assertion";
 import { updatePostApi } from "~/api/posts/update.server";
 import { getPostApi } from "~/api/posts/post.server";
 import { updatePostSchema } from "~/api/posts/validation/update";
-
-import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
-import type { FormFieldValues } from "./draft";
 import {
   HTTPErrorWrapper,
   ValidationErrorWrapper,
 } from "~/api/validation/common";
+
+import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
+import type { FormFieldValues } from "./draft";
 
 export const loader = async (args: LoaderArgs) => {
   const id = args.params.itemId;
@@ -72,9 +72,12 @@ export const action = async (args: ActionArgs) => {
     if (!body.success) {
       return json(body.error, { status: STATUS_CODE.BAD_REQUEST });
     }
-    await updatePostApi(body.data, {
+    const { json: data } = await updatePostApi(body.data, {
       actionArgs: args,
     });
+    if (data.resultCode !== RESULT_CODE.OK) {
+      return json({ ok: false, respData: data });
+    }
     return redirect(PAGE_ENDPOINTS.ROOT);
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
@@ -89,7 +92,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
-    throw json(error);
+    throw error;
   }
 };
 

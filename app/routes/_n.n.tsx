@@ -4,7 +4,7 @@ import { defer } from "@remix-run/cloudflare";
 
 import Header from "~/components/shared/Header";
 import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
-import AppRightTags from "~/components/n/AppRightTags";
+import AppRightSidebar from "~/components/n/AppRightSidebar";
 
 // api
 import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
@@ -68,7 +68,7 @@ export default function NTagPage() {
       <main>
         <AppLeftSidebar />
         <Outlet />
-        <AppRightTags />
+        <AppRightSidebar />
       </main>
     </div>
   );

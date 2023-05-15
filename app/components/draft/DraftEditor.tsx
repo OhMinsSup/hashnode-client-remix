@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import classNames from "classnames";
 import json from "superjson";
 
@@ -25,27 +25,30 @@ interface DraftEditorProps {
   action?: string;
 }
 
-const DraftEditor: React.FC<DraftEditorProps> = ({
+export default function DraftEditor({
   action = "/draft?index",
-}) => {
+}: DraftEditorProps) {
   const fetcher = useFetcher();
   const { visibility, setFormInstance, $form } = useDraftContext();
   const { handleSubmit } = useFormContext<FormFieldValues>();
 
   const isMobile = useMediaQuery("(max-width: 768px)", false);
 
-  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
-    fetcher.submit(
-      {
-        body: json.stringify(input),
-      },
-      {
-        method: "POST",
-        action,
-        replace: true,
-      }
-    );
-  };
+  const onSubmit: SubmitHandler<FormFieldValues> = useCallback(
+    (input) => {
+      fetcher.submit(
+        {
+          body: json.stringify(input),
+        },
+        {
+          method: "POST",
+          action,
+          replace: true,
+        }
+      );
+    },
+    [action, fetcher]
+  );
 
   return (
     <form
@@ -53,7 +56,6 @@ const DraftEditor: React.FC<DraftEditorProps> = ({
         if ($?.isSameNode($form)) {
           return;
         }
-
         if ($ && !$form) {
           setFormInstance($);
         }
@@ -73,6 +75,4 @@ const DraftEditor: React.FC<DraftEditorProps> = ({
       </React.Suspense>
     </form>
   );
-};
-
-export default DraftEditor;
+}

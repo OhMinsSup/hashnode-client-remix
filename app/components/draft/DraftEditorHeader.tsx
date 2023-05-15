@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useDraftContext } from "~/context/useDraftContext";
 import { Icons } from "~/components/shared/Icons";
 
-const DraftEditorHeader = () => {
+export default function DraftEditorHeader() {
   const { toggleLeftSidebar, visibility, togglePublish } = useDraftContext();
 
   const onToggleLeftSidebar = useCallback(() => {
@@ -57,4 +57,3 @@ const DraftEditorHeader = () => {
   );
 };
 
-export default DraftEditorHeader;

@@ -39,6 +39,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   try {
     const parse = await signinSchema.parseAsync(form);
+    console.log(parse);
     const { header: headers } = await signinApi(parse);
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers,
@@ -64,7 +65,7 @@ export type SigninAction = typeof action;
 
 export default function Signin() {
   return (
-    <Form method="post" className="auth-form__container" replace>
+    <Form method="POST" className="auth-form__container" replace>
       <h1 className="auth-form__title">To continue, Sign in to hashnode.</h1>
       <div className="social-container">
         <button

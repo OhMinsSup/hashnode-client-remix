@@ -33,6 +33,7 @@ export default function Input({ id, name, title, ...otherProps }: InputProps) {
       </label>
       <input
         id={id}
+        name={name}
         {...otherProps}
         className={classNames("auth-form__input", otherProps?.className, {
           error: !!errors?.[name],

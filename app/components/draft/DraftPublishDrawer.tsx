@@ -1,25 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 
 // components
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { Icons } from "../shared/Icons";
-import AsyncCreatableSelect from "react-select/async-creatable";
+import { Icons } from "~/components/shared/Icons";
+import DraftPublishDrawerContainer from "./DraftPublishDrawerContainer";
+import DraftPublishDrawerTags from "./DraftPublishDrawerTags";
+import DraftPublishDrawerTitle from "./DraftPublishDrawerTitle";
+import DraftPublishDrawerDescription from "./DraftPublishDrawerDescription";
+import DraftPublishDrawerSchedule from "./DraftPublishDrawerSchedule";
+import DraftPublishDrawerComment from "./DraftPublishDrawerComment";
 
 // hooks
 import { Transition, useDraftContext } from "~/context/useDraftContext";
-import { useFormContext, useWatch, useController } from "react-hook-form";
-import { useDebouncedCallback } from "use-debounce";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
-
-// utils
-import { scheduleMicrotask } from "~/libs/browser-utils";
-
-// api
-import { getTagListApi } from "~/api/tags/tagList";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
-import type { MultiValue } from "react-select";
 
 function InternalDraftPublishDrawer() {
   const { togglePublish } = useDraftContext();
@@ -27,16 +23,6 @@ function InternalDraftPublishDrawer() {
   const onClose = useCallback(() => {
     togglePublish(false);
   }, [togglePublish]);
-
-  // const onSubmit = useCallback(() => {
-  //   const ele = getTargetElement($form);
-  //   ele?.dispatchEvent(
-  //     new Event("submit", {
-  //       cancelable: true,
-  //       bubbles: true,
-  //     })
-  //   );
-  // }, [$form]);
 
   return (
     <div className="drawer-container">
@@ -51,21 +37,21 @@ function InternalDraftPublishDrawer() {
       </div>
       <ScrollArea.Root className="drawer-content">
         <ScrollArea.Viewport className="h-full w-full">
-          <InternalDraftPublishDrawer.Container>
-            <InternalDraftPublishDrawer.Tags />
-          </InternalDraftPublishDrawer.Container>
-          <InternalDraftPublishDrawer.Container>
-            <InternalDraftPublishDrawer.Title />
-          </InternalDraftPublishDrawer.Container>
-          <InternalDraftPublishDrawer.Container>
-            <InternalDraftPublishDrawer.Description />
-          </InternalDraftPublishDrawer.Container>
-          <InternalDraftPublishDrawer.Container>
-            <InternalDraftPublishDrawer.Schedule />
-          </InternalDraftPublishDrawer.Container>
-          <InternalDraftPublishDrawer.Container>
-            <InternalDraftPublishDrawer.Comment />
-          </InternalDraftPublishDrawer.Container>
+          <DraftPublishDrawerContainer>
+            <DraftPublishDrawerTags />
+          </DraftPublishDrawerContainer>
+          <DraftPublishDrawerContainer>
+            <DraftPublishDrawerTitle />
+          </DraftPublishDrawerContainer>
+          <DraftPublishDrawerContainer>
+            <DraftPublishDrawerDescription />
+          </DraftPublishDrawerContainer>
+          <DraftPublishDrawerContainer>
+            <DraftPublishDrawerSchedule />
+          </DraftPublishDrawerContainer>
+          <DraftPublishDrawerContainer>
+            <DraftPublishDrawerComment />
+          </DraftPublishDrawerContainer>
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar
           className="ScrollAreaScrollbar"
@@ -78,264 +64,6 @@ function InternalDraftPublishDrawer() {
     </div>
   );
 }
-
-interface Props {
-  children: React.ReactNode;
-}
-
-InternalDraftPublishDrawer.Container = function DraftPublishDrawerContainer({
-  children,
-}: Props) {
-  return <div className="px-5 pb-5 pt-4">{children}</div>;
-};
-
-InternalDraftPublishDrawer.Tags = function DraftPublishDrawerTags() {
-  const [inputValue, setInputValue] = useState("");
-  const { setValue, watch } = useFormContext<FormFieldValues>();
-
-  const tags = watch("tags");
-
-  const { changeTransition } = useDraftContext();
-
-  const loadOptions = useDebouncedCallback(async (inputValue) => {
-    const { json } = await getTagListApi({
-      name: inputValue,
-      limit: 10,
-    });
-    const list = json?.result?.list ?? [];
-    return list.map((tag) => ({
-      label: tag.name,
-      value: tag.name,
-    }));
-  }, 250);
-
-  const onChangeTags = useCallback(
-    (value: MultiValue<any>) => {
-      const tags = value.map((item) => item.value);
-      setValue("tags", tags, { shouldValidate: true, shouldDirty: true });
-      scheduleMicrotask(() => {
-        changeTransition(Transition.UPDATING);
-      });
-    },
-    [changeTransition, setValue]
-  );
-
-  return (
-    <>
-      <h3 className="title mb-3">Select tags</h3>
-      <div className="relative">
-        <AsyncCreatableSelect
-          inputValue={inputValue}
-          isClearable
-          cacheOptions
-          isMulti
-          loadOptions={loadOptions}
-          onChange={onChangeTags}
-          onInputChange={(newValue) => setInputValue(newValue)}
-          value={tags?.map((tag) => ({ label: tag, value: tag }))}
-        />
-      </div>
-    </>
-  );
-};
-
-InternalDraftPublishDrawer.Title = function DraftPublishDrawerTitle() {
-  const { register, formState, control } = useFormContext<FormFieldValues>();
-
-  const { changeTransition } = useDraftContext();
-
-  const watchTitle = useWatch<FormFieldValues, "seo.title">({
-    name: "seo.title",
-    control,
-  });
-
-  const debounced = useDebounceFn(
-    () => {
-      changeTransition(Transition.UPDATING);
-    },
-    {
-      wait: 200,
-      trailing: true,
-    }
-  );
-
-  useEffect(() => {
-    if (!formState.dirtyFields.seo?.title) return;
-    debounced.run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchTitle, formState.dirtyFields.seo?.title]);
-
-  return (
-    <>
-      <h3 className="title mb-3">SEO TITLE (OPTIONAL)</h3>
-      <p className="desc">
-        The "SEO Title" will be shown in place of your Title on search engine
-        results pages, such as a Google search. SEO titles between 40 and 50
-        characters with commonly searched words have the best
-        click-through-rates.
-      </p>
-      <div className="relative">
-        <textarea
-          maxLength={70}
-          placeholder="Enter meta title"
-          className="textarea"
-          style={{ height: "58px !important" }}
-          {...register("seo.title")}
-        ></textarea>
-      </div>
-    </>
-  );
-};
-
-InternalDraftPublishDrawer.Description =
-  function DraftPublishDrawerDescription() {
-    const { register, formState, control } = useFormContext<FormFieldValues>();
-
-    const { changeTransition } = useDraftContext();
-
-    const watchDescription = useWatch<FormFieldValues, "seo.desc">({
-      name: "seo.desc",
-      control,
-    });
-
-    const debounced = useDebounceFn(
-      () => {
-        changeTransition(Transition.UPDATING);
-      },
-      {
-        wait: 200,
-        trailing: true,
-      }
-    );
-
-    useEffect(() => {
-      if (!formState.dirtyFields.seo?.desc) return;
-      debounced.run();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [watchDescription, formState.dirtyFields.seo?.desc]);
-
-    return (
-      <>
-        <h3 className="title mb-3">SEO Description (Optional)</h3>
-        <p className="desc">
-          The SEO Description will be used in place of your Subtitle on search
-          engine results pages. Good SEO descriptions utilize keywords,
-          summarize the article and are between 140-156 characters long.
-        </p>
-        <div className="relative">
-          <textarea
-            maxLength={156}
-            placeholder="Enter meta description…"
-            className="textarea"
-            style={{ height: "58px !important" }}
-            {...register("seo.desc")}
-          ></textarea>
-        </div>
-      </>
-    );
-  };
-
-InternalDraftPublishDrawer.Schedule = function DraftPublishDrawerSchedule() {
-  const { setValue, formState, control } = useFormContext<FormFieldValues>();
-
-  const { changeTransition } = useDraftContext();
-
-  const { field } = useController({
-    name: "publishingDate",
-    control,
-  });
-
-  const onRemoveSchedule = useCallback(() => {
-    setValue("publishingDate", undefined, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [setValue]);
-
-  const onSetSchedule = useCallback(() => {
-    setValue("publishingDate", new Date(), {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [setValue]);
-
-  useEffect(() => {
-    if (!formState.dirtyFields.publishingDate) return;
-    changeTransition(Transition.UPDATING);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.value, formState.dirtyFields.publishingDate]);
-
-  const value = useMemo(() => {
-    if (!field.value) {
-      return undefined;
-    }
-    if (field.value instanceof Date) {
-      const offset = field.value.getTimezoneOffset() * 60000;
-      const isoString = new Date(field.value.getTime() - offset).toISOString();
-      return isoString.substring(0, isoString.indexOf("T") + 6);
-    }
-    return undefined;
-  }, [field.value]);
-
-  const min = useMemo(() => {
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const isoString = new Date(new Date().getTime() - offset).toISOString();
-    return isoString.substring(0, isoString.indexOf("T") + 6);
-  }, []);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dateTime = e.target.value;
-    if (!dateTime) {
-      field.onChange(undefined);
-      return;
-    }
-    const date = new Date(dateTime);
-    field.onChange(date);
-  };
-
-  return (
-    <>
-      <h3 className="title mb-3">SCHEDULE YOUR ARTICLE</h3>
-      <p className="desc">
-        Select a publishing date/time (Based on your local time zone)
-      </p>
-      <div className="mb-3">
-        {field.value ? (
-          <>
-            <div className="flex w-full flex-row items-center justify-between rounded-lg border bg-gray-50 p-4 text-base text-gray-900 outline-none">
-              <input
-                type="datetime-local"
-                className="flex-1 bg-gray-50"
-                name={field.name}
-                ref={field.ref}
-                value={value}
-                onChange={onChange}
-                min={min}
-                onBlur={field.onBlur}
-              />
-            </div>
-            <button
-              type="button"
-              className="schedule__button-close"
-              onClick={onRemoveSchedule}
-            >
-              Cancel scheduling
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            className="schedule__button"
-            onClick={onSetSchedule}
-          >
-            <Icons.Schedule className="icon__base mr-2 fill-current" />
-            <span>Select a date</span>
-          </button>
-        )}
-      </div>
-    </>
-  );
-};
 
 InternalDraftPublishDrawer.Comment = function DraftPublishDrawerComment() {
   const { register, formState, control } = useFormContext<FormFieldValues>();
@@ -376,7 +104,7 @@ InternalDraftPublishDrawer.Comment = function DraftPublishDrawerComment() {
   );
 };
 
-const DraftPublishDrawer = () => {
+export default function DraftPublishDrawer() {
   const { visibility } = useDraftContext();
 
   if (!visibility.isPublishVisible) {
@@ -388,6 +116,4 @@ const DraftPublishDrawer = () => {
       <InternalDraftPublishDrawer />
     </div>
   );
-};
-
-export default DraftPublishDrawer;
+}

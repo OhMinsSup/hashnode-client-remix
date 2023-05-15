@@ -9,7 +9,9 @@ interface RightTagTrendingItemProps {
   tag: TagWithPostCountSchema;
 }
 
-function RightTagTrendingItem({ tag }: RightTagTrendingItemProps) {
+export default function RightTagTrendingItem({
+  tag,
+}: RightTagTrendingItemProps) {
   const to = useMemo(() => {
     return PAGE_ENDPOINTS.N.TAG(tag.name);
   }, [tag.name]);
@@ -21,7 +23,7 @@ function RightTagTrendingItem({ tag }: RightTagTrendingItemProps) {
           <Link to={to} className="right-tag-trending__item-img-container">
             <img
               src="https://cdn.hashnode.com/res/hashnode/image/upload/v1607082785538/EryuLRriM.png?w=100&h=100&fit=crop&crop=entropy&auto=compress,format&format=webp"
-              alt=""
+              alt={`${tag.name} tag`}
             />
           </Link>
         </div>
@@ -43,27 +45,3 @@ function RightTagTrendingItem({ tag }: RightTagTrendingItemProps) {
     </div>
   );
 }
-
-export default RightTagTrendingItem;
-
-RightTagTrendingItem.Skeleton = function RightTagTrendingItemSkeleton() {
-  return (
-    <div>
-      <div className="right-tag-trending__item">
-        <div className="right-tag-trending__item-img">
-          <div className="right-tag-trending__item-img-container">
-            <div className="right-tag-trending__item-img-container__img" />
-          </div>
-        </div>
-        <div className="right-tag-trending__item-content">
-          <div className="right-tag-trending__item-title">
-            <div className="right-tag-trending__item-title__text" />
-          </div>
-          <div className="right-tag-trending__item-count">
-            <div className="right-tag-trending__item-count__text" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

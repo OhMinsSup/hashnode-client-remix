@@ -9,16 +9,16 @@ import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { scheduleMicrotask } from "~/libs/browser-utils";
 
 // components
-import { Icons } from "~/components/shared/Icons";
 import DraftImageCoverPopover from "./DraftImageCoverPopover";
 import Editor from "~/components/shared/Editor";
+import { Icons } from "~/components/shared/Icons";
 import { ClientOnly } from "remix-utils";
 
 // types
 import type { API } from "@editorjs/editorjs";
 import type { FormFieldValues } from "~/routes/draft";
 
-const DraftEdtiorContent = () => {
+export default function DraftEdtiorContent() {
   const ctx = useDraftContext();
 
   const methods = useFormContext<FormFieldValues>();
@@ -182,4 +182,3 @@ const DraftEdtiorContent = () => {
   );
 };
 
-export default DraftEdtiorContent;

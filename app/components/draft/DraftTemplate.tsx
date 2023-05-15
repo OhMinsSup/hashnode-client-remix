@@ -1,20 +1,25 @@
 import React from "react";
-import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
+
 import { DraftSidebarProvider } from "~/context/useDraftSidebarContext";
+import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
+import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
+import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
 
 interface DraftTemplateProps {
-  children: React.ReactNode;
+  children: React.JSX.Element;
 }
 
-const DraftTemplate: React.FC<DraftTemplateProps> = ({ children }) => {
+export default function DraftTemplate({ children }: DraftTemplateProps) {
   return (
     <div className="draft-template">
       <DraftSidebarProvider>
-        <DraftLeftSidebar />
+        <DraftLeftSidebar
+          myDrafts={<MyDraftSidebar />}
+          writeDraft={<WriteDraftSidebar />}
+        />
       </DraftSidebarProvider>
       {children}
     </div>
   );
 };
 
-export default DraftTemplate;

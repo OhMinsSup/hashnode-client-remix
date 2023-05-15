@@ -17,7 +17,9 @@ interface DraftShardActionFnProps {
   children: React.ReactNode;
 }
 
-function DraftShardActionFn({ children }: DraftShardActionFnProps) {
+export default function DraftShardActionFn({
+  children,
+}: DraftShardActionFnProps) {
   const { watch } = useFormContext<FormFieldValues>();
 
   const { transition, draftId, changeDraftId, changeTransition } =
@@ -78,7 +80,6 @@ function DraftShardActionFn({ children }: DraftShardActionFnProps) {
   return <>{children}</>;
 }
 
-export default DraftShardActionFn;
 
 const useSnapShot = <T extends Record<string, any>>() => {
   const ref = useRef<T>();

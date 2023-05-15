@@ -6,10 +6,12 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 
+// db
+import { hashnodeDB } from "~/libs/db/db";
+
 // components
 import MyDraftItem from "~/components/draft/MyDraftItem";
 import { Icons } from "~/components/shared/Icons";
-import { hashnodeDB } from "~/libs/db/db";
 
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);

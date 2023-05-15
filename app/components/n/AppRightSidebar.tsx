@@ -1,12 +1,15 @@
 import React, { Suspense } from "react";
+
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
 import { useLoaderData, Await } from "@remix-run/react";
-import AppRightSidebarContentBox from "../shared/AppRightSidebarContentBox";
+import AppRightSidebarContentBox from "~/components/shared/AppRightSidebarContentBox";
 import RightTagTrendingItem from "./RightTagTrendingItem";
 
 import type { nLoader } from "~/routes/_n.n";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-export default function AppRightTags() {
+export default function AppRightSidebar() {
   const data = useLoaderData<nLoader>();
   return (
     <aside className="main__right-sidebar">

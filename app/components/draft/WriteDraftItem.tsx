@@ -5,19 +5,21 @@ import classNames from "classnames";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Icons } from "~/components/shared/Icons";
 
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
+import { useNavigate } from "@remix-run/react";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
-import { useNavigate } from "@remix-run/react";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-interface MyDraftItemProps {
+interface WriteDraftItemProps {
   item: PostDetailRespSchema;
 }
 
-const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
+export default function WriteDraftItem({ item }: WriteDraftItemProps) {
   const { changeDraftId, draftId, toggleSubTitle } = useDraftContext();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -98,5 +100,3 @@ const MyDraftItem: React.FC<MyDraftItemProps> = ({ item }) => {
     </div>
   );
 };
-
-export default MyDraftItem;
