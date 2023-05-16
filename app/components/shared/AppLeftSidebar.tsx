@@ -18,10 +18,10 @@ import { Icons } from "~/components/shared/Icons";
 import AppLeftSidebarNavLink from "./AppLeftSidebarNavLink";
 import AppLeftSidebarTrendingTag from "./AppLeftSidebarTrendingTag";
 
-import type { HomeLoader } from "~/routes/_main";
+import type { MainLoader } from "~/routes/_main";
 
 export default function AppLeftSidebar() {
-  const data = useLoaderData<HomeLoader>();
+  const data = useLoaderData<MainLoader>();
 
   const $container = useRef<HTMLDivElement | null>(null);
   const GAP_SIZE = useMemo(() => 32, []);

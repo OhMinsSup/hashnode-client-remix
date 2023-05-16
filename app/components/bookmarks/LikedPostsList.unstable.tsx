@@ -8,7 +8,7 @@ import React, {
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { isBrowser } from "~/libs/browser-utils";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import PostsCard from "~/components/home/PostsCard.unstable";
+import PostsCard from "~/components/shared/PostsCard.unstable";
 import ReachedEnd from "~/components/shared/ReachedEnd";
 import uniqBy from "lodash-es/uniqBy";
 

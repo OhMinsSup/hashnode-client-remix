@@ -4,7 +4,7 @@ import React from "react";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // components
-import PostsList from "~/components/home/PostsList.unstable";
+import PostsList from "~/components/shared/PostsList.unstable";
 
 import { json } from "@remix-run/cloudflare";
 import { parseUrlParams } from "~/utils/util";

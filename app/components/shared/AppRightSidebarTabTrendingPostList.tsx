@@ -2,19 +2,19 @@ import React, { useMemo } from "react";
 import classNames from "classnames";
 import { isNull, isUndefined } from "~/utils/assertion";
 import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
-import AppRightTabTrendingPost from "./AppRightTabTrendingPost";
+import AppRightSidebarTabTrendingPost from "./AppRightSidebarTabTrendingPost";
 
-interface AppRightTabTrendingPostListProps {
+interface AppRightSidebarTabTrendingPostListProps {
   duration: number;
   enabled?: boolean;
   initialData?: any;
 }
 
-export default function AppRightTabTrendingPostList({
+export default function AppRightSidebarTabTrendingPostList({
   duration,
   initialData,
   enabled,
-}: AppRightTabTrendingPostListProps) {
+}: AppRightSidebarTabTrendingPostListProps) {
   const { data } = useGetTopPostsQuery(
     {
       duration: duration,
@@ -28,7 +28,7 @@ export default function AppRightTabTrendingPostList({
   );
 
   const posts = useMemo(() => {
-    return data?.json?.result?.posts ?? [];
+    return data?.posts ?? [];
   }, [data]);
 
   if (isNull(posts) || isUndefined(posts)) return null;
@@ -41,7 +41,7 @@ export default function AppRightTabTrendingPostList({
     >
       {posts?.map((item, index) => (
         <React.Fragment key={`tab-trending-post-${duration}-item-${item.id}`}>
-          <AppRightTabTrendingPost {...item} />
+          <AppRightSidebarTabTrendingPost {...item} />
           {index !== posts.length - 1 && (
             <hr className="custom-divide__tab-treding" />
           )}

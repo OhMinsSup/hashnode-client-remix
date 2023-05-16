@@ -1,12 +1,20 @@
 import React, { Suspense } from "react";
-import { Await, useLoaderData } from "@remix-run/react";
-import type { HomeLoader } from "~/routes/_main";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import AppRightSidebarContentBox from "./AppRightSidebarContentBox";
-import AppRightWidgetBookmark from "./AppRightWidgetBookmark";
 
-export default function AppRightWidgetForBookmarks() {
-  const data = useLoaderData<HomeLoader>();
+// remix
+import { Await, useLoaderData } from "@remix-run/react";
+
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+
+// components
+import AppRightSidebarContentBox from "./AppRightSidebarContentBox";
+import AppRightSidebarWidgetBookmark from "./AppRightSidebarWidgetBookmark";
+
+// types
+import type { MainLoader } from "~/routes/_main";
+
+export default function AppRightSidebarWidgetForBookmarks() {
+  const data = useLoaderData<MainLoader>();
 
   return (
     <Suspense fallback={<>Loading package location...</>}>
@@ -22,7 +30,7 @@ export default function AppRightWidgetForBookmarks() {
               to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
             >
               {bookmarks.map((item, index) => (
-                <AppRightWidgetBookmark
+                <AppRightSidebarWidgetBookmark
                   key={`widget-bookmark-${item.id}`}
                   bookmark={item}
                   index={index}

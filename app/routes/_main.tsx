@@ -48,7 +48,7 @@ export const loader = async (args: LoaderArgs) => {
   });
 };
 
-export type HomeLoader = typeof loader;
+export type MainLoader = typeof loader;
 
 export default function Main() {
   return (

@@ -9,7 +9,7 @@ import { getPostListApi } from "~/api/posts/posts.server";
 import { parseUrlParams } from "~/utils/util";
 
 // components
-import PostsList from "~/components/home/PostsList.unstable";
+import PostsList from "~/components/shared/PostsList.unstable";
 
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
-import AppRightWidgetForTreningPost from "./AppRightWidgetForTreningPost";
-import AppRightWidgetForBookmarks from "./AppRightWidgetForBookmarks";
+import AppRightWidgetForTreningPost from "./AppRightSidebarWidgetForTreningPost";
+import AppRightSidebarWidgetForBookmarks from "./AppRightSidebarWidgetForBookmarks";
 import AppRightSidebarContentBox from "./AppRightSidebarContentBox";
 
 export default function AppRightSidebar() {
@@ -10,7 +10,7 @@ export default function AppRightSidebar() {
     <aside className="main__right-sidebar">
       <div className="right-sidebar__container">
         <AppRightWidgetForTreningPost />
-        {session ? <AppRightWidgetForBookmarks /> : null}
+        {session ? <AppRightSidebarWidgetForBookmarks /> : null}
         <AppRightSidebarContentBox title="Others">??</AppRightSidebarContentBox>
       </div>
     </aside>

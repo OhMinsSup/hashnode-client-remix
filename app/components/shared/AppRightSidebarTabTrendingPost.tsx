@@ -12,15 +12,15 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
 
-interface AppRightTabTrendingPostProps extends PostDetailRespSchema { }
+interface AppRightSidebarTabTrendingPostProps extends PostDetailRespSchema {}
 
-export default function AppRightTabTrendingPost({
+export default function AppRightSidebarTabTrendingPost({
   id,
   title,
   subTitle,
   user,
   count,
-}: AppRightTabTrendingPostProps) {
+}: AppRightSidebarTabTrendingPostProps) {
   const to = useMemo(() => {
     return PAGE_ENDPOINTS.ITEMS.ID(id);
   }, [id]);

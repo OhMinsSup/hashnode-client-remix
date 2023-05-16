@@ -5,15 +5,15 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // types
 import type { GetWidgetBookmarkRespSchema } from "~/api/schema/resp";
 
-interface AppRightWidgetBookmarkProps {
+interface AppRightSidebarWidgetBookmarkProps {
   bookmark: GetWidgetBookmarkRespSchema;
   index: number;
 }
 
-export default function AppRightWidgetBookmark({
+export default function AppRightSidebarWidgetBookmark({
   index,
   bookmark,
-}: AppRightWidgetBookmarkProps) {
+}: AppRightSidebarWidgetBookmarkProps) {
   const displayDivide = useMemo(() => {
     const maxItemCount = 5;
     return index !== 0 && index <= maxItemCount;

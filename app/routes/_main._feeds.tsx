@@ -8,8 +8,8 @@ import { getAritcleCirclesApi } from "~/api/widget/aritcle-circles.server";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import TabRoutesPosts from "~/components/home/TabRoutesPosts";
-import ScrollAreaTrendingUsers from "~/components/home/ScrollAreaTrendingUsers";
+import TabRoutesPosts from "~/components/main/TabRoutesPosts";
+import ScrollAreaTrendingUsers from "~/components/main/ScrollAreaTrendingUsers";
 
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";

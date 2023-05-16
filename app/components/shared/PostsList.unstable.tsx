@@ -15,7 +15,7 @@ import { isBrowser } from "~/libs/browser-utils";
 import uniqBy from "lodash-es/uniqBy";
 
 // components
-import PostsCard from "~/components/home/PostsCard.unstable";
+import PostsCard from "~/components/shared/PostsCard.unstable";
 import ReachedEnd from "~/components/shared/ReachedEnd";
 
 import type { MainFeedsIndexLoader } from "~/routes/_main._feeds._index";
