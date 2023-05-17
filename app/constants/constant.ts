@@ -88,7 +88,7 @@ export const PAGE_ENDPOINTS = {
   EXPLORE: {
     ROOT: "/explore",
     TAGS: "/explore/tags",
-    POSTS: "/explore/posts",
+    BLOGS: "/explore/blogs",
   },
   ROOT: "/",
   FEATURED: "/featured",

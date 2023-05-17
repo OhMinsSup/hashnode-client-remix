@@ -1,0 +1,56 @@
+.explore-trending-tags {
+  @apply border-b-0 pb-5;
+}
+
+.explore-trending-tags .title-wrapper {
+  @apply mb-4 flex flex-col justify-between;
+}
+
+.explore-trending-tags .title-wrapper h2 {
+  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply mr-5 text-xl font-bold
+}
+
+.explore-trending-tags .title-wrapper p {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+.explore-trending-tags .content-wrapper {
+  @apply mx-[-0.5rem] flex flex-col flex-wrap
+}
+
+.explore-trending-tags .select-filter {
+  @apply relative mt-4 flex w-min
+}
+
+.explore-trending-tags .select-filter span {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+  @apply absolute top-0 right-0 flex h-full flex-col justify-center pr-4
+}
+
+.explore-trending-tags .select-filter select {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply w-52 appearance-none rounded-lg border bg-transparent py-[0.625rem] pl-4 pr-8;
+}
+
+@media (min-width: 768px) {
+  .explore-trending-tags .title-wrapper {
+    @apply flex-row items-center;
+  }
+
+  .explore-trending-tags .select-filter {
+    @apply mt-0;
+  }
+
+  .explore-trending-tags .content-wrapper {
+    @apply flex-row;
+  }
+}

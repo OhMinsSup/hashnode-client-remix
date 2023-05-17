@@ -25,10 +25,10 @@ function TabRoutesExplore({ children }: TabRoutesExploreProps) {
           path={PAGE_ENDPOINTS.EXPLORE.TAGS}
         />
         <TabExploreButton
-          id="explore-posts-tab"
-          label="Posts"
+          id="explore-blogs-tab"
+          label="Blogs"
           currentPathname={location.pathname}
-          path={PAGE_ENDPOINTS.EXPLORE.POSTS}
+          path={PAGE_ENDPOINTS.EXPLORE.BLOGS}
         />
       </div>
       <div
@@ -39,8 +39,8 @@ function TabRoutesExplore({ children }: TabRoutesExploreProps) {
             return "explore-trending-tab";
           } else if (location.pathname === PAGE_ENDPOINTS.EXPLORE.TAGS) {
             return "explore-tags-tab";
-          } else if (location.pathname === PAGE_ENDPOINTS.EXPLORE.POSTS) {
-            return "explore-posts-tab";
+          } else if (location.pathname === PAGE_ENDPOINTS.EXPLORE.BLOGS) {
+            return "explore-blogs-tab";
           } else {
             return "explore-trending-tab";
           }

@@ -1,19 +1,12 @@
 import React from "react";
 import { Outlet } from "@remix-run/react";
+import TabRoutesExplore from "~/components/explore/TabRoutesExplore";
 
 // types
 import type { V2_MetaFunction, LinksFunction } from "@remix-run/cloudflare";
 
 // styles
 import homeExploreStyle from "~/styles/routes/home-explore.css";
-import TabRoutesExplore from "~/components/explore/TabRoutesExplore";
-
-const Seo = {
-  title: "Explore Popular Tech Blogs and Topics - Hashnode",
-  description:
-    "Explore the most popular tech blogs from the Hashnode community. A constantly updating list of the best minds in tech.",
-  image: "/images/seo_image.png",
-};
 
 export const links: LinksFunction = () => {
   return [
@@ -24,38 +17,47 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction = ({ matches }) => {
+  const title = "Explore Popular Tech Blogs and Topics - Hashnode";
+  const description =
+    "Explore the most popular tech blogs from the Hashnode community. A constantly updating list of the best minds in tech.";
+  const rootMeta =
+    // @ts-ignore
+    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
+  const rootMetas = rootMeta.filter(
+    // @ts-ignore
+    (meta) =>
+      meta.name !== "description" &&
+      meta.name !== "og:title" &&
+      meta.name !== "og:description" &&
+      meta.name !== "twitter:title" &&
+      meta.name !== "twitter:description" &&
+      !("title" in meta)
+  );
   return [
+    ...rootMetas,
     {
-      title: Seo.title,
+      title,
     },
     {
       name: "description",
-      content: Seo.description,
+      content: description,
     },
     {
       name: "og:title",
-      content: Seo.title,
+      content: title,
     },
     {
       name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "og:image",
-      content: Seo.image,
+      content: description,
     },
     {
       name: "twitter:title",
-      content: Seo.title,
+      content: title,
     },
     {
       name: "twitter:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
+      content: description,
     },
   ];
 };
