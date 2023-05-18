@@ -1,7 +1,7 @@
-import { Link } from "@remix-run/react";
 import React from "react";
+import { Link } from "@remix-run/react";
 
-const ExploreTredingTagItem = () => {
+export default function ExploreTagItem() {
   return (
     <div className="explore-tag-item">
       <div className="tag">
@@ -34,6 +34,4 @@ const ExploreTredingTagItem = () => {
       </div>
     </div>
   );
-};
-
-export default ExploreTredingTagItem;
+}

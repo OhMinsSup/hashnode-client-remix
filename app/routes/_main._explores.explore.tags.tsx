@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 
 // components
 import { useLoaderData, useSearchParams } from "@remix-run/react";
-import ExploreTredingTagItem from "~/components/explore/ExploreTredingTagItem";
+import ExploreTagItem from "~/components/explore/ExploreTagItem";
 
 // api
 import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
@@ -85,7 +85,7 @@ export default function Page() {
       </div>
       <div className="content-wrapper">
         {trendingTag.list.map((item) => (
-          <ExploreTredingTagItem key={`ExploreTredingTagItem-${item.id}`} />
+          <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
         ))}
       </div>
     </div>

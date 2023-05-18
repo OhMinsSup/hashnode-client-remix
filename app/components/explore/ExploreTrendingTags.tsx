@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@remix-run/react";
-import ExploreTredingTagItem from "./ExploreTredingTagItem";
+import ExploreTagItem from "./ExploreTagItem";
 import NewlyAddedTags from "./NewlyAddedTags";
 
 const ExploreTrendingTags = () => {
@@ -13,12 +13,12 @@ const ExploreTrendingTags = () => {
         </Link>
       </div>
       <div className="content-wrapper">
-        <ExploreTredingTagItem />
-        <ExploreTredingTagItem />
-        <ExploreTredingTagItem />
-        <ExploreTredingTagItem />
-        <ExploreTredingTagItem />
-        <ExploreTredingTagItem />
+        <ExploreTagItem />
+        <ExploreTagItem />
+        <ExploreTagItem />
+        <ExploreTagItem />
+        <ExploreTagItem />
+        <ExploreTagItem />
       </div>
       <NewlyAddedTags />
     </div>

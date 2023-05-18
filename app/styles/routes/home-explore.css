@@ -27,44 +27,25 @@
 }
 
 .explore-tag-item {
-  padding: 0.5rem;
+  @apply p-2;
 }
 
 .explore-tag-item .tag {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-radius: 0.5rem;
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-  padding: 1rem;
+  @apply flex h-full w-full flex-row items-center rounded-lg p-4
 }
 
 .explore-tag-item .tag .profile {
-  margin-right: 0.5rem;
+  @apply mr-2
 }
 
 .explore-tag-item .tag .profile a {
-  display: block;
-  height: 2.5rem;
-  width: 2.5rem;
-  overflow: hidden;
-  border-radius: 0.25rem;
+  @apply block h-10 w-10 overflow-hidden rounded;
 }
 
 .explore-tag-item .tag .profile a img {
-  display: block;
-  width: 100%;
+  @apply block w-full;
 }
 
 .explore-tag-item .tag .content {
@@ -83,23 +64,19 @@
 }
 
 .explore-tag-item .tag .content h3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Noto Color Emoji";
-  font-weight: 700;
   --tw-text-opacity: 1;
   color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply overflow-hidden text-ellipsis whitespace-nowrap font-bold;
 }
 
 .explore-tag-item .tag .content .description {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(100 116 139 / var(--tw-text-opacity));
+  @apply text-sm;
 }
 
 .newly-added-tags-title {
@@ -458,10 +435,9 @@
   .blog-profile_right
   .btn-follow
   > span {
-  margin-left: 0.5rem;
-  font-weight: 700;
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
+  @apply ml-2 font-bold;
 }
 
 @media (min-width: 640px) {
@@ -478,7 +454,7 @@
     .blog-profile
     .blog-profile_left
     .blog-title {
-    margin-top: 0px;
+    @apply mt-0;
   }
 
   .explore-blog
@@ -487,56 +463,38 @@
     .content
     .blog-profile
     .blog-profile_left {
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
+    @apply flex-row items-center;
   }
 
   .explore-info-box {
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    @apply items-center py-10;
   }
 
   .explore-info-box h1 {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+    @apply text-3xl;
   }
 
   .explore-info-box p {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.5rem;
+    @apply mx-auto text-center text-base;
   }
 
   .explore-tag-item {
-    width: 50%;
+    @apply w-1/2;
   }
 
   .explore-tag-item .tag .content {
-    white-space: nowrap;
+    @apply whitespace-nowrap;
   }
 
   .newly-added-tags-content {
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
+    @apply flex-row;
   }
 
   .newly-added-tag {
-    width: 33.333333%;
+    @apply w-1/3;
   }
 
   .newly-added-tag .newly-added-tag-wrapper .content {
-    white-space: nowrap;
+    @apply whitespace-nowrap;
   }
 }

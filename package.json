@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@editorjs/code": "^2.8.0",
-    "@editorjs/editorjs": "^2.26.5",
+    "@editorjs/editorjs": "^2.27.0",
     "@editorjs/embed": "^2.5.3",
     "@editorjs/header": "^2.7.0",
     "@editorjs/image": "^2.8.1",
@@ -30,9 +30,9 @@
     "@radix-ui/react-popover": "^1.0.5",
     "@radix-ui/react-scroll-area": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.3",
-    "@remix-run/cloudflare": "^1.16.0",
-    "@remix-run/cloudflare-pages": "^1.16.0",
-    "@remix-run/react": "^1.16.0",
+    "@remix-run/cloudflare": "^1.16.1",
+    "@remix-run/cloudflare-pages": "^1.16.1",
+    "@remix-run/react": "^1.16.1",
     "@tanstack/react-query": "^4.29.7",
     "@tanstack/react-virtual": "^3.0.0-beta.54",
     "@tanstack/virtual-core": "^3.0.0-beta.54",
@@ -57,8 +57,8 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230511.0",
-    "@remix-run/dev": "^1.16.0",
-    "@remix-run/eslint-config": "^1.16.0",
+    "@remix-run/dev": "^1.16.1",
+    "@remix-run/eslint-config": "^1.16.1",
     "@tailwindcss/typography": "^0.5.9",
     "@types/cookie": "^0.5.1",
     "@types/lodash-es": "^4.17.7",
@@ -69,10 +69,10 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.2.8",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
-    "wrangler": "^2.20.0"
+    "wrangler": "^3.0.0"
   },
   "engines": {
     "node": ">=16.13"
