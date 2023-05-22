@@ -75,12 +75,13 @@ export class ApiService {
 
   static middlewareForAuth = (options?: BaseApiOptions) => {
     const isAuthticated = options?.custom?.isAuthticated ?? false;
-    if (!isAuthticated) {
-      return options;
-    }
+    if (!isAuthticated) return options;
 
-    const _options = {
-      ...options,
+    let _options = {
+      custom: options?.custom,
+      init: options?.init,
+      loaderArgs: options?.loaderArgs,
+      actionArgs: options?.actionArgs,
     };
 
     // 클라이언트
@@ -90,40 +91,32 @@ export class ApiService {
         credentials: "include",
       };
       return _options;
-    } else {
-      // 서버
-      let _token: string | null = null;
-      if (options?.loaderArgs) {
-        const { request } = options.loaderArgs;
-        const cookie = request.headers.get("cookie") ?? null;
-        if (cookie) {
-          const { access_token } = cookies.parse(cookie);
-          if (access_token) {
-            _token = access_token;
-          }
-        }
-      } else if (options?.actionArgs) {
-        const { request } = options.actionArgs;
-        const cookie = request.headers.get("cookie") ?? null;
-        if (cookie) {
-          const { access_token } = cookies.parse(cookie);
-          if (access_token) {
-            _token = access_token;
-          }
-        }
-      }
-
-      if (!_token) {
-        return options;
-      }
-      const args = options?.loaderArgs || options?.actionArgs;
-      const headers = args?.request?.headers ?? undefined;
-      _options.init = {
-        ..._options?.init,
-        credentials: "include",
-        headers: headers,
-      };
     }
+
+    // 서버
+    const args = options?.loaderArgs || options?.actionArgs;
+    let _token: string | null = null;
+
+    if (args) {
+      const cookie = args.request.headers.get("cookie") ?? null;
+      if (cookie) {
+        const { access_token } = cookies.parse(cookie);
+        if (access_token) _token = access_token;
+      }
+    }
+
+    if (!_token) {
+      return options;
+    }
+
+    // TODO: Cloudflare
+    // cloudflare workerd에서는 credentials를 지원하지 않음
+    // 하지만 cloudflare workerd에는 구현체 정보가 있음?
+    // credentials: "include",
+    _options.init = {
+      ..._options?.init,
+      headers: args?.request?.headers ?? undefined,
+    };
 
     return _options;
   };
@@ -153,26 +146,22 @@ export class ApiService {
   static headerJSON = (options?: BaseApiOptions["init"]) => {
     const headers = new Headers();
     if (options?.headers && options.headers instanceof Headers) {
-      headers.append("Content-Type", "application/json");
       for (const [key, value] of options.headers.entries()) {
-        headers.append(key, value);
+        headers.set(key, value);
       }
-    } else {
-      headers.append("Content-Type", "application/json");
     }
+    headers.set("content-type", "application/json");
     return headers;
   };
 
   static headerFormData = (options?: BaseApiOptions["init"]) => {
     const headers = new Headers();
     if (options?.headers && options.headers instanceof Headers) {
-      headers.append("Content-Type", "multipart/form-data");
       for (const [key, value] of options.headers.entries()) {
-        headers.append(key, value);
+        headers.set(key, value);
       }
-    } else {
-      headers.append("Content-Type", "multipart/form-data");
     }
+    headers.set("content-type", "multipart/form-data");
     return headers;
   };
 

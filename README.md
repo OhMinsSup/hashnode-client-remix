@@ -35,3 +35,22 @@ Once that's done, you should be able to deploy your app:
 ```sh
 npm run deploy
 ```
+
+# Issues Notes
+
+### Cloudflare Issue??
+
+[ ] - Your worker called response.clone(), but did not read the body of both clones. This is wasteful, as it forces the system to buffer the entire response body in memory, rather than streaming it through. This may cause your worker to be unexpectedly terminated for going over the memory limit. If you only meant to copy the response headers and metadata (e.g. in order to be able to modify them), use `new Response(response.body, response)` instead.
+
+ https://stackoverflow.com/questions/55920957/cloudflare-worker-typeerror-one-time-use-body
+
+[ ] - cloudflare workerd에서는 credentials를 지원하지 않음, 하지만 cloudflare workerd에는 구현체 정보가 있음? credentials: "include", 
+
+
+# Update 
+
+ - [ ] 유저 로그인 페이지 및 로그인이 되어있을 경우 진입 막는 코드 수정
+
+ - [ ] actions의 에러 및 고도화
+
+ - [ ] 번들사이즈 축소

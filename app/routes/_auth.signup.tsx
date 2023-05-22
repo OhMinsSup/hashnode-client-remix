@@ -33,10 +33,10 @@ export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
 
   const form = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    username: formData.get("username") || "",
+    email: formData.get("email") || "",
+    password: formData.get("password") || "",
+    confirmPassword: formData.get("confirmPassword") || "",
   };
 
   try {
@@ -132,10 +132,10 @@ export default function Signup() {
         <Input
           text="Confirm your password"
           type="password"
-          name="passwordConfirm"
-          id="passwordConfirm"
+          name="confirmPassword"
+          id="confirmPassword"
           autoComplete="new-password"
-          aria-label="passwordConfirm"
+          aria-label="confirmPassword"
           placeholder="Confirm your password."
         />
       </div>

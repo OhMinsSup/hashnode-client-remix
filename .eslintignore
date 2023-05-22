@@ -3,11 +3,12 @@ server.js
 remix.config.js
 
 # Node.js
-node_modules
+node_modules/**/*
 
 # Remix
-build
-.cache
+public/build/**/*
+build/**/*
+.cache/**/*
 
 # cloudflare
 functions/**/*

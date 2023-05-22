@@ -3,33 +3,63 @@ import { z } from "zod";
 export const userUpdateSocialSchema = z.object({
   github: z
     .string()
-    .url()
-    .regex(
-      /(http|https):\/\/github\.com\/(.+)|(http|https):\/\/www\.github\.com\/(.+)/
-    )
-    .optional(),
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const regex =
+          /(http|https):\/\/github\.com\/(.+)|(http|https):\/\/www\.github\.com\/(.+)/;
+        return regex.test(val);
+      },
+      { message: "Invalid github url" }
+    ),
   facebook: z
     .string()
-    .url()
-    .regex(
-      /(http|https):\/\/facebook\.com\/(.+)|(http|https):\/\/www\.facebook\.com\/(.+)|(http|https):\/\/fb\.com\/(.+)|(http|https):\/\/www\.fb\.com\/(.+)/
-    )
-    .optional(),
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const regex =
+          /(http|https):\/\/facebook\.com\/(.+)|(http|https):\/\/www\.facebook\.com\/(.+)|(http|https):\/\/fb\.com\/(.+)|(http|https):\/\/www\.fb\.com\/(.+)/;
+        return regex.test(val);
+      },
+      { message: "Invalid facebook url" }
+    ),
   twitter: z
     .string()
-    .url()
-    .regex(
-      /(http|https):\/\/twitter\.com\/(.+)|(http|https):\/\/www\.twitter\.com\/(.+)/
-    )
-    .optional(),
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const regex =
+          /(http|https):\/\/twitter\.com\/(.+)|(http|https):\/\/www\.twitter\.com\/(.+)/;
+        return regex.test(val);
+      },
+      { message: "Invalid twitter url" }
+    ),
   instagram: z
     .string()
-    .url()
-    .regex(
-      /(http|https):\/\/instagram\.com\/(.+)|(http|https):\/\/www\.instagram\.com\/(.+)/
-    )
-    .optional(),
-  website: z.string().url().optional(),
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const regex =
+          /(http|https):\/\/instagram\.com\/(.+)|(http|https):\/\/www\.instagram\.com\/(.+)/;
+        return regex.test(val);
+      },
+      { message: "Invalid instagram url" }
+    ),
+  website: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const regex = /(http|https):\/\/(.+)|(http|https):\/\/www\.(.+)/;
+        return regex.test(val);
+      },
+      { message: "Invalid website url" }
+    ),
 });
 
 export const userUpdateSchema = z.object({

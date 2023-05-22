@@ -47,17 +47,17 @@ export const loader = async (args: LoaderArgs) => {
   const { session, header: headers } = await getSessionApi(args);
   if (!session) {
     return json(
-      { currentProfile: null, env },
-      {
-        headers,
-      }
+      { currentProfile: null, env }
+      // {
+      //   headers,
+      // }
     );
   }
   return json(
-    { currentProfile: session, env },
-    {
-      headers,
-    }
+    { currentProfile: session, env }
+    // {
+    //   headers,
+    // }
   );
 };
 

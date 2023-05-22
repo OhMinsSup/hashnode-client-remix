@@ -2,7 +2,7 @@ import React from "react";
 import { defer } from "@remix-run/cloudflare";
 
 // api
-import { getTagListApi } from "~/api/tags/tagList";
+import { getTagListApi } from "~/api/tags/tags";
 import { getWidgetBookmarksApi } from "~/api/widget/widget-bookmarks.server";
 import { getSessionApi } from "~/libs/server/session.server";
 import { noopPromiseResponse } from "~/libs/server/response.server";

@@ -12,7 +12,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { scheduleMicrotask } from "~/libs/browser-utils";
 
 // api
-import { getTagListApi } from "~/api/tags/tagList";
+import { getTagListApi } from "~/api/tags/tags";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";

@@ -8,7 +8,7 @@ import { RESULT_CODE } from "~/constants/constant";
 import { userUpdateSchema } from "~/api/user/validation/update";
 import { putUserApi } from "~/api/user/update.server";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getTagListApi } from "~/api/tags/tagList";
+import { getTagListApi } from "~/api/tags/tags";
 import {
   HTTPErrorWrapper,
   ValidationErrorWrapper,
@@ -78,12 +78,10 @@ export const action = async (args: ActionArgs) => {
     if (!_input_body) {
       throw new Response("Missing body", { status: 400 });
     }
+
     const _input_json_body = Json.parse<FormFieldValues>(_input_body);
-    const body = await userUpdateSchema.safeParseAsync(_input_json_body);
-    if (!body.success) {
-      return json(body.error, { status: 400 });
-    }
-    const { json: data } = await putUserApi(body.data, {
+    const body = await userUpdateSchema.parseAsync(_input_json_body);
+    const { json: data } = await putUserApi(body, {
       actionArgs: args,
     });
     if (data.resultCode !== RESULT_CODE.OK) {
@@ -103,6 +101,7 @@ export const action = async (args: ActionArgs) => {
         status: error_http.statusCode,
       });
     }
+    console.log("error (4)", error);
     throw error;
   }
 };
@@ -113,6 +112,7 @@ export type FormFieldValues = UserUpdateBody;
 
 export default function Profile() {
   const fetcher = useFetcher();
+  console.log(fetcher.data);
   const [inputValue, setInputValue] = useState("");
   const session = useOptionalSession();
   const navigation = useNavigation();

@@ -4,31 +4,31 @@ import React, { useCallback } from "react";
 import { Icons } from "~/components/shared/Icons";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, REMIX_ACTIONS_KEY } from "~/constants/constant";
 
 // hooks
 import {
   Link,
+  useFetcher,
   useLoaderData,
   useNavigation,
-  useSubmit,
 } from "@remix-run/react";
 
 // types
 import type { nTagLoader } from "~/routes/_n.n.$tag";
 
 export default function TagDetailInfoBoxBody() {
-  const submit = useSubmit();
+  const fetcher = useFetcher();
   const { tagInfo } = useLoaderData<nTagLoader>();
   const navigation = useNavigation();
 
   const onTagFollow = useCallback(() => {
-    submit(null, {
+    fetcher.submit(null, {
       replace: true,
       method: tagInfo.isFollowing ? "DELETE" : "POST",
-      action: PAGE_ENDPOINTS.N.TAG(tagInfo.name),
+      action: REMIX_ACTIONS_KEY.TAG_FOLLOW,
     });
-  }, [submit, tagInfo.isFollowing, tagInfo.name]);
+  }, [fetcher, tagInfo.isFollowing]);
 
   return (
     <div className="tag-detail-info-box__body">

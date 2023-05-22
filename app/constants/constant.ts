@@ -74,6 +74,11 @@ export const MUTATIONS_KEY = {
   },
 };
 
+export const REMIX_ACTIONS_KEY = {
+  LOGOUT: "/action/logout",
+  TAG_FOLLOW: "/action/tag/follow",
+};
+
 export const ASSET_URL = {
   DEFAULT_AVATAR: "/images/default_profile.png",
   LOGO: "/images/logo.png",

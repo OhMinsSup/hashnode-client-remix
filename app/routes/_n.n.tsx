@@ -7,8 +7,7 @@ import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
 import AppRightSidebar from "~/components/n/AppRightSidebar";
 
 // api
-import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
-import { getTagListApi } from "~/api/tags/tagList";
+import { getTagListApi } from "~/api/tags/tags";
 
 // types
 import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
@@ -40,17 +39,19 @@ export const loader = async (args: LoaderArgs) => {
         loaderArgs: args,
       }
     ),
-    trendingTagsWeek: getTagTrendingListApi(
+    trendingTagsWeek: getTagListApi(
       {
         category: "week",
+        type: "trending",
       },
       {
         loaderArgs: args,
       }
     ),
-    trendingTagsAll: getTagTrendingListApi(
+    trendingTagsAll: getTagListApi(
       {
         category: "all",
+        type: "trending",
       },
       {
         loaderArgs: args,

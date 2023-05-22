@@ -5,7 +5,11 @@ import { Link, useFetcher } from "@remix-run/react";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 
 // constants
-import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import {
+  ASSET_URL,
+  PAGE_ENDPOINTS,
+  REMIX_ACTIONS_KEY,
+} from "~/constants/constant";
 import { Icons } from "./Icons";
 
 export default function HeaderUserMenu() {
@@ -21,7 +25,7 @@ export default function HeaderUserMenu() {
       }
       fetcher.submit(null, {
         method: "POST",
-        action: "/action/logout",
+        action: REMIX_ACTIONS_KEY.LOGOUT,
         replace: true,
       });
     },

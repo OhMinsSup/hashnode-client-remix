@@ -4,25 +4,13 @@ import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // api
 import { getTagApi } from "~/api/tags/tag.server";
-import { postTagFollowApi } from "~/api/tags/follow.server";
-import { deleteTagFollowApi } from "~/api/tags/unfollow.server";
-import { tagFollowSchema } from "~/api/tags/validation/follow";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
-import { RESULT_CODE } from "~/constants/constant";
 
 // components
 import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
 import TabRoutesTags from "~/components/n/TabRoutesTags";
 
 // types
-import type {
-  LoaderArgs,
-  ActionArgs,
-  V2_MetaFunction,
-} from "@remix-run/cloudflare";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 
 export const loader = async (args: LoaderArgs) => {
   const tag = args.params.tag?.toString();
@@ -41,52 +29,6 @@ export const loader = async (args: LoaderArgs) => {
 };
 
 export type nTagLoader = typeof loader;
-
-export const action = async (args: ActionArgs) => {
-  try {
-    const parse = await tagFollowSchema.parseAsync({
-      tag: args.params.tag?.toString(),
-    });
-    switch (args.request.method) {
-      case "POST": {
-        const { json: data } = await postTagFollowApi(parse.tag, {
-          actionArgs: args,
-        });
-        return json({
-          ok: data.resultCode == RESULT_CODE.OK,
-          respData: data,
-        });
-      }
-      case "DELETE": {
-        const { json: data } = await deleteTagFollowApi(parse.tag, {
-          actionArgs: args,
-        });
-        return json({
-          ok: data.resultCode == RESULT_CODE.OK,
-          respData: data,
-        });
-      }
-      default:
-        throw new Response("Method not allowed", { status: 405 });
-    }
-  } catch (error) {
-    const error_validation = ValidationErrorWrapper(error);
-    if (error_validation) {
-      return json(error_validation.errors, {
-        status: error_validation.statusCode,
-      });
-    }
-    const error_http = await HTTPErrorWrapper(error);
-    if (error_http) {
-      return json(error_http.errors, {
-        status: error_http.statusCode,
-      });
-    }
-    throw error;
-  }
-};
-
-export type NDataAction = typeof action;
 
 export const meta: V2_MetaFunction<nTagLoader> = ({
   params,

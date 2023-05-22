@@ -39,7 +39,6 @@ export const action = async ({ request }: ActionArgs) => {
 
   try {
     const parse = await signinSchema.parseAsync(form);
-    console.log(parse);
     const { header: headers } = await signinApi(parse);
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers,

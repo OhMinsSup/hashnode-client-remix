@@ -6,7 +6,7 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import ExploreTagItem from "~/components/explore/ExploreTagItem";
 
 // api
-import { getTagTrendingListApi } from "~/api/tags/tagTrending.server";
+import { getTagListApi } from "~/api/tags/tags";
 import { Icons } from "~/components/shared/Icons";
 
 // utils
@@ -29,8 +29,9 @@ export const links: LinksFunction = () => {
 
 export const loader = async (args: LoaderArgs) => {
   const { category } = parseUrlParams(args.request.url);
-  const data = await getTagTrendingListApi(
+  const data = await getTagListApi(
     {
+      type: "trending",
       category: category || "all",
       limit: 30,
     },

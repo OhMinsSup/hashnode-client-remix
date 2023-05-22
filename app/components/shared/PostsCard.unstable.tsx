@@ -156,19 +156,20 @@ PostCard.Profile = function PostProfile({ post }: PostCardProps) {
     };
   }, [post]);
 
-  const renderSkeleton = useCallback(() => {
-    return <img className="scale-110 blur-2xl grayscale" alt="thumbnail" />;
-  }, []);
+  // const renderSkeleton = useCallback(() => {
+  //   return <img className="scale-110 blur-2xl grayscale" alt="thumbnail" />;
+  // }, []);
 
-  return (
-    <ClientOnly fallback={renderSkeleton()}>
-      {() => (
-        <Suspense fallback={renderSkeleton()}>
-          <SuspenseImage data={profileData} alt="thumbnail" />
-        </Suspense>
-      )}
-    </ClientOnly>
-  );
+  // return (
+  //   <ClientOnly fallback={renderSkeleton()}>
+  //     {() => (
+  //       <Suspense fallback={renderSkeleton()}>
+  //         <SuspenseImage data={profileData} alt="thumbnail" />
+  //       </Suspense>
+  //     )}
+  //   </ClientOnly>
+  // );
+  return <img src={profileData?.url} loading="lazy" alt="user profile" />;
 };
 
 PostCard.Thumbnail = function PostThumbnail({ post }: PostCardProps) {
@@ -180,26 +181,34 @@ PostCard.Thumbnail = function PostThumbnail({ post }: PostCardProps) {
     };
   }, [post]);
 
-  const renderSkeleton = useCallback(() => {
-    return (
-      <img
-        className="min-h-[100px] w-full scale-110 blur-2xl grayscale"
-        alt="thumbnail"
-      />
-    );
-  }, []);
+  // const renderSkeleton = useCallback(() => {
+  //   return (
+  //     <img
+  //       className="min-h-[100px] w-full scale-110 blur-2xl grayscale"
+  //       alt="thumbnail"
+  //     />
+  //   );
+  // }, []);
 
+  // return (
+  //   <ClientOnly fallback={renderSkeleton()}>
+  //     {() => (
+  //       <Suspense fallback={renderSkeleton()}>
+  //         <SuspenseImage
+  //           data={thumbnailData}
+  //           className="min-h-[100px] w-full"
+  //           alt="thumbnail"
+  //         />
+  //       </Suspense>
+  //     )}
+  //   </ClientOnly>
+  // );
   return (
-    <ClientOnly fallback={renderSkeleton()}>
-      {() => (
-        <Suspense fallback={renderSkeleton()}>
-          <SuspenseImage
-            data={thumbnailData}
-            className="min-h-[100px] w-full"
-            alt="thumbnail"
-          />
-        </Suspense>
-      )}
-    </ClientOnly>
+    <img
+      className="min-h-[100px] w-full"
+      src={thumbnailData?.url}
+      loading="lazy"
+      alt="post thumbnail"
+    />
   );
 };

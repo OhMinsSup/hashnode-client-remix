@@ -38,7 +38,7 @@ export const ValidationErrorWrapper = (error: unknown) => {
 export const HTTPErrorWrapper = async (error: unknown) => {
   if (error instanceof HTTPError) {
     const resp = error.response;
-    const data = await resp.json<ErrorAPI>();
+    const data = await error.response.json<ErrorAPI>();
     const checkStatusCode = [
       STATUS_CODE.BAD_REQUEST,
       STATUS_CODE.NOT_FOUND,
