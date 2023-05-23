@@ -14,13 +14,7 @@ import Input from "~/components/auth/Input";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // remix
-import { json, redirect } from "@remix-run/cloudflare";
-
-// validation
-import { signinSchema } from "~/api/auth/validation/signin";
-
-// api
-import { signinApi } from "~/api/auth/signin.server";
+import { json } from "@remix-run/cloudflare";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
@@ -29,20 +23,16 @@ import {
   ValidationErrorWrapper,
 } from "~/api/validation/common";
 
-export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData();
-
-  const form = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
-
+export const action = async ({ request, context }: ActionArgs) => {
   try {
-    const parse = await signinSchema.parseAsync(form);
-    const { header: headers } = await signinApi(parse);
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers,
-    });
+    return await context.services.auth.authenticator.authenticate(
+      "@authenticators/form",
+      request,
+      {
+        successRedirect: PAGE_ENDPOINTS.ROOT,
+        failureRedirect: PAGE_ENDPOINTS.AUTH.SIGNIN,
+      }
+    );
   } catch (error) {
     const error_validation = ValidationErrorWrapper(error);
     if (error_validation) {

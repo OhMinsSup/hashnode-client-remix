@@ -1,5 +1,12 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "remix.env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "global.d.ts",
+    "cloudflare.d.ts",
+    "services/**/*.ts"
+  ],
   "exclude": ["_backup_routes"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],

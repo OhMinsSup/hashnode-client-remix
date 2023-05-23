@@ -54,3 +54,7 @@ npm run deploy
  - [ ] actions의 에러 및 고도화
 
  - [ ] 번들사이즈 축소
+
+# Remix.run Cloudflare 
+
+[cloudflare env](https://developers.cloudflare.com/workers/platform/environment-variables/) 환경변수 설정

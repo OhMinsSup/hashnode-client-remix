@@ -9,7 +9,7 @@
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "start": "cross-env NODE_ENV=production npm run wrangler",
     "typecheck": "tsc",
-    "wrangler": "wrangler pages dev ./public --compatibility-date=\"2023-05-16\" --compatibility-flags=\"nodejs_compat\""
+    "wrangler": "wrangler pages dev ./public --kv auth --compatibility-date=\"2023-05-12\" --compatibility-flags=\"nodejs_compat\""
   },
   "dependencies": {
     "@editorjs/code": "^2.8.0",
@@ -42,12 +42,14 @@
     "dayjs": "^1.11.7",
     "dexie": "^3.2.3",
     "dexie-react-hooks": "^1.1.3",
+    "dotenv": "^16.0.3",
     "isbot": "latest",
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
     "react-select": "^5.7.3",
+    "remix-auth": "^3.4.0",
     "remix-utils": "^6.3.0",
     "superjson": "^1.12.3",
     "tailwindcss-animate": "^1.0.5",
@@ -56,7 +58,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230511.0",
+    "@cloudflare/workers-types": "^4.20230518.0",
     "@remix-run/dev": "^1.16.1",
     "@remix-run/eslint-config": "^1.16.1",
     "@tailwindcss/typography": "^0.5.9",
@@ -72,7 +74,7 @@
     "prettier-plugin-tailwindcss": "^0.3.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.0.1"
   },
   "engines": {
     "node": ">=16.13"

@@ -94,28 +94,32 @@ export class ApiService {
     }
 
     // 서버
-    const args = options?.loaderArgs || options?.actionArgs;
     let _token: string | null = null;
+    const args =
+      (options?.loaderArgs || options?.actionArgs)?.request ?? undefined;
 
     if (args) {
-      const cookie = args.request.headers.get("cookie") ?? null;
+      const cookie = args.headers.get("cookie") ?? null;
       if (cookie) {
         const { access_token } = cookies.parse(cookie);
         if (access_token) _token = access_token;
       }
     }
 
-    if (!_token) {
-      return options;
-    }
+    if (!_token) return options;
 
+    const headers = new Headers();
+    for (const [key, value] of args?.headers ?? []) {
+      if (key === "cookie") headers.set(key, value);
+      if (key === "set-cookie") headers.set(key, value);
+    }
     // TODO: Cloudflare
     // cloudflare workerd에서는 credentials를 지원하지 않음
     // 하지만 cloudflare workerd에는 구현체 정보가 있음?
     // credentials: "include",
     _options.init = {
       ..._options?.init,
-      headers: args?.request?.headers ?? undefined,
+      headers,
     };
 
     return _options;
@@ -192,6 +196,9 @@ export class ApiService {
       method: "POST",
       body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
     });
+    for (const [k, v] of requset.headers.entries()) {
+      console.log(k, v);
+    }
     const response = await fetch(requset);
     if (!response.ok) {
       throw new HTTPError(response, requset, options);

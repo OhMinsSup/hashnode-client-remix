@@ -24,5 +24,5 @@ export async function signinApi(body: SigninBody, options?: BaseApiOptions) {
   >(API_ENDPOINTS.AUTH.SIGNIN, body, options?.init);
   const cookieHeader = response.headers.get("set-cookie");
   const header = createCookieHeaders(cookieHeader ? [cookieHeader] : undefined);
-  return { json, header };
+  return { json, header, response };
 }
