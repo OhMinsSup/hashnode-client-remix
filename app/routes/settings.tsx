@@ -6,10 +6,7 @@ import { NavLink, Outlet } from "@remix-run/react";
 import SettingHeader from "~/components/setting/SettingHeader";
 
 // remix
-import { redirect, json } from "@remix-run/cloudflare";
-
-// api
-import { getSessionApi } from "~/libs/server/session.server";
+import { redirect } from "@remix-run/cloudflare";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -24,15 +21,14 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: settingsStyles }];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const { type, header: headers } = await getSessionApi(args);
-  if (type !== "session") {
-    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-      headers,
-      status: 302,
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const isAuthenticated = await context.api.user.isAuthenticated(request);
+  if (!isAuthenticated) {
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.api.auth.getClearAuthHeaders(),
     });
   }
-  return json({ ok: true, respData: null });
+  return null;
 };
 
 export type SettingsLoader = typeof loader;

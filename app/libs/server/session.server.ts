@@ -1,9 +1,8 @@
 import cookies from "cookie";
 import { getMeApi } from "~/api/user/me.server";
 import { logoutApi } from "~/api/user/logout.server";
-import { clearCookie } from "./cookie.server";
 
-import { HTTPError } from "~/api/client.next";
+import { HTTPError } from "~/api/client";
 
 import type { LoaderArgs } from "@remix-run/cloudflare";
 import type { UserRespSchema } from "~/api/schema/resp";
@@ -42,7 +41,7 @@ export async function getSessionApi(
   }
   try {
     const { json } = await getMeApi({
-      loaderArgs: args,
+      request: args.request,
     });
     return {
       type: "session" as const,
@@ -56,12 +55,12 @@ export async function getSessionApi(
     ) {
       try {
         await logoutApi({
-          loaderArgs: args,
+          request: args.request,
         }).catch((e) => null);
         return {
           type: "unauthenticated" as const,
           session: undefined,
-          header: clearCookie(request.headers, "access_token"),
+          header: request.headers,
         };
       } catch (error) {
         return {

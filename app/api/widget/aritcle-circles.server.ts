@@ -1,12 +1,12 @@
 // api
-import { ApiService } from "../client.next";
+import { ApiService } from "../client";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 import { isString } from "~/utils/assertion";
 
 // types
-import type { BaseApiOptions } from "../client.next";
+import type { BaseApiOptions } from "../client";
 import type { GetAritcleCirclesRespSchema } from "../schema/resp";
 
 interface GetAritcleCirclesApiSearchParams {

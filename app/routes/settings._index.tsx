@@ -1,18 +1,14 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { json } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 import Json from "superjson";
 import classNames from "classnames";
-import { RESULT_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // api
 import { userUpdateSchema } from "~/api/user/validation/update";
-import { putUserApi } from "~/api/user/update.server";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getTagListApi } from "~/api/tags/tags";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
+import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 
 // components
 import AsyncCreatableSelect from "react-select/async-creatable";
@@ -70,40 +66,18 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export const action = async (args: ActionArgs) => {
-  const formData = await args.request.formData();
-  const _input_body = formData.get("body")?.toString();
-
-  try {
-    if (!_input_body) {
-      throw new Response("Missing body", { status: 400 });
+export const action = async ({ context, request }: ActionArgs) => {
+  return actionErrorWrapper(async () => {
+    const { json } = await context.api.user.updateUser(request);
+    if (json.resultCode !== RESULT_CODE.OK) {
+      return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT, {
+        status: STATUS_CODE.BAD_REQUEST,
+      });
     }
-
-    const _input_json_body = Json.parse<FormFieldValues>(_input_body);
-    const body = await userUpdateSchema.parseAsync(_input_json_body);
-    const { json: data } = await putUserApi(body, {
-      actionArgs: args,
+    return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT, {
+      headers: context.api.auth.getClearAuthHeaders(),
     });
-    if (data.resultCode !== RESULT_CODE.OK) {
-      return json({ ok: false, respData: data });
-    }
-    return json({ ok: true, respData: data });
-  } catch (error) {
-    const error_validation = ValidationErrorWrapper(error);
-    if (error_validation) {
-      return json(error_validation.errors, {
-        status: error_validation.statusCode,
-      });
-    }
-    const error_http = await HTTPErrorWrapper(error);
-    if (error_http) {
-      return json(error_http.errors, {
-        status: error_http.statusCode,
-      });
-    }
-    console.log("error (4)", error);
-    throw error;
-  }
+  });
 };
 
 export type SettingAction = typeof action;
@@ -112,7 +86,6 @@ export type FormFieldValues = UserUpdateBody;
 
 export default function Profile() {
   const fetcher = useFetcher();
-  console.log(fetcher.data);
   const [inputValue, setInputValue] = useState("");
   const session = useOptionalSession();
   const navigation = useNavigation();

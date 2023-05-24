@@ -1,12 +1,11 @@
 // api
-import { ApiService } from "../client.next";
+import { ApiService } from "../client";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { BaseApiOptions } from "../client.next";
-import { clearCookie } from "~/libs/server/cookie.server";
+import type { BaseApiOptions } from "../client";
 
 /**
  * @description 유저 삭제 API
@@ -18,6 +17,5 @@ export async function deleteUserApi(options?: BaseApiOptions) {
     ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
       ?.init
   );
-  const header = clearCookie(response.headers, "access_token");
-  return { json, header };
+  return { json, response };
 }

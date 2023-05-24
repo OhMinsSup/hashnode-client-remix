@@ -1,13 +1,13 @@
 import omit from "lodash-es/omit";
 
 // api
-import { ApiService } from "../client.next";
+import { ApiService } from "../client";
 
 // constants
 import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { BaseApiOptions } from "../client.next";
+import type { BaseApiOptions } from "../client";
 import type { PostRespSchema } from "../schema/resp";
 import type { UpdatePostBody } from "./validation/update";
 

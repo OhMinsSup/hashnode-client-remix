@@ -154,6 +154,10 @@ export const RESULT_CODE = {
   INVALID: 2004,
   // 만료된 토큰
   TOKEN_EXPIRED: 4001,
+  // 유효하지 않은 토큰
+  INVALID_TOKEN: 4002,
+  // 인증 토큰이 없음
+  NO_AUTH_TOKEN: 4003,
   // 로그인 할 수 없음
   CANNOT_BE_LOGIN: 5000,
 } as const;

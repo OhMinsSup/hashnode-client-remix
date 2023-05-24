@@ -11,59 +11,28 @@ import { Icons } from "~/components/shared/Icons";
 import Input from "~/components/auth/Input";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 
 // remix
-import { json, redirect } from "@remix-run/cloudflare";
-
-// validation
-import { signupSchema } from "~/api/auth/validation/signup";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
-
-// api
-import { signupApi } from "~/api/auth/signup.server";
+import { redirect } from "@remix-run/cloudflare";
+import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
 
-export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData();
-
-  const form = {
-    username: formData.get("username") || "",
-    email: formData.get("email") || "",
-    password: formData.get("password") || "",
-    confirmPassword: formData.get("confirmPassword") || "",
-  };
-
-  try {
-    const parse = await signupSchema.parseAsync(form);
-    const { header: headers } = await signupApi({
-      email: parse.email,
-      username: parse.username,
-      password: parse.password,
-    });
+export const action = async ({ request, context }: ActionArgs) => {
+  return actionErrorWrapper(async () => {
+    const { response } = await context.api.auth.signup(request);
+    const cookie = response.headers.get("set-cookie");
+    if (!cookie) {
+      return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+        status: STATUS_CODE.BAD_REQUEST,
+      });
+    }
     return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers,
+      headers: context.api.auth.getAuthHeaders(cookie),
     });
-  } catch (error) {
-    const error_validation = ValidationErrorWrapper(error);
-    if (error_validation) {
-      return json(error_validation.errors, {
-        status: error_validation.statusCode,
-      });
-    }
-    const error_http = await HTTPErrorWrapper(error);
-    if (error_http) {
-      return json(error_http.errors, {
-        status: error_http.statusCode,
-      });
-    }
-    throw error;
-  }
+  });
 };
 
 export type SignupAction = typeof action;

@@ -9,7 +9,7 @@ import type {
   MutationFunction,
   UseMutationOptions,
 } from "@tanstack/react-query";
-import type { BaseResponse } from "~/api/client.next";
+import type { BaseResponse } from "~/api/client";
 import type { UploadRespSchema } from "~/api/schema/resp";
 
 export type ReturnValue = {

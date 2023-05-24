@@ -3,9 +3,9 @@ import type { Nullable } from "./api";
 export interface SkillSchema {
   id: number;
   name: string;
-  createdAt: number;
-  updatedAt: number;
-  deletedAt?: Nullable<number>;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: Nullable<string>;
 }
 
 export interface UserProfileSchema {
@@ -17,9 +17,9 @@ export interface UserProfileSchema {
   location?: Nullable<string>;
   bio?: Nullable<string>;
   availableText?: Nullable<string>;
-  createdAt: number;
-  updatedAt: number;
-  deletedAt?: Nullable<number>;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: Nullable<string>;
 }
 
 export interface UserSocialSchema {
@@ -40,5 +40,5 @@ export interface UserSchema {
   >;
   skills: Pick<SkillSchema, "id" | "name">[];
   socials: UserSocialSchema;
-  createdAt: number;
+  createdAt: string;
 }

@@ -11,43 +11,28 @@ import { Icons } from "~/components/shared/Icons";
 import Input from "~/components/auth/Input";
 
 // constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 
 // remix
-import { json } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
+import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
-import {
-  HTTPErrorWrapper,
-  ValidationErrorWrapper,
-} from "~/api/validation/common";
 
 export const action = async ({ request, context }: ActionArgs) => {
-  try {
-    return await context.services.auth.authenticator.authenticate(
-      "@authenticators/form",
-      request,
-      {
-        successRedirect: PAGE_ENDPOINTS.ROOT,
-        failureRedirect: PAGE_ENDPOINTS.AUTH.SIGNIN,
-      }
-    );
-  } catch (error) {
-    const error_validation = ValidationErrorWrapper(error);
-    if (error_validation) {
-      return json(error_validation.errors, {
-        status: error_validation.statusCode,
+  return actionErrorWrapper(async () => {
+    const { response } = await context.api.auth.signin(request);
+    const cookie = response.headers.get("set-cookie");
+    if (!cookie) {
+      return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+        status: STATUS_CODE.BAD_REQUEST,
       });
     }
-    const error_http = await HTTPErrorWrapper(error);
-    if (error_http) {
-      return json(error_http.errors, {
-        status: error_http.statusCode,
-      });
-    }
-    throw error;
-  }
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.api.auth.getAuthHeaders(cookie),
+    });
+  });
 };
 
 export type SigninAction = typeof action;

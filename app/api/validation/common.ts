@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { STATUS_CODE } from "~/constants/constant";
 import { match, P } from "ts-pattern";
-import { HTTPError } from "../client.next";
+import { HTTPError } from "../client";
 
 // types
 import type { ErrorAPI } from "~/api/schema/api";

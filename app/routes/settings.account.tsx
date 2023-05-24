@@ -1,9 +1,6 @@
 import React, { useCallback } from "react";
-import { json, redirect } from "@remix-run/cloudflare";
-
-// api
-import { deleteUserApi } from "~/api/user/delete.server";
-import { HTTPErrorWrapper } from "~/api/validation/common";
+import { redirect } from "@remix-run/cloudflare";
+import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
@@ -14,7 +11,7 @@ import {
 } from "@remix-run/react";
 
 // constants
-import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
@@ -52,34 +49,18 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export const action = async (args: ActionArgs) => {
-  try {
-    if (args.request.method !== "DELETE") {
-      throw new Response(
-        "Method not allowed. Only DELETE requests are allowed.",
-        { status: 405 }
-      );
-    }
-
-    const { json: data, header } = await deleteUserApi({
-      actionArgs: args,
-    });
-
-    if (data.resultCode !== RESULT_CODE.OK) {
-      return json({ ok: false, respData: data });
-    }
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers: header,
-    });
-  } catch (error) {
-    const error_http = await HTTPErrorWrapper(error);
-    if (error_http) {
-      return json(error_http.errors, {
-        status: error_http.statusCode,
+export const action = async ({ context, request }: ActionArgs) => {
+  return actionErrorWrapper(async () => {
+    const { json } = await context.api.user.deleteUser(request);
+    if (json.resultCode !== RESULT_CODE.OK) {
+      return redirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT, {
+        status: STATUS_CODE.BAD_REQUEST,
       });
     }
-    throw error;
-  }
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.api.auth.getClearAuthHeaders(),
+    });
+  });
 };
 
 export default function Account() {

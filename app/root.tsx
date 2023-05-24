@@ -16,9 +16,7 @@ import NotFoundPage from "./components/errors/NotFoundPage";
 import InternalServerPage from "./components/errors/InternalServerPage";
 
 // api
-import Json from "superjson";
-import { getSessionApi } from "~/libs/server/session.server";
-import { ApiService } from "./api/client.next";
+import { ApiService } from "./api/client";
 import { ASSET_URL } from "./constants/constant";
 
 // styles
@@ -36,28 +34,19 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: globalStyles }];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  ApiService.setBaseUrl(
-    // @ts-ignore
-    args.context.API_BASE_URL || "http://localhost:8080/api/v1"
-  );
+export const loader = async ({ context, request }: LoaderArgs) => {
+  ApiService.setBaseUrl(context.API_BASE_URL || "http://localhost:8080/api/v1");
   const env = {
     API_BASE_URL: ApiService.baseUrl,
   };
-  const { session, header: headers } = await getSessionApi(args);
-  if (!session) {
-    return json(
-      { currentProfile: null, env }
-      // {
-      //   headers,
-      // }
-    );
-  }
+  const data = await context.api.user.getSession(request);
   return json(
-    { currentProfile: session, env }
-    // {
-    //   headers,
-    // }
+    { currentProfile: data, env },
+    data
+      ? undefined
+      : {
+          headers: context.api.auth.getClearAuthHeaders(),
+        }
   );
 };
 
@@ -169,7 +158,7 @@ export default function App() {
         <body>
           <script
             dangerouslySetInnerHTML={{
-              __html: `window.ENV = ${Json.stringify(env)}`,
+              __html: `window.ENV = ${JSON.stringify(env)}`,
             }}
           />
           <Outlet />
@@ -184,7 +173,6 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
   return (
     <html lang="en">
       <head>

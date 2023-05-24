@@ -5,7 +5,6 @@ import { isEmpty, isNull, isString, isUndefined } from "~/utils/assertion";
 
 // types
 import type { Nullable } from "./schema/api";
-import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
 
 export class HTTPError extends Error {
   public response: Response;
@@ -37,8 +36,7 @@ export type CustomOptions = {
 export type BaseApiOptions = {
   custom?: CustomOptions;
   init?: RequestInit;
-  loaderArgs?: LoaderArgs;
-  actionArgs?: ActionArgs;
+  request?: Request;
 };
 
 export type BaseResponse<Data = any> = {
@@ -51,16 +49,14 @@ export type BaseResponse<Data = any> = {
 export class ApiService {
   static baseUrl = !isBrowser
     ? "http://localhost:8080/api/v1"
-    : window.ENV?.json?.API_BASE_URL ?? "http://localhost:8080/api/v1";
+    : window.ENV?.API_BASE_URL ?? "http://localhost:8080/api/v1";
 
   static setBaseUrl(url: string) {
     this.baseUrl = url;
   }
 
   static middlewareSetAuthticated = (options?: BaseApiOptions) => {
-    const _options = {
-      ...options,
-    };
+    const _options = Object.assign({}, options);
     if (
       (options?.custom && isUndefined(options.custom.isAuthticated)) ||
       isNull(options?.custom?.isAuthticated)
@@ -76,51 +72,54 @@ export class ApiService {
   static middlewareForAuth = (options?: BaseApiOptions) => {
     const isAuthticated = options?.custom?.isAuthticated ?? false;
     if (!isAuthticated) return options;
-
-    let _options = {
+    const _options = {
       custom: options?.custom,
       init: options?.init,
-      loaderArgs: options?.loaderArgs,
-      actionArgs: options?.actionArgs,
+      rqeuest: options?.request,
     };
 
     // 클라이언트
     if (isBrowser) {
-      _options.init = {
-        ..._options?.init,
+      _options.init = Object.assign({}, _options.init, {
         credentials: "include",
-      };
+      });
       return _options;
     }
 
     // 서버
-    let _token: string | null = null;
-    const args =
-      (options?.loaderArgs || options?.actionArgs)?.request ?? undefined;
+    let _access_token: string | null = null;
+    const _headers = options?.request?.headers ?? new Headers();
 
-    if (args) {
-      const cookie = args.headers.get("cookie") ?? null;
+    if (_headers) {
+      const cookie =
+        _headers.get("cookie") || _headers.get("set-cookie") || null;
       if (cookie) {
         const { access_token } = cookies.parse(cookie);
-        if (access_token) _token = access_token;
+        if (access_token) _access_token = access_token;
       }
     }
 
-    if (!_token) return options;
+    if (!_access_token) return options;
 
+    const HEADERS = [
+      "cookie",
+      "Cookie",
+      "set-cookie",
+      "Set-Cookie",
+      "content-type",
+      "Content-Type",
+    ];
     const headers = new Headers();
-    for (const [key, value] of args?.headers ?? []) {
-      if (key === "cookie") headers.set(key, value);
-      if (key === "set-cookie") headers.set(key, value);
+    for (const [key, value] of _headers) {
+      if (HEADERS.includes(key)) headers.set(key, value);
     }
     // TODO: Cloudflare
     // cloudflare workerd에서는 credentials를 지원하지 않음
     // 하지만 cloudflare workerd에는 구현체 정보가 있음?
     // credentials: "include",
-    _options.init = {
-      ..._options?.init,
+    _options.init = Object.assign({}, _options.init, {
       headers,
-    };
+    });
 
     return _options;
   };
@@ -196,9 +195,6 @@ export class ApiService {
       method: "POST",
       body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
     });
-    for (const [k, v] of requset.headers.entries()) {
-      console.log(k, v);
-    }
     const response = await fetch(requset);
     if (!response.ok) {
       throw new HTTPError(response, requset, options);

@@ -5,7 +5,7 @@ import { Icons } from "~/components/shared/Icons";
 
 // remix
 import { Outlet, useLocation, useNavigate } from "@remix-run/react";
-
+import { redirect } from "@remix-run/cloudflare";
 import { useCallback, useMemo } from "react";
 
 // constants
@@ -16,20 +16,18 @@ import { mergeMeta } from "~/libs/server/merge-meta";
 import authStyles from "~/styles/routes/auth.css";
 
 // types
-import type { LoaderArgs } from "@remix-run/cloudflare";
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
 };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  let user = await context.services.auth.authenticator.isAuthenticated(request);
-  console.log("user", user);
-  // If the user is already authenticated redirect to /dashboard directly
-  return await context.services.auth.authenticator.isAuthenticated(request, {
-    successRedirect: PAGE_ENDPOINTS.ROOT,
-  });
+  const isAuthenticated = await context.api.user.isAuthenticated(request);
+  if (isAuthenticated) {
+    return redirect(PAGE_ENDPOINTS.ROOT);
+  }
+  return null;
 };
 
 export type AuthLoader = typeof loader;

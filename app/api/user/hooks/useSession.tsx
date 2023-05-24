@@ -2,7 +2,7 @@ import type { UserRespSchema } from "~/api/schema/resp";
 import { useMatchesData } from "~/libs/hooks/useMatchesData";
 
 function isSession(user: any): user is UserRespSchema {
-  return user && typeof user === "object" && typeof user.email === "string";
+  return user && typeof user === "object" && typeof user.id === "number";
 }
 
 export function useOptionalSession(): UserRespSchema | undefined {
