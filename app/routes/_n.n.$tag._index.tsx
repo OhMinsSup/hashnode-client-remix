@@ -1,12 +1,7 @@
 import React from "react";
 import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-
-// api
-import { getPostListApi } from "~/api/posts/posts.server";
-
-// utils
-import { parseUrlParams } from "~/utils/util";
+import { STATUS_CODE } from "~/constants/constant";
 
 // components
 import PostsList from "~/components/shared/PostsList.unstable";
@@ -14,38 +9,30 @@ import PostsList from "~/components/shared/PostsList.unstable";
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const tag = args.params.tag?.toString();
-  if (!tag) {
-    throw new Response("Not Found", { status: 404 });
+export const loader = async ({ request, context, params }: LoaderArgs) => {
+  const tagName = params.tag?.toString();
+  if (!tagName) {
+    throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
   }
-
-  const params = parseUrlParams(args.request.url);
-
   let cursor = undefined;
   if (params.cursor) {
     cursor = parseInt(params.cursor);
   }
-
   let limit = undefined;
   if (params.limit) {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getPostListApi(
-    {
-      cursor,
-      limit,
-      type: "recent",
-      tag,
-    },
-    {
-      loaderArgs: args,
-    }
-  );
+  const args = {
+    cursor,
+    limit,
+    type: "recent",
+    tag: tagName,
+  } as const;
 
+  const { json: data } = await context.api.item.getItems(request, args);
   return json({
-    posts: posts.json?.result,
+    posts: data?.result,
   });
 };
 

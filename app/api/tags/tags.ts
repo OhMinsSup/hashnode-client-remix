@@ -9,7 +9,7 @@ import type { BaseApiOptions } from "../client";
 import type { TagListRespSchema } from "../schema/resp";
 import type { PaginationQuery } from "../schema/query";
 
-interface GetTagListApiSearchParams extends PaginationQuery {
+export interface GetTagListApiSearchParams extends PaginationQuery {
   name?: string;
   type?: "recent" | "popular" | "new" | "trending";
   category?: "week" | "all" | "month" | "year";

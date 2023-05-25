@@ -9,7 +9,7 @@ import type { BaseApiOptions } from "../client";
 import type { PostLikeListRespSchema } from "../schema/resp";
 import type { PaginationQuery } from "../schema/query";
 
-interface GetLikePostListApiSearchParams extends PaginationQuery {}
+export interface GetLikePostListApiSearchParams extends PaginationQuery {}
 
 /**
  * @description 좋아요 포스트 리스트 조회 API

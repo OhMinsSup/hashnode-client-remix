@@ -37,7 +37,7 @@ export const loader = async (args: LoaderArgs) => {
       limit,
     },
     {
-      loaderArgs: args,
+      request: args.request,
     }
   );
 

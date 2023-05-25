@@ -1,4 +1,3 @@
-import React from "react";
 import { json } from "@remix-run/cloudflare";
 
 // components
@@ -8,37 +7,29 @@ import LikedPostsList from "~/components/bookmarks/LikedPostsList.unstable";
 import { parseUrlParams } from "~/utils/util";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
-// api
-import { getLikePostListApi } from "~/api/posts/like-posts.server";
-
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const params = parseUrlParams(args.request.url);
-
+export const loader = async ({ request, context }: LoaderArgs) => {
+  const params = parseUrlParams(request.url);
   let cursor = undefined;
   if (params.cursor) {
     cursor = parseInt(params.cursor);
   }
-
   let limit = 25;
   if (params.limit) {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getLikePostListApi(
-    {
-      cursor,
-      limit,
-    },
-    {
-      loaderArgs: args,
-    }
-  );
+  const args = {
+    cursor,
+    limit,
+  } as const;
+
+  const { json: data } = await context.api.item.getLikeItems(request, args);
 
   return json({
-    posts: posts.json?.result,
+    posts: data?.result,
   });
 };
 

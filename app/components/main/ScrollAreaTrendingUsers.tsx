@@ -25,6 +25,7 @@ function ScrollAreaTrendingUsers(_props: ScrollAreaTrendingUsersProps) {
           >
             {(data) => (
               <ScrollAreaTrendingUsers.AricleCircleList
+                // @ts-ignore
                 data={data.json?.result}
               />
             )}

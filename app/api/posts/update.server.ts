@@ -1,5 +1,3 @@
-import omit from "lodash-es/omit";
-
 // api
 import { ApiService } from "../client";
 
@@ -15,16 +13,18 @@ interface UpdatePostApiBody extends UpdatePostBody {}
 
 /**
  * @description 포스트 수정 API
+ * @param {number | string} id
  * @param {UpdatePostApiBody} body
  * @param {BaseApiOptions?} options
  */
 export async function updatePostApi(
+  id: number | string,
   body: UpdatePostApiBody,
   options?: BaseApiOptions
 ) {
   const { json } = await ApiService.putJson<PostRespSchema>(
-    API_ENDPOINTS.POSTS.ID(body.id),
-    omit(body, ["id"]),
+    API_ENDPOINTS.POSTS.ID(id),
+    body,
     ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
       ?.init
   );

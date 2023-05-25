@@ -1,9 +1,5 @@
-import React from "react";
 import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-
-// api
-import { getPostListApi } from "~/api/posts/posts.server";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -13,32 +9,27 @@ import PostsList from "~/components/shared/PostsList.unstable";
 
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const params = parseUrlParams(args.request.url);
-
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const params = parseUrlParams(request.url);
   let cursor = undefined;
   if (params.cursor) {
     cursor = parseInt(params.cursor);
   }
-
   let limit = undefined;
   if (params.limit) {
     limit = parseInt(params.limit);
   }
 
-  const posts = await getPostListApi(
-    {
-      cursor,
-      limit,
-      type: "recent",
-    },
-    {
-      loaderArgs: args,
-    }
-  );
+  const args = {
+    cursor,
+    limit,
+    type: "recent",
+  } as const;
+
+  const { json: data } = await context.api.item.getItems(request, args);
 
   return json({
-    posts: posts.json?.result,
+    posts: data?.result,
   });
 };
 

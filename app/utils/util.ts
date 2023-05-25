@@ -37,17 +37,6 @@ export const firstLetterToUpperCase = (str?: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const noopPromiseResponse = (data: any) => {
-  return Promise.resolve({
-    json: {
-      message: undefined,
-      result: data,
-      resultCode: 0,
-      error: undefined,
-    },
-  });
-};
-
 export const valueToBoolean = (value: any) => {
   if (value === "true") {
     return true;

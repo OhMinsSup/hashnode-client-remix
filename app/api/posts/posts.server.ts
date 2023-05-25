@@ -9,7 +9,7 @@ import type { BaseApiOptions } from "../client";
 import type { PostListRespSchema } from "../schema/resp";
 import type { PaginationQuery } from "../schema/query";
 
-interface GetPostListApiSearchParams extends PaginationQuery {
+export interface GetPostListApiSearchParams extends PaginationQuery {
   keyword?: string;
   type?: "recent" | "featured" | "past" | "personalized";
   startDate?: string;

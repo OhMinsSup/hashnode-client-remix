@@ -23,12 +23,14 @@ export default function AppRightSidebarWidgetForBookmarks() {
         errorElement={<>Error loading package location!</>}
       >
         {(data) => {
+          // @ts-ignore
           const bookmarks = data.json?.result ?? [];
           return (
             <AppRightSidebarContentBox
               title="Bookmarks"
               to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
             >
+              {/* @ts-ignore */}
               {bookmarks.map((item, index) => (
                 <AppRightSidebarWidgetBookmark
                   key={`widget-bookmark-${item.id}`}

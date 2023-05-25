@@ -1,13 +1,9 @@
-import React from "react";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { defer } from "@remix-run/cloudflare";
 
 import Header from "~/components/shared/Header";
 import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
 import AppRightSidebar from "~/components/n/AppRightSidebar";
-
-// api
-import { getTagListApi } from "~/api/tags/tags";
 
 // types
 import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
@@ -29,34 +25,17 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async (args: LoaderArgs) => {
+export const loader = async ({ request, context }: LoaderArgs) => {
   return defer({
-    trendingTag: getTagListApi(
-      {
-        type: "popular",
-      },
-      {
-        loaderArgs: args,
-      }
-    ),
-    trendingTagsWeek: getTagListApi(
-      {
-        category: "week",
-        type: "trending",
-      },
-      {
-        loaderArgs: args,
-      }
-    ),
-    trendingTagsAll: getTagListApi(
-      {
-        category: "all",
-        type: "trending",
-      },
-      {
-        loaderArgs: args,
-      }
-    ),
+    trendingTag: context.api.tag.getTagList(request, { type: "popular" }),
+    trendingTagsWeek: context.api.tag.getTagList(request, {
+      type: "popular",
+      category: "week",
+    }),
+    trendingTagsAll: context.api.tag.getTagList(request, {
+      type: "trending",
+      category: "all",
+    }),
   });
 };
 

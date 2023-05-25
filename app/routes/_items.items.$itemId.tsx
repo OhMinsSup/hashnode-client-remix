@@ -42,7 +42,7 @@ export const loader = async (args: LoaderArgs) => {
   }
 
   const { json: data } = await getPostApi(itemId, {
-    loaderArgs: args,
+    request: args.request,
   });
 
   return json({

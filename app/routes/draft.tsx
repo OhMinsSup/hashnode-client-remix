@@ -1,10 +1,7 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 // remix
-import { json, redirect } from "@remix-run/cloudflare";
-
-// api
-import { getSessionApi } from "~/libs/server/session.server";
+import { redirect } from "@remix-run/cloudflare";
 
 // components
 import DraftTemplate from "~/components/draft/DraftTemplate";
@@ -90,15 +87,14 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const { type, header: headers } = await getSessionApi(args);
-  if (type !== "session") {
-    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-      headers,
-      status: 302,
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const isAuthenticated = await context.api.user.isAuthenticated(request);
+  if (!isAuthenticated) {
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.api.auth.getClearAuthHeaders(),
     });
   }
-  return json({ ok: true });
+  return null;
 };
 
 export default function DraftRouteLayout() {

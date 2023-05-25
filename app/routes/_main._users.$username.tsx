@@ -27,7 +27,7 @@ export const loader = async (args: LoaderArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
   const { json: data } = await getUserApi(username, {
-    loaderArgs: args,
+    request: args.request,
   });
   if (!data?.result) {
     throw new Response("Not Found", { status: 404 });

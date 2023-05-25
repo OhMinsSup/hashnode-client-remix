@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // api
-import { getTagApi } from "~/api/tags/tag.server";
+import { STATUS_CODE } from "~/constants/constant";
 
 // components
 import TagDetailInfoBox from "~/components/n/TagDetailInfoBox";
@@ -12,19 +12,14 @@ import TabRoutesTags from "~/components/n/TabRoutesTags";
 // types
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const tag = args.params.tag?.toString();
-  if (!tag) {
-    throw new Response("Not Found", { status: 404 });
+export const loader = async ({ request, params, context }: LoaderArgs) => {
+  const tagName = params.tag?.toString();
+  if (!tagName) {
+    throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
   }
-  const { json: data } = await getTagApi(tag, {
-    loaderArgs: args,
-  });
-  if (!data?.result) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  const { json: data } = await context.api.tag.getTag(tagName, request);
   return json({
-    tagInfo: data?.result,
+    tagInfo: data.result,
   });
 };
 

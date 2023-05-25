@@ -32,7 +32,7 @@ export const action = async (args: ActionArgs) => {
     switch (args.request.method) {
       case "POST": {
         const { json: data } = await postTagFollowApi(parse.tag, {
-          actionArgs: args,
+          request: args.request,
         });
         return json({
           ok: data.resultCode == RESULT_CODE.OK,
@@ -41,7 +41,7 @@ export const action = async (args: ActionArgs) => {
       }
       case "DELETE": {
         const { json: data } = await deleteTagFollowApi(parse.tag, {
-          actionArgs: args,
+          request: args.request,
         });
         return json({
           ok: data.resultCode == RESULT_CODE.OK,

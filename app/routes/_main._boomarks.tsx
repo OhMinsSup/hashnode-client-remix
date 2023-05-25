@@ -1,12 +1,7 @@
-import React from "react";
-import { json, redirect } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-
-// api
-import { getSessionApi } from "~/libs/server/session.server";
 
 // types
 import type {
@@ -14,6 +9,7 @@ import type {
   V2_MetaFunction,
   LinksFunction,
 } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
@@ -26,15 +22,14 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const { type, header: headers } = await getSessionApi(args);
-  if (type !== "session") {
-    throw redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-      headers,
-      status: 302,
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const isAuthenticated = await context.api.user.isAuthenticated(request);
+  if (!isAuthenticated) {
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.api.auth.getClearAuthHeaders(),
     });
   }
-  return json({ ok: true });
+  return null;
 };
 
 export type BookmarksLoader = typeof loader;

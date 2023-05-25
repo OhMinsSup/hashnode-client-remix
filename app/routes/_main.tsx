@@ -1,11 +1,4 @@
-import React from "react";
 import { defer } from "@remix-run/cloudflare";
-
-// api
-import { getTagListApi } from "~/api/tags/tags";
-import { getWidgetBookmarksApi } from "~/api/widget/widget-bookmarks.server";
-import { getSessionApi } from "~/libs/server/session.server";
-import { noopPromiseResponse } from "~/libs/server/response.server";
 
 // components
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
@@ -23,28 +16,10 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeStyles }];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const data = await getSessionApi(args);
-  let bookmarksPromise: ReturnType<typeof getWidgetBookmarksApi> | null = null;
-  if (data.type === "session") {
-    bookmarksPromise = getWidgetBookmarksApi(undefined, {
-      loaderArgs: args,
-    });
-  } else {
-    bookmarksPromise = noopPromiseResponse([]) as ReturnType<
-      typeof getWidgetBookmarksApi
-    >;
-  }
+export const loader = async ({ context, request }: LoaderArgs) => {
   return defer({
-    trendingTag: getTagListApi(
-      {
-        type: "popular",
-      },
-      {
-        loaderArgs: args,
-      }
-    ),
-    bookmarks: bookmarksPromise,
+    trendingTag: context.api.tag.getTagList(request, { type: "popular" }),
+    bookmarks: context.api.widget.getWidgetBookmarks(request),
   });
 };
 

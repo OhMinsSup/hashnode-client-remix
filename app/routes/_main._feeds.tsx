@@ -1,10 +1,5 @@
-import React from "react";
-
 // remix
 import { defer } from "@remix-run/cloudflare";
-
-// api
-import { getAritcleCirclesApi } from "~/api/widget/aritcle-circles.server";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
@@ -20,12 +15,9 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeListStyle }];
 };
 
-export const loader = (args: LoaderArgs) => {
-  const getAricleCirclePromise = getAritcleCirclesApi(undefined, {
-    loaderArgs: args,
-  });
+export const loader = ({ context, request }: LoaderArgs) => {
   return defer({
-    getAricleCircle: getAricleCirclePromise,
+    getAricleCircle: context.api.widget.getAritcleCircles(request),
   });
 };
 
