@@ -9,11 +9,13 @@ import { updatePostSchema } from "~/api/posts/validation/update";
 import { createPostApi } from "~/api/posts/create.server";
 import { createPostSchema } from "~/api/posts/validation/create";
 import { getLikePostListApi } from "~/api/posts/like-posts.server";
+import { getUserPostListApi } from "~/api/user/user-posts.server";
 
 // types
 import type { Env } from "../env";
 import type { GetPostListApiSearchParams } from "~/api/posts/posts.server";
 import type { GetLikePostListApiSearchParams } from "~/api/posts/like-posts.server";
+import type { GetUserPostListApiSearchParams } from "~/api/user/user-posts.server";
 
 export class ItemApiService {
   constructor(private readonly env: Env) {}
@@ -29,6 +31,26 @@ export class ItemApiService {
     query?: GetLikePostListApiSearchParams
   ): Promise<ReturnType<typeof getPostListApi>> {
     return await getLikePostListApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @description 아이템 리스트
+   * @param {Request} request
+   * @param {string} username
+   * @param {GetUserPostListApiSearchParams?} query
+   * @returns {Promise<ReturnType<typeof getUserPostListApi>>}
+   */
+  async getUserItems(
+    request: Request,
+    username: string,
+    query?: GetUserPostListApiSearchParams
+  ): Promise<ReturnType<typeof getPostListApi>> {
+    if (!username) {
+      throw new Response("Not Found", { status: 404 });
+    }
+    return await getUserPostListApi(username, query, {
       request,
     });
   }

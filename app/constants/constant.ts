@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
     MY_POSTS: "users/my-posts",
     USERNAME: (username: string) => `users/${username}`,
     USERNAME_POSTS: (username: string) => `users/${username}/posts`,
+    TRENDING_USERS: "users/treanding",
   },
   POSTS: {
     ROOT: "posts",
@@ -117,7 +118,7 @@ export const PAGE_ENDPOINTS = {
     ACCOUNT: "/settings/account",
   },
   USERS: {
-    ID: (username: string) => `/@${username}`,
+    ID: (username: string) => `/blog/@${username}`,
   },
 } as const;
 

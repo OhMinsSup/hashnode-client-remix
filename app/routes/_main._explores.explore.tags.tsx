@@ -6,7 +6,6 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import ExploreTagItem from "~/components/explore/ExploreTagItem";
 
 // api
-import { getTagListApi } from "~/api/tags/tags";
 import { Icons } from "~/components/shared/Icons";
 
 // utils
@@ -27,33 +26,27 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const { category } = parseUrlParams(args.request.url);
-  const data = await getTagListApi(
-    {
-      type: "trending",
-      category: category || "all",
-      limit: 30,
-    },
-    {
-      request: args.request,
-    }
-  );
+export const loader = async ({ request, context }: LoaderArgs) => {
+  const { category } = parseUrlParams(request.url);
+  const data = await context.api.tag.getTagList(request, {
+    type: "trending",
+    category: category || "all",
+    limit: 50,
+  });
   return json({
-    trendingTag: data.json.result,
+    trendingTags: data.json.result,
   });
 };
 
 export type ExploreTrendingTagsLoader = typeof loader;
 
 export default function Page() {
-  const { trendingTag } = useLoaderData<ExploreTrendingTagsLoader>();
+  const { trendingTags } = useLoaderData<ExploreTrendingTagsLoader>();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      console.log(e.target.value);
       setSearchParams({
         ...searchParams,
         category: e.target.value,
@@ -85,7 +78,7 @@ export default function Page() {
         </div>
       </div>
       <div className="content-wrapper">
-        {trendingTag.list.map((item) => (
+        {trendingTags.list.map((item) => (
           <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
         ))}
       </div>

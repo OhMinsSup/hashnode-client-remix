@@ -67,6 +67,12 @@ export interface PostListRespSchema
 export interface PostLikeListRespSchema
   extends ListRespSchema<PostLikeRespSchema> {}
 
+export interface ExploreBlogsListRespSchema {
+  posts: Array<
+    Pick<PostDetailRespSchema, "id" | "title"> & { createdAt: number }
+  >;
+}
+
 export interface GetTopPostsRespSchema {
   posts: PostDetailRespSchema[];
 }
@@ -79,7 +85,7 @@ export interface GetAritcleCircleRespSchema {
   email: string;
   profile: Pick<UserProfileSchema, "name" | "bio" | "avatarUrl" | "tagline">;
   count: PostCountSchema;
-  lastPost: Pick<PostSchema, 'id' | 'title' | 'createdAt'>
+  lastPost: Pick<PostSchema, "id" | "title" | "createdAt">;
 }
 
 export interface GetAritcleCirclesRespSchema {

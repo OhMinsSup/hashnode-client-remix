@@ -1,17 +1,19 @@
 import React, { useCallback } from "react";
+import { json } from "@remix-run/cloudflare";
+import { parseUrlParams } from "~/utils/util";
 
 // components
 import ExploreBlogItem from "~/components/explore/ExploreBlogItem";
 import { Icons } from "~/components/shared/Icons";
 
 // hooks
-import { useSearchParams } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 
 // styles
 import homeExploreBlogsStyle from "~/styles/routes/home-explore-blogs.css";
 
 // types
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [
@@ -22,12 +24,26 @@ export const links: LinksFunction = () => {
   ];
 };
 
+export const loader = async ({ request, context }: LoaderArgs) => {
+  const { category } = parseUrlParams(request.url);
+  const data = await context.api.user.getExploreBlogs(request, {
+    category: category || "all",
+    limit: 50,
+  });
+  return json({
+    trendingBlogs: data.json.result,
+  });
+};
+
+export type ExploreTrendingBlogsLoader = typeof loader;
+
 export default function Page() {
+  const { trendingBlogs } = useLoaderData<ExploreTrendingBlogsLoader>();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      console.log(e.target.value);
       setSearchParams({
         ...searchParams,
         category: e.target.value,
@@ -61,11 +77,9 @@ export default function Page() {
         </div>
       </div>
       <div className="content-wrapper">
-        <ExploreBlogItem />
-        <ExploreBlogItem />
-        <ExploreBlogItem />
-        <ExploreBlogItem />
-        <ExploreBlogItem />
+        {trendingBlogs.posts.map((item) => (
+          <ExploreBlogItem key={`ExploreBlogItem-${item.id}`} />
+        ))}
       </div>
     </div>
   );

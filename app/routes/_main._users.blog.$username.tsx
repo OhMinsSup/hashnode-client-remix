@@ -1,10 +1,7 @@
-import React from "react";
-
 // provider
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import UserProfileBox from "~/components/users/UserProfileBox";
 import { json } from "@remix-run/cloudflare";
-import { getUserApi } from "~/api/user/user.server";
 
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
@@ -21,17 +18,12 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async (args: LoaderArgs) => {
-  const username = args.params.username?.toString();
+export const loader = async ({ context, request, params }: LoaderArgs) => {
+  const username = params.username?.toString();
   if (!username) {
     throw new Response("Not Found", { status: 404 });
   }
-  const { json: data } = await getUserApi(username, {
-    request: args.request,
-  });
-  if (!data?.result) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  const { json: data } = await context.api.user.getUser(request, username);
   return json({
     userInfo: data?.result,
   });

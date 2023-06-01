@@ -1,5 +1,3 @@
-import React from "react";
-
 // provider
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
@@ -8,41 +6,34 @@ import PostsList from "~/components/shared/PostsList.unstable";
 
 import { json } from "@remix-run/cloudflare";
 import { parseUrlParams } from "~/utils/util";
-import { getUserPostListApi } from "~/api/user/user-posts.server";
 
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async (args: LoaderArgs) => {
-  const username = args.params.username?.toString();
+export const loader = async ({ request, params, context }: LoaderArgs) => {
+  const username = params.username?.toString();
   if (!username) {
     throw new Response("Not Found", { status: 404 });
   }
-
-  const params = parseUrlParams(args.request.url);
-
+  const searchParams = parseUrlParams(request.url);
   let cursor = undefined;
-  if (params.cursor) {
-    cursor = parseInt(params.cursor);
+  if (searchParams.cursor) {
+    cursor = parseInt(searchParams.cursor);
   }
-
   let limit = undefined;
-  if (params.limit) {
-    limit = parseInt(params.limit);
+  if (searchParams.limit) {
+    limit = parseInt(searchParams.limit);
   }
-
-  const posts = await getUserPostListApi(
+  const args = {
+    cursor,
+    limit,
+  };
+  const { json: data } = await context.api.item.getUserItems(
+    request,
     username,
-    {
-      cursor,
-      limit,
-    },
-    {
-      request: args.request,
-    }
+    args
   );
-
   return json({
-    posts: posts.json?.result,
+    posts: data?.result,
   });
 };
 

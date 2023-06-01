@@ -5,6 +5,8 @@ import { getMeApi } from "~/api/user/me.server";
 import { logoutApi } from "~/api/user/logout.server";
 import { deleteUserApi } from "~/api/user/delete.server";
 import { putUserApi } from "~/api/user/update.server";
+import { getUserApi } from "~/api/user/user.server";
+import { getExploreBlogsApi } from "~/api/user/explore-blogs.server";
 import { userUpdateSchema } from "~/api/user/validation/update";
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 import { HTTPError } from "~/api/client";
@@ -13,6 +15,7 @@ import { HTTPError } from "~/api/client";
 import type { Env } from "../env";
 import type { UserRespSchema } from "~/api/schema/resp";
 import type { UserUpdateBody } from "~/api/user/validation/update";
+import type { GetExploreBlogsApiSearchParams } from "~/api/user/explore-blogs.server";
 
 export class UserApiService {
   constructor(private readonly env: Env) {}
@@ -51,6 +54,37 @@ export class UserApiService {
       });
     }
     return await deleteUserApi({
+      request,
+    });
+  }
+
+  /**
+   * @description 유저 정보
+   * @param {Request} request
+   * @param {string} username
+   * @returns {Promise<ReturnType<typeof getUserApi>>}
+   */
+  async getUser(
+    request: Request,
+    username: string
+  ): Promise<ReturnType<typeof getUserApi>> {
+    if (!username) {
+      throw new Response("Not Found", { status: 404 });
+    }
+    const resp = await getUserApi(username, {
+      request: request,
+    });
+    if (resp.json?.resultCode !== RESULT_CODE.OK) {
+      throw new Response("Not Found", { status: 404 });
+    }
+    return resp;
+  }
+
+  async getExploreBlogs(
+    request: Request,
+    query?: GetExploreBlogsApiSearchParams
+  ) {
+    return await getExploreBlogsApi(query, {
       request,
     });
   }

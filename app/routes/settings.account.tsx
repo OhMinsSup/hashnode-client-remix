@@ -75,7 +75,6 @@ export default function Account() {
     if (confirmDelete) {
       fetcher.submit(null, {
         method: "DELETE",
-        action: "/settings/account",
         replace: true,
       });
     }
