@@ -92,7 +92,7 @@ export default function AppLeftSidebar() {
               icon={<Icons.Explore className="flex-shrink-0 fill-current" />}
               applyActiveLinks={[
                 PAGE_ENDPOINTS.EXPLORE.TAGS,
-                PAGE_ENDPOINTS.EXPLORE.POSTS,
+                PAGE_ENDPOINTS.EXPLORE.BLOGS,
               ]}
               end
             />
@@ -122,6 +122,7 @@ export default function AppLeftSidebar() {
                   >
                     {(data) => (
                       <>
+                        {/* @ts-ignore */}
                         {data.json?.result?.list?.map((tag) => (
                           <AppLeftSidebarTrendingTag
                             key={`sidebar-trending-tag-${tag.id}`}

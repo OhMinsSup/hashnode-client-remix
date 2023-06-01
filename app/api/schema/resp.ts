@@ -67,11 +67,15 @@ export interface PostListRespSchema
 export interface PostLikeListRespSchema
   extends ListRespSchema<PostLikeRespSchema> {}
 
-export interface ExploreBlogsListRespSchema {
+export type ExploreBlogsListRespSchema = Array<{
+  id: number;
+  email: string;
+  username: string;
+  avatarUrl: string | null;
   posts: Array<
     Pick<PostDetailRespSchema, "id" | "title"> & { createdAt: number }
   >;
-}
+}>;
 
 export interface GetTopPostsRespSchema {
   posts: PostDetailRespSchema[];

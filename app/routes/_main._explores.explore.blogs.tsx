@@ -77,7 +77,7 @@ export default function Page() {
         </div>
       </div>
       <div className="content-wrapper">
-        {trendingBlogs.posts.map((item) => (
+        {trendingBlogs.map((item) => (
           <ExploreBlogItem key={`ExploreBlogItem-${item.id}`} />
         ))}
       </div>

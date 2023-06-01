@@ -21,20 +21,22 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ request, context }: LoaderArgs) => {
-  const blogs_data = await context.api.user.getExploreBlogs(request, {
-    category: "all",
-    limit: 10,
-  });
-  const tags_data = await context.api.tag.getTagList(request, {
-    type: "trending",
-    category: "all",
-    limit: 6,
-  });
-  const newTags_data = await context.api.tag.getTagList(request, {
-    type: "new",
-    category: "all",
-    limit: 6,
-  });
+  const [blogs_data, tags_data, newTags_data] = await Promise.all([
+    context.api.user.getExploreBlogs(request, {
+      category: "all",
+      limit: 10,
+    }),
+    context.api.tag.getTagList(request, {
+      type: "trending",
+      category: "all",
+      limit: 6,
+    }),
+    context.api.tag.getTagList(request, {
+      type: "new",
+      category: "all",
+      limit: 6,
+    }),
+  ]);
   return json({
     trendingBlogs: blogs_data.json.result,
     trendingTags: tags_data.json.result,
@@ -78,7 +80,7 @@ export default function Page() {
           </Link>
         </div>
         <div className="content-wrapper">
-          {trendingBlogs.posts.map((item) => (
+          {trendingBlogs.map((item) => (
             <ExploreBlogItem key={`ExploreBlogItem-${item.id}`} />
           ))}
         </div>
