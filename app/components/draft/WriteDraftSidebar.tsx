@@ -3,7 +3,7 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
 // hooks
-import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
+import { useDraftContext } from "~/context/useDraftContext";
 import { useGetMyPostsQuery } from "~/api/posts/hooks/useGetMyPostsQuery";
 
 // components
@@ -22,7 +22,7 @@ export default function WriteDraftSidebar() {
   const [open, setOpen] = useState(true);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const { keyword } = useDraftSidebarContext();
+  const { keyword } = useDraftContext();
 
   const { data, fetchNextPage, hasNextPage } = useGetMyPostsQuery({
     limit: 5,

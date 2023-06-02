@@ -24,6 +24,7 @@ enum Action {
   TOGGLE_SUBTITLE = "TOGGLE_SUBTITLE",
   SET_FORM_INSTANCE = "SET_FORM_INSTANCE",
   SET_EDITORJS_INSTANCE = "SET_EDITORJS_INSTANCE",
+  CHANGE_KEYWORD = "CHANGE_KEYWORD",
 }
 
 type ChangeDraftIdAction = {
@@ -66,6 +67,11 @@ type ChangeUploadStatusAction = {
   payload: UploadStatus;
 };
 
+type ChangeKeywordAction = {
+  type: Action.CHANGE_KEYWORD;
+  payload: string;
+};
+
 type ActionType =
   | ChangeDraftIdAction
   | ChangeTransitionAction
@@ -74,7 +80,8 @@ type ActionType =
   | SetFormInstanceAction
   | ChangeUploadStatusAction
   | TogglePublishAction
-  | SetEditorJSInstanceAction;
+  | SetEditorJSInstanceAction
+  | ChangeKeywordAction;
 
 interface VisibilityState {
   isLeftSidebarVisible: boolean;
@@ -93,6 +100,7 @@ interface DraftState {
   upload: UploadState;
   $form: HTMLFormElement | null;
   $editorJS: EditorJS | null;
+  keyword: string;
 }
 
 interface DraftContext extends DraftState {
@@ -104,6 +112,7 @@ interface DraftContext extends DraftState {
   changeUploadStatus: (status: UploadStatus) => void;
   setFormInstance: (form: HTMLFormElement | null) => void;
   setEditorJSInstance: (editor: EditorJS | null) => void;
+  changeKeyword: (keyword: string) => void;
   dispatch: React.Dispatch<ActionType>;
 }
 
@@ -120,6 +129,7 @@ const initialState: DraftState = {
     status: UploadStatus.IDLE,
   },
   draftId: undefined,
+  keyword: "",
 };
 
 const [Provider, useDraftContext] = createContext<DraftContext>({
@@ -186,6 +196,11 @@ function reducer(state = initialState, action: ActionType) {
         ...state,
         $editorJS: action.payload,
       };
+    case Action.CHANGE_KEYWORD:
+      return {
+        ...state,
+        keyword: action.payload,
+      };
     default:
       return state;
   }
@@ -250,6 +265,13 @@ function DraftProvider({ children }: Props) {
     });
   };
 
+  const changeKeyword = (keyword: string) => {
+    dispatch({
+      type: Action.CHANGE_KEYWORD,
+      payload: keyword,
+    });
+  };
+
   const actions = useMemo(
     () => ({
       ...state,
@@ -261,6 +283,7 @@ function DraftProvider({ children }: Props) {
       toggleSubTitle,
       setFormInstance,
       setEditorJSInstance,
+      changeKeyword,
       dispatch,
     }),
     [state]

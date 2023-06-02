@@ -24,14 +24,14 @@ export default function InputProfileImage(props: ProfileImageProps) {
   );
 
   const { isLoading, mutate } = useImageUploadMutation({
-    onSuccess(data) {
+    onSuccess: (data) => {
       const { result } = data.json;
       setValue("avatarUrl", result.url, {
         shouldValidate: true,
         shouldDirty: true,
       });
     },
-    onError() {
+    onError: () => {
       setValue("avatarUrl", undefined, {
         shouldValidate: true,
         shouldDirty: true,

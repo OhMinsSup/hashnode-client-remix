@@ -8,3 +8,9 @@ export const action = async ({ request, context }: ActionArgs) => {
     headers: context.api.auth.getClearAuthHeaders(),
   });
 };
+
+export const loader = () => redirect("/", { status: 404 });
+
+export default function Routes() {
+  return <div>Oops... You should not see this.</div>;
+}

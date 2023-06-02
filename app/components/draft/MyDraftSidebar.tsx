@@ -4,7 +4,7 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 
 // hooks
 import { useLiveQuery } from "dexie-react-hooks";
-import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
+import { useDraftContext } from "~/context/useDraftContext";
 
 // db
 import { hashnodeDB } from "~/libs/db/db";
@@ -16,7 +16,7 @@ import { Icons } from "~/components/shared/Icons";
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
 
-  const { keyword } = useDraftSidebarContext();
+  const { keyword } = useDraftContext();
 
   const data = useLiveQuery(async () => {
     return hashnodeDB.getHashTitleDrafts(keyword);

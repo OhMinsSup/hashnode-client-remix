@@ -1,5 +1,5 @@
 import React, { useCallback, useTransition } from "react";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import classNames from "classnames";
 
 // components
@@ -11,8 +11,8 @@ import { firstLetterToUpperCase } from "~/utils/util";
 // hooks
 import { useFormContext } from "react-hook-form";
 import { useDraftContext } from "~/context/useDraftContext";
-import { useDraftSidebarContext } from "~/context/useDraftSidebarContext";
 import { hashnodeDB } from "~/libs/db/db";
+import { useSession } from "~/api/user/hooks/useSession";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -30,7 +30,7 @@ export default function DraftLeftSidebar({
   myDrafts,
   writeDraft,
 }: DraftLeftSidebarProps) {
-  const { session } = useLoaderData();
+  const session = useSession();
 
   const { watch } = useFormContext<FormFieldValues>();
 
@@ -38,7 +38,7 @@ export default function DraftLeftSidebar({
 
   const { draftId, visibility, toggleLeftSidebar } = useDraftContext();
 
-  const { keyword, changeKeyword } = useDraftSidebarContext();
+  const { keyword, changeKeyword } = useDraftContext();
 
   const onToggleLeftSidebar = useCallback(() => {
     toggleLeftSidebar(!visibility.isLeftSidebarVisible);

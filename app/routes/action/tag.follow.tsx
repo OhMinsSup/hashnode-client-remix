@@ -1,4 +1,4 @@
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 
 // api
 import { postTagFollowApi } from "~/api/tags/follow.server";
@@ -69,3 +69,9 @@ export const action = async (args: ActionArgs) => {
 };
 
 export type TagFollowAction = typeof action;
+
+export const loader = () => redirect("/", { status: 404 });
+
+export default function Routes() {
+  return <div>Oops... You should not see this.</div>;
+}

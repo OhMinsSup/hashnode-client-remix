@@ -4,8 +4,10 @@ import { useMemo } from "react";
 import { redirect } from "@remix-run/cloudflare";
 
 // components
-import DraftTemplate from "~/components/draft/DraftTemplate";
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
+import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
+import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -124,9 +126,13 @@ export default function DraftRouteLayout() {
   return (
     <DraftProvider>
       <FormProvider {...methods}>
-        <DraftTemplate>
+        <div className="draft-template">
+          <DraftLeftSidebar
+            myDrafts={<MyDraftSidebar />}
+            writeDraft={<WriteDraftSidebar />}
+          />
           <Outlet />
-        </DraftTemplate>
+        </div>
       </FormProvider>
     </DraftProvider>
   );

@@ -1,6 +1,6 @@
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
 import * as build from "@remix-run/dev/server-build";
-import { AuthService } from "./services/auth";
+import { DraftService } from "./services/data/draft";
 import { EnvSchema } from "./services/env";
 import { AuthApiService } from "./services/api/auth";
 import { UserApiService } from "./services/api/user";
@@ -16,7 +16,7 @@ const handleRequest = createPagesFunctionHandler({
     return {
       ...context.env,
       services: {
-        auth: new AuthService(context.env.auth, env),
+        draft: new DraftService(env),
       },
       api: {
         auth: new AuthApiService(env),

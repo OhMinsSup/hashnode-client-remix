@@ -17,6 +17,9 @@ interface DraftShardActionFnProps {
   children: React.ReactNode;
 }
 
+// https://goidle.github.io/react/in-depth-react-scheduler_2/
+// 스케쥴러를 구현해서 해당 임시 저장 기능 구현??
+// 임시 저장 공간 kV?
 export default function DraftShardActionFn({
   children,
 }: DraftShardActionFnProps) {
