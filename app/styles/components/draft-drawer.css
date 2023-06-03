@@ -119,6 +119,16 @@
   @apply mr-2 h-5 w-5 flex-shrink-0 p-1;
 }
 
+.drawer__draft .drawer-container .drawer-content .input-text {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply w-full rounded-lg border p-4 text-base outline-none;
+}
+
+.drawer__draft .drawer-container .drawer-content .input-text.error {
+  @apply border-2 border-red-500;
+}
+
 @media (min-width: 768px) {
   .drawer__draft {
     width: 40%;

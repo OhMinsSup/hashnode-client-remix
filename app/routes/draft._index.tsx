@@ -2,7 +2,6 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // components
 import DraftEditor from "~/components/draft/DraftEditor";
-import DraftShardActionFn from "~/components/draft/DraftShardActionFn";
 
 import { redirect, json } from "@remix-run/cloudflare";
 import { actionErrorWrapper } from "~/api/validation/errorWrapper";
@@ -26,11 +25,7 @@ export const action = async ({ context, request }: ActionArgs) => {
 };
 
 export default function DraftPage() {
-  return (
-    <DraftShardActionFn>
-      <DraftEditor />
-    </DraftShardActionFn>
-  );
+  return <DraftEditor />;
 }
 
 export function ErrorBoundary() {

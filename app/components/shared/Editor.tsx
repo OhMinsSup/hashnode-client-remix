@@ -15,7 +15,7 @@ interface EditorProps {
   readOnly?: boolean;
   initialData?: Record<string, unknown> | string;
   onReady?: (editor: EditorJS) => void;
-  onChange?(api: EditorJS.API, event: CustomEvent<any>): void;
+  onChange?(api: EditorJS.API, event: any): void;
 }
 
 const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
@@ -93,6 +93,8 @@ const Editor: React.ForwardRefRenderFunction<EditorJS | null, EditorProps> = (
         readOnly: props.readOnly,
         placeholder: "Type here to write your post...",
         inlineToolbar: true,
+        // @ts-ignore
+        logLevel: 'ERROR',
         data,
         tools: {
           header: Header,

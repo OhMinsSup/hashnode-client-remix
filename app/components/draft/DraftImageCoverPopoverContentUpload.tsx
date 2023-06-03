@@ -3,17 +3,13 @@ import { Icons } from "~/components/shared/Icons";
 
 // utils
 import { isEmpty } from "~/utils/assertion";
-import { scheduleMicrotask, getTargetElement } from "~/libs/browser-utils";
+import { getTargetElement } from "~/libs/browser-utils";
 
 // hooks
 import { useDrop } from "~/libs/hooks/useDrop";
 import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
 import { useFormContext } from "react-hook-form";
-import {
-  Transition,
-  UploadStatus,
-  useDraftContext,
-} from "~/context/useDraftContext";
+import { UploadStatus, useDraftContext } from "~/context/useDraftContext";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
@@ -27,14 +23,14 @@ export default function DraftImageCoverPopoverContentUpload({
 }: DraftImageCoverPopoverContentUploadProps) {
   const { setValue } = useFormContext<FormFieldValues>();
 
-  const { changeTransition, changeUploadStatus } = useDraftContext();
+  const { changeUploadStatus } = useDraftContext();
 
   const $ipt = useRef<HTMLInputElement | null>(null);
 
   const $container = useRef<HTMLDivElement | null>(null);
 
   const { isLoading, mutate } = useImageUploadMutation({
-    onSuccess(data) {
+    onSuccess: (data) => {
       const { result } = data.json;
 
       setValue("thumbnail", result, {
@@ -43,20 +39,14 @@ export default function DraftImageCoverPopoverContentUpload({
       });
 
       onChangeOpenState(false);
-
-      scheduleMicrotask(() => {
-        changeUploadStatus(UploadStatus.SUCCESS);
-        changeTransition(Transition.UPDATING);
-      });
+      changeUploadStatus(UploadStatus.SUCCESS);
     },
-    onError() {
+    onError: () => {
       setValue("thumbnail", null, {
         shouldValidate: true,
         shouldDirty: true,
       });
-
       changeUploadStatus(UploadStatus.ERROR);
-      changeTransition(Transition.IDLE);
     },
   });
 

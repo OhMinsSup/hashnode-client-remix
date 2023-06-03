@@ -5,7 +5,6 @@ import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 
 // components
 import DraftEditor from "~/components/draft/DraftEditor";
-import DraftShardActionFn from "~/components/draft/DraftShardActionFn";
 
 // constants
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
@@ -99,11 +98,7 @@ export default function DraftPage() {
     startFetching();
   }, [item, ctx.$editorJS, itemId]);
 
-  return (
-    <DraftShardActionFn>
-      <DraftEditor />
-    </DraftShardActionFn>
-  );
+  return <DraftEditor />;
 }
 
 export function ErrorBoundary() {

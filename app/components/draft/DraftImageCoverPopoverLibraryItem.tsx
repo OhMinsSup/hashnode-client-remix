@@ -1,13 +1,9 @@
 import React, { useCallback } from "react";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 
-// utils
-import { scheduleMicrotask } from "~/libs/browser-utils";
-
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useFormContext } from "react-hook-form";
-import { Transition, useDraftContext } from "~/context/useDraftContext";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
@@ -26,18 +22,13 @@ export default function DraftImageCoverPopoverLibraryItem({
 
   const { setValue } = useFormContext<FormFieldValues>();
 
-  const { changeTransition } = useDraftContext();
-
   const onClickSelect = useCallback(() => {
     setValue("thumbnail", item, {
       shouldValidate: true,
       shouldDirty: true,
     });
-    scheduleMicrotask(() => {
-      changeTransition(Transition.UPDATING);
-      onChangeOpenState(false);
-    });
-  }, [item, changeTransition, setValue, onChangeOpenState]);
+    onChangeOpenState(false);
+  }, [item, setValue, onChangeOpenState]);
 
   return (
     <div className="col-span-4 cursor-pointer rounded-lg">

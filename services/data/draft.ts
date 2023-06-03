@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  SessionIdStorageStrategy,
-  createCookieSessionStorage,
-} from "@remix-run/cloudflare";
+import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { createTypedSessionStorage } from "remix-utils";
 
 import type { Env } from "../env";
@@ -10,7 +7,6 @@ import type { TypedSessionStorage, TypedSession } from "remix-utils";
 
 const SessionSchema = z.object({
   draftId: z.union([z.string(), z.number()]).nullish().optional(),
-  userId: z.number(),
 });
 
 export type Session = z.infer<typeof SessionSchema>;
@@ -28,7 +24,7 @@ export class DraftService implements IDraftService {
         name: "hashnode.draftId",
         httpOnly: true,
         sameSite: "lax",
-        path: "/",
+        path: "/draft",
         secrets: [env.COOKIE_SESSION_SECRET],
       },
     });

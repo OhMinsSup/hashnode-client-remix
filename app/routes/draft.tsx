@@ -1,13 +1,21 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 // remix
-import { redirect } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 
 // components
-import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import {
+  Outlet,
+  isRouteErrorResponse,
+  useFetcher,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react";
 import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
 import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
 import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -19,6 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // hooks
 import { FormProvider, useForm } from "react-hook-form";
 import { DraftProvider } from "~/context/useDraftContext";
+import { hashnodeDB } from "~/libs/db/db";
 
 // styles
 import draftStyles from "~/styles/routes/draft.css";
@@ -31,6 +40,7 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
+import type { DraftSetIdAction } from "./draft.action.set-id";
 
 export interface SeoFormFieldValues {
   title: string;
@@ -96,10 +106,21 @@ export const loader = async ({ context, request }: LoaderArgs) => {
       headers: context.api.auth.getClearAuthHeaders(),
     });
   }
-  return null;
+  const session = await context.services.draft.getSession(request);
+  const tempIdx = await context.services.draft.getId(session);
+  return json({
+    tempIdx: tempIdx ? `${tempIdx}` : null
+  });
 };
 
+export type DraftLoader = typeof loader;
+
 export default function DraftRouteLayout() {
+  const fetcher = useFetcher<DraftSetIdAction>();
+  const { tempIdx } = useLoaderData<DraftLoader>();
+
+  console.log(tempIdx);
+
   const intialValues: FormFieldValues = useMemo(() => {
     return {
       title: "",
@@ -122,6 +143,54 @@ export default function DraftRouteLayout() {
     defaultValues: intialValues,
     reValidateMode: "onChange",
   });
+
+  const { dirtyFields } = methods.formState;
+
+  const debounced = useDebounceFn(
+    async (id: string | null) => {
+      const input = methods.watch();
+      console.log("input", input);
+      try {
+        if (id) {
+          console.log("update");
+          await hashnodeDB.updateDraft(id, input);
+          return;
+        }
+        console.log("add");
+        const indexableType = await hashnodeDB.addDraft(input);
+        const idx = parseInt(indexableType.toString(), 10);
+        if (indexableType && !Number.isNaN(idx)) {
+          fetcher.submit(
+            {
+              idx: idx.toString(),
+            },
+            {
+              method: "POST",
+              action: "/draft/action/set-id",
+              replace: true,
+            }
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    {
+      wait: 250,
+      trailing: true,
+    }
+  );
+
+  useDeepCompareEffect(() => {
+    const idx = fetcher.data?.idx ?? tempIdx ?? null;
+    debounced.run(idx);
+  }, [dirtyFields, fetcher.data, tempIdx]);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      console.log("fetcher.data", fetcher.data);
+    }
+  }, [fetcher.data]);
 
   return (
     <DraftProvider>

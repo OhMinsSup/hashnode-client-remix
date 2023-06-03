@@ -9,7 +9,7 @@ export interface Draft {
   thumbnail: Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> | null;
   description: string;
   disabledComment: boolean;
-  publishingDate: Date;
+  publishingDate: string | Date;
   tags: string[];
 }
 

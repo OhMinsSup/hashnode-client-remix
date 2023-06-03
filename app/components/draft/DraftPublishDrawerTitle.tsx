@@ -1,38 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // hooks
-import { Transition, useDraftContext } from "~/context/useDraftContext";
-import { useFormContext, useWatch } from "react-hook-form";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { useFormContext } from "react-hook-form";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
 
 export default function DraftPublishDrawerTitle() {
-  const { register, formState, control } = useFormContext<FormFieldValues>();
-
-  const { changeTransition } = useDraftContext();
-
-  const watchTitle = useWatch<FormFieldValues, "seo.title">({
-    name: "seo.title",
-    control,
-  });
-
-  const debounced = useDebounceFn(
-    () => {
-      changeTransition(Transition.UPDATING);
-    },
-    {
-      wait: 200,
-      trailing: true,
-    }
-  );
-
-  useEffect(() => {
-    if (!formState.dirtyFields.seo?.title) return;
-    debounced.run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchTitle, formState.dirtyFields.seo?.title]);
+  const { register } = useFormContext<FormFieldValues>();
 
   return (
     <>

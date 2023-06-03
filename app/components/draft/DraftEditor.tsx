@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import classNames from "classnames";
-import json from "superjson";
+import Json from "superjson";
 
 // hooks
 import { useFetcher } from "@remix-run/react";
@@ -11,15 +11,12 @@ import { useFormContext } from "react-hook-form";
 
 // components
 import DraftEditorHeader from "~/components/draft/DraftEditorHeader";
-import DraftEdtiorContent from "~/components/draft/DraftEdtiorContent";
+import DraftEditorContent from "~/components/draft/DraftEditorContent";
+import DraftPublishDrawer from "~/components/draft/DraftPublishDrawer";
 
 // types
 import type { SubmitHandler } from "react-hook-form";
 import type { FormFieldValues } from "~/routes/draft";
-
-const DraftPublishDrawer = React.lazy(
-  () => import("~/components/draft/DraftPublishDrawer")
-);
 
 interface DraftEditorProps {
   action?: string;
@@ -38,7 +35,7 @@ export default function DraftEditor({
     (input) => {
       fetcher.submit(
         {
-          body: json.stringify(input),
+          body: Json.stringify(input),
         },
         {
           method: "POST",
@@ -69,10 +66,8 @@ export default function DraftEditor({
       })}
     >
       <DraftEditorHeader />
-      <DraftEdtiorContent />
-      <React.Suspense fallback={<>Loading....</>}>
-        <DraftPublishDrawer />
-      </React.Suspense>
+      <DraftEditorContent />
+      <DraftPublishDrawer />
     </form>
   );
 }

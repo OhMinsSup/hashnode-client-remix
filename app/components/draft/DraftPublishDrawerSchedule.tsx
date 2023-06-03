@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Icons } from "~/components/shared/Icons";
 
 // hooks
-import { Transition, useDraftContext } from "~/context/useDraftContext";
 import { useFormContext, useController } from "react-hook-form";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
 
 export default function DraftPublishDrawerSchedule() {
-  const { setValue, formState, control } = useFormContext<FormFieldValues>();
-
-  const { changeTransition } = useDraftContext();
+  const { setValue, control } = useFormContext<FormFieldValues>();
 
   const { field } = useController({
     name: "publishingDate",
@@ -31,12 +28,6 @@ export default function DraftPublishDrawerSchedule() {
       shouldTouch: true,
     });
   }, [setValue]);
-
-  useEffect(() => {
-    if (!formState.dirtyFields.publishingDate) return;
-    changeTransition(Transition.UPDATING);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.value, formState.dirtyFields.publishingDate]);
 
   const value = useMemo(() => {
     if (!field.value) {

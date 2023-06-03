@@ -4,13 +4,13 @@ import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionArgs) => {
   const draftSession = await context.services.draft.getSession(request);
-  const requestText = await request.text();
-  const form = new URLSearchParams(requestText);
-  const draftId = form.get("draftId");
-  if (!draftId) {
+  const form = await request.formData();
+  const idx = form.get("idx")?.toString();
+  console.log("idx =====>", idx);
+  if (!idx) {
     await context.services.draft.removeId(draftSession);
     return json(
-      { ok: false, draftId: null },
+      { ok: false, idx: null },
       {
         headers: {
           "Set-Cookie": await context.services.draft.commit(draftSession),
@@ -18,11 +18,11 @@ export const action = async ({ request, context }: ActionArgs) => {
       }
     );
   }
-  await context.services.draft.setId(draftSession, draftId);
+  await context.services.draft.setId(draftSession, idx);
   return json(
     {
       ok: true,
-      draftId: draftId,
+      idx: idx,
     },
     {
       headers: {
@@ -31,6 +31,8 @@ export const action = async ({ request, context }: ActionArgs) => {
     }
   );
 };
+
+export type DraftSetIdAction = typeof action;
 
 export const loader = () => redirect("/", { status: 404 });
 

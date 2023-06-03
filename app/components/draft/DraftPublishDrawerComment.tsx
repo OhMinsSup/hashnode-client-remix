@@ -1,28 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // hooks
-import { Transition, useDraftContext } from "~/context/useDraftContext";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
 
 export default function DraftPublishDrawerComment() {
-  const { register, formState, control } = useFormContext<FormFieldValues>();
-
-  const watchIsPublic = useWatch<FormFieldValues, "disabledComment">({
-    name: "disabledComment",
-    control,
-  });
-
-  const { changeTransition } = useDraftContext();
-
-  useEffect(() => {
-    if (!formState.dirtyFields.disabledComment) return;
-    changeTransition(Transition.UPDATING);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchIsPublic, formState.dirtyFields.disabledComment]);
-
+  const { register } = useFormContext<FormFieldValues>();
   return (
     <>
       <h3 className="title mb-3">DISABLE COMMENTS?</h3>

@@ -62,23 +62,6 @@ export default function InputTechStack() {
         <InputTechStack.Popover inputValue={inputValue} onReset={onReset} />
       </div>
       <InputTechStack.Tags />
-      {/* <Select
-        inputValue={inputValue}
-        isClearable
-        cacheOptions
-        isMulti
-        isLoading={fetcher.state === "loading"}
-        className={classNames("min-h-30", {
-          error: !!formState.errors.skills,
-        })}
-        placeholder="Search technologies, topics, more…"
-        loadOptions={loadOptions}
-        // @ts-ignore
-        onChange={onChangeTags}
-        options={options}
-        onInputChange={(newValue) => setInputValue(newValue)}
-        value={watchSkills?.map((tag) => ({ label: tag, value: tag }))}
-      /> */}
       <ErrorMessage
         isSubmitting={false}
         errors={formState.errors}
