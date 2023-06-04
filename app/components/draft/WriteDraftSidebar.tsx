@@ -4,7 +4,6 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
-import { useGetMyPostsQuery } from "~/api/posts/hooks/useGetMyPostsQuery";
 
 // components
 import WriteDraftItem from "~/components/draft/WriteDraftItem";
@@ -24,19 +23,14 @@ export default function WriteDraftSidebar() {
 
   const { keyword } = useDraftContext();
 
-  const { data, fetchNextPage, hasNextPage } = useGetMyPostsQuery({
-    limit: 5,
-    keyword,
-  });
-
   const list = useMemo(() => {
-    return data?.pages?.flatMap?.((page) => page.list) ?? [];
-  }, [data]);
+    // return data?.pages?.flatMap?.((page) => page.list) ?? [];
+    return [];
+  }, []);
 
   const totalCount = useMemo(() => {
-    const fristPage = data?.pages?.at(-1) ?? null;
-    return fristPage?.totalCount ?? 0;
-  }, [data]);
+    return 0;
+  }, []);
 
   const onCollapsibleOpenChange = useCallback((open: boolean) => {
     setOpen(open);
@@ -53,9 +47,9 @@ export default function WriteDraftSidebar() {
     const scrollHeight = getScrollHeight(el);
     const clientHeight = getClientHeight(el);
 
-    if (scrollHeight - scrollTop <= clientHeight + 10 && hasNextPage) {
-      fetchNextPage();
-    }
+    // if (scrollHeight - scrollTop <= clientHeight + 10 && hasNextPage) {
+    //   fetchNextPage();
+    // }
   });
 
   useEventListener("scroll", scrollMethod, { target: ref });
@@ -90,9 +84,9 @@ export default function WriteDraftSidebar() {
 
         <Collapsible.Content>
           <ScrollArea.Viewport className="ScrollAreaViewport" ref={ref}>
-            {list.map((item, i) => (
+            {/* {list.map((item, i) => (
               <WriteDraftItem key={`write-draft-${item.id}-${i}`} item={item} />
-            ))}
+            ))} */}
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar
             className="ScrollAreaScrollbar"

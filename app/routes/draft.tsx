@@ -1,19 +1,19 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 // remix
-import { json, redirect } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
+import Json from "superjson";
 
 // components
 import {
   Outlet,
   isRouteErrorResponse,
   useFetcher,
-  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
-import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
-import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
+// import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
+// import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
 
@@ -25,9 +25,8 @@ import { createPostSchema } from "~/api/posts/validation/create";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // hooks
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { DraftProvider } from "~/context/useDraftContext";
-import { hashnodeDB } from "~/libs/db/db";
 
 // styles
 import draftStyles from "~/styles/routes/draft.css";
@@ -40,7 +39,8 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import type { DraftSetIdAction } from "./draft.action.set-id";
+import type { DraftTempAction } from "./draft.action.temp";
+import type { DraftItemIdTempAction } from "./draft.action.$itemId.temp";
 
 export interface SeoFormFieldValues {
   title: string;
@@ -106,21 +106,12 @@ export const loader = async ({ context, request }: LoaderArgs) => {
       headers: context.api.auth.getClearAuthHeaders(),
     });
   }
-  const session = await context.services.draft.getSession(request);
-  const tempIdx = await context.services.draft.getId(session);
-  return json({
-    tempIdx: tempIdx ? `${tempIdx}` : null
-  });
+  return null;
 };
 
 export type DraftLoader = typeof loader;
 
 export default function DraftRouteLayout() {
-  const fetcher = useFetcher<DraftSetIdAction>();
-  const { tempIdx } = useLoaderData<DraftLoader>();
-
-  console.log(tempIdx);
-
   const intialValues: FormFieldValues = useMemo(() => {
     return {
       title: "",
@@ -144,36 +135,44 @@ export default function DraftRouteLayout() {
     reValidateMode: "onChange",
   });
 
-  const { dirtyFields } = methods.formState;
+  const watchAll = useWatch({
+    control: methods.control,
+  });
 
-  const debounced = useDebounceFn(
-    async (id: string | null) => {
-      const input = methods.watch();
-      console.log("input", input);
-      try {
-        if (id) {
-          console.log("update");
-          await hashnodeDB.updateDraft(id, input);
-          return;
+  const fetcher_temp = useFetcher<DraftTempAction>();
+  const fetcher_itemId_temp = useFetcher<DraftItemIdTempAction>();
+
+  const debounced_create = useDebounceFn(
+    () => {
+      fetcher_temp.submit(
+        {
+          body: Json.stringify(watchAll),
+        },
+        {
+          method: "POST",
+          action: "/draft/action/temp",
+          replace: true,
         }
-        console.log("add");
-        const indexableType = await hashnodeDB.addDraft(input);
-        const idx = parseInt(indexableType.toString(), 10);
-        if (indexableType && !Number.isNaN(idx)) {
-          fetcher.submit(
-            {
-              idx: idx.toString(),
-            },
-            {
-              method: "POST",
-              action: "/draft/action/set-id",
-              replace: true,
-            }
-          );
+      );
+    },
+    {
+      wait: 250,
+      trailing: true,
+    }
+  );
+
+  const debounced_update = useDebounceFn(
+    (dataId: number) => {
+      fetcher_itemId_temp.submit(
+        {
+          body: Json.stringify(watchAll),
+        },
+        {
+          method: "PUT",
+          action: `/draft/action/${dataId}/temp`,
+          replace: true,
         }
-      } catch (error) {
-        console.error(error);
-      }
+      );
     },
     {
       wait: 250,
@@ -182,23 +181,26 @@ export default function DraftRouteLayout() {
   );
 
   useDeepCompareEffect(() => {
-    const idx = fetcher.data?.idx ?? tempIdx ?? null;
-    debounced.run(idx);
-  }, [dirtyFields, fetcher.data, tempIdx]);
-
-  useEffect(() => {
-    if (fetcher.data) {
-      console.log("fetcher.data", fetcher.data);
+    if (!fetcher_temp.data?.dataId) {
+      debounced_create.run();
     }
-  }, [fetcher.data]);
+  }, [watchAll, fetcher_temp.data]);
+
+  useDeepCompareEffect(() => {
+    if (fetcher_temp.data && fetcher_temp.data.dataId) {
+      debounced_update.run(fetcher_temp.data.dataId);
+    }
+  }, [watchAll, fetcher_temp.data]);
 
   return (
     <DraftProvider>
       <FormProvider {...methods}>
         <div className="draft-template">
           <DraftLeftSidebar
-            myDrafts={<MyDraftSidebar />}
-            writeDraft={<WriteDraftSidebar />}
+            // myDrafts={<MyDraftSidebar />}
+            // writeDraft={<WriteDraftSidebar />}
+            myDrafts={<></>}
+            writeDraft={<></>}
           />
           <Outlet />
         </div>

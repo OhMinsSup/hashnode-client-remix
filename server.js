@@ -7,6 +7,7 @@ import { UserApiService } from "./services/api/user";
 import { ItemApiService } from "./services/api/item";
 import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
+import { DraftApiService } from "./services/api/draft";
 
 const handleRequest = createPagesFunctionHandler({
   build,
@@ -24,6 +25,7 @@ const handleRequest = createPagesFunctionHandler({
         item: new ItemApiService(env),
         widget: new WidgetApiService(env),
         tag: new TagApiService(env),
+        draft: new DraftApiService(env),
       },
     };
   },

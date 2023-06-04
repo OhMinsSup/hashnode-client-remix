@@ -1,4 +1,4 @@
-import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts";
+import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
 import type { Nullable } from "~/api/schema/api";
 
 export const API_ENDPOINTS = {
@@ -31,11 +31,9 @@ export const API_ENDPOINTS = {
     TAG_FOLLOW: (tag: string) => `tags/${tag}/follow`,
     TAG_TRENDING: "tags/trending",
   },
-  DRAFTS: {
-    ROOT: "drafts",
-    NEW: "drafts/new",
-    SAVE_DATA: "drafts/save-data",
-    ID: (id: string | number) => `drafts/${id}`,
+  DRAFT: {
+    ROOT: "draft",
+    ID: (id: string | number) => `draft/${id}`,
   },
   WIDGET: {
     ARTICLE_CIRCLES: "widget/article-circles",

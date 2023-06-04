@@ -3,24 +3,20 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
 // hooks
-import { useLiveQuery } from "dexie-react-hooks";
 import { useDraftContext } from "~/context/useDraftContext";
 
-// db
-import { hashnodeDB } from "~/libs/db/db";
-
 // components
-import MyDraftItem from "~/components/draft/MyDraftItem";
+// import MyDraftItem from "~/components/draft/MyDraftItem";
 import { Icons } from "~/components/shared/Icons";
 
 const MyDraftSidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
 
-  const { keyword } = useDraftContext();
+  // const { keyword } = useDraftContext();
 
-  const data = useLiveQuery(async () => {
-    return hashnodeDB.getHashTitleDrafts(keyword);
-  }, [keyword]);
+  // const data = useLiveQuery(async () => {
+  //   return hashnodeDB.getHashTitleDrafts(keyword);
+  // }, [keyword]);
 
   const onCollapsibleOpenChange = useCallback((open: boolean) => {
     setOpen(open);
@@ -40,9 +36,9 @@ const MyDraftSidebar: React.FC = () => {
             aria-expanded={open}
           >
             <span>
-              {keyword
+              {/* {keyword
                 ? `Showing results for: ${data?.totalCount ?? 0}`
-                : `My Drafts (${data?.totalCount ?? 0})`}
+                : `My Drafts (${data?.totalCount ?? 0})`} */}
             </span>
             <div className=" rounded-lg p-1">
               {open ? (
@@ -56,9 +52,9 @@ const MyDraftSidebar: React.FC = () => {
 
         <Collapsible.Content>
           <ScrollArea.Viewport className="ScrollAreaViewport">
-            {data?.list.map((draft, i) => (
+            {/* {data?.list.map((draft, i) => (
               <MyDraftItem key={`my-draft-${draft.id}-${i}`} item={draft} />
-            ))}
+            ))} */}
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar
             className="ScrollAreaScrollbar"

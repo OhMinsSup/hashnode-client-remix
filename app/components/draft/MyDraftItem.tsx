@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import classNames from "classnames";
-import { isString } from "~/utils/assertion";
 
 // components
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -11,11 +10,10 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { useFormContext } from "react-hook-form";
 
 // types
-import { type Draft, hashnodeDB } from "~/libs/db/db";
 import type { FormFieldValues } from "~/routes/draft";
 
 interface MyDraftItemProps {
-  item: Partial<Draft>;
+  item: Partial<any>;
 }
 
 export default function MyDraftItem({ item }: MyDraftItemProps) {
@@ -25,28 +23,28 @@ export default function MyDraftItem({ item }: MyDraftItemProps) {
   const methods = useFormContext<FormFieldValues>();
 
   const onSelectedDraft = useCallback(async () => {
-    if (!item.id) return;
-    const draft = await hashnodeDB.getDraft(item.id);
-    if (!draft) return;
-    changeDraftId(item.id);
-    if (draft.subTitle) {
-      toggleSubTitle(true);
-    }
-    methods.reset(draft);
-    if (draft.content && isString(draft.content)) {
-      const data = JSON.parse(draft.content);
-      if (!data) return;
-      $editorJS?.render(data);
-    }
+    // if (!item.id) return;
+    // const draft = await hashnodeDB.getDraft(item.id);
+    // if (!draft) return;
+    // changeDraftId(item.id);
+    // if (draft.subTitle) {
+    //   toggleSubTitle(true);
+    // }
+    // methods.reset(draft);
+    // if (draft.content && isString(draft.content)) {
+    //   const data = JSON.parse(draft.content);
+    //   if (!data) return;
+    //   $editorJS?.render(data);
+    // }
   }, [item.id, changeDraftId, methods, toggleSubTitle, $editorJS]);
 
   const onClickDelete = useCallback(async () => {
-    if (!item.id) return;
-    changeDraftId(undefined);
-    if (item.subTitle) {
-      toggleSubTitle(false);
-    }
-    await hashnodeDB.deleteDraft(item.id);
+    // if (!item.id) return;
+    // changeDraftId(undefined);
+    // if (item.subTitle) {
+    //   toggleSubTitle(false);
+    // }
+    // await hashnodeDB.deleteDraft(item.id);
   }, [changeDraftId, item.id, item.subTitle, toggleSubTitle]);
 
   return (
@@ -112,5 +110,4 @@ export default function MyDraftItem({ item }: MyDraftItemProps) {
       </div>
     </div>
   );
-};
-
+}
