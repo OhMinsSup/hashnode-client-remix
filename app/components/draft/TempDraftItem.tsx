@@ -12,14 +12,11 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { useDraftContext } from "~/context/useDraftContext";
 import { useNavigate } from "@remix-run/react";
 
-// types
-import type { PostDetailRespSchema } from "~/api/schema/resp";
-
-interface WriteDraftItemProps {
-  item: PostDetailRespSchema;
+interface TempDraftItemProps {
+  item: any;
 }
 
-export default function WriteDraftItem({ item }: WriteDraftItemProps) {
+export default function TempDraftItem({ item }: TempDraftItemProps) {
   const { changeDraftId, draftId, toggleSubTitle } = useDraftContext();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -99,4 +96,4 @@ export default function WriteDraftItem({ item }: WriteDraftItemProps) {
       </div>
     </div>
   );
-};
+}

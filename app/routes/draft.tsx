@@ -11,11 +11,10 @@ import {
   useFetcher,
   useRouteError,
 } from "@remix-run/react";
+import SearchDraftSidebarInput from "~/components/draft/SearchDraftSidebarInput";
 import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar";
-// import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
-// import WriteDraftSidebar from "~/components/draft/WriteDraftSidebar";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
-import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
+import MyDraftSidebar from "~/components/draft/MyDraftSidebar";
+import TempDraftSidebar from "~/components/draft/TempDraftSidebar";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -27,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // hooks
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { DraftProvider } from "~/context/useDraftContext";
+import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
+import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
 
 // styles
 import draftStyles from "~/styles/routes/draft.css";
@@ -182,13 +183,13 @@ export default function DraftRouteLayout() {
 
   useDeepCompareEffect(() => {
     if (!fetcher_temp.data?.dataId) {
-      debounced_create.run();
+      // debounced_create.run();
     }
   }, [watchAll, fetcher_temp.data]);
 
   useDeepCompareEffect(() => {
     if (fetcher_temp.data && fetcher_temp.data.dataId) {
-      debounced_update.run(fetcher_temp.data.dataId);
+      // debounced_update.run(fetcher_temp.data.dataId);
     }
   }, [watchAll, fetcher_temp.data]);
 
@@ -197,10 +198,9 @@ export default function DraftRouteLayout() {
       <FormProvider {...methods}>
         <div className="draft-template">
           <DraftLeftSidebar
-            // myDrafts={<MyDraftSidebar />}
-            // writeDraft={<WriteDraftSidebar />}
-            myDrafts={<></>}
-            writeDraft={<></>}
+            searchInput={<SearchDraftSidebarInput />}
+            myDrafts={<MyDraftSidebar />}
+            tempDraft={<TempDraftSidebar />}
           />
           <Outlet />
         </div>

@@ -22,7 +22,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
     ...(keyword && { keyword }),
   } as const;
 
-  const { json: resp } = await context.api.draft.getDrafts(request, args);
+  const { json: resp } = await context.api.item.getMyItems(request, args);
 
   const data = resp?.result ?? {
     list: [],
@@ -36,4 +36,4 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   return json(data);
 };
 
-export type LoadTagsLoader = typeof loader;
+export type DraftMyLoader = typeof loader;

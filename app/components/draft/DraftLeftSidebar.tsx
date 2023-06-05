@@ -1,6 +1,7 @@
-import React, { useCallback, useTransition } from "react";
-import { Link } from "@remix-run/react";
+import React, { useCallback } from "react";
+import { Link, useFetcher } from "@remix-run/react";
 import classNames from "classnames";
+import Json from "superjson";
 
 // components
 import { Icons } from "~/components/shared/Icons";
@@ -11,7 +12,6 @@ import { firstLetterToUpperCase } from "~/utils/util";
 // hooks
 import { useFormContext } from "react-hook-form";
 import { useDraftContext } from "~/context/useDraftContext";
-import { hashnodeDB } from "~/libs/db/db";
 import { useSession } from "~/api/user/hooks/useSession";
 
 // constants
@@ -20,48 +20,42 @@ import { ASSET_URL } from "~/constants/constant";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
+import type { DraftTempAction } from "~/routes/draft.action.temp";
 
 interface DraftLeftSidebarProps {
   myDrafts: React.JSX.Element;
-  writeDraft: React.JSX.Element;
+  tempDraft: React.JSX.Element;
+  searchInput: React.JSX.Element;
 }
 
 export default function DraftLeftSidebar({
   myDrafts,
-  writeDraft,
+  tempDraft,
+  searchInput,
 }: DraftLeftSidebarProps) {
   const session = useSession();
 
   const { watch } = useFormContext<FormFieldValues>();
 
-  const [isPending, startTransition] = useTransition();
-
-  const { draftId, visibility, toggleLeftSidebar } = useDraftContext();
-
-  const { keyword, changeKeyword } = useDraftContext();
+  const fetcher = useFetcher<DraftTempAction>();
+  const { visibility, toggleLeftSidebar } = useDraftContext();
 
   const onToggleLeftSidebar = useCallback(() => {
     toggleLeftSidebar(!visibility.isLeftSidebarVisible);
   }, [toggleLeftSidebar, visibility.isLeftSidebarVisible]);
 
   const onNewOrSaveDraftClick = useCallback(async () => {
-    const input = watch();
-
-    startTransition(() => {
-      if (!draftId) {
-        hashnodeDB.addDraft(input);
-      } else {
-        hashnodeDB.updateDraft(draftId, input);
+    fetcher.submit(
+      {
+        body: Json.stringify(watch()),
+      },
+      {
+        method: "POST",
+        action: "/draft/action/temp",
+        replace: true,
       }
-    });
-  }, [draftId, watch]);
-
-  const onChangeKeyword = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      changeKeyword(e.target.value);
-    },
-    [changeKeyword]
-  );
+    );
+  }, [fetcher, watch]);
 
   return (
     <div
@@ -103,28 +97,16 @@ export default function DraftLeftSidebar({
           </button>
         </div>
       </div>
-      <div className="draft-sidebar-search">
-        <input
-          type="search"
-          value={keyword}
-          className="input-seach"
-          aria-label="Search drafts"
-          placeholder="Search drafts…"
-          onChange={onChangeKeyword}
-        />
-        <span className="input-search--icon">
-          <Icons.Search className="icon__sm" />
-        </span>
-      </div>
+      {searchInput}
       {myDrafts}
-      {writeDraft}
+      {tempDraft}
       <div className="draft-sidebar-footer">
         <button
           type="button"
           className="btn-new-draft"
           aria-label="new draft button"
           onClick={onNewOrSaveDraftClick}
-          disabled={isPending}
+          disabled={fetcher.state === "submitting"}
         >
           <Icons.AddFile className="icon__base mr-2 stroke-current" />
           <span>New draft</span>
@@ -132,5 +114,4 @@ export default function DraftLeftSidebar({
       </div>
     </div>
   );
-};
-
+}

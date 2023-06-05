@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import uniqBy from "lodash-es/uniqBy";
 
@@ -7,6 +7,10 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { useFetcher } from "@remix-run/react";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
+
+// components
+import TempDraftItem from "~/components/draft/TempDraftItem";
+import { Icons } from "~/components/shared/Icons";
 
 // utils
 import { optimizeAnimation } from "~/utils/util";
@@ -17,28 +21,23 @@ import {
   getTargetElement,
 } from "~/libs/browser-utils";
 
-// components
-import MyDraftItem from "~/components/draft/MyDraftItem";
-import { Icons } from "~/components/shared/Icons";
-
 // types
-import type { PostDetailRespSchema } from "~/api/schema/resp";
-import type { DraftMyLoader } from "~/routes/draft.my[.]json";
+import type { DraftTempLoader } from "~/routes/draft.temps[.]json";
 
-export default function MyDraftSidebar() {
+export default function TempDraftSidebar() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const fetcher = useFetcher<DraftMyLoader>();
+  const fetcher = useFetcher<DraftTempLoader>();
   const [open, setOpen] = useState(true);
 
   const { keyword } = useDraftContext();
-  const [posts, setPosts] = useState<PostDetailRespSchema[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
   const cursor = useRef<number | null>(posts.at(-1)?.id ?? null);
 
   const totalCount = fetcher.data?.totalCount ?? 0;
   const canFetchMore = fetcher.data?.pageInfo?.hasNextPage ?? false;
 
   useDeepCompareEffect(() => {
-    let loadUrl = "/draft/my.json";
+    let loadUrl = "/draft/temps.json";
     if (keyword) {
       setPosts([]);
       loadUrl += `?keyword=${keyword}`;
@@ -103,7 +102,7 @@ export default function MyDraftSidebar() {
             <span>
               {keyword
                 ? `Showing results for: ${totalCount}`
-                : `My Drafts (${totalCount})`}
+                : `Temp Drafts (${totalCount})`}
             </span>
             <div className=" rounded-lg p-1">
               {open ? (
@@ -114,9 +113,10 @@ export default function MyDraftSidebar() {
             </div>
           </button>
         </Collapsible.Trigger>
+
         <Collapsible.Content className="h-80 overflow-y-scroll" ref={ref}>
           {posts.map((item, i) => (
-            <MyDraftItem key={`my-draft-${item.id}-${i}`} item={item} />
+            <TempDraftItem key={`write-draft-${item.id}-${i}`} item={item} />
           ))}
         </Collapsible.Content>
       </Collapsible.Root>

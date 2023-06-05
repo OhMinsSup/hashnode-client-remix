@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 
 // components
@@ -7,36 +7,32 @@ import { Icons } from "~/components/shared/Icons";
 
 // hooks
 import { useDraftContext } from "~/context/useDraftContext";
-import { useFormContext } from "react-hook-form";
+import { useNavigate, useParams } from "@remix-run/react";
+
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { PostDetailRespSchema } from "~/api/schema/resp";
 
 interface MyDraftItemProps {
-  item: Partial<any>;
+  item: PostDetailRespSchema;
 }
 
 export default function MyDraftItem({ item }: MyDraftItemProps) {
-  const { changeDraftId, draftId, $editorJS, toggleSubTitle } =
-    useDraftContext();
+  const { changeDraftId, draftId, toggleSubTitle } = useDraftContext();
   const [open, setOpen] = useState(false);
-  const methods = useFormContext<FormFieldValues>();
+  const navigate = useNavigate();
+  const params = useParams<{ itemId: string }>();
+
+  const selected = useMemo(() => {
+    if (!params.itemId) return false;
+    return params.itemId.toString() === item.id.toString();
+  }, [item.id, params.itemId]);
 
   const onSelectedDraft = useCallback(async () => {
-    // if (!item.id) return;
-    // const draft = await hashnodeDB.getDraft(item.id);
-    // if (!draft) return;
-    // changeDraftId(item.id);
-    // if (draft.subTitle) {
-    //   toggleSubTitle(true);
-    // }
-    // methods.reset(draft);
-    // if (draft.content && isString(draft.content)) {
-    //   const data = JSON.parse(draft.content);
-    //   if (!data) return;
-    //   $editorJS?.render(data);
-    // }
-  }, [item.id, changeDraftId, methods, toggleSubTitle, $editorJS]);
+    navigate(PAGE_ENDPOINTS.DRAFT.ID(item.id));
+  }, [navigate, item.id]);
 
   const onClickDelete = useCallback(async () => {
     // if (!item.id) return;
@@ -49,17 +45,15 @@ export default function MyDraftItem({ item }: MyDraftItemProps) {
 
   return (
     <div
-      aria-selected={
-        draftId ? (draftId === item.id ? "true" : "false") : "false"
-      }
+      aria-selected={selected}
       aria-label="my draft item"
       className={classNames("my-draft-item", {
-        active: draftId ? draftId === item.id : false,
+        active: selected,
       })}
     >
       <button
         className={classNames("my-draft-content w-full", {
-          active: draftId ? draftId === item.id : false,
+          active: selected,
         })}
         aria-label="my draft item"
         onClick={onSelectedDraft}
@@ -71,20 +65,13 @@ export default function MyDraftItem({ item }: MyDraftItemProps) {
       </button>
       <div className="my-draft-more">
         <div className="my-draft-more--container">
-          <DropdownMenu.Root
-            open={open}
-            onOpenChange={(open) => {
-              setOpen(open);
-
-              if (open) {
-                changeDraftId(item.id);
-              } else {
-                changeDraftId(undefined);
-              }
-            }}
-          >
+          <DropdownMenu.Root open={open} onOpenChange={setOpen}>
             <DropdownMenu.Trigger asChild>
-              <button className="btn-more" aria-label="Customise options">
+              <button
+                type="button"
+                className="btn-more"
+                aria-label="Customise options"
+              >
                 <Icons.EllipsisVertical className="icon__sm stroke-current" />
               </button>
             </DropdownMenu.Trigger>

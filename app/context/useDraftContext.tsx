@@ -16,7 +16,6 @@ export enum UploadStatus {
 }
 
 enum Action {
-  CHANGE_DRAFT_ID = "CHANGE_DRAFT_ID",
   CHANGE_TRANSITION = "CHANGE_TRANSITION",
   CHANGE_UPLOAD_STATUS = "CHANGE_UPLOAD_STATUS",
   TOGGLE_LEFT_SIDEBAR = "TOGGLE_LEFT_SIDEBAR",
@@ -26,11 +25,6 @@ enum Action {
   SET_EDITORJS_INSTANCE = "SET_EDITORJS_INSTANCE",
   CHANGE_KEYWORD = "CHANGE_KEYWORD",
 }
-
-type ChangeDraftIdAction = {
-  type: Action.CHANGE_DRAFT_ID;
-  payload: number | undefined;
-};
 
 type ChangeTransitionAction = {
   type: Action.CHANGE_TRANSITION;
@@ -73,7 +67,6 @@ type ChangeKeywordAction = {
 };
 
 type ActionType =
-  | ChangeDraftIdAction
   | ChangeTransitionAction
   | ToggleLeftSidebarAction
   | ToggleSubTitleAction
@@ -95,7 +88,6 @@ interface UploadState {
 
 interface DraftState {
   visibility: VisibilityState;
-  draftId: number | undefined;
   transition: Transition;
   upload: UploadState;
   $form: HTMLFormElement | null;
@@ -107,7 +99,6 @@ interface DraftContext extends DraftState {
   toggleLeftSidebar: (visible: boolean) => void;
   togglePublish: (visible: boolean) => void;
   toggleSubTitle: (used: boolean) => void;
-  changeDraftId: (draftId: number | undefined) => void;
   changeTransition: (transition: Transition) => void;
   changeUploadStatus: (status: UploadStatus) => void;
   setFormInstance: (form: HTMLFormElement | null) => void;
@@ -128,7 +119,6 @@ const initialState: DraftState = {
   upload: {
     status: UploadStatus.IDLE,
   },
-  draftId: undefined,
   keyword: "",
 };
 
@@ -144,11 +134,6 @@ interface Props {
 
 function reducer(state = initialState, action: ActionType) {
   switch (action.type) {
-    case Action.CHANGE_DRAFT_ID:
-      return {
-        ...state,
-        draftId: action.payload,
-      };
     case Action.CHANGE_TRANSITION:
       return {
         ...state,
@@ -209,13 +194,6 @@ function reducer(state = initialState, action: ActionType) {
 function DraftProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const changeDraftId = (draftId: number | undefined) => {
-    dispatch({
-      type: Action.CHANGE_DRAFT_ID,
-      payload: draftId,
-    });
-  };
-
   const changeTransition = (transition: Transition) => {
     dispatch({
       type: Action.CHANGE_TRANSITION,
@@ -275,7 +253,6 @@ function DraftProvider({ children }: Props) {
   const actions = useMemo(
     () => ({
       ...state,
-      changeDraftId,
       changeTransition,
       changeUploadStatus,
       toggleLeftSidebar,
