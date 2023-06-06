@@ -23,7 +23,7 @@ import { Icons } from "~/components/shared/Icons";
 
 // types
 import type { PostDetailRespSchema } from "~/api/schema/resp";
-import type { DraftMyLoader } from "~/routes/draft.my[.]json";
+import type { DraftMyLoader } from "~/routes/draft.loader.my[.]json";
 
 export default function MyDraftSidebar() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -38,7 +38,7 @@ export default function MyDraftSidebar() {
   const canFetchMore = fetcher.data?.pageInfo?.hasNextPage ?? false;
 
   useDeepCompareEffect(() => {
-    let loadUrl = "/draft/my.json";
+    let loadUrl = "/draft/loader/my.json";
     if (keyword) {
       setPosts([]);
       loadUrl += `?keyword=${keyword}`;
@@ -77,10 +77,15 @@ export default function MyDraftSidebar() {
     const clientHeight = getClientHeight(el);
 
     if (scrollHeight - scrollTop <= clientHeight + 10 && canFetchMore) {
-      const loadUrl =
-        `/draft/temps.json?cursor=${cursor.current}` + keyword
-          ? `&keyword=${keyword}`
-          : "";
+      let loadUrl = "/draft/loader/my.json";
+      const searchParams = new URLSearchParams();
+      if (cursor.current) {
+        searchParams.append("cursor", cursor.current.toString());
+      }
+      if (keyword) {
+        searchParams.append("keyword", keyword);
+      }
+      loadUrl += searchParams.toString() ? `?${searchParams.toString()}` : "";
       fetcher.load(loadUrl);
     }
   });

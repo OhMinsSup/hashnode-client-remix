@@ -18,6 +18,7 @@ import type { GetPostListApiSearchParams } from "~/api/posts/posts.server";
 import type { GetLikePostListApiSearchParams } from "~/api/posts/like-posts.server";
 import type { GetUserPostListApiSearchParams } from "~/api/user/user-posts.server";
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
+import { deletePostApi } from "~/api/posts/delete.server";
 
 export class ItemApiService {
   constructor(private readonly env: Env) {}
@@ -159,6 +160,26 @@ export class ItemApiService {
     const jsonData = Json.parse(bodyString);
     const input = await updatePostSchema.parseAsync(jsonData);
     return await updatePostApi(itemId, input, {
+      request,
+    });
+  }
+
+  /**
+   * @description 아이템 수정
+   * @param {number | string} id
+   * @param {Request} request
+   * @returns {Promise<ReturnType<typeof deletePostApi>>}
+   */
+  async deleteItem(
+    id: number | string,
+    request: Request
+  ): Promise<ReturnType<typeof deletePostApi>> {
+    // 인티저 영어
+    const itemId = isString(id) ? parseInt(id, 10) : id;
+    if (isNaN(itemId)) {
+      throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+    }
+    return await deletePostApi(itemId, {
       request,
     });
   }

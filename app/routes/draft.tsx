@@ -183,13 +183,13 @@ export default function DraftRouteLayout() {
 
   useDeepCompareEffect(() => {
     if (!fetcher_temp.data?.dataId) {
-      // debounced_create.run();
+      debounced_create.run();
     }
   }, [watchAll, fetcher_temp.data]);
 
   useDeepCompareEffect(() => {
     if (fetcher_temp.data && fetcher_temp.data.dataId) {
-      // debounced_update.run(fetcher_temp.data.dataId);
+      debounced_update.run(fetcher_temp.data.dataId);
     }
   }, [watchAll, fetcher_temp.data]);
 

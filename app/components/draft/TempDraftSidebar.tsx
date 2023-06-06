@@ -22,7 +22,7 @@ import {
 } from "~/libs/browser-utils";
 
 // types
-import type { DraftTempLoader } from "~/routes/draft.temps[.]json";
+import type { DraftTempLoader } from "~/routes/draft.loader.temps[.]json";
 
 export default function TempDraftSidebar() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -37,7 +37,7 @@ export default function TempDraftSidebar() {
   const canFetchMore = fetcher.data?.pageInfo?.hasNextPage ?? false;
 
   useDeepCompareEffect(() => {
-    let loadUrl = "/draft/temps.json";
+    let loadUrl = "/draft/loader/temps.json";
     if (keyword) {
       setPosts([]);
       loadUrl += `?keyword=${keyword}`;
@@ -76,10 +76,15 @@ export default function TempDraftSidebar() {
     const clientHeight = getClientHeight(el);
 
     if (scrollHeight - scrollTop <= clientHeight + 10 && canFetchMore) {
-      const loadUrl =
-        `/draft/temps.json?cursor=${cursor.current}` + keyword
-          ? `&keyword=${keyword}`
-          : "";
+      let loadUrl = "/draft/loader/temps.json";
+      const searchParams = new URLSearchParams();
+      if (cursor.current) {
+        searchParams.append("cursor", cursor.current.toString());
+      }
+      if (keyword) {
+        searchParams.append("keyword", keyword);
+      }
+      loadUrl += searchParams.toString() ? `?${searchParams.toString()}` : "";
       fetcher.load(loadUrl);
     }
   });

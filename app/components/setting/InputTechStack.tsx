@@ -10,7 +10,7 @@ import { useFetcher, useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 
 import type { UserUpdateBody } from "~/api/user/validation/update";
-import type { LoadTagsLoader } from "~/routes/settings.tags[.]json";
+import type { LoadTagsLoader } from "~/routes/settings.loader.tags[.]json";
 import { Icons } from "../shared/Icons";
 import { isEmpty } from "~/utils/assertion";
 
@@ -33,7 +33,7 @@ export default function InputTechStack() {
       setInputValue(value);
 
       startTransition(() => {
-        fetcher.load(`/settings/tags.json?name=${value}&limit=10`);
+        fetcher.load(`/settings/loader/tags.json?name=${value}&limit=10`);
       });
     },
     [fetcher]
