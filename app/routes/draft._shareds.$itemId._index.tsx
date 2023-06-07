@@ -39,20 +39,38 @@ export const action = async ({ context, request, params }: ActionArgs) => {
   if (!id) {
     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
   }
-  return actionErrorWrapper(async () => {
-    const { json: data } = await context.api.item.updateItem(id, request);
-    if (data.resultCode !== RESULT_CODE.OK) {
-      throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
-        status: STATUS_CODE.BAD_REQUEST,
+  switch (request.method) {
+    case "DELETE": {
+      return actionErrorWrapper(async () => {
+        const { json: data } = await context.api.item.deleteItem(id, request);
+        if (data.resultCode !== RESULT_CODE.OK) {
+          throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
+            status: STATUS_CODE.BAD_REQUEST,
+          });
+        }
+        return json(data.result);
       });
     }
-    return json({ ok: true, respData: data });
-  });
+    case "PUT": {
+      return actionErrorWrapper(async () => {
+        const { json: data } = await context.api.item.updateItem(id, request);
+        if (data.resultCode !== RESULT_CODE.OK) {
+          throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
+            status: STATUS_CODE.BAD_REQUEST,
+          });
+        }
+        return json(data.result);
+      });
+    }
+    default: {
+      throw new Response("Method not allowed", { status: 405 });
+    }
+  }
 };
 
 export type ItemLoaderData = typeof loader;
 
-export default function DraftPage() {
+export default function Routes() {
   const { itemId } = useParams<{ itemId: string }>();
   const { item } = useLoaderData<ItemLoaderData>();
   const methods = useFormContext<FormFieldValues>();

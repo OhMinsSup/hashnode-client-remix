@@ -11,7 +11,6 @@ import { useFetcher, useNavigate, useParams } from "@remix-run/react";
 
 // types
 import type { DraftDetailRespSchema } from "~/api/schema/resp";
-import type { DraftItemIdTempAction } from "~/routes/draft.action.$itemId.temp";
 
 interface TempDraftItemProps {
   item: DraftDetailRespSchema;
@@ -20,7 +19,7 @@ interface TempDraftItemProps {
 export default function TempDraftItem({ item }: TempDraftItemProps) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const fetcher = useFetcher<DraftItemIdTempAction>();
+  const fetcher = useFetcher();
   const params = useParams<{ itemId: string }>();
 
   const selected = useMemo(() => {
@@ -33,9 +32,11 @@ export default function TempDraftItem({ item }: TempDraftItemProps) {
   }, [item.id, navigate]);
 
   const onClickDelete = useCallback(async () => {
-    fetcher.submit(null, {
+    const input = {
+      id: item.id.toString(),
+    };
+    fetcher.submit(input, {
       method: "DELETE",
-      action: `/draft/action/${item.id}/temp`,
       replace: true,
     });
   }, [fetcher, item.id]);

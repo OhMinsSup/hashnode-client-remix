@@ -20,16 +20,15 @@ import { ASSET_URL } from "~/constants/constant";
 
 // types
 import type { FormFieldValues } from "~/routes/draft";
-import type { DraftTempAction } from "~/routes/draft.action.temp";
 
 interface DraftLeftSidebarProps {
-  myDrafts: React.JSX.Element;
+  myDraft: React.JSX.Element;
   tempDraft: React.JSX.Element;
   searchInput: React.JSX.Element;
 }
 
 export default function DraftLeftSidebar({
-  myDrafts,
+  myDraft,
   tempDraft,
   searchInput,
 }: DraftLeftSidebarProps) {
@@ -37,7 +36,7 @@ export default function DraftLeftSidebar({
 
   const { watch } = useFormContext<FormFieldValues>();
 
-  const fetcher = useFetcher<DraftTempAction>();
+  const fetcher = useFetcher();
   const { visibility, toggleLeftSidebar } = useDraftContext();
 
   const onToggleLeftSidebar = useCallback(() => {
@@ -98,7 +97,7 @@ export default function DraftLeftSidebar({
         </div>
       </div>
       {searchInput}
-      {myDrafts}
+      {myDraft}
       {tempDraft}
       <div className="draft-sidebar-footer">
         <button

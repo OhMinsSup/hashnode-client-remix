@@ -34,6 +34,7 @@ export default function MyDraftItem({ item }: MyDraftItemProps) {
   const onClickDelete = useCallback(async () => {
     fetcher.submit(null, {
       method: "DELETE",
+      // TODO: 수정이 필요한 부분
       action: `/draft/action/${item.id}`,
       replace: true,
     });

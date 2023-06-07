@@ -54,18 +54,48 @@ export class DraftApiService {
     return resp;
   }
 
+  // /**
+  //  * @description 아이템 상세
+  //  * @param {number | string} id
+  //  * @param {Request} request
+  //  * @returns {Promise<ReturnType<typeof getPostApi>>}
+  //  */
+  // async deleteDraft(
+  //   id: number | string,
+  //   request: Request
+  // ): Promise<ReturnType<typeof deleteDraftApi>> {
+  //   // 인티저 영어
+  //   const itemId = isString(id) ? parseInt(id, 10) : id;
+  //   if (isNaN(itemId)) {
+  //     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+  //   }
+  //   const resp = await deleteDraftApi(itemId, {
+  //     request,
+  //   });
+  //   if (resp.json?.resultCode !== RESULT_CODE.OK) {
+  //     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+  //   }
+  //   return resp;
+  // }
+
   /**
    * @description 아이템 상세
-   * @param {number | string} id
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof getPostApi>>}
    */
   async deleteDraft(
-    id: number | string,
     request: Request
   ): Promise<ReturnType<typeof deleteDraftApi>> {
+    const formData = await this.readFormData(request);
+    const idString = formData.get("id")?.toString();
+    if (!idString) {
+      const pathname = new URL(request.url).pathname;
+      throw redirect(pathname || PAGE_ENDPOINTS.DRAFT.ROOT, {
+        status: STATUS_CODE.BAD_REQUEST,
+      });
+    }
     // 인티저 영어
-    const itemId = isString(id) ? parseInt(id, 10) : id;
+    const itemId = parseInt(idString, 10);
     if (isNaN(itemId)) {
       throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
     }
@@ -100,28 +130,56 @@ export class DraftApiService {
     });
   }
 
+  // /**
+  //  * @description 아이템 수정
+  //  * @param {number | string} id
+  //  * @param {Request} request
+  //  * @returns {Promise<ReturnType<typeof updateDraftApi>>}
+  //  */
+  // async updateDraft(
+  //   id: number | string,
+  //   request: Request
+  // ): Promise<ReturnType<typeof updateDraftApi>> {
+  //   // 인티저 영어
+  //   const itemId = isString(id) ? parseInt(id, 10) : id;
+  //   if (isNaN(itemId)) {
+  //     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+  //   }
+
+  //   const formData = await this.readFormData(request);
+  //   const bodyString = formData.get("body")?.toString();
+  //   if (!bodyString) {
+  //     throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
+  //       status: STATUS_CODE.BAD_REQUEST,
+  //     });
+  //   }
+  //   const jsonData = Json.parse(bodyString);
+  //   const input = await draftSchema.parseAsync(jsonData);
+  //   return await updateDraftApi(itemId, input, {
+  //     request,
+  //   });
+  // }
   /**
    * @description 아이템 수정
-   * @param {number | string} id
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof updateDraftApi>>}
    */
   async updateDraft(
-    id: number | string,
     request: Request
   ): Promise<ReturnType<typeof updateDraftApi>> {
-    // 인티저 영어
-    const itemId = isString(id) ? parseInt(id, 10) : id;
-    if (isNaN(itemId)) {
-      throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
-    }
-
     const formData = await this.readFormData(request);
     const bodyString = formData.get("body")?.toString();
-    if (!bodyString) {
-      throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
+    const idString = formData.get("id")?.toString();
+    if (!bodyString || !idString) {
+      const pathname = new URL(request.url).pathname;
+      throw redirect(pathname || PAGE_ENDPOINTS.DRAFT.ROOT, {
         status: STATUS_CODE.BAD_REQUEST,
       });
+    }
+    // 인티저 영어
+    const itemId = parseInt(idString, 10);
+    if (isNaN(itemId)) {
+      throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
     }
     const jsonData = Json.parse(bodyString);
     const input = await draftSchema.parseAsync(jsonData);

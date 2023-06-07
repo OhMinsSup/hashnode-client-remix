@@ -24,7 +24,7 @@ export const action = async ({ context, request }: ActionArgs) => {
   });
 };
 
-export default function DraftPage() {
+export default function Routes() {
   return <DraftEditor />;
 }
 
