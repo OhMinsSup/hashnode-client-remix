@@ -6,7 +6,6 @@ import uniqBy from "lodash-es/uniqBy";
 import { useDraftContext } from "~/context/useDraftContext";
 import { useFetcher } from "@remix-run/react";
 import { useEventListener } from "~/libs/hooks/useEventListener";
-import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
 
 // components
 import TempDraftItem from "~/components/draft/TempDraftItem";
@@ -22,32 +21,35 @@ import {
 } from "~/libs/browser-utils";
 
 // types
-import type { DraftTempLoader } from "~/routes/draft.loader.temps[.]json";
+import type { DraftListRespSchema } from "~/api/schema/resp";
+import type { DraftLayoutLoader } from "~/routes/_draft.draft._layout";
+import type { BaseResponse } from "~/api/client";
 
-export default function TempDraftSidebar() {
+interface TempDraftSidebarProps {
+  data: DraftListRespSchema;
+}
+
+export default function TempDraftSidebar({ data }: TempDraftSidebarProps) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const fetcher = useFetcher<DraftTempLoader>();
+  const fetcher = useFetcher<DraftLayoutLoader>();
   const [open, setOpen] = useState(true);
 
   const { keyword } = useDraftContext();
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<any[]>(data.list ?? []);
   const cursor = useRef<number | null>(posts.at(-1)?.id ?? null);
 
-  const totalCount = fetcher.data?.totalCount ?? 0;
-  const canFetchMore = fetcher.data?.pageInfo?.hasNextPage ?? false;
-
-  useDeepCompareEffect(() => {
-    let loadUrl = "/draft/loader/temps.json";
-    if (keyword) {
-      setPosts([]);
-      loadUrl += `?keyword=${keyword}`;
-    }
-    fetcher.load(loadUrl);
-  }, [keyword]);
+  const totalCount = data.totalCount ?? 0;
+  const fetcherData = fetcher.data?.temp_promises as unknown as {
+    json: BaseResponse<DraftListRespSchema>;
+  } | null;
+  const canFetchMore =
+    fetcherData?.json.result?.pageInfo?.hasNextPage ??
+    data.pageInfo?.hasNextPage ??
+    false;
 
   useEffect(() => {
-    if (fetcher.data) {
-      const { list } = fetcher.data;
+    if (fetcherData) {
+      const { list } = fetcherData.json.result;
       cursor.current = list.at(-1)?.id ?? null;
       setPosts((prevItems) => {
         // 이전 아이템의 값중에 cursor.current와 같은 id를 가진 아이템이 있으면
@@ -59,7 +61,7 @@ export default function TempDraftSidebar() {
         return uniqBy([...prevItems, ...list], "id");
       });
     }
-  }, [fetcher.data]);
+  }, [fetcherData]);
 
   const onCollapsibleOpenChange = useCallback((open: boolean) => {
     setOpen(open);
@@ -76,7 +78,7 @@ export default function TempDraftSidebar() {
     const clientHeight = getClientHeight(el);
 
     if (scrollHeight - scrollTop <= clientHeight + 10 && canFetchMore) {
-      let loadUrl = "/draft/loader/temps.json";
+      let loadUrl = "/draft";
       const searchParams = new URLSearchParams();
       if (cursor.current) {
         searchParams.append("cursor", cursor.current.toString());
@@ -119,7 +121,7 @@ export default function TempDraftSidebar() {
           </button>
         </Collapsible.Trigger>
 
-        <Collapsible.Content className="h-80 overflow-y-scroll" ref={ref}>
+        <Collapsible.Content className="h-96 overflow-y-scroll" ref={ref}>
           {posts.map((item, i) => (
             <TempDraftItem key={`write-draft-${item.id}-${i}`} item={item} />
           ))}

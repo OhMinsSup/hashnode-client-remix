@@ -6,7 +6,7 @@ import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useFormContext } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 import type { FileSchema } from "~/api/schema/file";
 
 interface DraftImageCoverPopoverLibraryItemProps {

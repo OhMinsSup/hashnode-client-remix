@@ -1,11 +1,10 @@
-import React from "react";
-import { json, redirect } from "@remix-run/cloudflare";
-import { Outlet } from "@remix-run/react";
+import { defer, json, redirect } from "@remix-run/cloudflare";
+import { Await, Outlet, useLoaderData } from "@remix-run/react";
 import { actionErrorWrapper } from "~/api/validation/errorWrapper";
+import { parseUrlParams } from "~/utils/util";
 
 // components
 import DraftLeftSidebar from "~/components/draft/DraftLeftSidebar.unstable";
-import MyDraftSidebar from "~/components/draft/MyDraftSidebar.unstable";
 import SearchDraftSidebarInput from "~/components/draft/SearchDraftSidebarInput";
 import TempDraftSidebar from "~/components/draft/TempDraftSidebar.unstable";
 
@@ -13,7 +12,35 @@ import TempDraftSidebar from "~/components/draft/TempDraftSidebar.unstable";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 // types
-import type { ActionArgs } from "@remix-run/cloudflare";
+import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
+import { Suspense } from "react";
+
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const params = parseUrlParams(request.url);
+  let cursor = undefined;
+  if (params.cursor) {
+    cursor = parseInt(params.cursor);
+  }
+  let limit = undefined;
+  if (params.limit) {
+    limit = parseInt(params.limit);
+  }
+  let keyword = undefined;
+  if (params.keyword) {
+    keyword = params.keyword;
+  }
+  const args = {
+    cursor,
+    limit,
+    ...(keyword && { keyword }),
+  } as const;
+
+  return defer({
+    temp_promises: context.api.draft.getDrafts(request, args),
+  });
+};
+
+export type DraftLayoutLoader = typeof loader;
 
 export const action = async ({ request, context }: ActionArgs) => {
   switch (request.method) {
@@ -54,11 +81,18 @@ export const action = async ({ request, context }: ActionArgs) => {
 };
 
 export default function Routes() {
+  const data = useLoaderData<DraftLayoutLoader>();
   return (
     <div className="draft-template">
       <DraftLeftSidebar
         searchComponent={<SearchDraftSidebarInput />}
-        draftComponent={<TempDraftSidebar />}
+        draftComponent={
+          <Suspense fallback={<></>}>
+            <Await resolve={data.temp_promises} errorElement={<></>}>
+              {(data: any) => <TempDraftSidebar data={data?.json?.result} />}
+            </Await>
+          </Suspense>
+        }
       >
         <Outlet />
       </DraftLeftSidebar>

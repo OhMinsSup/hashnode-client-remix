@@ -16,7 +16,7 @@ import DraftPublishDrawer from "~/components/draft/DraftPublishDrawer";
 
 // types
 import type { SubmitHandler } from "react-hook-form";
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 interface DraftEditorProps {
   action?: string;

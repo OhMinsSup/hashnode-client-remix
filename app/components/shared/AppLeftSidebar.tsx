@@ -5,6 +5,7 @@ import { Await, Link, useLoaderData } from "@remix-run/react";
 
 // hooks
 import { useEventListener } from "~/libs/hooks/useEventListener";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -22,6 +23,7 @@ import type { MainLoader } from "~/routes/_main";
 
 export default function AppLeftSidebar() {
   const data = useLoaderData<MainLoader>();
+  const session = useOptionalSession();
 
   const $container = useRef<HTMLDivElement | null>(null);
   const GAP_SIZE = useMemo(() => 32, []);
@@ -108,6 +110,16 @@ export default function AppLeftSidebar() {
               icon={<Icons.MyBookmark className="flex-shrink-0 fill-current" />}
               end
             />
+            {session ? (
+              <AppLeftSidebarNavLink
+                text="My Items"
+                to={PAGE_ENDPOINTS.USERS.ROOT}
+                icon={
+                  <Icons.UserProfile className="flex-shrink-0 fill-current" />
+                }
+                end
+              />
+            ) : null}
             <div className="px-4">
               <hr className="my-5 border-gray-200"></hr>
               <h5>

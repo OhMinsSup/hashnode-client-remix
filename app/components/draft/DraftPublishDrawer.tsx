@@ -15,7 +15,7 @@ import { Transition, useDraftContext } from "~/context/useDraftContext";
 import { useFormContext, useWatch } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 function InternalDraftPublishDrawer() {
   const { togglePublish } = useDraftContext();

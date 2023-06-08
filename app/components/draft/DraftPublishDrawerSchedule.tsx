@@ -5,7 +5,7 @@ import { Icons } from "~/components/shared/Icons";
 import { useFormContext, useController } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 export default function DraftPublishDrawerSchedule() {
   const { setValue, control } = useFormContext<FormFieldValues>();

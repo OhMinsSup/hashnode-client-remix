@@ -122,38 +122,6 @@ export default function Routes() {
     reValidateMode: "onChange",
   });
 
-  // const watchAll = useWatch({
-  //   control: methods.control,
-  // });
-
-  // const fetcher_temp = useFetcher();
-  // const fetcher_itemId_temp = useFetcher<DraftItemIdTempAction>();
-
-  // const debounced_update = useDebounceFn(
-  //   (dataId: number) => {
-  //     fetcher_itemId_temp.submit(
-  //       {
-  //         body: Json.stringify(watchAll),
-  //       },
-  //       {
-  //         method: "PUT",
-  //         action: `/draft/action/${dataId}/temp`,
-  //         replace: true,
-  //       }
-  //     );
-  //   },
-  //   {
-  //     wait: 250,
-  //     trailing: true,
-  //   }
-  // );
-
-  // useDeepCompareEffect(() => {
-  //   if (fetcher_temp.data && fetcher_temp.data.dataId) {
-  //     debounced_update.run(fetcher_temp.data.dataId);
-  //   }
-  // }, [watchAll, fetcher_temp.data]);
-
   return (
     <DraftProvider>
       <FormProvider {...methods}>

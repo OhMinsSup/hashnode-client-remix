@@ -21,7 +21,7 @@ import { useDraftContext } from "~/context/useDraftContext";
 import { isString } from "~/utils/assertion";
 
 import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
-import type { FormFieldValues } from "./draft";
+import type { FormFieldValues } from "./_draft";
 
 export const loader = async ({ context, params, request }: LoaderArgs) => {
   const id = params.itemId;

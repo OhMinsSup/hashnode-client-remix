@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 import { Icons } from "../shared/Icons";
 import { useDraftContext } from "~/context/useDraftContext";
 

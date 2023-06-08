@@ -4,7 +4,7 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 export default function DraftPublishDrawerDescription() {
   const { register } = useFormContext<FormFieldValues>();

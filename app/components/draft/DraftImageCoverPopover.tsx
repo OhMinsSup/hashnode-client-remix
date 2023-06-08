@@ -8,7 +8,7 @@ import { useFormContext } from "react-hook-form";
 import { UploadStatus, useDraftContext } from "~/context/useDraftContext";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 export default function DraftImageCoverPopover() {
   const [open, setOpen] = useState(false);

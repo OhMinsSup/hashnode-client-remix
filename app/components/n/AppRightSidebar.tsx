@@ -28,14 +28,14 @@ export default function AppRightSidebar() {
         </AppRightSidebarContentBox>
         <Suspense fallback={<>Loading package location...</>}>
           <Await resolve={data.trendingTagsWeek}>
-            {(data) => (
+            {(data: any) => (
               <AppRightSidebarContentBox
                 title="Trending Weekly"
                 to={PAGE_ENDPOINTS.EXPLORE.TAGS}
                 toText="All tags"
               >
                 <div>
-                  {(data.json.result?.list ?? []).map((tag) => (
+                  {(data.json.result?.list ?? []).map((tag: any) => (
                     <RightTagTrendingItem
                       key={`trending-weekly-n-tags-${tag.id}`}
                       tag={tag}
@@ -48,14 +48,14 @@ export default function AppRightSidebar() {
         </Suspense>
         <Suspense fallback={<>Loading package location...</>}>
           <Await resolve={data.trendingTagsAll}>
-            {(data) => (
+            {(data: any) => (
               <AppRightSidebarContentBox
                 title="Trending All-time"
                 toText="All tags"
                 to={PAGE_ENDPOINTS.EXPLORE.TAGS}
               >
                 <div>
-                  {(data.json.result?.list ?? []).map((tag) => (
+                  {(data.json.result?.list ?? []).map((tag: any) => (
                     <RightTagTrendingItem
                       key={`trending-allTime-n-tags-${tag.id}`}
                       tag={tag}

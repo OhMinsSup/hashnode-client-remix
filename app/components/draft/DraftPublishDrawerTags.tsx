@@ -8,7 +8,7 @@ import { useFetcher, useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 import type { LoadTagsLoader } from "~/routes/settings.loader.tags[.]json";
 import classNames from "classnames";
 import { isEmpty } from "~/utils/assertion";

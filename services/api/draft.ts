@@ -119,6 +119,7 @@ export class DraftApiService {
     const formData = await this.readFormData(request);
     const bodyString = formData.get("body")?.toString();
     if (!bodyString) {
+      console.log("bodyString", bodyString);
       throw redirect(PAGE_ENDPOINTS.DRAFT.ROOT, {
         status: STATUS_CODE.BAD_REQUEST,
       });

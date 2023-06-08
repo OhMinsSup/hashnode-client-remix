@@ -19,7 +19,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { ASSET_URL } from "~/constants/constant";
 
 // types
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 interface DraftLeftSidebarProps {
   myDraft: React.JSX.Element;

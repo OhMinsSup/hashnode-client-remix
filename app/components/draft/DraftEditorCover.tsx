@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Icons } from "../shared/Icons";
 import { useFormContext } from "react-hook-form";
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 
 export default function DraftEditorCover() {
   const { setValue, clearErrors, watch } = useFormContext<FormFieldValues>();

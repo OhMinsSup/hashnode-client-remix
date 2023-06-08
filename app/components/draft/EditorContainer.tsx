@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import Editor from "~/components/shared/Editor";
-import type { FormFieldValues } from "~/routes/draft";
+import type { FormFieldValues } from "~/routes/_draft";
 import type { API } from "@editorjs/editorjs";
 import { useDraftContext } from "~/context/useDraftContext";
 
