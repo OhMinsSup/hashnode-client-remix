@@ -87,7 +87,7 @@ export default function Routes() {
         <h1>My Items</h1>
         <p>Manage your bookmarks and drafts here.</p>
       </div>
-      <div className="overflow-hidden rounded-lg border bg-white">
+      <div className="rounded-lg border bg-white">
         <Outlet />
       </div>
     </div>

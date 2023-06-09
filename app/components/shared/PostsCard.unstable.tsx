@@ -1,11 +1,11 @@
-import React, { Suspense, useCallback, useMemo } from "react";
-import { Link } from "@remix-run/react";
+import React, { useCallback, useMemo, useState } from "react";
+import { Link, useFetcher } from "@remix-run/react";
 import { Icons } from "~/components/shared/Icons";
-import SuspenseImage from "~/components/shared/SuspenseImage";
-import { ClientOnly } from "remix-utils";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { isEmpty } from "~/utils/assertion";
 import { getDateFormat } from "~/libs/date";
+import classNames from "classnames";
 
 // types
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -14,9 +14,14 @@ import type { PostDetailRespSchema } from "~/api/schema/resp";
 interface PostCardProps {
   post: PostDetailRespSchema;
   ["data-index"]?: number;
+  isMyItemPage?: boolean;
 }
 
-function PostCard({ post, ...props }: PostCardProps, ref: any) {
+function PostCard({ post, isMyItemPage, ...props }: PostCardProps, ref: any) {
+  const fetcher = useFetcher();
+
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
   const tags = useMemo(() => {
     return post?.tags ?? [];
   }, [post]);
@@ -25,9 +30,32 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
     return PAGE_ENDPOINTS.ITEMS.ID(post.id);
   }, [post]);
 
+  const onClickDelete = useCallback(() => {
+    const isConfim = confirm(
+      "정말로 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."
+    );
+    if (isConfim) {
+      fetcher.submit(
+        {
+          id: post.id.toString(),
+        },
+        {
+          method: "DELETE",
+          action: PAGE_ENDPOINTS.USERS.ROOT,
+          replace: true,
+        }
+      );
+    }
+  }, [fetcher, post.id]);
+
   return (
     <div className="main-post-card" ref={ref} {...props}>
-      <div className="main-post-card__header">
+      <div
+        ref={setContainer}
+        className={classNames("main-post-card__header", {
+          "flex items-center justify-between": isMyItemPage,
+        })}
+      >
         <div className="main-post-card__header-container">
           <div className="thumbnail-container">
             <Link to={to} className="thumbnail-container__link">
@@ -55,6 +83,30 @@ function PostCard({ post, ...props }: PostCardProps, ref: any) {
             </div>
           </div>
         </div>
+        {isMyItemPage ? (
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <button className="my-item-delete-btn">
+                <Icons.EllipsisVertical className="icon__sm stroke-current" />
+              </button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal container={container}>
+              <DropdownMenu.Content
+                className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade min-w-[220px] rounded-md bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+                sideOffset={5}
+              >
+                <DropdownMenu.Item
+                  className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative flex h-[25px] select-none items-center rounded-[3px] px-[5px] pl-[25px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none"
+                  onClick={onClickDelete}
+                >
+                  Delete
+                </DropdownMenu.Item>
+
+                <DropdownMenu.Arrow className="fill-white" />
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+        ) : null}
       </div>
       <div className="main-post-card__content">
         <div className="main-post-card__content-container">
@@ -156,19 +208,6 @@ PostCard.Profile = function PostProfile({ post }: PostCardProps) {
     };
   }, [post]);
 
-  // const renderSkeleton = useCallback(() => {
-  //   return <img className="scale-110 blur-2xl grayscale" alt="thumbnail" />;
-  // }, []);
-
-  // return (
-  //   <ClientOnly fallback={renderSkeleton()}>
-  //     {() => (
-  //       <Suspense fallback={renderSkeleton()}>
-  //         <SuspenseImage data={profileData} alt="thumbnail" />
-  //       </Suspense>
-  //     )}
-  //   </ClientOnly>
-  // );
   return <img src={profileData?.url} loading="lazy" alt="user profile" />;
 };
 
@@ -181,28 +220,6 @@ PostCard.Thumbnail = function PostThumbnail({ post }: PostCardProps) {
     };
   }, [post]);
 
-  // const renderSkeleton = useCallback(() => {
-  //   return (
-  //     <img
-  //       className="min-h-[100px] w-full scale-110 blur-2xl grayscale"
-  //       alt="thumbnail"
-  //     />
-  //   );
-  // }, []);
-
-  // return (
-  //   <ClientOnly fallback={renderSkeleton()}>
-  //     {() => (
-  //       <Suspense fallback={renderSkeleton()}>
-  //         <SuspenseImage
-  //           data={thumbnailData}
-  //           className="min-h-[100px] w-full"
-  //           alt="thumbnail"
-  //         />
-  //       </Suspense>
-  //     )}
-  //   </ClientOnly>
-  // );
   return (
     <img
       className="min-h-[100px] w-full"

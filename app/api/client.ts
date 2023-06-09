@@ -124,7 +124,7 @@ export class ApiService {
     return _options;
   };
 
-  static middlewareForUrl = (pathname: ApiRoutes) => {
+  static makeURL = (pathname: ApiRoutes) => {
     const baseURL = new URL(ApiService.baseUrl);
     const basePathname = baseURL.pathname;
     const concatPathname = basePathname + "/" + pathname.toString();
@@ -164,15 +164,28 @@ export class ApiService {
         headers.set(key, value);
       }
     }
-    headers.set("content-type", "multipart/form-data");
+    headers.delete("content-type");
     return headers;
+  };
+
+  static makeBody = (body?: any) => {
+    if (!body) {
+      return undefined;
+    }
+    if (body instanceof FormData) {
+      return body;
+    }
+    if (isEmpty(body)) {
+      return undefined;
+    }
+    return JSON.stringify(body);
   };
 
   static async get(
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const input = this.middlewareForUrl(pathname);
+    const input = this.makeURL(pathname);
     const requset = new Request(input, {
       ...options,
       method: "GET",
@@ -189,11 +202,13 @@ export class ApiService {
     body?: any,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const input = this.middlewareForUrl(pathname);
+    const input = this.makeURL(pathname);
+    const bodyData = this.makeBody(body);
+    console.log("bodyData", bodyData);
     const requset = new Request(input, {
       ...options,
       method: "POST",
-      body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
+      body: bodyData,
     });
     const response = await fetch(requset);
     if (!response.ok) {
@@ -206,7 +221,7 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const input = this.middlewareForUrl(pathname);
+    const input = this.makeURL(pathname);
     const requset = new Request(input, {
       ...options,
       method: "DELETE",
@@ -223,11 +238,12 @@ export class ApiService {
     body?: any,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const input = this.middlewareForUrl(pathname);
+    const input = this.makeURL(pathname);
+    const bodyData = this.makeBody(body);
     const requset = new Request(input, {
       ...options,
       method: "PUT",
-      body: body && !isEmpty(body) ? JSON.stringify(body) : undefined,
+      body: bodyData,
     });
     const response = await fetch(requset);
     if (!response.ok) {
@@ -240,7 +256,7 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const input = this.middlewareForUrl(pathname);
+    const input = this.makeURL(pathname);
     const requset = new Request(input, {
       ...options,
       method: "PATCH",

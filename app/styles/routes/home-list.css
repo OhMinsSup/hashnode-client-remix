@@ -125,6 +125,15 @@
   @apply relative mb-2;
 }
 
+.main-post-card .main-post-card__header .my-item-delete-btn {
+  @apply flex flex-shrink-0 flex-row items-center rounded-full px-2 py-1;
+}
+
+.main-post-card .main-post-card__header .my-item-delete-btn:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
 .main-post-card .main-post-card__header .main-post-card__header-container {
   word-break: normal;
   overflow-wrap: anywhere;

@@ -57,7 +57,7 @@ export const action = async ({ request, context }: ActionArgs) => {
 export type UsersIndexLoader = typeof loader;
 
 export default function Routes() {
-  return <PostsList />;
+  return <PostsList isMyItemPage />;
 }
 
 export function ErrorBoundary() {

@@ -2,15 +2,16 @@ import React, { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { Icons } from "~/components/shared/Icons";
-
-// constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { isEmpty, isString } from "~/utils/assertion";
 
 // hooks
-import { useFetcher, useNavigate, useParams } from "@remix-run/react";
+import { useFormContext } from "react-hook-form";
+import { useFetcher, useParams } from "@remix-run/react";
+import { useDraftContext } from "~/context/useDraftContext";
 
 // types
 import type { DraftDetailRespSchema } from "~/api/schema/resp";
+import type { FormFieldValues } from "~/routes/_draft";
 
 interface TempDraftItemProps {
   item: DraftDetailRespSchema;
@@ -18,8 +19,9 @@ interface TempDraftItemProps {
 
 export default function TempDraftItem({ item }: TempDraftItemProps) {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const fetcher = useFetcher();
+  const { reset } = useFormContext<FormFieldValues>();
+  const { toggleSubTitle, $editorJS } = useDraftContext();
   const params = useParams<{ itemId: string }>();
 
   const selected = useMemo(() => {
@@ -28,8 +30,38 @@ export default function TempDraftItem({ item }: TempDraftItemProps) {
   }, [item.id, params.itemId]);
 
   const onSelectedDraft = useCallback(async () => {
-    navigate(PAGE_ENDPOINTS.DRAFT.ID(item.id));
-  }, [item.id, navigate]);
+    if (!item.id) return;
+    const json = JSON.parse(item.json ?? "{}");
+    if (!isEmpty(json)) {
+      const defaultValues = {
+        title: "",
+        subTitle: undefined,
+        content: "",
+        thumbnail: null,
+        tags: undefined,
+        disabledComment: false,
+        publishingDate: undefined,
+        seo: {
+          title: "",
+          desc: "",
+          image: "",
+        },
+      };
+      reset({
+        ...defaultValues,
+        ...json,
+      });
+      if (json.subTitle) {
+        toggleSubTitle(true);
+      }
+      console.log(typeof json.content);
+      if (json.content && isString(json.content)) {
+        const data = JSON.parse(json.content);
+        if (!data) return;
+        $editorJS?.render(data);
+      }
+    }
+  }, [$editorJS, item.id, item.json, reset, toggleSubTitle]);
 
   const onClickDelete = useCallback(async () => {
     const input = {

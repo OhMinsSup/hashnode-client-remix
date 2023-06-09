@@ -37,7 +37,11 @@ type Loader =
   | UsersIndexLoader
   | MainUserPostsIndexLoader;
 
-const PostsList = () => {
+interface PostsListProps {
+  isMyItemPage?: boolean;
+}
+
+export default function PostsList({ isMyItemPage }: PostsListProps) {
   const data = useLoaderData<Loader>();
   const fetcher = useFetcher<Loader>();
 
@@ -140,6 +144,7 @@ const PostsList = () => {
                 data-index={virtualRow.index}
                 ref={virtualizer.measureElement}
                 key={`post-card-${key}-${item?.id}`}
+                isMyItemPage={isMyItemPage}
                 post={item}
               />
             );
@@ -149,6 +154,4 @@ const PostsList = () => {
       {!canFetchMore ? <ReachedEnd className="pt-0" /> : null}
     </div>
   );
-};
-
-export default PostsList;
+}

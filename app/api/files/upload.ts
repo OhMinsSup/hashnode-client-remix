@@ -20,6 +20,7 @@ export async function uploadApi(body: UploadBody, options?: BaseApiOptions) {
   formData.append("uploadType", body.uploadType);
   formData.append("mediaType", body.mediaType);
   formData.append("filename", body.file.name);
+  console.log("formData", formData);
   const { json } = await ApiService.postFormData<UploadRespSchema>(
     API_ENDPOINTS.FILES.UPLOAD,
     formData,

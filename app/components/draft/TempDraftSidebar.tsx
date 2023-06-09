@@ -21,12 +21,9 @@ import {
   getTargetElement,
 } from "~/libs/browser-utils";
 
-// types
-import type { DraftTempLoader } from "~/routes/draft.loader.temps[.]json";
-
 export default function TempDraftSidebar() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const fetcher = useFetcher<DraftTempLoader>();
+  const fetcher = useFetcher();
   const [open, setOpen] = useState(true);
 
   const { keyword } = useDraftContext();
