@@ -6,6 +6,7 @@ import type { Env } from "./services/env";
 import type { TagApiService } from "./services/api/tag";
 import type { WidgetApiService } from "./services/api/widget";
 import type { DraftApiService } from "./services/api/draft";
+import type { FileApiService } from "services/api/file";
 
 // remix.run load, action cloudflare pages context
 interface RuntimeEnv {
@@ -27,6 +28,7 @@ declare module "@remix-run/server-runtime" {
       tag: TagApiService;
       widget: WidgetApiService;
       draft: DraftApiService;
+      file: FileApiService;
     };
   }
 }

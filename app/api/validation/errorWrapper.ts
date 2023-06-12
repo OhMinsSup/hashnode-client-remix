@@ -1,7 +1,7 @@
 import { json } from "@remix-run/cloudflare";
 import { HTTPErrorWrapper, ValidationErrorWrapper } from "./common";
 
-export const actionErrorWrapper = async (fn: any): Promise<any> => {
+export const actionErrorWrapper = async <F = unknown>(fn: () => F) => {
   try {
     return await fn();
   } catch (error) {

@@ -33,6 +33,7 @@ const TabRoutesPosts: React.FC<TabPostListProps> = ({ children }) => {
 
   const onMoveToClick = useCallback(
     (dataKey: string) => {
+      console.log(dataKey);
       switch (dataKey) {
         case "Featured":
           navigate(PAGE_ENDPOINTS.FEATURED);
@@ -67,7 +68,6 @@ const TabRoutesPosts: React.FC<TabPostListProps> = ({ children }) => {
               aria-selected={match.isIndex ? "true" : "false"}
               onClick={onMoveToClick}
             />
-
             <TabRoutesPostsButton
               tabIndex={match.isFeatured ? 0 : -1}
               name="Featured"
@@ -118,11 +118,11 @@ const TabRoutesPostsButton: React.FC<TabRoutesPostsButtonProps> = ({
 
   return (
     <div
+      {...props}
       data-key={dataKey}
       role="tab"
       className="tab-routes-button"
       onClick={onTabClick}
-      {...props}
     >
       <Icon className="icon__base mr-2 fill-current" />
       <span className="whitespace-nowrap">{name}</span>

@@ -1,12 +1,7 @@
-import classNames from "classnames";
-
-// components
-import { Icons } from "~/components/shared/Icons";
-
 // remix
-import { Outlet, useLocation, useNavigate } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
-import { useCallback, useMemo } from "react";
+import AuthLayout from "~/components/auth/AuthLayout";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -33,9 +28,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   return null;
 };
 
-export type AuthLoader = typeof loader;
+export type AuthLayoutLoader = typeof loader;
 
-export const meta: V2_MetaFunction<AuthLoader> = ({ location }) => {
+export const meta: V2_MetaFunction<AuthLayoutLoader> = ({ location }) => {
   const Seo = {
     signin: "Sign in to Hashnode",
     signup: "Sign up to Hashnode",
@@ -71,33 +66,10 @@ export const meta: V2_MetaFunction<AuthLoader> = ({ location }) => {
   ];
 };
 
-export default function Auth() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const isSigninPage = useMemo(() => {
-    return location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
-  }, [location]);
-
-  const onClick = useCallback(() => {
-    navigate(PAGE_ENDPOINTS.ROOT);
-  }, [navigate]);
-
+export default function Routes() {
   return (
-    <div
-      className={classNames({
-        "signup-page": !isSigninPage,
-      })}
-    >
-      <header
-        className={classNames({
-          "auth-header__signin": isSigninPage,
-          "auth-header__signup": !isSigninPage,
-        })}
-      >
-        <Icons.Logo onClick={onClick} className="h-8 cursor-pointer" />
-      </header>
+    <AuthLayout>
       <Outlet />
-    </div>
+    </AuthLayout>
   );
 }

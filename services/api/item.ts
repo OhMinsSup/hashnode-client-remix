@@ -11,6 +11,7 @@ import { createPostSchema } from "~/api/posts/validation/create";
 import { getLikePostListApi } from "~/api/posts/like-posts.server";
 import { getUserPostListApi } from "~/api/user/user-posts.server";
 import { getMyPostListApi } from "~/api/posts/my-posts.server";
+import { deletePostApi } from "~/api/posts/delete.server";
 
 // types
 import type { Env } from "../env";
@@ -18,7 +19,6 @@ import type { GetPostListApiSearchParams } from "~/api/posts/posts.server";
 import type { GetLikePostListApiSearchParams } from "~/api/posts/like-posts.server";
 import type { GetUserPostListApiSearchParams } from "~/api/user/user-posts.server";
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
-import { deletePostApi } from "~/api/posts/delete.server";
 
 export class ItemApiService {
   constructor(private readonly env: Env) {}
@@ -164,21 +164,48 @@ export class ItemApiService {
     });
   }
 
+  // /**
+  //  * @description 아이템 수정
+  //  * @param {number | string} id
+  //  * @param {Request} request
+  //  * @returns {Promise<ReturnType<typeof deletePostApi>>}
+  //  */
+  // async deleteItem(
+  //   id: number | string,
+  //   request: Request
+  // ): Promise<ReturnType<typeof deletePostApi>> {
+  //   // 인티저 영어
+  //   const itemId = isString(id) ? parseInt(id, 10) : id;
+  //   if (isNaN(itemId)) {
+  //     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+  //   }
+  //   return await deletePostApi(itemId, {
+  //     request,
+  //   });
+  // }
+
   /**
    * @description 아이템 수정
-   * @param {number | string} id
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof deletePostApi>>}
    */
-  async deleteItem(
-    id: number | string,
+   async deleteItem(
     request: Request
   ): Promise<ReturnType<typeof deletePostApi>> {
-    // 인티저 영어
-    const itemId = isString(id) ? parseInt(id, 10) : id;
-    if (isNaN(itemId)) {
-      throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+    const formData = await this.readFormData(request);
+    const bodyString = formData.get("body")?.toString();
+    const idString = formData.get("id")?.toString();
+    if (!bodyString || !idString) {
+      const pathname = new URL(request.url).pathname;
+      throw redirect(pathname || PAGE_ENDPOINTS.USERS.ROOT, {
+        status: STATUS_CODE.BAD_REQUEST,
+      });
     }
+   // 인티저 영어
+   const itemId = parseInt(idString, 10);
+   if (isNaN(itemId)) {
+     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+   }
     return await deletePostApi(itemId, {
       request,
     });

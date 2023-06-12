@@ -6,23 +6,17 @@ import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type { BaseApiOptions } from "../client";
-import type { UploadBody } from "./validation/upload";
 import type { UploadRespSchema } from "../schema/resp";
 
 /**
  * @description 파일 업로드 API
- * @param {UploadBody} body
+ * @param {FormData} body
  * @param {BaseApiOptions?} options
  */
-export async function uploadApi(body: UploadBody, options?: BaseApiOptions) {
-  const formData = new FormData();
-  formData.append("file", body.file);
-  formData.append("uploadType", body.uploadType);
-  formData.append("mediaType", body.mediaType);
-  formData.append("filename", body.file.name);
+export async function uploadApi(body: FormData, options?: BaseApiOptions) {
   const { json } = await ApiService.postFormData<UploadRespSchema>(
     API_ENDPOINTS.FILES.UPLOAD,
-    formData,
+    body,
     ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
       ?.init
   );

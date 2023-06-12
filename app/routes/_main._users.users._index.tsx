@@ -40,10 +40,10 @@ export const action = async ({ request, context }: ActionArgs) => {
   switch (request.method) {
     case "DELETE": {
       return actionErrorWrapper(async () => {
-        const { json: data } = await context.api.draft.deleteDraft(request);
+        const { json: data } = await context.api.item.deleteItem(request);
         if (data.resultCode !== RESULT_CODE.OK) {
           const pathname = new URL(request.url).pathname;
-          throw redirect(pathname || PAGE_ENDPOINTS.DRAFT.ROOT);
+          throw redirect(pathname || PAGE_ENDPOINTS.USERS.ROOT);
         }
         return json(data.result);
       });

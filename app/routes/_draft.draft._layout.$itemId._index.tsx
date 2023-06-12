@@ -40,17 +40,6 @@ export const action = async ({ context, request, params }: ActionArgs) => {
     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
   }
   switch (request.method) {
-    case "DELETE": {
-      return actionErrorWrapper(async () => {
-        const { json: data } = await context.api.item.deleteItem(id, request);
-        if (data.resultCode !== RESULT_CODE.OK) {
-          throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
-            status: STATUS_CODE.BAD_REQUEST,
-          });
-        }
-        return json(data.result);
-      });
-    }
     case "PUT": {
       return actionErrorWrapper(async () => {
         const { json: data } = await context.api.item.updateItem(id, request);

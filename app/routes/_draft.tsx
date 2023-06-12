@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 // remix
 import { redirect } from "@remix-run/cloudflare";
 
@@ -98,27 +96,25 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type DraftLoader = typeof loader;
 
-export default function Routes() {
-  const intialValues: FormFieldValues = useMemo(() => {
-    return {
-      title: "",
-      subTitle: undefined,
-      content: "",
-      thumbnail: null,
-      tags: undefined,
-      disabledComment: false,
-      publishingDate: undefined,
-      seo: {
-        title: "",
-        desc: "",
-        image: "",
-      },
-    };
-  }, []);
+export const defaultValues: FormFieldValues = {
+  title: "",
+  subTitle: undefined,
+  content: "",
+  thumbnail: null,
+  tags: undefined,
+  disabledComment: false,
+  publishingDate: undefined,
+  seo: {
+    title: "",
+    desc: "",
+    image: "",
+  },
+};
 
+export default function Routes() {
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(createPostSchema),
-    defaultValues: intialValues,
+    defaultValues,
     reValidateMode: "onChange",
   });
 

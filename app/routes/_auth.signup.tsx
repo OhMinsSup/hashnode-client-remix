@@ -21,7 +21,7 @@ import { actionErrorWrapper } from "~/api/validation/errorWrapper";
 import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionArgs) => {
-  return actionErrorWrapper(async () => {
+  const actionFn = async () => {
     const { response } = await context.api.auth.signup(request);
     const cookie = response.headers.get("set-cookie");
     if (!cookie) {
@@ -32,12 +32,11 @@ export const action = async ({ request, context }: ActionArgs) => {
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers: context.api.auth.getAuthHeaders(cookie),
     });
-  });
+  };
+  return actionErrorWrapper(actionFn);
 };
 
-export type SignupAction = typeof action;
-
-export default function Signup() {
+export default function Routes() {
   return (
     <Form method="POST" className="auth-form__container" replace>
       <h1 className="auth-form__title">
@@ -124,9 +123,9 @@ export default function Signup() {
 export function ErrorBoundary() {
   let error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return <Signup />;
+    return <Routes />;
   } else if (error instanceof Error) {
-    return <Signup />;
+    return <Routes />;
   }
-  return <Signup />;
+  return <Routes />;
 }

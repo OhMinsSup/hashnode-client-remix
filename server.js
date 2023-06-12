@@ -1,6 +1,5 @@
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
 import * as build from "@remix-run/dev/server-build";
-import { DraftService } from "./services/data/draft";
 import { EnvSchema } from "./services/env";
 import { AuthApiService } from "./services/api/auth";
 import { UserApiService } from "./services/api/user";
@@ -8,6 +7,7 @@ import { ItemApiService } from "./services/api/item";
 import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
+import { FileApiService } from "./services/api/file";
 
 const handleRequest = createPagesFunctionHandler({
   build,
@@ -17,7 +17,6 @@ const handleRequest = createPagesFunctionHandler({
     return {
       ...context.env,
       services: {
-        draft: new DraftService(env),
       },
       api: {
         auth: new AuthApiService(env),
@@ -26,6 +25,7 @@ const handleRequest = createPagesFunctionHandler({
         widget: new WidgetApiService(env),
         tag: new TagApiService(env),
         draft: new DraftApiService(env),
+        file: new FileApiService(env),
       },
     };
   },
