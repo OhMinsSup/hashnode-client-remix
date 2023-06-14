@@ -9,10 +9,10 @@ import { useFormContext } from "react-hook-form";
 
 // types
 import type { FormFieldValues } from "~/routes/_draft";
-import type { LoadTagsLoader } from "~/routes/settings.loader.tags[.]json";
 import classNames from "classnames";
 import { isEmpty } from "~/utils/assertion";
 import { Icons } from "../shared/Icons";
+import type { LoadTagsLoader } from "~/routes/_loader._protected.loader.tags[.]json";
 
 export default function DraftPublishDrawerTags() {
   const [inputValue, setInputValue] = useState("");
@@ -35,7 +35,7 @@ export default function DraftPublishDrawerTags() {
       setInputValue(value);
 
       startTransition(() => {
-        fetcher.load(`/settings/loader/tags.json?name=${value}&limit=10`);
+        fetcher.load(`/loader/tags.json?name=${value}&limit=10`);
       });
     },
     [fetcher]
