@@ -1,15 +1,9 @@
 import React, { useMemo } from "react";
 import classNames from "classnames";
+import ErrorMessage from "../shared/ErrorMessage";
 
 // hooks
 import { useActionData, useNavigation } from "@remix-run/react";
-import ErrorMessage from "../shared/ErrorMessage";
-
-// types
-import type { SignupAction } from "~/routes/_auth.signup";
-import type { SigninAction } from "~/routes/_auth.signin";
-
-type ActionData = SignupAction | SigninAction;
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   id: string;
@@ -19,7 +13,8 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
 
 export default function Input({ id, name, title, ...otherProps }: InputProps) {
   const navigation = useNavigation();
-  const errors = useActionData<ActionData>();
+  const errors = useActionData();
+  const error = errors?.[name];
 
   const isSubmitting = useMemo(
     () => navigation.state === "submitting",
@@ -36,10 +31,10 @@ export default function Input({ id, name, title, ...otherProps }: InputProps) {
         name={name}
         {...otherProps}
         className={classNames("auth-form__input", otherProps?.className, {
-          error: !!errors?.[name],
+          error: !!error,
         })}
       />
-      <ErrorMessage error={errors?.[name]} isSubmitting={isSubmitting} />
+      <ErrorMessage error={error} isSubmitting={isSubmitting} />
     </div>
   );
 }
