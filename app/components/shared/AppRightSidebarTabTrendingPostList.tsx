@@ -1,8 +1,15 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import classNames from "classnames";
 import { isNull, isUndefined } from "~/utils/assertion";
-import { useGetTopPostsQuery } from "~/api/posts/hooks/useGetTopPostsQuery";
+
+// hooks
+import { useFetcher } from "@remix-run/react";
+
+// components
 import AppRightSidebarTabTrendingPost from "./AppRightSidebarTabTrendingPost";
+
+// types
+import type { LoadTopPostsLoader } from "~/routes/_loader._public.loader.get-top-posts[.]json";
 
 interface AppRightSidebarTabTrendingPostListProps {
   duration: number;
@@ -15,21 +22,16 @@ export default function AppRightSidebarTabTrendingPostList({
   initialData,
   enabled,
 }: AppRightSidebarTabTrendingPostListProps) {
-  const { data } = useGetTopPostsQuery(
-    {
-      duration: duration,
-    },
-    {
-      enabled,
-      initialData,
-      staleTime: 1000 * 60 * 60 * 24,
-      cacheTime: 1000 * 60 * 60 * 24,
-    }
-  );
+  const fetcher = useFetcher<LoadTopPostsLoader>()
+
+  useEffect(() => {
+    if (enabled === false) return;
+    fetcher.load(`/loader/get-top-posts.json?duration=${duration}`)
+  }, [enabled]);
 
   const posts = useMemo(() => {
-    return data?.posts ?? [];
-  }, [data]);
+    return fetcher.data?.posts ?? [];
+  }, [fetcher.data?.posts]);
 
   if (isNull(posts) || isUndefined(posts)) return null;
 

@@ -1,6 +1,7 @@
 import { json } from "@remix-run/cloudflare";
 import { parseUrlParams } from "~/utils/util";
 import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { TagListRespSchema } from "~/api/schema/resp";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const params = parseUrlParams(request.url);
@@ -33,7 +34,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
       hasNextPage: false,
       endCursor: null,
     },
-  };
+  } as TagListRespSchema;
 
   return json(data);
 };

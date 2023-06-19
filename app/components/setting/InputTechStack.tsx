@@ -1,18 +1,19 @@
 import React, { useCallback, useMemo, useState, useTransition } from "react";
 import classNames from "classnames";
 import unionBy from "lodash-es/unionBy";
+import { isEmpty } from "~/utils/assertion";
 
 // components
 import ErrorMessage from "../shared/ErrorMessage";
+import { Icons } from "../shared/Icons";
 
 // hooks
 import { useFetcher, useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 
 import type { UserUpdateBody } from "~/api/user/validation/update";
-import { Icons } from "../shared/Icons";
-import { isEmpty } from "~/utils/assertion";
 import type { LoadTagsLoader } from "~/routes/_loader._protected.loader.tags[.]json";
+import type { TagListRespSchema } from "~/api/schema/resp";
 
 export default function InputTechStack() {
   const [inputValue, setInputValue] = useState("");
@@ -59,7 +60,11 @@ export default function InputTechStack() {
           value={inputValue}
           onChange={onChange}
         />
-        <InputTechStack.Popover inputValue={inputValue} onReset={onReset} />
+        <InputTechStack.Popover
+          fetcherData={fetcher.data}
+          inputValue={inputValue}
+          onReset={onReset}
+        />
       </div>
       <InputTechStack.Tags />
       <ErrorMessage
@@ -74,13 +79,14 @@ export default function InputTechStack() {
 interface PopoverProps {
   inputValue: string;
   onReset: () => void;
+  fetcherData: TagListRespSchema | undefined;
 }
 
 InputTechStack.Popover = function Popover({
   inputValue,
   onReset,
+  fetcherData,
 }: PopoverProps) {
-  const fetcher = useFetcher<LoadTagsLoader>();
   const { setValue, watch } = useFormContext<UserUpdateBody>();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,15 +97,15 @@ InputTechStack.Popover = function Popover({
     if (watchSkills.length) {
       _data.push(...watchSkills);
     }
-    if (fetcher.data) {
-      const { list } = fetcher.data;
+    if (fetcherData) {
+      const { list } = fetcherData;
       _data.push(...list.map((tag) => tag.name));
     }
     if (inputValue) {
       _data.push(inputValue);
     }
     return unionBy(_data, (item) => item);
-  }, [fetcher.data, inputValue, watchSkills]);
+  }, [fetcherData, inputValue, watchSkills]);
 
   const onClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
