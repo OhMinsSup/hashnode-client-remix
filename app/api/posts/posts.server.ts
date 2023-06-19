@@ -49,12 +49,8 @@ export async function getPostListApi(
     searchParams.set("tag", query.tag);
   }
   const { json } = await ApiService.getJson<PostListRespSchema>(
-    ApiService.middlewareForSearchParams(
-      API_ENDPOINTS.POSTS.ROOT,
-      searchParams
-    ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.getSearchParams(API_ENDPOINTS.POSTS.ROOT, searchParams),
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

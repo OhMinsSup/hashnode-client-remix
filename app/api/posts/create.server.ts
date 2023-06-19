@@ -23,8 +23,7 @@ export async function createPostApi(
   const { json } = await ApiService.postJson<PostRespSchema>(
     API_ENDPOINTS.POSTS.ROOT,
     body,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

@@ -15,8 +15,7 @@ import type { BaseApiOptions } from "../client";
 export async function deleteDraftApi(id: number, options?: BaseApiOptions) {
   const { json } = await ApiService.deleteJson(
     API_ENDPOINTS.DRAFT.ID(id),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

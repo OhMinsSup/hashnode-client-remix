@@ -1,6 +1,10 @@
 // types
 import { getWidgetBookmarksApi } from "~/api/widget/widget-bookmarks.server";
 import { getAritcleCirclesApi } from "~/api/widget/aritcle-circles.server";
+import {
+  getTopPostsApi,
+  type GetTopPostsApiSearchParams,
+} from "~/api/posts/top-posts.server";
 import type { Env } from "../env";
 
 export class WidgetApiService {
@@ -9,7 +13,6 @@ export class WidgetApiService {
   /**
    * @description 위젯 북마크 가져오기
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof getWidgetBookmarksApi>>}
    */
   async getWidgetBookmarks(
     request: Request
@@ -22,12 +25,22 @@ export class WidgetApiService {
   /**
    * @description 위젯 유저 정보 가져오기
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof getAritcleCirclesApi>>}
    */
   async getAritcleCircles(
     request: Request
   ): Promise<ReturnType<typeof getAritcleCirclesApi>> {
     return await getAritcleCirclesApi(undefined, {
+      request,
+    });
+  }
+
+  /**
+   * @description 탑 포스트 가져오기
+   * @param {Request} request
+   * @param {GetTopPostsApiSearchParams?} query
+  */
+  async getTopPosts(request: Request, query?: GetTopPostsApiSearchParams) {
+    return await getTopPostsApi(query, {
       request,
     });
   }

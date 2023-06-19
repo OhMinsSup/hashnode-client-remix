@@ -9,7 +9,7 @@ import { getUserApi } from "~/api/user/user.server";
 import { getExploreBlogsApi } from "~/api/user/explore-blogs.server";
 import { userUpdateSchema } from "~/api/user/validation/update";
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
-import { HTTPError } from "~/api/client";
+import { HTTPError } from "~/api/error";
 
 // types
 import type { Env } from "../env";

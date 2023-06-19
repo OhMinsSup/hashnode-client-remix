@@ -19,8 +19,7 @@ export interface GetWidgetBookmarksApiSearchParams {
 export async function getWidgetBookmarksApi(options?: BaseApiOptions) {
   const { json } = await ApiService.getJson<GetWidgetBookmarksRespSchema>(
     API_ENDPOINTS.WIDGET.BOOKMARKS,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

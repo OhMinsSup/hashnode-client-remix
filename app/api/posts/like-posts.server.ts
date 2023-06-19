@@ -30,12 +30,8 @@ export async function getLikePostListApi(
     searchParams.set("limit", "15");
   }
   const { json } = await ApiService.getJson<PostLikeListRespSchema>(
-    ApiService.middlewareForSearchParams(
-      API_ENDPOINTS.POSTS.GET_LIKES,
-      searchParams
-    ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.getSearchParams(API_ENDPOINTS.POSTS.GET_LIKES, searchParams),
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

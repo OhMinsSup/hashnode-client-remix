@@ -23,8 +23,7 @@ export async function createDraftApi(
   const { json } = await ApiService.postJson<DraftRespSchema>(
     API_ENDPOINTS.DRAFT.ROOT,
     body,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

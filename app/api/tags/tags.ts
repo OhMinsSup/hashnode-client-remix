@@ -45,9 +45,8 @@ export async function getTagListApi(
     searchParams.set("category", "all");
   }
   const { json } = await ApiService.getJson<TagListRespSchema>(
-    ApiService.middlewareForSearchParams(API_ENDPOINTS.TAGS.ROOT, searchParams),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.getSearchParams(API_ENDPOINTS.TAGS.ROOT, searchParams),
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

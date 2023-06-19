@@ -14,8 +14,7 @@ import type { BaseApiOptions } from "../client";
 export async function deleteUserApi(options?: BaseApiOptions) {
   const { json, response } = await ApiService.deleteJson(
     API_ENDPOINTS.USERS.ME,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json, response };
 }

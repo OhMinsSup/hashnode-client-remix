@@ -15,8 +15,7 @@ import type { UserRespSchema } from "../schema/resp";
 export async function getMeApi(options?: BaseApiOptions) {
   const { json, response } = await ApiService.getJson<UserRespSchema>(
     API_ENDPOINTS.USERS.ME,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json, response };
 }

@@ -31,12 +31,11 @@ export async function getAritcleCirclesApi(
     );
   }
   const { json } = await ApiService.getJson<GetAritcleCirclesRespSchema>(
-    ApiService.middlewareForSearchParams(
+    ApiService.getSearchParams(
       API_ENDPOINTS.WIDGET.ARTICLE_CIRCLES,
       searchParams
     ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

@@ -25,8 +25,7 @@ export async function updateDraftApi(
   const { json } = await ApiService.putJson<DraftRespSchema>(
     API_ENDPOINTS.DRAFT.ID(id),
     body,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

@@ -17,8 +17,7 @@ export async function uploadApi(body: FormData, options?: BaseApiOptions) {
   const { json } = await ApiService.postFormData<UploadRespSchema>(
     API_ENDPOINTS.FILES.UPLOAD,
     body,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

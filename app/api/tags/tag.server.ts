@@ -16,8 +16,7 @@ import type { TagDetailRespSchema } from "../schema/resp";
 export async function getTagApi(tag: string, options?: BaseApiOptions) {
   const { json } = await ApiService.getJson<TagDetailRespSchema>(
     API_ENDPOINTS.TAGS.TAG(tag),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

@@ -32,12 +32,11 @@ export async function getUserPostListApi(
   }
 
   const { json } = await ApiService.getJson<PostListRespSchema>(
-    ApiService.middlewareForSearchParams(
+    ApiService.getSearchParams(
       API_ENDPOINTS.USERS.USERNAME_POSTS(username),
       searchParams
     ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

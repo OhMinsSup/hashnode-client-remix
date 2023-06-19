@@ -16,8 +16,7 @@ import type { PostDetailRespSchema } from "../schema/resp";
 export async function getPostApi(id: number, options?: BaseApiOptions) {
   const { json } = await ApiService.getJson<PostDetailRespSchema>(
     API_ENDPOINTS.POSTS.ID(id),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

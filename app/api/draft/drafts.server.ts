@@ -35,12 +35,11 @@ export async function getDraftListApi(
     searchParams.set("keyword", query.keyword);
   }
   const { json } = await ApiService.getJson<DraftListRespSchema>(
-    ApiService.middlewareForSearchParams(
+    ApiService.getSearchParams(
       API_ENDPOINTS.DRAFT.ROOT,
       searchParams
     ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

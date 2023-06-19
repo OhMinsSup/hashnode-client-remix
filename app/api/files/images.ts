@@ -32,12 +32,8 @@ export async function getImageFilesApi(
     searchParams.set("cursor", query.cursor.toString());
   }
   const { json, response } = await ApiService.getJson<FileListRespSchema>(
-    ApiService.middlewareForSearchParams(
-      API_ENDPOINTS.FILES.ROOT,
-      searchParams
-    ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.getSearchParams(API_ENDPOINTS.FILES.ROOT, searchParams),
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json, response };
 }

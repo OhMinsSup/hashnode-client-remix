@@ -16,8 +16,7 @@ import type { DraftDetailRespSchema } from "../schema/resp";
 export async function getDraftApi(id: number, options?: BaseApiOptions) {
   const { json } = await ApiService.getJson<DraftDetailRespSchema>(
     API_ENDPOINTS.DRAFT.ID(id),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

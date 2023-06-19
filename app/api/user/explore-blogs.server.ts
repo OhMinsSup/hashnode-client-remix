@@ -37,12 +37,11 @@ export async function getExploreBlogsApi(
     searchParams.set("category", "all");
   }
   const { json } = await ApiService.getJson<ExploreBlogsListRespSchema>(
-    ApiService.middlewareForSearchParams(
+    ApiService.getSearchParams(
       API_ENDPOINTS.USERS.TRENDING_USERS,
       searchParams
     ),
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

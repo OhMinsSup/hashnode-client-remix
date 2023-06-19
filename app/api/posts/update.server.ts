@@ -25,8 +25,7 @@ export async function updatePostApi(
   const { json } = await ApiService.putJson<PostRespSchema>(
     API_ENDPOINTS.POSTS.ID(id),
     body,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

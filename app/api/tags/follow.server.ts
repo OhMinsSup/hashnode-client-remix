@@ -17,8 +17,7 @@ export async function postTagFollowApi(tag: string, options?: BaseApiOptions) {
   const { json } = await ApiService.postJson<TagFollowRespSchema>(
     API_ENDPOINTS.TAGS.TAG_FOLLOW(tag),
     {},
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   return { json };
 }

@@ -15,8 +15,7 @@ export async function logoutApi(options?: BaseApiOptions) {
   const { json, response } = await ApiService.postJson(
     API_ENDPOINTS.USERS.LOGOUT,
     undefined,
-    ApiService.middlewareForAuth(ApiService.middlewareSetAuthticated(options))
-      ?.init
+    ApiService.autoAuthticated(ApiService.setAuthticated(options))?.init
   );
   const header = response.headers;
   return { json, header };
