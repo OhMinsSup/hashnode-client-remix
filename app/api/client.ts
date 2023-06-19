@@ -5,27 +5,7 @@ import { isEmpty, isNull, isString, isUndefined } from "~/utils/assertion";
 
 // types
 import type { Nullable } from "./schema/api";
-
-export class HTTPError extends Error {
-  public response: Response;
-  public request: Request;
-  public options: any;
-
-  constructor(response: Response, request: Request, options: any) {
-    const code =
-      response.status || response.status === 0 ? response.status : "";
-    const title = response.statusText || "";
-    const status = `${code} ${title}`.trim();
-    const reason = status ? `status code ${status}` : "an unknown error";
-
-    super(`Request failed with ${reason}`);
-
-    this.name = "HTTPError";
-    this.response = response;
-    this.request = request;
-    this.options = options;
-  }
-}
+import { HTTPError } from "./error";
 
 export type ApiRoutes = URL | RequestInfo;
 
@@ -55,7 +35,7 @@ export class ApiService {
     this.baseUrl = url;
   }
 
-  static middlewareSetAuthticated = (options?: BaseApiOptions) => {
+  static setAuthticated = (options?: BaseApiOptions) => {
     const _options = Object.assign({}, options);
     if (
       (options?.custom && isUndefined(options.custom.isAuthticated)) ||
@@ -69,7 +49,7 @@ export class ApiService {
     return _options;
   };
 
-  static middlewareForAuth = (options?: BaseApiOptions) => {
+  static autoAuthticated = (options?: BaseApiOptions) => {
     const isAuthticated = options?.custom?.isAuthticated ?? false;
     if (!isAuthticated) return options;
     const _options = {
@@ -100,25 +80,12 @@ export class ApiService {
     }
 
     if (!_access_token) return options;
-
-    const HEADERS = [
-      "cookie",
-      "Cookie",
-      "set-cookie",
-      "Set-Cookie",
-      "content-type",
-      "Content-Type",
-    ];
-    const headers = new Headers();
-    for (const [key, value] of _headers) {
-      if (HEADERS.includes(key)) headers.set(key, value);
-    }
     // TODO: Cloudflare
     // cloudflare workerd에서는 credentials를 지원하지 않음
     // 하지만 cloudflare workerd에는 구현체 정보가 있음?
     // credentials: "include",
     _options.init = Object.assign({}, _options.init, {
-      headers,
+      headers: _headers,
     });
 
     return _options;
@@ -131,7 +98,7 @@ export class ApiService {
     return new URL(concatPathname, ApiService.baseUrl);
   };
 
-  static middlewareForSearchParams = (
+  static getSearchParams = (
     url: ApiRoutes | string,
     params?: URLSearchParams | string
   ) => {
@@ -204,7 +171,6 @@ export class ApiService {
   ) {
     const input = this.makeURL(pathname);
     const bodyData = this.makeBody(body);
-    console.log("bodyData", bodyData);
     const requset = new Request(input, {
       ...options,
       method: "POST",
@@ -272,10 +238,9 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = this.headerJSON(options);
     const response = await this.get(pathname, {
       ...options,
-      headers,
+      headers: this.headerJSON(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -293,10 +258,9 @@ export class ApiService {
     body: Body,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = this.headerJSON(options);
     const response = await this.post(pathname, body, {
       ...options,
-      headers,
+      headers: this.headerJSON(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -316,10 +280,9 @@ export class ApiService {
   ) {
     const body =
       formData instanceof FormData ? formData : new FormData(formData);
-    const headers = this.headerFormData(options);
     const response = await this.post(pathname, body, {
       ...options,
-      headers,
+      headers: this.headerFormData(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -336,10 +299,9 @@ export class ApiService {
     pathname: ApiRoutes,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = this.headerJSON(options);
     const response = await this.delete(pathname, {
       ...options,
-      headers,
+      headers: this.headerJSON(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -357,10 +319,9 @@ export class ApiService {
     body: Body,
     options?: BaseApiOptions["init"] | undefined
   ) {
-    const headers = this.headerJSON(options);
     const response = await this.put(pathname, body, {
       ...options,
-      headers,
+      headers: this.headerJSON(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -380,10 +341,9 @@ export class ApiService {
   ) {
     const body =
       formData instanceof FormData ? formData : new FormData(formData);
-    const headers = this.headerFormData(options);
     const response = await this.put(pathname, body, {
       ...options,
-      headers,
+      headers: this.headerFormData(options),
     });
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
