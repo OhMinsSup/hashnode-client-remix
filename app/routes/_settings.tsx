@@ -15,6 +15,7 @@ import settingsStyles from "~/styles/routes/settings.css";
 
 // types
 import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
+import SettingLayout from "~/components/setting/SettingLayout";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: settingsStyles }];
@@ -32,18 +33,10 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type SettingsLoader = typeof loader;
 
-export default function Setting() {
+export default function Routes() {
   return (
-    <div className="bg-slate-100">
-      <SettingHeader />
-      <div className="setting__container">
-        <div className="wrapper">
-          <SettingSidebar />
-          <div className="flex-1">
-            <Outlet />
-          </div>
-        </div>
-      </div>
-    </div>
+    <SettingLayout>
+      <Outlet />
+    </SettingLayout>
   );
 }

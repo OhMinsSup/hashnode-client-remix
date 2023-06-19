@@ -50,7 +50,7 @@ export const meta: V2_MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionArgs) => {
-  return actionErrorWrapper(async () => {
+  const actionFn = async () => {
     const { json } = await context.api.user.deleteUser(request);
     if (json.resultCode !== RESULT_CODE.OK) {
       return redirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT, {
@@ -60,10 +60,11 @@ export const action = async ({ context, request }: ActionArgs) => {
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers: context.api.auth.getClearAuthHeaders(),
     });
-  });
+  };
+  return actionErrorWrapper(actionFn);
 };
 
-export default function Account() {
+export default function Routes() {
   const session = useOptionalSession();
   const fetcher = useFetcher();
 
@@ -110,24 +111,10 @@ export default function Account() {
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }
