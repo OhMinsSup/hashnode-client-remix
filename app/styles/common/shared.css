@@ -3,11 +3,12 @@
 .button-primary {
   border-radius: 9999px;
   --tw-border-opacity: 1;
-  border-color: rgb(37 99 235/var(--tw-border-opacity));
-  color: rgb(37 99 235/var(--tw-text-opacity));
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+  color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 
-.button-primary, .button-transparent-outline {
+.button-primary,
+.button-transparent-outline {
   border-width: 1px;
   padding: 0.25rem 0.75rem;
   font-size: 1rem;
@@ -15,15 +16,16 @@
   font-weight: 500;
   line-height: 1.625;
   --tw-text-opacity: 1;
-  transition-property: color,background-color,border-color,text-decoration-color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  transition-duration: .15s;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
 }
 
 .button-primary.small {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
@@ -94,7 +96,7 @@
 /* Error */
 
 .error-message {
-  @apply my-1 mx-1 text-sm text-red-500 duration-300 ease-in-out;
+  @apply mx-1 my-1 text-sm text-red-500 duration-300 ease-in-out;
 }
 
 /* Error */
@@ -104,7 +106,7 @@
 .btn__menu-header {
   --tw-text-opacity: 1;
   color: rgb(51 65 85 / var(--tw-text-opacity));
-  @apply mr-2 inline-flex flex-row items-center justify-center rounded-full border border-transparent pl-2 pr-2 pt-1 pb-1 text-center text-sm font-medium leading-5 outline-none lg:hidden;
+  @apply mr-2 inline-flex flex-row items-center justify-center rounded-full border border-transparent pb-1 pl-2 pr-2 pt-1 text-center text-sm font-medium leading-5 outline-none lg:hidden;
 }
 
 /* Buttons */
@@ -173,11 +175,11 @@
 .header__search form > input:nth-child(2) {
   --tw-bg-opacity: 1;
   background-color: rgb(245 247 250 / var(--tw-bg-opacity));
-  @apply relative z-20 w-full rounded-full border py-2 pr-10 pl-10 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100;
+  @apply relative z-20 w-full rounded-full border py-2 pl-10 pr-10 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100;
 }
 
 .header__search form > span:nth-child(3) {
-  @apply pointer-events-none absolute top-0 right-0 z-20 mr-4 flex h-full flex-row items-center;
+  @apply pointer-events-none absolute right-0 top-0 z-20 mr-4 flex h-full flex-row items-center;
 }
 
 .header__search form > span:nth-child(3).active {
@@ -298,6 +300,20 @@
   @apply h-auto w-64 p-6 leading-[1.375];
 }
 
+.popover__notification .popover__notification-wrapper-logged-in {
+  @apply relative z-20 flex min-w-[39rem] max-w-[39rem] flex-col;
+}
+
+.popover__notification-wrapper-logged-in
+  .notification-wrapper-logged-in-header {
+  @apply px-4;
+}
+
+.popover__notification-wrapper-logged-in .notification-wrapper-logged-in-body {
+  max-height: calc(100vh - 18rem);
+  @apply overflow-auto;
+}
+
 .popover__notification-wrapper .icon-wrapper {
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
@@ -359,7 +375,7 @@
 }
 
 .popover__menu-wrapper .btns-groups a.base {
-  @apply block w-1/2 flex-row items-center justify-center rounded-full border py-2 px-3 text-center text-base font-bold leading-[1.625] outline-none transition-colors;
+  @apply block w-1/2 flex-row items-center justify-center rounded-full border px-3 py-2 text-center text-base font-bold leading-[1.625] outline-none transition-colors;
 }
 
 .popover__menu-wrapper .btns-groups a.signup {
@@ -466,7 +482,7 @@
 .content-info-box {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  @apply mb-5 flex flex-col rounded-lg border px-6 pt-10 pb-5;
+  @apply mb-5 flex flex-col rounded-lg border px-6 pb-5 pt-10;
 }
 
 .content-info-box h1 {

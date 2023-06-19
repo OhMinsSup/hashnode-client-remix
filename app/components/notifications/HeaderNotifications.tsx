@@ -6,8 +6,24 @@ import { Icons } from "~/components/shared/Icons";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
+import NotificationHeader from "./NotificationHeader";
+import NotificationContent from "./NotificationContent";
 
 export default function HeaderNotifications() {
+  const session = useOptionalSession();
+
+  if (session) {
+    return (
+      <div className="popover__notification-container">
+        <div className="popover__notification-wrapper-logged-in">
+          <NotificationHeader />
+          <NotificationContent />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="popover__notification-container">
       <div className="popover__notification-wrapper">
