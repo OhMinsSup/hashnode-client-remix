@@ -1,0 +1,174 @@
+/* white */
+.root {
+  --tw-translate-x: -100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  @apply invisible fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-white p-6 opacity-0 transition-all;
+}
+
+.root.open {
+  --tw-translate-x: 0;
+  @apply visible overflow-hidden opacity-100;
+}
+
+/* dark */
+.root {
+  @apply dark:bg-black;
+}
+
+.logo_container {
+  @apply mb-5;
+}
+
+.navigation {
+  @apply relative z-50 col-span-1 flex flex-1 flex-col justify-between py-4 text-slate-900;
+}
+
+.navigation_items {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  @apply flex-1;
+}
+
+.navigation_items {
+  @apply dark:text-white;
+}
+
+.navigation_items__icon {
+  margin-right: 1rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  fill: currentcolor;
+}
+
+.navigation_items a {
+  @apply flex flex-row items-center rounded-lg p-2 font-medium;
+}
+
+.navigation_items a:hover {
+  @apply bg-slate-200 dark:bg-slate-700;
+}
+
+.active {
+  @apply font-semibold text-blue-600;
+}
+
+.navigation_footer {
+  @apply flex flex-col items-start text-sm font-medium;
+}
+
+.navigation_footer__container {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.navigation_footer__links {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.navigation_footer__coypright {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+}
+
+.navigation_footer__coypright {
+  @apply dark:text-slate-400;
+}
+
+.twitter {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(29 161 242 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.twitter:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 161 242 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.linkedin {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(0 119 181 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 100ms;
+}
+
+.linkedin:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 119 181 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.instagram {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(225 48 108 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 100ms;
+}
+
+.instagram:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(225 48 108 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.discord {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(114 137 218 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 100ms;
+}
+
+.discord:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(114 137 218 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+@media (min-width: 1280px) {
+  .root {
+    @apply hidden;
+  }
+}

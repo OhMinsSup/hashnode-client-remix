@@ -11,6 +11,7 @@ import homeStyles from "~/styles/routes/home.css";
 
 // types
 import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
+import { MainLayout } from "~/components/shared/future/MainLayout";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeStyles }];
@@ -25,16 +26,24 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type MainLoader = typeof loader;
 
-export default function Main() {
+// export default function Main() {
+//   return (
+//     <div className="container__base">
+//       <Header />
+//       <main>
+//         <AppLeftSidebar />
+//         <Outlet />
+//         <AppRightSidebar />
+//       </main>
+//     </div>
+//   );
+// }
+
+export default function Routes() {
   return (
-    <div className="container__base">
-      <Header />
-      <main>
-        <AppLeftSidebar />
-        <Outlet />
-        <AppRightSidebar />
-      </main>
-    </div>
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
   );
 }
 

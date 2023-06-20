@@ -1,0 +1,42 @@
+.root {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  @apply min-h-screen bg-white dark:bg-black;
+}
+
+.main {
+  @apply relative z-40 grid max-h-screen w-full min-w-full gap-8;
+}
+
+.aside {
+}
+
+@media (min-width: 640px) {
+  .main {
+    @apply max-w-[640px];
+  }
+}
+
+@media (min-width: 768px) {
+  .main {
+    @apply max-w-3xl;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main {
+    @apply mx-auto min-w-0 max-w-full grid-cols-10 px-20;
+  }
+}
+
+@media (min-width: 1280px) {
+  .main {
+    @apply mx-auto min-w-0 max-w-full grid-cols-10 px-32;
+  }
+}
+
+@media (min-width: 1536px) {
+  .main {
+    @apply mx-auto min-w-0 max-w-[1536px] grid-cols-10 px-52;
+  }
+}

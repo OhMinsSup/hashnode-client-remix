@@ -1,5 +1,6 @@
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
 import type { Nullable } from "~/api/schema/api";
+import { Icons } from "~/components/shared/Icons";
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -120,6 +121,56 @@ export const PAGE_ENDPOINTS = {
     ID: (username: string) => `/blog/@${username}`,
   },
 } as const;
+
+export const NAVIGATION_ITEMS = [
+  {
+    id: 1,
+    title: "My Feed",
+    href: PAGE_ENDPOINTS.ROOT,
+    icon: Icons.MyFeed,
+    applyActiveLinks: [
+      PAGE_ENDPOINTS.FEATURED
+    ],
+  },
+  {
+    id: 2,
+    title: "Explore",
+    href: PAGE_ENDPOINTS.EXPLORE.ROOT,
+    icon: Icons.Explore,
+    applyActiveLinks: [
+      PAGE_ENDPOINTS.EXPLORE.TAGS,
+      PAGE_ENDPOINTS.EXPLORE.BLOGS,
+    ],
+  },
+  {
+    id: 3,
+    title: "Drafts",
+    href: PAGE_ENDPOINTS.DRAFT.ROOT,
+    icon: Icons.MyDraft,
+    applyActiveLinks: [],
+  },
+  {
+    id: 4,
+    title: "Bookmarks",
+    href: PAGE_ENDPOINTS.BOOKMARKS.ROOT,
+    icon: Icons.MyBookmark,
+    applyActiveLinks: [],
+  },
+  {
+    id: 5,
+    title: "My Items",
+    href: PAGE_ENDPOINTS.USERS.ROOT,
+    icon: Icons.UserProfile,
+    applyActiveLinks: [],
+  },
+  {
+    id: 6,
+    title: "Search",
+    href: PAGE_ENDPOINTS.ROOT,
+    icon: Icons.Search,
+    applyActiveLinks: [],
+  },
+] as const;
 
 export const STATUS_CODE = {
   OK: 200,

@@ -6,11 +6,11 @@ import {
   LiveReload,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useRouteError,
   isRouteErrorResponse,
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { cssBundleHref } from "@remix-run/css-bundle";
 
 import NotFoundPage from "./components/errors/NotFoundPage";
 import InternalServerPage from "./components/errors/InternalServerPage";
@@ -29,9 +29,13 @@ import type {
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
 import { useMemo } from "react";
+import { Body } from "./components/shared/future/Body";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: globalStyles }];
+  return [
+    { rel: "stylesheet", href: globalStyles },
+    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  ];
 };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
@@ -117,7 +121,6 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
 };
 
 export default function App() {
-  const { env } = useLoaderData<RootLoader>();
   const client = useMemo(() => {
     return new QueryClient({
       defaultOptions: {
@@ -138,10 +141,6 @@ export default function App() {
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="theme-color" content="#0F172A" />
-          <Meta />
-          <Links />
           <link
             rel="preconnect"
             href="https://fonts.gstatic.com"
@@ -154,18 +153,17 @@ export default function App() {
             type="application/opensearchdescription+xml"
             title="Hashnode"
           />
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="theme-color" content="#0F172A" />
+          <Meta />
+          <Links />
         </head>
-        <body>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.ENV = ${JSON.stringify(env)}`,
-            }}
-          />
+        <Body>
           <Outlet />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
-        </body>
+        </Body>
       </html>
     </QueryClientProvider>
   );
