@@ -128,9 +128,8 @@ export const NAVIGATION_ITEMS = [
     title: "My Feed",
     href: PAGE_ENDPOINTS.ROOT,
     icon: Icons.MyFeed,
-    applyActiveLinks: [
-      PAGE_ENDPOINTS.FEATURED
-    ],
+    applyActiveLinks: [PAGE_ENDPOINTS.FEATURED] as string[],
+    position: ["left", "top"] as string[],
   },
   {
     id: 2,
@@ -140,35 +139,40 @@ export const NAVIGATION_ITEMS = [
     applyActiveLinks: [
       PAGE_ENDPOINTS.EXPLORE.TAGS,
       PAGE_ENDPOINTS.EXPLORE.BLOGS,
-    ],
+    ] as string[],
+    position: ["left", "top"] as string[],
   },
   {
     id: 3,
     title: "Drafts",
     href: PAGE_ENDPOINTS.DRAFT.ROOT,
     icon: Icons.MyDraft,
-    applyActiveLinks: [],
+    applyActiveLinks: [] as string[],
+    position: ["left"] as string[],
   },
   {
     id: 4,
     title: "Bookmarks",
     href: PAGE_ENDPOINTS.BOOKMARKS.ROOT,
     icon: Icons.MyBookmark,
-    applyActiveLinks: [],
+    applyActiveLinks: [] as string[],
+    position: ["left", "top"] as string[],
   },
   {
     id: 5,
     title: "My Items",
     href: PAGE_ENDPOINTS.USERS.ROOT,
     icon: Icons.UserProfile,
-    applyActiveLinks: [],
+    applyActiveLinks: [] as string[],
+    position: ["left"] as string[],
   },
   {
     id: 6,
     title: "Search",
     href: PAGE_ENDPOINTS.ROOT,
     icon: Icons.Search,
-    applyActiveLinks: [],
+    applyActiveLinks: [] as string[],
+    position: ["left"] as string[],
   },
 ] as const;
 

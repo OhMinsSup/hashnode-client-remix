@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useState } from "react";
 import { Logo } from "~/components/shared/future/Logo";
 import styles from "./styles.module.css";
+import { MainHeaderNavigation } from "~/components/shared/future/MainHeaderNavigation";
 
 const MainDrawerMenu = React.lazy(() =>
   import("~/components/shared/future/MainDrawerMenu").then((mod) => ({
@@ -17,7 +18,7 @@ export default function MainHeader() {
 
   const onClose = useCallback(() => {
     setOpen(false);
-  }, [])
+  }, []);
 
   return (
     <header className={styles.root}>
@@ -30,7 +31,9 @@ export default function MainHeader() {
           <div className={styles.header__layout__logo}>
             <Logo onOpen={onOpen} />
           </div>
-          <div className={styles.header__layout__navigation}>123</div>
+          <div className={styles.header__layout__navigation}>
+            <MainHeaderNavigation />
+          </div>
           <div className={styles.header__layout__menu}>123</div>
         </div>
       </div>

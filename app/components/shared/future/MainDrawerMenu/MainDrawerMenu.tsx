@@ -42,7 +42,9 @@ export default function MainDrawerMenu({ open, onClose }: MainDrawerMenuProps) {
       </div>
       <div className={styles.navigation}>
         <div className={styles.navigation_items}>
-          {NAVIGATION_ITEMS.map((item) => {
+          {NAVIGATION_ITEMS.filter((item) =>
+            item.position.includes("left")
+          ).map((item) => {
             return (
               <MainDrawerMenu.Item
                 key={item.id}
