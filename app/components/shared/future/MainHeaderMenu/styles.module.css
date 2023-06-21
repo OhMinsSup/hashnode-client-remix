@@ -1,0 +1,92 @@
+.search {
+  @apply relative z-20;
+}
+
+.btn_search {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.btn_search > svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  stroke: currentColor;
+}
+
+.write {
+  @apply relative hidden;
+}
+
+.btn_write {
+  @apply flex flex-row rounded-full bg-blue-600 text-white;
+}
+
+.btn_write > a {
+  letter-spacing: 0.025em;
+  @apply relative flex flex-row items-center gap-2 rounded-full bg-blue-600 py-[0.625rem] pl-4 pr-[18px] text-sm font-medium transition-colors;
+}
+
+.btn_write > a > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.btn_write > a:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.menus {
+  @apply flex flex-row items-center justify-end gap-3;
+}
+
+.menus_btn_area {
+  @apply flex gap-1;
+}
+
+.menus_btn_theme {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.menus_btn_theme > svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  stroke: currentColor;
+}
+
+.moon {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  --tw-rotate: 0deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.sun {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.menus_user_profile {
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .write {
+    @apply block;
+  }
+}
+
+@media (min-width: 1536px) {
+  .btn_write > a {
+    @apply px-3 text-base;
+  }
+}
