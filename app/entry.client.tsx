@@ -7,27 +7,9 @@
 import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
+import { handleDarkAndLightModeEls } from "./context/useThemeContext";
 
-// window.requestIdleCallback =
-//     window.requestIdleCallback ||
-//     function(cb) {
-//         var start = Date.now();
-//         return setTimeout(function() {
-//             cb({
-//                 didTimeout: false,
-//                 timeRemaining: function() {
-//                     return Math.max(0, 50 - (Date.now() - start));
-//                 },
-//             });
-//         }, 1);
-//     };
-
-// window.cancelIdleCallback =
-//     window.cancelIdleCallback ||
-//     function(id) {
-//         clearTimeout(id);
-//     };
-
+handleDarkAndLightModeEls();
 startTransition(() => {
   hydrateRoot(
     document,

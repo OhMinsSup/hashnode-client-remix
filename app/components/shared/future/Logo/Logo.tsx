@@ -3,20 +3,29 @@ import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { Icons } from "~/components/shared/Icons";
+import { Theme, useTheme } from "~/context/useThemeContext";
 
 interface LogoProps {
   onOpen: () => void;
 }
 
 export default function Logo({ onOpen }: LogoProps) {
+  const [theme] = useTheme();
   return (
     <>
       <button type="button" className={styles.btn_menu} onClick={onOpen}>
         <Icons.Menu />
       </button>
-      <Link className={styles.logo} aria-label="Hashnode Logo" to={PAGE_ENDPOINTS.ROOT}>
-        <Logo.Dark className={styles.logo_dark} />
-        <Logo.White className={styles.logo_white} />
+      <Link
+        className={styles.logo}
+        aria-label="Hashnode Logo"
+        to={PAGE_ENDPOINTS.ROOT}
+      >
+        {theme === Theme.DARK ? (
+          <Logo.Dark className={styles.logo_dark} />
+        ) : (
+          <Logo.White className={styles.logo_white} />
+        )}
       </Link>
     </>
   );

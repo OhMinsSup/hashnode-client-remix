@@ -1,9 +1,9 @@
 .btn_menu {
-  @apply mr-2 inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none dark:text-slate-300 dark:hover:border-slate-800;
+  @apply mr-2 inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
 }
 
 .btn_menu {
-  @apply dark:text-slate-300;
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
 }
 
 .btn_menu > svg {

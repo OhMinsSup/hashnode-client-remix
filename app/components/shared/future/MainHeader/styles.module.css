@@ -72,7 +72,7 @@
   }
 
   .header__layout__navigation {
-    @apply col-span-7 flex flex-row
+    @apply col-span-7 flex flex-row;
   }
 
   .header__layout__menu {

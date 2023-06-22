@@ -9,6 +9,8 @@ import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
 
+import { ThemeService } from "./services/data/theme";
+
 const handleRequest = createPagesFunctionHandler({
   build,
   mode: process.env.NODE_ENV,
@@ -17,6 +19,7 @@ const handleRequest = createPagesFunctionHandler({
     return {
       ...context.env,
       services: {
+        theme: new ThemeService(env),
       },
       api: {
         auth: new AuthApiService(env),

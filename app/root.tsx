@@ -8,6 +8,8 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
+  useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cssBundleHref } from "@remix-run/css-bundle";
@@ -28,8 +30,15 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Body } from "./components/shared/future/Body";
+import {
+  NonFlashOfWrongThemeEls,
+  ThemeProvider,
+  useTheme,
+} from "./context/useThemeContext";
+import classNames from "classnames";
+import { getDomainUrl, removeTrailingSlash } from "./utils/util";
 
 export const links: LinksFunction = () => {
   return [
@@ -44,8 +53,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
     API_BASE_URL: ApiService.baseUrl,
   };
   const data = await context.api.user.getSession(request);
+  const theme = await context.services.theme.getTheme(request);
   return json(
-    { currentProfile: data, env },
+    { currentProfile: data, env, theme, origin: getDomainUrl(request) },
     data
       ? undefined
       : {
@@ -65,11 +75,6 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
     image: ASSET_URL.SEO_IMAGE,
   };
   return [
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url.href,
-    },
     {
       title: Seo.title,
     },
@@ -120,7 +125,53 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
   ];
 };
 
-export default function App() {
+function CanonicalLink({ origin }: { origin: string }) {
+  const { pathname } = useLocation();
+  const canonicalUrl = removeTrailingSlash(`${origin}${pathname}`);
+
+  useEffect(() => {}, [canonicalUrl]);
+
+  return <link rel="canonical" href={canonicalUrl} />;
+}
+
+function ExternalLink() {
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+      <link rel="manifest" href="/manifest.json" />
+      <link
+        rel="search"
+        href="/opensearch.xml"
+        type="application/opensearchdescription+xml"
+        title="Hashnode"
+      />
+    </>
+  );
+}
+
+function Metas() {
+  return (
+    <>
+      <meta charSet="UTF-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <meta name="msapplication-TileColor" content="#ffffff" />
+      <meta name="theme-color" content="#0F172A" />
+    </>
+  );
+}
+
+function App() {
+  const [theme] = useTheme();
+  const data = useLoaderData<RootLoader>();
+
   const client = useMemo(() => {
     return new QueryClient({
       defaultOptions: {
@@ -132,67 +183,52 @@ export default function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={client}>
-      <html lang="en">
-        <head>
-          <meta charSet="UTF-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="anonymous"
-          />
-          <link rel="manifest" href="/manifest.json" />
-          <link
-            rel="search"
-            href="/opensearch.xml"
-            type="application/opensearchdescription+xml"
-            title="Hashnode"
-          />
-          <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="theme-color" content="#0F172A" />
-          <Meta />
-          <Links />
-        </head>
+    <html lang="en" className={classNames(theme)}>
+      <head>
+        <Metas />
+        <CanonicalLink origin={data.origin} />
+        <ExternalLink />
+        <Meta />
+        <Links />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
+      </head>
+      <QueryClientProvider client={client}>
         <Body>
           <Outlet />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
         </Body>
-      </html>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </html>
+  );
+}
+
+export default function Routes() {
+  const data = useLoaderData<RootLoader>();
+  return (
+    <ThemeProvider specifiedTheme={data.theme}>
+      <App />
+    </ThemeProvider>
   );
 }
 
 export function ErrorBoundary() {
+  const [theme] = useTheme();
+  const data = useLoaderData<RootLoader>();
   const error = useRouteError();
+
   return (
-    <html lang="en">
+    <html lang="en" className={classNames(theme)}>
       <head>
         <title>Oops!</title>
-        <meta charSet="UTF-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="theme-color" content="#0F172A" />
+        <Metas />
+        <CanonicalLink origin={data.origin} />
+        <ExternalLink />
         <Meta />
         <Links />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="manifest" href="/manifest.json" />
       </head>
-      <body>
+      <Body>
         <>
           {isRouteErrorResponse(error) ? (
             <>
@@ -204,7 +240,7 @@ export function ErrorBoundary() {
         </>
         <NotFoundPage />
         <Scripts />
-      </body>
+      </Body>
     </html>
   );
 }

@@ -3,7 +3,11 @@
 }
 
 .btn_search {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none dark:text-slate-300 dark:hover:border-slate-800;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.btn_search {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
 }
 
 .btn_search > svg {
@@ -44,7 +48,11 @@
 }
 
 .menus_btn_theme {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none dark:text-slate-300 dark:hover:border-slate-800;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.menus_btn_theme {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
 }
 
 .menus_btn_theme > svg {
@@ -79,9 +87,51 @@
   flex-shrink: 0;
 }
 
+.btn_wrapper {
+  @apply relative hidden;
+}
+
+.menus_btn_logs {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.menus_btn_logs {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.menus_btn_logs > svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  stroke: currentColor;
+}
+
+.meus_btn_notification {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.meus_btn_notification {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.meus_btn_notification > svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  stroke: currentColor;
+}
+
+.menu_notification_count {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  @apply absolute right-0 top-[-0.25rem] flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-blue-600 font-bold text-white;
+}
+
 @media (min-width: 768px) {
   .write {
     @apply block;
+  }
+
+  .btn_wrapper {
+    display: block;
   }
 }
 
