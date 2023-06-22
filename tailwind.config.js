@@ -2,7 +2,7 @@
 module.exports = {
   mode: "jit",
   content: ["./app/**/*.{ts,tsx,jsx,js}"],
-  darkMode: "class",
+  darkMode: ["class", ":global(.dark)"],
   theme: {
     extend: {
       keyframes: {
