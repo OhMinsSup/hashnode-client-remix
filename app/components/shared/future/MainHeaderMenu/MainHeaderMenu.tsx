@@ -1,13 +1,23 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styles from "./styles.module.css";
+import classNames from "classnames";
+
 import { Icons } from "~/components/shared/Icons";
 import { Link } from "@remix-run/react";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import classNames from "classnames";
+import { MainMenuUserMenu } from "~/components/shared/future/MainMenuUserMenu";
+import * as Popover from "@radix-ui/react-popover";
+
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+
+// hooks
 import { Theme, useTheme } from "~/context/useThemeContext";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
 
 export default function MainHeaderMenu() {
+  const [open_menu, setToggleMenu] = useState(false);
   const [theme, setTheme] = useTheme();
+
+  const session = useOptionalSession();
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
@@ -62,7 +72,43 @@ export default function MainHeaderMenu() {
             </button>
           </div>
         </div>
-        <div className={styles.menus_user_profile}>123</div>
+        <Popover.Root open={open_menu} onOpenChange={setToggleMenu}>
+          <Popover.Trigger asChild>
+            <button
+              type="button"
+              aria-label="Profile Dropdown"
+              className={styles.menus_user_profile}
+            >
+              <div className={styles.menus_user_profile_container}>
+                {session?.profile.avatarUrl ? (
+                  <img
+                    loading="lazy"
+                    src={session.profile.avatarUrl}
+                    alt="profile"
+                  />
+                ) : (
+                  <img
+                    loading="lazy"
+                    src={ASSET_URL.DEFAULT_AVATAR}
+                    alt="profile"
+                  />
+                )}
+              </div>
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal
+            style={{ width: 280, outline: "none", pointerEvents: "auto" }}
+          >
+            <Popover.Content
+              align="end"
+              sideOffset={10}
+              data-navigation-user-menu
+              className={styles.menu_user_profile_portal}
+            >
+              <MainMenuUserMenu open={open_menu} />
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
       </div>
     </>
   );

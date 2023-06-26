@@ -82,9 +82,17 @@
 }
 
 .menus_user_profile {
-  height: 2.5rem;
-  width: 2.5rem;
-  flex-shrink: 0;
+  @apply block h-10 w-10 shrink-0 overflow-hidden rounded-full bg-slate-300 focus:outline-none;
+}
+
+.menus_user_profile_container {
+  position: relative;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 9999px;
 }
 
 .btn_wrapper {
@@ -123,6 +131,14 @@
   font-size: 0.75rem;
   line-height: 1rem;
   @apply absolute right-0 top-[-0.25rem] flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-blue-600 font-bold text-white;
+}
+
+.menu_notification_count {
+  @apply dark:border-blue-600;
+}
+
+.menu_user_profile_portal {
+  @apply z-50 flex h-auto w-full min-w-[198px] flex-col gap-2 rounded-xl border border-slate-200 bg-white py-2 shadow-xl outline-none dark:border-slate-800 dark:bg-slate-900;
 }
 
 @media (min-width: 768px) {
