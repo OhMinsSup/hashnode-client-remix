@@ -1,0 +1,29 @@
+.root {
+  @apply flex h-screen flex-col justify-between;
+}
+
+.header {
+  @apply border-b p-4;
+}
+
+.header {
+  @apply dark:border-slate-800 dark:bg-slate-900;
+}
+
+.content {
+  @apply bg-slate-50;
+}
+
+.content {
+  @apply dark:bg-black;
+}
+
+@media (min-width: 1024px) {
+  .root {
+    @apply block h-auto;
+  }
+
+  .content {
+    @apply min-h-screen;
+  }
+}

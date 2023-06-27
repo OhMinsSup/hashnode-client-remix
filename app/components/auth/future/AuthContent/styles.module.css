@@ -1,0 +1,137 @@
+.root {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  min-width: 100%;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.root_container {
+  grid-column: span 12 / span 12;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.left {
+  grid-column: 1/-1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.right {
+  display: none;
+  padding-left: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
+.right_container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 66.666667%;
+}
+
+.desc {
+  margin-bottom: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-style: italic;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+}
+
+.desc {
+  @apply dark:text-slate-200;
+}
+
+.right {
+  @apply dark:text-slate-400;
+}
+
+.profile {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.profile_image {
+  position: relative;
+  margin-right: 1rem;
+  height: 3rem;
+  width: 3rem;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.profile_info {
+  line-height: 1.375;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+@media (min-width: 640px) {
+  .root {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .root {
+    max-width: 768px;
+  }
+
+  .root_container {
+    padding: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .root {
+    max-width: 1024px;
+    min-width: 0px;
+  }
+
+  .left {
+    grid-column: span 6 / span 6;
+  }
+
+  .right {
+    grid-column: span 6 / span 6;
+    margin-top: 4rem;
+    display: block;
+  }
+}
+
+@media (min-width: 1280px) {
+  .root {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .root {
+    max-width: 1536px;
+  }
+}

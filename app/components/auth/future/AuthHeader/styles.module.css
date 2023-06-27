@@ -1,0 +1,46 @@
+.root {
+  @apply mx-auto flex w-full flex-row items-center justify-center;
+}
+
+.logo {
+  @apply block w-36 text-black;
+}
+
+.logo {
+  @apply dark:text-white;
+}
+
+.logo > svg {
+  width: 100%;
+  fill: currentColor;
+}
+
+@media (min-width: 1536px) {
+  .root {
+    max-width: 1536px;
+  }
+}
+@media (min-width: 1280px) {
+  .root {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1024px) {
+  .root {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 768px) {
+  .root {
+    max-width: 768px;
+  }
+
+  .logo {
+    @apply w-48;
+  }
+}
+@media (min-width: 640px) {
+  .root {
+    max-width: 640px;
+  }
+}

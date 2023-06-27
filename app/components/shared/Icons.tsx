@@ -1,4 +1,4 @@
-interface IconProps extends React.SVGProps<SVGSVGElement> {}
+type IconProps = React.SVGProps<SVGSVGElement>;
 
 const MediaIcon = (props: IconProps) => (
   <svg {...props} fill="none" viewBox="0 0 24 24">

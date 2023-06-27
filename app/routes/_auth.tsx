@@ -1,7 +1,7 @@
 // remix
 import { Outlet } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
-import AuthLayout from "~/components/auth/AuthLayout";
+import { AuthLayout } from "~/components/auth/future/AuthLayout";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -15,6 +15,7 @@ import type {
   LoaderArgs,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
+import { AuthHeader } from "~/components/auth/future/AuthHeader";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
@@ -68,7 +69,7 @@ export const meta: V2_MetaFunction<AuthLayoutLoader> = ({ location }) => {
 
 export default function Routes() {
   return (
-    <AuthLayout>
+    <AuthLayout header={<AuthHeader />}>
       <Outlet />
     </AuthLayout>
   );
