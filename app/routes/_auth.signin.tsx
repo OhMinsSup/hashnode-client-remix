@@ -1,14 +1,8 @@
-import React from "react";
-
 // components
-import {
-  Form,
-  Link,
-  useRouteError,
-  isRouteErrorResponse,
-} from "@remix-run/react";
-import { Icons } from "~/components/shared/Icons";
-import Input from "~/components/auth/Input";
+import { Form, useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import { SigninForm } from "~/components/auth/future/SigninForm";
+import { Input } from "~/components/auth/future/Input";
+import { SubmitButton } from "~/components/auth/future/Button";
 
 // constants
 import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
@@ -38,79 +32,27 @@ export const action = async ({ request, context }: ActionArgs) => {
 
 export default function Routes() {
   return (
-    <Form method="POST" className="auth-form__container" replace>
-      <h1 className="auth-form__title">To continue, Sign in to hashnode.</h1>
-      <div className="social-container">
-        <button
-          type="button"
-          aria-label="github login"
-          className="btn-social__base btn-social__github"
-        >
-          <span>
-            <Icons.Github className="icon__base fill-current" />
-          </span>
-          Continue with Github
-        </button>
-        <button
-          type="button"
-          aria-label="google login"
-          className="btn-social__base btn-social__google"
-        >
-          <span>
-            <Icons.Google className="icon__base fill-current" />
-          </span>
-          Continue with Google
-        </button>
-        <div className="or-container">
-          <p className="or-container__line"></p>
-          <span className="or-container__text">OR</span>
-        </div>
-      </div>
-
-      <div className="auth-form__form-item">
+    <SigninForm>
+      <Form method="POST" replace className="flex flex-col">
         <Input
-          text="Email address"
+          id="email"
           type="email"
           name="email"
-          id="email"
           aria-label="Email address"
           autoComplete="email"
-          placeholder="Email address."
+          placeholder="Enter your email address"
         />
         <Input
-          text="Password"
           type="password"
           name="password"
           id="password"
-          autoComplete="current-password"
+          autoComplete="new-password"
           aria-label="Password"
-          placeholder="Password."
+          placeholder="Enter your password"
         />
-        <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN} className="forget-password">
-          Forgot your password?
-        </Link>
-      </div>
-
-      <div className="btn-login__container">
-        <button type="submit" className="btn-login" aria-label="Sign in">
-          Sign in
-        </button>
-      </div>
-
-      <div className="btn-signup__container">
-        <p className="or-container__line"></p>
-
-        <h1 className="mt-6 text-xl font-bold">Don&apos;t have an account?</h1>
-
-        <Link
-          aria-label="Sign up"
-          to={PAGE_ENDPOINTS.AUTH.SIGNUP}
-          className="btn-signup"
-        >
-          Signup for hashnode
-        </Link>
-      </div>
-    </Form>
+        <SubmitButton />
+      </Form>
+    </SigninForm>
   );
 }
 

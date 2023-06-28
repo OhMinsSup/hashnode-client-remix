@@ -1,14 +1,10 @@
 import React from "react";
 
 // components
-import {
-  Form,
-  Link,
-  useRouteError,
-  isRouteErrorResponse,
-} from "@remix-run/react";
-import { Icons } from "~/components/shared/Icons";
-import Input from "~/components/auth/Input";
+import { Form, useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import { SigninForm } from "~/components/auth/future/SigninForm";
+import { Input } from "~/components/auth/future/Input";
+import { SubmitButton } from "~/components/auth/future/Button";
 
 // constants
 import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
@@ -38,41 +34,10 @@ export const action = async ({ request, context }: ActionArgs) => {
 
 export default function Routes() {
   return (
-    <Form method="POST" className="auth-form__container" replace>
-      <h1 className="auth-form__title">
-        Sign up for blog and start sharing your knowledge
-      </h1>
-      <div className="social-container signup">
-        <button
-          type="button"
-          aria-label="github login"
-          className="btn-social-signup__base btn-social-signup__github"
-        >
-          <span>
-            <Icons.Github className="icon__base fill-current" />
-          </span>
-          Continue with Github
-        </button>
-        <button
-          type="button"
-          aria-label="google login"
-          className="btn-social-signup__base btn-social-signup__google"
-        >
-          <span>
-            <Icons.Google className="icon__base fill-current" />
-          </span>
-          Continue with Google
-        </button>
-        <div className="or-container">
-          <p className="or-container__line"></p>
-          <span className="or-container__text">OR</span>
-        </div>
-      </div>
-
-      <div className="auth-form__form-item">
+    <SigninForm>
+      <Form method="POST" replace className="flex flex-col">
         <Input
           id="username"
-          text="What's your username?"
           type="text"
           name="username"
           autoComplete="username"
@@ -83,22 +48,19 @@ export default function Routes() {
           id="email"
           type="email"
           name="email"
-          text="What's your email?"
           aria-label="Email address"
           autoComplete="email"
-          placeholder="Enter your email."
+          placeholder="Enter your email address"
         />
         <Input
-          text="Create a password"
           type="password"
           name="password"
           id="password"
           autoComplete="new-password"
           aria-label="Password"
-          placeholder="Create a password."
+          placeholder="Enter your password"
         />
         <Input
-          text="Confirm your password"
           type="password"
           name="confirmPassword"
           id="confirmPassword"
@@ -106,17 +68,9 @@ export default function Routes() {
           aria-label="confirmPassword"
           placeholder="Confirm your password."
         />
-      </div>
-      <div className="btn-login__container">
-        <button type="submit" className="btn-login" aria-label="Sign in">
-          Sign up
-        </button>
-      </div>
-
-      <div className="btn-signin__container">
-        Have an account? <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN}>Sign in</Link>.
-      </div>
-    </Form>
+        <SubmitButton />
+      </Form>
+    </SigninForm>
   );
 }
 

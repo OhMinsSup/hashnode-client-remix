@@ -1,17 +1,18 @@
-import React, { useMemo } from "react";
-import classNames from "classnames";
-import ErrorMessage from "../shared/ErrorMessage";
+import React, { useEffect, useMemo, useRef } from "react";
+import styles from "./styles.module.css";
 
 // hooks
 import { useActionData, useNavigation } from "@remix-run/react";
+import { ErrorMessage } from "../ErrorMessage";
+import { getTargetElement } from "~/libs/browser-utils";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   id: string;
   name: string;
-  text: string;
 }
 
-export default function Input({ id, name, title, ...otherProps }: InputProps) {
+export default function Input({ id, name, ...otherProps }: InputProps) {
+  const $ipt = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
   const errors = useActionData();
   const error = errors?.[name];
@@ -21,20 +22,23 @@ export default function Input({ id, name, title, ...otherProps }: InputProps) {
     [navigation.state]
   );
 
+  useEffect(() => {
+    const $el = getTargetElement($ipt);
+    if (error && $el) {
+      $el.focus();
+    }
+  }, [error]);
+
   return (
-    <div className="auth-form__form-item-inner mb-3">
-      <label className="text-sm" htmlFor={id}>
-        {title}
-      </label>
+    <>
       <input
+        ref={$ipt}
         id={id}
         name={name}
-        className={classNames("auth-form__input", otherProps?.className, {
-          error: !!error,
-        })}
+        className={styles.root}
         {...otherProps}
       />
       <ErrorMessage error={error} isSubmitting={isSubmitting} />
-    </div>
+    </>
   );
 }
