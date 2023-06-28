@@ -137,18 +137,40 @@ function CanonicalLink({ origin }: { origin: string }) {
 function ExternalLink() {
   return (
     <>
+      <link rel="manifest" href="/manifest.json" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link
         rel="preconnect"
         href="https://fonts.gstatic.com"
         crossOrigin="anonymous"
       />
-      <link rel="manifest" href="/manifest.json" />
       <link
         rel="search"
         href="/opensearch.xml"
         type="application/opensearchdescription+xml"
         title="Hashnode"
+      />
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/images/logo_180x180.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="/images/logo_32x32.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="/images/logo_16x16.png"
+      />
+      <link
+        rel="mask-icon"
+        href="/images/safari-pinned-tab-new.svg"
+        color="#2962ff"
       />
     </>
   );

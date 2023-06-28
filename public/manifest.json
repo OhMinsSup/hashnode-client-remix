@@ -3,12 +3,12 @@
   "short_name": "Hashnode",
   "icons": [
     {
-      "src": "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242375722/lfDjH4Nh1.png",
+      "src": "/images/logo_192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242435690/zj8apC_bD.png",
+      "src": "/images/logo_512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

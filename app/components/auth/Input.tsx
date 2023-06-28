@@ -29,10 +29,10 @@ export default function Input({ id, name, title, ...otherProps }: InputProps) {
       <input
         id={id}
         name={name}
-        {...otherProps}
         className={classNames("auth-form__input", otherProps?.className, {
           error: !!error,
         })}
+        {...otherProps}
       />
       <ErrorMessage error={error} isSubmitting={isSubmitting} />
     </div>
