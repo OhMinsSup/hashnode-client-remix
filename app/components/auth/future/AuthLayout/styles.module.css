@@ -18,6 +18,22 @@
   @apply dark:bg-black;
 }
 
+.other {
+  @apply bg-slate-100 px-20 py-14;
+}
+
+.other {
+  @apply dark:bg-slate-800 dark:text-white;
+}
+
+.p {
+  @apply text-slate-400;
+}
+
+.p {
+  @apply dark:text-slate-200;
+}
+
 @media (min-width: 1024px) {
   .root {
     @apply block h-auto;
@@ -25,5 +41,9 @@
 
   .content {
     @apply min-h-screen;
+  }
+
+  .other {
+    @apply hidden;
   }
 }
