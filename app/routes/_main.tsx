@@ -2,9 +2,9 @@ import { defer } from "@remix-run/cloudflare";
 
 // components
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-import Header from "~/components/shared/Header";
-import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
-import AppRightSidebar from "~/components/shared/AppRightSidebar";
+// import Header from "~/components/shared/Header";
+// import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
+// import AppRightSidebar from "~/components/shared/AppRightSidebar";
 
 // styles
 import homeStyles from "~/styles/routes/home.css";

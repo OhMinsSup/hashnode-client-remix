@@ -5,7 +5,9 @@ import classNames from "classnames";
 import { Icons } from "~/components/shared/Icons";
 import { Link } from "@remix-run/react";
 import { MainMenuUserMenu } from "~/components/shared/future/MainMenuUserMenu";
-import * as Popover from "@radix-ui/react-popover";
+import { MainMenuUserProfileMenu } from "~/components/shared/future/MainMenuUserProfileMenu";
+// import * as Popover from "@radix-ui/react-popover";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
@@ -72,8 +74,8 @@ export default function MainHeaderMenu() {
             </button>
           </div>
         </div>
-        <Popover.Root open={open_menu} onOpenChange={setToggleMenu}>
-          <Popover.Trigger asChild>
+        <DropdownMenu.Root open={open_menu} onOpenChange={setToggleMenu}>
+          <DropdownMenu.Trigger asChild>
             <button
               type="button"
               aria-label="Profile Dropdown"
@@ -95,20 +97,24 @@ export default function MainHeaderMenu() {
                 )}
               </div>
             </button>
-          </Popover.Trigger>
-          <Popover.Portal
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal
             style={{ width: 280, outline: "none", pointerEvents: "auto" }}
           >
-            <Popover.Content
+            <DropdownMenu.Content
               align="end"
               sideOffset={10}
               data-navigation-user-menu
               className={styles.menu_user_profile_portal}
             >
-              <MainMenuUserMenu open={open_menu} />
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+              {session ? (
+                <MainMenuUserProfileMenu open={open_menu} session={session} />
+              ) : (
+                <MainMenuUserMenu open={open_menu} />
+              )}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
       </div>
     </>
   );

@@ -5,16 +5,11 @@ import { Link } from "@remix-run/react";
 
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
-// hooks
-import { useOptionalSession } from "~/api/user/hooks/useSession";
-
 interface MainMenuUserMenuProps {
   open: boolean;
 }
 
 export default function MainMenuUserMenu({ open }: MainMenuUserMenuProps) {
-  const session = useOptionalSession();
-
   useLayoutEffect(() => {
     const $content_wrapper = document.querySelector(
       "div[data-radix-popper-content-wrapper]"
@@ -38,11 +33,7 @@ export default function MainMenuUserMenu({ open }: MainMenuUserMenuProps) {
     <div className={styles.root}>
       <div className={styles.container_profile}>
         <div className={styles.menus_user_profile_container}>
-          {session?.profile.avatarUrl ? (
-            <img loading="lazy" src={session.profile.avatarUrl} alt="profile" />
-          ) : (
-            <img loading="lazy" src={ASSET_URL.DEFAULT_AVATAR} alt="profile" />
-          )}
+          <img loading="lazy" src={ASSET_URL.DEFAULT_AVATAR} alt="profile" />
         </div>
       </div>
       <h1 className={styles.h1}>Sign up or log in to your Hashnode account</h1>
