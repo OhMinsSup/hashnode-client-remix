@@ -6,6 +6,7 @@ import { Logo } from "~/components/shared/future/Logo";
 import styles_logo from "~/components/shared/future/Logo/styles.module.css";
 import classNames from "classnames";
 import { useOutsideClick } from "~/libs/hooks/useOutsideClick";
+import { Theme, useTheme } from "~/context/useThemeContext";
 
 interface MainDrawerMenuProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface MainDrawerMenuProps {
 }
 
 export default function MainDrawerMenu({ open, onClose }: MainDrawerMenuProps) {
+  const [theme] = useTheme();
   const $ele = useRef<HTMLDivElement | null>(null);
 
   useOutsideClick({
@@ -36,8 +38,11 @@ export default function MainDrawerMenu({ open, onClose }: MainDrawerMenuProps) {
           to={PAGE_ENDPOINTS.ROOT}
           aria-label="Hashnode Logo"
         >
-          <Logo.White className={styles_logo.logo_dark} />
-          <Logo.Dark className={styles_logo.logo_white} />
+          {theme === Theme.DARK ? (
+            <Logo.Dark className={styles_logo.logo_white} />
+          ) : (
+            <Logo.White className={styles_logo.logo_dark} />
+          )}
         </Link>
       </div>
       <div className={styles.navigation}>

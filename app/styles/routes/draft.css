@@ -1,6 +1,6 @@
 .ce-block__content,
 .ce-toolbar__content {
-    max-width: unset !important;
+  max-width: unset !important;
 }
 
 /* [data-radix-popper-content-wrapper] 자식 요소에 .popover__cover가 존재하는 경우 z-index 50 */
@@ -257,9 +257,21 @@
 }
 
 .draft-sidebar .draft-sidebar-footer .btn-new-draft span {
-  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  font-family:
+    "Plus Jakarta Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
     "Noto Color Emoji";
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -379,9 +391,21 @@
   padding-right: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  font-family:
+    Plus Jakarta Sans,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
     "Noto Color Emoji";
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
@@ -605,9 +629,21 @@
 }
 
 .editor-title .textarea-title {
-  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  font-family:
+    "Plus Jakarta Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
     "Noto Color Emoji";
   font-size: 1.875rem;
   --tw-text-opacity: 1;
