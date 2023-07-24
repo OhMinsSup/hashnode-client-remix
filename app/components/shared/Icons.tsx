@@ -651,4 +651,17 @@ export const Icons = {
   Calendar: CalendarIcon,
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
+  V2: {
+    X: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M6 18 18 6M6 6l12 12"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+  },
 };

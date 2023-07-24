@@ -10,6 +10,8 @@ export default {
   serverMinify: true,
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
+  tailwind: true,
+  postcss: true,
   future: {
     v2_dev: true,
     v2_errorBoundary: true,
