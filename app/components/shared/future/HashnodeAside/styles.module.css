@@ -1,0 +1,13 @@
+.root {
+  display: none;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+@media (min-width: 1280px) {
+  .root {
+    display: block;
+    width: 340px;
+  }
+}

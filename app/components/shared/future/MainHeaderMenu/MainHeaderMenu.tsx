@@ -6,7 +6,6 @@ import { Icons } from "~/components/shared/Icons";
 import { Link } from "@remix-run/react";
 import { MainMenuUserMenu } from "~/components/shared/future/MainMenuUserMenu";
 import { MainMenuUserProfileMenu } from "~/components/shared/future/MainMenuUserProfileMenu";
-// import * as Popover from "@radix-ui/react-popover";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
@@ -14,12 +13,15 @@ import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 // hooks
 import { Theme, useTheme } from "~/context/useThemeContext";
 import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 export default function MainHeaderMenu() {
   const [open_menu, setToggleMenu] = useState(false);
   const [theme, setTheme] = useTheme();
 
   const session = useOptionalSession();
+
+  const isMobile = useMediaQuery("(max-width: 768px)", false);
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
@@ -36,7 +38,7 @@ export default function MainHeaderMenu() {
       </div>
       <div className={styles.write}>
         <div className={styles.btn_write}>
-          <Link to={PAGE_ENDPOINTS.DRAFT.ROOT}>
+          <Link to={PAGE_ENDPOINTS.DRAFT.ROOT} aria-label="Write">
             <Icons.Write />
             <span>Write</span>
           </Link>
@@ -44,6 +46,17 @@ export default function MainHeaderMenu() {
       </div>
       <div className={styles.menus}>
         <div className={styles.menus_btn_area}>
+          {isMobile && (
+            <div>
+              <Link
+                to={PAGE_ENDPOINTS.DRAFT.ROOT}
+                aria-label="Write"
+                className={styles.btn_write_mobile}
+              >
+                <Icons.V2.Pen />
+              </Link>
+            </div>
+          )}
           <button
             type="button"
             onClick={onToggleTheme}

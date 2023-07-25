@@ -19,7 +19,7 @@ export default function MainLayout({
       <div className={styles.root}>
         {layout === "main" && <MainHeader />}
         <main className={styles.main}>{children}</main>
-        <aside className={styles.aside}>Aside</aside>
+        <aside className={styles.aside}></aside>
       </div>
       {/* google one tap */}
     </div>

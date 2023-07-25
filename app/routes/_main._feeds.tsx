@@ -1,19 +1,15 @@
 // remix
 import { defer } from "@remix-run/cloudflare";
 
+// components
+import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
+import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
+import { HashnodeList } from "~/components/shared/future/HashnodeList";
+
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import TabRoutesPosts from "~/components/main/TabRoutesPosts";
-import ScrollAreaTrendingUsers from "~/components/main/ScrollAreaTrendingUsers";
 
-// styles
-import homeListStyle from "~/styles/routes/home-list.css";
-
-import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: homeListStyle }];
-};
+import type { LoaderArgs } from "@remix-run/cloudflare";
 
 export const loader = ({ context, request }: LoaderArgs) => {
   return defer({
@@ -23,18 +19,31 @@ export const loader = ({ context, request }: LoaderArgs) => {
 
 export type MainFeedsLoader = ReturnType<typeof loader>;
 
-export default function MainFeedsPage() {
+// export default function MainFeedsPage() {
+//   return (
+//     <div className="main__list-container">
+//       <div className="main__list-container__trending-users">
+//         <ScrollAreaTrendingUsers />
+//       </div>
+//       <div className="main__list-container__tabs">
+//         <TabRoutesPosts>
+//           <Outlet />
+//         </TabRoutesPosts>
+//       </div>
+//     </div>
+//   );
+// }
+
+export default function Routes() {
   return (
-    <div className="main__list-container">
-      <div className="main__list-container__trending-users">
-        <ScrollAreaTrendingUsers />
-      </div>
-      <div className="main__list-container__tabs">
-        <TabRoutesPosts>
+    <>
+      <HashnodeContainer>
+        <HashnodeList>
           <Outlet />
-        </TabRoutesPosts>
-      </div>
-    </div>
+        </HashnodeList>
+      </HashnodeContainer>
+      <HashnodeAside />
+    </>
   );
 }
 

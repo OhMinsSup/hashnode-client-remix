@@ -2,9 +2,6 @@ import { defer } from "@remix-run/cloudflare";
 
 // components
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-// import Header from "~/components/shared/Header";
-// import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
-// import AppRightSidebar from "~/components/shared/AppRightSidebar";
 
 // styles
 import homeStyles from "~/styles/routes/home.css";
@@ -25,19 +22,6 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 };
 
 export type MainLoader = typeof loader;
-
-// export default function Main() {
-//   return (
-//     <div className="container__base">
-//       <Header />
-//       <main>
-//         <AppLeftSidebar />
-//         <Outlet />
-//         <AppRightSidebar />
-//       </main>
-//     </div>
-//   );
-// }
 
 export default function Routes() {
   return (
