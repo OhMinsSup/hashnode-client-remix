@@ -5,7 +5,8 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { parseUrlParams } from "~/utils/util";
 
 // components
-import PostsList from "~/components/shared/PostsList.unstable";
+// import PostsList from "~/components/shared/PostsList.unstable";
+import { HashnodeList } from "~/components/shared/future/HashnodeList";
 
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
@@ -35,8 +36,11 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type MainFeedsIndexLoader = typeof loader;
 
-export default function MainFeedsIndexPage() {
-  return <PostsList />;
+// export default function MainFeedsIndexPage() {
+//   return <PostsList />;
+// }
+export default function Routes() {
+  return <HashnodeList />;
 }
 
 export function ErrorBoundary() {

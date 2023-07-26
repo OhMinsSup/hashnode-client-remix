@@ -1,7 +1,7 @@
 .root {
   --tw-text-opacity: 1;
   color: rgb(15 23 42 / var(--tw-text-opacity));
-  @apply min-h-screen bg-white dark:bg-black;
+  @apply min-h-screen bg-white dark:bg-slate-950;
 }
 
 .main {

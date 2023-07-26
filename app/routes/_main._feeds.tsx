@@ -4,7 +4,7 @@ import { defer } from "@remix-run/cloudflare";
 // components
 import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
-import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
@@ -19,28 +19,13 @@ export const loader = ({ context, request }: LoaderArgs) => {
 
 export type MainFeedsLoader = ReturnType<typeof loader>;
 
-// export default function MainFeedsPage() {
-//   return (
-//     <div className="main__list-container">
-//       <div className="main__list-container__trending-users">
-//         <ScrollAreaTrendingUsers />
-//       </div>
-//       <div className="main__list-container__tabs">
-//         <TabRoutesPosts>
-//           <Outlet />
-//         </TabRoutesPosts>
-//       </div>
-//     </div>
-//   );
-// }
-
 export default function Routes() {
   return (
     <>
       <HashnodeContainer>
-        <HashnodeList>
+        <HashnodeTabs>
           <Outlet />
-        </HashnodeList>
+        </HashnodeTabs>
       </HashnodeContainer>
       <HashnodeAside />
     </>
