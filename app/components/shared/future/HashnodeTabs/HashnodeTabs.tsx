@@ -41,7 +41,7 @@ export default function HashnodeTabs({ children }: HashnodeTabsProps) {
                     </div>
                   </button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value={PAGE_ENDPOINTS.FEATURED}>
+                <Tabs.Trigger value={PAGE_ENDPOINTS.FEATURED} asChild>
                   <button type="button" className={styles.tab_btn}>
                     <div
                       className={classNames(
@@ -58,7 +58,7 @@ export default function HashnodeTabs({ children }: HashnodeTabsProps) {
                     </div>
                   </button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value={PAGE_ENDPOINTS.FEATURED}>
+                <Tabs.Trigger value={PAGE_ENDPOINTS.FEATURED} asChild>
                   <button type="button" className={styles.tab_btn}>
                     <div
                       className={classNames(
