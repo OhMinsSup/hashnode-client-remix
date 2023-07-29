@@ -4,7 +4,7 @@
 
 /* white */
 .header {
-  @apply relative z-20 flex w-full border-b bg-white py-4;
+  @apply relative z-20 flex w-full border-b py-4 backdrop-blur-3xl;
 }
 
 .header__layout {

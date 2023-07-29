@@ -9,13 +9,11 @@ import { getTargetElement, getWindowScrollTop } from "~/libs/browser-utils";
 
 export default function MainHeader() {
   const ref = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState(0);
-  const [marginTop, setMarginTop] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
   const [, setOpen] = useState(false);
+  const [height, setHeight] = useState(0);
 
   const prevScrollTop = useRef(0);
-  const direction = useRef<"UP" | "DOWN">("DOWN");
-  const transitionPoint = useRef(0);
 
   const onOpen = useCallback(() => {
     setOpen(true);
@@ -23,29 +21,23 @@ export default function MainHeader() {
 
   const scrollMethod = optimizeAnimation(() => {
     const scrollTop = getWindowScrollTop();
-    const nextDirection = prevScrollTop.current > scrollTop ? "UP" : "DOWN";
 
-    if (
-      direction.current === "DOWN" &&
-      nextDirection === "UP" &&
-      transitionPoint.current - scrollTop < 0
-    ) {
-      transitionPoint.current = scrollTop;
+    // 현재 스크롤이 내려가는지 올라가는지 판단
+    const isScrollDown = scrollTop > prevScrollTop.current;
+
+    // 스크롤이 내려가는 경우
+    if (isScrollDown) {
+      // 헤더가 사라지는 경우
+      if (scrollTop > height) {
+        setTranslateY(-height);
+      } else {
+        setTranslateY(-scrollTop);
+      }
+    } else {
+      // 스크롤이 올라가는 경우
+      setTranslateY(0);
     }
 
-    if (
-      direction.current === "UP" &&
-      nextDirection === "DOWN" &&
-      scrollTop - transitionPoint.current < -1 * height
-    ) {
-      transitionPoint.current = scrollTop + height;
-    }
-
-    setMarginTop(
-      Math.min(0, -1 * height + transitionPoint.current - scrollTop)
-    );
-
-    direction.current = nextDirection;
     prevScrollTop.current = scrollTop;
   });
 
@@ -61,7 +53,7 @@ export default function MainHeader() {
     <header
       className={styles.root}
       style={{
-        transform: `translateY(${marginTop}px)`,
+        transform: `translateY(${translateY}px)`,
       }}
       ref={ref}
     >
