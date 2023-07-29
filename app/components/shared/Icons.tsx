@@ -804,5 +804,38 @@ export const Icons = {
         ></path>
       </svg>
     ),
+    Bookmark: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M10 6.77v1.874m0 0v1.875m0-1.875h1.875m-1.875 0H8.125M7.083 2.5h5.834a2.5 2.5 0 0 1 2.5 2.5v12.5l-4.98-3.065a.833.833 0 0 0-.874 0L4.583 17.5V5a2.5 2.5 0 0 1 2.5-2.5Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    Comment: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M13.333 8.75H7.5m3.333 2.917H7.5m-2.803-6.97A7.5 7.5 0 1 1 7.035 16.89a.885.885 0 0 0-.495-.064l-3.465.578a.417.417 0 0 1-.48-.48l.58-3.458a.886.886 0 0 0-.064-.496 7.503 7.503 0 0 1 1.586-8.274Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    Like: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M10 17.5c.833 0 8.333-4.166 8.333-10 0-2.916-2.5-4.963-5-5-1.25-.018-2.5.417-3.333 1.667-.833-1.25-2.105-1.666-3.333-1.666-2.5 0-5 2.083-5 5 0 5.833 7.5 9.999 8.333 9.999Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
   },
 };

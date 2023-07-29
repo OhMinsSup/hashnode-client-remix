@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles.module.css";
 import { NAVIGATION_ITEMS } from "~/constants/constant";
 import { NavLink, useLocation } from "@remix-run/react";
-import classNames from "classnames";
+import { cn } from "~/utils/util";
 
 export default function MainHeaderNavigation() {
   return (
@@ -39,7 +39,7 @@ MainHeaderNavigation.Item = function MainHeaderNavigationItem(
       aria-label={text}
       to={to}
       className={({ isActive }) => {
-        return classNames(styles.item, {
+        return cn(styles.item, {
           [styles.active]:
             isActive || applyActiveLinks?.includes(location.pathname),
         });

@@ -8,7 +8,6 @@ import classNames from "classnames";
 
 export default function MainDrawerMenu() {
   const [open, setOpen] = useState(false);
-  console.log("open", open);
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
@@ -117,7 +116,6 @@ MainDrawerMenu.Item = function MainDrawerMenuItem(
         to={to}
         end
         className={({ isActive }) => {
-          console.log(isActive);
           return classNames(styles.nav_link, {
             [styles.nav_link_active]:
               isActive || applyActiveLinks?.includes(location.pathname),

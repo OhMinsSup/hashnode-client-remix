@@ -1,4 +1,6 @@
 import { isNull, isUndefined } from "./assertion";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function optimizeAnimation(callback: () => void) {
   let ticking = false;
@@ -86,4 +88,8 @@ export function getDomainUrl(request: Request) {
   }
   const protocol = host.includes("localhost") ? "http" : "https";
   return `${protocol}://${host}`;
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

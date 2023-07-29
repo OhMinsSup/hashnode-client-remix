@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { Icons } from "../../Icons";
+import classNames from "classnames";
+import { cn } from "~/utils/util";
 
 export default function HashnodeCard() {
   return (
@@ -86,7 +88,69 @@ export default function HashnodeCard() {
             </div>
           </div>
         </div>
-        HashnodeCard
+        <div className={styles.footer}>
+          <div className="flex flex-row items-center justify-start gap-2">
+            <a
+              target="_blank"
+              rel="noopener"
+              href="/authenticate?next=https://fragland.dev/a-guide-to-table-partitioning-with-postgresql-12"
+            >
+              <button
+                className={cn(styles.btn_action, "group")}
+                aria-label="Like reaction"
+              >
+                <span className="group-hover:text-blue-600">
+                  <Icons.V2.Like />
+                </span>
+                21
+              </button>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener"
+              href="/authenticate?next=https://fragland.dev/a-guide-to-table-partitioning-with-postgresql-12#comments-list"
+            >
+              <button
+                className={cn(styles.btn_action, "group")}
+                aria-label="Comment"
+              >
+                <span className="group-hover:text-blue-600">
+                  <Icons.V2.Comment />
+                </span>
+              </button>
+            </a>
+            <p className={styles.dot_2}>•</p>
+            <p>160 reads</p>
+          </div>
+          <div className="flex-row items-center flex gap-1">
+            <div className="hidden sm:flex gap-2 items-center">
+              <a href="/n/postgresql?source=tags_feed_article">
+                <div className={styles.tag}>
+                  <span className="truncate">PostgreSQL</span>
+                </div>
+              </a>
+              <div
+                data-orientation="horizontal"
+                role="separator"
+                className="h-3 w-px bg-slate-200 dark:bg-slate-800"
+              ></div>
+            </div>
+            <button
+              className="bookmark-button group"
+              aria-label="Bookmark post"
+              data-state="closed"
+            >
+              <span
+                className={classNames(
+                  styles.btn_bookmark_text,
+                  "group-hover:text-blue-600"
+                )}
+              >
+                <Icons.V2.Bookmark />
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

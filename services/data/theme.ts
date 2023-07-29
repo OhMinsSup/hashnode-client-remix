@@ -28,9 +28,7 @@ export class ThemeService {
     const session = await this.themeStorage.getSession(
       request.headers.get("Cookie")
     );
-    console.log("session 123", session.get(this.themeName));
     const themeValue = session.get("theme");
-    console.log("themeValue", themeValue);
     return isTheme(themeValue) ? themeValue : Theme.LIGHT;
   }
 
