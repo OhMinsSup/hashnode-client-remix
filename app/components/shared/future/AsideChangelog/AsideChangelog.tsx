@@ -35,7 +35,7 @@ export default function AsideChangelog() {
               height="30"
               decoding="async"
               data-nimg="1"
-              className="css-1082qq3"
+              className="w-full"
               loading="lazy"
               style={{ color: "transparent" }}
             />

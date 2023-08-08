@@ -9,6 +9,7 @@ import homeStyles from "~/styles/routes/home.css";
 // types
 import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
 import { MainLayout } from "~/components/shared/future/MainLayout";
+import { MainFooter } from "~/components/shared/future/MainFooter";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeStyles }];
@@ -25,7 +26,7 @@ export type MainLoader = typeof loader;
 
 export default function Routes() {
   return (
-    <MainLayout>
+    <MainLayout footer={<MainFooter />}>
       <Outlet />
     </MainLayout>
   );

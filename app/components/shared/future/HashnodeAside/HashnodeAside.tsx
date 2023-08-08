@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { AsideChangelog } from "../AsideChangelog";
-import { AsideDraft } from "../AsideDraft";
-import { AsideTrendingArticle } from "../AsideTrendingArticle";
-import { AsideBookmark } from "../AsideBookmark";
-import { AsideFooter } from "../AsideFooter";
+import { AsideChangelog } from "~/components/shared/future/AsideChangelog";
+import { AsideDraft } from "~/components/shared/future/AsideDraft";
+import { AsideTrendingArticle } from "~/components/shared/future/AsideTrendingArticle";
+import { AsideBookmark } from "~/components/shared/future/AsideBookmark";
+import { AsideFooter } from "~/components/shared/future/AsideFooter";
 
 export default function HashnodeAside() {
   return (

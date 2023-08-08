@@ -1,0 +1,35 @@
+.root {
+  @apply p-4 rounded-xl border border-slate-100 dark:border-slate-900 flex flex-row gap-2 justify-between bg-white dark:bg-slate-950 align-middle;
+}
+
+.image_link {
+  @apply cursor-pointer block rounded-full shrink-0 grow-0;
+}
+
+.image_container {
+  display: block;
+  height: 2.5rem;
+  width: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.25rem;
+}
+
+.content_container {
+  @apply flex flex-col gap-0 text-sm grow shrink basis-[206px] overflow-hidden;
+}
+
+.title {
+  @apply font-semibold truncate dark:text-slate-300 text-slate-600;
+}
+
+.count {
+  @apply truncate dark:text-slate-400 text-slate-500;
+}
+
+.btn_follow_container {
+  @apply text-blue-600 shrink-0;
+}
+
+.btn_follow {
+  @apply flex items-center justify-center transition-colors duration-100 focus:outline-none border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:text-slate-300 disabled:dark:text-slate-800 disabled:hover:bg-transparent disabled:dark:hover:bg-transparent disabled:cursor-not-allowed rounded-full p-2 text-blue-600 dark:text-blue-600;
+}

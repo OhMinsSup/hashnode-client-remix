@@ -6,11 +6,13 @@ type LayoutType = "main";
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  footer?: React.ReactNode;
   layout?: LayoutType;
 }
 
 export default function MainLayout({
   children,
+  footer,
   layout = "main",
 }: MainLayoutProps) {
   return (
@@ -20,6 +22,7 @@ export default function MainLayout({
         {layout === "main" && <MainHeader />}
         <main className={styles.main}>{children}</main>
         <aside className={styles.aside}></aside>
+        {footer}
       </div>
       {/* google one tap */}
     </div>

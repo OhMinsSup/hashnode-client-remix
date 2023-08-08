@@ -652,6 +652,93 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    FollowUser: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M18.07 19.516s-1.8-3.512-6.07-3.512c-4.27 0-6.07 3.512-6.07 3.512m15.946-9.094c.082.514.124 1.041.124 1.578 0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2c.431 0 .856.027 1.273.08M19.5 7V4.5m0 0V2m0 2.5H17m2.5 0H22m-6.665 5.432a3.335 3.335 0 1 1-6.67 0 3.335 3.335 0 0 1 6.67 0Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+    FollowTag: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M8 12h4m0 0h4m-4 0V8m0 4v4m10-4c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+    MoveRight: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M3.333 10h13.334m0 0-5-5m5 5-5 5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    SidebarFooter: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M9.267 3v18m0-18H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 5.28 3 6.12 3 7.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 21 6.12 21 7.8 21h1.467m0-18H16.2c1.68 0 2.52 0 3.162.327a3 3 0 0 1 1.311 1.311C21 5.28 21 6.12 21 7.8v8.4c0 1.68 0 2.52-.327 3.162a3 3 0 0 1-1.311 1.311C18.72 21 17.88 21 16.2 21H9.267m3.23-4h5.5m-5.5-5h5.5m-5.5-5h5.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+    SearchFooter: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="m21 21-5.19-5.19M18 10.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+    NotificationsFooter: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M9.354 21c.705.622 1.632 1 2.646 1s1.94-.378 2.646-1M18 8A6 6 0 1 0 6 8c0 3.09-.78 5.206-1.65 6.605-.735 1.18-1.102 1.771-1.089 1.936.015.182.054.252.2.36.133.099.732.099 1.928.099H18.61c1.196 0 1.795 0 1.927-.098.147-.11.186-.179.2-.361.014-.165-.353-.755-1.088-1.936C18.78 13.206 18 11.09 18 8Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
+    MyFeedFooter: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          fill="currentColor"
+          d="M18.15 7.85V5a2.75 2.75 0 0 0-2.75-2.75H5A2.75 2.75 0 0 0 2.25 5v12A4.75 4.75 0 0 0 7 21.75h12.2a2.55 2.55 0 0 0 2.55-2.55v-9.1a2.25 2.25 0 0 0-2.25-2.25h-1.35Zm1.05 12.4c.58 0 1.05-.47 1.05-1.05v-9.1a.75.75 0 0 0-.75-.75h-1.35v9.85c0 .58.47 1.05 1.05 1.05ZM7.95 6.75a.75.75 0 1 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Zm0 4.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Zm0 4.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Z"
+          fillRule="evenodd"
+          clipRule="evenodd"
+        ></path>
+      </svg>
+    ),
+    BookmarkFooter: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
+        <path
+          stroke="currentColor"
+          d="M17.938 16.44a.862.862 0 0 0 1.312-.736V4.75a2 2 0 0 0-2-2h-6.5c-.7 0-1.318.36-1.675.906M15.25 21.25V8.75a2 2 0 0 0-2-2h-6.5a2 2 0 0 0-2 2v12.5l4.74-2.806a1 1 0 0 1 1.02 0l4.74 2.806Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        ></path>
+      </svg>
+    ),
     X: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
         <path
