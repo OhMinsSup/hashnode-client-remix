@@ -7,12 +7,14 @@ type LayoutType = "main";
 interface MainLayoutProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
+  sidebar?: React.ReactNode;
   layout?: LayoutType;
 }
 
 export default function MainLayout({
   children,
   footer,
+  sidebar,
   layout = "main",
 }: MainLayoutProps) {
   return (
@@ -20,7 +22,10 @@ export default function MainLayout({
       {/* react-joyride */}
       <div className={styles.root}>
         {layout === "main" && <MainHeader />}
-        <main className={styles.main}>{children}</main>
+        <main className={styles.main}>
+          {children}
+          {sidebar}
+        </main>
         <aside className={styles.aside}></aside>
         {footer}
       </div>

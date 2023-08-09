@@ -3,7 +3,6 @@ import { defer } from "@remix-run/cloudflare";
 
 // components
 import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
-import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
 
 // provider
@@ -21,14 +20,11 @@ export type MainFeedsLoader = ReturnType<typeof loader>;
 
 export default function Routes() {
   return (
-    <>
-      <HashnodeContainer>
-        <HashnodeTabs>
-          <Outlet />
-        </HashnodeTabs>
-      </HashnodeContainer>
-      <HashnodeAside />
-    </>
+    <HashnodeContainer>
+      <HashnodeTabs>
+        <Outlet />
+      </HashnodeTabs>
+    </HashnodeContainer>
   );
 }
 
