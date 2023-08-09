@@ -12,9 +12,9 @@ export default function AsideChangelog() {
             <path
               stroke="currentColor"
               d="M5 15 15 5M5 5l10 10"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.25"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.25"
             ></path>
           </svg>
         </button>

@@ -21,8 +21,8 @@ export default function AsideTrendingArticle() {
               <path
                 stroke="currentColor"
                 d="m4 7 4 4 4-4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               ></path>
             </svg>
           </span>
@@ -127,9 +127,9 @@ export default function AsideTrendingArticle() {
               <path
                 stroke="currentColor"
                 d="m5 8 5 5 5-5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.25"
               ></path>
             </svg>
           </span>

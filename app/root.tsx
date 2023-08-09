@@ -243,12 +243,12 @@ export function ErrorBoundary() {
   return (
     <html lang="en" className={classNames(theme)}>
       <head>
-        <title>Oops!</title>
         <Metas />
         <CanonicalLink origin={data.origin} />
         <ExternalLink />
         <Meta />
         <Links />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
       </head>
       <Body>
         <>
@@ -260,7 +260,6 @@ export function ErrorBoundary() {
             <InternalServerPage />
           )}
         </>
-        <NotFoundPage />
         <Scripts />
       </Body>
     </html>
