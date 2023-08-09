@@ -172,6 +172,34 @@ function ExternalLink() {
         href="/images/safari-pinned-tab-new.svg"
         color="#2962ff"
       />
+      <link
+        rel="preload"
+        href="/fonts/SuisseIntl-Book-WebXL.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="preload"
+        href="/fonts/SuisseIntl-Medium-WebXL.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="preload"
+        href="/fonts/SuisseIntl-SemiBold-WebXL.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="preload"
+        href="/fonts/SuisseIntl-Bold-WebXL.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
     </>
   );
 }
