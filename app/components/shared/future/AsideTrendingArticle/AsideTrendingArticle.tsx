@@ -48,13 +48,6 @@ export default function AsideTrendingArticle() {
                 >
                   ByteScrum Technolo...
                 </a>
-                <a
-                  className="group css-i7ftw6"
-                  href="/pro?source=proBadge"
-                  data-state="closed"
-                >
-                  <div className="css-15v8co2">Pro</div>
-                </a>
               </p>
               <span className="inline-block mx-2 font-bold opacity-50 ml-0">
                 ·
@@ -102,13 +95,6 @@ export default function AsideTrendingArticle() {
                   title="ByteScrum Technologies"
                 >
                   ByteScrum Technolo...
-                </a>
-                <a
-                  className="group css-i7ftw6"
-                  href="/pro?source=proBadge"
-                  data-state="closed"
-                >
-                  <div className="css-15v8co2">Pro</div>
                 </a>
               </p>
               <span className="inline-block mx-2 font-bold opacity-50 ml-0">
