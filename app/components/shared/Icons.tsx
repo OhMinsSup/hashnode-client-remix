@@ -652,6 +652,49 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    ChangelogX: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M5 15 15 5M5 5l10 10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    DraftEditIcon: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M12.77 3.897 7.587 9.078c-.344.344-.515.516-.659.708-.128.17-.238.353-.331.545-.105.216-.178.448-.324.911l-.763 2.413 2.413-.762c.463-.147.695-.22.911-.324.192-.093.375-.204.545-.332.193-.143.364-.315.708-.659l5.181-5.18m-2.5-2.5.981-.981c.34-.341.511-.512.695-.603a1.25 1.25 0 0 1 1.11 0c.184.091.354.262.695.603.34.34.511.51.602.695.174.35.174.76 0 1.11-.09.183-.261.354-.602.694l-.98.981m-2.5-2.5 2.5 2.5M16.666 17.5H3.333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    SeeMoreArrowBottom: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="m5 8 5 5 5-5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    SelectArrowBottom: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 16 16" width="16" height="16">
+        <path
+          stroke="currentColor"
+          d="m4 7 4 4 4-4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </svg>
+    ),
     FollowUser: (props: IconProps) => (
       <svg fill="none" viewBox="0 0 24 24" width="24" height="24">
         <path

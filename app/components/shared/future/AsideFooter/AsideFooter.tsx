@@ -1,14 +1,14 @@
 import React from "react";
+import styles from "./styles.module.css";
+import { cn } from "~/utils/util";
 
 export default function AsideFooter() {
   return (
-    <div className="border border-slate-200 dark:border-slate-800/80 rounded-2xl flex flex-col justify-start w-full gap-3.5 py-5 px-6  border-transparent bg-slate-50 dark:bg-slate-900">
+    <div className={styles.root}>
       <div className="grid grid-cols-2 gap-y-2 ">
-        <h3 className="col-span-2 text-base font-medium text-slate-700 dark:text-slate-200">
-          External links
-        </h3>
+        <h3 className={styles.title}>External links</h3>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="/feature-requests?source=others_feature_request"
           target="_Blank"
           rel="noopener"
@@ -16,7 +16,7 @@ export default function AsideFooter() {
           Feature requests
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="/changelog?source=others_changelog"
           target="_Blank"
           rel="noopener"
@@ -24,24 +24,19 @@ export default function AsideFooter() {
           Changelog
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="https://api.hashnode.com"
           target="_Blank"
           rel="noopener noreferrer"
         >
           Hashnode APIs
         </a>
-        <h3 className="col-span-2 text-base font-medium text-slate-700 dark:text-slate-200 mt-5">
-          Company
-        </h3>
-        <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
-          href="/about?source=others_about"
-        >
+        <h3 className={cn(styles.title, "mt-5")}>Company</h3>
+        <a className={styles.item_link} href="/about?source=others_about">
           About
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="https://status.hashnode.com"
           target="_Blank"
           rel="noopener noreferrer"
@@ -49,27 +44,21 @@ export default function AsideFooter() {
           Service status
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="https://townhall.hashnode.com"
           target="_Blank"
           rel="noopener noreferrer"
         >
           Official blog
         </a>
-        <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
-          href="/media?source=others_press_kit"
-        >
+        <a className={styles.item_link} href="/media?source=others_press_kit">
           Press kit
         </a>
-        <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
-          href="/support?source=others_support"
-        >
+        <a className={styles.item_link} href="/support?source=others_support">
           Support
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="https://careers.hashnode.com/jobs"
           target="_Blank"
           rel="noopener noreferrer"
@@ -77,17 +66,15 @@ export default function AsideFooter() {
           Careers
         </a>
         <a
-          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
+          className={styles.item_link}
           href="/acknowledgements?source=others_oss_ack"
         >
           OSS ACK
         </a>
-        <h3 className="col-span-2 text-base font-medium text-slate-700 dark:text-slate-200 mt-5">
-          Connect with us
-        </h3>
-        <div className="col-span-2 flex gap-5 text-slate-600 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300">
+        <h3 className={cn(styles.title, "mt-5")}>Connect with us</h3>
+        <div className={styles.item_social_container}>
           <a
-            className="p-2 rounded-full font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className={styles.item_social}
             href="https://twitter.com/hashnode"
             target="_blank"
             aria-label="Follow Hashnode on Twitter"
@@ -101,7 +88,7 @@ export default function AsideFooter() {
             </svg>
           </a>
           <a
-            className="p-2 rounded-full font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className={styles.item_social}
             href="https://linkedin.com/company/hashnode"
             target="_blank"
             aria-label="Follow Hashnode on LinkedIn"
@@ -117,7 +104,7 @@ export default function AsideFooter() {
             </svg>
           </a>
           <a
-            className="p-2 rounded-full font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className={styles.item_social}
             href="https://instagram.com/hashnode"
             target="_blank"
             aria-label="Follow Hashnode on Instagram"
@@ -137,7 +124,7 @@ export default function AsideFooter() {
             </svg>
           </a>
           <a
-            className="p-2 rounded-full font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className={styles.item_social}
             href="https://discord.gg/hashnode"
             target="_blank"
             aria-label="Join Hashnode's Discord Community"
@@ -153,25 +140,17 @@ export default function AsideFooter() {
             </svg>
           </a>
         </div>
-        <hr className="my-4 col-span-2 w-full h-px bg-slate-200 dark:border-slate-800" />
-        <div className="col-span-2 text-sm text-slate-600 dark:text-slate-300">
-          <a
-            className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
-            href="/privacy"
-          >
+        <hr className={styles.divider} />
+        <div className={styles.item_terms_container}>
+          <a className={styles.item_link} href="/privacy">
             Privacy
           </a>
           <span className="inline-block mx-2 font-bold opacity-50 ">·</span>
-          <a
-            className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:underline"
-            href="/terms"
-          >
+          <a className={styles.item_link} href="/terms">
             Terms
           </a>
           <span className="inline-block mx-2 font-bold opacity-50 ">·</span>
-          <span className="inline-block break-words text-slate-500 dark:text-slate-400">
-            © 2023 Hashnode
-          </span>
+          <span className={styles.copy_right}>© 2023 Hashnode</span>
         </div>
       </div>
     </div>
