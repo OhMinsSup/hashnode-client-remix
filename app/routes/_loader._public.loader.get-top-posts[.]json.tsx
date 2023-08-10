@@ -16,11 +16,16 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
   const { json: resp } = await context.api.widget.getTopPosts(request, args);
 
-  const data = resp?.result ?? {
-    posts: [],
-  } as GetTopPostsRespSchema;
+  const data =
+    resp?.result ??
+    ({
+      posts: [],
+    } as GetTopPostsRespSchema);
 
   return json(data);
 };
 
-export type LoadTopPostsLoader = typeof loader;
+export type Loader = typeof loader;
+
+export const getPath = (duration: number | string) =>
+  `/loader/get-top-posts.json?duration=${duration}`;

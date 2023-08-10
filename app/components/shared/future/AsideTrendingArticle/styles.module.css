@@ -21,3 +21,11 @@
 .btn_see_more {
   @apply rounded-full flex text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 hover:dark:border-slate-700 hover:bg-slate-50 hover:dark:bg-slate-800 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 focus:dark:ring-offset-slate-800 disabled:bg-white disabled:border-slate-200 disabled:cursor-not-allowed disabled:text-slate-300 disabled:dark:bg-slate-950 disabled:dark:border-slate-800 disabled:dark:text-slate-800 text-sm py-2.5 px-5 w-full items-center justify-center;
 }
+
+.dropdown_menu_content {
+  @apply z-50 min-w-[198px] flex flex-col gap-2 h-auto bg-white rounded-xl shadow-xl w-full py-2 outline-none dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80;
+}
+
+.dropdown_menu_item {
+  @apply w-full py-2 px-4 hover:bg-slate-100 disabled:cursor-not-allowed text-base sm:text-sm dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-800 flex items-center justify-between;
+}

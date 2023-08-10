@@ -652,6 +652,17 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    DropdownMenuCheck: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M3.333 10.833 7.5 15l9.167-10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
     ChangelogX: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
         <path

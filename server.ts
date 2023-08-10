@@ -8,7 +8,7 @@ import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
-import { ThemeService } from "./services/data/theme";
+import { ThemeService } from "./services/app/theme";
 
 import * as build from "@remix-run/dev/server-build";
 

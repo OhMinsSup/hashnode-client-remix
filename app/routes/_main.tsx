@@ -2,28 +2,27 @@ import { defer } from "@remix-run/cloudflare";
 
 // components
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-
-// styles
-import homeStyles from "~/styles/routes/home.css";
-
-// types
-import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
 import { MainLayout } from "~/components/shared/future/MainLayout";
 import { MainFooter } from "~/components/shared/future/MainFooter";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: homeStyles }];
-};
+// types
+import type { LoaderArgs } from "@remix-run/cloudflare";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   return defer({
-    trendingTag: context.api.tag.getTagList(request, { type: "popular" }),
-    bookmarks: context.api.widget.getWidgetBookmarks(request),
+    trendingTag: context.api.tag.getTagList(request, {
+      type: "popular",
+      limit: 4,
+    }),
+    // getAritcleCircles: context.api.widget.getAritcleCircles(request),
+    // getDrafts: context.api.draft.getDrafts(request, { limit: 6 }),
+    // getTopPosts: context.api.widget.getTopPosts(request, { duration: 7 }),
+    // getWidgetBookmarks: context.api.widget.getWidgetBookmarks(request),
   });
 };
 
-export type MainLoader = typeof loader;
+export type Loader = typeof loader;
 
 export default function Routes() {
   return (

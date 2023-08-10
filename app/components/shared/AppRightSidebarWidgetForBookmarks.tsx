@@ -11,10 +11,10 @@ import AppRightSidebarContentBox from "./AppRightSidebarContentBox";
 import AppRightSidebarWidgetBookmark from "./AppRightSidebarWidgetBookmark";
 
 // types
-import type { MainLoader } from "~/routes/_main";
+import type { Loader } from "~/routes/_main";
 
 export default function AppRightSidebarWidgetForBookmarks() {
-  const data = useLoaderData<MainLoader>();
+  const data = useLoaderData<Loader>();
 
   return (
     <Suspense fallback={<>Loading package location...</>}>

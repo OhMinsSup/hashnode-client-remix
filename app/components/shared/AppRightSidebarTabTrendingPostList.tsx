@@ -9,7 +9,7 @@ import { useFetcher } from "@remix-run/react";
 import AppRightSidebarTabTrendingPost from "./AppRightSidebarTabTrendingPost";
 
 // types
-import type { LoadTopPostsLoader } from "~/routes/_loader._public.loader.get-top-posts[.]json";
+import type { Loader } from "~/routes/_loader._public.loader.get-top-posts[.]json";
 
 interface AppRightSidebarTabTrendingPostListProps {
   duration: number;
@@ -22,11 +22,11 @@ export default function AppRightSidebarTabTrendingPostList({
   initialData,
   enabled,
 }: AppRightSidebarTabTrendingPostListProps) {
-  const fetcher = useFetcher<LoadTopPostsLoader>()
+  const fetcher = useFetcher<Loader>();
 
   useEffect(() => {
     if (enabled === false) return;
-    fetcher.load(`/loader/get-top-posts.json?duration=${duration}`)
+    fetcher.load(`/loader/get-top-posts.json?duration=${duration}`);
   }, [enabled]);
 
   const posts = useMemo(() => {

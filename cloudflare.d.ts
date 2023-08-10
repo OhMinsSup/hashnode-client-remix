@@ -1,7 +1,7 @@
 import type { ItemApiService } from "services/api/item";
 import type { AuthApiService } from "./services/api/auth";
 import type { UserApiService } from "./services/api/user";
-import type { ThemeService } from "./services/data/theme";
+import type { ThemeService } from "./services/app/theme";
 import type { Env } from "./services/env";
 import type { TagApiService } from "./services/api/tag";
 import type { WidgetApiService } from "./services/api/widget";
