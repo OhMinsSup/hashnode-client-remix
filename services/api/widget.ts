@@ -11,6 +11,18 @@ export class WidgetApiService {
   constructor(private readonly env: Env) {}
 
   /**
+   * @description 탑 포스트 가져오기
+   * @param {Request} request
+   * @param {GetTopPostsApiSearchParams?} query
+   */
+  async getTopPosts(request: Request, query?: GetTopPostsApiSearchParams) {
+    return await getTopPostsApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @deprecated
    * @description 위젯 북마크 가져오기
    * @param {Request} request
    */
@@ -23,6 +35,7 @@ export class WidgetApiService {
   }
 
   /**
+   * @deprecated
    * @description 위젯 유저 정보 가져오기
    * @param {Request} request
    */
@@ -30,17 +43,6 @@ export class WidgetApiService {
     request: Request
   ): Promise<ReturnType<typeof getAritcleCirclesApi>> {
     return await getAritcleCirclesApi(undefined, {
-      request,
-    });
-  }
-
-  /**
-   * @description 탑 포스트 가져오기
-   * @param {Request} request
-   * @param {GetTopPostsApiSearchParams?} query
-  */
-  async getTopPosts(request: Request, query?: GetTopPostsApiSearchParams) {
-    return await getTopPostsApi(query, {
       request,
     });
   }

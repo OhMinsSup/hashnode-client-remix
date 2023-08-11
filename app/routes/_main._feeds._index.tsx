@@ -36,9 +36,6 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type MainFeedsIndexLoader = typeof loader;
 
-// export default function MainFeedsIndexPage() {
-//   return <PostsList />;
-// }
 export default function Routes() {
   return <HashnodeList />;
 }

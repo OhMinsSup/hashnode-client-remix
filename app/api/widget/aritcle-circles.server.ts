@@ -14,6 +14,7 @@ interface GetAritcleCirclesApiSearchParams {
 }
 
 /**
+ * @deprecated
  * @description article-circles 조회 API
  * @param {GetAritcleCirclesApiSearchParams?} query
  * @param {BaseApiOptions?} options

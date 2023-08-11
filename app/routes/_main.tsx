@@ -15,10 +15,6 @@ export const loader = async ({ context, request }: LoaderArgs) => {
       type: "popular",
       limit: 4,
     }),
-    // getAritcleCircles: context.api.widget.getAritcleCircles(request),
-    // getDrafts: context.api.draft.getDrafts(request, { limit: 6 }),
-    // getTopPosts: context.api.widget.getTopPosts(request, { duration: 7 }),
-    // getWidgetBookmarks: context.api.widget.getWidgetBookmarks(request),
   });
 };
 

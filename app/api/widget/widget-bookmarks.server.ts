@@ -13,6 +13,7 @@ export interface GetWidgetBookmarksApiSearchParams {
 }
 
 /**
+ * @deprecated
  * @description Bookmarks 조회 API
  * @param {BaseApiOptions?} options
  */
