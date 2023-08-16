@@ -30,7 +30,7 @@ export default function Input({ id, name, ...otherProps }: InputProps) {
   }, [error]);
 
   return (
-    <>
+    <label className={styles.label}>
       <input
         ref={$ipt}
         id={id}
@@ -39,6 +39,6 @@ export default function Input({ id, name, ...otherProps }: InputProps) {
         {...otherProps}
       />
       <ErrorMessage error={error} isSubmitting={isSubmitting} />
-    </>
+    </label>
   );
 }

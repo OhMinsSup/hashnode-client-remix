@@ -33,6 +33,13 @@
   @apply dark:border-blue-600 dark:bg-slate-800;
 }
 
+.label {
+  text-align: center;
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .error {
   margin: 0.5rem 0.25rem;
   font-size: 0.875rem;
