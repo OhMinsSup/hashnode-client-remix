@@ -22,7 +22,6 @@ export default function HashnodeTabs({ children }: HashnodeTabsProps) {
     [navigate]
   );
 
-  console.log(location.pathname);
   return (
     <Tabs.Root
       defaultValue={PAGE_ENDPOINTS.ROOT}

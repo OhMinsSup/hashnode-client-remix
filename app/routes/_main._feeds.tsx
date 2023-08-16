@@ -1,22 +1,9 @@
-// remix
-import { defer } from "@remix-run/cloudflare";
-
 // components
 import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
 import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-
-import type { LoaderArgs } from "@remix-run/cloudflare";
-
-export const loader = ({ context, request }: LoaderArgs) => {
-  return defer({
-    getAricleCircle: context.api.widget.getAritcleCircles(request),
-  });
-};
-
-export type MainFeedsLoader = ReturnType<typeof loader>;
 
 export default function Routes() {
   return (

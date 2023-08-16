@@ -1,44 +1,27 @@
+import { Suspense } from "react";
 import { json } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-
-// utils
-import { parseUrlParams } from "~/utils/util";
+import {
+  Await,
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
+} from "@remix-run/react";
 
 // components
-import PostsList from "~/components/shared/PostsList.unstable";
+import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type { Loader as MainLoader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const params = parseUrlParams(request.url);
-  let cursor = undefined;
-  if (params.cursor) {
-    cursor = parseInt(params.cursor);
-  }
-  let limit = undefined;
-  if (params.limit) {
-    limit = parseInt(params.limit);
-  }
-
-  const args = {
-    cursor,
-    limit,
-    type: "featured",
-  } as const;
-
-  const { json: data } = await context.api.item.getItems(request, args);
-
-  return json({
-    posts: data?.result,
-  });
+  const response = await context.api.item.getItemsByList(request, "featured");
+  return json(response);
 };
 
-export type MainFeedsFeaturedLoader = typeof loader;
+export type Loader = typeof loader;
 
-export const meta: V2_MetaFunction<MainFeedsFeaturedLoader> = ({
-  data,
-  matches,
-}) => {
+export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
   const title = "Featured posts on Hashnode";
   const rootMeta =
     // @ts-ignore
@@ -66,8 +49,20 @@ export const meta: V2_MetaFunction<MainFeedsFeaturedLoader> = ({
   ];
 };
 
-export default function MainFeedsFeaturedPage() {
-  return <PostsList />;
+export default function Routes() {
+  const data = useRouteLoaderData<MainLoader>("routes/_main");
+
+  return (
+    <HashnodeList
+      trendingTags={
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.trendingTag}>
+            {(data) => <TrendingTagsBox />}
+          </Await>
+        </Suspense>
+      }
+    />
+  );
 }
 
 export function ErrorBoundary() {

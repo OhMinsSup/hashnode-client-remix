@@ -13,6 +13,9 @@ import { getUserPostListApi } from "~/api/user/user-posts.server";
 import { getMyPostListApi } from "~/api/posts/my-posts.server";
 import { deletePostApi } from "~/api/posts/delete.server";
 
+// utils
+import { parseUrlParams } from "~/utils/util";
+
 // types
 import type { Env } from "../env";
 import type { GetPostListApiSearchParams } from "~/api/posts/posts.server";
@@ -189,7 +192,7 @@ export class ItemApiService {
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof deletePostApi>>}
    */
-   async deleteItem(
+  async deleteItem(
     request: Request
   ): Promise<ReturnType<typeof deletePostApi>> {
     const formData = await this.readFormData(request);
@@ -201,14 +204,56 @@ export class ItemApiService {
         status: STATUS_CODE.BAD_REQUEST,
       });
     }
-   // 인티저 영어
-   const itemId = parseInt(idString, 10);
-   if (isNaN(itemId)) {
-     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
-   }
+    // 인티저 영어
+    const itemId = parseInt(idString, 10);
+    if (isNaN(itemId)) {
+      throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
+    }
     return await deletePostApi(itemId, {
       request,
     });
+  }
+
+  /**
+   * @version 2023-08-16
+   * @description loader에서 호출 할 때 사용하는 함수
+   * @param {Request} request
+   * @param {string} type
+   */
+  async getItemsByList(
+    request: Request,
+    type: "recent" | "featured" | "past" | "personalized" | undefined
+  ) {
+    const params = parseUrlParams(request.url);
+    let cursor: number | undefined = undefined;
+    if (params.cursor) {
+      cursor = parseInt(params.cursor);
+    }
+    let limit: number | undefined = undefined;
+    if (params.limit) {
+      limit = parseInt(params.limit);
+    }
+
+    try {
+      const { json: data } = await this.getItems(request, {
+        cursor,
+        limit,
+        type,
+      });
+
+      const { result, resultCode } = data;
+      if (resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultItemList();
+      }
+
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultItemList();
+    }
   }
 
   /**
@@ -218,5 +263,16 @@ export class ItemApiService {
    */
   private async readFormData(request: Request): Promise<FormData> {
     return await request.formData();
+  }
+
+  private getDefaultItemList() {
+    return {
+      list: [],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+      totalCount: 0,
+    };
   }
 }
