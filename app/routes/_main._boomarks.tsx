@@ -14,6 +14,7 @@ import { redirect } from "@remix-run/cloudflare";
 // styles
 import homeListStyle from "~/styles/routes/home-list.css";
 import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
+import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
 
 export const links: LinksFunction = () => {
   return [
@@ -80,17 +81,14 @@ export const meta: V2_MetaFunction<BookmarksLoader> = ({ data, matches }) => {
   ];
 };
 
-export default function Bookmarks() {
+export default function Routes() {
   return (
-    <div className="relative col-span-7 min-w-0 pb-5 pt-5">
-      <div className="content-info-box">
-        <h1>Bookmarks</h1>
-        <p>All articles you have bookmarked on Hashnode</p>
-      </div>
-      <div className="overflow-hidden rounded-lg border bg-white">
-        <Outlet />
-      </div>
-    </div>
+    <CategoryBoxWithHashnodeList
+      title="Bookmarks"
+      description="All articles you have bookmarked on Hashnode"
+    >
+      <Outlet />
+    </CategoryBoxWithHashnodeList>
   );
 }
 
