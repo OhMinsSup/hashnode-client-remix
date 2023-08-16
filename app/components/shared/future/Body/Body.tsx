@@ -13,14 +13,16 @@ interface BodyProps {
 }
 
 export default function Body({ children }: BodyProps) {
-  const { env } = useLoaderData<RootLoader>();
+  const data = useLoaderData<RootLoader>();
   return (
     <body className={classNames(styles.root)}>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.ENV = ${JSON.stringify(env)}`,
-        }}
-      />
+      {data ? (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data.env)}`,
+          }}
+        />
+      ) : null}
       {children}
     </body>
   );

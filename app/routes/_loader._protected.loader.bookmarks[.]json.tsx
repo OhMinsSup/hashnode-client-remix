@@ -40,6 +40,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
     return json(data.result);
   } catch (error) {
+    console.log("error!!!", error);
     return json({
       list: [],
       totalCount: 0,
@@ -54,7 +55,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 export type Loader = typeof loader;
 
 export const getPath = (params?: Record<string, any>) => {
-  const _base = "/loader/get-like-items.json";
+  const _base = "/loader/bookmarks.json";
   if (params) {
     const _params = new URLSearchParams(params);
     return `${_base}?${_params.toString()}`;

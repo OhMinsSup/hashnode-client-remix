@@ -10,11 +10,27 @@ import { AsideFooter } from "~/components/shared/future/AsideFooter";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { AsideProvider, useAsideContext } from "./provider/aside";
 
-export default function HashnodeAside() {
+function InternalHashnodeAside() {
   const session = useOptionalSession();
+  const { scrollPosition } = useAsideContext();
+
   return (
-    <aside className={styles.root} style={{ top: 0, position: "relative" }}>
+    <aside
+      className={styles.root}
+      style={{
+        ...(scrollPosition > 0
+          ? {
+              top: `-${scrollPosition}px`,
+              position: "sticky",
+            }
+          : {
+              top: 0,
+              position: "relative",
+            }),
+      }}
+    >
       <section aria-hidden="false"></section>
       <div className={styles.content}>
         <div className={styles.content_container}>
@@ -26,5 +42,13 @@ export default function HashnodeAside() {
         </div>
       </div>
     </aside>
+  );
+}
+
+export default function HashnodeAside() {
+  return (
+    <AsideProvider>
+      <InternalHashnodeAside />
+    </AsideProvider>
   );
 }

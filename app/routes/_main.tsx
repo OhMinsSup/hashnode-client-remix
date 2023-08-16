@@ -9,12 +9,9 @@ import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = ({ context, request }: LoaderArgs) => {
   return defer({
-    trendingTag: context.api.tag.getTagList(request, {
-      type: "popular",
-      limit: 4,
-    }),
+    trendingTag: context.api.tag.getTagListByHomePopular(request),
   });
 };
 

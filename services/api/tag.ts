@@ -44,4 +44,37 @@ export class TagApiService {
     }
     return resp;
   }
+
+  async getTagListByHomePopular(request: Request) {
+    try {
+      const { json: data } = await this.getTagList(request, {
+        type: "popular",
+        limit: 4,
+      });
+
+      const { result, resultCode } = data;
+      if (resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultTagList();
+      }
+
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultTagList();
+    }
+  }
+
+  private getDefaultTagList() {
+    return {
+      list: [],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+      totalCount: 0,
+    };
+  }
 }

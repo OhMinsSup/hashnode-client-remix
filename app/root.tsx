@@ -52,16 +52,26 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   const env = {
     API_BASE_URL: ApiService.baseUrl,
   };
-  const data = await context.api.user.getSession(request);
-  const theme = await context.services.theme.getTheme(request);
-  return json(
-    { currentProfile: data, env, theme, origin: getDomainUrl(request) },
-    data
-      ? undefined
-      : {
-          headers: context.api.auth.getClearAuthHeaders(),
-        }
-  );
+  try {
+    const data = await context.api.user.getSession(request);
+    console.log("data", data);
+    const theme = await context.services.theme.getTheme(request);
+    return json(
+      { currentProfile: data, env, theme, origin: getDomainUrl(request) },
+      data
+        ? undefined
+        : {
+            headers: context.api.auth.getClearAuthHeaders(),
+          }
+    );
+  } catch (error) {
+    return json({
+      currentProfile: null,
+      env,
+      theme: null,
+      origin: getDomainUrl(request),
+    });
+  }
 };
 
 export type RootLoader = typeof loader;
@@ -254,29 +264,16 @@ function App() {
   );
 }
 
-export default function Routes() {
-  const data = useLoaderData<RootLoader>();
-  return (
-    <ThemeProvider specifiedTheme={data.theme}>
-      <App />
-    </ThemeProvider>
-  );
-}
-
-export function ErrorBoundary() {
-  const [theme] = useTheme();
-  const data = useLoaderData<RootLoader>();
+function AppError() {
   const error = useRouteError();
 
   return (
-    <html lang="en" className={classNames(theme)}>
+    <html lang="en">
       <head>
         <Metas />
-        <CanonicalLink origin={data.origin} />
         <ExternalLink />
         <Meta />
         <Links />
-        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
       </head>
       <Body>
         <>
@@ -291,5 +288,22 @@ export function ErrorBoundary() {
         <Scripts />
       </Body>
     </html>
+  );
+}
+
+export default function Routes() {
+  const data = useLoaderData<RootLoader>();
+  return (
+    <ThemeProvider specifiedTheme={data.theme}>
+      <App />
+    </ThemeProvider>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <ThemeProvider specifiedTheme={null}>
+      <AppError />
+    </ThemeProvider>
   );
 }

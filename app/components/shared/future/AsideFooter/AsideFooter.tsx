@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn, optimizeAnimation } from "~/utils/util";
+import { useEventListener } from "~/libs/hooks/useEventListener";
+import { getTargetElement } from "~/libs/browser-utils";
+import { useAsideContext } from "~/components/shared/future/HashnodeAside/provider/aside";
 
 export default function AsideFooter() {
+  const $ele = useRef<HTMLDivElement>(null);
+  const { changeScrollPosition } = useAsideContext();
+
+  const scrollMethod = optimizeAnimation(() => {
+    // 현재 스크롤 위치하고 $ele의 top 위치를 비교해서 $ele의 top이 현재 스크롤 위치보다 작으면 $ele의 top을 현재 스크롤 위치로 설정한다.
+    const ele = getTargetElement($ele);
+    if (!ele) return;
+
+    const scrollPosition = window.scrollY;
+    const $parent_aside = ele.parentElement?.parentElement?.parentElement;
+    const parent_aside_height = $parent_aside?.clientHeight || 0;
+
+    if (parent_aside_height < scrollPosition) {
+      const ele_height = ele.clientHeight || 0;
+      const height = parent_aside_height - ele_height;
+      changeScrollPosition(height - 45);
+    } else {
+      changeScrollPosition(0);
+    }
+  });
+
+  useEventListener("scroll", scrollMethod);
+
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={$ele}>
       <div className="grid grid-cols-2 gap-y-2 ">
         <h3 className={styles.title}>External links</h3>
         <a

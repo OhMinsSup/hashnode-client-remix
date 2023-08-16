@@ -21,8 +21,6 @@ export default function AsideTrendingArticle() {
   const [, startTransition] = useTransition();
   const [duration, setDuration] = useState<string>("7");
 
-  console.log("duration", duration);
-
   const fetcher = useFetcher<Loader>();
 
   const text = useMemo(() => {

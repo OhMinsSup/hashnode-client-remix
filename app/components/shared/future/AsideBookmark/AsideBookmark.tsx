@@ -2,9 +2,9 @@ import React, { useEffect, useMemo } from "react";
 import styles from "./styles.module.css";
 import { useFetcher } from "@remix-run/react";
 
-import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.].json";
+import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.]json";
 
-import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.].json";
+import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.]json";
 
 export default function AsideBookmark() {
   const fetcher = useFetcher<Loader>();
