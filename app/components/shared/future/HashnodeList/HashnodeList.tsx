@@ -1,19 +1,26 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { HashnodeCard } from "../HashnodeCard";
-import { TrendingTagsBox } from "../TrendingTagsBox";
 import { RecommendedUsersBox } from "../RecommendedUsersBox";
 
-export default function HashnodeList() {
+interface HashnodeListProps {
+  recommendedUsers?: React.ReactNode;
+  trendingTags?: React.ReactNode;
+}
+
+export default function HashnodeList({
+  trendingTags,
+  recommendedUsers,
+}: HashnodeListProps) {
   return (
     <div className={styles.root}>
       <HashnodeCard />
       <HashnodeCard />
-      <RecommendedUsersBox />
+      {recommendedUsers && <RecommendedUsersBox />}
       <HashnodeCard />
       <HashnodeCard />
       <HashnodeCard />
-      <TrendingTagsBox />
+      {trendingTags}
       <HashnodeCard />
       <HashnodeCard />
       <HashnodeCard />

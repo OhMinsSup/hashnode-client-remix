@@ -21,6 +21,8 @@ export default function AsideTrendingArticle() {
   const [, startTransition] = useTransition();
   const [duration, setDuration] = useState<string>("7");
 
+  console.log("duration", duration);
+
   const fetcher = useFetcher<Loader>();
 
   const text = useMemo(() => {
@@ -31,6 +33,8 @@ export default function AsideTrendingArticle() {
         return "1 month";
       case "90":
         return "3 months";
+      case "180":
+        return "6 months";
       default:
         return "1 week";
     }

@@ -1,14 +1,21 @@
+import { Suspense } from "react";
 import { json } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import {
+  Await,
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
+} from "@remix-run/react";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
 
 // components
-// import PostsList from "~/components/shared/PostsList.unstable";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 
 import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { Loader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const params = parseUrlParams(request.url);
@@ -37,7 +44,19 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 export type MainFeedsIndexLoader = typeof loader;
 
 export default function Routes() {
-  return <HashnodeList />;
+  const data = useRouteLoaderData<Loader>("routes/_main");
+
+  return (
+    <HashnodeList
+      trendingTags={
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.trendingTag}>
+            {(data) => <TrendingTagsBox />}
+          </Await>
+        </Suspense>
+      }
+    />
+  );
 }
 
 export function ErrorBoundary() {
