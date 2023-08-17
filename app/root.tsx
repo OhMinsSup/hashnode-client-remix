@@ -54,7 +54,6 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   };
   try {
     const data = await context.api.auth.getSession(request);
-    console.log("data", data);
     const theme = await context.services.theme.getTheme(request);
     return json(
       { currentProfile: data, env, theme, origin: getDomainUrl(request) },

@@ -1,20 +1,8 @@
 .root {
-  border-radius: 9999px;
   border-width: 1px;
   --tw-border-opacity: 1;
   border-color: rgb(37 99 235 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  text-align: center;
-  font-size: 1rem;
   line-height: 1.625;
-  font-weight: 500;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
   transition-property: color, background-color, border-color,
     text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -24,8 +12,6 @@
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   font-size: 0.875rem;
@@ -56,6 +42,22 @@
   border-radius: 9999px;
   padding-left: 5rem !important;
   padding-right: 5rem !important;
+}
+
+.link_area {
+  @apply flex flex-col items-center justify-center text-slate-900;
+}
+
+.link_area {
+  @apply dark:text-white;
+}
+
+.title {
+  @apply mt-6 text-xl font-bold;
+}
+
+.link {
+  @apply mt-2 text-sm font-medium underline;
 }
 
 @media (min-width: 768px) {

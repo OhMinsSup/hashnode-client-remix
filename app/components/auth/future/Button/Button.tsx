@@ -13,12 +13,12 @@ export default function Button() {
       <button type="submit" className={styles.root}>
         Submit
       </button>
-      <div className="flex flex-col items-center justify-center">
-        <h1 className="mt-6 text-xl font-bold">
+      <div className={styles.link_area}>
+        <h1 className={styles.title}>
           {isSignin ? "New to Hashnode?" : "Already have an account?"}
         </h1>
         <Link
-          className="mt-2 text-sm font-medium underline"
+          className={styles.link}
           aria-label={isSignin ? "Signup for hashnode" : "Signin to hashnode"}
           to={
             isSignin ? PAGE_ENDPOINTS.AUTH.SIGNUP : PAGE_ENDPOINTS.AUTH.SIGNIN

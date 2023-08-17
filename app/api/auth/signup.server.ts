@@ -10,6 +10,7 @@ import type { SignupBody } from "./validation/signup";
 import type { BaseApiOptions } from "../client";
 
 /**
+ * @deprecated
  * @description 회원가입 API
  * @param {Omit<SignupBody, 'confirmPassword'>} body
  * @param {BaseApiOptions?} options

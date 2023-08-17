@@ -1,4 +1,8 @@
 import cookies from "cookie";
+import omit from "lodash-es/omit";
+import { ZodError } from "zod";
+import { redirect } from "@remix-run/cloudflare";
+
 import { signinSchema } from "~/api/auth/validation/signin";
 import { signupSchema } from "~/api/auth/validation/signup";
 
@@ -9,7 +13,10 @@ import { getMeApi } from "~/api/user/me.server";
 
 import { HTTPError } from "~/api/error";
 
-import { RESULT_CODE } from "~/constants/constant";
+import { signinApi as $signinApi } from "services/fetch/auth/signin-api.server";
+import { signupApi as $signupApi } from "services/fetch/auth/signup-api.server";
+
+import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../env";
@@ -19,26 +26,26 @@ export class AuthApiService {
   constructor(private readonly env: Env) {}
 
   /**
+   * @version 2023-08-17
    * @description 로그인 API
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof signinApi>>}
    */
-  async signin(request: Request): Promise<ReturnType<typeof signinApi>> {
+  async signin(request: Request) {
     const formData = await this.readFormData(request);
     const input = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
     const parse = await signinSchema.parseAsync(input);
-    return await signinApi(parse);
+    return $signinApi(parse);
   }
 
   /**
+   * @version 2023-08-17
    * @description 회원가입 API
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof signupApi>>}
    */
-  async signup(request: Request): Promise<ReturnType<typeof signupApi>> {
+  async signup(request: Request) {
     const formData = await this.readFormData(request);
     const input = {
       username: formData.get("username"),
@@ -47,31 +54,41 @@ export class AuthApiService {
       confirmPassword: formData.get("confirmPassword"),
     };
     const parse = await signupSchema.parseAsync(input);
-    return await signupApi({
-      email: parse.email,
-      username: parse.username,
-      password: parse.password,
-    });
+    return $signupApi(omit(parse, ["confirmPassword"]));
   }
 
   /**
-   * @description 로그인 쿠키 생성
-   * @param {string} cookieValue
-   * @returns {Headers}
+   * @version 2023-08-17
+   * @description 로그인 후 리다이렉트
+   * @param {Request} request
    */
-  getAuthHeaders(cookieValue: string): Headers {
-    const headers = new Headers();
-    headers.append("Set-Cookie", cookieValue);
-    return headers;
-  }
-
-  getClearAuthHeaders(): Headers {
-    const headers = new Headers();
-    headers.append(
-      "Set-Cookie",
-      "access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-    );
-    return headers;
+  async signinWithAuth(request: Request) {
+    try {
+      const response = await this.signin(request);
+      console.log(response);
+      // const cookie = response.headers.get("set-cookie");
+      // if (!cookie) {
+      //   return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+      //     status: STATUS_CODE.BAD_REQUEST,
+      //   });
+      // }
+      // return redirect(PAGE_ENDPOINTS.ROOT, {
+      //   headers: this.getAuthHeaders(cookie),
+      // });
+    } catch (error) {
+      console.log(error);
+      const error_validation = this.readValidateError(error);
+      if (error_validation) {
+        return error_validation;
+      }
+      // const error_http = await HTTPErrorWrapper(error);
+      // if (error_http) {
+      //   return json(error_http.errors, {
+      //     status: error_http.statusCode,
+      //   });
+      // }
+      throw error;
+    }
   }
 
   /**
@@ -161,11 +178,57 @@ export class AuthApiService {
   }
 
   /**
+   * @version 2023-08-17
    * @description FormData 읽기
    * @param {Request} request
-   * @returns {Promise<FormData>}
    */
-  private async readFormData(request: Request): Promise<FormData> {
+  private async readFormData(request: Request) {
     return await request.formData();
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description error validation
+   * @param {unknown} error
+   */
+  private async readValidateError(error: unknown) {
+    if (error instanceof ZodError) {
+      const errors: Record<string, string> = {};
+      error.issues.reduce((acc, cur) => {
+        const key = cur.path.at(0);
+        if (!key) return acc;
+        acc[key] = cur.message;
+        return acc;
+      }, errors);
+      return {
+        statusCode: STATUS_CODE.BAD_REQUEST,
+        errors,
+      };
+    }
+    return null;
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그인 쿠키 생성
+   * @param {string} cookieValue
+   */
+  getAuthHeaders(cookieValue: string) {
+    const headers = new Headers();
+    headers.append("Set-Cookie", cookieValue);
+    return headers;
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그아웃 쿠키 생성
+   */
+  getClearAuthHeaders() {
+    const headers = new Headers();
+    headers.append(
+      "Set-Cookie",
+      "access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    );
+    return headers;
   }
 }

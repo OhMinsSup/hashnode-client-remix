@@ -10,6 +10,7 @@ import type { SigninBody } from "./validation/signin";
 import type { BaseApiOptions } from "../client";
 
 /**
+ * @deprecated
  * @description 로그인 API
  * @param {SigninBody} body
  * @param {BaseApiOptions?} options

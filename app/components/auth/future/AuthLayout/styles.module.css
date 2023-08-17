@@ -19,7 +19,7 @@
 }
 
 .other {
-  @apply bg-slate-100 px-20 py-14;
+  @apply bg-slate-100 px-20 py-14 text-slate-950;
 }
 
 .other {
