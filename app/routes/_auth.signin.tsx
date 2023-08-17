@@ -5,10 +5,13 @@ import { Input } from "~/components/auth/future/Input";
 import { SubmitButton } from "~/components/auth/future/Button";
 
 // types
-import type { ActionArgs } from "@remix-run/cloudflare";
+import { json, type ActionArgs } from "@remix-run/cloudflare";
 
-export const action = ({ request, context }: ActionArgs) => {
-  return context.api.auth.signinWithAuth(request);
+export const action = async ({ request, context }: ActionArgs) => {
+  const response = await context.api.auth.signinWithAuth(request);
+  console.log("response", response);
+  if (response instanceof Response) return response;
+  return json(response);
 };
 
 export default function Routes() {
@@ -27,7 +30,7 @@ export default function Routes() {
           type="password"
           name="password"
           id="password"
-          autoComplete="new-password"
+          autoComplete="current-password"
           aria-label="Password"
           placeholder="Enter your password"
         />
@@ -39,6 +42,7 @@ export default function Routes() {
 
 export function ErrorBoundary() {
   let error = useRouteError();
+  console.log(error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

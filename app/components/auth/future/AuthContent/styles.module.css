@@ -50,14 +50,6 @@
   color: rgb(51 65 85 / var(--tw-text-opacity));
 }
 
-.desc {
-  @apply dark:text-slate-200;
-}
-
-.right {
-  @apply dark:text-slate-400;
-}
-
 .profile {
   display: -webkit-box;
   display: -webkit-flex;

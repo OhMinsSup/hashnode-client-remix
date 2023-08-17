@@ -6,30 +6,16 @@ import { SigninForm } from "~/components/auth/future/SigninForm";
 import { Input } from "~/components/auth/future/Input";
 import { SubmitButton } from "~/components/auth/future/Button";
 
-// constants
-import { PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
-
 // remix
-import { redirect } from "@remix-run/cloudflare";
-import { actionErrorWrapper } from "~/api/validation/errorWrapper";
+import { json } from "@remix-run/cloudflare";
 
 // types
 import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionArgs) => {
-  const actionFn = async () => {
-    const { response } = await context.api.auth.signup(request);
-    const cookie = response.headers.get("set-cookie");
-    if (!cookie) {
-      return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-        status: STATUS_CODE.BAD_REQUEST,
-      });
-    }
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers: context.api.auth.getAuthHeaders(cookie),
-    });
-  };
-  return actionErrorWrapper(actionFn);
+  const response = await context.api.auth.signinWithAuth(request);
+  if (response instanceof Response) return response;
+  return json(response);
 };
 
 export default function Routes() {

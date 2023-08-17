@@ -30,10 +30,6 @@
   color: rgb(15 23 42 / var(--tw-text-opacity));
 }
 
-.header {
-  @apply dark:text-slate-100;
-}
-
 .header > span {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
   --tw-gradient-from: #2563eb;
@@ -52,10 +48,6 @@
   margin-bottom: 1.25rem;
   border-bottom-width: 1px;
   padding-bottom: 1.25rem;
-}
-
-.social {
-  @apply dark:border-slate-800;
 }
 
 .social_container {
@@ -107,10 +99,6 @@
   outline-offset: 2px !important;
 }
 
-.btn_social > a {
-  @apply dark:bg-slate-800 dark:text-slate-200;
-}
-
 .btn_social > a > svg {
   margin-right: 0.5rem;
   height: 1rem;
@@ -127,7 +115,7 @@
 }
 
 .text {
-  @apply text-center font-semibold text-black dark:text-white;
+  @apply text-center font-semibold text-black;
 }
 
 @media (min-width: 768px) {

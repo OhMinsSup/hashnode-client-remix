@@ -1,12 +1,11 @@
 import cookies from "cookie";
-import { ofetch } from "ofetch";
 import { isBrowser } from "~/libs/browser-utils";
-import { isArray, isEmpty, isString } from "~/utils/assertion";
+import { isEmpty, isString } from "~/utils/assertion";
 import { API_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { FetchOptions } from "ofetch";
 import type { ApiRoutes, Body, ApiOptions, AppAPI } from "./fetch.type";
+import { FetchError } from "./fetch.error";
 
 export class FetchService {
   static baseURL = isBrowser
@@ -23,51 +22,6 @@ export class FetchService {
   static prefix = "/api";
 
   static defineApis = API_ENDPOINTS;
-
-  static apiFetch = ofetch.create({
-    baseURL: this.baseURL,
-    retry: false,
-    ignoreResponseError: false,
-    onRequest: ({ options }) => {
-      if (!isBrowser) {
-        let _access_token: string | null = null;
-        let header = options.headers;
-
-        if (header) {
-          if (header instanceof Headers) {
-            const cookieValue =
-              header.get("cookie") || header.get("set-cookie") || null;
-            if (cookieValue) {
-              const { access_token } = cookies.parse(cookieValue);
-              if (access_token) _access_token = access_token;
-            }
-          } else if (isArray(header)) {
-            header.forEach((item) => {
-              const [key, value] = item;
-              if (key === "cookie" || key === "set-cookie") {
-                const { access_token } = cookies.parse(value);
-                if (access_token) _access_token = access_token;
-              }
-            });
-          } else if (typeof header === "object") {
-            const cookieValue = header.cookie || header["set-cookie"] || null;
-            if (cookieValue) {
-              const { access_token } = cookies.parse(cookieValue);
-              if (access_token) _access_token = access_token;
-            }
-          }
-
-          if (_access_token) {
-            //
-          }
-        } else {
-          options.credentials = "include";
-        }
-      }
-    },
-    onRequestError: (ctx) => {},
-    onResponseError: (ctx) => {},
-  });
 
   static getSearchParams = (
     url: ApiRoutes | string,
@@ -145,89 +99,130 @@ export class FetchService {
       return undefined;
     }
 
-    return body;
+    if (!isString(body)) {
+      return JSON.stringify(body);
+    }
+
+    return body as BodyInit;
   };
 
-  static async $fetch(request: ApiRoutes, options?: ApiOptions) {
-    const { pathname } = this.makeURL(request, options);
-    const _response = await this.apiFetch.native(
-      pathname,
-      options?.requestInit
-    );
-    return _response;
-  }
+  static headerCookie = (options?: ApiOptions) => {
+    const isAuthticated = options?.customOptions?.withAuthorization ?? false;
+    const $headers = options?.request?.headers ?? new Headers();
 
-  static async get<FetchData extends Record<string, unknown>>(
-    request: ApiRoutes,
-    options?: ApiOptions
-  ) {
-    const { pathname } = this.makeURL(request, options);
-    const { oFetchOptions = undefined } = options || {};
-    const defaultFetchOptions: FetchOptions<"json"> = {
-      ...(oFetchOptions || {}),
+    if (!isAuthticated) {
+      return $headers;
+    }
+
+    let token: string | null = null;
+    const $cookie = $headers.get("cookie") || $headers.get("set-cookie");
+    if ($cookie) {
+      const { access_token } = cookies.parse($cookie);
+      if (access_token) token = access_token;
+    }
+
+    if (!token) {
+      if ($headers.has("cookie")) $headers.delete("cookie");
+      if ($headers.has("set-cookie")) $headers.delete("set-cookie");
+      return $headers;
+    }
+
+    return $headers;
+  };
+
+  static headerJSON = (options?: ApiOptions) => {
+    const $headers = this.headerCookie(options);
+
+    if (
+      options?.requestInit?.headers &&
+      options.requestInit.headers instanceof Headers
+    ) {
+      for (const [key, value] of options.requestInit.headers.entries()) {
+        $headers.set(key, value);
+      }
+    }
+    $headers.set("content-type", "application/json");
+    return $headers;
+  };
+
+  static headerFormData = (options?: ApiOptions) => {
+    const $headers = this.headerCookie(options);
+
+    if (
+      options?.requestInit?.headers &&
+      options.requestInit.headers instanceof Headers
+    ) {
+      for (const [key, value] of options.requestInit.headers.entries()) {
+        $headers.set(key, value);
+      }
+    }
+    $headers.delete("content-type");
+    return $headers;
+  };
+
+  static async get(request: ApiRoutes, options?: ApiOptions) {
+    const { url } = this.makeURL(request, options);
+    const requset = new Request(url, {
+      headers: this.headerJSON(options),
       method: "GET",
-    };
-    const _response = await this.apiFetch<AppAPI<FetchData>>(
-      pathname,
-      defaultFetchOptions
-    );
-    return _response;
+    });
+    const response = await fetch(requset);
+    if (!response.ok) {
+      throw new FetchError(response, requset, options);
+    }
+    return response;
   }
 
-  static async post<FetchData extends Record<string, unknown>>(
-    request: ApiRoutes,
-    input?: Body,
-    options?: ApiOptions
-  ) {
-    const { pathname } = this.makeURL(request, options);
+  static async post(request: ApiRoutes, input?: Body, options?: ApiOptions) {
+    const { url } = this.makeURL(request, options);
     const body = this.makeBody(input);
-    const { oFetchOptions = undefined } = options || {};
-    const defaultFetchOptions: FetchOptions<"json"> = {
-      ...(oFetchOptions || {}),
+    const requset = new Request(url, {
+      headers:
+        body instanceof FormData
+          ? this.headerFormData(options)
+          : this.headerJSON(options),
       method: "POST",
       body,
-    };
-    const _response = await this.apiFetch<AppAPI<FetchData>>(
-      pathname,
-      defaultFetchOptions
-    );
-    return _response;
+    });
+    const response = await fetch(requset);
+    if (!response.ok) {
+      throw new FetchError(response, requset, options);
+    }
+    return response;
   }
 
-  static async delete<FetchData extends Record<string, unknown>>(
-    request: ApiRoutes,
-    options?: ApiOptions
-  ) {
-    const { pathname } = this.makeURL(request, options);
-    const { oFetchOptions = undefined } = options || {};
-    const defaultFetchOptions: FetchOptions<"json"> = {
-      ...(oFetchOptions || {}),
+  static async delete(request: ApiRoutes, options?: ApiOptions) {
+    const { url } = this.makeURL(request, options);
+    const requset = new Request(url, {
+      headers: this.headerJSON(options),
       method: "DELETE",
-    };
-    const _response = await this.apiFetch<AppAPI<FetchData>>(
-      pathname,
-      defaultFetchOptions
-    );
-    return _response;
+    });
+    const response = await fetch(requset);
+    if (!response.ok) {
+      throw new FetchError(response, requset, options);
+    }
+    return response;
   }
 
-  static async put<FetchData extends Record<string, unknown>>(
-    request: ApiRoutes,
-    input?: Body,
-    options?: ApiOptions
-  ) {
-    const { pathname } = this.makeURL(request, options);
+  static async put(request: ApiRoutes, input?: Body, options?: ApiOptions) {
+    const { url } = this.makeURL(request, options);
     const body = this.makeBody(input);
-    const { oFetchOptions = undefined } = options || {};
-    const defaultFetchOptions: FetchOptions<"json"> = {
-      ...(oFetchOptions || {}),
+    const requset = new Request(url, {
+      headers:
+        body instanceof FormData
+          ? this.headerFormData(options)
+          : this.headerJSON(options),
       method: "PUT",
       body,
-    };
-    const _response = await this.apiFetch<AppAPI<FetchData>>(
-      pathname,
-      defaultFetchOptions
-    );
-    return _response;
+    });
+    const response = await fetch(requset);
+    if (!response.ok) {
+      throw new FetchError(response, requset, options);
+    }
+    return response;
+  }
+
+  static async toJson<FetchData = any>(response: Response) {
+    return response.json<AppAPI<FetchData>>();
   }
 }

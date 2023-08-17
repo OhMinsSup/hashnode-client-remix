@@ -48,10 +48,6 @@
   @apply flex flex-col items-center justify-center text-slate-900;
 }
 
-.link_area {
-  @apply dark:text-white;
-}
-
 .title {
   @apply mt-6 text-xl font-bold;
 }

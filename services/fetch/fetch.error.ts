@@ -1,4 +1,4 @@
-export class HTTPError extends Error {
+export class FetchError extends Error {
   public response: Response;
   public request: Request;
   public options: any;

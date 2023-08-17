@@ -6,21 +6,25 @@ import { redirect } from "@remix-run/cloudflare";
 import { signinSchema } from "~/api/auth/validation/signin";
 import { signupSchema } from "~/api/auth/validation/signup";
 
-import { signinApi } from "~/api/auth/signin.server";
+// import { signinApi } from "~/api/auth/signin.server";
 import { logoutApi } from "~/api/user/logout.server";
-import { signupApi } from "~/api/auth/signup.server";
+// import { signupApi } from "~/api/auth/signup.server";
 import { getMeApi } from "~/api/user/me.server";
 
-import { HTTPError } from "~/api/error";
+// import { HTTPError } from "~/api/error";
 
 import { signinApi as $signinApi } from "services/fetch/auth/signin-api.server";
 import { signupApi as $signupApi } from "services/fetch/auth/signup-api.server";
+// import { FetchService } from "services/fetch/fetch.client";
+import { FetchError } from "services/fetch/fetch.error";
 
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
+import { isArray } from "~/utils/assertion";
 
 // types
 import type { Env } from "../env";
 import type { UserRespSchema } from "~/api/schema/resp";
+import type { ErrorAPI } from "services/fetch/fetch.type";
 
 export class AuthApiService {
   constructor(private readonly env: Env) {}
@@ -37,6 +41,7 @@ export class AuthApiService {
       password: formData.get("password"),
     };
     const parse = await signinSchema.parseAsync(input);
+    console.log(parse);
     return $signinApi(parse);
   }
 
@@ -59,35 +64,65 @@ export class AuthApiService {
 
   /**
    * @version 2023-08-17
+   * @description 회원가입 후 리다이렉트
+   * @param {Request} request
+   */
+  async signupWithAuth(request: Request) {
+    try {
+      const response = await this.signup(request);
+      const cookie = response.headers.get("set-cookie");
+      if (!cookie) {
+        return redirect(PAGE_ENDPOINTS.AUTH.SIGNUP, {
+          status: STATUS_CODE.BAD_REQUEST,
+        });
+      }
+      return redirect(PAGE_ENDPOINTS.ROOT, {
+        headers: this.getAuthHeaders(cookie),
+      });
+    } catch (error) {
+      const error_validation = this.readValidateError(error);
+      if (error_validation) {
+        return error_validation;
+      }
+
+      const error_fetch = await this.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * @version 2023-08-17
    * @description 로그인 후 리다이렉트
    * @param {Request} request
    */
   async signinWithAuth(request: Request) {
     try {
       const response = await this.signin(request);
-      console.log(response);
-      // const cookie = response.headers.get("set-cookie");
-      // if (!cookie) {
-      //   return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-      //     status: STATUS_CODE.BAD_REQUEST,
-      //   });
-      // }
-      // return redirect(PAGE_ENDPOINTS.ROOT, {
-      //   headers: this.getAuthHeaders(cookie),
-      // });
+      const cookie = response.headers.get("set-cookie");
+      if (!cookie) {
+        return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+          status: STATUS_CODE.BAD_REQUEST,
+        });
+      }
+      return redirect(PAGE_ENDPOINTS.ROOT, {
+        headers: this.getAuthHeaders(cookie),
+      });
     } catch (error) {
-      console.log(error);
       const error_validation = this.readValidateError(error);
       if (error_validation) {
         return error_validation;
       }
-      // const error_http = await HTTPErrorWrapper(error);
-      // if (error_http) {
-      //   return json(error_http.errors, {
-      //     status: error_http.statusCode,
-      //   });
-      // }
-      throw error;
+
+      const error_fetch = await this.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
     }
   }
 
@@ -118,7 +153,7 @@ export class AuthApiService {
 
       return json.result;
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error instanceof FetchError) {
         if ([403, 401].includes(error.response.status)) {
           await this.logout(request);
         }
@@ -188,10 +223,45 @@ export class AuthApiService {
 
   /**
    * @version 2023-08-17
+   * @description error fetch
+   * @param {unknown} error
+   */
+  private async readFetchError(error: unknown) {
+    if (error instanceof FetchError) {
+      const $response = error.response;
+      const data = await $response.json<ErrorAPI>();
+      const checkStatusCode = [
+        STATUS_CODE.BAD_REQUEST,
+        STATUS_CODE.NOT_FOUND,
+      ] as number[];
+
+      if (checkStatusCode.includes($response.status)) {
+        const errorKey = data.error;
+        const errors = data.message;
+        return {
+          statusCode: $response.status,
+          errors: {
+            [errorKey]: isArray(errors) ? errors[0] : errors,
+          },
+        };
+      } else {
+        return {
+          statusCode: $response.status,
+          errors: {
+            error: "알 수 없는 에러가 발생했습니다.",
+          },
+        };
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @version 2023-08-17
    * @description error validation
    * @param {unknown} error
    */
-  private async readValidateError(error: unknown) {
+  private readValidateError(error: unknown) {
     if (error instanceof ZodError) {
       const errors: Record<string, string> = {};
       error.issues.reduce((acc, cur) => {
@@ -201,7 +271,7 @@ export class AuthApiService {
         return acc;
       }, errors);
       return {
-        statusCode: STATUS_CODE.BAD_REQUEST,
+        statusCode: STATUS_CODE.BAD_REQUEST as number,
         errors,
       };
     }

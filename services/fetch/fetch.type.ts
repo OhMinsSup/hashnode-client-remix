@@ -1,6 +1,3 @@
-// types
-import type { FetchOptions } from "ofetch";
-
 export type Nullable<T> = T | null;
 
 export type Body = BodyInit | Record<string, any> | null | undefined;
@@ -32,6 +29,6 @@ export type ApiCustomOptions = {
 
 export type ApiOptions = {
   requestInit?: RequestInit;
-  oFetchOptions?: Omit<FetchOptions<"json">, "method" | "body"> | undefined;
+  request?: Request;
   customOptions?: ApiCustomOptions;
 };

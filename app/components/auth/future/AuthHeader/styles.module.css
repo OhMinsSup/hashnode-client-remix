@@ -6,10 +6,6 @@
   @apply block w-36 text-black;
 }
 
-.logo {
-  @apply dark:text-white;
-}
-
 .logo > svg {
   width: 100%;
   fill: currentColor;

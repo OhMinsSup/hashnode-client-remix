@@ -11,11 +11,17 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   name: string;
 }
 
+interface ActionData {
+  errors: Record<string, string>;
+  statusCode: number;
+}
+
 export default function Input({ id, name, ...otherProps }: InputProps) {
   const $ipt = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
-  const errors = useActionData();
-  const error = errors?.[name];
+  const data = useActionData<ActionData>();
+
+  const error = data?.errors?.[name];
 
   const isSubmitting = useMemo(
     () => navigation.state === "submitting",

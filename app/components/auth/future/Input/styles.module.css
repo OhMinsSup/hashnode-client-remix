@@ -25,14 +25,6 @@
   border-color: rgb(37 99 235 / var(--tw-border-opacity));
 }
 
-.root {
-  @apply dark:border-slate-800 dark:bg-slate-800 dark:text-white;
-}
-
-.root:focus {
-  @apply dark:border-blue-600 dark:bg-slate-800;
-}
-
 .label {
   text-align: center;
   font-weight: 600;
@@ -46,10 +38,6 @@
   line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
-}
-
-.error {
-  @apply dark:text-red-400;
 }
 
 @media (min-width: 768px) {
