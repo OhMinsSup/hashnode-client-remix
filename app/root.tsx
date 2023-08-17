@@ -53,7 +53,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
     API_BASE_URL: ApiService.baseUrl,
   };
   try {
-    const data = await context.api.user.getSession(request);
+    const data = await context.api.auth.getSession(request);
     console.log("data", data);
     const theme = await context.services.theme.getTheme(request);
     return json(

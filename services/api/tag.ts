@@ -5,6 +5,7 @@ import { RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 // types
 import type { Env } from "../env";
 import type { GetTagListApiSearchParams } from "~/api/tags/tags";
+import { parseUrlParams } from "~/utils/util";
 
 export class TagApiService {
   constructor(private readonly env: Env) {}
@@ -45,11 +46,39 @@ export class TagApiService {
     return resp;
   }
 
-  async getTagListByHomePopular(request: Request) {
+  /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (인기 태그 추천 태그)
+   * @param {Request} request
+   * @param {string} type
+   */
+  async getTagsByList(
+    request: Request,
+    type?: "recent" | "popular" | "new" | "trending" | undefined
+  ) {
+    const params = parseUrlParams(request.url);
+    let cursor = undefined;
+    if (params.cursor) {
+      cursor = parseInt(params.cursor);
+    }
+    let limit = undefined;
+    if (params.limit) {
+      limit = parseInt(params.limit);
+    }
+    let name = undefined;
+    if (params.name) {
+      name = params.name;
+    }
+    if (params.type) {
+      type = params.type;
+    }
+
     try {
       const { json: data } = await this.getTagList(request, {
-        type: "popular",
-        limit: 4,
+        cursor,
+        limit,
+        name,
+        type,
       });
 
       const { result, resultCode } = data;

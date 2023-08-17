@@ -26,6 +26,8 @@ export const action = async ({ request, context }: ActionArgs) => {
 
 export const loader = () => redirect("/", { status: 404 });
 
+export const getPath = () => "/action/set-theme";
+
 export default function MarkRead() {
   return <div>Oops... You should not see this.</div>;
 }

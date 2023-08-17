@@ -24,7 +24,7 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const isAuthenticated = await context.api.user.isAuthenticated(request);
+  const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (!isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers: context.api.auth.getClearAuthHeaders(),

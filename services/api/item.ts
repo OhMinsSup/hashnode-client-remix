@@ -12,6 +12,7 @@ import { getLikePostListApi } from "~/api/posts/like-posts.server";
 import { getUserPostListApi } from "~/api/user/user-posts.server";
 import { getMyPostListApi } from "~/api/posts/my-posts.server";
 import { deletePostApi } from "~/api/posts/delete.server";
+import { getTopPostsApi } from "~/api/posts/top-posts.server";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -22,6 +23,7 @@ import type { GetPostListApiSearchParams } from "~/api/posts/posts.server";
 import type { GetLikePostListApiSearchParams } from "~/api/posts/like-posts.server";
 import type { GetUserPostListApiSearchParams } from "~/api/user/user-posts.server";
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
+import type { GetTopPostsApiSearchParams } from "~/api/posts/top-posts.server";
 
 export class ItemApiService {
   constructor(private readonly env: Env) {}
@@ -87,6 +89,17 @@ export class ItemApiService {
     query?: GetPostListApiSearchParams
   ): Promise<ReturnType<typeof getPostListApi>> {
     return await getPostListApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @description 탑 포스트 가져오기
+   * @param {Request} request
+   * @param {GetTopPostsApiSearchParams?} query
+   */
+  async getTopPosts(request: Request, query?: GetTopPostsApiSearchParams) {
+    return await getTopPostsApi(query, {
       request,
     });
   }
@@ -215,8 +228,79 @@ export class ItemApiService {
   }
 
   /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (top posts)
+   * @param {Request} request
+   */
+  async getItemsByTopList(request: Request) {
+    const params = parseUrlParams(request.url);
+    let duration = 7;
+    if (params.duration && isNaN(parseInt(params.duration)) === false) {
+      duration = parseInt(params.duration);
+    }
+
+    try {
+      const { json: data } = await this.getTopPosts(request, {
+        duration,
+      });
+
+      const { result, resultCode } = data;
+      if (resultCode !== RESULT_CODE.OK) {
+        return {
+          posts: [],
+        };
+      }
+
+      return {
+        posts: result.posts,
+      };
+    } catch (error) {
+      return {
+        posts: [],
+      };
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (좋아요)
+   * @param {Request} request
+   */
+  async getItemsByLikeList(request: Request) {
+    const params = parseUrlParams(request.url);
+    let cursor = undefined;
+    if (params.cursor) {
+      cursor = parseInt(params.cursor);
+    }
+    let limit = 25;
+    if (params.limit) {
+      limit = parseInt(params.limit);
+    }
+
+    try {
+      const { json: data } = await this.getLikeItems(request, {
+        cursor,
+        limit,
+      });
+
+      const { result, resultCode } = data;
+      if (resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultItemList();
+      }
+
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultItemList();
+    }
+  }
+
+  /**
    * @version 2023-08-16
-   * @description loader에서 호출 할 때 사용하는 함수
+   * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {Request} request
    * @param {string} type
    */

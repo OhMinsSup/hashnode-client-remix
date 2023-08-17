@@ -90,6 +90,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @description 세션 가져오기
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof getMeApi> | null>}
@@ -128,6 +129,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @description 로그아웃
    * @param {Request} request
    * @returns {Promise<boolean>}
@@ -153,6 +155,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @description 인증 여부
    * @param {Request} request
    * @returns {Promise<boolean>}

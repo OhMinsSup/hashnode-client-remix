@@ -11,6 +11,7 @@ export class WidgetApiService {
   constructor(private readonly env: Env) {}
 
   /**
+   * @deprecated
    * @description 탑 포스트 가져오기
    * @param {Request} request
    * @param {GetTopPostsApiSearchParams?} query
