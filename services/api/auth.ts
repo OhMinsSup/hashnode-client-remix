@@ -7,15 +7,18 @@ import { signinSchema } from "~/api/auth/validation/signin";
 import { signupSchema } from "~/api/auth/validation/signup";
 
 // import { signinApi } from "~/api/auth/signin.server";
-import { logoutApi } from "~/api/user/logout.server";
+// import { logoutApi } from "~/api/user/logout.server";
 // import { signupApi } from "~/api/auth/signup.server";
-import { getMeApi } from "~/api/user/me.server";
+// import { getMeApi } from "~/api/user/me.server";
 
 // import { HTTPError } from "~/api/error";
 
 import { signinApi as $signinApi } from "services/fetch/auth/signin-api.server";
 import { signupApi as $signupApi } from "services/fetch/auth/signup-api.server";
-// import { FetchService } from "services/fetch/fetch.client";
+import { signoutApi as $signoutApi } from "services/fetch/auth/signout-api.server";
+import { getMeApi as $getMeApi } from "services/fetch/users/me-api.server";
+
+import { FetchService } from "services/fetch/fetch.client";
 import { FetchError } from "services/fetch/fetch.error";
 
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
@@ -23,11 +26,47 @@ import { isArray } from "~/utils/assertion";
 
 // types
 import type { Env } from "../env";
-import type { UserRespSchema } from "~/api/schema/resp";
 import type { ErrorAPI } from "services/fetch/fetch.type";
 
 export class AuthApiService {
   constructor(private readonly env: Env) {}
+
+  /**
+   * @version 2023-08-17
+   * @description 세션 가져오기
+   * @param {Request} request
+   */
+  async getSession(request: Request) {
+    const cookie = this.readHeaderCookie(request);
+
+    let accessToken: string | null = null;
+    if (cookie) {
+      const { access_token } = cookies.parse(cookie);
+      if (access_token) accessToken = access_token;
+    }
+
+    if (!accessToken) {
+      return null;
+    }
+
+    try {
+      const response = await $getMeApi({ request });
+      const data =
+        await FetchService.toJson<FetchRespSchema.UserRespSchema>(response);
+      if (data.resultCode !== RESULT_CODE.OK) {
+        return null;
+      }
+
+      return data.result;
+    } catch (error) {
+      if (error instanceof FetchError) {
+        if ([403, 401].includes(error.response.status)) {
+          await this.signout(request);
+        }
+      }
+      return null;
+    }
+  }
 
   /**
    * @version 2023-08-17
@@ -41,7 +80,6 @@ export class AuthApiService {
       password: formData.get("password"),
     };
     const parse = await signinSchema.parseAsync(input);
-    console.log(parse);
     return $signinApi(parse);
   }
 
@@ -60,6 +98,49 @@ export class AuthApiService {
     };
     const parse = await signupSchema.parseAsync(input);
     return $signupApi(omit(parse, ["confirmPassword"]));
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그아웃
+   * @param {Request} request
+   */
+  async signout(request: Request) {
+    const cookie = this.readHeaderCookie(request);
+
+    let accessToken: string | null = null;
+    if (cookie) {
+      const { access_token } = cookies.parse(cookie);
+      if (access_token) accessToken = access_token;
+    }
+
+    if (!accessToken) {
+      return true;
+    }
+
+    try {
+      const response = await $signoutApi({ request });
+      const data = await FetchService.toJson(response);
+      if (data.resultCode !== RESULT_CODE.OK) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그아웃 API
+   * @param {Request} request
+   */
+  async signoutWithAuth(request: Request) {
+    await this.signout(request);
+
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: this.getClearAuthHeaders(),
+    });
   }
 
   /**
@@ -123,69 +204,6 @@ export class AuthApiService {
       }
 
       return null;
-    }
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 세션 가져오기
-   * @param {Request} request
-   * @returns {Promise<ReturnType<typeof getMeApi> | null>}
-   */
-  async getSession(request: Request): Promise<UserRespSchema | null> {
-    const cookie = this.readHeaderCookie(request);
-
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-
-    if (!accessToken) {
-      return null;
-    }
-
-    try {
-      const { json } = await getMeApi({ request });
-      if (json.resultCode !== RESULT_CODE.OK) {
-        return null;
-      }
-
-      return json.result;
-    } catch (error) {
-      if (error instanceof FetchError) {
-        if ([403, 401].includes(error.response.status)) {
-          await this.logout(request);
-        }
-      }
-      return null;
-    }
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 로그아웃
-   * @param {Request} request
-   */
-  async logout(request: Request) {
-    const cookie = this.readHeaderCookie(request);
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-    if (!accessToken) {
-      return true;
-    }
-
-    try {
-      const { json } = await logoutApi({ request });
-      if (json.resultCode !== RESULT_CODE.OK) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      return false;
     }
   }
 

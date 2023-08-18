@@ -9,7 +9,6 @@ import { json, type ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionArgs) => {
   const response = await context.api.auth.signinWithAuth(request);
-  console.log("response", response);
   if (response instanceof Response) return response;
   return json(response);
 };

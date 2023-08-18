@@ -11,7 +11,7 @@ import type { FormFieldValues } from "services/validate/signin-api.validate";
  * @param {FormFieldValues} body
  * @param {ApiOptions?} options
  */
-export async function signinApi(body: FormFieldValues, options?: ApiOptions) {
+export function signinApi(body: FormFieldValues, options?: ApiOptions) {
   return FetchService.post(getPath(), body, options);
 }
 

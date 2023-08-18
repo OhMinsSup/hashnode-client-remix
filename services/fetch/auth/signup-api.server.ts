@@ -10,7 +10,7 @@ import type { FormFieldValues } from "services/validate/signup-api.validate";
  * @param {Omit<FormFieldValues, 'confirmPassword'>} body
  * @param {ApiOptions?} options
  */
-export async function signupApi(
+export function signupApi(
   body: Omit<FormFieldValues, "confirmPassword">,
   options?: ApiOptions
 ) {

@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { json } from "@remix-run/cloudflare";
 import {
   Links,
@@ -14,11 +15,19 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cssBundleHref } from "@remix-run/css-bundle";
 
+import classNames from "classnames";
+import { getDomainUrl, removeTrailingSlash } from "./utils/util";
+
 import NotFoundPage from "./components/errors/NotFoundPage";
 import InternalServerPage from "./components/errors/InternalServerPage";
+import { Body } from "./components/shared/future/Body";
+import {
+  NonFlashOfWrongThemeEls,
+  ThemeProvider,
+  useTheme,
+} from "./context/useThemeContext";
 
 // api
-import { ApiService } from "./api/client";
 import { ASSET_URL } from "./constants/constant";
 
 // styles
@@ -30,15 +39,7 @@ import type {
   LinksFunction,
   V2_MetaFunction,
 } from "@remix-run/cloudflare";
-import { useEffect, useMemo } from "react";
-import { Body } from "./components/shared/future/Body";
-import {
-  NonFlashOfWrongThemeEls,
-  ThemeProvider,
-  useTheme,
-} from "./context/useThemeContext";
-import classNames from "classnames";
-import { getDomainUrl, removeTrailingSlash } from "./utils/util";
+import type { Theme } from "./context/useThemeContext";
 
 export const links: LinksFunction = () => {
   return [
@@ -48,35 +49,49 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  ApiService.setBaseUrl(context.API_BASE_URL || "http://localhost:8080/api/v1");
   const env = {
-    API_BASE_URL: ApiService.baseUrl,
+    API_BASE_URL: context.API_BASE_URL,
   };
+
+  const $object = {
+    currentProfile: null,
+    theme: null,
+    origin: getDomainUrl(request),
+  } as {
+    currentProfile: FetchRespSchema.UserRespSchema | null;
+    env: typeof env;
+    theme: Theme | null;
+    origin: string;
+  };
+
   try {
-    const data = await context.api.auth.getSession(request);
-    const theme = await context.services.theme.getTheme(request);
+    const [session, theme] = await Promise.all([
+      context.api.auth.getSession(request),
+      context.services.theme.getTheme(request),
+    ]);
+
+    const $data = Object.assign({}, $object, {
+      currentProfile: session,
+      theme,
+    });
+
     return json(
-      { currentProfile: data, env, theme, origin: getDomainUrl(request) },
-      data
+      $data,
+      session
         ? undefined
         : {
             headers: context.api.auth.getClearAuthHeaders(),
           }
     );
   } catch (error) {
-    return json({
-      currentProfile: null,
-      env,
-      theme: null,
-      origin: getDomainUrl(request),
-    });
+    return json($object);
   }
 };
 
-export type RootLoader = typeof loader;
+export type Loader = typeof loader;
 
-export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
-  const url = new URL(location.pathname, "http://localhost:8788");
+export const meta: V2_MetaFunction<Loader> = ({ location, data }) => {
+  const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",
     description:
@@ -229,7 +244,7 @@ function Metas() {
 
 function App() {
   const [theme] = useTheme();
-  const data = useLoaderData<RootLoader>();
+  const data = useLoaderData<Loader>();
 
   const client = useMemo(() => {
     return new QueryClient({
@@ -291,7 +306,7 @@ function AppError() {
 }
 
 export default function Routes() {
-  const data = useLoaderData<RootLoader>();
+  const data = useLoaderData<Loader>();
   return (
     <ThemeProvider specifiedTheme={data.theme}>
       <App />

@@ -10,9 +10,6 @@ import { FetchError } from "./fetch.error";
 export class FetchService {
   static baseURL = isBrowser
     ? (function () {
-        if (window.ENV && window.ENV.API_BASE_URL) {
-          return window.ENV?.API_BASE_URL;
-        }
         return "http://localhost:8080";
       })()
     : (function () {

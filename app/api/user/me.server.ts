@@ -9,6 +9,7 @@ import type { BaseApiOptions } from "../client";
 import type { UserRespSchema } from "../schema/resp";
 
 /**
+ * @deprecated
  * @description 유저 API
  * @param {BaseApiOptions?} options
  */
