@@ -1,6 +1,9 @@
 import React from "react";
 
 import { Outlet } from "@remix-run/react";
+import { SettingLayout } from "~/components/setting/future/SettingLayout";
+import { AsideMenus } from "~/components/setting/future/AsideMenus";
+import { MainHeader } from "~/components/shared/future/MainHeader";
 
 // remix
 import { redirect } from "@remix-run/cloudflare";
@@ -8,18 +11,8 @@ import { redirect } from "@remix-run/cloudflare";
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-// styles
-// import settingsStyles from "~/styles/routes/settings.css";
-
 // types
 import type { LoaderArgs } from "@remix-run/cloudflare";
-// import SettingLayout from "~/components/setting/SettingLayout";
-import { SettingLayout } from "~/components/setting/future/SettingLayout";
-import { AsideMenus } from "~/components/setting/future/AsideMenus";
-
-// export const links: LinksFunction = () => {
-//   return [{ rel: "stylesheet", href: settingsStyles }];
-// };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
@@ -35,7 +28,10 @@ export type Loader = typeof loader;
 
 export default function Routes() {
   return (
-    <SettingLayout sidebar={<AsideMenus />}>
+    <SettingLayout
+      sidebar={<AsideMenus />}
+      header={<MainHeader disableScroll />}
+    >
       <Outlet />
     </SettingLayout>
   );
