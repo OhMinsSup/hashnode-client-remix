@@ -32,9 +32,9 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   return null;
 };
 
-export type BookmarksLoader = typeof loader;
+export type Loader = typeof loader;
 
-export const meta: V2_MetaFunction<BookmarksLoader> = ({ data, matches }) => {
+export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
   const Seo = {
     title: "My Items - Hashnode",
     description: "My Items - Hashnode",

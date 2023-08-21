@@ -54,7 +54,7 @@ export const action = async ({ request, context }: ActionArgs) => {
   }
 };
 
-export type UsersIndexLoader = typeof loader;
+export type Loader = typeof loader;
 
 export default function Routes() {
   return <PostsList isMyItemPage />;

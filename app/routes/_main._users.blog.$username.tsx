@@ -8,8 +8,7 @@ import homeListStyle from "~/styles/routes/home-list.css";
 import homeUsersStyles from "~/styles/routes/home-users.css";
 
 // types
-import type { LoaderArgs } from "@remix-run/cloudflare";
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [
@@ -19,19 +18,14 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ context, request, params }: LoaderArgs) => {
-  const username = params.username?.toString();
-  if (!username) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  const { json: data } = await context.api.user.getUser(request, username);
-  return json({
-    userInfo: data?.result,
-  });
+  const response = await context.api.user.usernameByUser(params, request);
+  if (response instanceof Response) throw response;
+  return json(response);
 };
 
-export type MainUserLoader = typeof loader;
+export type Loader = typeof loader;
 
-export default function MainUserPage() {
+export default function Routes() {
   return (
     <div className="relative col-span-7 min-w-0 pb-5 pt-5">
       <div className="content-info-box">

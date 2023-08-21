@@ -37,9 +37,9 @@ export const loader = async ({ request, params, context }: LoaderArgs) => {
   });
 };
 
-export type MainUserPostsIndexLoader = typeof loader;
+export type Loader = typeof loader;
 
-export default function MainUserPostsPage() {
+export default function Routes() {
   return <PostsList />;
 }
 

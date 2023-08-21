@@ -29,7 +29,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
   return null;
 };
 
-export type SettingsLoader = typeof loader;
+export type Loader = typeof loader;
 
 export default function Routes() {
   return (
