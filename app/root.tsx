@@ -257,7 +257,13 @@ function App() {
   }, []);
 
   return (
-    <html lang="en" className={classNames(theme)}>
+    <html
+      id="current-style"
+      lang="en"
+      itemScope
+      itemType="http://schema.org/WebSite"
+      className={classNames(theme)}
+    >
       <head>
         <Metas />
         <CanonicalLink origin={data.origin} />
