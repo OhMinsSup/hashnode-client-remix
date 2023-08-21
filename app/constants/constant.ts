@@ -115,6 +115,7 @@ export const PAGE_ENDPOINTS = {
   },
   SETTINGS: {
     ROOT: "/settings",
+    EMAILS: "/settings/emails",
     ACCOUNT: "/settings/account",
   },
   USERS: {
@@ -176,6 +177,27 @@ export const NAVIGATION_ITEMS = [
     position: ["left"] as string[],
   },
 ] as const;
+
+export const NAVIGATION_USER_MENU_ITEMS = [
+  {
+    id: 1,
+    title: "Profile",
+    href: PAGE_ENDPOINTS.SETTINGS.ROOT,
+    icon: Icons.V2.SettingUser,
+  },
+  {
+    id: 2,
+    title: "Email Notifications",
+    href: PAGE_ENDPOINTS.SETTINGS.EMAILS,
+    icon: Icons.V2.SettingEmail,
+  },
+  {
+    id: 3,
+    title: "Account",
+    href: PAGE_ENDPOINTS.SETTINGS.ACCOUNT,
+    icon: Icons.V2.SettingAccount,
+  },
+];
 
 export const STATUS_CODE = {
   OK: 200,

@@ -9,15 +9,17 @@ import { redirect } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // styles
-import settingsStyles from "~/styles/routes/settings.css";
+// import settingsStyles from "~/styles/routes/settings.css";
 
 // types
-import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
-import SettingLayout from "~/components/setting/SettingLayout";
+import type { LoaderArgs } from "@remix-run/cloudflare";
+// import SettingLayout from "~/components/setting/SettingLayout";
+import { SettingLayout } from "~/components/setting/future/SettingLayout";
+import { AsideMenus } from "~/components/setting/future/AsideMenus";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: settingsStyles }];
-};
+// export const links: LinksFunction = () => {
+//   return [{ rel: "stylesheet", href: settingsStyles }];
+// };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
@@ -33,7 +35,7 @@ export type Loader = typeof loader;
 
 export default function Routes() {
   return (
-    <SettingLayout>
+    <SettingLayout sidebar={<AsideMenus />}>
       <Outlet />
     </SettingLayout>
   );
