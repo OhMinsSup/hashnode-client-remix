@@ -13,7 +13,7 @@ import { json } from "@remix-run/cloudflare";
 import type { ActionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionArgs) => {
-  const response = await context.api.auth.signinWithAuth(request);
+  const response = await context.api.auth.signupWithAuth(request);
   if (response instanceof Response) return response;
   return json(response);
 };
