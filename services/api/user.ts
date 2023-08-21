@@ -8,17 +8,22 @@ import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 import { deleteUserApi as $deleteUserApi } from "services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "services/fetch/users/put-api.server";
+import { getUserApi as $getUserApi } from "services/fetch/users/get-api.server";
 
 import {
   schema as $updateSchema,
-  type FormFieldValues,
+  type FormFieldValues as $UpdateFormFieldValues,
 } from "services/validate/user-update-api.validate";
+
+import { schema as $getSchema } from "services/validate/user-get-api.validate";
 
 // types
 import type { Env } from "../env";
 import type { UserUpdateBody } from "~/api/user/validation/update";
 import type { GetExploreBlogsApiSearchParams } from "~/api/user/explore-blogs.server";
 import type { ServerService } from "services/app/server";
+import type { Params } from "@remix-run/react";
+import { FetchService } from "services/fetch/fetch.client";
 
 export class UserApiService {
   constructor(
@@ -63,32 +68,7 @@ export class UserApiService {
   }
 
   /**
-   * @version 2023-08-17
-   * @description 수정 API
-   * @param {Request} request
-   */
-  async update(request: Request) {
-    const formData = await this.$server.readFormData(request);
-    const bodyString = formData.get("body")?.toString() ?? "{}";
-    const body = Json.parse<FormFieldValues>(bodyString);
-    const input = await $updateSchema.parseAsync(body);
-    return $putUserApi(input, {
-      request,
-    });
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 삭제 API
-   * @param {Request} request
-   */
-  async delete(request: Request) {
-    return $deleteUserApi({
-      request,
-    });
-  }
-
-  /**
+   * @deprecated
    * @description 유저 정보
    * @param {Request} request
    * @param {string} username
@@ -110,6 +90,9 @@ export class UserApiService {
     return resp;
   }
 
+  /**
+   * @deprecated
+   */
   async getExploreBlogs(
     request: Request,
     query?: GetExploreBlogsApiSearchParams
@@ -117,6 +100,65 @@ export class UserApiService {
     return await getExploreBlogsApi(query, {
       request,
     });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 상세 정보 API
+   * @param {Params} params
+   * @param {Request} request
+   */
+  async get(params: Params, request: Request) {
+    const input = await $getSchema.parseAsync(params);
+    return $getUserApi(input.username, {
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 수정 API
+   * @param {Request} request
+   */
+  async update(request: Request) {
+    const formData = await this.$server.readFormData(request);
+    const bodyString = formData.get("body")?.toString() ?? "{}";
+    const body = Json.parse<$UpdateFormFieldValues>(bodyString);
+    const input = await $updateSchema.parseAsync(body);
+    return $putUserApi(input, {
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 삭제 API
+   * @param {Request} request
+   */
+  async delete(request: Request) {
+    return $deleteUserApi({
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 상세
+   * @param {Params} params
+   * @param {Request} request
+   */
+  async usernameByUser(params: Params, request: Request) {
+    try {
+      const response = await this.get(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.UserRespSchema>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return new Response("Not Found", { status: 404 });
+      }
+      return json.result;
+    } catch (error) {
+      return new Response("Not Found", { status: 404 });
+    }
   }
 
   /**
