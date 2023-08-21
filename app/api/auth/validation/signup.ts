@@ -2,6 +2,7 @@ import { z } from "zod";
 
 /**
  * Signup schema
+ * @deprecated
  * @version 1.0.0
  * @description 회원가입 시 사용되는 스키마입니다.
  */

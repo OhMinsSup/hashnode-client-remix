@@ -9,6 +9,7 @@ import type { UserUpdateBody } from "./validation/update";
 import type { BaseApiOptions } from "../client";
 
 /**
+ * @deprecated
  * @description 유저 정보 업데이트 API
  * @param {UserUpdateBody} body
  * @param {BaseApiOptions?} options

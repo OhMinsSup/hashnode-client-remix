@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import Json from "superjson";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userUpdateSchema } from "~/api/user/validation/update";
+import { schema } from "services/validate/user-update-api.validate";
 
 import { useOptionalSession } from "~/api/user/hooks/useSession";
 import { useForm, FormProvider } from "react-hook-form";
@@ -10,7 +10,7 @@ import { useFetcher } from "@remix-run/react";
 
 // types
 import type { SubmitHandler } from "react-hook-form";
-import type { FormFieldValues } from "~/routes/_settings.settings._index";
+import type { FormFieldValues } from "services/validate/user-update-api.validate";
 
 interface SettingFormLayoutProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ export default function SettingFormLayout({
   const session = useOptionalSession();
 
   const methods = useForm({
-    resolver: zodResolver(userUpdateSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: session?.profile?.name ?? "",
       username: session?.username ?? "",

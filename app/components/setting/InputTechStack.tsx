@@ -8,25 +8,26 @@ import ErrorMessage from "../shared/ErrorMessage";
 import { Icons } from "../shared/Icons";
 
 // hooks
-import { useFetcher, useNavigation } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 
-import type { UserUpdateBody } from "~/api/user/validation/update";
-import type { LoadTagsLoader } from "~/routes/_loader._protected.loader.tags[.]json";
+import type { FormFieldValues } from "services/validate/user-update-api.validate";
+import type { Loader } from "~/routes/_loader._protected.loader.tags[.]json";
 import type { TagListRespSchema } from "~/api/schema/resp";
 
 export default function InputTechStack() {
   const [inputValue, setInputValue] = useState("");
-  const fetcher = useFetcher<LoadTagsLoader>();
-  const [isPending, startTransition] = useTransition();
-  const navigation = useNavigation();
+  const fetcher = useFetcher<Loader>();
+  const [, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
+  // const navigation = useNavigation();
 
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
+  // const isSubmitting = useMemo(
+  //   () => navigation.state === "submitting",
+  //   [navigation.state]
+  // );
 
-  const { formState } = useFormContext<UserUpdateBody>();
+  const { formState } = useFormContext<FormFieldValues>();
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +88,7 @@ InputTechStack.Popover = function Popover({
   onReset,
   fetcherData,
 }: PopoverProps) {
-  const { setValue, watch } = useFormContext<UserUpdateBody>();
+  const { setValue, watch } = useFormContext<FormFieldValues>();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const watchSkills = watch("skills") ?? [];
@@ -156,7 +157,7 @@ InputTechStack.Popover = function Popover({
 };
 
 InputTechStack.Tags = function Tags() {
-  const { setValue, watch } = useFormContext<UserUpdateBody>();
+  const { setValue, watch } = useFormContext<FormFieldValues>();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const watchSkills = watch("skills") ?? [];

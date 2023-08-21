@@ -8,6 +8,7 @@ import { API_ENDPOINTS } from "~/constants/constant";
 import type { BaseApiOptions } from "../client";
 
 /**
+ * @deprecated
  * @description 유저 삭제 API
  * @param {BaseApiOptions?} options
  */

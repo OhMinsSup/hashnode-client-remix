@@ -9,6 +9,7 @@ import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
 import { ThemeService } from "./services/app/theme";
+import { ServerService } from "./services/app/server";
 
 import * as build from "@remix-run/dev/server-build";
 
@@ -21,20 +22,26 @@ export const onRequest = createPagesFunctionHandler({
   mode: process.env.NODE_ENV,
   getLoadContext: (context) => {
     const env = EnvSchema.parse(context.env);
+
+    const services = {
+      theme: new ThemeService(env),
+      server: new ServerService(env),
+    };
+
+    const api = {
+      auth: new AuthApiService(env, services.server),
+      user: new UserApiService(env, services.server),
+      item: new ItemApiService(env),
+      widget: new WidgetApiService(env),
+      tag: new TagApiService(env),
+      draft: new DraftApiService(env),
+      file: new FileApiService(env),
+    };
+
     return {
       ...context.env,
-      services: {
-        theme: new ThemeService(env),
-      },
-      api: {
-        auth: new AuthApiService(env),
-        user: new UserApiService(env),
-        item: new ItemApiService(env),
-        widget: new WidgetApiService(env),
-        tag: new TagApiService(env),
-        draft: new DraftApiService(env),
-        file: new FileApiService(env),
-      },
+      services,
+      api,
     };
   },
 });

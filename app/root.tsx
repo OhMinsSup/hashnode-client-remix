@@ -80,7 +80,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
       session
         ? undefined
         : {
-            headers: context.api.auth.getClearAuthHeaders(),
+            headers: context.services.server.getClearAuthHeaders(),
           }
     );
   } catch (error) {

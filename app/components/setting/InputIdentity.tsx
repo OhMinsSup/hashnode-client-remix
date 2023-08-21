@@ -4,7 +4,8 @@ import { useFormContext } from "react-hook-form";
 import ErrorMessage from "../shared/ErrorMessage";
 
 import { useNavigation } from "@remix-run/react";
-import type { UserUpdateBody } from "~/api/user/validation/update";
+
+import type { FormFieldValues } from "services/validate/user-update-api.validate";
 
 interface InputIdentityProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -21,7 +22,7 @@ export default function InputIdentity({
   name,
   ...otherPros
 }: InputIdentityProps) {
-  const { register, formState } = useFormContext<UserUpdateBody>();
+  const { register, formState } = useFormContext<FormFieldValues>();
 
   const navigation = useNavigation();
 

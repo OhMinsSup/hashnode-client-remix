@@ -2,6 +2,7 @@ import type { ItemApiService } from "services/api/item";
 import type { AuthApiService } from "./services/api/auth";
 import type { UserApiService } from "./services/api/user";
 import type { ThemeService } from "./services/app/theme";
+import type { ServerService } from "./services/app/server";
 import type { Env } from "./services/env";
 import type { TagApiService } from "./services/api/tag";
 import type { WidgetApiService } from "./services/api/widget";
@@ -20,6 +21,7 @@ declare module "@remix-run/server-runtime" {
     COOKIE_SESSION_SECRET: Env["COOKIE_SESSION_SECRET"];
     services: {
       theme: ThemeService;
+      server: ServerService;
     };
     api: {
       auth: AuthApiService;

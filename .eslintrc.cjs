@@ -7,5 +7,6 @@ module.exports = {
   ],
   rules: {
     "react/display-name": "off",
+    "no-useless-constructor": "off",
   },
 };

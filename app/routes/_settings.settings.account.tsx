@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
-import { redirect } from "@remix-run/cloudflare";
-import { actionErrorWrapper } from "~/api/validation/errorWrapper";
+import { json } from "@remix-run/cloudflare";
 
 // hooks
 import { useOptionalSession } from "~/api/user/hooks/useSession";
@@ -9,9 +8,6 @@ import {
   useFetcher,
   useRouteError,
 } from "@remix-run/react";
-
-// constants
-import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
@@ -50,18 +46,9 @@ export const meta: V2_MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionArgs) => {
-  const actionFn = async () => {
-    const { json } = await context.api.user.deleteUser(request);
-    if (json.resultCode !== RESULT_CODE.OK) {
-      return redirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT, {
-        status: STATUS_CODE.BAD_REQUEST,
-      });
-    }
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers: context.api.auth.getClearAuthHeaders(),
-    });
-  };
-  return actionErrorWrapper(actionFn);
+  const response = await context.api.user.deleteByUser(request);
+  if (response instanceof Response) return response;
+  return json(response);
 };
 
 export default function Routes() {

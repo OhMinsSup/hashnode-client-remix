@@ -1,32 +1,38 @@
-import cookies from "cookie";
 import Json from "superjson";
 import { redirect } from "@remix-run/cloudflare";
-import { getMeApi } from "~/api/user/me.server";
-import { logoutApi } from "~/api/user/logout.server";
-import { deleteUserApi } from "~/api/user/delete.server";
-import { putUserApi } from "~/api/user/update.server";
+
 import { getUserApi } from "~/api/user/user.server";
 import { getExploreBlogsApi } from "~/api/user/explore-blogs.server";
 import { userUpdateSchema } from "~/api/user/validation/update";
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
-import { HTTPError } from "~/api/error";
+
+import { deleteUserApi as $deleteUserApi } from "services/fetch/users/delete-api.server";
+import { putUserApi as $putUserApi } from "services/fetch/users/put-api.server";
+
+import {
+  schema as $updateSchema,
+  type FormFieldValues,
+} from "services/validate/user-update-api.validate";
 
 // types
 import type { Env } from "../env";
-import type { UserRespSchema } from "~/api/schema/resp";
 import type { UserUpdateBody } from "~/api/user/validation/update";
 import type { GetExploreBlogsApiSearchParams } from "~/api/user/explore-blogs.server";
+import type { ServerService } from "services/app/server";
 
 export class UserApiService {
-  constructor(private readonly env: Env) {}
+  constructor(
+    private readonly $env: Env,
+    private readonly $server: ServerService
+  ) {}
 
   /**
+   * @deprecated
    * @description 유저 정보 수정
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof putUserApi>>}
    */
-  async updateUser(request: Request): Promise<ReturnType<typeof putUserApi>> {
-    const formData = await this.readFormData(request);
+  async updateUser(request: Request) {
+    const formData = await this.$server.readFormData(request);
     const bodyString = formData.get("body")?.toString();
     if (!bodyString) {
       throw redirect(PAGE_ENDPOINTS.SETTINGS.ROOT, {
@@ -35,25 +41,49 @@ export class UserApiService {
     }
     const jsonData = Json.parse<UserUpdateBody>(bodyString);
     const input = await userUpdateSchema.parseAsync(jsonData);
-    return await putUserApi(input, {
+    return await $putUserApi(input, {
       request,
     });
   }
 
   /**
+   * @deprecated
    * @description 유저 회원탈퇴
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof deleteUserApi>>}
    */
-  async deleteUser(
-    request: Request
-  ): Promise<ReturnType<typeof deleteUserApi>> {
+  async deleteUser(request: Request) {
     if (request.method !== "DELETE") {
       throw redirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT, {
         status: STATUS_CODE.METHOD_NOT_ALLOED,
       });
     }
-    return await deleteUserApi({
+    return await $deleteUserApi({
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 수정 API
+   * @param {Request} request
+   */
+  async update(request: Request) {
+    const formData = await this.$server.readFormData(request);
+    const bodyString = formData.get("body")?.toString() ?? "{}";
+    const body = Json.parse<FormFieldValues>(bodyString);
+    const input = await $updateSchema.parseAsync(body);
+    return $putUserApi(input, {
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 삭제 API
+   * @param {Request} request
+   */
+  async delete(request: Request) {
+    return $deleteUserApi({
       request,
     });
   }
@@ -90,87 +120,55 @@ export class UserApiService {
   }
 
   /**
-   * @deprecated
-   * @description 세션 가져오기
+   * @version 2023-08-17
+   * @description 유저 탈퇴
    * @param {Request} request
-   * @returns {Promise<ReturnType<typeof getMeApi> | null>}
    */
-  async getSession(request: Request): Promise<UserRespSchema | null> {
-    const cookie =
-      request.headers.get("Cookie") ||
-      request.headers.get("Set-Cookie") ||
-      null;
-
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-
-    if (!accessToken) {
-      return null;
-    }
+  async deleteByUser(request: Request) {
+    this.$server.readValidateMethod(
+      request,
+      "DELETE",
+      PAGE_ENDPOINTS.SETTINGS.ROOT
+    );
 
     try {
-      const { json } = await getMeApi({ request });
-      if (json.resultCode !== RESULT_CODE.OK) {
-        return null;
+      await this.delete(request);
+
+      return redirect(PAGE_ENDPOINTS.ROOT, {
+        headers: this.$server.getClearAuthHeaders(),
+      });
+    } catch (error) {
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
       }
 
-      return json.result;
-    } catch (error) {
-      if (error instanceof HTTPError) {
-        if ([403, 401].includes(error.response.status)) {
-          await logoutApi().catch((e) => null);
-        }
-      }
       return null;
     }
   }
 
   /**
-   * @deprecated
-   * @description 로그아웃
+   * @version 2023-08-17
+   * @description 유저 수정
    * @param {Request} request
-   * @returns {Promise<boolean>}
    */
-  async logout(request: Request): Promise<boolean> {
-    const cookie =
-      request.headers.get("Cookie") ||
-      request.headers.get("Set-Cookie") ||
-      null;
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-    if (!accessToken) {
-      return true;
-    }
-    const { json } = await logoutApi({ request });
-    if (json.resultCode !== RESULT_CODE.OK) {
-      return false;
-    }
-    return true;
-  }
+  async updateByUser(request: Request) {
+    try {
+      await this.update(request);
 
-  /**
-   * @deprecated
-   * @description 인증 여부
-   * @param {Request} request
-   * @returns {Promise<boolean>}
-   */
-  async isAuthenticated(request: Request): Promise<boolean> {
-    const session = await this.getSession(request);
-    return !!session;
-  }
+      return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT);
+    } catch (error) {
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        return error_validation;
+      }
 
-  /**
-   * @description FormData 읽기
-   * @param {Request} request
-   * @returns {Promise<FormData>}
-   */
-  private async readFormData(request: Request): Promise<FormData> {
-    return await request.formData();
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
+    }
   }
 }

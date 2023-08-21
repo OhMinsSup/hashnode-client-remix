@@ -4,7 +4,8 @@ import ErrorMessage from "../shared/ErrorMessage";
 
 import { useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
-import type { UserUpdateBody } from "~/api/user/validation/update";
+
+import type { FormFieldValues } from "services/validate/user-update-api.validate";
 
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -19,7 +20,7 @@ export default function Textarea({
   className,
   ...otherPros
 }: TextareaProps) {
-  const { register, formState } = useFormContext<UserUpdateBody>();
+  const { register, formState } = useFormContext<FormFieldValues>();
 
   const navigation = useNavigation();
 

@@ -2,6 +2,7 @@ import { z } from "zod";
 
 /**
  * Signin schema
+ * @deprecated
  * @version 1.0.0
  * @description 로그인 시 사용되는 스키마입니다.
  */

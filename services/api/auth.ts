@@ -1,17 +1,9 @@
 import cookies from "cookie";
 import omit from "lodash-es/omit";
-import { ZodError } from "zod";
 import { redirect } from "@remix-run/cloudflare";
 
-import { signinSchema } from "~/api/auth/validation/signin";
-import { signupSchema } from "~/api/auth/validation/signup";
-
-// import { signinApi } from "~/api/auth/signin.server";
-// import { logoutApi } from "~/api/user/logout.server";
-// import { signupApi } from "~/api/auth/signup.server";
-// import { getMeApi } from "~/api/user/me.server";
-
-// import { HTTPError } from "~/api/error";
+import { schema as $signinSchema } from "services/validate/signin-api.validate";
+import { schema as $signupSchema } from "services/validate/signup-api.validate";
 
 import { signinApi as $signinApi } from "services/fetch/auth/signin-api.server";
 import { signupApi as $signupApi } from "services/fetch/auth/signup-api.server";
@@ -22,14 +14,16 @@ import { FetchService } from "services/fetch/fetch.client";
 import { FetchError } from "services/fetch/fetch.error";
 
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
-import { isArray } from "~/utils/assertion";
 
 // types
 import type { Env } from "../env";
-import type { ErrorAPI } from "services/fetch/fetch.type";
+import type { ServerService } from "services/app/server";
 
 export class AuthApiService {
-  constructor(private readonly env: Env) {}
+  constructor(
+    private readonly $env: Env,
+    private readonly $server: ServerService
+  ) {}
 
   /**
    * @version 2023-08-17
@@ -37,7 +31,7 @@ export class AuthApiService {
    * @param {Request} request
    */
   async getSession(request: Request) {
-    const cookie = this.readHeaderCookie(request);
+    const cookie = this.$server.readHeaderCookie(request);
 
     let accessToken: string | null = null;
     if (cookie) {
@@ -74,12 +68,12 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signin(request: Request) {
-    const formData = await this.readFormData(request);
+    const formData = await this.$server.readFormData(request);
     const input = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    const parse = await signinSchema.parseAsync(input);
+    const parse = await $signinSchema.parseAsync(input);
     return $signinApi(parse);
   }
 
@@ -89,14 +83,14 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signup(request: Request) {
-    const formData = await this.readFormData(request);
+    const formData = await this.$server.readFormData(request);
     const input = {
       username: formData.get("username"),
       email: formData.get("email"),
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
     };
-    const parse = await signupSchema.parseAsync(input);
+    const parse = await $signupSchema.parseAsync(input);
     return $signupApi(omit(parse, ["confirmPassword"]));
   }
 
@@ -106,7 +100,7 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signout(request: Request) {
-    const cookie = this.readHeaderCookie(request);
+    const cookie = this.$server.readHeaderCookie(request);
 
     let accessToken: string | null = null;
     if (cookie) {
@@ -139,7 +133,7 @@ export class AuthApiService {
     await this.signout(request);
 
     return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers: this.getClearAuthHeaders(),
+      headers: this.$server.getClearAuthHeaders(),
     });
   }
 
@@ -158,15 +152,15 @@ export class AuthApiService {
         });
       }
       return redirect(PAGE_ENDPOINTS.ROOT, {
-        headers: this.getAuthHeaders(cookie),
+        headers: this.$server.getAuthHeaders(cookie),
       });
     } catch (error) {
-      const error_validation = this.readValidateError(error);
+      const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         return error_validation;
       }
 
-      const error_fetch = await this.readFetchError(error);
+      const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         return error_fetch;
       }
@@ -190,15 +184,15 @@ export class AuthApiService {
         });
       }
       return redirect(PAGE_ENDPOINTS.ROOT, {
-        headers: this.getAuthHeaders(cookie),
+        headers: this.$server.getAuthHeaders(cookie),
       });
     } catch (error) {
-      const error_validation = this.readValidateError(error);
+      const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         return error_validation;
       }
 
-      const error_fetch = await this.readFetchError(error);
+      const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         return error_fetch;
       }
@@ -215,108 +209,5 @@ export class AuthApiService {
   async isAuthenticated(request: Request) {
     const session = await this.getSession(request);
     return !!session;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 쿠키 읽기
-   * @param {Request} request
-   */
-  private readHeaderCookie(request: Request) {
-    const cookie =
-      request.headers.get("Cookie") ||
-      request.headers.get("Set-Cookie") ||
-      null;
-    return cookie;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description FormData 읽기
-   * @param {Request} request
-   */
-  private async readFormData(request: Request) {
-    return await request.formData();
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description error fetch
-   * @param {unknown} error
-   */
-  private async readFetchError(error: unknown) {
-    if (error instanceof FetchError) {
-      const $response = error.response;
-      const data = await $response.json<ErrorAPI>();
-      const checkStatusCode = [
-        STATUS_CODE.BAD_REQUEST,
-        STATUS_CODE.NOT_FOUND,
-      ] as number[];
-
-      if (checkStatusCode.includes($response.status)) {
-        const errorKey = data.error;
-        const errors = data.message;
-        return {
-          statusCode: $response.status,
-          errors: {
-            [errorKey]: isArray(errors) ? errors[0] : errors,
-          },
-        };
-      } else {
-        return {
-          statusCode: $response.status,
-          errors: {
-            error: "알 수 없는 에러가 발생했습니다.",
-          },
-        };
-      }
-    }
-    return null;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description error validation
-   * @param {unknown} error
-   */
-  private readValidateError(error: unknown) {
-    if (error instanceof ZodError) {
-      const errors: Record<string, string> = {};
-      error.issues.reduce((acc, cur) => {
-        const key = cur.path.at(0);
-        if (!key) return acc;
-        acc[key] = cur.message;
-        return acc;
-      }, errors);
-      return {
-        statusCode: STATUS_CODE.BAD_REQUEST as number,
-        errors,
-      };
-    }
-    return null;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 로그인 쿠키 생성
-   * @param {string} cookieValue
-   */
-  getAuthHeaders(cookieValue: string) {
-    const headers = new Headers();
-    headers.append("Set-Cookie", cookieValue);
-    return headers;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 로그아웃 쿠키 생성
-   */
-  getClearAuthHeaders() {
-    const headers = new Headers();
-    headers.append(
-      "Set-Cookie",
-      "access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-    );
-    return headers;
   }
 }

@@ -9,12 +9,12 @@ import { useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
 
-import type { UserUpdateBody } from "~/api/user/validation/update";
+import type { FormFieldValues } from "services/validate/user-update-api.validate";
 
 interface ProfileImageProps {}
 
 export default function InputProfileImage(props: ProfileImageProps) {
-  const { setValue, watch, formState } = useFormContext<UserUpdateBody>();
+  const { setValue, watch, formState } = useFormContext<FormFieldValues>();
 
   const navigation = useNavigation();
 

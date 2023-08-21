@@ -1,5 +1,5 @@
-import { redirect } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
+import { json } from "@remix-run/cloudflare";
+
 import Input from "~/components/setting/Input";
 import Textarea from "~/components/setting/Textarea";
 import AvailableCount from "~/components/setting/AvailableCount";
@@ -8,15 +8,11 @@ import InputTechStack from "~/components/setting/InputTechStack";
 import InputProfileImage from "~/components/setting/InputProfileImage";
 import SettingFormLayout from "~/components/setting/SettingFormLayout";
 
-// api
-import { actionErrorWrapper } from "~/api/validation/errorWrapper";
-
 // hooks
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-import type { UserUpdateBody } from "~/api/user/validation/update";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {
@@ -52,21 +48,12 @@ export const meta: V2_MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionArgs) => {
-  const actionFn = async () => {
-    const { json } = await context.api.user.updateUser(request);
-    if (json.resultCode !== RESULT_CODE.OK) {
-      return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT, {
-        status: STATUS_CODE.BAD_REQUEST,
-      });
-    }
-    return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT);
-  };
-  return actionErrorWrapper(actionFn);
+  const response = await context.api.user.updateByUser(request);
+  if (response instanceof Response) return response;
+  return json(response);
 };
 
-export type SettingAction = typeof action;
-
-export type FormFieldValues = UserUpdateBody;
+export type Action = typeof action;
 
 export default function Routes() {
   return (
