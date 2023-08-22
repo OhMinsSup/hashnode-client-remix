@@ -18,7 +18,7 @@ export const action = async ({ request, context }: ActionArgs) => {
   });
   const formData = await parseMultipartFormData(request, uploadHandler);
   const file = formData.get("file");
-  console.log(file);
+  console.log((file as File).name);
   return json({
     ok: true,
   });

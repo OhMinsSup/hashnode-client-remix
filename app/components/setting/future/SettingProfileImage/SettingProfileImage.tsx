@@ -72,6 +72,7 @@ export default function SettingProfileImage(props: SettingProfileImageProps) {
       fetcher.submit(formData, {
         method: "POST",
         action: getPath(),
+        encType: "multipart/form-data",
       });
     },
     [fetcher]
