@@ -14,7 +14,7 @@ import {
   schema as $updateSchema,
   type FormFieldValues as $UpdateFormFieldValues,
 } from "services/validate/user-update-api.validate";
-
+import { FetchService } from "services/fetch/fetch.client";
 import { schema as $getSchema } from "services/validate/user-get-api.validate";
 
 // types
@@ -23,7 +23,6 @@ import type { UserUpdateBody } from "~/api/user/validation/update";
 import type { GetExploreBlogsApiSearchParams } from "~/api/user/explore-blogs.server";
 import type { ServerService } from "services/app/server";
 import type { Params } from "@remix-run/react";
-import { FetchService } from "services/fetch/fetch.client";
 
 export class UserApiService {
   constructor(

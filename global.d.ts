@@ -63,7 +63,8 @@ declare namespace FetchSchema {
 
   export interface TagListQuery extends PaginationQuery {
     name?: string;
-    type?: "popular" | "recent";
+    type?: "recent" | "popular" | "new" | "trending";
+    category?: "week" | "all" | "month" | "year";
   }
 
   export interface PostListQuery extends PaginationQuery {
