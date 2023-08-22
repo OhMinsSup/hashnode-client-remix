@@ -1,6 +1,9 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { SettingInput } from "~/components/setting/future/SettingInput";
+import { SettingTextarea } from "~/components/setting/future/SettingTextarea";
+import { SettingInputIdentity } from "~/components/setting/future/SettingInputIdentity";
+import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
 
 export default function SettingUserArea() {
   return (
@@ -39,22 +42,23 @@ export default function SettingUserArea() {
             </div>
             <h4 className={styles.title}>About You</h4>
             <div className="mb-6">
-              {/* <Textarea
-              id="moreAboutYou"
-              name="bio"
-              text="Profile Bio (About you)"
-              placeholder="I am a developer from …"
-            /> */}
+              <SettingTextarea
+                id="moreAboutYou"
+                name="bio"
+                text="Profile Bio (About you)"
+                placeholder="I am a developer from …"
+              />
             </div>
-            <div className="mb-6">{/* <InputTechStack /> */}</div>
             <div className="mb-6">
-              {/* <Textarea
-              id="availableFor"
-              text="Available for"
-              name="availableText"
-              placeholder="I am available for mentoring, …"
-            />
-            <AvailableCount /> */}
+              <SettingInputTechStack />
+            </div>
+            <div className="mb-6">
+              <SettingTextarea
+                id="availableFor"
+                text="Available for"
+                name="availableText"
+                placeholder="I am available for mentoring, …"
+              />
             </div>
           </div>
           <div className="w-full lg:w-1/2">
@@ -112,24 +116,24 @@ export default function SettingUserArea() {
               Profile Identity
             </h4>
             <div className="mb-6">
-              {/* <InputIdentity
-              type="text"
-              id="username"
-              name="username"
-              text="username"
-              desc="You can change username once. This is the last chance."
-            /> */}
+              <SettingInputIdentity
+                type="text"
+                id="username"
+                name="username"
+                text="username"
+                desc="You can change username once. This is the last chance."
+              />
             </div>
             <div className="mb-6">
-              {/* <InputIdentity
-              type="email"
-              id="email"
-              name="email"
-              text="Email address"
-              desc={`Changing your email address might break your OAuth sign-in if your
+              <SettingInputIdentity
+                type="email"
+                id="email"
+                name="email"
+                text="Email address"
+                desc={`Changing your email address might break your OAuth sign-in if your
               social media accounts do not use the same email address. Please
               use magic link sign-in if you encounter such an issue.`}
-            /> */}
+              />
             </div>
           </div>
         </div>

@@ -1,0 +1,7 @@
+.popover {
+  @apply absolute top-[100] right-0 w-full h-auto bg-white dark:bg-slate-950 rounded-lg shadow-lg z-10;
+}
+
+.popover_item {
+  @apply px-4 py-2 flex flex-row items-center dark:text-slate-300 font-medium hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-700  text-slate-900;
+}
