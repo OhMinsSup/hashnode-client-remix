@@ -29,11 +29,10 @@ AsideMenus.Menu = function AsideMenu({ item }: AsideMenuProps) {
       to={item.href}
       end
       className={({ isActive }) => {
-        console.log(isActive);
-        return cn(styles.menu, {
-          menu_active: isActive,
-          menu_default: !isActive,
-        });
+        return cn(
+          styles.menu,
+          isActive ? styles.menu_active : styles.menu_default
+        );
       }}
     >
       <item.icon className={styles.menu_icon} />

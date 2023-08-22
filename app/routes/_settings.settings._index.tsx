@@ -13,6 +13,8 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
+import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {
@@ -57,8 +59,9 @@ export type Action = typeof action;
 
 export default function Routes() {
   return (
-    <SettingFormLayout>
-      <div className="flex flex-row flex-wrap">
+    <SettingUserForm>
+      <SettingUserArea />
+      {/* <div className="flex flex-row flex-wrap">
         <div className="w-full lg:w-1/2 lg:pr-10">
           <h4 className="mb-5 text-xl font-bold text-slate-900">Basic Info</h4>
           <div className="mb-6">
@@ -195,8 +198,8 @@ export default function Routes() {
         <button className="btn-submit" type="submit">
           Update
         </button>
-      </div>
-    </SettingFormLayout>
+      </div> */}
+    </SettingUserForm>
   );
 }
 

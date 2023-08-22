@@ -1,5 +1,5 @@
 .title {
-  @apply p-4 mb-2 bg-white border rounded-lg dark:text-slate-100 dark:bg-slate-950 dark:border-slate-800/80;
+  @apply p-4 mb-2 bg-white text-slate-950 border rounded-lg dark:text-slate-100 dark:bg-slate-950 dark:border-slate-800/80;
 }
 
 .menus {

@@ -7,7 +7,11 @@ import { optimizeAnimation } from "~/utils/util";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { getTargetElement, getWindowScrollTop } from "~/libs/browser-utils";
 
-export default function MainHeader() {
+interface MainHeaderProps {
+  disableScroll?: boolean;
+}
+
+export default function MainHeader({ disableScroll }: MainHeaderProps) {
   const ref = useRef<HTMLElement>(null);
   const [translateY, setTranslateY] = useState(0);
   const [, setOpen] = useState(false);
@@ -53,7 +57,11 @@ export default function MainHeader() {
     <header
       className={styles.root}
       style={{
-        transform: `translateY(${translateY}px)`,
+        ...(disableScroll
+          ? {
+              position: "relative",
+            }
+          : { transform: `translateY(${translateY}px)` }),
       }}
       ref={ref}
     >
@@ -64,7 +72,7 @@ export default function MainHeader() {
             <Logo onOpen={onOpen} />
           </div>
           <div className={styles.header__layout__navigation}>
-            <MainHeaderNavigation />
+            {disableScroll ? null : <MainHeaderNavigation />}
           </div>
           <div className={styles.header__layout__menu}>
             <MainHeaderMenu />
