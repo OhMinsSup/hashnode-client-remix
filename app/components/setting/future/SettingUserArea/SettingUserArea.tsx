@@ -4,6 +4,7 @@ import { SettingInput } from "~/components/setting/future/SettingInput";
 import { SettingTextarea } from "~/components/setting/future/SettingTextarea";
 import { SettingInputIdentity } from "~/components/setting/future/SettingInputIdentity";
 import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
+import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
 
 export default function SettingUserArea() {
   return (
@@ -30,7 +31,9 @@ export default function SettingUserArea() {
                 placeholder="Software Developer @ …"
               />
             </div>
-            <div className="mb-6">{/* 이미지 */}</div>
+            <div className="mb-6">
+              <SettingProfileImage />
+            </div>
             <div className="mb-6">
               <SettingInput
                 type="text"

@@ -17,6 +17,11 @@ export const action = async ({ request, context }: ActionArgs) => {
     maxPartSize: 500_000,
   });
   const formData = await parseMultipartFormData(request, uploadHandler);
+  const file = formData.get("file");
+  console.log(file);
+  return json({
+    ok: true,
+  });
   // const uploadHandler = createMemoryUploadHandler();
   // return actionErrorWrapper(async () => {
   //   const { json: data } = await context.api.file.uploadFile(request);
