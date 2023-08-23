@@ -253,4 +253,40 @@ declare namespace FetchRespSchema {
 
   export interface GetWidgetBookmarksRespSchema
     extends Array<GetWidgetBookmarkRespSchema> {}
+
+  export type CfUploadResp = {
+    result: {
+      id: string;
+      metadata: Record<string, string>;
+      uploaded: string;
+      requireSignedURLs: boolean;
+      variants: string[];
+      draft: boolean;
+    };
+    success: boolean;
+    errors: Array<{
+      code: number;
+      message: string;
+    }>;
+    messages: Array<{
+      code: number;
+      message: string;
+    }>;
+  };
+
+  export type CfDirectUploadResp = {
+    errors: Array<{
+      code: number;
+      message: string;
+    }>;
+    messages: Array<{
+      code: number;
+      message: string;
+    }>;
+    result: {
+      id: string;
+      uploadURL: string;
+    };
+    success: boolean;
+  };
 }

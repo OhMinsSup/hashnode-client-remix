@@ -1,16 +1,8 @@
-import React, { useCallback } from "react";
-import { json } from "@remix-run/cloudflare";
-import { Account } from "~/components/setting/future/Account";
-
 // hooks
-import {
-  isRouteErrorResponse,
-  useFetcher,
-  useRouteError,
-} from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type { V2_MetaFunction } from "@remix-run/cloudflare";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {
@@ -45,31 +37,8 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export const action = async ({ context, request }: ActionArgs) => {
-  const response = await context.api.user.deleteByUser(request);
-  if (response instanceof Response) return response;
-  return json(response);
-};
-
-export type Action = typeof action;
-
 export default function Routes() {
-  const fetcher = useFetcher<Action>();
-
-  const onDeleteAccount = useCallback(() => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete your account?"
-    );
-
-    if (!confirmDelete) return;
-
-    fetcher.submit(null, {
-      method: "DELETE",
-      replace: true,
-    });
-  }, [fetcher]);
-
-  return <Account onDeleteAccount={onDeleteAccount} />;
+  return <></>;
 }
 
 export function ErrorBoundary() {

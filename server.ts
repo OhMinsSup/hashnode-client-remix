@@ -1,6 +1,8 @@
 import { logDevReady } from "@remix-run/cloudflare";
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
+
 import { EnvSchema } from "./services/env";
+
 import { AuthApiService } from "./services/api/auth";
 import { UserApiService } from "./services/api/user";
 import { ItemApiService } from "./services/api/item";
@@ -8,16 +10,19 @@ import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
+
 import { ThemeService } from "./services/app/theme";
 import { ServerService } from "./services/app/server";
 
 import * as build from "@remix-run/dev/server-build";
 
+import type { RuntimeEnv } from "./cloudflare";
+
 if (process.env.NODE_ENV === "development") {
   logDevReady(build);
 }
 
-export const onRequest = createPagesFunctionHandler({
+export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
   build,
   mode: process.env.NODE_ENV,
   getLoadContext: (context) => {

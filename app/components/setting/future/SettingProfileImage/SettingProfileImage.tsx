@@ -1,46 +1,20 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
 import styles from "./styles.module.css";
 
 // hooks
-import { useFetcher, useNavigation } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
-import { useImageUploadMutation } from "~/api/files/hooks/useImageUploadMutation";
-
+import { Icons } from "~/components/shared/Icons";
 import { getPath } from "~/routes/_action._protected.action.upload";
 
 import type { FormFieldValues } from "services/validate/user-update-api.validate";
-import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
-import { Icons } from "~/components/shared/Icons";
 import type { Action } from "~/routes/_action._protected.action.upload";
 
 interface SettingProfileImageProps {}
 
 export default function SettingProfileImage(props: SettingProfileImageProps) {
   const fetcher = useFetcher<Action>();
-  const { setValue, watch, formState } = useFormContext<FormFieldValues>();
-
-  const navigation = useNavigation();
-
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
-
-  const { isLoading, mutate } = useImageUploadMutation({
-    onSuccess: (data) => {
-      const { result } = data.json;
-      setValue("avatarUrl", result.url, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    },
-    onError: () => {
-      setValue("avatarUrl", undefined, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    },
-  });
+  const { setValue } = useFormContext<FormFieldValues>();
 
   const onImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,25 +23,10 @@ export default function SettingProfileImage(props: SettingProfileImageProps) {
         throw new Error("No file selected");
       }
 
-      const objectUrl = URL.createObjectURL(file);
-      // validation checj file sizes 1600 x 800 px
-      const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = (e) => reject(e);
-        img.src = objectUrl;
-      });
-
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-      }
-
-      if (image.width > 1600 || image.height > 800) {
-        throw new Error("Image size is too small");
-      }
-
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("uploadType", "PROFILE");
+      formData.append("mediaType", "IMAGE");
 
       fetcher.submit(formData, {
         method: "POST",
@@ -79,35 +38,37 @@ export default function SettingProfileImage(props: SettingProfileImageProps) {
   );
 
   const onImageDelete = useCallback(() => {
+    fetcher.submit(
+      {},
+      {
+        method: "POST",
+        action: getPath(),
+        encType: "multipart/form-data",
+      }
+    );
     setValue("avatarUrl", undefined, {
       shouldValidate: true,
       shouldDirty: true,
     });
-  }, [setValue]);
-
-  const watchAvatarUrl = watch("avatarUrl");
+  }, [fetcher, setValue]);
 
   return (
     <>
       <label htmlFor="file" className="input-label">
         Profile Photo
       </label>
-      <SettingProfileImage.Pending onChange={onImageUpload} />
-      {/* {isLoading && <SettingProfileImage.Loading />}
-      {!isLoading && watchAvatarUrl && (
+      {fetcher.state === "idle" && fetcher.data == null ? (
+        <SettingProfileImage.Pending onChange={onImageUpload} />
+      ) : null}
+      {fetcher.state === "loading" || fetcher.state === "submitting" ? (
+        <SettingProfileImage.Loading />
+      ) : null}
+      {fetcher.state === "idle" && fetcher.data != null ? (
         <SettingProfileImage.Success
-          url={watchAvatarUrl}
+          urls={fetcher.data.result?.variants ?? []}
           onDelete={onImageDelete}
         />
-      )}
-      {!isLoading && !watchAvatarUrl && (
-        <SettingProfileImage.Pending onChange={onImageUpload} />
-      )}
-      <ErrorMessage
-        isSubmitting={isSubmitting}
-        errors={formState.errors}
-        name="avatarUrl"
-      /> */}
+      ) : null}
     </>
   );
 }
@@ -153,14 +114,25 @@ SettingProfileImage.Loading = function Loading() {
 };
 
 interface SuccessProps {
-  url: string;
+  urls: string[];
   onDelete?: () => void;
 }
 
 SettingProfileImage.Success = function Success({
-  url,
+  urls,
   onDelete,
 }: SuccessProps) {
+  const { setValue, watch } = useFormContext<FormFieldValues>();
+
+  const url = watch("avatarUrl");
+
+  useEffect(() => {
+    const first = urls.at(0);
+    if (first) {
+      setValue("avatarUrl", first, { shouldValidate: true, shouldDirty: true });
+    }
+  }, [urls]);
+
   return (
     <div className="relative block h-40 w-40 rounded-full bg-slate-100 shadow-xl">
       <a

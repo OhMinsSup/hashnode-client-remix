@@ -1,20 +1,13 @@
 import { json } from "@remix-run/cloudflare";
 
-import Input from "~/components/setting/Input";
-import Textarea from "~/components/setting/Textarea";
-import AvailableCount from "~/components/setting/AvailableCount";
-import InputIdentity from "~/components/setting/InputIdentity";
-import InputTechStack from "~/components/setting/InputTechStack";
-import InputProfileImage from "~/components/setting/InputProfileImage";
-import SettingFormLayout from "~/components/setting/SettingFormLayout";
+import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
+import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
 
 // hooks
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
-import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {

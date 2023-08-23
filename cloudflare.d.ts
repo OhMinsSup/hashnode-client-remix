@@ -10,15 +10,16 @@ import type { DraftApiService } from "./services/api/draft";
 import type { FileApiService } from "services/api/file";
 
 // remix.run load, action cloudflare pages context
-interface RuntimeEnv {
-  auth: KVNamespace;
+export interface RuntimeEnv {
+  API_BASE_URL: Env["API_BASE_URL"];
+  COOKIE_SESSION_SECRET: Env["COOKIE_SESSION_SECRET"];
+  CF_ID: Env["CF_ID"];
+  CF_API_TOKEN: Env["CF_API_TOKEN"];
   [key: string]: unknown;
 }
 
 declare module "@remix-run/server-runtime" {
-  export interface AppLoadContext {
-    API_BASE_URL: Env["API_BASE_URL"];
-    COOKIE_SESSION_SECRET: Env["COOKIE_SESSION_SECRET"];
+  export interface AppLoadContext extends RuntimeEnv {
     services: {
       theme: ThemeService;
       server: ServerService;
