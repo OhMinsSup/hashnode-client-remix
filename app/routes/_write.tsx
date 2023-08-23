@@ -1,17 +1,20 @@
-import { json } from "@remix-run/cloudflare";
+// remix
+import { redirect } from "@remix-run/cloudflare";
 
-import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
-import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
+// components
+import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
-// hooks
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+// constants
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import { WriteLayout } from "~/components/write/future/WriteLayout";
+import { WriteLeftSide } from "~/components/write/future/WriteLeftSide";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {
-    title: "Change settings — Hashnode",
+    title: "Editing Article",
   };
   const rootMeta =
     // @ts-ignore
@@ -42,19 +45,21 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export const action = async ({ context, request }: ActionArgs) => {
-  const response = await context.api.user.updateByUser(request);
-  if (response instanceof Response) return response;
-  return json(response);
+export const loader = async ({ context, request }: LoaderArgs) => {
+  const isAuthenticated = await context.api.auth.isAuthenticated(request);
+  if (!isAuthenticated) {
+    return redirect(PAGE_ENDPOINTS.ROOT, {
+      headers: context.services.server.getClearAuthHeaders(),
+    });
+  }
+  return null;
 };
-
-export type Action = typeof action;
 
 export default function Routes() {
   return (
-    <SettingUserForm>
-      <SettingUserArea />
-    </SettingUserForm>
+    <WriteLayout sidebar={<WriteLeftSide />}>
+      <Outlet />
+    </WriteLayout>
   );
 }
 
