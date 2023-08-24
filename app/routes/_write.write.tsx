@@ -1,8 +1,17 @@
 // components
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { WriteContent } from "~/components/write/future/WriteContent";
+import { WriteHeader } from "~/components/write/future/WriteHeader";
+import { WriteLeftHeader } from "~/components/write/future/WriteLeftHeader";
+import { WriteRightHeader } from "~/components/write/future/WriteRightHeader";
 
 export default function Routes() {
-  return <>asdasd</>;
+  return (
+    <>
+      <WriteHeader left={<WriteLeftHeader />} right={<WriteRightHeader />} />
+      <WriteContent />
+    </>
+  );
 }
 
 export function ErrorBoundary() {
