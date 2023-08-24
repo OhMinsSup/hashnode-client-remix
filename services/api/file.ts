@@ -118,7 +118,7 @@ export class FileApiService {
     } catch (error) {
       if (error instanceof FetchError) {
         const $response = error.response;
-        const data = await $response.json<FetchRespSchema.CfDirectUploadResp>();
+        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
         return {
           data,
           status: $response.status,
@@ -142,7 +142,7 @@ export class FileApiService {
     } catch (error) {
       if (error instanceof FetchError) {
         const $response = error.response;
-        const data = await $response.json<FetchRespSchema.CfUploadResp>();
+        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
         return {
           data,
           status: $response.status,
