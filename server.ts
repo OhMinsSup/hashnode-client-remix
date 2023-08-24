@@ -13,6 +13,7 @@ import { FileApiService } from "./services/api/file";
 
 import { ThemeService } from "./services/app/theme";
 import { ServerService } from "./services/app/server";
+import { ImagesService } from "services/app/images";
 
 import * as build from "@remix-run/dev/server-build";
 
@@ -31,6 +32,7 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
     const services = {
       theme: new ThemeService(env),
       server: new ServerService(env),
+      images: new ImagesService(env),
     };
 
     const api = {
