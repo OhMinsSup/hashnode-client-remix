@@ -40,7 +40,7 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       widget: new WidgetApiService(env),
       tag: new TagApiService(env),
       draft: new DraftApiService(env),
-      file: new FileApiService(env),
+      file: new FileApiService(env, services.server),
     };
 
     return {

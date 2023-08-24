@@ -9,6 +9,7 @@ import type { BaseApiOptions } from "../client";
 import type { UploadRespSchema } from "../schema/resp";
 
 /**
+ * @deprecated
  * @description 파일 업로드 API
  * @param {FormData} body
  * @param {BaseApiOptions?} options

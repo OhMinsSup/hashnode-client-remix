@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * @deprecated
+ */
 export const uploadSchema = z.object({
   file: z.instanceof(File),
   uploadType: z.enum(["PROFILE", "IMAGE", "POST_THUMBNAIL"]),
