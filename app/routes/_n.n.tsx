@@ -1,56 +1,18 @@
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import { defer } from "@remix-run/cloudflare";
-
-import Header from "~/components/shared/Header";
-import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
-import AppRightSidebar from "~/components/n/AppRightSidebar";
-
-// types
-import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
 
 // styles
-import homeStyle from "~/styles/routes/home.css";
-import nStyle from "~/styles/routes/n.css";
-
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: homeStyle,
-    },
-    {
-      rel: "stylesheet",
-      href: nStyle,
-    },
-  ];
-};
-
-export const loader = async ({ request, context }: LoaderArgs) => {
-  return defer({
-    trendingTag: context.api.tag.getTagList(request, { type: "popular" }),
-    trendingTagsWeek: context.api.tag.getTagList(request, {
-      type: "popular",
-      category: "week",
-    }),
-    trendingTagsAll: context.api.tag.getTagList(request, {
-      type: "trending",
-      category: "all",
-    }),
-  });
-};
-
-export type nLoader = typeof loader;
+import { MainLayout } from "~/components/shared/future/MainLayout";
+import { MainFooter } from "~/components/shared/future/MainFooter";
+import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
+import { TagsLayout } from "~/components/n/future/TagsLayout";
 
 export default function Routes() {
   return (
-    <div className="container__base">
-      <Header />
-      <main>
-        <AppLeftSidebar />
+    <MainLayout footer={<MainFooter />} sidebar={<HashnodeAside />}>
+      <TagsLayout>
         <Outlet />
-        <AppRightSidebar />
-      </main>
-    </div>
+      </TagsLayout>
+    </MainLayout>
   );
 }
 

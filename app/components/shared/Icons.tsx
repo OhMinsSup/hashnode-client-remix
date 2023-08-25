@@ -652,6 +652,28 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    TagHot: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
+        <path
+          stroke="currentColor"
+          d="M16.667 11.56c0-6.39-6.248-9.366-6.248-9.366 0 3.117.784 7.805-1.56 7.805-1.56 0-1.951-1.556-1.951-4.294 0 0-2.741 2.325-2.741 5.865s2.737 6.236 6.252 6.236c3.515 0 6.248-2.71 6.248-6.246Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    TagNew: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
+        <path
+          stroke="currentColor"
+          d="M10 5v5l3.333 1.666m5-1.666a8.333 8.333 0 1 1-16.666 0 8.333 8.333 0 0 1 16.666 0Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
     SettingTagX: (props: IconProps) => (
       <svg {...props} viewBox="0 0 320 512">
         <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
