@@ -10,6 +10,7 @@ import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
 import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
+import { PostApiService } from "./services/api/post";
 
 import { ThemeService } from "./services/app/theme";
 import { ServerService } from "./services/app/server";
@@ -38,7 +39,8 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
     const api = {
       auth: new AuthApiService(env, services.server),
       user: new UserApiService(env, services.server),
-      item: new ItemApiService(env),
+      item: new ItemApiService(env, services.server),
+      post: new PostApiService(env, services.server),
       widget: new WidgetApiService(env),
       tag: new TagApiService(env),
       draft: new DraftApiService(env),

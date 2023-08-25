@@ -9,6 +9,7 @@ import type { WidgetApiService } from "./services/api/widget";
 import type { DraftApiService } from "./services/api/draft";
 import type { FileApiService } from "services/api/file";
 import type { ImagesService } from "services/app/images";
+import type { PostApiService } from "services/api/post";
 
 // remix.run load, action cloudflare pages context
 export interface RuntimeEnv {
@@ -34,6 +35,7 @@ declare module "@remix-run/server-runtime" {
       widget: WidgetApiService;
       draft: DraftApiService;
       file: FileApiService;
+      post: PostApiService;
     };
   }
 }

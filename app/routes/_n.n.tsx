@@ -41,7 +41,7 @@ export const loader = async ({ request, context }: LoaderArgs) => {
 
 export type nLoader = typeof loader;
 
-export default function NTagPage() {
+export default function Routes() {
   return (
     <div className="container__base">
       <Header />
@@ -57,24 +57,10 @@ export default function NTagPage() {
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }

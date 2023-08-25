@@ -24,26 +24,16 @@ import type { GetLikePostListApiSearchParams } from "~/api/posts/like-posts.serv
 import type { GetUserPostListApiSearchParams } from "~/api/user/user-posts.server";
 import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
 import type { GetTopPostsApiSearchParams } from "~/api/posts/top-posts.server";
+import type { ServerService } from "services/app/server";
 
 export class ItemApiService {
-  constructor(private readonly env: Env) {}
+  constructor(
+    private readonly env: Env,
+    private readonly $server: ServerService
+  ) {}
 
   /**
-   * @description 좋아요 아이템 리스트
-   * @param {Request} request
-   * @param {GetPostListApiSearchParams?} query
-   * @returns {Promise<ReturnType<typeof getPostListApi>>}
-   */
-  async getLikeItems(
-    request: Request,
-    query?: GetLikePostListApiSearchParams
-  ): Promise<ReturnType<typeof getPostListApi>> {
-    return await getLikePostListApi(query, {
-      request,
-    });
-  }
-
-  /**
+   * @deprecated
    * @description 아이템 리스트
    * @param {Request} request
    * @param {GetMyPostListApiSearchParams?} query
@@ -59,6 +49,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @description 아이템 리스트
    * @param {Request} request
    * @param {string} username
@@ -79,32 +70,43 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
+   * @description 좋아요 아이템 리스트
+   * @param {Request} request
+   * @param {GetPostListApiSearchParams?} query
+   */
+  async getLikeItems(request: Request, query?: GetLikePostListApiSearchParams) {
+    return await getLikePostListApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @deprecated
    * @description 아이템 리스트
    * @param {Request} request
    * @param {GetPostListApiSearchParams?} query
-   * @returns {Promise<ReturnType<typeof getPostListApi>>}
    */
-  async getItems(
-    request: Request,
-    query?: GetPostListApiSearchParams
-  ): Promise<ReturnType<typeof getPostListApi>> {
+  async getItems(request: Request, query?: GetPostListApiSearchParams) {
     return await getPostListApi(query, {
       request,
     });
   }
 
   /**
+   * @deprecated
    * @description 탑 포스트 가져오기
    * @param {Request} request
    * @param {GetTopPostsApiSearchParams?} query
    */
-  async getTopPosts(request: Request, query?: GetTopPostsApiSearchParams) {
+  async getTopPostItems(request: Request, query?: GetTopPostsApiSearchParams) {
     return await getTopPostsApi(query, {
       request,
     });
   }
 
   /**
+   * @deprecated
    * @description 아이템 상세
    * @param {number | string} id
    * @param {Request} request
@@ -129,6 +131,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @description 아이템 추가
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof createPostApi>>}
@@ -136,7 +139,7 @@ export class ItemApiService {
   async createItem(
     request: Request
   ): Promise<ReturnType<typeof createPostApi>> {
-    const formData = await this.readFormData(request);
+    const formData = await this.$server.readFormData(request);
     const bodyString = formData.get("body")?.toString();
     if (!bodyString) {
       throw redirect(PAGE_ENDPOINTS.DRAFT.ROOT, {
@@ -151,6 +154,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @description 아이템 수정
    * @param {number | string} id
    * @param {Request} request
@@ -166,7 +170,7 @@ export class ItemApiService {
       throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
     }
 
-    const formData = await this.readFormData(request);
+    const formData = await this.$server.readFormData(request);
     const bodyString = formData.get("body")?.toString();
     if (!bodyString) {
       throw redirect(PAGE_ENDPOINTS.DRAFT.ID(id), {
@@ -180,27 +184,8 @@ export class ItemApiService {
     });
   }
 
-  // /**
-  //  * @description 아이템 수정
-  //  * @param {number | string} id
-  //  * @param {Request} request
-  //  * @returns {Promise<ReturnType<typeof deletePostApi>>}
-  //  */
-  // async deleteItem(
-  //   id: number | string,
-  //   request: Request
-  // ): Promise<ReturnType<typeof deletePostApi>> {
-  //   // 인티저 영어
-  //   const itemId = isString(id) ? parseInt(id, 10) : id;
-  //   if (isNaN(itemId)) {
-  //     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
-  //   }
-  //   return await deletePostApi(itemId, {
-  //     request,
-  //   });
-  // }
-
   /**
+   * @deprecated
    * @description 아이템 수정
    * @param {Request} request
    * @returns {Promise<ReturnType<typeof deletePostApi>>}
@@ -208,7 +193,7 @@ export class ItemApiService {
   async deleteItem(
     request: Request
   ): Promise<ReturnType<typeof deletePostApi>> {
-    const formData = await this.readFormData(request);
+    const formData = await this.$server.readFormData(request);
     const bodyString = formData.get("body")?.toString();
     const idString = formData.get("id")?.toString();
     if (!bodyString || !idString) {
@@ -228,6 +213,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (top posts)
    * @param {Request} request
@@ -240,7 +226,7 @@ export class ItemApiService {
     }
 
     try {
-      const { json: data } = await this.getTopPosts(request, {
+      const { json: data } = await this.getTopPostItems(request, {
         duration,
       });
 
@@ -262,6 +248,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (좋아요)
    * @param {Request} request
@@ -299,6 +286,7 @@ export class ItemApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {Request} request
@@ -341,14 +329,9 @@ export class ItemApiService {
   }
 
   /**
-   * @description FormData 읽기
-   * @param {Request} request
-   * @returns {Promise<FormData>}
+   * @deprecated
+   * @returns
    */
-  private async readFormData(request: Request): Promise<FormData> {
-    return await request.formData();
-  }
-
   private getDefaultItemList() {
     return {
       list: [],

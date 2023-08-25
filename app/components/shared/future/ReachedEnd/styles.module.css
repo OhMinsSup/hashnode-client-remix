@@ -1,0 +1,7 @@
+.root {
+  @apply w-full py-5;
+}
+
+.root > p {
+  @apply text-center text-slate-700 dark:text-slate-300;
+}

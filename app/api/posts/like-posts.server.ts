@@ -12,6 +12,7 @@ import type { PaginationQuery } from "../schema/query";
 export interface GetLikePostListApiSearchParams extends PaginationQuery {}
 
 /**
+ * @deprecated
  * @description 좋아요 포스트 리스트 조회 API
  * @param {GetLikePostListApiSearchParams?} query
  * @param {BaseApiOptions?} options

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Outlet } from "@remix-run/react";
+import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { SettingLayout } from "~/components/setting/future/SettingLayout";
 import { AsideMenus } from "~/components/setting/future/AsideMenus";
 import { MainHeader } from "~/components/shared/future/MainHeader";
@@ -35,4 +35,15 @@ export default function Routes() {
       <Outlet />
     </SettingLayout>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return <Routes />;
+  } else if (error instanceof Error) {
+    return <Routes />;
+  } else {
+    return <Routes />;
+  }
 }

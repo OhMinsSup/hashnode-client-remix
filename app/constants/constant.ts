@@ -130,7 +130,10 @@ export const NAVIGATION_ITEMS = [
     title: "My Feed",
     href: PAGE_ENDPOINTS.ROOT,
     icon: Icons.MyFeed,
-    applyActiveLinks: [PAGE_ENDPOINTS.FEATURED] as string[],
+    applyActiveLinks: [
+      PAGE_ENDPOINTS.FEATURED,
+      PAGE_ENDPOINTS.FOLLOWING,
+    ] as string[],
     position: ["left", "top"] as string[],
   },
   {

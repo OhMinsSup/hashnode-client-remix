@@ -15,7 +15,7 @@ import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 import type { Loader as MainLoader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
-  const response = await context.api.item.getItemsByList(request, "featured");
+  const response = await context.api.post.getPostsByList(request);
   return json(response);
 };
 
@@ -51,6 +51,7 @@ export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
 
 export default function Routes() {
   const data = useRouteLoaderData<MainLoader>("routes/_main");
+  // "featured"
 
   return (
     <HashnodeList
@@ -68,24 +69,10 @@ export default function Routes() {
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }

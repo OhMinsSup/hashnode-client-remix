@@ -50,8 +50,8 @@ export default function AsideTrendingArticle() {
   );
 
   const items = useMemo(() => {
-    return fetcher.data?.posts ?? [];
-  }, [fetcher.data?.posts]);
+    return fetcher.data?.list ?? [];
+  }, [fetcher.data]);
 
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data == null) {

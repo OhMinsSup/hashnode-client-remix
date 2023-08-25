@@ -72,6 +72,7 @@ declare namespace FetchSchema {
     type?: "recent" | "featured" | "past" | "personalized";
     startDate?: string;
     endDate?: string;
+    tag?: string;
   }
 
   export interface GetTopPostsQuery {

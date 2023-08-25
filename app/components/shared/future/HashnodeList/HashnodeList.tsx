@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { HashnodeCard } from "../HashnodeCard";
-import { RecommendedUsersBox } from "../RecommendedUsersBox";
+import { HashnodeCard } from "~/components/shared/future/HashnodeCard";
+import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";
+import { ReachedEnd } from "~/components/shared/future/ReachedEnd";
 
 interface HashnodeListProps {
   recommendedUsers?: React.ReactNode;
@@ -34,6 +35,7 @@ export default function HashnodeList({
       <HashnodeCard />
       <HashnodeCard />
       <HashnodeCard />
+      <ReachedEnd />
     </div>
   );
 }
