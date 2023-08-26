@@ -55,33 +55,34 @@ export default function Page() {
     [searchParams, setSearchParams]
   );
 
-  return (
-    <div className="explore-trending-tags border-b-0">
-      <div className="title-wrapper">
-        <div>
-          <h2>Trending Tags</h2>
-          <p>Tags with most number of articles</p>
-        </div>
-        <div className="select-filter">
-          <select
-            onChange={onChange}
-            value={searchParams.get("category") || "all"}
-          >
-            <option value="week">This week</option>
-            <option value="month">This month</option>
-            <option value="year">This year</option>
-            <option value="all">All time</option>
-          </select>
-          <span>
-            <Icons.ArrowDown className="icon__sm fill-current" />
-          </span>
-        </div>
-      </div>
-      <div className="content-wrapper">
-        {trendingTags.list.map((item) => (
-          <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
-        ))}
-      </div>
-    </div>
-  );
+  // return (
+  //   <div className="explore-trending-tags border-b-0">
+  //     <div className="title-wrapper">
+  //       <div>
+  //         <h2>Trending Tags</h2>
+  //         <p>Tags with most number of articles</p>
+  //       </div>
+  //       <div className="select-filter">
+  //         <select
+  //           onChange={onChange}
+  //           value={searchParams.get("category") || "all"}
+  //         >
+  //           <option value="week">This week</option>
+  //           <option value="month">This month</option>
+  //           <option value="year">This year</option>
+  //           <option value="all">All time</option>
+  //         </select>
+  //         <span>
+  //           <Icons.ArrowDown className="icon__sm fill-current" />
+  //         </span>
+  //       </div>
+  //     </div>
+  //     <div className="content-wrapper">
+  //       {trendingTags.list.map((item) => (
+  //         <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
+  //       ))}
+  //     </div>
+  //   </div>
+  // );
+  return null;
 }

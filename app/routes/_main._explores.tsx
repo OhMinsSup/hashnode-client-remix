@@ -1,21 +1,10 @@
 import React from "react";
 import { Outlet } from "@remix-run/react";
-import TabRoutesExplore from "~/components/explore/TabRoutesExplore";
+import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
 
 // types
-import type { V2_MetaFunction, LinksFunction } from "@remix-run/cloudflare";
-
-// styles
-import homeExploreStyle from "~/styles/routes/home-explore.css";
-
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: homeExploreStyle,
-    },
-  ];
-};
+import type { V2_MetaFunction } from "@remix-run/cloudflare";
+import { ExploreTabs } from "~/components/explore/future/ExploreTabs";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const title = "Explore Popular Tech Blogs and Topics - Hashnode";
@@ -62,20 +51,22 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export default function Explore() {
+export default function Routes() {
   return (
-    <div className="relative col-span-7 min-w-0 pb-5 pt-5">
-      <div className="content-info-box">
-        <h1>Explore Tech Blogs &amp; Tags</h1>
-        <p>
-          Everything that's… Hashnode. Explore the most popular tech blogs from
-          the Hashnode community. A constantly updating list of popular tags and
-          the best minds in tech.
-        </p>
-      </div>
-      <TabRoutesExplore>
+    <CategoryBoxWithHashnodeList
+      title="Explore Tech Blogs &amp; Tags"
+      description={
+        <>
+          Explore the most popular tech blogs from the Hashnode community.{" "}
+          <br />A constantly updating list of popular tags and the best minds in
+          tech.
+        </>
+      }
+      isOutSideContent
+    >
+      <ExploreTabs>
         <Outlet />
-      </TabRoutesExplore>
-    </div>
+      </ExploreTabs>
+    </CategoryBoxWithHashnodeList>
   );
 }

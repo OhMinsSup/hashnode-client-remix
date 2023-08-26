@@ -202,6 +202,34 @@ export const NAVIGATION_USER_MENU_ITEMS = [
   },
 ];
 
+export const NAVIGATION_EXPLORE_ITEMS = [
+  {
+    id: 1,
+    name: "Treanding",
+    href: PAGE_ENDPOINTS.EXPLORE.ROOT,
+  },
+  {
+    id: 2,
+    name: "Tags",
+    href: PAGE_ENDPOINTS.EXPLORE.TAGS,
+  },
+  {
+    id: 3,
+    name: "Blogs",
+    href: PAGE_ENDPOINTS.EXPLORE.BLOGS,
+  },
+  {
+    id: 4,
+    name: "Tags You Follow",
+    href: "/explore/tags-following",
+  },
+  {
+    id: 5,
+    name: "Blogs You Follow",
+    href: "/explore/blogs-following",
+  },
+] as const;
+
 export const STATUS_CODE = {
   OK: 200,
   CREATED: 201,

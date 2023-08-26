@@ -49,42 +49,44 @@ export type ExploreTrendingLoader = typeof loader;
 export default function Page() {
   const { trendingBlogs, trendingTags, newTags } =
     useLoaderData<ExploreTrendingLoader>();
-  return (
-    <>
-      <div className="explore-trendings">
-        <div className="title-wrapper">
-          <h2>Trending Tags</h2>
-          <Link to={PAGE_ENDPOINTS.EXPLORE.TAGS} className="see-all-link">
-            See all tags
-          </Link>
-        </div>
-        <div className="content-wrapper">
-          {trendingTags.list.map((item) => (
-            <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
-          ))}
-        </div>
-        <div className="newly-added-tags-title">
-          <h2>Newly Added Tags</h2>
-        </div>
-        <div className="newly-added-tags-content">
-          {newTags.list.map((item) => (
-            <NewlyAddedTagItem key={`NewlyAddedTagItem-${item.id}`} />
-          ))}
-        </div>
-      </div>
-      <div className="explore-trendings mt-4">
-        <div className="title-wrapper">
-          <h2>Trending Tech Blogs</h2>
-          <Link to={PAGE_ENDPOINTS.EXPLORE.BLOGS} className="see-all-link">
-            See all blogs
-          </Link>
-        </div>
-        <div className="content-wrapper">
-          {trendingBlogs.map((item) => (
-            <ExploreBlogItem key={`ExploreBlogItem-${item.id}`} />
-          ))}
-        </div>
-      </div>
-    </>
-  );
+
+  return null;
+  // return (
+  //   <>
+  //     <div className="explore-trendings">
+  //       <div className="title-wrapper">
+  //         <h2>Trending Tags</h2>
+  //         <Link to={PAGE_ENDPOINTS.EXPLORE.TAGS} className="see-all-link">
+  //           See all tags
+  //         </Link>
+  //       </div>
+  //       <div className="content-wrapper">
+  //         {trendingTags.list.map((item) => (
+  //           <ExploreTagItem key={`ExploreTredingTagItem-${item.id}`} />
+  //         ))}
+  //       </div>
+  //       <div className="newly-added-tags-title">
+  //         <h2>Newly Added Tags</h2>
+  //       </div>
+  //       <div className="newly-added-tags-content">
+  //         {newTags.list.map((item) => (
+  //           <NewlyAddedTagItem key={`NewlyAddedTagItem-${item.id}`} />
+  //         ))}
+  //       </div>
+  //     </div>
+  //     <div className="explore-trendings mt-4">
+  //       <div className="title-wrapper">
+  //         <h2>Trending Tech Blogs</h2>
+  //         <Link to={PAGE_ENDPOINTS.EXPLORE.BLOGS} className="see-all-link">
+  //           See all blogs
+  //         </Link>
+  //       </div>
+  //       <div className="content-wrapper">
+  //         {trendingBlogs.map((item) => (
+  //           <ExploreBlogItem key={`ExploreBlogItem-${item.id}`} />
+  //         ))}
+  //       </div>
+  //     </div>
+  //   </>
+  // );
 }

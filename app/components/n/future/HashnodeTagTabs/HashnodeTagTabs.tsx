@@ -24,7 +24,7 @@ export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
 
   return (
     <Tabs.Root
-      defaultValue={PAGE_ENDPOINTS.N.TAG("javascript")}
+      defaultValue={PAGE_ENDPOINTS.N.TAG("hashnode")}
       value={location.pathname}
       onValueChange={onNavigation}
     >
