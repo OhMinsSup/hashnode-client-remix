@@ -1,0 +1,19 @@
+.root {
+  position: relative;
+  z-index: 10;
+  grid-column: span 10 / span 10;
+  margin-top: 1.25rem;
+  min-width: 0px;
+  border-radius: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 1024px) {
+  .root {
+    border-width: 1px;
+  }
+}

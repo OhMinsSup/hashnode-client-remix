@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { PAGE_ENDPOINTS, ASSET_URL } from "~/constants/constant";
 import { Icons } from "../shared/Icons";
-import type { MainUserLoader } from "~/routes/_main._users.blog.$username";
+// import type { MainUserLoader } from "~/routes/_users.blog.$username";
 
 export default function UserProfileBox() {
   const { userInfo } = useLoaderData<MainUserLoader>();

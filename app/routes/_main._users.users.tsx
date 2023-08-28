@@ -4,23 +4,10 @@ import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type {
-  LoaderArgs,
-  V2_MetaFunction,
-  LinksFunction,
-} from "@remix-run/cloudflare";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
 
-// styles
-import homeListStyle from "~/styles/routes/home-list.css";
-import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
-
-export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: homeListStyle },
-    { rel: "stylesheet", href: homeBookmarkStyle },
-  ];
-};
+import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
@@ -82,15 +69,12 @@ export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
 
 export default function Routes() {
   return (
-    <div className="relative col-span-7 min-w-0 pb-5 pt-5">
-      <div className="content-info-box">
-        <h1>My Items</h1>
-        <p>Manage your bookmarks and drafts here.</p>
-      </div>
-      <div className="rounded-lg border bg-white">
-        <Outlet />
-      </div>
-    </div>
+    <CategoryBoxWithHashnodeList
+      title="My Items"
+      description="Manage your items"
+    >
+      <Outlet />
+    </CategoryBoxWithHashnodeList>
   );
 }
 
