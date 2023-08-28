@@ -143,7 +143,7 @@ CategoryBoxWithHashnodeList.GroupIcon = function GroupIcon() {
             gradientTransform="translate(202.011 202.174) rotate(90) scale(201.068 201.068)"
           >
             <stop></stop>
-            <stop offset="1" stop-opacity="0"></stop>
+            <stop offset="1" stopOpacity="0"></stop>
           </radialGradient>
         </defs>
       </svg>
@@ -359,8 +359,8 @@ CategoryBoxWithHashnodeList.GroupIcon = function GroupIcon() {
           ></rect>
         </g>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M272.75 53C272.75 50.9289 274.429 49.25 276.5 49.25H283.5C285.571 49.25 287.25 50.9289 287.25 53V68C287.25 68.2717 287.103 68.5222 286.866 68.6547C286.629 68.7873 286.338 68.7811 286.107 68.6387L280.131 64.9613C280.051 64.9118 279.949 64.9118 279.869 64.9613L273.893 68.6387C273.662 68.7811 273.371 68.7873 273.134 68.6547C272.897 68.5222 272.75 68.2717 272.75 68V53ZM283.53 56.0303C283.823 55.7374 283.823 55.2626 283.53 54.9697C283.237 54.6768 282.763 54.6768 282.47 54.9697L279 58.4393L277.53 56.9697C277.237 56.6768 276.763 56.6768 276.47 56.9697C276.177 57.2626 276.177 57.7374 276.47 58.0303L278.47 60.0303C278.763 60.3232 279.237 60.3232 279.53 60.0303L283.53 56.0303Z"
           fill="#4338CA"
         ></path>

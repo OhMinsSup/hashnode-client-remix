@@ -652,6 +652,28 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    ExploreAdd: (props: IconProps) => (
+      <svg {...props} viewBox="0 0 384 512">
+        <path d="M368 224H224V80c0-8.84-7.16-16-16-16h-32c-8.84 0-16 7.16-16 16v144H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h144v144c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V288h144c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path>
+      </svg>
+    ),
+    ExploreCheck: (props: IconProps) => (
+      <svg {...props} viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0V0z"></path>
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path>
+      </svg>
+    ),
+    ExploreSelectArrowDown: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20">
+        <path
+          d="m5 7.5 5 5 5-5"
+          stroke="stroke-current"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </svg>
+    ),
     TagHot: (props: IconProps) => (
       <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
         <path

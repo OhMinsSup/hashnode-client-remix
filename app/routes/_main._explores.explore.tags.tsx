@@ -1,59 +1,62 @@
-import React, { useCallback } from "react";
-import { json } from "@remix-run/cloudflare";
+// import React, { useCallback } from "react";
+// import { json } from "@remix-run/cloudflare";
 
-// components
-import { useLoaderData, useSearchParams } from "@remix-run/react";
-import ExploreTagItem from "~/components/explore/ExploreTagItem";
+import ExploreLayout from "~/components/explore/future/ExploreLayout/ExploreLayout";
+import { TrendingTag } from "~/components/explore/future/TrendingTag";
 
-// api
-import { Icons } from "~/components/shared/Icons";
+// // components
+// import { useLoaderData, useSearchParams } from "@remix-run/react";
+// import ExploreTagItem from "~/components/explore/ExploreTagItem";
 
-// utils
-import { parseUrlParams } from "~/utils/util";
+// // api
+// import { Icons } from "~/components/shared/Icons";
 
-// types
-import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
+// // utils
+// import { parseUrlParams } from "~/utils/util";
 
-// styles
-import homeExploreTagsStyle from "~/styles/routes/home-explore-tags.css";
+// // types
+// import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
 
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: homeExploreTagsStyle,
-    },
-  ];
-};
+// // styles
+// import homeExploreTagsStyle from "~/styles/routes/home-explore-tags.css";
 
-export const loader = async ({ request, context }: LoaderArgs) => {
-  const { category } = parseUrlParams(request.url);
-  const data = await context.api.tag.getTagList(request, {
-    type: "trending",
-    category: category || "all",
-    limit: 50,
-  });
-  return json({
-    trendingTags: data.json.result,
-  });
-};
+// export const links: LinksFunction = () => {
+//   return [
+//     {
+//       rel: "stylesheet",
+//       href: homeExploreTagsStyle,
+//     },
+//   ];
+// };
 
-export type ExploreTrendingTagsLoader = typeof loader;
+// export const loader = async ({ request, context }: LoaderArgs) => {
+//   const { category } = parseUrlParams(request.url);
+//   const data = await context.api.tag.getTagList(request, {
+//     type: "trending",
+//     category: category || "all",
+//     limit: 50,
+//   });
+//   return json({
+//     trendingTags: data.json.result,
+//   });
+// };
 
-export default function Page() {
-  const { trendingTags } = useLoaderData<ExploreTrendingTagsLoader>();
+// export type Loader = typeof loader;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+export default function Routes() {
+  // const { trendingTags } = useLoaderData<ExploreTrendingTagsLoader>();
 
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSearchParams({
-        ...searchParams,
-        category: e.target.value,
-      });
-    },
-    [searchParams, setSearchParams]
-  );
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  // const onChange = useCallback(
+  //   (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //     setSearchParams({
+  //       ...searchParams,
+  //       category: e.target.value,
+  //     });
+  //   },
+  //   [searchParams, setSearchParams]
+  // );
 
   // return (
   //   <div className="explore-trending-tags border-b-0">
@@ -62,20 +65,20 @@ export default function Page() {
   //         <h2>Trending Tags</h2>
   //         <p>Tags with most number of articles</p>
   //       </div>
-  //       <div className="select-filter">
-  //         <select
-  //           onChange={onChange}
-  //           value={searchParams.get("category") || "all"}
-  //         >
-  //           <option value="week">This week</option>
-  //           <option value="month">This month</option>
-  //           <option value="year">This year</option>
-  //           <option value="all">All time</option>
-  //         </select>
-  //         <span>
-  //           <Icons.ArrowDown className="icon__sm fill-current" />
-  //         </span>
-  //       </div>
+  // <div className="select-filter">
+  //   <select
+  //     onChange={onChange}
+  //     value={searchParams.get("category") || "all"}
+  //   >
+  //     <option value="week">This week</option>
+  //     <option value="month">This month</option>
+  //     <option value="year">This year</option>
+  //     <option value="all">All time</option>
+  //   </select>
+  //   <span>
+  //     <Icons.ArrowDown className="icon__sm fill-current" />
+  //   </span>
+  // </div>
   //     </div>
   //     <div className="content-wrapper">
   //       {trendingTags.list.map((item) => (
@@ -84,5 +87,15 @@ export default function Page() {
   //     </div>
   //   </div>
   // );
-  return null;
+  return (
+    <ExploreLayout
+      title="Trending Tags"
+      description="Tags with most number of articles"
+    >
+      <TrendingTag />
+      <TrendingTag />
+      <TrendingTag />
+      <TrendingTag />
+    </ExploreLayout>
+  );
 }

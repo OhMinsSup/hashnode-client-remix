@@ -1,54 +1,54 @@
-import React from "react";
-import { Link, useLoaderData } from "@remix-run/react";
-import ExploreTagItem from "~/components/explore/ExploreTagItem";
-import NewlyAddedTagItem from "~/components/explore/NewlyAddedTagItem";
-import ExploreBlogItem from "~/components/explore/ExploreBlogItem";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+// import React from "react";
+// import { Link, useLoaderData } from "@remix-run/react";
+// import ExploreTagItem from "~/components/explore/ExploreTagItem";
+// import NewlyAddedTagItem from "~/components/explore/NewlyAddedTagItem";
+// import ExploreBlogItem from "~/components/explore/ExploreBlogItem";
+// import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // styles
-import homeExploreTrendingsStyle from "~/styles/routes/home-explore-trendings.css";
+// import homeExploreTrendingsStyle from "~/styles/routes/home-explore-trendings.css";
 
-import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
+// import type { LinksFunction, LoaderArgs } from "@remix-run/cloudflare";
+// import { json } from "@remix-run/cloudflare";
 
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: homeExploreTrendingsStyle,
-    },
-  ];
-};
+// export const links: LinksFunction = () => {
+//   return [
+//     {
+//       rel: "stylesheet",
+//       href: homeExploreTrendingsStyle,
+//     },
+//   ];
+// };
 
-export const loader = async ({ request, context }: LoaderArgs) => {
-  const [blogs_data, tags_data, newTags_data] = await Promise.all([
-    context.api.user.getExploreBlogs(request, {
-      category: "all",
-      limit: 10,
-    }),
-    context.api.tag.getTagList(request, {
-      type: "trending",
-      category: "all",
-      limit: 6,
-    }),
-    context.api.tag.getTagList(request, {
-      type: "new",
-      category: "all",
-      limit: 6,
-    }),
-  ]);
-  return json({
-    trendingBlogs: blogs_data.json.result,
-    trendingTags: tags_data.json.result,
-    newTags: newTags_data.json.result,
-  });
-};
+// export const loader = async ({ request, context }: LoaderArgs) => {
+//   const [blogs_data, tags_data, newTags_data] = await Promise.all([
+//     context.api.user.getExploreBlogs(request, {
+//       category: "all",
+//       limit: 10,
+//     }),
+//     context.api.tag.getTagList(request, {
+//       type: "trending",
+//       category: "all",
+//       limit: 6,
+//     }),
+//     context.api.tag.getTagList(request, {
+//       type: "new",
+//       category: "all",
+//       limit: 6,
+//     }),
+//   ]);
+//   return json({
+//     trendingBlogs: blogs_data.json.result,
+//     trendingTags: tags_data.json.result,
+//     newTags: newTags_data.json.result,
+//   });
+// };
 
-export type ExploreTrendingLoader = typeof loader;
+// export type Loader = typeof loader;
 
-export default function Page() {
-  const { trendingBlogs, trendingTags, newTags } =
-    useLoaderData<ExploreTrendingLoader>();
+export default function Routes() {
+  // const { trendingBlogs, trendingTags, newTags } =
+  //   useLoaderData<ExploreTrendingLoader>();
 
   return null;
   // return (
