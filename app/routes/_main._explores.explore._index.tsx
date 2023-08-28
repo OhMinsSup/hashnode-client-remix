@@ -5,6 +5,8 @@
 // import ExploreBlogItem from "~/components/explore/ExploreBlogItem";
 // import { PAGE_ENDPOINTS } from "~/constants/constant";
 
+import { TrendingBox } from "~/components/explore/future/TrendingBox";
+
 // styles
 // import homeExploreTrendingsStyle from "~/styles/routes/home-explore-trendings.css";
 
@@ -50,7 +52,7 @@ export default function Routes() {
   // const { trendingBlogs, trendingTags, newTags } =
   //   useLoaderData<ExploreTrendingLoader>();
 
-  return null;
+  return <TrendingBox>asdas</TrendingBox>;
   // return (
   //   <>
   //     <div className="explore-trendings">
