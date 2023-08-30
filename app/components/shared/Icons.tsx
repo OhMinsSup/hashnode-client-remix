@@ -652,6 +652,17 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    NotificationAllCheck: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
+        <path
+          stroke="currentColor"
+          d="M13.16 2.287a8.333 8.333 0 1 0 5.14 6.967m.033-5.92L10 11.673l-2.5-2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
     SearchInput: (props: IconProps) => (
       <svg
         viewBox="0 0 24 24"
