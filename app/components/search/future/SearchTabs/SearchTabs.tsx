@@ -19,11 +19,13 @@ export default function SearchTabs({ children }: SearchTabsProps) {
     [navigate]
   );
 
+  console.log(location.pathname);
+
   return (
     <section className="mb-8">
       <Tabs.Root
         value={location.pathname}
-        defaultValue="index"
+        defaultValue="/search"
         onValueChange={onNavigation}
       >
         <section className={styles.tabs_container}>
@@ -31,7 +33,7 @@ export default function SearchTabs({ children }: SearchTabsProps) {
             aria-label="hashnode list tabs"
             className="flex radix-orientation-horizontal:flex-row radix-orientation-vertical:flex-col gap-1"
           >
-            <Tabs.Trigger value="index" asChild>
+            <Tabs.Trigger value="/search" asChild>
               <button className="group flex flex-col">
                 <div
                   className={cn(
@@ -44,7 +46,7 @@ export default function SearchTabs({ children }: SearchTabsProps) {
                 <span className="inline-block h-0"></span>
               </button>
             </Tabs.Trigger>
-            <Tabs.Trigger value="latest" asChild>
+            <Tabs.Trigger value="/search/latest" asChild>
               <button className="group flex flex-col">
                 <div
                   className={cn(
@@ -57,7 +59,7 @@ export default function SearchTabs({ children }: SearchTabsProps) {
                 <span className="inline-block h-0"></span>
               </button>
             </Tabs.Trigger>
-            <Tabs.Trigger value="tags" asChild>
+            <Tabs.Trigger value="/search/tags" asChild>
               <button className="group flex flex-col">
                 <div
                   className={cn(
@@ -70,7 +72,7 @@ export default function SearchTabs({ children }: SearchTabsProps) {
                 <span className="inline-block h-0"></span>
               </button>
             </Tabs.Trigger>
-            <Tabs.Trigger value="blogs" asChild>
+            <Tabs.Trigger value="/search/blogs" asChild>
               <button className="group flex flex-col">
                 <div
                   className={cn(
@@ -85,10 +87,10 @@ export default function SearchTabs({ children }: SearchTabsProps) {
             </Tabs.Trigger>
           </Tabs.List>
         </section>
-        <Tabs.Content value={"index"}>{children}</Tabs.Content>
-        <Tabs.Content value={"latest"}>{children}</Tabs.Content>
-        <Tabs.Content value={"tags"}>{children}</Tabs.Content>
-        <Tabs.Content value={"blogs"}>{children}</Tabs.Content>
+        <Tabs.Content value={"/search"}>{children}</Tabs.Content>
+        <Tabs.Content value={"/search/latest"}>{children}</Tabs.Content>
+        <Tabs.Content value={"/search/tags"}>{children}</Tabs.Content>
+        <Tabs.Content value={"/search/blogs"}>{children}</Tabs.Content>
       </Tabs.Root>
     </section>
   );
