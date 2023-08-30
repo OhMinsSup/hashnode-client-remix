@@ -15,26 +15,27 @@ export default function HashnodeList({
 }: HashnodeListProps) {
   return (
     <div className={styles.root}>
-      <HashnodeCard />
-      <HashnodeCard />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
       {recommendedUsers && <RecommendedUsersBox />}
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
       {trendingTags}
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
-      <HashnodeCard />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
+      <HashnodeCard.V2 />
       <ReachedEnd />
     </div>
   );
