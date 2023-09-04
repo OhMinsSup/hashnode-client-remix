@@ -1,6 +1,6 @@
 import React from "react";
-import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import SearchBlogList from "~/components/search/future/SearchBlogList/SearchBlogList";
 
 export default function Routes() {
-  return <HashnodeList />;
+  return <SearchBlogList />;
 }
