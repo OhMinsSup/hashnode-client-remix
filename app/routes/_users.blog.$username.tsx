@@ -1,5 +1,7 @@
 // provider
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { UserBlockTags } from "~/components/users/future/UserBlockTags";
+import { UserFooter } from "~/components/users/future/UserFooter";
 import { UsersHeader } from "~/components/users/future/UsersHeader";
 // import { json } from "@remix-run/cloudflare";
 
@@ -18,6 +20,8 @@ export default function Routes() {
   return (
     <>
       <UsersHeader />
+      <UserBlockTags />
+      <UserFooter />
     </>
   );
 }

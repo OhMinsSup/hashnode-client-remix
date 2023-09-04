@@ -57,3 +57,27 @@
     padding-right: 5rem;
   }
 }
+
+@media (min-width: 1280px) {
+  .main {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0px;
+    grid-template-columns: repeat(10, minmax(0px, 1fr));
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .main {
+    max-width: 1536px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0px;
+    grid-template-columns: repeat(10, minmax(0px, 1fr));
+    padding-left: 13rem;
+    padding-right: 13rem;
+  }
+}
