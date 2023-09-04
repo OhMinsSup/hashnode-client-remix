@@ -33,7 +33,7 @@ export default function NotificationsTabs({
         <ScrollArea.Root className="overflow-hidden">
           <ScrollArea.Viewport className="w-full h-full">
             <Tabs.List className="flex radix-orientation-horizontal:flex-row radix-orientation-vertical:flex-col gap-1">
-              <Tabs.Trigger value={PAGE_ENDPOINTS.ROOT} asChild>
+              <Tabs.Trigger value={"/notifications"} asChild>
                 <button type="button" className={"group flex flex-col"}>
                   <div
                     className={cn(
@@ -86,7 +86,7 @@ export default function NotificationsTabs({
                 </button>
               </Tabs.Trigger>
             </Tabs.List>
-            <Tabs.Content value={PAGE_ENDPOINTS.ROOT}>{children}</Tabs.Content>
+            <Tabs.Content value={"/notifications"}>{children}</Tabs.Content>
           </ScrollArea.Viewport>
         </ScrollArea.Root>
       </div>
