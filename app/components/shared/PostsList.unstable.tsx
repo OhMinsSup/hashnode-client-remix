@@ -23,7 +23,7 @@ import type { MainFeedsFeaturedLoader } from "~/routes/_main._feeds.featured";
 import type { nTagIndexLoader } from "~/routes/_n.n.$tag._index";
 import type { nTagHotLoader } from "~/routes/_n.n.$tag.hot";
 import type { MainUserPostsIndexLoader } from "~/routes/_main._users.blog.$username._index";
-import type { UsersIndexLoader } from "~/routes/_main._users.users._index";
+import type { UsersIndexLoader } from "~/routes/_users.users._index";
 
 const LIMIT = 15;
 

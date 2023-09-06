@@ -5,6 +5,7 @@ import { Icons } from "~/components/shared/Icons";
 import { Link, NavLink, useLocation } from "@remix-run/react";
 import { NAVIGATION_ITEMS, PAGE_ENDPOINTS } from "~/constants/constant";
 import classNames from "classnames";
+import { useOptionalSession } from "~/api/user/hooks/useSession";
 
 export default function MainDrawerMenu() {
   const [open, setOpen] = useState(false);
@@ -108,6 +109,10 @@ MainDrawerMenu.Item = function MainDrawerMenuItem(
   const { to, text, applyActiveLinks, ...resetProps } = props;
 
   const location = useLocation();
+  const session = useOptionalSession();
+  if (!session && to === PAGE_ENDPOINTS.USERS.ROOT) {
+    return null;
+  }
 
   return (
     <li>

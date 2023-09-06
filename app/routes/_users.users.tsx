@@ -1,27 +1,14 @@
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
-// constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-
 // types
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-import { redirect } from "@remix-run/cloudflare";
+import type { V2_MetaFunction } from "@remix-run/cloudflare";
 
 import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
+import { MainLayout } from "~/components/shared/future/MainLayout";
+import { MainFooter } from "~/components/shared/future/MainFooter";
+import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
-  const isAuthenticated = await context.api.auth.isAuthenticated(request);
-  if (!isAuthenticated) {
-    return redirect(PAGE_ENDPOINTS.ROOT, {
-      headers: context.services.server.getClearAuthHeaders(),
-    });
-  }
-  return null;
-};
-
-export type Loader = typeof loader;
-
-export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
+export const meta: V2_MetaFunction = ({ data, matches }) => {
   const Seo = {
     title: "My Items - Hashnode",
     description: "My Items - Hashnode",
@@ -69,36 +56,24 @@ export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
 
 export default function Routes() {
   return (
-    <CategoryBoxWithHashnodeList
-      title="My Items"
-      description="Manage your items"
-    >
-      <Outlet />
-    </CategoryBoxWithHashnodeList>
+    <MainLayout footer={<MainFooter />} sidebar={<HashnodeAside />}>
+      <CategoryBoxWithHashnodeList
+        title="My Items"
+        description="Manage your items"
+      >
+        <Outlet />
+      </CategoryBoxWithHashnodeList>
+    </MainLayout>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }

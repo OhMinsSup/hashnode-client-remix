@@ -1,9 +1,8 @@
 // provider
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { UserBlockTags } from "~/components/users/future/UserBlockTags";
-import { UserFooter } from "~/components/users/future/UserFooter";
-import { UserRecentActivity } from "~/components/users/future/UserRecentActivity";
-import { UsersHeader } from "~/components/users/future/UsersHeader";
+import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { UsersLayout } from "~/components/users/future/UsersLayout";
+import { MainHeader } from "~/components/shared/future/MainHeader";
+
 // import { json } from "@remix-run/cloudflare";
 
 // types
@@ -19,12 +18,9 @@ import { UsersHeader } from "~/components/users/future/UsersHeader";
 
 export default function Routes() {
   return (
-    <>
-      <UsersHeader />
-      <UserBlockTags />
-      <UserRecentActivity />
-      <UserFooter />
-    </>
+    <UsersLayout header={<MainHeader />}>
+      <Outlet />
+    </UsersLayout>
   );
 }
 
