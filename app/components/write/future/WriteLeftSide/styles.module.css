@@ -30,6 +30,11 @@
   outline-offset: 2px !important;
 }
 
+.btn_back_title:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
 .btn_back_title > svg {
   height: 1rem;
   width: 1rem;
