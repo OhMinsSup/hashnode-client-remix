@@ -1,11 +1,11 @@
 import { useImperativeHandle, useRef, forwardRef, useEffect } from "react";
 import type { Editor } from "@tiptap/react";
 import { useEditor, EditorContent } from "@tiptap/react";
-import { useDebouncedCallback } from "use-debounce";
-import StarterKit from "@tiptap/starter-kit";
+// import { useDebouncedCallback } from "use-debounce";
+import { TiptapExtensions } from "./extensions";
+import { EditorBubbleMenu } from "./bubble-menu";
 
 // define your extension array
-const extensions = [StarterKit];
 
 export interface ITipTapRichTextEditor {
   value: string;
@@ -26,23 +26,24 @@ export interface ITipTapRichTextEditor {
 
 const Tiptap = (props: ITipTapRichTextEditor) => {
   const {
-    onChange,
-    debouncedUpdatesEnabled,
-    forwardedRef,
-    editable,
+    // onChange,
+    // debouncedUpdatesEnabled,
+    // forwardedRef,
+    // editable,
     setIsSubmitting,
-    setShouldShowAlert,
+    // setShouldShowAlert,
     editorContentCustomClassNames,
-    value,
+    // value,
     noBorder,
     // workspaceSlug,
     borderOnFocus,
     customClassName,
   } = props;
+
   const editor = useEditor({
     // editable: editable ?? true,
     // editorProps: TiptapEditorProps(workspaceSlug, setIsSubmitting),
-    // extensions: TiptapExtensions(workspaceSlug, setIsSubmitting),
+    extensions: TiptapExtensions("dev", setIsSubmitting),
     // content: value,
     // onUpdate: async ({ editor }) => {
     //   // for instant feedback loop
@@ -54,7 +55,6 @@ const Tiptap = (props: ITipTapRichTextEditor) => {
     //     onChange?.(editor.getJSON(), editor.getHTML());
     //   }
     // },
-    extensions,
   });
 
   // useEffect(() => {
@@ -103,7 +103,7 @@ const Tiptap = (props: ITipTapRichTextEditor) => {
       }}
       className={`tiptap-editor-container cursor-text ${editorClassNames}`}
     >
-      {/* {editor && <EditorBubbleMenu editor={editor} />} */}
+      {editor && <EditorBubbleMenu editor={editor} />}
       <div className={`${editorContentCustomClassNames}`}>
         <EditorContent editor={editor} />
         {/* {editor?.isActive("image") && <ImageResizer editor={editor} />} */}

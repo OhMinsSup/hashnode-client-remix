@@ -47,6 +47,7 @@ WriteLeftSide.Title = function Title() {
                 decoding="async"
                 data-nimg="fill"
                 loading="lazy"
+                className="w-full h-full object-contain text-transparent object-center"
               />
             </div>
           </div>
@@ -56,6 +57,13 @@ WriteLeftSide.Title = function Title() {
             </span>
           </div>
         </div>
+      </div>
+      <div className="ml-2">
+        <button type="button" className={styles.btn_close}>
+          <svg viewBox="0 0 320 512">
+            <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
+          </svg>
+        </button>
       </div>
     </div>
   );

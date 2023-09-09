@@ -8,9 +8,14 @@ import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type {
+  LinksFunction,
+  LoaderArgs,
+  V2_MetaFunction,
+} from "@remix-run/cloudflare";
 import { WriteLayout } from "~/components/write/future/WriteLayout";
 import { WriteLeftSide } from "~/components/write/future/WriteLeftSide";
+import editorStyles from "~/styles/common/editor.css";
 
 export const meta: V2_MetaFunction = ({ matches }) => {
   const Seo = {
@@ -43,6 +48,10 @@ export const meta: V2_MetaFunction = ({ matches }) => {
       content: Seo.title,
     },
   ];
+};
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: editorStyles }];
 };
 
 export const loader = async ({ context, request }: LoaderArgs) => {
