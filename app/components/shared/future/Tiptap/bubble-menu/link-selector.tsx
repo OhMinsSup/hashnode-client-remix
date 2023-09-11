@@ -1,5 +1,5 @@
 import type { Editor } from "@tiptap/core";
-// import { Check, Trash } from "lucide-react";
+import { Check, Trash } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -78,8 +78,7 @@ export const LinkSelector: React.FC<LinkSelectorProps> = ({
                 setIsOpen(false);
               }}
             >
-              {/* <Trash className="h-4 w-4" /> */}
-              Trash
+              <Trash className="h-4 w-4" />
             </button>
           ) : (
             <button
@@ -89,8 +88,7 @@ export const LinkSelector: React.FC<LinkSelectorProps> = ({
                 onLinkSubmit();
               }}
             >
-              {/* <Check className="h-4 w-4" /> */}
-              Check
+              <Check className="h-4 w-4" />
             </button>
           )}
         </div>

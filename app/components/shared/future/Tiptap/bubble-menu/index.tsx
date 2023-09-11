@@ -117,12 +117,11 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props: any) => {
               }
             )}
           >
-            {item.icon}
-            {/* <item.icon
+            <item.icon
               className={cn("h-4 w-4", {
                 "text-custom-text-100": item.isActive(),
               })}
-            /> */}
+            />
           </button>
         ))}
       </div>
