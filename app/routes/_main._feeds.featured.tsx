@@ -11,24 +11,24 @@ import {
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
 import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import type { Loader as MainLoader } from "~/routes/_main";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const response = await context.api.post.getPostsByList(request);
   return json(response);
 };
 
 export type Loader = typeof loader;
 
-export const meta: V2_MetaFunction<Loader> = ({ data, matches }) => {
+export const meta: MetaFunction<Loader> = ({ data, matches }) => {
   const title = "Featured posts on Hashnode";
   const rootMeta =
     // @ts-ignore
     matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
   const rootMetas = rootMeta.filter(
     // @ts-ignore
-    (meta) =>
+    (meta: any) =>
       meta.name !== "og:title" &&
       meta.name !== "twitter:title" &&
       !("title" in meta)
