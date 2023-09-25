@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { useSession } from "~/api/user/hooks/useSession";
+import { useSession } from "services/hooks/useSession";
 
 const TAGS = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`

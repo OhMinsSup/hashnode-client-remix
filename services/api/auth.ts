@@ -46,7 +46,7 @@ export class AuthApiService {
     try {
       const response = await $getMeApi({ request });
       const data =
-        await FetchService.toJson<FetchRespSchema.UserRespSchema>(response);
+        await FetchService.toJson<FetchRespSchema.UserResponse>(response);
       if (data.resultCode !== RESULT_CODE.OK) {
         return null;
       }

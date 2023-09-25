@@ -4,7 +4,7 @@ import Json from "superjson";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "services/validate/user-update-api.validate";
 
-import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useOptionalSession } from "services/hooks/useSession";
 import { useForm, FormProvider } from "react-hook-form";
 import { useFetcher } from "@remix-run/react";
 

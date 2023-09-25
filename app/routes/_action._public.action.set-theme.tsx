@@ -1,8 +1,8 @@
 import { json, redirect } from "@remix-run/cloudflare";
 import { isTheme } from "~/context/useThemeContext";
-import type { ActionArgs } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
-export const action = async ({ request, context }: ActionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
   const theme = form.get("theme");

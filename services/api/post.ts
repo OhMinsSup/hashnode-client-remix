@@ -20,10 +20,10 @@ export class PostApiService {
 
   /**
    * @description 아이템 리스트
-   * @param {FetchSchema.PostListQuery} query
+   * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
    */
-  async list(query: FetchSchema.PostListQuery, request: Request) {
+  async list(query: FetchQuerySchema.PostList, request: Request) {
     return await $getPostsApi(query, {
       request,
     });
@@ -31,10 +31,10 @@ export class PostApiService {
 
   /**
    * @description 좋아요 아이템 리스트
-   * @param {FetchSchema.PaginationQuery} query
+   * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
    */
-  async likeList(query: FetchSchema.PaginationQuery, request: Request) {
+  async likeList(query: FetchQuerySchema.PostList, request: Request) {
     return await $getLikePostsApi(query, {
       request,
     });
@@ -42,10 +42,10 @@ export class PostApiService {
 
   /**
    * @description 탑 포스트 가져오기
-   * @param {FetchSchema.GetTopPostsQuery} query
+   * @param {FetchQuerySchema.GetTopPost} query
    * @param {Request} request
    */
-  async topList(query: FetchSchema.GetTopPostsQuery, request: Request) {
+  async topList(query: FetchQuerySchema.GetTopPost, request: Request) {
     return await $getTopPostsApi(query, {
       request,
     });
@@ -54,17 +54,17 @@ export class PostApiService {
   /**
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
-   * @param {FetchSchema.PostListQuery} params
+   * @param {FetchQuerySchema.PostList} params
    * @param {Request} request
    */
   async getPostsByBaseList(
-    params: FetchSchema.PostListQuery,
+    params: FetchQuerySchema.PostList,
     request: Request
   ) {
     try {
       const response = await this.list(params, request);
       const json =
-        await FetchService.toJson<FetchRespSchema.PostListRespSchema>(response);
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
         return this.getDefaultPostList();
       }
@@ -99,9 +99,7 @@ export class PostApiService {
       const params = parseUrlParams(request.url);
       const response = await this.likeList(params, request);
       const json =
-        await FetchService.toJson<FetchRespSchema.PostLikeListRespSchema>(
-          response
-        );
+        await FetchService.toJson<FetchRespSchema.PostLikeListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
         return this.getDefaultPostList();
       }
@@ -136,9 +134,7 @@ export class PostApiService {
         request
       );
       const json =
-        await FetchService.toJson<FetchRespSchema.GetTopPostsRespSchema>(
-          response
-        );
+        await FetchService.toJson<FetchRespSchema.GetTopPostsResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
         return this.getDefaultPostList();
       }

@@ -1,6 +1,4 @@
-import Json from "superjson";
 import {
-  redirect,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/cloudflare";
@@ -12,11 +10,6 @@ import {
   postCfDirectUploadApi,
   postCfUploadApi,
 } from "services/fetch/files/cf-file.server";
-import { uploadApi } from "~/api/files/upload.server";
-import { uploadSchema } from "~/api/files/validation/upload";
-
-// constants
-import { STATUS_CODE } from "~/constants/constant";
 
 import { FetchError } from "services/fetch/fetch.error";
 
@@ -30,43 +23,6 @@ export class FileApiService {
     private readonly env: Env,
     private readonly $server: ServerService
   ) {}
-
-  /**
-   * @deprecated
-   * @description 파일 업로드
-   * @param {Request} request
-   * @returns {Promise<ReturnType<typeof uploadApi>>}
-   */
-  async uploadFile(request: Request): Promise<ReturnType<typeof uploadApi>> {
-    const formData = await this.readFormData(request);
-    const bodyString = formData.get("body")?.toString();
-    if (!bodyString) {
-      const pathname = new URL(request.url).pathname;
-      throw redirect(pathname, {
-        status: STATUS_CODE.BAD_REQUEST,
-      });
-    }
-    const jsonData = Json.parse(bodyString);
-    const input = await uploadSchema.parseAsync(jsonData);
-    const newFormData = new FormData();
-    formData.append("file", input.file);
-    formData.append("uploadType", input.uploadType);
-    formData.append("mediaType", input.mediaType);
-    formData.append("filename", input.file.name);
-    return uploadApi(newFormData, {
-      request,
-    });
-  }
-
-  /**
-   * @deprecated
-   * @description FormData 읽기
-   * @param {Request} request
-   * @returns {Promise<FormData>}
-   */
-  private async readFormData(request: Request): Promise<FormData> {
-    return await request.formData();
-  }
 
   /**
    * @version 2023-08-24

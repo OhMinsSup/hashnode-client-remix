@@ -10,9 +10,9 @@ import { SubmitButton } from "~/components/auth/future/Button";
 import { json } from "@remix-run/cloudflare";
 
 // types
-import type { ActionArgs } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
-export const action = async ({ request, context }: ActionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const response = await context.api.auth.signupWithAuth(request);
   if (response instanceof Response) return response;
   return json(response);

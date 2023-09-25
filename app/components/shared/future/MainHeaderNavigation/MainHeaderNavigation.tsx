@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { NAVIGATION_ITEMS, PAGE_ENDPOINTS } from "~/constants/constant";
 import { NavLink, useLocation } from "@remix-run/react";
 import { cn } from "~/utils/util";
-import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useOptionalSession } from "services/hooks/useSession";
 
 export default function MainHeaderNavigation() {
   return (

@@ -1,10 +1,9 @@
 import { json } from "@remix-run/cloudflare";
-import type { LoaderArgs } from "@remix-run/cloudflare";
-import type { TagListRespSchema } from "~/api/schema/resp";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const response = await context.api.tag.getTagsByList(request);
-  return json<TagListRespSchema>(response);
+  return json(response);
 };
 
 export type Loader = typeof loader;

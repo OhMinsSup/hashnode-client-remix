@@ -2,9 +2,9 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
-import type { V2_MetaFunction } from "@remix-run/cloudflare";
+import type { MetaFunction } from "@remix-run/cloudflare";
 
-export const meta: V2_MetaFunction = ({ matches }) => {
+export const meta: MetaFunction = ({ matches }) => {
   const Seo = {
     title: "Account Settings — Hashnode",
   };
@@ -13,7 +13,7 @@ export const meta: V2_MetaFunction = ({ matches }) => {
     matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
   const rootMetas = rootMeta.filter(
     // @ts-ignore
-    (meta) =>
+    (meta: any) =>
       meta.name !== "description" &&
       meta.name !== "og:title" &&
       meta.name !== "og:description" &&

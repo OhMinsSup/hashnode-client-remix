@@ -5,10 +5,7 @@ import { EnvSchema } from "./services/env";
 
 import { AuthApiService } from "./services/api/auth";
 import { UserApiService } from "./services/api/user";
-import { ItemApiService } from "./services/api/item";
-import { WidgetApiService } from "./services/api/widget";
 import { TagApiService } from "./services/api/tag";
-import { DraftApiService } from "./services/api/draft";
 import { FileApiService } from "./services/api/file";
 import { PostApiService } from "./services/api/post";
 
@@ -39,11 +36,8 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
     const api = {
       auth: new AuthApiService(env, services.server),
       user: new UserApiService(env, services.server),
-      item: new ItemApiService(env, services.server),
       post: new PostApiService(env, services.server),
-      widget: new WidgetApiService(env),
       tag: new TagApiService(env),
-      draft: new DraftApiService(env),
       file: new FileApiService(env, services.server),
     };
 

@@ -5,9 +5,9 @@ import { Input } from "~/components/auth/future/Input";
 import { SubmitButton } from "~/components/auth/future/Button";
 
 // types
-import { json, type ActionArgs } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 
-export const action = async ({ request, context }: ActionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const response = await context.api.auth.signinWithAuth(request);
   if (response instanceof Response) return response;
   return json(response);
@@ -41,7 +41,6 @@ export default function Routes() {
 
 export function ErrorBoundary() {
   let error = useRouteError();
-  console.log(error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

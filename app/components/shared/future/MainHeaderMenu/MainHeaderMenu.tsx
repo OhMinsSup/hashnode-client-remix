@@ -12,7 +12,7 @@ import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
 // hooks
 import { Theme, useTheme } from "~/context/useThemeContext";
-import { useOptionalSession } from "~/api/user/hooks/useSession";
+import { useOptionalSession } from "services/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 export default function MainHeaderMenu() {
@@ -98,9 +98,7 @@ export default function MainHeaderMenu() {
               </div>
             </button>
           </DropdownMenu.Trigger>
-          <DropdownMenu.Portal
-            style={{ width: 280, outline: "none", pointerEvents: "auto" }}
-          >
+          <DropdownMenu.Portal>
             <DropdownMenu.Content
               align="end"
               sideOffset={10}

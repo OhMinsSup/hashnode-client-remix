@@ -5,11 +5,12 @@ import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { MainLayout } from "~/components/shared/future/MainLayout";
 import { MainFooter } from "~/components/shared/future/MainFooter";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
+import { MainHeader } from "~/components/shared/future/MainHeader";
 
 // types
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = ({ context, request }: LoaderArgs) => {
+export const loader = ({ context, request }: LoaderFunctionArgs) => {
   return defer({
     trendingTag: context.api.tag.getTagsByBaseList(
       {
@@ -25,7 +26,11 @@ export type Loader = typeof loader;
 
 export default function Routes() {
   return (
-    <MainLayout footer={<MainFooter />} sidebar={<HashnodeAside />}>
+    <MainLayout
+      header={<MainHeader />}
+      footer={<MainFooter />}
+      sidebar={<HashnodeAside />}
+    >
       <Outlet />
     </MainLayout>
   );

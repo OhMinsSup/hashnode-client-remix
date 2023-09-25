@@ -12,9 +12,9 @@ import { redirect } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (!isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT, {

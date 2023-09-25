@@ -1,8 +1,8 @@
 import { json } from "@remix-run/cloudflare";
 
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const response = await context.api.post.getPostsByTop(request);
   return json(response);
 };

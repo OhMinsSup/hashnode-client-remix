@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet } from "@remix-run/react";
-import { redirect, type LoaderArgs } from "@remix-run/cloudflare";
+import { redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (!isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT, {

@@ -13,15 +13,15 @@ import authStyles from "~/styles/routes/auth.css";
 // types
 import type {
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
 };
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT);
@@ -31,7 +31,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type AuthLayoutLoader = typeof loader;
 
-export const meta: V2_MetaFunction<AuthLayoutLoader> = ({ location }) => {
+export const meta: MetaFunction<AuthLayoutLoader> = ({ location }) => {
   const Seo = {
     signin: "Sign in to Hashnode",
     signup: "Sign up to Hashnode",

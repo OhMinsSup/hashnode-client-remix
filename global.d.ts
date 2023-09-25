@@ -5,15 +5,23 @@ interface Window {
 }
 
 declare namespace FetchSchema {
-  export interface SkillSchema {
+  // Auth
+  export type AuthRespSchema = {
+    userId: number;
+    accessToken: string;
+  };
+
+  // User
+
+  export type Skill = {
     id: number;
     name: string;
     createdAt: string;
     updatedAt: string;
     deletedAt?: string | null;
-  }
+  };
 
-  export interface UserProfileSchema {
+  export type UserProfile = {
     id: number;
     userId: number;
     name: string;
@@ -25,59 +33,40 @@ declare namespace FetchSchema {
     createdAt: string;
     updatedAt: string;
     deletedAt?: string | null;
-  }
+  };
 
-  export interface UserSocialSchema {
+  export type UserSocial = {
     github: string | null;
     twitter: string | null;
     facebook: string | null;
     instagram: string | null;
     website: string | null;
-  }
+  };
 
-  export interface UserSchema {
+  export type User = {
     id: number;
     email: string;
     username: string;
     profile: Omit<
-      UserProfileSchema,
+      UserProfile,
       "id" | "userId" | "createdAt" | "updatedAt" | "deletedAt"
     >;
-    skills: Pick<SkillSchema, "id" | "name">[];
-    socials: UserSocialSchema;
+    skills: Pick<Skill, "id" | "name">[];
+    socials: UserSocial;
     createdAt: string;
-  }
+  };
 
-  export interface TagSchema {
+  // Tags
+
+  export type Tag = {
     id: number;
     name: string;
     createdAt: number;
     updatedAt: number;
     deletedAt?: number | null;
-  }
+  };
 
-  export interface PaginationQuery {
-    limit?: number;
-    cursor?: number;
-  }
-
-  export interface TagListQuery extends PaginationQuery {
-    name?: string;
-    type?: "recent" | "popular" | "new" | "trending";
-    category?: "week" | "all" | "month" | "year";
-  }
-
-  export interface PostListQuery extends PaginationQuery {
-    keyword?: string;
-    type?: "recent" | "featured" | "past" | "personalized";
-    startDate?: string;
-    endDate?: string;
-    tag?: string;
-  }
-
-  export interface GetTopPostsQuery {
-    duration: number;
-  }
+  // Posts
 
   export enum UPLOAD_TYPE {
     PROFILE = "PROFILE",
@@ -93,7 +82,7 @@ declare namespace FetchSchema {
 
   export type MediaType = keyof typeof MEDIA_TYPE;
 
-  export interface FileSchema {
+  export type File = {
     id: number;
     name: string;
     url: string;
@@ -102,19 +91,19 @@ declare namespace FetchSchema {
     createdAt: string;
     updatedAt: string;
     deletedAt?: string;
-  }
+  };
 
-  export interface PostCountSchema {
+  export type PostCount = {
     postLike: number;
-  }
+  };
 
-  export interface PostSeoSchema {
+  export type PostSeo = {
     title: string | null;
     desc: string | null;
     image: string | null;
-  }
+  };
 
-  export interface PostSchema {
+  export type Post = {
     id: number;
     title: string;
     subTitle: string | null;
@@ -125,65 +114,70 @@ declare namespace FetchSchema {
     publishingDate: number;
     createdAt: Date | string;
     updatedAt: Date | string;
-    user: UserSchema;
-    tags: Pick<TagSchema, "id" | "name">[];
-    seo?: PostSeoSchema;
-    count: PostCountSchema;
-  }
+    user: User;
+    tags: Pick<Tag, "id" | "name">[];
+    seo?: PostSeo;
+    count: PostCount;
+  };
+}
 
-  export interface DraftSchema {
-    id: number;
-    title?: string;
-    json?: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-  }
+declare namespace FetchQuerySchema {
+  export type Pagination = {
+    limit?: number;
+    cursor?: number;
+  };
+
+  export type TagList = Pagination & {
+    name?: string;
+    type?: "recent" | "popular" | "new" | "trending";
+    category?: "week" | "all" | "month" | "year";
+  };
+
+  export type PostList = Pagination & {
+    keyword?: string;
+    type?: "recent" | "featured" | "past" | "personalized";
+    startDate?: string;
+    endDate?: string;
+    tag?: string;
+  };
+
+  export type GetTopPost = {
+    duration: number;
+  };
 }
 
 declare namespace FetchRespSchema {
-  export interface ListRespSchema<Item = Record<string, any>> {
+  export type ListResp<Item = Record<string, any>> = {
     list: Item[];
     totalCount: number;
     pageInfo: {
       endCursor: number | null;
       hasNextPage: boolean;
     };
-  }
+  };
 
-  export interface AuthRespSchema {
-    userId: number;
-    accessToken: string;
-  }
-
-  export interface UserRespSchema extends FetchSchema.UserSchema {}
-
-  export interface PostRespSchema {
+  export type DataIDResp = {
     dataId: number;
-  }
+  };
 
-  export interface DraftRespSchema extends PostRespSchema {}
+  export type UserResponse = FetchSchema.User;
 
-  export interface DraftDetailRespSchema extends FetchSchema.DraftSchema {}
+  export type PostResp = DataIDResp;
 
-  export interface TagWithPostCountSchema
-    extends Omit<FetchSchema.TagSchema, "deletedAt"> {
+  export type TagWithPostCountResp = {
     postsCount: number;
-  }
+  } & Omit<FetchSchema.Tag, "deletedAt">;
 
-  export interface UploadRespSchema
-    extends Omit<
-      FetchSchema.FileSchema,
-      "createdAt" | "updatedAt" | "deletedAt"
-    > {}
+  export type UploadResp = Omit<
+    FetchSchema.File,
+    "createdAt" | "updatedAt" | "deletedAt"
+  >;
 
-  export interface FileListRespSchema
-    extends ListRespSchema<Omit<FetchSchema.FileSchema, "deletedAt">> {}
+  export type FileListResp = ListResp<Omit<FetchSchema.File, "deletedAt">>;
 
-  export interface TagListRespSchema
-    extends ListRespSchema<TagWithPostCountSchema> {}
+  export type TagListResp = ListResp<TagWithPostCountResp>;
 
-  export interface TagDetailRespSchema {
+  export interface TagDetailResp {
     id: number;
     name: string;
     postCount: number;
@@ -191,56 +185,49 @@ declare namespace FetchRespSchema {
     isFollowing: boolean;
   }
 
-  export interface TagFollowRespSchema {
+  export type TagFollowResp = {
     dataId: number;
     count: number;
-  }
+  };
 
-  export interface PostDetailRespSchema extends FetchSchema.PostSchema {
-    count: FetchSchema.PostCountSchema;
-  }
+  export type PostDetailResp = FetchSchema.Post & {
+    count: FetchSchema.PostCount;
+  };
 
-  export interface PostLikeRespSchema extends PostDetailRespSchema {
+  export type PostLikeResp = PostDetailResp & {
     cursorId: number;
-  }
+  };
 
-  export interface PostListRespSchema
-    extends ListRespSchema<PostDetailRespSchema> {}
+  export type PostListResp = ListResp<PostDetailResp>;
 
-  export interface PostLikeListRespSchema
-    extends ListRespSchema<PostLikeRespSchema> {}
+  export type PostLikeListResp = ListResp<PostLikeResp>;
 
-  export type ExploreBlogsListRespSchema = Array<{
+  export type ExploreBlogsListResp = Array<{
     id: number;
     email: string;
     username: string;
     avatarUrl: string | null;
-    posts: Array<
-      Pick<PostDetailRespSchema, "id" | "title"> & { createdAt: number }
-    >;
+    posts: Array<Pick<PostDetailResp, "id" | "title"> & { createdAt: number }>;
   }>;
 
-  export interface GetTopPostsRespSchema {
-    posts: PostDetailRespSchema[];
+  export interface GetTopPostsResp {
+    posts: PostDetailResp[];
   }
 
-  export interface DraftListRespSchema
-    extends ListRespSchema<FetchSchema.DraftSchema> {}
-
-  export interface GetAritcleCircleRespSchema {
+  export interface GetAritcleCircleResp {
     id: number;
     username: string;
     email: string;
     profile: Pick<
-      FetchSchema.UserProfileSchema,
+      FetchSchema.UserProfile,
       "name" | "bio" | "avatarUrl" | "tagline"
     >;
-    count: FetchSchema.PostCountSchema;
-    lastPost: Pick<FetchSchema.PostSchema, "id" | "title" | "createdAt">;
+    count: FetchSchema.PostCount;
+    lastPost: Pick<FetchSchema.Post, "id" | "title" | "createdAt">;
   }
 
   export interface GetAritcleCirclesRespSchema {
-    circles: GetAritcleCircleRespSchema[];
+    circles: GetAritcleCircleResp[];
   }
 
   export interface GetWidgetBookmarkRespSchema {

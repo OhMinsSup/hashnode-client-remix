@@ -1,14 +1,14 @@
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 
 // types
-import type { V2_MetaFunction } from "@remix-run/cloudflare";
+import type { MetaFunction } from "@remix-run/cloudflare";
 
 import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
 import { MainLayout } from "~/components/shared/future/MainLayout";
 import { MainFooter } from "~/components/shared/future/MainFooter";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 
-export const meta: V2_MetaFunction = ({ data, matches }) => {
+export const meta: MetaFunction = ({ data, matches }) => {
   const Seo = {
     title: "My Items - Hashnode",
     description: "My Items - Hashnode",
@@ -18,7 +18,7 @@ export const meta: V2_MetaFunction = ({ data, matches }) => {
     matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
   const rootMetas = rootMeta.filter(
     // @ts-ignore
-    (meta) =>
+    (meta: any) =>
       meta.name !== "description" &&
       meta.name !== "og:title" &&
       meta.name !== "og:description" &&

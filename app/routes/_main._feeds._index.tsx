@@ -11,10 +11,10 @@ import {
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
 import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import type { Loader as MainLoader } from "~/routes/_main";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const response = await context.api.post.getPostsByList(request);
   return json(response);
 };
@@ -29,7 +29,6 @@ export default function Routes() {
     <HashnodeList
       trendingTags={
         <>
-          <TrendingTagsBox />
           <Suspense fallback={<></>}>
             <Await resolve={data?.trendingTag}>
               {(data) => <TrendingTagsBox />}

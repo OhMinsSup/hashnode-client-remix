@@ -1,10 +1,7 @@
 import Json from "superjson";
 import { redirect } from "@remix-run/cloudflare";
 
-import { getUserApi } from "~/api/user/user.server";
-import { getExploreBlogsApi } from "~/api/user/explore-blogs.server";
-import { userUpdateSchema } from "~/api/user/validation/update";
-import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 import { deleteUserApi as $deleteUserApi } from "services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "services/fetch/users/put-api.server";
@@ -19,8 +16,6 @@ import { schema as $getSchema } from "services/validate/user-get-api.validate";
 
 // types
 import type { Env } from "../env";
-import type { UserUpdateBody } from "~/api/user/validation/update";
-import type { GetExploreBlogsApiSearchParams } from "~/api/user/explore-blogs.server";
 import type { ServerService } from "services/app/server";
 import type { Params } from "@remix-run/react";
 
@@ -29,77 +24,6 @@ export class UserApiService {
     private readonly $env: Env,
     private readonly $server: ServerService
   ) {}
-
-  /**
-   * @deprecated
-   * @description 유저 정보 수정
-   * @param {Request} request
-   */
-  async updateUser(request: Request) {
-    const formData = await this.$server.readFormData(request);
-    const bodyString = formData.get("body")?.toString();
-    if (!bodyString) {
-      throw redirect(PAGE_ENDPOINTS.SETTINGS.ROOT, {
-        status: STATUS_CODE.BAD_REQUEST,
-      });
-    }
-    const jsonData = Json.parse<UserUpdateBody>(bodyString);
-    const input = await userUpdateSchema.parseAsync(jsonData);
-    return await $putUserApi(input, {
-      request,
-    });
-  }
-
-  /**
-   * @deprecated
-   * @description 유저 회원탈퇴
-   * @param {Request} request
-   */
-  async deleteUser(request: Request) {
-    if (request.method !== "DELETE") {
-      throw redirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT, {
-        status: STATUS_CODE.METHOD_NOT_ALLOED,
-      });
-    }
-    return await $deleteUserApi({
-      request,
-    });
-  }
-
-  /**
-   * @deprecated
-   * @description 유저 정보
-   * @param {Request} request
-   * @param {string} username
-   * @returns {Promise<ReturnType<typeof getUserApi>>}
-   */
-  async getUser(
-    request: Request,
-    username: string
-  ): Promise<ReturnType<typeof getUserApi>> {
-    if (!username) {
-      throw new Response("Not Found", { status: 404 });
-    }
-    const resp = await getUserApi(username, {
-      request: request,
-    });
-    if (resp.json?.resultCode !== RESULT_CODE.OK) {
-      throw new Response("Not Found", { status: 404 });
-    }
-    return resp;
-  }
-
-  /**
-   * @deprecated
-   */
-  async getExploreBlogs(
-    request: Request,
-    query?: GetExploreBlogsApiSearchParams
-  ) {
-    return await getExploreBlogsApi(query, {
-      request,
-    });
-  }
 
   /**
    * @version 2023-08-17

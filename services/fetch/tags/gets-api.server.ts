@@ -7,11 +7,11 @@ import type { ApiOptions } from "services/fetch/fetch.type";
 /**
  * @version 2023-08-17
  * @description 태그 리스트 API
- * @param {FetchSchema.TagListQuery} query
+ * @param {FetchQuerySchema.TagList} query
  * @param {ApiOptions?} options
  */
 export function getTagsApi(
-  query: FetchSchema.TagListQuery,
+  query: FetchQuerySchema.TagList,
   options?: ApiOptions
 ) {
   const searchParams = new URLSearchParams();

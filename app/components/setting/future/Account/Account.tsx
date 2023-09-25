@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { cn } from "~/utils/util";
-import { useSession } from "~/api/user/hooks/useSession";
+import { useSession } from "services/hooks/useSession";
 
 interface AccountProps {
   onDeleteAccount: () => void;

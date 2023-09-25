@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./styles.module.css";
 import { NavLink } from "@remix-run/react";
 import { cn } from "~/utils/util";

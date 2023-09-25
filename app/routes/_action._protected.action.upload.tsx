@@ -1,9 +1,9 @@
 import { json, redirect } from "@remix-run/cloudflare";
 
 // types
-import type { ActionArgs } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
-export const action = async ({ request, context }: ActionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { data, status } = await context.api.file.uploadWithCfImages(request);
   return json(data, { status });
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { json } from "@remix-run/cloudflare";
 import {
   Links,
@@ -7,19 +7,14 @@ import {
   LiveReload,
   Scripts,
   ScrollRestoration,
-  useRouteError,
-  isRouteErrorResponse,
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cssBundleHref } from "@remix-run/css-bundle";
 
 import classNames from "classnames";
 import { getDomainUrl, removeTrailingSlash } from "./utils/util";
 
-import NotFoundPage from "./components/errors/NotFoundPage";
-import InternalServerPage from "./components/errors/InternalServerPage";
 import { Body } from "./components/shared/future/Body";
 import {
   NonFlashOfWrongThemeEls,
@@ -35,9 +30,9 @@ import globalStyles from "~/styles/global.css";
 
 // types
 import type {
-  LoaderArgs,
   LinksFunction,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/cloudflare";
 import type { Theme } from "./context/useThemeContext";
 
@@ -48,7 +43,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const env = {
     API_BASE_URL: context.API_BASE_URL,
   };
@@ -58,7 +53,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
     theme: null,
     origin: getDomainUrl(request),
   } as {
-    currentProfile: FetchRespSchema.UserRespSchema | null;
+    currentProfile: FetchRespSchema.UserResponse | null;
     env: typeof env;
     theme: Theme | null;
     origin: string;
@@ -90,7 +85,7 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export type Loader = typeof loader;
 
-export const meta: V2_MetaFunction<Loader> = ({ location, data }) => {
+export const meta: MetaFunction<Loader> = ({ location, data }) => {
   const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",
@@ -246,16 +241,6 @@ function App() {
   const [theme] = useTheme();
   const data = useLoaderData<Loader>();
 
-  const client = useMemo(() => {
-    return new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
-  }, []);
-
   return (
     <html
       id="current-style"
@@ -272,21 +257,17 @@ function App() {
         <Links />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
       </head>
-      <QueryClientProvider client={client}>
-        <Body>
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-        </Body>
-      </QueryClientProvider>
+      <Body>
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </Body>
     </html>
   );
 }
 
 function AppError() {
-  const error = useRouteError();
-
   return (
     <html lang="en">
       <head>
@@ -296,15 +277,7 @@ function AppError() {
         <Links />
       </head>
       <Body>
-        <>
-          {isRouteErrorResponse(error) ? (
-            <>
-              {error.status !== 500 ? <NotFoundPage /> : <InternalServerPage />}
-            </>
-          ) : (
-            <InternalServerPage />
-          )}
-        </>
+        <>에러가 발생했습니다!!!</>
         <Scripts />
       </Body>
     </html>

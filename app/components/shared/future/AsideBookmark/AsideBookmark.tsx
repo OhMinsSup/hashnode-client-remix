@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import styles from "./styles.module.css";
 import { useFetcher } from "@remix-run/react";
-
+import { Link } from "lucide-react";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.]json";
 
 import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.]json";
@@ -57,9 +58,12 @@ export default function AsideBookmark() {
         </div>
       </div>
       <div className="">
-        <a href="/bookmarks" className={styles.btn_see_all}>
+        <Link
+          href={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
+          className={styles.btn_see_all}
+        >
           See all bookmarks
-        </a>
+        </Link>
       </div>
     </div>
   );

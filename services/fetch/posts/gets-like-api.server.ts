@@ -7,11 +7,11 @@ import type { ApiOptions } from "services/fetch/fetch.type";
 /**
  * @version 2023-08-17
  * @description 좋아요 포스트 리스트 조회 API
- * @param {FetchSchema.TagListQuery} query
+ * @param {FetchQuerySchema.Pagination} query
  * @param {ApiOptions?} options
  */
 export function getLikePostsApi(
-  query?: FetchSchema.PaginationQuery,
+  query?: FetchQuerySchema.Pagination,
   options?: ApiOptions
 ) {
   const searchParams = new URLSearchParams();

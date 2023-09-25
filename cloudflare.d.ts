@@ -1,12 +1,9 @@
-import type { ItemApiService } from "services/api/item";
 import type { AuthApiService } from "./services/api/auth";
 import type { UserApiService } from "./services/api/user";
 import type { ThemeService } from "./services/app/theme";
 import type { ServerService } from "./services/app/server";
 import type { Env } from "./services/env";
 import type { TagApiService } from "./services/api/tag";
-import type { WidgetApiService } from "./services/api/widget";
-import type { DraftApiService } from "./services/api/draft";
 import type { FileApiService } from "services/api/file";
 import type { ImagesService } from "services/app/images";
 import type { PostApiService } from "services/api/post";
@@ -30,10 +27,7 @@ declare module "@remix-run/server-runtime" {
     api: {
       auth: AuthApiService;
       user: UserApiService;
-      item: ItemApiService;
       tag: TagApiService;
-      widget: WidgetApiService;
-      draft: DraftApiService;
       file: FileApiService;
       post: PostApiService;
     };

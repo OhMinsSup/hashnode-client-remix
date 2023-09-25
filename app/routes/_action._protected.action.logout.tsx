@@ -1,7 +1,6 @@
-import { redirect } from "@remix-run/cloudflare";
-import type { ActionArgs } from "@remix-run/cloudflare";
+import { type ActionFunctionArgs, redirect } from "@remix-run/cloudflare";
 
-export const action = async ({ request, context }: ActionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const response = await context.api.auth.signoutWithAuth(request);
   return response;
 };

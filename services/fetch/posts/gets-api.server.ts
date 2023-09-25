@@ -7,11 +7,11 @@ import type { ApiOptions } from "services/fetch/fetch.type";
 /**
  * @version 2023-08-17
  * @description 포스트 리스트 조회 API
- * @param {FetchSchema.PostListQuery} query
+ * @param {FetchQuerySchema.PostList} query
  * @param {ApiOptions?} options
  */
 export function getPostsApi(
-  query: FetchSchema.PostListQuery,
+  query: FetchQuerySchema.PostList,
   options?: ApiOptions
 ) {
   const searchParams = new URLSearchParams();

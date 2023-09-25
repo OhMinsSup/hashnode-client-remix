@@ -1,8 +1,6 @@
 import React from "react";
-import { useRouteError } from "@remix-run/react";
 
 const NotFoundPage = () => {
-  const error = useRouteError();
   return (
     <div className="bg-slate-100">
       <div className="container mx-auto min-h-screen overflow-scroll border-l border-r bg-white">

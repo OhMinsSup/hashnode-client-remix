@@ -7,11 +7,11 @@ import type { ApiOptions } from "services/fetch/fetch.type";
 /**
  * @version 2023-08-17
  * @description Get top posts
- * @param {FetchSchema.GetTopPostsQuery} query
+ * @param {FetchQuerySchema.GetTopPost} query
  * @param {ApiOptions?} options
  */
 export function getTopPostsApi(
-  query?: FetchSchema.GetTopPostsQuery,
+  query?: FetchQuerySchema.GetTopPost,
   options?: ApiOptions
 ) {
   const searchParams = new URLSearchParams();

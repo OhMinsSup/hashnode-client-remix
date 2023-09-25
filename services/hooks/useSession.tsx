@@ -6,7 +6,7 @@ function isSession(user: any): user is UserRespSchema {
 }
 
 export function useOptionalSession(): UserRespSchema | undefined {
-  const data = useMatchesData("root");
+  const data = useMatchesData("root") as any;
   if (!data || !isSession(data.currentProfile)) {
     return undefined;
   }

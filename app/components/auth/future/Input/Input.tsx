@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 
 // hooks
 import { useActionData, useNavigation } from "@remix-run/react";
-import { ErrorMessage } from "../ErrorMessage";
+import { ErrorMessage } from "~/components/auth/future/ErrorMessage";
 import { getTargetElement } from "~/libs/browser-utils";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {

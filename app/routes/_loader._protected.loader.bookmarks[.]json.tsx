@@ -1,12 +1,11 @@
 import { json } from "@remix-run/cloudflare";
 
 // types
-import type { LoaderArgs } from "@remix-run/cloudflare";
-import type { PostListRespSchema } from "~/api/schema/resp";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ context, request }: LoaderArgs) => {
-  const response = await context.api.item.getItemsByLikeList(request);
-  return json<PostListRespSchema>(response);
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const response = await context.api.post.getPostsByLikeList(request);
+  return json(response);
 };
 
 export type Loader = typeof loader;

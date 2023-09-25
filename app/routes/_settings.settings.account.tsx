@@ -10,9 +10,9 @@ import {
 } from "@remix-run/react";
 
 // types
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 
-export const meta: V2_MetaFunction = ({ matches }) => {
+export const meta: MetaFunction = ({ matches }) => {
   const Seo = {
     title: "Account Settings — Hashnode",
   };
@@ -21,7 +21,7 @@ export const meta: V2_MetaFunction = ({ matches }) => {
     matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
   const rootMetas = rootMeta.filter(
     // @ts-ignore
-    (meta) =>
+    (meta: any) =>
       meta.name !== "description" &&
       meta.name !== "og:title" &&
       meta.name !== "og:description" &&
@@ -45,7 +45,7 @@ export const meta: V2_MetaFunction = ({ matches }) => {
   ];
 };
 
-export const action = async ({ context, request }: ActionArgs) => {
+export const action = async ({ context, request }: ActionFunctionArgs) => {
   const response = await context.api.user.deleteByUser(request);
   if (response instanceof Response) return response;
   return json(response);
@@ -65,7 +65,6 @@ export default function Routes() {
 
     fetcher.submit(null, {
       method: "DELETE",
-      replace: true,
     });
   }, [fetcher]);
 
