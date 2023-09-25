@@ -3,7 +3,7 @@ import DraftEditorTitle from "./DraftEditorTitle";
 import DraftEditorSubtitle from "./DraftEditorSubtitle";
 import DraftEditorCover from "./DraftEditorCover";
 import EditorContainer from "./EditorContainer";
-import { ClientOnly } from "remix-utils";
+import { ClientOnly } from "../shared/future/ClientOnly";
 
 export default function DraftEditorContent() {
   return (

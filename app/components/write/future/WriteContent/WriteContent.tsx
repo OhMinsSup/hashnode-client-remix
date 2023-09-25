@@ -4,9 +4,10 @@ import { TipTapEditor } from "~/components/shared/future/Tiptap";
 
 interface WriteConrentProps {
   header?: React.ReactNode;
+  drawer?: React.ReactNode;
 }
 
-export default function WriteConrent({ header }: WriteConrentProps) {
+export default function WriteConrent({ header, drawer }: WriteConrentProps) {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -25,6 +26,7 @@ export default function WriteConrent({ header }: WriteConrentProps) {
             </div>
           </div>
         </div>
+        {drawer}
       </div>
     </div>
   );

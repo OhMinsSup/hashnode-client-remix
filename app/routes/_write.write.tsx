@@ -5,12 +5,13 @@ import { WriteHead } from "~/components/write/future/WriteHead";
 import { WriteHeader } from "~/components/write/future/WriteHeader";
 import { WriteLeftHeader } from "~/components/write/future/WriteLeftHeader";
 import { WriteRightHeader } from "~/components/write/future/WriteRightHeader";
+import { WritePublishDrawer } from "~/components/write/future/WritePublishDrawer";
 
 export default function Routes() {
   return (
     <>
       <WriteHeader left={<WriteLeftHeader />} right={<WriteRightHeader />} />
-      <WriteContent header={<WriteHead />} />
+      <WriteContent header={<WriteHead />} drawer={<WritePublishDrawer />} />
     </>
   );
 }
