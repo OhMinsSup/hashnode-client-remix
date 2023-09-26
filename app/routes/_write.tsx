@@ -10,14 +10,15 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 // types
 import type {
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/cloudflare";
 import { WriteLayout } from "~/components/write/future/WriteLayout";
 import { WriteLeftSide } from "~/components/write/future/WriteLeftSide";
 import editorStyles from "~/styles/common/editor.css";
+import { WriteProvider } from "~/context/useWriteContext";
 
-export const meta: V2_MetaFunction = ({ matches }) => {
+export const meta: MetaFunction = ({ matches }) => {
   const Seo = {
     title: "Editing Article",
   };
@@ -26,7 +27,7 @@ export const meta: V2_MetaFunction = ({ matches }) => {
     matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
   const rootMetas = rootMeta.filter(
     // @ts-ignore
-    (meta) =>
+    (meta: any) =>
       meta.name !== "description" &&
       meta.name !== "og:title" &&
       meta.name !== "og:description" &&
@@ -54,7 +55,7 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: editorStyles }];
 };
 
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (!isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT, {
@@ -66,9 +67,11 @@ export const loader = async ({ context, request }: LoaderArgs) => {
 
 export default function Routes() {
   return (
-    <WriteLayout sidebar={<WriteLeftSide />}>
-      <Outlet />
-    </WriteLayout>
+    <WriteProvider>
+      <WriteLayout sidebar={<WriteLeftSide />}>
+        <Outlet />
+      </WriteLayout>
+    </WriteProvider>
   );
 }
 

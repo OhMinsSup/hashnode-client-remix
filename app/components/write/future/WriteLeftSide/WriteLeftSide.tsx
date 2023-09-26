@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { useSession } from "services/hooks/useSession";
+import { useWriteContext } from "~/context/useWriteContext";
 
 const TAGS = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -21,7 +22,13 @@ export default function WriteLeftSide() {
 }
 
 WriteLeftSide.Title = function Title() {
+  const { setSideClose } = useWriteContext();
   const session = useSession();
+
+  const onClickClose = useCallback(() => {
+    setSideClose();
+  }, [setSideClose]);
+
   return (
     <div className={styles.title}>
       <div className="css-0">
@@ -59,7 +66,11 @@ WriteLeftSide.Title = function Title() {
         </div>
       </div>
       <div className="ml-2">
-        <button type="button" className={styles.btn_close}>
+        <button
+          type="button"
+          className={styles.btn_close}
+          onClick={onClickClose}
+        >
           <svg viewBox="0 0 320 512">
             <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
           </svg>
