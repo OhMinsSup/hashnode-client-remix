@@ -7,6 +7,14 @@ enum Action {
 
   SET_SIDE_OPEN = "SET_SIDE_OPEN",
   SET_SIDE_CLOSE = "SET_SIDE_CLOSE",
+
+  SET_SUBTITLE_OPEN = "SET_SUBTITLE_OPEN",
+  SET_SUBTITLE_CLOSE = "SET_SUBTITLE_CLOSE",
+
+  SET_COVER_OPEN = "SET_COVER_OPEN",
+  SET_COVER_CLOSE = "SET_COVER_CLOSE",
+
+  SET_UPLOAD_STATE = "SET_UPLOAD_STATE",
 }
 
 type OpenAction = {
@@ -25,15 +33,44 @@ type SetSideCloseAction = {
   type: Action.SET_SIDE_CLOSE;
 };
 
+type SetSubtitleOpenAction = {
+  type: Action.SET_SUBTITLE_OPEN;
+};
+
+type SetSubtitleCloseAction = {
+  type: Action.SET_SUBTITLE_CLOSE;
+};
+
+type SetCoverOpenAction = {
+  type: Action.SET_COVER_OPEN;
+};
+
+type SetCoverCloseAction = {
+  type: Action.SET_COVER_CLOSE;
+};
+
+type SetUploadStateAction = {
+  type: Action.SET_UPLOAD_STATE;
+  payload: "idle" | "pending" | "success" | "error";
+};
+
 type WriteAction =
   | OpenAction
   | CloseAction
   | SetSideOpenAction
-  | SetSideCloseAction;
+  | SetSideCloseAction
+  | SetSubtitleOpenAction
+  | SetSubtitleCloseAction
+  | SetCoverOpenAction
+  | SetCoverCloseAction
+  | SetUploadStateAction;
 
 interface WriteState {
   isOpen: boolean;
   isSideOpen: boolean;
+  isSubtitleOpen: boolean;
+  isCoverOpen: boolean;
+  uploadState: "idle" | "pending" | "success" | "error";
 }
 
 interface WriteContext extends WriteState {
@@ -41,12 +78,20 @@ interface WriteContext extends WriteState {
   close: () => void;
   setSideOpen: () => void;
   setSideClose: () => void;
+  setSubtitleOpen: () => void;
+  setSubtitleClose: () => void;
+  setCoverOpen: () => void;
+  setCoverClose: () => void;
+  setUploadState: (payload: SetUploadStateAction["payload"]) => void;
   dispatch: React.Dispatch<WriteAction>;
 }
 
 const initialState: WriteState = {
   isOpen: false,
-  isSideOpen: true,
+  isSideOpen: false,
+  isSubtitleOpen: false,
+  isCoverOpen: false,
+  uploadState: "idle",
 };
 
 const [Provider, useWriteContext] = createContext<WriteContext>({
@@ -81,6 +126,36 @@ function reducer(state = initialState, action: WriteAction) {
         isSideOpen: false,
       };
     }
+    case Action.SET_SUBTITLE_OPEN: {
+      return {
+        ...state,
+        isSubtitleOpen: true,
+      };
+    }
+    case Action.SET_SUBTITLE_CLOSE: {
+      return {
+        ...state,
+        isSubtitleOpen: false,
+      };
+    }
+    case Action.SET_COVER_OPEN: {
+      return {
+        ...state,
+        isCoverOpen: true,
+      };
+    }
+    case Action.SET_COVER_CLOSE: {
+      return {
+        ...state,
+        isCoverOpen: false,
+      };
+    }
+    case Action.SET_UPLOAD_STATE: {
+      return {
+        ...state,
+        uploadState: action.payload,
+      };
+    }
     default:
       return state;
   }
@@ -101,6 +176,17 @@ function WriteProvider({ children }: Props) {
 
   const setSideClose = () => dispatch({ type: Action.SET_SIDE_CLOSE });
 
+  const setSubtitleOpen = () => dispatch({ type: Action.SET_SUBTITLE_OPEN });
+
+  const setSubtitleClose = () => dispatch({ type: Action.SET_SUBTITLE_CLOSE });
+
+  const setCoverOpen = () => dispatch({ type: Action.SET_COVER_OPEN });
+
+  const setCoverClose = () => dispatch({ type: Action.SET_COVER_CLOSE });
+
+  const setUploadState = (payload: SetUploadStateAction["payload"]) =>
+    dispatch({ type: Action.SET_UPLOAD_STATE, payload });
+
   const actions = useMemo(
     () => ({
       ...state,
@@ -108,6 +194,11 @@ function WriteProvider({ children }: Props) {
       close,
       setSideOpen,
       setSideClose,
+      setSubtitleOpen,
+      setSubtitleClose,
+      setCoverOpen,
+      setCoverClose,
+      setUploadState,
       dispatch,
     }),
     [state]

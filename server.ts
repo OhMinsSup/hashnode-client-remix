@@ -1,7 +1,7 @@
 import { logDevReady } from "@remix-run/cloudflare";
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
 
-import { EnvSchema } from "./services/env";
+import { EnvSchema, type RuntimeEnv } from "./services/env";
 
 import { AuthApiService } from "./services/api/auth";
 import { UserApiService } from "./services/api/user";
@@ -11,11 +11,9 @@ import { PostApiService } from "./services/api/post";
 
 import { ThemeService } from "./services/app/theme";
 import { ServerService } from "./services/app/server";
-import { ImagesService } from "services/app/images";
+import { ImagesService } from "./services/app/images";
 
 import * as build from "@remix-run/dev/server-build";
-
-import type { RuntimeEnv } from "./cloudflare";
 
 if (process.env.NODE_ENV === "development") {
   logDevReady(build);

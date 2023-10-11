@@ -8,3 +8,11 @@ export const EnvSchema = z.object({
 });
 
 export type Env = z.infer<typeof EnvSchema>;
+
+export interface RuntimeEnv {
+  API_BASE_URL: Env["API_BASE_URL"];
+  COOKIE_SESSION_SECRET: Env["COOKIE_SESSION_SECRET"];
+  CF_ID: Env["CF_ID"];
+  CF_API_TOKEN: Env["CF_API_TOKEN"];
+  [key: string]: unknown;
+}

@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import * as Popover from "@radix-ui/react-popover";
 
 import { cn } from "~/utils/util";
+import { useWriteContext } from "~/context/useWriteContext";
 
 export default function WriteRightHeader() {
+  const { open } = useWriteContext();
+
+  const onOpen = useCallback(() => {
+    open();
+  }, [open]);
+
   return (
     <>
       <WriteRightHeader.HashnodeAiButton />
@@ -19,7 +26,7 @@ export default function WriteRightHeader() {
       <button type="button" className={styles.btn_preview}>
         <span>Preview</span>
       </button>
-      <button type="button" className={styles.btn_publish}>
+      <button type="button" className={styles.btn_publish} onClick={onOpen}>
         <span>Publish</span>
       </button>
     </>

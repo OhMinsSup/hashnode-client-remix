@@ -6,13 +6,14 @@ import { WriteHeader } from "~/components/write/future/WriteHeader";
 import { WriteLeftHeader } from "~/components/write/future/WriteLeftHeader";
 import { WriteRightHeader } from "~/components/write/future/WriteRightHeader";
 import { WritePublishDrawer } from "~/components/write/future/WritePublishDrawer";
+import { WriteFormProvider } from "~/components/write/context/form";
 
 export default function Routes() {
   return (
-    <>
+    <WriteFormProvider>
       <WriteHeader left={<WriteLeftHeader />} right={<WriteRightHeader />} />
       <WriteContent header={<WriteHead />} drawer={<WritePublishDrawer />} />
-    </>
+    </WriteFormProvider>
   );
 }
 

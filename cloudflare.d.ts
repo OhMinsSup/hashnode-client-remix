@@ -1,35 +1,9 @@
-import type { AuthApiService } from "./services/api/auth";
-import type { UserApiService } from "./services/api/user";
-import type { ThemeService } from "./services/app/theme";
-import type { ServerService } from "./services/app/server";
-import type { Env } from "./services/env";
-import type { TagApiService } from "./services/api/tag";
-import type { FileApiService } from "services/api/file";
-import type { ImagesService } from "services/app/images";
-import type { PostApiService } from "services/api/post";
-
-// remix.run load, action cloudflare pages context
-export interface RuntimeEnv {
-  API_BASE_URL: Env["API_BASE_URL"];
-  COOKIE_SESSION_SECRET: Env["COOKIE_SESSION_SECRET"];
-  CF_ID: Env["CF_ID"];
-  CF_API_TOKEN: Env["CF_API_TOKEN"];
-  [key: string]: unknown;
-}
+import type { RemixContext } from "./services/types";
 
 declare module "@remix-run/server-runtime" {
-  export interface AppLoadContext extends RuntimeEnv {
-    services: {
-      theme: ThemeService;
-      server: ServerService;
-      images: ImagesService;
-    };
-    api: {
-      auth: AuthApiService;
-      user: UserApiService;
-      tag: TagApiService;
-      file: FileApiService;
-      post: PostApiService;
-    };
-  }
+  export interface AppLoadContext extends RemixContext {}
+}
+
+declare module "@remix-run/cloudflare" {
+  export interface AppLoadContext extends RemixContext {}
 }

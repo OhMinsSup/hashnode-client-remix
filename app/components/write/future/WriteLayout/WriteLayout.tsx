@@ -22,8 +22,6 @@ export default function WriteLayout({ children, sidebar }: WriteLayoutProps) {
     if (isMobile) setSideClose();
   }, [isMobile]);
 
-  console.log("hydrating", hydrating);
-
   return (
     <div className={styles.root} data-hydrating-signal>
       <div
