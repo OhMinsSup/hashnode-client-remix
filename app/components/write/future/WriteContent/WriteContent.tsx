@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { TipTapEditor } from "~/components/shared/future/Tiptap";
+import { useWriteFormContext } from "../../context/form";
 
 interface WriteConrentProps {
   header?: React.ReactNode;
@@ -8,6 +9,10 @@ interface WriteConrentProps {
 }
 
 export default function WriteConrent({ header, drawer }: WriteConrentProps) {
+  const { setValue, watch } = useWriteFormContext();
+
+  const html = watch("content") ?? "";
+
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -16,11 +21,11 @@ export default function WriteConrent({ header, drawer }: WriteConrentProps) {
           <div className={styles.wrapper}>
             <div className={styles.editor}>
               <TipTapEditor
-                value={"<p>test</p>"}
+                value={html}
                 editable={true}
                 debouncedUpdatesEnabled={true}
                 onChange={(description: Object, description_html: string) => {
-                  console.log(description, description_html);
+                  setValue("content", description_html);
                 }}
               />
             </div>
