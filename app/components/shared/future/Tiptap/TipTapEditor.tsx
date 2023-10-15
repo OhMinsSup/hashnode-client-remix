@@ -3,9 +3,9 @@ import type { Editor } from "@tiptap/react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 import { TiptapExtensions } from "./extensions";
-import { EditorBubbleMenu } from "./bubble-menu";
+// import { EditorBubbleMenu } from "./bubble-menu";
 import { TiptapEditorProps } from "./props";
-import { ImageResizer } from "./extensions/image-resize";
+// import { ImageResizer } from "./extensions/image-resize";
 import { useDebouncedCallback } from "use-debounce";
 
 // define your extension array
@@ -83,9 +83,9 @@ const Tiptap = (props: ITipTapRichTextEditor) => {
       }}
       className={`tiptap-editor-container`}
     >
-      {editor && <EditorBubbleMenu editor={editor} />}
+      {/* {editor && <EditorBubbleMenu editor={editor} />} */}
       <EditorContent editor={editor} />
-      {editor?.isActive("image") && <ImageResizer editor={editor} />}
+      {/* {editor?.isActive("image") && <ImageResizer editor={editor} />} */}
     </div>
   );
 };

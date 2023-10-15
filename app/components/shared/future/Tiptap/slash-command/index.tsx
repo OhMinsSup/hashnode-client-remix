@@ -2,11 +2,12 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  ReactNode,
+  type ReactNode,
   useRef,
   useLayoutEffect,
 } from "react";
-import { Editor, Range, Extension } from "@tiptap/core";
+import type { Editor, Range } from "@tiptap/core";
+import { Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
@@ -141,7 +142,7 @@ const getSuggestionItems =
         searchTerms: ["todo", "task", "list", "check", "checkbox"],
         icon: <CheckSquare size={18} />,
         command: ({ editor, range }: CommandProps) => {
-          editor.chain().focus().deleteRange(range).toggleTaskList().run();
+          // editor.chain().focus().deleteRange(range).toggleTaskList().run();
         },
       },
       {
@@ -150,7 +151,7 @@ const getSuggestionItems =
         searchTerms: ["unordered", "point"],
         icon: <List size={18} />,
         command: ({ editor, range }: CommandProps) => {
-          editor.chain().focus().deleteRange(range).toggleBulletList().run();
+          // editor.chain().focus().deleteRange(range).toggleBulletList().run();
         },
       },
       {
@@ -159,7 +160,7 @@ const getSuggestionItems =
         searchTerms: ["line", "divider", "horizontal", "rule", "separate"],
         icon: <MinusSquare size={18} />,
         command: ({ editor, range }: CommandProps) => {
-          editor.chain().focus().deleteRange(range).setHorizontalRule().run();
+          // editor.chain().focus().deleteRange(range).setHorizontalRule().run();
         },
       },
       {
@@ -168,12 +169,12 @@ const getSuggestionItems =
         searchTerms: ["table", "cell", "db", "data", "tabular"],
         icon: <Table size={18} />,
         command: ({ editor, range }: CommandProps) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-            .run();
+          // editor
+          //   .chain()
+          //   .focus()
+          //   .deleteRange(range)
+          //   .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+          //   .run();
         },
       },
       {
@@ -182,7 +183,7 @@ const getSuggestionItems =
         searchTerms: ["ordered"],
         icon: <ListOrdered size={18} />,
         command: ({ editor, range }: CommandProps) => {
-          editor.chain().focus().deleteRange(range).toggleOrderedList().run();
+          // editor.chain().focus().deleteRange(range).toggleOrderedList().run();
         },
       },
       {
@@ -190,22 +191,24 @@ const getSuggestionItems =
         description: "Capture a quote.",
         searchTerms: ["blockquote"],
         icon: <TextQuote size={18} />,
-        command: ({ editor, range }: CommandProps) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .toggleNode("paragraph", "paragraph")
-            .toggleBlockquote()
-            .run(),
+        command: ({ editor, range }: CommandProps) => {
+          // editor
+          //   .chain()
+          //   .focus()
+          //   .deleteRange(range)
+          //   .toggleNode("paragraph", "paragraph")
+          //   .toggleBlockquote()
+          //   .run();
+        },
       },
       {
         title: "Code",
         description: "Capture a code snippet.",
         searchTerms: ["codeblock"],
         icon: <Code size={18} />,
-        command: ({ editor, range }: CommandProps) =>
-          editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
+        command: ({ editor, range }: CommandProps) => {
+          // editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
+        },
       },
       {
         title: "Image",
@@ -358,7 +361,7 @@ const renderItems = () => {
     onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
       component = new ReactRenderer(CommandList, {
         props,
-        editor: props.editor,
+        editor: props.editor as any,
       });
 
       // @ts-ignore

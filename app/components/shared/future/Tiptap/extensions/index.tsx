@@ -1,30 +1,30 @@
 import StarterKit from "@tiptap/starter-kit";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import TiptapLink from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
-import TiptapUnderline from "@tiptap/extension-underline";
-import TextStyle from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
-import TaskItem from "@tiptap/extension-task-item";
-import TaskList from "@tiptap/extension-task-list";
-import { Markdown } from "tiptap-markdown";
-import Highlight from "@tiptap/extension-highlight";
+// import HorizontalRule from "@tiptap/extension-horizontal-rule";
+// import TiptapLink from "@tiptap/extension-link";
+// import Placeholder from "@tiptap/extension-placeholder";
+// import TiptapUnderline from "@tiptap/extension-underline";
+// import TextStyle from "@tiptap/extension-text-style";
+// import { Color } from "@tiptap/extension-color";
+// import TaskItem from "@tiptap/extension-task-item";
+// import TaskList from "@tiptap/extension-task-list";
+// import { Markdown } from "tiptap-markdown";
+// import Highlight from "@tiptap/extension-highlight";
 // import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 // import { createLowlight } from "lowlight/lib/core";
-import SlashCommand from "../slash-command";
-import { InputRule } from "@tiptap/core";
-import Gapcursor from "@tiptap/extension-gapcursor";
+// import SlashCommand from "../slash-command";
+// import { InputRule } from "@tiptap/core";
+// import Gapcursor from "@tiptap/extension-gapcursor";
 
 // import ts from "highlight.js/lib/languages/typescript";
 
 import "highlight.js/styles/github-dark.css";
 // import UniqueID from "@tiptap-pro/extension-unique-id";
-import UpdatedImage from "./updated-image";
-import isValidHttpUrl from "../bubble-menu/utils/link-validator";
-import { CustomTableCell } from "./table/table-cell";
-import { Table } from "./table/table";
-import { TableHeader } from "./table/table-header";
-import { TableRow } from "@tiptap/extension-table-row";
+// import UpdatedImage from "./updated-image";
+// import isValidHttpUrl from "../bubble-menu/utils/link-validator";
+// import { CustomTableCell } from "./table/table-cell";
+// import { Table } from "./table/table";
+// import { TableHeader } from "./table/table-header";
+// import { TableRow } from "@tiptap/extension-table-row";
 
 // createLowlight().registerLanguage("ts", ts);
 
@@ -70,83 +70,83 @@ export const TiptapExtensions = (
   // CodeBlockLowlight.configure({
   //   lowlight,
   // }),
-  HorizontalRule.extend({
-    addInputRules() {
-      return [
-        new InputRule({
-          find: /^(?:---|—-|___\s|\*\*\*\s)$/,
-          handler: ({ state, range, commands }) => {
-            commands.splitBlock();
+  // HorizontalRule.extend({
+  //   addInputRules() {
+  //     return [
+  //       new InputRule({
+  //         find: /^(?:---|—-|___\s|\*\*\*\s)$/,
+  //         handler: ({ state, range, commands }) => {
+  //           commands.splitBlock();
 
-            const attributes = {};
-            const { tr } = state;
-            const start = range.from;
-            const end = range.to;
-            // @ts-ignore
-            tr.replaceWith(start - 1, end, this.type.create(attributes));
-          },
-        }),
-      ];
-    },
-  }).configure({
-    HTMLAttributes: {
-      class: "mb-6 border-t border-custom-border-300",
-    },
-  }),
-  Gapcursor,
-  TiptapLink.configure({
-    protocols: ["http", "https"],
-    validate: (url) => isValidHttpUrl(url),
-    HTMLAttributes: {
-      class:
-        "text-custom-primary-300 underline underline-offset-[3px] hover:text-custom-primary-500 transition-colors cursor-pointer",
-    },
-  }),
-  UpdatedImage.configure({
-    HTMLAttributes: {
-      class: "rounded-lg border border-custom-border-300",
-    },
-  }),
-  Placeholder.configure({
-    placeholder: ({ node }) => {
-      if (node.type.name === "heading") {
-        return `Heading ${node.attrs.level}`;
-      }
-      if (node.type.name === "image" || node.type.name === "table") {
-        return "";
-      }
+  //           const attributes = {};
+  //           const { tr } = state;
+  //           const start = range.from;
+  //           const end = range.to;
+  //           // @ts-ignore
+  //           tr.replaceWith(start - 1, end, this.type.create(attributes));
+  //         },
+  //       }),
+  //     ];
+  //   },
+  // }).configure({
+  //   HTMLAttributes: {
+  //     class: "mb-6 border-t border-custom-border-300",
+  //   },
+  // }),
+  // Gapcursor,
+  // TiptapLink.configure({
+  //   protocols: ["http", "https"],
+  //   validate: (url) => isValidHttpUrl(url),
+  //   HTMLAttributes: {
+  //     class:
+  //       "text-custom-primary-300 underline underline-offset-[3px] hover:text-custom-primary-500 transition-colors cursor-pointer",
+  //   },
+  // }),
+  // UpdatedImage.configure({
+  //   HTMLAttributes: {
+  //     class: "rounded-lg border border-custom-border-300",
+  //   },
+  // }),
+  // Placeholder.configure({
+  //   placeholder: ({ node }) => {
+  //     if (node.type.name === "heading") {
+  //       return `Heading ${node.attrs.level}`;
+  //     }
+  //     if (node.type.name === "image" || node.type.name === "table") {
+  //       return "";
+  //     }
 
-      return "Press '/' for commands...";
-    },
-    includeChildren: true,
-  }),
+  //     return "Press '/' for commands...";
+  //   },
+  //   includeChildren: true,
+  // }),
   // UniqueID.configure({
   //   types: ["image"],
   // }),
-  SlashCommand(setIsSubmitting),
-  TiptapUnderline,
-  TextStyle,
-  Color,
-  Highlight.configure({
-    multicolor: true,
-  }),
-  TaskList.configure({
-    HTMLAttributes: {
-      class: "not-prose pl-2",
-    },
-  }),
-  TaskItem.configure({
-    HTMLAttributes: {
-      class: "flex items-start my-4",
-    },
-    nested: true,
-  }),
-  Markdown.configure({
-    html: true,
-    transformCopiedText: true,
-  }),
-  Table,
-  TableHeader,
-  CustomTableCell,
-  TableRow,
+  // SlashCommand(setIsSubmitting),
+  // TiptapUnderline,
+  // TextStyle,
+  // Color,
+  // Highlight.configure({
+  //   multicolor: true,
+  // }),
+  // TaskList.configure({
+  //   HTMLAttributes: {
+  //     class: "not-prose pl-2",
+  //   },
+  // }),
+  // TaskItem.configure({
+  //   HTMLAttributes: {
+  //     class: "flex items-start my-4",
+  //   },
+  //   nested: true,
+  // }),
+  // Markdown.configure({
+  //   html: true,
+  //   transformCopiedText: true,
+  // }),
+  // Table,
+  // TableHeader,
+  // CustomTableCell,
+  // TableRow,
 ];
