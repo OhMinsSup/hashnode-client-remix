@@ -1,0 +1,17 @@
+.ipt_label {
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+}
+
+.ipt_checkbox {
+  margin-right: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+  padding: 0.25rem;
+}
