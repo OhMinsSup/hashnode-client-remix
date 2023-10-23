@@ -1,4 +1,3 @@
-import type { GetMyPostListApiSearchParams } from "~/api/posts/my-posts.server";
 import type { Nullable } from "~/api/schema/api";
 import { Icons } from "~/components/shared/Icons";
 
@@ -18,6 +17,7 @@ export const API_ENDPOINTS = {
   POSTS: {
     ROOT: "posts",
     GET_TOP_POSTS: "posts/get-top-posts",
+    GET_DRAFT_POSTS: "posts/get-draft-posts",
     GET_LIKES: "posts/get-likes",
     ID: (id: string | number) => `posts/${id}`,
   },
@@ -48,11 +48,9 @@ export const QUERIES_KEY = {
   },
   POSTS: {
     GET_MY_POSTS: (
-      query?: GetMyPostListApiSearchParams
-    ): [string, GetMyPostListApiSearchParams?] => {
-      const keys: [string, GetMyPostListApiSearchParams?] = [
-        "getMyPostListApi",
-      ];
+      query?: FetchQuerySchema.PostList
+    ): [string, FetchQuerySchema.PostList?] => {
+      const keys: [string, FetchQuerySchema.PostList?] = ["getMyPostListApi"];
       if (query) keys.push(query);
       return keys;
     },
@@ -121,6 +119,10 @@ export const PAGE_ENDPOINTS = {
   USERS: {
     ROOT: "/users",
     ID: (username: string) => `/blog/@${username}`,
+  },
+  WRITE: {
+    ROOT: "/write",
+    ID: (id: string | number) => `/write/${id}`,
   },
 } as const;
 

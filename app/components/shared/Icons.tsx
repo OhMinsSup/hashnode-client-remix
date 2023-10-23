@@ -652,6 +652,7 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    Write: WriteIcon,
     NotificationAllCheck: (props: IconProps) => (
       <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
         <path

@@ -1,9 +1,15 @@
+import Json from "superjson";
+
 import { RESULT_CODE } from "~/constants/constant";
 import { getPostsApi as $getPostsApi } from "services/fetch/posts/gets-api.server";
 import { getLikePostsApi as $getLikePostsApi } from "services/fetch/posts/gets-like-api.server";
 import { getTopPostsApi as $getTopPostsApi } from "services/fetch/posts/gets-top-api.server";
+import { getDraftPostsApi as $getDraftPostsApi } from "services/fetch/posts/gets-draft-api.server";
+import { createPostApi as $createPostApi } from "services/fetch/posts/create-api.server";
+import { getPostApi as $getPostApi } from "services/fetch/posts/get-api.server";
 
 import { FetchService } from "services/fetch/fetch.client";
+import { schema as $createSchema } from "services/validate/post-create-api.validate";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -11,6 +17,7 @@ import { parseUrlParams } from "~/utils/util";
 // types
 import type { Env } from "../env";
 import type { ServerService } from "services/app/server";
+import type { FormFieldValues } from "services/validate/post-create-api.validate";
 
 export class PostApiService {
   constructor(
@@ -52,6 +59,94 @@ export class PostApiService {
   }
 
   /**
+   * @description 초안작성 포스트 가져오기
+   * @param {FetchQuerySchema.GetTopPost} query
+   * @param {Request} request
+   */
+  async draftList(query: FetchQuerySchema.Pagination, request: Request) {
+    return await $getDraftPostsApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @description 포스트 상세 읽기
+   * @param {string | number} id
+   * @param {Request} request
+   */
+  async get(id: string | number, request: Request) {
+    return await $getPostApi(id, {
+      request,
+    });
+  }
+
+  /**
+   * @description 포스트 작성하기
+   * @param {FormFieldValues} input
+   * @param {Request} request
+   */
+  async create(input: FormFieldValues, request: Request) {
+    return await $createPostApi(input, {
+      request,
+    });
+  }
+
+  /**
+   * @description 포스트 작성하기 (action, loader)
+   * @param {Request} request
+   */
+  async createItem(request: Request) {
+    try {
+      const formData = await this.$server.readFormData(request);
+      const bodyString = formData.get("body")?.toString();
+      if (!bodyString) {
+        throw new TypeError(
+          "body is not defined. please check your request body."
+        );
+      }
+      const input = await $createSchema.parseAsync(Json.parse(bodyString));
+      return await this.create(input, request);
+    } catch (error) {
+      const error_body = this.$server.readBodyError(error);
+      if (error_body) {
+        return error_body;
+      }
+
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        return error_validation;
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * @version 2023-08-16
+   * @description loader에서 호출 할 때 사용하는 함수 (상세)
+   * @param {string | number} id
+   * @param {Request} request
+   */
+  async getPost(id: string | number, request: Request) {
+    try {
+      const response = await this.get(id, request);
+      const json =
+        await this.$server.toJSON<FetchRespSchema.PostDetailResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return null;
+      }
+      return json.result;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {FetchQuerySchema.PostList} params
@@ -63,6 +158,31 @@ export class PostApiService {
   ) {
     try {
       const response = await this.list(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
+   * @param {Request} request
+   */
+  async getPostsByDraftList(request: Request) {
+    try {
+      const params = parseUrlParams(request.url);
+      const response = await this.draftList(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
@@ -152,6 +272,10 @@ export class PostApiService {
     }
   }
 
+  /**
+   * @version 2023-08-17
+   * @description 기본 포스트 리스트
+   */
   private getDefaultPostList() {
     return {
       list: [],

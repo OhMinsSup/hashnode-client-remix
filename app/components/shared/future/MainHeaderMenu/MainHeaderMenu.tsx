@@ -36,14 +36,16 @@ export default function MainHeaderMenu() {
           <Icons.Search />
         </button>
       </div>
-      <div className={styles.write}>
-        <div className={styles.btn_write}>
-          <Link to={PAGE_ENDPOINTS.DRAFT.ROOT} aria-label="Write">
-            <Icons.Write />
-            <span>Write</span>
-          </Link>
+      {session && (
+        <div className={styles.write}>
+          <div className={styles.btn_write}>
+            <Link to={PAGE_ENDPOINTS.WRITE.ROOT} aria-label="Write">
+              <Icons.V2.Write />
+              <span>Write</span>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
       <div className={styles.menus}>
         <div className={styles.menus_btn_area}>
           {isMobile && (

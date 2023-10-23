@@ -2,13 +2,23 @@ import { ZodError } from "zod";
 import { FetchError } from "services/fetch/fetch.error";
 import { STATUS_CODE } from "~/constants/constant";
 import { isArray } from "~/utils/assertion";
+import { redirect } from "@remix-run/cloudflare";
+import { FetchService } from "services/fetch/fetch.client";
 
 import type { Env } from "../env";
 import type { ErrorAPI } from "services/fetch/fetch.type";
-import { redirect } from "@remix-run/cloudflare";
 
 export class ServerService {
   constructor(private readonly env: Env) {}
+
+  /**
+   * @version 2023-08-17
+   * @description response 값의 json 읽기
+   * @param {Response} response
+   */
+  async toJSON<T>(response: Response) {
+    return await FetchService.toJson<T>(response);
+  }
 
   /**
    * @version 2023-08-17
@@ -54,6 +64,23 @@ export class ServerService {
    */
   readFormData(request: Request) {
     return request.formData();
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description Body 읽기
+   * @param {unknown} error
+   */
+  readBodyError(error: unknown) {
+    if (error instanceof TypeError) {
+      return {
+        statusCode: STATUS_CODE.BAD_REQUEST as number,
+        errors: {
+          error: "잘못된 요청입니다.",
+        },
+      };
+    }
+    return null;
   }
 
   /**

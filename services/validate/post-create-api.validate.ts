@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const schema = z.object({
-  title: z.string().max(150).optional().nullable(),
+  title: z.string().max(150),
   subTitle: z.string().max(150).optional().nullable(),
-  content: z.string(),
+  content: z.string().optional().nullable(),
   thumbnail: z
     .object({
       id: z.string().optional().nullable(),
@@ -35,6 +35,7 @@ export const schema = z.object({
     })
     .optional()
     .nullable(),
+  isDraft: z.boolean().optional(),
 });
 
 export type FormFieldValues = z.infer<typeof schema>;
