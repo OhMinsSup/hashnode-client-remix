@@ -1,3 +1,6 @@
+const { colors } = require("tailwindcss/defaultTheme");
+const { blackA, mauve, violet } = require("@radix-ui/colors");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: "jit",
@@ -5,6 +8,12 @@ module.exports = {
   darkMode: ["class", ":global(.dark)"],
   theme: {
     extend: {
+      colors: {
+        ...colors,
+        ...blackA,
+        ...mauve,
+        ...violet,
+      },
       keyframes: {
         overlayShow: {
           from: { opacity: 0 },

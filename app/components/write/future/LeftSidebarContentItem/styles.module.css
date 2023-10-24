@@ -1,0 +1,186 @@
+.root {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0px, 1fr));
+}
+
+.content {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  grid-column: span 8 / span 8;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0px, 1fr));
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  text-align: left;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.content_active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
+.content:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.item_icon {
+  margin-right: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+  stroke: currentcolor;
+}
+
+.content_text {
+  grid-column: span 9 / span 9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu {
+  grid-column: span 4 / span 4;
+  height: 100%;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  overflow: hidden;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.menu_content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+}
+
+.menu_icon {
+  height: 1rem;
+  width: 1rem;
+  stroke: currentcolor;
+}
+
+.btn_menu {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  padding: 0.25rem 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  text-align: center;
+  --tw-border-opacity: 1;
+  border-color: rgb(226 232 240 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.btn_menu:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.popover {
+  z-index: 50;
+  display: flex;
+  max-height: 24rem;
+  width: 12rem;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(226 232 240 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
+    0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.popover_item {
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  border-radius: 0px;
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.popover_item:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.popover_icon {
+  margin-right: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  stroke: currentcolor;
+}
+
+@media (min-width: 768px) {
+  .root {
+    display: block;
+  }
+
+  .content {
+    grid-column: auto / auto;
+  }
+
+  .menu {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    grid-column: auto / auto;
+  }
+}

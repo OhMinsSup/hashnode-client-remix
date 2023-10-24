@@ -82,6 +82,7 @@ export const ASSET_URL = {
   LOGO: "/images/logo.png",
   PLACEHOLDER: "/images/placeholder.png",
   SEO_IMAGE: "/images/seo_image.png",
+  WRITE_TEAM_LOGO: "/images/write_team_logo.png",
 };
 
 export const PAGE_ENDPOINTS = {

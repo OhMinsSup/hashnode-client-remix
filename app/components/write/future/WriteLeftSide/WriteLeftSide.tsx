@@ -2,13 +2,12 @@ import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { useSession } from "services/hooks/useSession";
 import { useWriteContext } from "~/context/useWriteContext";
-
-const TAGS = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+import { MyDraftList } from "../MyDraftList";
+import { PublishedList } from "../PublishedList";
+import { DeletedList } from "../DeletedList";
 
 export default function WriteLeftSide() {
   return (
@@ -49,8 +48,8 @@ WriteLeftSide.Title = function Title() {
           <div className="col-span-2">
             <div className="relative h-8 w-full">
               <img
-                alt="OhMinSup's team blog"
-                src="https://cdn.hashnode.com/res/hashnode/image/upload/v1593680282896/kNC7E8IR4.png?w=200&amp;h=200&amp;fit=crop&amp;crop=entropy&amp;auto=format&amp;auto=compress,format&amp;format=webp"
+                alt={`${session.username} team blog`}
+                src={ASSET_URL.WRITE_TEAM_LOGO}
                 decoding="async"
                 data-nimg="fill"
                 loading="lazy"
@@ -112,28 +111,18 @@ WriteLeftSide.List = function List() {
   return (
     <ScrollArea.Root className={styles.list}>
       <ScrollArea.Viewport className="h-full">
-        <div className="py-[15px] px-5">
-          <div className="text-violet11 text-[15px] leading-[18px] font-medium">
-            Tags
-          </div>
-          {TAGS.map((tag) => (
-            <div
-              className="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
-              key={tag}
-            >
-              {tag}
-            </div>
-          ))}
-        </div>
+        <MyDraftList />
+        <PublishedList />
+        <DeletedList />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-blackA6 transition-colors ease-out hover:bg-blackA8 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+        className="flex select-none touch-none p-0.5 bg-transparent transition-colors ease-out data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
         orientation="vertical"
       >
         <ScrollArea.Thumb className="flex-1 bg-mauve10 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
       </ScrollArea.Scrollbar>
       <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-blackA6 transition-colors ease-out hover:bg-blackA8 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+        className="flex select-none touch-none p-0.5 bg-transparent transition-colors ease-out data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
         orientation="horizontal"
       >
         <ScrollArea.Thumb className="flex-1 bg-mauve10 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />

@@ -60,7 +60,7 @@ export class PostApiService {
 
   /**
    * @description 초안작성 포스트 가져오기
-   * @param {FetchQuerySchema.GetTopPost} query
+   * @param {FetchQuerySchema.Pagination} query
    * @param {Request} request
    */
   async draftList(query: FetchQuerySchema.Pagination, request: Request) {
