@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useTransition } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import styles from "./styles.module.css";
 import { cn } from "~/utils/util";
-import { useNavigate, useParams } from "@remix-run/react";
+import { useNavigate, useParams, useSubmit } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import useHover from "~/libs/hooks/useHover";
 
@@ -62,8 +62,26 @@ interface MenuProps {
   item: FetchRespSchema.PostDetailResp;
 }
 
-LeftSidebarContentItem.Menu = function Item({ item, isHovering }: MenuProps) {
+LeftSidebarContentItem.Menu = React.memo(function Item({
+  item,
+  isHovering,
+}: MenuProps) {
   const [open, setOpen] = useState(false);
+
+  const submit = useSubmit();
+
+  const onClick = useCallback(() => {
+    const isConfirm = confirm("Are you sure you want to delete this draft?");
+    if (!isConfirm) return;
+    const formData = new FormData();
+    formData.append("id", item.id.toString());
+    submit(formData, {
+      method: "DELETE",
+      replace: true,
+      encType: "multipart/form-data",
+    });
+    setOpen(false);
+  }, [submit, item]);
 
   if (!open && !isHovering) return null;
 
@@ -86,7 +104,11 @@ LeftSidebarContentItem.Menu = function Item({ item, isHovering }: MenuProps) {
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content className={styles.popover} sideOffset={5}>
-              <button type="button" className={styles.popover_item}>
+              <button
+                type="button"
+                className={styles.popover_item}
+                onClick={onClick}
+              >
                 <svg
                   className={styles.popover_icon}
                   fill="none"
@@ -108,4 +130,4 @@ LeftSidebarContentItem.Menu = function Item({ item, isHovering }: MenuProps) {
       </div>
     </div>
   );
-};
+});

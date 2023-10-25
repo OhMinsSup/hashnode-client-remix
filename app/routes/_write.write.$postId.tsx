@@ -1,6 +1,5 @@
 import { WritePage } from "~/components/write/future/WritePage";
-import { redirect, type LoaderFunctionArgs, json } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { type LoaderFunctionArgs, json } from "@remix-run/cloudflare";
 import {
   isRouteErrorResponse,
   useLoaderData,
@@ -12,11 +11,12 @@ export const loader = async ({
   context,
   request,
 }: LoaderFunctionArgs) => {
-  const id = params.postId;
-  if (!id) return redirect(PAGE_ENDPOINTS.ROOT);
-  const item = await context.api.post.getPost(id, request);
-  if (!item) return redirect(PAGE_ENDPOINTS.ROOT);
-  return json(item);
+  const response = await context.api.user.getOwnerPostDetailByUser(
+    request,
+    params.postId
+  );
+  if (response instanceof Response) throw response;
+  return json(response);
 };
 
 export type RoutesData = typeof loader;

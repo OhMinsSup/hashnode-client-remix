@@ -13,6 +13,9 @@ export const API_ENDPOINTS = {
     USERNAME: (username: string) => `users/${username}`,
     USERNAME_POSTS: (username: string) => `users/${username}/posts`,
     TRENDING_USERS: "users/treanding",
+    OWNER_POSTS: {
+      ID: (id: string | number) => `users/owner-posts/${id}`,
+    },
   },
   POSTS: {
     ROOT: "posts",

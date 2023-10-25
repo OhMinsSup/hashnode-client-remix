@@ -7,6 +7,7 @@ import { getTopPostsApi as $getTopPostsApi } from "services/fetch/posts/gets-top
 import { getDraftPostsApi as $getDraftPostsApi } from "services/fetch/posts/gets-draft-api.server";
 import { createPostApi as $createPostApi } from "services/fetch/posts/create-api.server";
 import { getPostApi as $getPostApi } from "services/fetch/posts/get-api.server";
+import { deletePostApi as $deletePostApi } from "services/fetch/posts/delete-api.server";
 
 import { FetchService } from "services/fetch/fetch.client";
 import { schema as $createSchema } from "services/validate/post-create-api.validate";
@@ -89,6 +90,76 @@ export class PostApiService {
     return await $createPostApi(input, {
       request,
     });
+  }
+
+  /**
+   * @description 포스트 삭제하기
+   * @param {string | number} id
+   * @param {Request} request
+   */
+  async delete(id: string | number, request: Request) {
+    return await $deletePostApi(id, {
+      request,
+    });
+  }
+
+  /**
+   * @description 초안 게시물 작성하기
+   * @param {Request} request
+   */
+  async createDraft(request: Request) {
+    try {
+      const response = await this.create(
+        { title: "Untitled", isDraft: true },
+        request
+      );
+      const result =
+        await this.$server.toJSON<FetchRespSchema.DataIDResp>(response);
+      if (result.resultCode !== RESULT_CODE.OK) {
+        return null;
+      }
+      return result.result;
+    } catch (error) {
+      const error_body = this.$server.readBodyError(error);
+      if (error_body) {
+        return error_body;
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * @description 게시물 삭제하기
+   * @param {string | number} id
+   * @param {Request} request
+   */
+  async deleteItem(id: string | number, request: Request) {
+    try {
+      const response = await this.delete(id, request);
+      const result = await this.$server.toJSON(response);
+      if (result.resultCode !== RESULT_CODE.OK) {
+        return null;
+      }
+      return result.result;
+    } catch (error) {
+      const error_body = this.$server.readBodyError(error);
+      if (error_body) {
+        return error_body;
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        return error_fetch;
+      }
+
+      return null;
+    }
   }
 
   /**

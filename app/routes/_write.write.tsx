@@ -9,6 +9,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 // types
 import type {
+  ActionFunctionArgs,
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
@@ -65,6 +66,49 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   return null;
 };
 
+export type RoutesData = typeof loader;
+
+export const action = async ({ request, context }: ActionFunctionArgs) => {
+  switch (request.method) {
+    case "POST": {
+      const data = await context.api.post.createDraft(request);
+      if (!data) {
+        throw new Response("Bad Request", {
+          status: 400,
+        });
+      }
+      if ("errors" in data) {
+        throw new Response(JSON.stringify(data), {
+          status: 400,
+        });
+      }
+      const dataId = data.dataId;
+      if (!dataId) {
+        throw new Response("Bad Request", {
+          status: 400,
+        });
+      }
+      return redirect(PAGE_ENDPOINTS.WRITE.ID(dataId));
+    }
+    case "DELETE": {
+      console.log("[delete ???] =======>", request);
+      const formData = await request.formData();
+      const id = formData.get("id");
+      console.log("[delete] =======>", id);
+      return {
+        ok: true,
+      };
+    }
+    default: {
+      throw new Response("Method Not Allowed", {
+        status: 405,
+      });
+    }
+  }
+};
+
+export type ActionData = typeof action;
+
 export default function Routes() {
   return (
     <WriteProvider>
@@ -77,6 +121,7 @@ export default function Routes() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  console.log("error ---->", error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

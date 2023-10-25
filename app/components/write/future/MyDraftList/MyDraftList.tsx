@@ -1,10 +1,11 @@
 import { useFetcher } from "@remix-run/react";
 import { LeftSidebarContentArea } from "../LeftSidebarContentArea";
 import { useCallback, useEffect, useState } from "react";
-import { getPath } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
-import type { Loader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
 import { LeftSidebarContentItem } from "../LeftSidebarContentItem";
 import styles from "./styles.module.css";
+import uniqBy from "lodash-es/uniqBy";
+import { getPath } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
+import type { Loader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
 
 const LIMIT = 30;
 
@@ -25,8 +26,9 @@ export default function MyDraftList() {
 
   useEffect(() => {
     if (fetcher.data) {
-      console.log("fetcher.data ---->", fetcher.data);
-      setItems((prevItems) => [...prevItems, ...(fetcher.data?.list ?? [])]);
+      setItems((prevItems) =>
+        uniqBy([...prevItems, ...(fetcher.data?.list ?? [])], "id")
+      );
     }
   }, [fetcher.data]);
 

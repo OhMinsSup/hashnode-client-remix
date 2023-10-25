@@ -39,8 +39,6 @@ export function WriteFormProvider({ children, initialValues }: Props) {
     criteriaMode: "firstError",
   });
 
-  console.log("initialValues", initialValues);
-
   return <FormProvider {...methods}>{children}</FormProvider>;
 }
 

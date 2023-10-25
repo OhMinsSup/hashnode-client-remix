@@ -52,7 +52,6 @@ export default function SettingUserForm({ children }: SettingUserFormProps) {
         {
           method: "POST",
           action: "/settings?index",
-          replace: true,
         }
       );
     },

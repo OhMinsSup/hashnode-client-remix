@@ -6,6 +6,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { deleteUserApi as $deleteUserApi } from "services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "services/fetch/users/put-api.server";
 import { getUserApi as $getUserApi } from "services/fetch/users/get-api.server";
+import { getOwnerPostDetailApi as $getOwnerPostDetailApi } from "services/fetch/users/get-owner-post-api.server";
 
 import {
   schema as $updateSchema,
@@ -24,6 +25,18 @@ export class UserApiService {
     private readonly $env: Env,
     private readonly $server: ServerService
   ) {}
+
+  /**
+   * @version 2023-08-17
+   * @description 작성자만 볼 수 있는 포스트 상세 조회 API
+   * @param {string | number} id
+   * @param {Request} request
+   */
+  async getOwnerPostDetail(id: string | number, request: Request) {
+    return $getOwnerPostDetailApi(id, {
+      request,
+    });
+  }
 
   /**
    * @version 2023-08-17
@@ -66,6 +79,32 @@ export class UserApiService {
 
   /**
    * @version 2023-08-17
+   * @description 작성자만 볼 수 있는 포스트 상세 조회
+   * @param {Request} request
+   * @param {string | number} id
+   */
+  async getOwnerPostDetailByUser(
+    request: Request,
+    id?: string | number | null
+  ) {
+    try {
+      if (!id || isNaN(Number(id))) {
+        return new Response("Not Found", { status: 404 });
+      }
+      const response = await this.getOwnerPostDetail(id, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.PostDetailResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return new Response("Not Found", { status: 404 });
+      }
+      return json.result;
+    } catch (error) {
+      return new Response("Not Found", { status: 404 });
+    }
+  }
+
+  /**
+   * @version 2023-08-17
    * @description 유저 상세
    * @param {Params} params
    * @param {Request} request
@@ -74,7 +113,7 @@ export class UserApiService {
     try {
       const response = await this.get(params, request);
       const json =
-        await FetchService.toJson<FetchRespSchema.UserRespSchema>(response);
+        await FetchService.toJson<FetchRespSchema.UserResponse>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
         return new Response("Not Found", { status: 404 });
       }
