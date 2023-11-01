@@ -8,10 +8,12 @@ import useHover from "~/libs/hooks/useHover";
 
 interface LeftSidebarContentItemProps {
   item: FetchRespSchema.PostDetailResp;
+  type?: "draft" | "published" | "deleted";
 }
 
 export default function LeftSidebarContentItem({
   item,
+  type = "draft",
 }: LeftSidebarContentItemProps) {
   const $ele = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
@@ -52,7 +54,11 @@ export default function LeftSidebarContentItem({
         </div>
         <div className={styles.content_text}>{item.title}</div>
       </button>
-      <LeftSidebarContentItem.Menu item={item} isHovering={isHovering} />
+      <LeftSidebarContentItem.Menu
+        item={item}
+        isHovering={isHovering}
+        type={type}
+      />
     </div>
   );
 }
@@ -60,17 +66,19 @@ export default function LeftSidebarContentItem({
 interface MenuProps {
   isHovering: boolean;
   item: FetchRespSchema.PostDetailResp;
+  type?: "draft" | "published" | "deleted";
 }
 
 LeftSidebarContentItem.Menu = React.memo(function Item({
   item,
   isHovering,
+  type,
 }: MenuProps) {
   const [open, setOpen] = useState(false);
 
   const submit = useSubmit();
 
-  const onClick = useCallback(() => {
+  const onClickRemove = useCallback(() => {
     const isConfirm = confirm("Are you sure you want to delete this draft?");
     if (!isConfirm) return;
     const formData = new FormData();
@@ -82,6 +90,19 @@ LeftSidebarContentItem.Menu = React.memo(function Item({
     });
     setOpen(false);
   }, [submit, item]);
+
+  const onClickRestore = useCallback(() => {
+    const isConfirm = confirm("Are you sure you want to restore this article?");
+    if (!isConfirm) return;
+    const formData = new FormData();
+    formData.append("id", item.id.toString());
+    submit(formData, {
+      method: "PUT",
+      replace: true,
+      encType: "multipart/form-data",
+    });
+    setOpen(false);
+  }, [item, submit]);
 
   if (!open && !isHovering) return null;
 
@@ -104,26 +125,50 @@ LeftSidebarContentItem.Menu = React.memo(function Item({
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content className={styles.popover} sideOffset={5}>
-              <button
-                type="button"
-                className={styles.popover_item}
-                onClick={onClick}
-              >
-                <svg
-                  className={styles.popover_icon}
-                  fill="none"
-                  viewBox="0 0 18 18"
+              {type === "draft" || type === "published" ? (
+                <button
+                  type="button"
+                  className={styles.popover_item}
+                  onClick={onClickRemove}
                 >
-                  <path
-                    d="m3 3.75.484 8.232c.094 1.59.14 2.385.48 2.989a3 3 0 0 0 1.3 1.226c.622.303 1.419.303 3.012.303h1.448c1.593 0 2.39 0 3.012-.303a3 3 0 0 0 1.3-1.226c.34-.604.386-1.399.48-2.99L15 3.75m-12 0H1.5m1.5 0h12m0 0h1.5m-4.5 0-.203-.609c-.197-.59-.295-.885-.478-1.103a1.5 1.5 0 0 0-.601-.434C10.453 1.5 10.142 1.5 9.52 1.5H8.48c-.622 0-.933 0-1.198.104a1.5 1.5 0 0 0-.602.434c-.182.218-.28.513-.477 1.103L6 3.75M7.5 7.5v5.25m3-5.25v5.25"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-                <span>Delete</span>
-              </button>
+                  <svg
+                    className={styles.popover_icon}
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      d="m3 3.75.484 8.232c.094 1.59.14 2.385.48 2.989a3 3 0 0 0 1.3 1.226c.622.303 1.419.303 3.012.303h1.448c1.593 0 2.39 0 3.012-.303a3 3 0 0 0 1.3-1.226c.34-.604.386-1.399.48-2.99L15 3.75m-12 0H1.5m1.5 0h12m0 0h1.5m-4.5 0-.203-.609c-.197-.59-.295-.885-.478-1.103a1.5 1.5 0 0 0-.601-.434C10.453 1.5 10.142 1.5 9.52 1.5H8.48c-.622 0-.933 0-1.198.104a1.5 1.5 0 0 0-.602.434c-.182.218-.28.513-.477 1.103L6 3.75M7.5 7.5v5.25m3-5.25v5.25"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                  <span>Delete</span>
+                </button>
+              ) : null}
+              {type === "deleted" ? (
+                <button
+                  type="button"
+                  className={styles.popover_item}
+                  onClick={onClickRestore}
+                >
+                  <svg
+                    className={styles.popover_icon}
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      d="m3 3.75.484 8.232c.094 1.59.14 2.385.48 2.989a3 3 0 0 0 1.3 1.226c.622.303 1.419.303 3.012.303h1.448c1.593 0 2.39 0 3.012-.303a3 3 0 0 0 1.3-1.226c.34-.604.386-1.399.48-2.99L15 3.75m-12 0H1.5m1.5 0h12m0 0h1.5m-4.5 0-.203-.609c-.197-.59-.295-.885-.478-1.103a1.5 1.5 0 0 0-.601-.434C10.453 1.5 10.142 1.5 9.52 1.5H8.48c-.622 0-.933 0-1.198.104a1.5 1.5 0 0 0-.602.434c-.182.218-.28.513-.477 1.103L6 3.75M7.5 7.5v5.25m3-5.25v5.25"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                  <span>restore</span>
+                </button>
+              ) : null}
             </Popover.Content>
           </Popover.Portal>
         </Popover.Root>

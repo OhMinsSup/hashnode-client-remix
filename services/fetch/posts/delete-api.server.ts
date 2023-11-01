@@ -11,7 +11,7 @@ import type { ApiOptions } from "services/fetch/fetch.type";
  * @param {ApiOptions?} options
  */
 export function deletePostApi(id: string | number, options?: ApiOptions) {
-  return FetchService.get(getPath(id), options);
+  return FetchService.delete(getPath(id), options);
 }
 
 /**

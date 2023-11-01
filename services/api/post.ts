@@ -8,6 +8,7 @@ import { getDraftPostsApi as $getDraftPostsApi } from "services/fetch/posts/gets
 import { createPostApi as $createPostApi } from "services/fetch/posts/create-api.server";
 import { getPostApi as $getPostApi } from "services/fetch/posts/get-api.server";
 import { deletePostApi as $deletePostApi } from "services/fetch/posts/delete-api.server";
+import { getDeletePostsApi as $getDeletePostsApi } from "services/fetch/posts/gets-deleted-api.server";
 
 import { FetchService } from "services/fetch/fetch.client";
 import { schema as $createSchema } from "services/validate/post-create-api.validate";
@@ -66,6 +67,17 @@ export class PostApiService {
    */
   async draftList(query: FetchQuerySchema.Pagination, request: Request) {
     return await $getDraftPostsApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @description 삭제 포스트 가져오기
+   * @param {FetchQuerySchema.Pagination} query
+   * @param {Request} request
+   */
+  async deleteList(query: FetchQuerySchema.Pagination, request: Request) {
+    return await $getDeletePostsApi(query, {
       request,
     });
   }
@@ -144,21 +156,12 @@ export class PostApiService {
       const response = await this.delete(id, request);
       const result = await this.$server.toJSON(response);
       if (result.resultCode !== RESULT_CODE.OK) {
-        return null;
+        return false;
       }
-      return result.result;
+      return true;
     } catch (error) {
-      const error_body = this.$server.readBodyError(error);
-      if (error_body) {
-        return error_body;
-      }
-
-      const error_fetch = await this.$server.readFetchError(error);
-      if (error_fetch) {
-        return error_fetch;
-      }
-
-      return null;
+      console.log(error);
+      return false;
     }
   }
 
@@ -254,6 +257,31 @@ export class PostApiService {
     try {
       const params = parseUrlParams(request.url);
       const response = await this.draftList(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (삭제여부)
+   * @param {Request} request
+   */
+  async getPostsByDeleteList(request: Request) {
+    try {
+      const params = parseUrlParams(request.url);
+      const response = await this.deleteList(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {

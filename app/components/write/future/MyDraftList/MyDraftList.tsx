@@ -56,6 +56,7 @@ export default function MyDraftList() {
         );
       })}
       {pageInfo && pageInfo.hasNextPage && (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a href="#" className={styles.btn_load_more} onClick={onClickLoadMore}>
           Load more drafts
         </a>

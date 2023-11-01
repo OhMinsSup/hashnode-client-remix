@@ -8,6 +8,11 @@ import { FetchService } from "services/fetch/fetch.client";
 import type { Env } from "../env";
 import type { ErrorAPI } from "services/fetch/fetch.type";
 
+export type ErrorState = {
+  statusCode: number;
+  errors: Record<string, string>;
+};
+
 export class ServerService {
   constructor(private readonly env: Env) {}
 
@@ -88,7 +93,7 @@ export class ServerService {
    * @description error validation
    * @param {unknown} error
    */
-  readValidateError(error: unknown) {
+  readValidateError(error: unknown): ErrorState | null {
     if (error instanceof ZodError) {
       const errors: Record<string, string> = {};
       error.issues.reduce((acc, cur) => {
@@ -110,7 +115,7 @@ export class ServerService {
    * @description error fetch
    * @param {unknown} error
    */
-  async readFetchError(error: unknown) {
+  async readFetchError(error: unknown): Promise<ErrorState | null> {
     if (error instanceof FetchError) {
       const $response = error.response;
       const data = await $response.json<ErrorAPI>();

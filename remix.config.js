@@ -16,4 +16,7 @@ export default {
       punycode: true,
     },
   },
+  future: {
+    v3_fetcherPersist: true,
+  },
 };
