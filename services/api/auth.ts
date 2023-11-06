@@ -17,7 +17,9 @@ import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../env";
-import type { ServerService } from "services/app/server";
+import type { ErrorState, ServerService } from "services/app/server";
+import type { FormFieldValues as SignupFormFieldValues } from "services/validate/signup-api.validate";
+import type { FormFieldValues as SigninFormFieldValues } from "services/validate/signin-api.validate";
 
 export class AuthApiService {
   constructor(
@@ -65,33 +67,19 @@ export class AuthApiService {
   /**
    * @version 2023-08-17
    * @description 로그인 API
-   * @param {Request} request
+   * @param {SigninFormFieldValues} input
    */
-  async signin(request: Request) {
-    const formData = await this.$server.readFormData(request);
-    const input = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-    const parse = await $signinSchema.parseAsync(input);
-    return $signinApi(parse);
+  async signin(input: SigninFormFieldValues) {
+    return $signinApi(input);
   }
 
   /**
    * @version 2023-08-17
    * @description 회원가입 API
-   * @param {Request} request
+   * @param {SignupFormFieldValues} input
    */
-  async signup(request: Request) {
-    const formData = await this.$server.readFormData(request);
-    const input = {
-      username: formData.get("username"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      confirmPassword: formData.get("confirmPassword"),
-    };
-    const parse = await $signupSchema.parseAsync(input);
-    return $signupApi(omit(parse, ["confirmPassword"]));
+  async signup(input: SignupFormFieldValues) {
+    return $signupApi(omit(input, ["confirmPassword"]));
   }
 
   /**
@@ -143,8 +131,17 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signupWithAuth(request: Request) {
+    const formData = await this.$server.readFormData(request);
+    const input = {
+      username: formData.get("username"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
+    };
+
     try {
-      const response = await this.signup(request);
+      const parse = await $signupSchema.parseAsync(input);
+      const response = await this.signup(parse);
       const cookie = response.headers.get("set-cookie");
       if (!cookie) {
         return redirect(PAGE_ENDPOINTS.AUTH.SIGNUP, {
@@ -175,8 +172,16 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signinWithAuth(request: Request) {
+    const formData = await this.$server.readFormData(request);
+    const input = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
     try {
-      const response = await this.signin(request);
+      const parse = await $signinSchema.parseAsync(input);
+      const response = await this.signin(parse);
+
       const cookie = response.headers.get("set-cookie");
       if (!cookie) {
         return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
@@ -194,6 +199,19 @@ export class AuthApiService {
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
+        const isNotExistsUser = this._isNotExistsUser(error_fetch);
+        if (isNotExistsUser && input.email) {
+          return redirect(
+            `${PAGE_ENDPOINTS.AUTH.SIGNIN}?redirectType=register`,
+            {
+              headers: {
+                "Set-Cookie": await this.$server.setSignupValidate(
+                  input.email as string
+                ),
+              },
+            }
+          );
+        }
         return error_fetch;
       }
 
@@ -209,5 +227,20 @@ export class AuthApiService {
   async isAuthenticated(request: Request) {
     const session = await this.getSession(request);
     return !!session;
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 회원가입 여부
+   * @param {ErrorState} state
+   */
+  private _isNotExistsUser(state: ErrorState) {
+    return state
+      ? !!(
+          state?.data &&
+          state?.data?.status &&
+          state?.data?.status === RESULT_CODE.NOT_EXIST
+        )
+      : false;
   }
 }

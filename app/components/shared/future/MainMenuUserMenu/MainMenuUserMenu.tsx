@@ -39,7 +39,7 @@ export default function MainMenuUserMenu({ open }: MainMenuUserMenuProps) {
       <h1 className={styles.h1}>Sign up or log in to your Hashnode account</h1>
       <p className={styles.p}>Takes only a few seconds</p>
       <div className={styles.btn_groups}>
-        <Link to={PAGE_ENDPOINTS.AUTH.SIGNUP} className={styles.btn_signup}>
+        <Link to={PAGE_ENDPOINTS.AUTH.SIGNIN} className={styles.btn_signup}>
           <svg fill="none" viewBox="0 0 20 20" width="20" height="20">
             <path
               stroke="currentColor"

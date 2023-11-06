@@ -6,6 +6,13 @@ interface Window {
 
 declare namespace FetchSchema {
   // Auth
+  export type Hashnodeonboard = {
+    username: string;
+    job: string;
+    image: string;
+    description: string;
+  };
+
   export type AuthRespSchema = {
     userId: number;
     accessToken: string;
@@ -268,4 +275,9 @@ declare namespace FetchRespSchema {
     id: string;
     uploadURL: string;
   }>;
+
+  export type FileResp = {
+    id: number;
+    publicUrl: string;
+  };
 }

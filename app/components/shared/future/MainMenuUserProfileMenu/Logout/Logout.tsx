@@ -12,7 +12,6 @@ export default function Logout() {
       fetcher.submit(null, {
         method: "POST",
         action: REMIX_ACTIONS_KEY.LOGOUT,
-        replace: true,
       });
     },
     [fetcher]

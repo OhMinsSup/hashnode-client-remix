@@ -54,7 +54,7 @@ export default function DrawerSeoImage() {
         ) : null}
         {fetcher.state === "idle" && fetcher.data != null ? (
           <DrawerSeoImage.Success
-            urls={fetcher.data.result?.variants ?? []}
+            urls={fetcher.data.result?.publicUrl ?? []}
             onImageDelete={onImageDelete}
           />
         ) : null}

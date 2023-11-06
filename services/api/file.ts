@@ -9,6 +9,7 @@ import { schema } from "services/validate/cf-file.validate";
 import {
   postCfDirectUploadApi,
   postCfUploadApi,
+  postFileUploadApi,
 } from "services/fetch/files/cf-file.server";
 
 import { FetchError } from "services/fetch/fetch.error";
@@ -17,6 +18,7 @@ import { FetchError } from "services/fetch/fetch.error";
 import type { Env } from "../env";
 import type { ServerService } from "services/app/server";
 import type { FormFieldValues } from "services/validate/cf-file.validate";
+import { RESULT_CODE } from "~/constants/constant";
 
 export class FileApiService {
   constructor(
@@ -71,6 +73,39 @@ export class FileApiService {
         cfApiToken: this.env.CF_API_TOKEN,
         formFields: body,
       });
+      if (!directUploadResp) {
+        return {
+          data: this._getDefaultValues(),
+          status: 400,
+        };
+      }
+    } catch (error) {
+      if (error instanceof FetchError) {
+        const $response = error.response;
+        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
+        return {
+          data,
+          status: $response.status,
+        };
+      }
+      return {
+        data: this._getDefaultValues(),
+        status: 500,
+      };
+    }
+
+    let uploaded: FetchRespSchema.CfUploadResp | null = null;
+    try {
+      uploaded = await postCfUploadApi({
+        uploadUrl: directUploadResp.result.uploadURL,
+        formFields: body,
+      });
+      if (!uploaded) {
+        return {
+          data: this._getDefaultValues(),
+          status: 400,
+        };
+      }
     } catch (error) {
       if (error instanceof FetchError) {
         const $response = error.response;
@@ -87,20 +122,44 @@ export class FileApiService {
     }
 
     try {
-      const uploaded = await postCfUploadApi({
-        uploadUrl: directUploadResp.result.uploadURL,
-        formFields: body,
-      });
+      const response = await postFileUploadApi(
+        {
+          cfId: uploaded.result.id,
+          filename: body.file.name,
+          mimeType: body.file.type,
+          publicUrl: uploaded.result.variants[0],
+          mediaType: body.mediaType as FetchSchema.MediaType,
+          uploadType: body.uploadType as FetchSchema.UploadType,
+        },
+        {
+          request,
+        }
+      );
+      const result =
+        await this.$server.toJSON<FetchRespSchema.FileResp>(response);
+      if (result.resultCode !== RESULT_CODE.OK) {
+        return {
+          data: this._getDefaultValues(),
+          status: 400,
+        };
+      }
       return {
-        data: uploaded,
+        data: {
+          ...this._getDefaultValues(),
+          success: true,
+          result: result.result,
+        },
         status: 200,
       };
     } catch (error) {
       if (error instanceof FetchError) {
         const $response = error.response;
-        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
+        const data = await $response.json();
         return {
-          data,
+          data: {
+            ...this._getDefaultValues(),
+            result: data,
+          },
           status: $response.status,
         };
       }

@@ -1,5 +1,7 @@
 import type { FormFieldValues } from "services/validate/cf-file.validate";
-import { FetchError } from "../fetch.error";
+import { FetchError } from "services/fetch/fetch.error";
+import { FetchService } from "services/fetch/fetch.client";
+import type { ApiOptions } from "services/fetch/fetch.type";
 
 type CfDirectUploadParams = {
   cfApiToken: string;
@@ -49,6 +51,30 @@ export const postCfUploadApi = async ({
   return response.json<FetchRespSchema.CfUploadResp>();
 };
 
+type FileUploadParams = {
+  cfId: string;
+  filename: string;
+  mimeType: string;
+  publicUrl: string;
+  mediaType: FetchSchema.MediaType;
+  uploadType: FetchSchema.UploadType;
+};
+
+export const postFileUploadApi = async (
+  body: FileUploadParams,
+  options?: ApiOptions
+) => {
+  return FetchService.post(getPath(), body, options);
+};
+
 export const getPathDirectUpload = (cfId: string) => {
   return `https://api.cloudflare.com/client/v4/accounts/${cfId}/images/v2/direct_upload`;
+};
+
+/**
+ * @version 2023-08-17
+ * @description 로그아웃 API Path
+ */
+export const getPath = () => {
+  return FetchService.defineApis.FILES.ROOT;
 };

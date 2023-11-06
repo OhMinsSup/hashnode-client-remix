@@ -1,32 +1,24 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 
 // hooks
-import { useActionData, useNavigation } from "@remix-run/react";
-import { ErrorMessage } from "~/components/auth/future/ErrorMessage";
+import { useActionData } from "@remix-run/react";
 import { getTargetElement } from "~/libs/browser-utils";
+import { cn } from "~/utils/util";
+
+// types
+import type { ActionData } from "~/routes/_auth.signin";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   id: string;
   name: string;
 }
 
-interface ActionData {
-  errors: Record<string, string>;
-  statusCode: number;
-}
-
 export default function Input({ id, name, ...otherProps }: InputProps) {
   const $ipt = useRef<HTMLInputElement | null>(null);
-  const navigation = useNavigation();
   const data = useActionData<ActionData>();
 
   const error = data?.errors?.[name];
-
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
 
   useEffect(() => {
     const $el = getTargetElement($ipt);
@@ -36,15 +28,12 @@ export default function Input({ id, name, ...otherProps }: InputProps) {
   }, [error]);
 
   return (
-    <label className={styles.label}>
-      <input
-        ref={$ipt}
-        id={id}
-        name={name}
-        className={styles.root}
-        {...otherProps}
-      />
-      <ErrorMessage error={error} isSubmitting={isSubmitting} />
-    </label>
+    <input
+      {...otherProps}
+      ref={$ipt}
+      id={id}
+      name={name}
+      className={cn(styles.input, otherProps.className)}
+    />
   );
 }

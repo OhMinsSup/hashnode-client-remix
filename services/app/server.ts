@@ -1,20 +1,42 @@
 import { ZodError } from "zod";
 import { FetchError } from "services/fetch/fetch.error";
-import { STATUS_CODE } from "~/constants/constant";
+import { ASSET_URL, PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
 import { isArray } from "~/utils/assertion";
-import { redirect } from "@remix-run/cloudflare";
+import { createCookie, redirect } from "@remix-run/cloudflare";
 import { FetchService } from "services/fetch/fetch.client";
 
+import type { Cookie } from "@remix-run/cloudflare";
 import type { Env } from "../env";
 import type { ErrorAPI } from "services/fetch/fetch.type";
 
-export type ErrorState = {
+export type ErrorState<Data = any> = {
   statusCode: number;
-  errors: Record<string, string>;
+  errors: Record<string, string> | null;
+  data: Data;
 };
 
 export class ServerService {
-  constructor(private readonly env: Env) {}
+  signupValidateName = "hashnode.signup-validate";
+  signupValidateStorage: Cookie;
+
+  constructor(private readonly env: Env) {
+    this.signupValidateStorage = createCookie(this.signupValidateName, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: PAGE_ENDPOINTS.AUTH.SIGNIN,
+      expires: new Date(Date.now() + 3600000), // 1 hour
+      secrets: [env.COOKIE_SESSION_SECRET],
+    });
+  }
+
+  getHashnodeonboard() {
+    return {
+      image: ASSET_URL.DEFAULT_AVATAR,
+      username: "Guillermo Rauch",
+      job: "CEO, Vercel",
+      description: `It's amazing to see how fast devs go from 0 to Blog under a domain they own on Hashnode 🤯. It reminds me a lot of what Substack did for journalists.`,
+    } as FetchSchema.Hashnodeonboard;
+  }
 
   /**
    * @version 2023-08-17
@@ -105,6 +127,7 @@ export class ServerService {
       return {
         statusCode: STATUS_CODE.BAD_REQUEST as number,
         errors,
+        data: null,
       };
     }
     return null;
@@ -132,6 +155,7 @@ export class ServerService {
           errors: {
             [errorKey]: isArray(errors) ? errors[0] : errors,
           },
+          data,
         };
       } else {
         return {
@@ -139,6 +163,7 @@ export class ServerService {
           errors: {
             error: "알 수 없는 에러가 발생했습니다.",
           },
+          data,
         };
       }
     }
@@ -156,5 +181,27 @@ export class ServerService {
         status: STATUS_CODE.METHOD_NOT_ALLOED,
       });
     }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 회원가입이 안된 유저인지 확인
+   * @param {Request} request
+   */
+  async getSignupValidate(request: Request) {
+    const value = await this.signupValidateStorage.parse(
+      request.headers.get("Cookie")
+    );
+    return value as string;
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 회원가입이 안된 유저인지 확인
+   * @param {string} value
+   */
+  async setSignupValidate(value: string) {
+    const session = await this.signupValidateStorage.serialize(value);
+    return session;
   }
 }

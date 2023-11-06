@@ -110,6 +110,7 @@ WriteAddCover.Upload = function Item() {
 
   const upload = useCallback(
     async (file: File) => {
+      console.log("upload ====>", file);
       setUploadState("pending");
       const objectUrl = URL.createObjectURL(file);
 
@@ -199,11 +200,11 @@ WriteAddCover.Upload = function Item() {
       if (result && fetcherData.success) {
         setCoverClose();
         setUploadState("success");
-        const { id, variants } = result;
-        const url = variants[0];
+        // @ts-ignore TODO: fix this
+        const { id, publicUrl } = result;
         setValue("thumbnail", {
           id,
-          url,
+          url: publicUrl,
         });
       } else {
         setUploadState("idle");
