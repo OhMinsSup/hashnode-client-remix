@@ -2,11 +2,13 @@ import React, { useCallback, useEffect } from "react";
 import styles from "./styles.module.css";
 import { cn } from "~/utils/util";
 import { useSigninContext } from "~/components/auth/context/signin";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { Input } from "~/components/auth/future/Input";
-import { isEmpty } from "~/utils/assertion";
+import { AuthenticityTokenInput } from "remix-utils/csrf/react";
 
-import type { RoutesData } from "~/routes/_auth.signin";
+// types
+import type { ActionData } from "~/routes/_auth.signin";
+import { HoneypotInputs } from "remix-utils/honeypot/react";
 
 const socials = [
   {
@@ -70,9 +72,13 @@ const socials = [
 
 export default function SigninForm() {
   const { step, changeStep } = useSigninContext();
-  const data = useLoaderData<RoutesData>();
 
-  const displayRegister = !isEmpty(data?.email);
+  const actionData = useActionData<ActionData>();
+
+  const gotoNextStep =
+    actionData?.data &&
+    typeof actionData.data === "boolean" &&
+    !!actionData.data;
 
   const onChangeStep = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -83,19 +89,15 @@ export default function SigninForm() {
   );
 
   useEffect(() => {
-    if (displayRegister) changeStep(3);
-  }, [displayRegister]);
+    if (gotoNextStep) changeStep(3);
+  }, [gotoNextStep]);
 
   return (
     <div className={styles.root}>
       {step === 1 && <SigninForm.Lending onChangeStep={onChangeStep} />}
       {step === 2 && <SigninForm.EmailAuth onChangeStep={onChangeStep} />}
-      {step === 3 && displayRegister ? (
-        <SigninForm.ConfirmText onChangeStep={onChangeStep} />
-      ) : null}
-      {step === 4 && displayRegister ? (
-        <SigninForm.Register onChangeStep={onChangeStep} />
-      ) : null}
+      {step === 3 && <SigninForm.ConfirmText onChangeStep={onChangeStep} />}
+      {step === 4 && <SigninForm.Register onChangeStep={onChangeStep} />}
     </div>
   );
 }
@@ -157,7 +159,14 @@ SigninForm.EmailAuth = function Item({ onChangeStep }: EmailAuthProps) {
     <>
       <div className={styles.email_auth_wrapper}>
         <span className={styles.form_title}>Sign in with email</span>
-        <Form className={styles.email_form} replace method="POST">
+        <Form
+          className={styles.email_form}
+          replace
+          method="POST"
+          action="/signin?type=login"
+        >
+          <AuthenticityTokenInput />
+          <HoneypotInputs />
           <Input
             id="email"
             type="email"
@@ -250,12 +259,18 @@ interface RegisterProps {
 }
 
 SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
-  const data = useLoaderData<RoutesData>();
   return (
     <>
       <div className={styles.email_auth_wrapper}>
         <span className={styles.form_title}>Sign up with email</span>
-        <Form className={styles.email_form} replace method="POST">
+        <Form
+          className={styles.email_form}
+          replace
+          method="POST"
+          action="/signin?type=register"
+        >
+          <AuthenticityTokenInput />
+          <HoneypotInputs />
           <Input
             id="username"
             type="text"
@@ -268,7 +283,6 @@ SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
             id="email"
             type="email"
             name="email"
-            defaultValue={data?.email ?? undefined}
             aria-label="Email address"
             autoComplete="email"
             placeholder="Enter your email address"

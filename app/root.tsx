@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { json } from "@remix-run/cloudflare";
 import {
   Links,
@@ -8,33 +7,37 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
 } from "@remix-run/react";
 import { cssBundleHref } from "@remix-run/css-bundle";
+import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
+import { HoneypotProvider } from "remix-utils/honeypot/react";
 
 import classNames from "classnames";
-import { getDomainUrl, removeTrailingSlash } from "./utils/util";
+import { getDomainUrl } from "~/utils/util";
 
-import { Body } from "./components/shared/future/Body";
+import { ExternalLink } from "~/components/shared/future/ExternalLink";
+import { CanonicalLink } from "~/components/shared/future/CanonicalLink";
+import { Body } from "~/components/shared/future/Body";
 import {
   NonFlashOfWrongThemeEls,
   ThemeProvider,
   useTheme,
-} from "./context/useThemeContext";
+} from "~/context/useThemeContext";
 
 // api
-import { ASSET_URL } from "./constants/constant";
+import { ASSET_URL } from "~/constants/constant";
 
 // styles
 import globalStyles from "~/styles/global.css";
 
 // types
+import type { Theme } from "~/context/useThemeContext";
+import type { HoneypotInputProps } from "remix-utils/honeypot/server";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import type { Theme } from "./context/useThemeContext";
 
 export const links: LinksFunction = () => {
   return [
@@ -48,15 +51,25 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     API_BASE_URL: context.API_BASE_URL,
   };
 
+  const values = await context.services.csrf.csrf.commitToken(request);
+  const [csrfToken, csrfHeader] = values;
+
+  const honeyProps = context.services.honeypot.honeypot.getInputProps();
+
   const $object = {
     currentProfile: null,
     theme: null,
+    csrfToken,
     origin: getDomainUrl(request),
+    env,
+    honeyProps,
   } as {
     currentProfile: FetchRespSchema.UserResponse | null;
+    csrfToken: string;
     env: typeof env;
     theme: Theme | null;
     origin: string;
+    honeyProps: HoneypotInputProps;
   };
 
   try {
@@ -70,12 +83,21 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       theme,
     });
 
+    const headers = context.services.server.getClearAuthHeaders();
+    if (csrfHeader) {
+      headers.append("set-cookie", csrfHeader);
+    }
+
     return json(
       $data,
       session
-        ? undefined
+        ? csrfHeader
+          ? {
+              headers: { "set-cookie": csrfHeader },
+            }
+          : undefined
         : {
-            headers: context.services.server.getClearAuthHeaders(),
+            headers,
           }
     );
   } catch (error) {
@@ -83,9 +105,9 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   }
 };
 
-export type Loader = typeof loader;
+export type RoutesData = typeof loader;
 
-export const meta: MetaFunction<Loader> = ({ location, data }) => {
+export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
   const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",
@@ -144,103 +166,17 @@ export const meta: MetaFunction<Loader> = ({ location, data }) => {
   ];
 };
 
-function CanonicalLink({ origin }: { origin: string }) {
-  const { pathname } = useLocation();
-  const canonicalUrl = removeTrailingSlash(`${origin}${pathname}`);
-
-  useEffect(() => {}, [canonicalUrl]);
-
-  return <link rel="canonical" href={canonicalUrl} />;
-}
-
-function ExternalLink() {
-  return (
-    <>
-      <link rel="manifest" href="/manifest.json" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        rel="search"
-        href="/opensearch.xml"
-        type="application/opensearchdescription+xml"
-        title="Hashnode"
-      />
-      <link
-        rel="apple-touch-icon"
-        sizes="180x180"
-        href="/images/logo_180x180.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="32x32"
-        href="/images/logo_32x32.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href="/images/logo_16x16.png"
-      />
-      <link
-        rel="mask-icon"
-        href="/images/safari-pinned-tab-new.svg"
-        color="#2962ff"
-      />
-      <link
-        rel="preload"
-        href="/fonts/SuisseIntl-Book-WebXL.woff2"
-        as="font"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-      <link
-        rel="preload"
-        href="/fonts/SuisseIntl-Medium-WebXL.woff2"
-        as="font"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-      <link
-        rel="preload"
-        href="/fonts/SuisseIntl-SemiBold-WebXL.woff2"
-        as="font"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-      <link
-        rel="preload"
-        href="/fonts/SuisseIntl-Bold-WebXL.woff2"
-        as="font"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-    </>
-  );
-}
-
-function Metas() {
-  return (
-    <>
-      <meta charSet="UTF-8" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-      />
-      <meta name="msapplication-TileColor" content="#ffffff" />
-      <meta name="theme-color" content="#0F172A" />
-    </>
-  );
-}
-
-function App() {
-  const [theme] = useTheme();
-  const data = useLoaderData<Loader>();
-
+function Document({
+  children,
+  origin,
+  theme,
+  env,
+}: {
+  children: React.ReactNode;
+  origin?: string;
+  theme?: Theme | null;
+  env?: Record<string, string>;
+}) {
   return (
     <html
       id="current-style"
@@ -250,15 +186,26 @@ function App() {
       className={classNames(theme)}
     >
       <head>
-        <Metas />
-        <CanonicalLink origin={data.origin} />
+        <meta charSet="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="theme-color" content="#0F172A" />
+        <CanonicalLink origin={origin} />
         <ExternalLink />
         <Meta />
         <Links />
-        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
       </head>
       <Body>
-        <Outlet />
+        {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(env)}`,
+          }}
+        />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -267,36 +214,30 @@ function App() {
   );
 }
 
-function AppError() {
+function App() {
+  const [theme] = useTheme();
+  const data = useLoaderData<RoutesData>();
+
   return (
-    <html lang="en">
-      <head>
-        <Metas />
-        <ExternalLink />
-        <Meta />
-        <Links />
-      </head>
-      <Body>
-        <>에러가 발생했습니다!!!</>
-        <Scripts />
-      </Body>
-    </html>
+    <Document origin={data.origin} theme={theme} env={data.env}>
+      <Outlet />
+    </Document>
   );
 }
 
-export default function Routes() {
-  const data = useLoaderData<Loader>();
+export default function AppWithProviders() {
+  const data = useLoaderData<RoutesData>();
   return (
-    <ThemeProvider specifiedTheme={data.theme}>
-      <App />
-    </ThemeProvider>
+    <HoneypotProvider {...data.honeyProps}>
+      <AuthenticityTokenProvider token={data.csrfToken}>
+        <ThemeProvider specifiedTheme={data.theme}>
+          <App />
+        </ThemeProvider>
+      </AuthenticityTokenProvider>
+    </HoneypotProvider>
   );
 }
 
 export function ErrorBoundary() {
-  return (
-    <ThemeProvider specifiedTheme={null}>
-      <AppError />
-    </ThemeProvider>
-  );
+  return <Document>Error</Document>;
 }

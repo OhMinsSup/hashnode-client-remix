@@ -15,8 +15,8 @@ import {
 import { FetchError } from "services/fetch/fetch.error";
 
 // types
-import type { Env } from "../env";
-import type { ServerService } from "services/app/server";
+import type { Env } from "../app/env.server";
+import type { ServerService } from "services/app/server.server";
 import type { FormFieldValues } from "services/validate/cf-file.validate";
 import { RESULT_CODE } from "~/constants/constant";
 

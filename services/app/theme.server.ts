@@ -1,7 +1,7 @@
 import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { Theme, isTheme } from "~/context/useThemeContext";
 
-import type { Env } from "../env";
+import type { Env } from "./env.server";
 import type {
   Session,
   SessionData,

@@ -1,17 +1,19 @@
 import { logDevReady } from "@remix-run/cloudflare";
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
 
-import { EnvSchema, type RuntimeEnv } from "./services/env";
+import { EnvSchema, type RuntimeEnv } from "./services/app/env.server";
 
-import { AuthApiService } from "./services/api/auth";
-import { UserApiService } from "./services/api/user";
-import { TagApiService } from "./services/api/tag";
-import { FileApiService } from "./services/api/file";
-import { PostApiService } from "./services/api/post";
+import { AuthApiService } from "./services/api/auth.server";
+import { UserApiService } from "./services/api/user.server";
+import { TagApiService } from "./services/api/tag.server";
+import { FileApiService } from "./services/api/file.server";
+import { PostApiService } from "./services/api/post.server";
 
-import { ThemeService } from "./services/app/theme";
-import { ServerService } from "./services/app/server";
-import { ImagesService } from "./services/app/images";
+import { ThemeService } from "./services/app/theme.server";
+import { ServerService } from "./services/app/server.server";
+import { ImagesService } from "./services/app/images.server";
+import { CsrfService } from "./services/app/csrf.server";
+import { HoneypotService } from "./services/app/honeypot.server";
 
 import * as build from "@remix-run/dev/server-build";
 
@@ -29,10 +31,17 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       theme: new ThemeService(env),
       server: new ServerService(env),
       images: new ImagesService(env),
+      csrf: new CsrfService(env),
+      honeypot: new HoneypotService(env),
     };
 
     const api = {
-      auth: new AuthApiService(env, services.server),
+      auth: new AuthApiService(
+        env,
+        services.server,
+        services.csrf,
+        services.honeypot
+      ),
       user: new UserApiService(env, services.server),
       post: new PostApiService(env, services.server),
       tag: new TagApiService(env),

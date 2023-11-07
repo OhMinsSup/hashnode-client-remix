@@ -1,33 +1,21 @@
 import { ZodError } from "zod";
 import { FetchError } from "services/fetch/fetch.error";
-import { ASSET_URL, PAGE_ENDPOINTS, STATUS_CODE } from "~/constants/constant";
+import { ASSET_URL, STATUS_CODE } from "~/constants/constant";
 import { isArray } from "~/utils/assertion";
-import { createCookie, redirect } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 import { FetchService } from "services/fetch/fetch.client";
 
-import type { Cookie } from "@remix-run/cloudflare";
-import type { Env } from "../env";
+import type { Env } from "./env.server";
 import type { ErrorAPI } from "services/fetch/fetch.type";
 
-export type ErrorState<Data = any> = {
+export type ResponseState<Data = any> = {
   statusCode: number;
   errors: Record<string, string> | null;
   data: Data;
 };
 
 export class ServerService {
-  signupValidateName = "hashnode.signup-validate";
-  signupValidateStorage: Cookie;
-
-  constructor(private readonly env: Env) {
-    this.signupValidateStorage = createCookie(this.signupValidateName, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: PAGE_ENDPOINTS.AUTH.SIGNIN,
-      expires: new Date(Date.now() + 3600000), // 1 hour
-      secrets: [env.COOKIE_SESSION_SECRET],
-    });
-  }
+  constructor(private readonly env: Env) {}
 
   getHashnodeonboard() {
     return {
@@ -115,7 +103,7 @@ export class ServerService {
    * @description error validation
    * @param {unknown} error
    */
-  readValidateError(error: unknown): ErrorState | null {
+  readValidateError(error: unknown): ResponseState | null {
     if (error instanceof ZodError) {
       const errors: Record<string, string> = {};
       error.issues.reduce((acc, cur) => {
@@ -138,7 +126,7 @@ export class ServerService {
    * @description error fetch
    * @param {unknown} error
    */
-  async readFetchError(error: unknown): Promise<ErrorState | null> {
+  async readFetchError(error: unknown): Promise<ResponseState | null> {
     if (error instanceof FetchError) {
       const $response = error.response;
       const data = await $response.json<ErrorAPI>();
@@ -185,23 +173,13 @@ export class ServerService {
 
   /**
    * @version 2023-08-17
-   * @description 회원가입이 안된 유저인지 확인
-   * @param {Request} request
+   * @description 요청
    */
-  async getSignupValidate(request: Request) {
-    const value = await this.signupValidateStorage.parse(
-      request.headers.get("Cookie")
-    );
-    return value as string;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 회원가입이 안된 유저인지 확인
-   * @param {string} value
-   */
-  async setSignupValidate(value: string) {
-    const session = await this.signupValidateStorage.serialize(value);
-    return session;
+  getResponse<Data = any>(data: Data) {
+    return {
+      statusCode: STATUS_CODE.OK,
+      errors: null,
+      data,
+    } as ResponseState;
   }
 }

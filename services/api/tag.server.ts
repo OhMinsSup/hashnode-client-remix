@@ -8,7 +8,7 @@ import { schema as $getSchema } from "services/validate/tag-get.api.validate";
 import { FetchService } from "services/fetch/fetch.client";
 
 // types
-import type { Env } from "../env";
+import type { Env } from "../app/env.server";
 import type { Params } from "@remix-run/react";
 
 export class TagApiService {

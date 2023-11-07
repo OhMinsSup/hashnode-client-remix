@@ -17,8 +17,8 @@ import { schema as $createSchema } from "services/validate/post-create-api.valid
 import { parseUrlParams } from "~/utils/util";
 
 // types
-import type { Env } from "../env";
-import type { ServerService } from "services/app/server";
+import type { Env } from "../app/env.server";
+import type { ServerService } from "services/app/server.server";
 import type { FormFieldValues } from "services/validate/post-create-api.validate";
 
 export class PostApiService {

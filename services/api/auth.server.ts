@@ -16,15 +16,19 @@ import { FetchError } from "services/fetch/fetch.error";
 import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
-import type { Env } from "../env";
-import type { ErrorState, ServerService } from "services/app/server";
+import type { Env } from "../app/env.server";
+import type { ResponseState, ServerService } from "services/app/server.server";
 import type { FormFieldValues as SignupFormFieldValues } from "services/validate/signup-api.validate";
 import type { FormFieldValues as SigninFormFieldValues } from "services/validate/signin-api.validate";
+import type { CsrfService } from "services/app/csrf.server";
+import type { HoneypotService } from "services/app/honeypot.server";
 
 export class AuthApiService {
   constructor(
     private readonly $env: Env,
-    private readonly $server: ServerService
+    private readonly $server: ServerService,
+    private readonly $csrf: CsrfService,
+    private readonly $honeypot: HoneypotService
   ) {}
 
   /**
@@ -132,6 +136,10 @@ export class AuthApiService {
    */
   async signupWithAuth(request: Request) {
     const formData = await this.$server.readFormData(request);
+
+    await this.$csrf.validateCSRF(formData, request.headers);
+    this.$honeypot.checkHoneypot(formData);
+
     const input = {
       username: formData.get("username"),
       email: formData.get("email"),
@@ -173,6 +181,10 @@ export class AuthApiService {
    */
   async signinWithAuth(request: Request) {
     const formData = await this.$server.readFormData(request);
+
+    await this.$csrf.validateCSRF(formData, request.headers);
+    this.$honeypot.checkHoneypot(formData);
+
     const input = {
       email: formData.get("email"),
       password: formData.get("password"),
@@ -200,17 +212,8 @@ export class AuthApiService {
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         const isNotExistsUser = this._isNotExistsUser(error_fetch);
-        if (isNotExistsUser && input.email) {
-          return redirect(
-            `${PAGE_ENDPOINTS.AUTH.SIGNIN}?redirectType=register`,
-            {
-              headers: {
-                "Set-Cookie": await this.$server.setSignupValidate(
-                  input.email as string
-                ),
-              },
-            }
-          );
+        if (isNotExistsUser) {
+          return this.$server.getResponse<boolean>(isNotExistsUser);
         }
         return error_fetch;
       }
@@ -232,9 +235,9 @@ export class AuthApiService {
   /**
    * @version 2023-08-17
    * @description 회원가입 여부
-   * @param {ErrorState} state
+   * @param {ResponseState} state
    */
-  private _isNotExistsUser(state: ErrorState) {
+  private _isNotExistsUser(state: ResponseState) {
     return state
       ? !!(
           state?.data &&

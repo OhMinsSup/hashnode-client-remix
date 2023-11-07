@@ -16,8 +16,8 @@ import { FetchService } from "services/fetch/fetch.client";
 import { schema as $getSchema } from "services/validate/user-get-api.validate";
 
 // types
-import type { Env } from "../env";
-import type { ServerService } from "services/app/server";
+import type { Env } from "../app/env.server";
+import type { ServerService } from "services/app/server.server";
 import type { Params } from "@remix-run/react";
 
 export class UserApiService {

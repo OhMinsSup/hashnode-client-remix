@@ -1,4 +1,4 @@
-import type { Env } from "../env";
+import type { Env } from "./env.server";
 
 export class ImagesService {
   constructor(private readonly env: Env) {}
