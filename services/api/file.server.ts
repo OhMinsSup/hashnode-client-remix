@@ -11,14 +11,17 @@ import {
   postCfUploadApi,
   postFileUploadApi,
 } from "services/fetch/files/cf-file.server";
+import { getFilesApi as $getFilesApi } from "services/fetch/files/gets-api.server";
 
 import { FetchError } from "services/fetch/fetch.error";
+
+import { RESULT_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../app/env.server";
 import type { ServerService } from "services/app/server.server";
 import type { FormFieldValues } from "services/validate/cf-file.validate";
-import { RESULT_CODE } from "~/constants/constant";
+import { parseUrlParams } from "~/utils/util";
 
 export class FileApiService {
   constructor(
@@ -27,12 +30,63 @@ export class FileApiService {
   ) {}
 
   /**
+   * @description 파일 리스트
+   * @param {FetchQuerySchema.Pagination} query
+   * @param {Request} request
+   */
+  async list(query: FetchQuerySchema.Pagination, request: Request) {
+    return await $getFilesApi(query, {
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-16
+   * @description loader에서 호출 할 때 사용하는 함수 (일반)
+   * @param {FetchQuerySchema.Pagination} params
+   * @param {Request} request
+   */
+  async getFilesByBaseList(
+    params: FetchQuerySchema.Pagination,
+    request: Request
+  ) {
+    try {
+      const response = await this.list(params, request);
+      const json =
+        await this.$server.toJSON<FetchRespSchema.FileListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultFileList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultFileList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 파일 리스트 가져오기
+   * @param {Request} request
+   */
+  async getFiles(request: Request) {
+    const params = parseUrlParams(request.url);
+    return this.getFilesByBaseList(params, request);
+  }
+
+  /**
    * @version 2023-08-24
    * @description Cloudflare Images 를 사용하여 파일 업로드
    * @param {Request} request
    */
   async uploadWithCfImages(request: Request) {
     let body: FormFieldValues | null = null;
+
+    this.$server.readValidateMethod(request, "POST", request.url);
 
     try {
       const MAX_FILE_SIZE = 5_000_000; // 5MB
@@ -71,7 +125,6 @@ export class FileApiService {
       directUploadResp = await postCfDirectUploadApi({
         cfAccountId: this.env.CF_ID,
         cfApiToken: this.env.CF_API_TOKEN,
-        formFields: body,
       });
       if (!directUploadResp) {
         return {
@@ -176,6 +229,21 @@ export class FileApiService {
       success: false,
       errors: [],
       messages: [],
+    };
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 기본 포스트 리스트
+   */
+  private getDefaultFileList() {
+    return {
+      list: [],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+      totalCount: 0,
     };
   }
 }

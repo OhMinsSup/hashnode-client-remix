@@ -19,7 +19,7 @@ export function WriteFormProvider({ children, initialValues }: Props) {
       content: initialValues?.content ?? undefined,
       thumbnail: initialValues?.thumbnail
         ? {
-            id: "cf",
+            id: null,
             url: initialValues?.thumbnail,
           }
         : undefined,
@@ -38,6 +38,8 @@ export function WriteFormProvider({ children, initialValues }: Props) {
     reValidateMode: "onSubmit",
     criteriaMode: "firstError",
   });
+
+  console.log(methods.watch());
 
   return <FormProvider {...methods}>{children}</FormProvider>;
 }

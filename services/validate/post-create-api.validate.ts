@@ -6,7 +6,7 @@ export const schema = z.object({
   content: z.string().optional().nullable(),
   thumbnail: z
     .object({
-      id: z.string().optional().nullable(),
+      id: z.number().optional().nullable(),
       url: z.string().url().optional().nullable(),
     })
     .optional()

@@ -6,6 +6,7 @@ import styles from "./styles.module.css";
 import uniqBy from "lodash-es/uniqBy";
 import { getPath } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
 import type { Loader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
+import { useWriteContext } from "~/context/useWriteContext";
 
 const LIMIT = 30;
 
@@ -13,6 +14,8 @@ export default function MyDraftList() {
   const [items, setItems] = useState<FetchRespSchema.PostDetailResp[]>([]);
 
   const fetcher = useFetcher<Loader>();
+
+  const { leftSideKeyword } = useWriteContext();
 
   const totalCount = fetcher?.data?.totalCount ?? 0;
 
@@ -43,6 +46,11 @@ export default function MyDraftList() {
     [fetcher, pageInfo]
   );
 
+  const filteredItems = items.filter((item) => {
+    if (!leftSideKeyword) return true;
+    return item.title.includes(leftSideKeyword);
+  });
+
   return (
     <LeftSidebarContentArea title={`My Drafts (${totalCount})`}>
       {fetcher.data && !totalCount && (
@@ -50,7 +58,7 @@ export default function MyDraftList() {
           <p>You have not my drafts anything.</p>
         </div>
       )}
-      {items.map((item) => {
+      {filteredItems.map((item) => {
         return (
           <LeftSidebarContentItem key={`my-draft-${item.id}`} item={item} />
         );

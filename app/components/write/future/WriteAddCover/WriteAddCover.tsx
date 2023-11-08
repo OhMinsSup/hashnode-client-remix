@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
+import uniqBy from "lodash-es/uniqBy";
 import { cn } from "~/utils/util";
 import * as Popover from "@radix-ui/react-popover";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -11,24 +12,33 @@ import { isEmpty } from "~/utils/assertion";
 import { useDrop } from "~/libs/hooks/useDrop";
 import { Icons } from "~/components/shared/Icons";
 import { getPath } from "~/routes/_action._protected.action.upload";
+import { getPath as getFilesPath } from "~/routes/_loader._protected.loader.get-uploaded-files[.]json";
+import { useWriteFormContext } from "~/components/write/context/form";
 
 import type { Action } from "~/routes/_action._protected.action.upload";
-import { useWriteFormContext } from "../../context/form";
+import type { Loader } from "~/routes/_loader._protected.loader.get-uploaded-files[.]json";
 
 export default function WriteAddCover() {
   const { isCoverOpen, setCoverOpen, setCoverClose, uploadState } =
     useWriteContext();
+
+  const [tab, setTab] = useState<string>("upload");
 
   const onOpenChange = useCallback(
     (open: boolean) => {
       if (open) {
         setCoverOpen();
       } else {
+        setTab("upload");
         setCoverClose();
       }
     },
     [setCoverClose, setCoverOpen]
   );
+
+  const onChange = useCallback((value: string) => {
+    setTab(value);
+  }, []);
 
   return (
     <Popover.Root open={isCoverOpen} onOpenChange={onOpenChange}>
@@ -64,15 +74,29 @@ export default function WriteAddCover() {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content className={styles.popover__content} align="start">
-          <Tabs.Root className={styles.popover__container} defaultValue="tab1">
+          <Tabs.Root
+            className={styles.popover__container}
+            value={tab}
+            onValueChange={onChange}
+          >
             <Tabs.List
               className={cn(styles.tab_list, "outline-none")}
               aria-label="Manage your account"
             >
-              <Tabs.Trigger className={styles.tab_active} value="tab1">
+              <Tabs.Trigger
+                className={cn(
+                  tab === "upload" ? styles.tab_active : styles.tab
+                )}
+                value="upload"
+              >
                 <span>Upload</span>
               </Tabs.Trigger>
-              <Tabs.Trigger className={styles.tab} value="tab2">
+              <Tabs.Trigger
+                className={cn(
+                  tab === "library" ? styles.tab_active : styles.tab
+                )}
+                value="library"
+              >
                 <span>Library</span>
               </Tabs.Trigger>
               <Popover.Close
@@ -84,10 +108,10 @@ export default function WriteAddCover() {
                 </svg>
               </Popover.Close>
             </Tabs.List>
-            <Tabs.Content className="p-4" value="tab1">
+            <Tabs.Content className="p-4" value="upload">
               <WriteAddCover.Upload />
             </Tabs.Content>
-            <Tabs.Content className="overflow-auto px-4" value="tab2">
+            <Tabs.Content className="overflow-auto px-4" value="library">
               <WriteAddCover.Library />
             </Tabs.Content>
           </Tabs.Root>
@@ -110,7 +134,6 @@ WriteAddCover.Upload = function Item() {
 
   const upload = useCallback(
     async (file: File) => {
-      console.log("upload ====>", file);
       setUploadState("pending");
       const objectUrl = URL.createObjectURL(file);
 
@@ -194,14 +217,12 @@ WriteAddCover.Upload = function Item() {
 
   useEffect(() => {
     const fetcherData = fetcher.data;
-    console.log("fetcherData ====>", fetcherData);
     if (fetcher.state === "idle" && fetcherData != null) {
       const result = fetcherData.result;
       if (result && fetcherData.success) {
         setCoverClose();
         setUploadState("success");
-        // @ts-ignore TODO: fix this
-        const { id, publicUrl } = result;
+        const { id, publicUrl } = result as FetchRespSchema.FileResp;
         setValue("thumbnail", {
           id,
           url: publicUrl,
@@ -252,6 +273,22 @@ WriteAddCover.Upload = function Item() {
 };
 
 WriteAddCover.Library = function Item() {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  const [keyword, setKeyword] = useState("");
+
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }, []);
+
+  const onSubmit = useCallback(() => {
+    setValue(keyword);
+  }, [keyword]);
+
+  const onReset = useCallback(() => {
+    setKeyword("");
+    setValue(undefined);
+  }, []);
+
   return (
     <div className="pt-4">
       <label htmlFor="unsplash-search" className={styles.search_input_label}>
@@ -262,7 +299,8 @@ WriteAddCover.Library = function Item() {
             autoComplete="off"
             placeholder="Type something and press enter"
             className={styles.ipt_search}
-            value=""
+            value={keyword}
+            onChange={onChange}
           />
           <svg
             className={styles.ipt_search_icon}
@@ -277,45 +315,99 @@ WriteAddCover.Library = function Item() {
               strokeLinejoin="round"
             ></path>
           </svg>
-          <button
-            disabled
-            type="button"
-            aria-label="Clear image search"
-            className={styles.btn_search_ipt_reset}
-          >
-            <svg className="css-12cnxdc" viewBox="0 0 320 512">
-              <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
-            </svg>
-          </button>
+          {keyword ? (
+            <button
+              type="button"
+              aria-label="Clear image search"
+              onClick={onReset}
+              className={styles.btn_search_ipt_reset}
+            >
+              <svg className="css-12cnxdc" viewBox="0 0 320 512">
+                <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
+              </svg>
+            </button>
+          ) : null}
         </div>
-        <button type="button" className={styles.btn_search}>
+        <button type="button" className={styles.btn_search} onClick={onSubmit}>
           Search
         </button>
       </label>
-      <div className="h-72">
-        <div className="grid gap-4 md:grid-cols-9">
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-          <WriteAddCover.LibraryCard />
-        </div>
+      <WriteAddCover.LibraryList keyword={value} />
+    </div>
+  );
+};
+
+WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
+  const [items, setItems] = useState<FetchSchema.File[]>([]);
+
+  const fetcher = useFetcher<Loader>();
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data == null) {
+      fetcher.load(getFilesPath());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      setItems((prevItems) =>
+        uniqBy([...prevItems, ...(fetcher.data?.list ?? [])], "id")
+      );
+    }
+  }, [fetcher.data]);
+
+  const filteredItems = items.filter((item) => {
+    if (!keyword) return true;
+    return item.user?.username?.includes(keyword) ?? true;
+  });
+
+  return (
+    <div className="h-72">
+      <div className="grid gap-4 md:grid-cols-9">
+        {filteredItems.map((item) => (
+          <WriteAddCover.LibraryCard
+            key={`library-${item.id}`}
+            id={item.id}
+            url={item.publicUrl}
+            username={item.user?.username}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-WriteAddCover.LibraryCard = function Item() {
+WriteAddCover.LibraryCard = function Item({
+  id,
+  url,
+  username,
+}: {
+  id: number;
+  url: string;
+  username?: string;
+}) {
+  const { setValue } = useWriteFormContext();
+  const { setUploadState, setCoverClose } = useWriteContext();
+
+  const onClick = useCallback(() => {
+    setUploadState("success");
+    setValue("thumbnail", {
+      id,
+      url,
+    });
+    setCoverClose();
+  }, [setUploadState, setValue, id, url, setCoverClose]);
+
   return (
-    <div className="cursor-pointer rounded-lg col-span-4 md:col-span-3">
+    <div
+      className="cursor-pointer rounded-lg col-span-4 md:col-span-3"
+      onClick={onClick}
+    >
       <button className={styles.card}>
         <AspectRatio.Root ratio={16 / 9}>
           <img
             className="h-full w-full"
-            src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=300&dpr=2&q=80"
+            src={url}
             alt="Landscape photograph by Tobias Tullius"
           />
         </AspectRatio.Root>
@@ -329,7 +421,7 @@ WriteAddCover.LibraryCard = function Item() {
             target="_blank"
             className="font-semibold"
           >
-            Andrew Neel
+            {username}
           </a>
         </span>
       </p>

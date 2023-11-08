@@ -80,12 +80,23 @@ WriteLeftSide.Title = function Title() {
 };
 
 WriteLeftSide.Search = function Search() {
+  const { leftSideKeyword, changeLeftSideKeyword } = useWriteContext();
+
+  const onChangeKeyword = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      changeLeftSideKeyword(e.target.value);
+    },
+    [changeLeftSideKeyword]
+  );
+
   return (
     <div className="relative z-30 p-4">
       <input
         placeholder="Search drafts…"
         type="text"
+        value={leftSideKeyword}
         className={styles.input_search}
+        onChange={onChangeKeyword}
       />
       <span className={styles.input_search_icon}>
         <svg fill="none" viewBox="0 0 16 16">
@@ -98,11 +109,17 @@ WriteLeftSide.Search = function Search() {
           ></path>
         </svg>
       </span>
-      <button type="button" className={styles.btn_search_close}>
-        <svg viewBox="0 0 320 512">
-          <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
-        </svg>
-      </button>
+      {leftSideKeyword && leftSideKeyword.length > 0 ? (
+        <button
+          type="button"
+          className={styles.btn_search_close}
+          onClick={() => changeLeftSideKeyword("")}
+        >
+          <svg viewBox="0 0 320 512">
+            <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
+          </svg>
+        </button>
+      ) : null}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import uniqBy from "lodash-es/uniqBy";
 import { getPath } from "~/routes/_loader._protected.loader.get-deleted-posts[.]json";
 import type { Loader } from "~/routes/_loader._protected.loader.get-deleted-posts[.]json";
 import { LeftSidebarContentItem } from "../LeftSidebarContentItem";
+import { useWriteContext } from "~/context/useWriteContext";
 
 const LIMIT = 30;
 
@@ -13,6 +14,8 @@ export default function DeletedList() {
   const [items, setItems] = useState<FetchRespSchema.PostDetailResp[]>([]);
 
   const fetcher = useFetcher<Loader>();
+
+  const { leftSideKeyword } = useWriteContext();
 
   const totalCount = fetcher?.data?.totalCount ?? 0;
 
@@ -43,14 +46,19 @@ export default function DeletedList() {
     [fetcher, pageInfo]
   );
 
+  const filteredItems = items.filter((item) => {
+    if (!leftSideKeyword) return true;
+    return item.title.includes(leftSideKeyword);
+  });
+
   return (
-    <LeftSidebarContentArea title={`DELETED ARTICLES (${0})`}>
+    <LeftSidebarContentArea title={`DELETED ARTICLES (${totalCount})`}>
       {fetcher.data && !totalCount && (
         <div className={styles.empty}>
           <p>You have not deleted article anything.</p>
         </div>
       )}
-      {items.map((item) => {
+      {filteredItems.map((item) => {
         return (
           <LeftSidebarContentItem
             key={`delete-item-${item.id}`}

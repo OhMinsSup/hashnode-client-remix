@@ -4,14 +4,9 @@ import { cn } from "~/utils/util";
 import { WriteAddCover } from "../WriteAddCover";
 import { useWriteContext } from "~/context/useWriteContext";
 import { useWriteFormContext } from "../../context/form";
-import { useFetcher } from "@remix-run/react";
-import { getPath } from "~/routes/_action._protected.action.upload";
-
-import type { Action } from "~/routes/_action._protected.action.upload";
 
 export default function WriteHead() {
-  const fetcher = useFetcher<Action>();
-  const { setSubtitleClose, setSubtitleOpen, isSubtitleOpen } =
+  const { setSubtitleClose, setSubtitleOpen, isSubtitleOpen, setUploadState } =
     useWriteContext();
 
   const { register, setValue, watch } = useWriteFormContext();
@@ -28,16 +23,9 @@ export default function WriteHead() {
   }, [setSubtitleClose, setValue]);
 
   const onImageDelete = useCallback(() => {
-    fetcher.submit(
-      {},
-      {
-        method: "POST",
-        action: getPath(),
-        encType: "multipart/form-data",
-      }
-    );
     setValue("thumbnail", undefined);
-  }, [fetcher, setValue]);
+    setUploadState("idle");
+  }, [setValue, setUploadState]);
 
   return (
     <div>

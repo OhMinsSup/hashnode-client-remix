@@ -6,13 +6,11 @@ import type { ApiOptions } from "services/fetch/fetch.type";
 type CfDirectUploadParams = {
   cfApiToken: string;
   cfAccountId: string;
-  formFields: FormFieldValues;
 };
 
 export const postCfDirectUploadApi = async ({
   cfAccountId,
   cfApiToken,
-  formFields,
 }: CfDirectUploadParams) => {
   const init = new Request(getPathDirectUpload(cfAccountId), {
     method: "POST",

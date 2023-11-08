@@ -263,6 +263,12 @@
   outline-offset: 2px !important;
 }
 
+.btn_search_ipt_reset > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: currentcolor;
+}
+
 .ipt_search:focus {
   background-color: transparent;
 }

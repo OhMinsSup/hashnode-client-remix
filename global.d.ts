@@ -91,13 +91,13 @@ declare namespace FetchSchema {
 
   export type File = {
     id: number;
-    name: string;
-    url: string;
+    filename: string;
+    publicUrl: string;
     uploadType: UploadType;
     mediaType: MediaType;
     createdAt: string;
     updatedAt: string;
-    deletedAt?: string;
+    user?: Pick<User, "id" | "username">;
   };
 
   export type PostCount = {
@@ -175,12 +175,7 @@ declare namespace FetchRespSchema {
     postsCount: number;
   } & Omit<FetchSchema.Tag, "deletedAt">;
 
-  export type UploadResp = Omit<
-    FetchSchema.File,
-    "createdAt" | "updatedAt" | "deletedAt"
-  >;
-
-  export type FileListResp = ListResp<Omit<FetchSchema.File, "deletedAt">>;
+  export type FileListResp = ListResp<FetchSchema.File>;
 
   export type TagListResp = ListResp<TagWithPostCountResp>;
 
@@ -248,6 +243,8 @@ declare namespace FetchRespSchema {
 
   export interface GetWidgetBookmarksRespSchema
     extends Array<GetWidgetBookmarkRespSchema> {}
+
+  /// Cloudflare file upload
 
   export type CfCommonResp<Result = any> = {
     result: Result;

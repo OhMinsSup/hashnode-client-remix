@@ -15,6 +15,8 @@ enum Action {
   SET_COVER_CLOSE = "SET_COVER_CLOSE",
 
   SET_UPLOAD_STATE = "SET_UPLOAD_STATE",
+
+  CHANGE_LEFT_SIDE_KEYWORD = "CHANGE_LEFT_SIDE_KEYWORD",
 }
 
 type OpenAction = {
@@ -54,6 +56,11 @@ type SetUploadStateAction = {
   payload: "idle" | "pending" | "success" | "error";
 };
 
+type ChangeLeftSideKeywordAction = {
+  type: Action.CHANGE_LEFT_SIDE_KEYWORD;
+  payload: string;
+};
+
 type WriteAction =
   | OpenAction
   | CloseAction
@@ -63,7 +70,8 @@ type WriteAction =
   | SetSubtitleCloseAction
   | SetCoverOpenAction
   | SetCoverCloseAction
-  | SetUploadStateAction;
+  | SetUploadStateAction
+  | ChangeLeftSideKeywordAction;
 
 interface WriteState {
   isOpen: boolean;
@@ -71,6 +79,7 @@ interface WriteState {
   isSubtitleOpen: boolean;
   isCoverOpen: boolean;
   uploadState: "idle" | "pending" | "success" | "error";
+  leftSideKeyword: string;
 }
 
 interface WriteContext extends WriteState {
@@ -83,6 +92,9 @@ interface WriteContext extends WriteState {
   setCoverOpen: () => void;
   setCoverClose: () => void;
   setUploadState: (payload: SetUploadStateAction["payload"]) => void;
+  changeLeftSideKeyword: (
+    payload: ChangeLeftSideKeywordAction["payload"]
+  ) => void;
   dispatch: React.Dispatch<WriteAction>;
 }
 
@@ -92,6 +104,7 @@ const initialState: WriteState = {
   isSubtitleOpen: false,
   isCoverOpen: false,
   uploadState: "idle",
+  leftSideKeyword: "",
 };
 
 const [Provider, useWriteContext] = createContext<WriteContext>({
@@ -156,6 +169,12 @@ function reducer(state = initialState, action: WriteAction) {
         uploadState: action.payload,
       };
     }
+    case Action.CHANGE_LEFT_SIDE_KEYWORD: {
+      return {
+        ...state,
+        leftSideKeyword: action.payload,
+      };
+    }
     default:
       return state;
   }
@@ -187,6 +206,10 @@ function WriteProvider({ children }: Props) {
   const setUploadState = (payload: SetUploadStateAction["payload"]) =>
     dispatch({ type: Action.SET_UPLOAD_STATE, payload });
 
+  const changeLeftSideKeyword = (
+    payload: ChangeLeftSideKeywordAction["payload"]
+  ) => dispatch({ type: Action.CHANGE_LEFT_SIDE_KEYWORD, payload });
+
   const actions = useMemo(
     () => ({
       ...state,
@@ -199,6 +222,7 @@ function WriteProvider({ children }: Props) {
       setCoverOpen,
       setCoverClose,
       setUploadState,
+      changeLeftSideKeyword,
       dispatch,
     }),
     [state]
