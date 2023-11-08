@@ -88,6 +88,14 @@ export const getScrollTop = (el: Document | Element) => {
   return (el as Element).scrollTop;
 };
 
+export const getWindowScrollTop = () => {
+  if (!document.body) return 0;
+  const scrollTop = document.documentElement
+    ? document.documentElement.scrollTop || document.body.scrollTop
+    : document.body.scrollTop;
+  return scrollTop;
+};
+
 export const getScrollHeight = (el: Document | Element) => {
   return (
     (el as Element).scrollHeight ||

@@ -1,0 +1,37 @@
+.root {
+  @apply fixed bottom-0 flex justify-around items-center w-full border-t bg-white py-2 z-40 dark:text-slate-300 dark:bg-slate-950 dark:border-slate-800 md:hidden;
+}
+
+.item {
+  @apply relative flex items-center justify-center w-10 h-10 rounded-full active:bg-slate-100 dark:active:bg-slate-800 focus:outline-none text-slate-600 dark:text-slate-300;
+}
+
+.active {
+  @apply text-blue-600;
+}
+
+.dialog_overlay {
+  @apply fixed inset-0 z-50 opacity-50 bg-slate-950 dark:bg-slate-600;
+}
+
+.dialog_content {
+  @apply px-6 py-20 overflow-y-auto fixed top-0 bottom-0 right-0 flex flex-col z-50 bg-white dark:bg-slate-950;
+}
+
+.dialog_close {
+  @apply flex items-center justify-center transition-colors duration-100 text-slate-600 dark:text-slate-300 focus:outline-none border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:text-slate-300 disabled:dark:text-slate-800 disabled:hover:bg-transparent disabled:dark:hover:bg-transparent disabled:cursor-not-allowed rounded-full p-2;
+}
+
+.dialog_body {
+  margin-bottom: 1.25rem;
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .dialog_body {
+    width: 340px;
+  }
+}

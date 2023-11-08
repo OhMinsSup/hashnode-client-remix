@@ -1,0 +1,57 @@
+.root {
+  @apply flex flex-col items-center justify-center p-3;
+}
+
+.menus_user_profile_container {
+  position: relative;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 9999px;
+}
+
+.container_profile {
+  @apply mx-auto mb-5 block h-16 w-16;
+}
+
+.h1 {
+  @apply mb-2 text-center text-xl font-bold text-slate-700;
+}
+
+.h1 {
+  @apply dark:text-slate-200;
+}
+
+.p {
+  @apply mb-5 text-base text-slate-600;
+}
+
+.p {
+  @apply dark:text-slate-300;
+}
+
+.btn_groups {
+  @apply flex w-full flex-col items-center justify-center gap-3;
+}
+
+.btn_signup {
+  @apply flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-[18px] py-2.5 text-sm font-medium text-white;
+}
+
+.btn_signin {
+  @apply flex w-full items-center justify-center gap-2 rounded-full border border-blue-600 px-[18px] py-2.5 text-sm font-medium text-white hover:bg-blue-50;
+}
+
+.btn_signin {
+  @apply dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700;
+}
+
+.btn_signin > span {
+  @apply text-blue-600;
+}
+
+.btn_signin > span {
+  @apply dark:text-slate-200;
+}

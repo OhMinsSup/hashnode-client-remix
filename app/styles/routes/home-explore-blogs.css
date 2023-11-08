@@ -7,13 +7,25 @@
 }
 
 .explore-trending-blog .title-wrapper h2 {
-  font-family: Plus Jakarta Sans, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  font-family:
+    Plus Jakarta Sans,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
     "Noto Color Emoji";
   --tw-text-opacity: 1;
   color: rgb(15 23 42 / var(--tw-text-opacity));
-  @apply mr-5 text-xl font-bold
+  @apply mr-5 text-xl font-bold;
 }
 
 .explore-trending-blog .title-wrapper p {
@@ -22,17 +34,17 @@
 }
 
 .explore-trending-blog .content-wrapper {
-  @apply mx-[-0.5rem] flex flex-col flex-wrap
+  @apply mx-[-0.5rem] flex flex-col flex-wrap;
 }
 
 .explore-trending-blog .select-filter {
-  @apply relative mt-4 flex w-min
+  @apply relative mt-4 flex w-min;
 }
 
 .explore-trending-blog .select-filter span {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
-  @apply absolute top-0 right-0 flex h-full flex-col justify-center pr-4
+  @apply absolute top-0 right-0 flex h-full flex-col justify-center pr-4;
 }
 
 .explore-trending-blog .select-filter select {

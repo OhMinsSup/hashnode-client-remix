@@ -1,0 +1,11 @@
+.item {
+  @apply inline-flex items-center justify-center gap-2 rounded-3xl border border-transparent px-5 py-2.5 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.item {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.active {
+  @apply !text-blue-600;
+}

@@ -7,53 +7,108 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useRouteError,
-  isRouteErrorResponse,
 } from "@remix-run/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { cssBundleHref } from "@remix-run/css-bundle";
+import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
+import { HoneypotProvider } from "remix-utils/honeypot/react";
 
-import NotFoundPage from "./components/errors/NotFoundPage";
-import InternalServerPage from "./components/errors/InternalServerPage";
+import classNames from "classnames";
+import { getDomainUrl } from "~/utils/util";
+
+import { ExternalLink } from "~/components/shared/future/ExternalLink";
+import { CanonicalLink } from "~/components/shared/future/CanonicalLink";
+import { Body } from "~/components/shared/future/Body";
+import {
+  NonFlashOfWrongThemeEls,
+  ThemeProvider,
+  useTheme,
+} from "~/context/useThemeContext";
 
 // api
-import { ApiService } from "./api/client";
-import { ASSET_URL } from "./constants/constant";
+import { ASSET_URL } from "~/constants/constant";
 
 // styles
 import globalStyles from "~/styles/global.css";
 
 // types
+import type { Theme } from "~/context/useThemeContext";
+import type { HoneypotInputProps } from "remix-utils/honeypot/server";
 import type {
-  LoaderArgs,
   LinksFunction,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/cloudflare";
-import { useMemo } from "react";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: globalStyles }];
+  return [
+    { rel: "stylesheet", href: globalStyles },
+    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  ];
 };
 
-export const loader = async ({ context, request }: LoaderArgs) => {
-  ApiService.setBaseUrl(context.API_BASE_URL || "http://localhost:8080/api/v1");
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const env = {
-    API_BASE_URL: ApiService.baseUrl,
+    API_BASE_URL: context.API_BASE_URL,
   };
-  const data = await context.api.user.getSession(request);
-  return json(
-    { currentProfile: data, env },
-    data
-      ? undefined
-      : {
-          headers: context.api.auth.getClearAuthHeaders(),
-        }
-  );
+
+  const values = await context.services.csrf.csrf.commitToken(request);
+  const [csrfToken, csrfHeader] = values;
+
+  const honeyProps = context.services.honeypot.honeypot.getInputProps();
+
+  const $object = {
+    currentProfile: null,
+    theme: null,
+    csrfToken,
+    origin: getDomainUrl(request),
+    env,
+    honeyProps,
+  } as {
+    currentProfile: FetchRespSchema.UserResponse | null;
+    csrfToken: string;
+    env: typeof env;
+    theme: Theme | null;
+    origin: string;
+    honeyProps: HoneypotInputProps;
+  };
+
+  try {
+    const [session, theme] = await Promise.all([
+      context.api.auth.getSession(request),
+      context.services.theme.getTheme(request),
+    ]);
+
+    const $data = Object.assign({}, $object, {
+      currentProfile: session,
+      theme,
+    });
+
+    const headers = context.services.server.getClearAuthHeaders();
+    if (csrfHeader) {
+      headers.append("set-cookie", csrfHeader);
+    }
+
+    return json(
+      $data,
+      session
+        ? csrfHeader
+          ? {
+              headers: { "set-cookie": csrfHeader },
+            }
+          : undefined
+        : {
+            headers,
+          }
+    );
+  } catch (error) {
+    return json($object);
+  }
 };
 
-export type RootLoader = typeof loader;
+export type RoutesData = typeof loader;
 
-export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
-  const url = new URL(location.pathname, "http://localhost:8788");
+export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
+  const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",
     description:
@@ -61,11 +116,6 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
     image: ASSET_URL.SEO_IMAGE,
   };
   return [
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url.href,
-    },
     {
       title: Seo.title,
     },
@@ -116,97 +166,78 @@ export const meta: V2_MetaFunction<RootLoader> = ({ location }) => {
   ];
 };
 
-export default function App() {
-  const { env } = useLoaderData<RootLoader>();
-  const client = useMemo(() => {
-    return new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
-  }, []);
-
+function Document({
+  children,
+  origin,
+  theme,
+  env,
+}: {
+  children: React.ReactNode;
+  origin?: string;
+  theme?: Theme | null;
+  env?: Record<string, string>;
+}) {
   return (
-    <QueryClientProvider client={client}>
-      <html lang="en">
-        <head>
-          <meta charSet="UTF-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="theme-color" content="#0F172A" />
-          <Meta />
-          <Links />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="anonymous"
-          />
-          <link rel="manifest" href="/manifest.json" />
-          <link
-            rel="search"
-            href="/opensearch.xml"
-            type="application/opensearchdescription+xml"
-            title="Hashnode"
-          />
-        </head>
-        <body>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.ENV = ${JSON.stringify(env)}`,
-            }}
-          />
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-        </body>
-      </html>
-    </QueryClientProvider>
-  );
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  return (
-    <html lang="en">
+    <html
+      id="current-style"
+      lang="en"
+      itemScope
+      itemType="http://schema.org/WebSite"
+      className={classNames(theme)}
+    >
       <head>
-        <title>Oops!</title>
         <meta charSet="UTF-8" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="theme-color" content="#0F172A" />
+        <CanonicalLink origin={origin} />
+        <ExternalLink />
         <Meta />
         <Links />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="manifest" href="/manifest.json" />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
       </head>
-      <body>
-        <>
-          {isRouteErrorResponse(error) ? (
-            <>
-              {error.status !== 500 ? <NotFoundPage /> : <InternalServerPage />}
-            </>
-          ) : (
-            <InternalServerPage />
-          )}
-        </>
-        <NotFoundPage />
+      <Body>
+        {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(env)}`,
+          }}
+        />
+        <ScrollRestoration />
         <Scripts />
-      </body>
+        <LiveReload />
+      </Body>
     </html>
   );
+}
+
+function App() {
+  const [theme] = useTheme();
+  const data = useLoaderData<RoutesData>();
+
+  return (
+    <Document origin={data.origin} theme={theme} env={data.env}>
+      <Outlet />
+    </Document>
+  );
+}
+
+export default function AppWithProviders() {
+  const data = useLoaderData<RoutesData>();
+  return (
+    <HoneypotProvider {...data.honeyProps}>
+      <AuthenticityTokenProvider token={data.csrfToken}>
+        <ThemeProvider specifiedTheme={data.theme}>
+          <App />
+        </ThemeProvider>
+      </AuthenticityTokenProvider>
+    </HoneypotProvider>
+  );
+}
+
+export function ErrorBoundary() {
+  return <Document>Error</Document>;
 }

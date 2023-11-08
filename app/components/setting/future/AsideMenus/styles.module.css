@@ -1,0 +1,23 @@
+.title {
+  @apply p-4 mb-2 bg-white text-slate-950 border rounded-lg dark:text-slate-100 dark:bg-slate-950 dark:border-slate-800/80;
+}
+
+.menus {
+  @apply flex flex-row items-end mb-2 overflow-auto text-sm font-bold uppercase bg-white border rounded-lg text-slate-700 whitespace-nowrap dark:bg-slate-950 dark:border-slate-800/80 dark:text-slate-300 lg:items-start lg:flex-col;
+}
+
+.menu {
+  @apply px-3 md:px-6 py-4 w-full flex flex-row items-center;
+}
+
+.menu_default {
+  @apply hover:bg-slate-100 dark:hover:bg-slate-800;
+}
+
+.menu_active {
+  @apply text-blue-500;
+}
+
+.menu_icon {
+  @apply w-6 h-6 mr-4 opacity-75 fill-current;
+}

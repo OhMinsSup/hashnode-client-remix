@@ -1,0 +1,41 @@
+import { z } from "zod";
+
+export const schema = z.object({
+  title: z.string().max(150),
+  subTitle: z.string().max(150).optional().nullable(),
+  content: z.string().optional().nullable(),
+  thumbnail: z
+    .object({
+      id: z.number().optional().nullable(),
+      url: z.string().url().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
+  disabledComment: z.boolean().optional(),
+  tableOfContents: z.boolean().optional(),
+  publishingDate: z.date().optional().nullable(),
+  tags: z
+    .array(
+      z.object({
+        id: z.number().optional().nullable(),
+        name: z.string(),
+        selected: z.boolean(),
+        postsCount: z.number().optional().nullable(),
+        createdAt: z.number().optional().nullable(),
+        updatedAt: z.number().optional().nullable(),
+      })
+    )
+    .nullable()
+    .optional(),
+  seo: z
+    .object({
+      title: z.string().max(70).optional().nullable(),
+      desc: z.string().max(156).optional().nullable(),
+      image: z.string().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
+  isDraft: z.boolean().optional(),
+});
+
+export type FormFieldValues = z.infer<typeof schema>;

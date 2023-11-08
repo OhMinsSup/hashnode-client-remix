@@ -2,63 +2,47 @@ import { defer } from "@remix-run/cloudflare";
 
 // components
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-import Header from "~/components/shared/Header";
-import AppLeftSidebar from "~/components/shared/AppLeftSidebar";
-import AppRightSidebar from "~/components/shared/AppRightSidebar";
-
-// styles
-import homeStyles from "~/styles/routes/home.css";
+import { MainLayout } from "~/components/shared/future/MainLayout";
+import { MainFooter } from "~/components/shared/future/MainFooter";
+import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
+import { MainHeader } from "~/components/shared/future/MainHeader";
 
 // types
-import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: homeStyles }];
-};
-
-export const loader = async ({ context, request }: LoaderArgs) => {
+export const loader = ({ context, request }: LoaderFunctionArgs) => {
   return defer({
-    trendingTag: context.api.tag.getTagList(request, { type: "popular" }),
-    bookmarks: context.api.widget.getWidgetBookmarks(request),
+    trendingTag: context.api.tag.getTagsByBaseList(
+      {
+        type: "popular",
+        limit: 4,
+      },
+      request
+    ),
   });
 };
 
-export type MainLoader = typeof loader;
+export type Loader = typeof loader;
 
-export default function Main() {
+export default function Routes() {
   return (
-    <div className="container__base">
-      <Header />
-      <main>
-        <AppLeftSidebar />
-        <Outlet />
-        <AppRightSidebar />
-      </main>
-    </div>
+    <MainLayout
+      header={<MainHeader />}
+      footer={<MainFooter />}
+      sidebar={<HashnodeAside />}
+    >
+      <Outlet />
+    </MainLayout>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }

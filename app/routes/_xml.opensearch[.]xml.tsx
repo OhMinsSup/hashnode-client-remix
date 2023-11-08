@@ -1,9 +1,9 @@
 import { Buffer } from "node:buffer";
 
 // utils
-import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const host =
     request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
   if (!host) {

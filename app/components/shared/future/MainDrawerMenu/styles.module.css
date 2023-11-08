@@ -1,0 +1,55 @@
+.btn_menu {
+  @apply mr-2 inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+}
+
+.btn_menu {
+  @apply dark:text-slate-300 dark:hover:border-slate-800;
+}
+
+.btn_menu > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: currentColor;
+}
+
+.overlay {
+  @apply fixed inset-0 z-50 opacity-50 bg-slate-900 dark:bg-slate-600;
+}
+
+.content {
+  @apply fixed top-0 bottom-0 left-0 flex flex-col z-50 w-[323px] bg-white dark:bg-slate-900;
+}
+
+.container {
+  @apply flex items-center justify-between border-b border-slate-200 dark:border-slate-800 p-4 min-h-[75px];
+}
+
+.btn_close {
+  @apply flex items-center justify-center transition-colors duration-100 text-slate-600 dark:text-slate-300 focus:outline-none border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:text-slate-300 disabled:dark:text-slate-800 disabled:hover:bg-transparent disabled:dark:hover:bg-transparent disabled:cursor-not-allowed rounded-full p-2;
+}
+
+.logo {
+  @apply block w-[168px] text-slate-900 dark:text-white;
+}
+
+.logo_white {
+  @apply w-full fill-current dark:hidden;
+}
+
+.logo_dark {
+  @apply w-full fill-current hidden dark:block;
+}
+
+.nav_link {
+  @apply flex flex-row justify-between items-center gap-2 w-full py-2 px-3 rounded-lg font-sans cursor-pointer transition-colors duration-150 ease-in-out active:bg-slate-100 dark:active:bg-slate-800 md:hover:bg-slate-100 md:dark:hover:bg-slate-800 focus:outline-none text-slate-600 dark:text-slate-300 text-lg font-semibold;
+}
+
+.nav_link_active {
+  @apply !text-blue-600;
+}
+
+@media (min-width: 1280px) {
+  .btn_menu {
+    @apply hidden;
+  }
+}

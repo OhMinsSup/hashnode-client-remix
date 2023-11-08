@@ -1,6 +1,5 @@
 import type { DependencyList, EffectCallback } from "react";
-import { useEffect, useLayoutEffect } from "react";
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { depsAreSame } from "./depsAreSame";
 import {
   type BasicTarget,

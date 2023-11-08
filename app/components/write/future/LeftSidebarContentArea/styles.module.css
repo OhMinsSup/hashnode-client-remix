@@ -1,0 +1,29 @@
+.btn_title_area {
+  margin-bottom: 0.5rem;
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+.btn_title_area:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity));
+}
+
+.icon {
+  height: 1rem;
+  width: 1rem;
+  stroke: currentcolor;
+}

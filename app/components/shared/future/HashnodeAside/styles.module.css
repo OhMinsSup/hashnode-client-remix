@@ -1,0 +1,39 @@
+.root {
+  display: none;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.content {
+  display: none;
+}
+
+.content_container {
+  margin-bottom: 1.25rem;
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .content_container {
+    width: 340px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .root {
+    display: block;
+    width: 340px;
+  }
+
+  .content {
+    display: block;
+  }
+
+  .content_container {
+    margin-top: 2rem;
+  }
+}

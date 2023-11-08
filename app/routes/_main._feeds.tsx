@@ -1,64 +1,27 @@
-// remix
-import { defer } from "@remix-run/cloudflare";
+// components
+import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
+import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
 
 // provider
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import TabRoutesPosts from "~/components/main/TabRoutesPosts";
-import ScrollAreaTrendingUsers from "~/components/main/ScrollAreaTrendingUsers";
 
-// styles
-import homeListStyle from "~/styles/routes/home-list.css";
-
-import type { LoaderArgs, LinksFunction } from "@remix-run/cloudflare";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: homeListStyle }];
-};
-
-export const loader = ({ context, request }: LoaderArgs) => {
-  return defer({
-    getAricleCircle: context.api.widget.getAritcleCircles(request),
-  });
-};
-
-export type MainFeedsLoader = ReturnType<typeof loader>;
-
-export default function MainFeedsPage() {
+export default function Routes() {
   return (
-    <div className="main__list-container">
-      <div className="main__list-container__trending-users">
-        <ScrollAreaTrendingUsers />
-      </div>
-      <div className="main__list-container__tabs">
-        <TabRoutesPosts>
-          <Outlet />
-        </TabRoutesPosts>
-      </div>
-    </div>
+    <HashnodeContainer>
+      <HashnodeTabs>
+        <Outlet />
+      </HashnodeTabs>
+    </HashnodeContainer>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
+    return <Routes />;
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
+    return <Routes />;
   } else {
-    return <h1>Unknown Error</h1>;
+    return <Routes />;
   }
 }

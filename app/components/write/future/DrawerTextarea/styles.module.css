@@ -1,0 +1,13 @@
+.textarea {
+  width: 100%;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  background-color: transparent;
+  padding: 1rem 2rem 1rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  outline: transparent solid 2px;
+  outline-offset: 2px;
+}

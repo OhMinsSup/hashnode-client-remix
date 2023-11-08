@@ -1,0 +1,21 @@
+.root {
+  @apply container mx-auto mt-5;
+}
+
+.wrapper {
+  @apply flex flex-row flex-wrap md:pt-2;
+}
+
+.sidebar {
+  @apply w-full shrink-0 lg:pl-0 lg:pr-4;
+}
+
+.content {
+  @apply flex-1;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    width: 21rem;
+  }
+}

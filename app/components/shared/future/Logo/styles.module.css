@@ -1,0 +1,19 @@
+.logo {
+  @apply block text-slate-900 dark:text-white;
+}
+
+.logo_icon {
+  @apply hidden w-36 fill-current;
+}
+
+.logo_icon_mobile {
+  --tw-text-opacity: 1;
+  color: rgb(41 98 255 / var(--tw-text-opacity));
+  @apply w-8 fill-current dark:text-white;
+}
+
+@media (min-width: 768px) {
+  .logo_icon {
+    @apply block w-44;
+  }
+}

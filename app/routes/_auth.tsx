@@ -1,7 +1,7 @@
 // remix
 import { Outlet } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
-import AuthLayout from "~/components/auth/AuthLayout";
+import { AuthLayout } from "~/components/auth/future/AuthLayout";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -12,25 +12,25 @@ import authStyles from "~/styles/routes/auth.css";
 // types
 import type {
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/cloudflare";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: authStyles }];
 };
 
-export const loader = async ({ context, request }: LoaderArgs) => {
-  const isAuthenticated = await context.api.user.isAuthenticated(request);
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+  const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (isAuthenticated) {
     return redirect(PAGE_ENDPOINTS.ROOT);
   }
-  return null;
+  return context.services.server.getHashnodeonboard();
 };
 
-export type AuthLayoutLoader = typeof loader;
+export type RoutesLoader = Promise<FetchSchema.Hashnodeonboard>;
 
-export const meta: V2_MetaFunction<AuthLayoutLoader> = ({ location }) => {
+export const meta: MetaFunction<RoutesLoader> = ({ location }) => {
   const Seo = {
     signin: "Sign in to Hashnode",
     signup: "Sign up to Hashnode",

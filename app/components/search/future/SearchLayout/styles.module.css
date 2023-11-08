@@ -1,0 +1,85 @@
+.root {
+  width: 100%;
+  position: relative;
+  z-index: 40;
+  display: grid;
+  min-height: 100vh;
+  min-width: 100%;
+  gap: 2rem;
+}
+
+.container {
+  position: relative;
+  grid-column: span 8 / span 8;
+  min-width: 0px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 2rem;
+  padding-bottom: 6rem;
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 728px;
+}
+
+@media (min-width: 640px) {
+  .root {
+    max-width: 640px;
+  }
+
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .root {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .root {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0px;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .container {
+    grid-column-start: 2;
+    grid-column-end: 10;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .root {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0px;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .root {
+    max-width: 1536px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0px;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    padding-left: 13rem;
+    padding-right: 13rem;
+  }
+}

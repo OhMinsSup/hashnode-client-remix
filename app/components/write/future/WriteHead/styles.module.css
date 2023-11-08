@@ -1,0 +1,244 @@
+.textarea_title {
+  width: 100%;
+  resize: none;
+  appearance: none;
+  overflow: hidden;
+  background-color: transparent;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-family:
+    "Plus Jakarta Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: 1.875rem;
+  font-weight: 800;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  outline: transparent solid 2px;
+  outline-offset: 2px;
+  line-height: 1.375 !important;
+}
+
+.textarea_subtitle {
+  width: 100%;
+  resize: none;
+  appearance: none;
+  background-color: transparent;
+  padding-left: 1rem;
+  padding-right: 2.5rem;
+  font-family:
+    "Plus Jakarta Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: 1.5rem;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  outline: transparent solid 2px;
+  outline-offset: 2px;
+  line-height: 1.375 !important;
+}
+
+.btn_close {
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.btn_close > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: currentcolor;
+}
+
+.btn_close:hover {
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
+.btn_subtitle {
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  -webkit-box-pack: center;
+  justify-content: center;
+  text-align: center;
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  outline: transparent solid 2px !important;
+  outline-offset: 2px !important;
+}
+
+.btn_subtitle:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
+.btn_subtitle > svg {
+  margin-right: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  stroke: currentcolor;
+}
+
+.header {
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-weight: 600;
+}
+
+.cover_image_toolbox {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.btn_cover_image_delete {
+  margin-left: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  border-width: 2px;
+  border-color: transparent;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding: 0.5rem 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
+  opacity: 0.75;
+}
+
+.btn_cover_image_delete > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: currentcolor;
+}
+
+.btn_cover_image_delete > svg::after {
+  right: 0;
+  top: 100%;
+}
+
+.btn_cover_image_delete > svg:after {
+  content: attr(data-title);
+  --tw-bg-opacity: 1;
+  background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 0.5rem;
+  opacity: 0;
+  padding: 0.5rem;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  text-align: right;
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+  visibility: hidden;
+  white-space: nowrap;
+  z-index: 20;
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    opacity,
+    box-shadow,
+    transform,
+    filter,
+    -webkit-backdrop-filter;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    opacity,
+    box-shadow,
+    transform,
+    filter,
+    backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (min-width: 768px) {
+  .textarea_title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
