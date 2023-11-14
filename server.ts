@@ -44,7 +44,7 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       ),
       user: new UserApiService(env, services.server),
       post: new PostApiService(env, services.server),
-      tag: new TagApiService(env),
+      tag: new TagApiService(env, services.server),
       file: new FileApiService(env, services.server),
     };
 

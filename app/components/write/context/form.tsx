@@ -39,8 +39,6 @@ export function WriteFormProvider({ children, initialValues }: Props) {
     criteriaMode: "firstError",
   });
 
-  console.log(methods.watch());
-
   return <FormProvider {...methods}>{children}</FormProvider>;
 }
 

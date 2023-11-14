@@ -9,10 +9,14 @@ import { FetchService } from "services/fetch/fetch.client";
 
 // types
 import type { Env } from "../app/env.server";
+import type { ServerService } from "services/app/server.server";
 import type { Params } from "@remix-run/react";
 
 export class TagApiService {
-  constructor(private readonly env: Env) {}
+  constructor(
+    private readonly env: Env,
+    private readonly $server: ServerService
+  ) {}
 
   /**
    * @version 2023-08-17
