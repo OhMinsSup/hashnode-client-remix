@@ -5,7 +5,7 @@ import { SigninForm } from "~/components/auth/future/SigninForm";
 import { json } from "@remix-run/cloudflare";
 
 // types
-import type { ResponseState } from "services/app/server.server";
+import type { ResponseState } from "~/services/app/server.server";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {

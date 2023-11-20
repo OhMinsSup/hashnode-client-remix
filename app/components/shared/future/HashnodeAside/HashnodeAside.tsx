@@ -9,7 +9,7 @@ import { AsideBookmark } from "~/components/shared/future/AsideBookmark";
 import { AsideFooter } from "~/components/shared/future/AsideFooter";
 
 // hooks
-import { useOptionalSession } from "services/hooks/useSession";
+import { useOptionalSession } from "~/services/hooks/useSession";
 import { AsideProvider, useAsideContext } from "./provider/aside";
 
 function InternalHashnodeAside() {

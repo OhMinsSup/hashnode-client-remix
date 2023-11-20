@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   schema,
   type FormFieldValues,
-} from "services/validate/post-create-api.validate";
+} from "~/services/validate/post-create-api.validate";
 
 interface Props {
   initialValues?: FetchRespSchema.PostDetailResp;

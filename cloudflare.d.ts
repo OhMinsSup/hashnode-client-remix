@@ -1,4 +1,4 @@
-import type { RemixContext } from "./services/types";
+import type { RemixContext } from "./app/services/types";
 
 declare module "@remix-run/server-runtime" {
   export interface AppLoadContext extends RemixContext {}

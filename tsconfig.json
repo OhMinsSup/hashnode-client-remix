@@ -5,7 +5,7 @@
     "**/*.tsx",
     "global.d.ts",
     "cloudflare.d.ts",
-    "./services/**/*.ts"
+    "app/services/**/*.ts"
   ],
   "exclude": ["_backup_routes"],
   "compilerOptions": {

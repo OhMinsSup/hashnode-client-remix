@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import type { FieldPath } from "react-hook-form";
-import type { FormFieldValues } from "services/validate/post-create-api.validate";
+import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 import { useWriteFormContext } from "../../context/form";
 
 type InputProps = React.DetailedHTMLProps<

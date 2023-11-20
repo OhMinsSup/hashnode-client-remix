@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 import { Icons } from "~/components/shared/Icons";
 import { getPath } from "~/routes/_action._protected.action.upload";
 
-import type { FormFieldValues } from "services/validate/user-update-api.validate";
+import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
 import type { Action } from "~/routes/_action._protected.action.upload";
 
 interface SettingProfileImageProps {}

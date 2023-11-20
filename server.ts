@@ -1,19 +1,19 @@
 import { logDevReady } from "@remix-run/cloudflare";
 import { createPagesFunctionHandler } from "@remix-run/cloudflare-pages";
 
-import { EnvSchema, type RuntimeEnv } from "./services/app/env.server";
+import { EnvSchema, type RuntimeEnv } from "./app/services/app/env.server";
 
-import { AuthApiService } from "./services/api/auth.server";
-import { UserApiService } from "./services/api/user.server";
-import { TagApiService } from "./services/api/tag.server";
-import { FileApiService } from "./services/api/file.server";
-import { PostApiService } from "./services/api/post.server";
+import { AuthApiService } from "./app/services/api/auth.server";
+import { UserApiService } from "./app/services/api/user.server";
+import { TagApiService } from "./app/services/api/tag.server";
+import { FileApiService } from "./app/services/api/file.server";
+import { PostApiService } from "./app/services/api/post.server";
 
-import { ThemeService } from "./services/app/theme.server";
-import { ServerService } from "./services/app/server.server";
-import { ImagesService } from "./services/app/images.server";
-import { CsrfService } from "./services/app/csrf.server";
-import { HoneypotService } from "./services/app/honeypot.server";
+import { ThemeService } from "./app/services/app/theme.server";
+import { ServerService } from "./app/services/app/server.server";
+import { ImagesService } from "./app/services/app/images.server";
+import { CsrfService } from "./app/services/app/csrf.server";
+import { HoneypotService } from "./app/services/app/honeypot.server";
 
 import * as build from "@remix-run/dev/server-build";
 
