@@ -9,8 +9,8 @@ export const schema = z
   .object({
     username: z
       .string()
-      .min(3, {
-        message: "Username must be at least 3 characters long",
+      .min(2, {
+        message: "Username must be at least 2 characters long",
       })
       .max(20, {
         message: "Username must be at most 20 characters long",
@@ -20,16 +20,16 @@ export const schema = z
     }),
     password: z
       .string()
-      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{6,10}$/, {
         message:
-          "Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter",
+          "Password must be at least 6 characters long and contain at least one number, one lowercase and one uppercase letter",
       }),
-    name: z.string().optional(),
+    nickname: z.string().optional(),
     confirmPassword: z
       .string()
-      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{6,10}$/, {
         message:
-          "Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter",
+          "Password must be at least 6 characters long and contain at least one number, one lowercase and one uppercase letter",
       }),
   })
   .refine((data) => data.password === data.confirmPassword, {

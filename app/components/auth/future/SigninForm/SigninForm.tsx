@@ -163,7 +163,7 @@ SigninForm.EmailAuth = function Item({ onChangeStep }: EmailAuthProps) {
           className={styles.email_form}
           replace
           method="POST"
-          action="/signin?type=login"
+          action="/signin"
         >
           <AuthenticityTokenInput />
           <HoneypotInputs />

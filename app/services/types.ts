@@ -9,6 +9,7 @@ import type { ImagesService } from "./app/images.server";
 import type { PostApiService } from "./api/post.server";
 import type { CsrfService } from "./app/csrf.server";
 import type { HoneypotService } from "./app/honeypot.server";
+import type { ToastService } from "./app/toast.server";
 
 export interface RemixContext extends RuntimeEnv {
   services: {
@@ -17,6 +18,7 @@ export interface RemixContext extends RuntimeEnv {
     images: ImagesService;
     csrf: CsrfService;
     honeypot: HoneypotService;
+    toast: ToastService;
   };
   api: {
     auth: AuthApiService;

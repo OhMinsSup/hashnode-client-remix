@@ -1,6 +1,7 @@
 import cookies from "cookie";
 import omit from "lodash-es/omit";
 import { redirect } from "@remix-run/cloudflare";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 import { schema as $signinSchema } from "~/services/validate/signin-api.validate";
 import { schema as $signupSchema } from "~/services/validate/signup-api.validate";
@@ -17,18 +18,23 @@ import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../app/env.server";
-import type { ResponseState, ServerService } from "~/services/app/server.server";
+import type {
+  ResponseState,
+  ServerService,
+} from "~/services/app/server.server";
 import type { FormFieldValues as SignupFormFieldValues } from "~/services/validate/signup-api.validate";
 import type { FormFieldValues as SigninFormFieldValues } from "~/services/validate/signin-api.validate";
 import type { CsrfService } from "~/services/app/csrf.server";
 import type { HoneypotService } from "~/services/app/honeypot.server";
+import type { ToastService } from "../app/toast.server";
 
 export class AuthApiService {
   constructor(
     private readonly $env: Env,
     private readonly $server: ServerService,
     private readonly $csrf: CsrfService,
-    private readonly $honeypot: HoneypotService
+    private readonly $honeypot: HoneypotService,
+    private readonly $toast: ToastService
   ) {}
 
   /**
@@ -152,16 +158,17 @@ export class AuthApiService {
       const response = await this.signup(parse);
       const cookie = response.headers.get("set-cookie");
       if (!cookie) {
-        return redirect(PAGE_ENDPOINTS.AUTH.SIGNUP, {
+        return redirect(safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNIN), {
           status: STATUS_CODE.BAD_REQUEST,
         });
       }
-      return redirect(PAGE_ENDPOINTS.ROOT, {
+      return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
         headers: this.$server.getAuthHeaders(cookie),
       });
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
+        console.log(error_validation);
         return error_validation;
       }
 
@@ -182,17 +189,26 @@ export class AuthApiService {
   async signinWithAuth(request: Request) {
     const formData = await this.$server.readFormData(request);
 
+    console.log("formData", formData);
+
     await this.$csrf.validateCSRF(formData, request.headers);
+
+    console.log("csrf", formData);
     this.$honeypot.checkHoneypot(formData);
+    console.log("honeypot", formData);
 
     const input = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
 
+    console.log("input", input);
+
     try {
       const parse = await $signinSchema.parseAsync(input);
+      console.log("parser", parse);
       const response = await this.signin(parse);
+      console.log("response", response);
 
       const cookie = response.headers.get("set-cookie");
       if (!cookie) {
@@ -206,16 +222,25 @@ export class AuthApiService {
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
-        return error_validation;
+        throw await this.$server.redirectWithToast(
+          PAGE_ENDPOINTS.AUTH.SIGNIN,
+          {
+            title: "sign in error",
+            description: Object.values(error_validation.error ?? {}).join(", "),
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        const isNotExistsUser = this._isNotExistsUser(error_fetch);
-        if (isNotExistsUser) {
-          return this.$server.getResponse<boolean>(isNotExistsUser);
-        }
-        return error_fetch;
+        console.log(error_fetch);
+        // const isNotExistsUser = this._isNotExistsUser(error_fetch);
+        // if (isNotExistsUser) {
+        //   return this.$server.getResponse<boolean>(isNotExistsUser);
+        // }
+        // return error_fetch;
       }
 
       return null;

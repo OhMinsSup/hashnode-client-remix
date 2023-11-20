@@ -11,9 +11,9 @@ export const schema = z.object({
   }),
   password: z
     .string()
-    .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+    .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{6,10}$/, {
       message:
-        "Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter",
+        "Password must be at least 6 characters long and contain at least one number, one lowercase and one uppercase letter",
     }),
 });
 

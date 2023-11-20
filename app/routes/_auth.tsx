@@ -1,5 +1,5 @@
 // remix
-import { Outlet } from "@remix-run/react";
+import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
 import { AuthLayout } from "~/components/auth/future/AuthLayout";
 
@@ -72,4 +72,15 @@ export default function Routes() {
       <Outlet />
     </AuthLayout>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return <Routes />;
+  } else if (error instanceof Error) {
+    return <Routes />;
+  } else {
+    return <Routes />;
+  }
 }

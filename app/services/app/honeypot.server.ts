@@ -7,7 +7,6 @@ export class HoneypotService {
 
   constructor(env: Env) {
     this.honeypot = new Honeypot({
-      // validFromFieldName: process.env.TESTING ? null : undefined,
       encryptionSeed: env.HONEYPOT_SECRET,
     });
   }

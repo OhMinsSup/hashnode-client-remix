@@ -9,11 +9,11 @@ export type AppAPI<Data = any> = {
   result: Data;
 };
 
-export type ErrorAPI = {
+export type ErrorAPI<Data = any> = {
   resultCode: number;
   message: string | string[];
   error: string;
-  result: null;
+  result: Data | null;
 };
 
 export type Flag = {

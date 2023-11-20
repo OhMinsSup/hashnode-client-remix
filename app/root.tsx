@@ -32,6 +32,7 @@ import globalStyles from "~/styles/global.css";
 
 // types
 import type { Theme } from "~/context/useThemeContext";
+import type { Toast } from "./services/validate/toast.validate";
 import type { HoneypotInputProps } from "remix-utils/honeypot/server";
 import type {
   LinksFunction,
@@ -51,6 +52,9 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     API_BASE_URL: context.API_BASE_URL,
   };
 
+  const { toast, headers: toastHeaders } =
+    await context.services.toast.getToast(request);
+
   const values = await context.services.csrf.csrf.commitToken(request);
   const [csrfToken, csrfHeader] = values;
 
@@ -60,6 +64,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     currentProfile: null,
     theme: null,
     csrfToken,
+    toast,
     origin: getDomainUrl(request),
     env,
     honeyProps,
@@ -68,6 +73,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     csrfToken: string;
     env: typeof env;
     theme: Theme | null;
+    toast: Toast | null;
     origin: string;
     honeyProps: HoneypotInputProps;
   };
@@ -217,6 +223,8 @@ function Document({
 function App() {
   const [theme] = useTheme();
   const data = useLoaderData<RoutesData>();
+
+  console.log(data.toast);
 
   return (
     <Document origin={data.origin} theme={theme} env={data.env}>

@@ -7,11 +7,19 @@ import { FetchService } from "~/services/fetch/fetch.client";
 
 import type { Env } from "./env.server";
 import type { ErrorAPI } from "~/services/fetch/fetch.type";
+import type { OptionalToast } from "../validate/toast.validate";
 
 export type ResponseState<Data = any> = {
   statusCode: number;
   errors: Record<string, string> | null;
   data: Data;
+};
+
+export type ResponseJSON<Data = any> = {
+  ok: boolean;
+  code: number;
+  data: Data | null;
+  error: Record<string, string> | null;
 };
 
 export class ServerService {
@@ -24,6 +32,53 @@ export class ServerService {
       job: "CEO, Vercel",
       description: `It's amazing to see how fast devs go from 0 to Blog under a domain they own on Hashnode 🤯. It reminds me a lot of what Substack did for journalists.`,
     } as FetchSchema.Hashnodeonboard;
+  }
+
+  async redirectWithToast(
+    url: string,
+    toast: OptionalToast,
+    createToastHeaders: (optionalToast: OptionalToast) => Promise<Headers>,
+    init?: ResponseInit
+  ) {
+    return redirect(url, {
+      ...init,
+      headers: this.combineHeaders(
+        init?.headers,
+        await createToastHeaders(toast)
+      ),
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description Combine multiple header objects into one (uses append so headers are not overridden)
+   * @param {Array<ResponseInit["headers"] | null>} headers
+   */
+  combineHeaders(...headers: Array<ResponseInit["headers"] | null>) {
+    const combined = new Headers();
+    for (const header of headers) {
+      if (!header) continue;
+      for (const [key, value] of new Headers(header).entries()) {
+        combined.append(key, value);
+      }
+    }
+    return combined;
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description Combine multiple response init objects into one (uses combineHeaders)
+   * @param {ResponseInit} responseInits
+   */
+  combineResponseInits(...responseInits: Array<ResponseInit | undefined>) {
+    let combined: ResponseInit = {};
+    for (const responseInit of responseInits) {
+      combined = {
+        ...responseInit,
+        headers: this.combineHeaders(combined.headers, responseInit?.headers),
+      };
+    }
+    return combined;
   }
 
   /**
@@ -103,19 +158,20 @@ export class ServerService {
    * @description error validation
    * @param {unknown} error
    */
-  readValidateError(error: unknown): ResponseState | null {
+  readValidateError<Data = any>(error: unknown): ResponseJSON<Data> | null {
     if (error instanceof ZodError) {
-      const errors: Record<string, string> = {};
+      const obj: Record<string, string> = {};
       error.issues.reduce((acc, cur) => {
         const key = cur.path.at(0);
         if (!key) return acc;
         acc[key] = cur.message;
         return acc;
-      }, errors);
+      }, obj);
       return {
-        statusCode: STATUS_CODE.BAD_REQUEST as number,
-        errors,
+        ok: false,
+        code: STATUS_CODE.BAD_REQUEST as number,
         data: null,
+        error: obj,
       };
     }
     return null;
@@ -126,7 +182,9 @@ export class ServerService {
    * @description error fetch
    * @param {unknown} error
    */
-  async readFetchError(error: unknown): Promise<ResponseState | null> {
+  async readFetchError<Data = any>(
+    error: unknown
+  ): Promise<ResponseJSON<ErrorAPI<Data>> | null> {
     if (error instanceof FetchError) {
       const $response = error.response;
       const data = await $response.json<ErrorAPI>();
@@ -139,19 +197,21 @@ export class ServerService {
         const errorKey = data.error;
         const errors = data.message;
         return {
-          statusCode: $response.status,
-          errors: {
+          ok: false,
+          code: $response.status,
+          error: {
             [errorKey]: isArray(errors) ? errors[0] : errors,
           },
           data,
         };
       } else {
         return {
-          statusCode: $response.status,
-          errors: {
-            error: "알 수 없는 에러가 발생했습니다.",
+          ok: false,
+          code: $response.status,
+          error: {
+            common: "An unknown error occurred.",
           },
-          data,
+          data: null,
         };
       }
     }
