@@ -11,17 +11,14 @@ import { signupApi as $signupApi } from "~/services/fetch/auth/signup-api.server
 import { signoutApi as $signoutApi } from "~/services/fetch/auth/signout-api.server";
 import { getMeApi as $getMeApi } from "~/services/fetch/users/me-api.server";
 
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 import { FetchError } from "~/services/fetch/fetch.error";
 
-import { PAGE_ENDPOINTS, RESULT_CODE, STATUS_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../app/env.server";
-import type {
-  ResponseState,
-  ServerService,
-} from "~/services/app/server.server";
+import type { ServerService } from "~/services/app/server.server";
 import type { FormFieldValues as SignupFormFieldValues } from "~/services/validate/signup-api.validate";
 import type { FormFieldValues as SigninFormFieldValues } from "~/services/validate/signin-api.validate";
 import type { CsrfService } from "~/services/app/csrf.server";
@@ -141,10 +138,10 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signupWithAuth(request: Request) {
-    const formData = await this.$server.readFormData(request);
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
 
-    await this.$csrf.validateCSRF(formData, request.headers);
-    this.$honeypot.checkHoneypot(formData);
+    const formData = await this.$server.readFormData(request);
 
     const input = {
       username: formData.get("username"),
@@ -154,30 +151,66 @@ export class AuthApiService {
     };
 
     try {
+      await this.$csrf.validateCSRF(formData, request.headers);
+      this.$honeypot.checkHoneypot(formData);
+
       const parse = await $signupSchema.parseAsync(input);
       const response = await this.signup(parse);
       const cookie = response.headers.get("set-cookie");
-      if (!cookie) {
-        return redirect(safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNIN), {
-          status: STATUS_CODE.BAD_REQUEST,
-        });
-      }
       return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
-        headers: this.$server.getAuthHeaders(cookie),
+        headers: cookie ? this.$server.getAuthHeaders(cookie) : undefined,
       });
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
-        console.log(error_validation);
-        return error_validation;
+        throw await this.$server.redirectWithToast(
+          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
+          {
+            title: "error",
+            description:
+              Object.values(error_validation.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        return error_fetch;
+        const isNotExistsUser =
+          error_fetch.data?.resultCode === RESULT_CODE.NOT_EXIST;
+        if (isNotExistsUser) {
+          throw redirect(
+            safeRedirect(
+              `${PAGE_ENDPOINTS.AUTH.SIGNIN}?step=3&type=register&email=${input.email}`
+            )
+          );
+        }
+
+        throw await this.$server.redirectWithToast(
+          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
+          {
+            title: "error",
+            description:
+              Object.values(error_fetch.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
-      return null;
+      throw await this.$server.redirectWithToast(
+        `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 
@@ -187,46 +220,36 @@ export class AuthApiService {
    * @param {Request} request
    */
   async signinWithAuth(request: Request) {
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
+
     const formData = await this.$server.readFormData(request);
-
-    console.log("formData", formData);
-
-    await this.$csrf.validateCSRF(formData, request.headers);
-
-    console.log("csrf", formData);
-    this.$honeypot.checkHoneypot(formData);
-    console.log("honeypot", formData);
 
     const input = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
 
-    console.log("input", input);
-
     try {
-      const parse = await $signinSchema.parseAsync(input);
-      console.log("parser", parse);
-      const response = await this.signin(parse);
-      console.log("response", response);
+      await this.$csrf.validateCSRF(formData, request.headers);
+      this.$honeypot.checkHoneypot(formData);
 
+      const parse = await $signinSchema.parseAsync(input);
+      const response = await this.signin(parse);
       const cookie = response.headers.get("set-cookie");
-      if (!cookie) {
-        return redirect(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-          status: STATUS_CODE.BAD_REQUEST,
-        });
-      }
       return redirect(PAGE_ENDPOINTS.ROOT, {
-        headers: this.$server.getAuthHeaders(cookie),
+        headers: cookie ? this.$server.getAuthHeaders(cookie) : undefined,
       });
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         throw await this.$server.redirectWithToast(
-          PAGE_ENDPOINTS.AUTH.SIGNIN,
+          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
           {
-            title: "sign in error",
-            description: Object.values(error_validation.error ?? {}).join(", "),
+            title: "error",
+            description:
+              Object.values(error_validation.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
             type: "error",
           },
           this.$toast.createToastHeaders
@@ -235,15 +258,39 @@ export class AuthApiService {
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        console.log(error_fetch);
-        // const isNotExistsUser = this._isNotExistsUser(error_fetch);
-        // if (isNotExistsUser) {
-        //   return this.$server.getResponse<boolean>(isNotExistsUser);
-        // }
-        // return error_fetch;
+        const isNotExistsUser =
+          error_fetch.data?.resultCode === RESULT_CODE.NOT_EXIST;
+        if (isNotExistsUser) {
+          throw redirect(
+            safeRedirect(
+              `${PAGE_ENDPOINTS.AUTH.SIGNIN}?step=3&type=register&email=${input.email}`
+            )
+          );
+        }
+
+        throw await this.$server.redirectWithToast(
+          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
+          {
+            title: "error",
+            description:
+              Object.values(error_fetch.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
-      return null;
+      throw await this.$server.redirectWithToast(
+        `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 
@@ -255,20 +302,5 @@ export class AuthApiService {
   async isAuthenticated(request: Request) {
     const session = await this.getSession(request);
     return !!session;
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 회원가입 여부
-   * @param {ResponseState} state
-   */
-  private _isNotExistsUser(state: ResponseState) {
-    return state
-      ? !!(
-          state?.data &&
-          state?.data?.status &&
-          state?.data?.status === RESULT_CODE.NOT_EXIST
-        )
-      : false;
   }
 }

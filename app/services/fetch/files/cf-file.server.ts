@@ -1,6 +1,6 @@
 import type { FormFieldValues } from "~/services/validate/cf-file.validate";
 import { FetchError } from "~/services/fetch/fetch.error";
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 import type { ApiOptions } from "~/services/fetch/fetch.type";
 
 type CfDirectUploadParams = {

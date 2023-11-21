@@ -5,7 +5,7 @@ import { getTagsApi as $getTagsApi } from "~/services/fetch/tags/gets-api.server
 import { getTagApi as $getTagApi } from "~/services/fetch/tags/get-api.server";
 
 import { schema as $getSchema } from "~/services/validate/tag-get.api.validate";
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 
 // types
 import type { Env } from "../app/env.server";

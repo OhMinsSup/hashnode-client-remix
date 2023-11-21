@@ -19,13 +19,12 @@ export class ToastService {
         sameSite: "lax",
         path: "/",
         httpOnly: true,
-        secrets: [env.COOKIE_SESSION_SECRET],
+        secrets: [env.TOAST_SECRET],
       },
     });
   }
 
   createToastHeaders = async (optionalToast: OptionalToast) => {
-    console.log("optionalToast", this);
     const session = await this.toastSessionStorage.getSession();
     const toast = schema.parse(optionalToast);
     session.flash(this.toastKey, toast);

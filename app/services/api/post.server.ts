@@ -10,7 +10,7 @@ import { getPostApi as $getPostApi } from "~/services/fetch/posts/get-api.server
 import { deletePostApi as $deletePostApi } from "~/services/fetch/posts/delete-api.server";
 import { getDeletePostsApi as $getDeletePostsApi } from "~/services/fetch/posts/gets-deleted-api.server";
 
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 import { schema as $createSchema } from "~/services/validate/post-create-api.validate";
 
 // utils

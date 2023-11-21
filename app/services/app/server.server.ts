@@ -3,7 +3,7 @@ import { FetchError } from "~/services/fetch/fetch.error";
 import { ASSET_URL, STATUS_CODE } from "~/constants/constant";
 import { isArray } from "~/utils/assertion";
 import { redirect } from "@remix-run/cloudflare";
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 
 import type { Env } from "./env.server";
 import type { ErrorAPI } from "~/services/fetch/fetch.type";
@@ -188,12 +188,9 @@ export class ServerService {
     if (error instanceof FetchError) {
       const $response = error.response;
       const data = await $response.json<ErrorAPI>();
-      const checkStatusCode = [
-        STATUS_CODE.BAD_REQUEST,
-        STATUS_CODE.NOT_FOUND,
-      ] as number[];
+      const checkStatusCode = $response.status >= 400 && $response.status < 500;
 
-      if (checkStatusCode.includes($response.status)) {
+      if (checkStatusCode) {
         const errorKey = data.error;
         const errors = data.message;
         return {

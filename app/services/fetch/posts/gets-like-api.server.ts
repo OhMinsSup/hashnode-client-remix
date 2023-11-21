@@ -1,5 +1,5 @@
 // api
-import { FetchService } from "~/services/fetch/fetch.client";
+import { FetchService } from "~/services/fetch/fetch.api";
 
 // constants
 import type { ApiOptions } from "~/services/fetch/fetch.type";

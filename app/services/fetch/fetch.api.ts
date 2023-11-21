@@ -2,10 +2,10 @@ import cookies from "cookie";
 import { isBrowser } from "~/libs/browser-utils";
 import { isEmpty, isString } from "~/utils/assertion";
 import { API_ENDPOINTS } from "~/constants/constant";
+import { FetchError } from "./fetch.error";
 
 // types
 import type { ApiRoutes, Body, ApiOptions, AppAPI } from "./fetch.type";
-import { FetchError } from "./fetch.error";
 
 export class FetchService {
   static baseURL = isBrowser
@@ -50,8 +50,8 @@ export class FetchService {
     const _baseURL = _prefix
       ? new URL(_prefix, this.baseURL)
       : this.baseURL
-      ? new URL(this.baseURL)
-      : undefined;
+        ? new URL(this.baseURL)
+        : undefined;
 
     if (!_baseURL) {
       throw new Error("baseURL is undefined");

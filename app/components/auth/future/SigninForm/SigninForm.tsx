@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.css";
+import { z } from "zod";
 import { cn } from "~/utils/util";
-import { useSigninContext } from "~/components/auth/context/signin";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useSearchParams } from "@remix-run/react";
 import { Input } from "~/components/auth/future/Input";
 import { AuthenticityTokenInput } from "remix-utils/csrf/react";
-
-// types
-import type { ActionData } from "~/routes/_auth.signin";
 import { HoneypotInputs } from "remix-utils/honeypot/react";
+import { useUrlState } from "~/libs/hooks/useUrlState";
 
 const socials = [
   {
@@ -71,33 +69,39 @@ const socials = [
 ];
 
 export default function SigninForm() {
-  const { step, changeStep } = useSigninContext();
+  const [searchParams, setSearchParams] = useUrlState();
 
-  const actionData = useActionData<ActionData>();
-
-  const gotoNextStep =
-    actionData?.data &&
-    typeof actionData.data === "boolean" &&
-    !!actionData.data;
+  const step = searchParams.get("step") || "1";
+  const email = searchParams.get("email") || undefined;
+  const type = searchParams.get("type") || undefined;
 
   const onChangeStep = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const { step } = e.currentTarget.dataset;
-      if (step) changeStep(+step);
+      if (step)
+        setSearchParams(
+          { step },
+          {
+            replace: true,
+          }
+        );
     },
-    [changeStep]
+    [setSearchParams]
   );
 
-  useEffect(() => {
-    if (gotoNextStep) changeStep(3);
-  }, [gotoNextStep]);
+  const isRegister = type === "register";
+  const isEmail = email && isRegister ? z.string().email().parse(email) : false;
+  const isStep3 = step === "3" && isEmail;
+  const isStep4 = step === "4" && isEmail;
 
   return (
     <div className={styles.root}>
-      {step === 1 && <SigninForm.Lending onChangeStep={onChangeStep} />}
-      {step === 2 && <SigninForm.EmailAuth onChangeStep={onChangeStep} />}
-      {step === 3 && <SigninForm.ConfirmText onChangeStep={onChangeStep} />}
-      {step === 4 && <SigninForm.Register onChangeStep={onChangeStep} />}
+      {step === "1" && <SigninForm.Lending onChangeStep={onChangeStep} />}
+      {step === "2" && <SigninForm.EmailAuth onChangeStep={onChangeStep} />}
+      {isStep3 && <SigninForm.ConfirmText onChangeStep={onChangeStep} />}
+      {isStep4 && (
+        <SigninForm.Register email={email} onChangeStep={onChangeStep} />
+      )}
     </div>
   );
 }
@@ -155,15 +159,31 @@ interface EmailAuthProps {
 }
 
 SigninForm.EmailAuth = function Item({ onChangeStep }: EmailAuthProps) {
+  const [, setSearchParams] = useSearchParams();
+
+  const onReset = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { step } = e.currentTarget.dataset;
+      if (step)
+        setSearchParams(
+          { step },
+          {
+            replace: true,
+          }
+        );
+    },
+    [setSearchParams]
+  );
+
   return (
     <>
       <div className={styles.email_auth_wrapper}>
         <span className={styles.form_title}>Sign in with email</span>
         <Form
-          className={styles.email_form}
           replace
+          className={styles.email_form}
           method="POST"
-          action="/signin"
+          action="/signin?step=2&type=login"
         >
           <AuthenticityTokenInput />
           <HoneypotInputs />
@@ -193,7 +213,7 @@ SigninForm.EmailAuth = function Item({ onChangeStep }: EmailAuthProps) {
         </Form>
         <button
           type="button"
-          onClick={onChangeStep}
+          onClick={onReset}
           data-step="1"
           className={cn(styles.btn_email, styles.btn_email_signin)}
         >
@@ -217,6 +237,22 @@ interface ConfirmTextProps {
 }
 
 SigninForm.ConfirmText = function Item({ onChangeStep }: ConfirmTextProps) {
+  const [, setSearchParams] = useSearchParams();
+
+  const onReset = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { step } = e.currentTarget.dataset;
+      if (step)
+        setSearchParams(
+          { step },
+          {
+            replace: true,
+          }
+        );
+    },
+    [setSearchParams]
+  );
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -235,7 +271,7 @@ SigninForm.ConfirmText = function Item({ onChangeStep }: ConfirmTextProps) {
         </button>
         <button
           type="button"
-          onClick={onChangeStep}
+          onClick={onReset}
           data-step="1"
           className={cn(styles.btn_email, styles.btn_email_signin)}
         >
@@ -255,10 +291,27 @@ SigninForm.ConfirmText = function Item({ onChangeStep }: ConfirmTextProps) {
 };
 
 interface RegisterProps {
+  email?: string;
   onChangeStep: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
+SigninForm.Register = function Item({ onChangeStep, email }: RegisterProps) {
+  const [, setSearchParams] = useSearchParams();
+
+  const onReset = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { step } = e.currentTarget.dataset;
+      if (step)
+        setSearchParams(
+          { step },
+          {
+            replace: true,
+          }
+        );
+    },
+    [setSearchParams]
+  );
+
   return (
     <>
       <div className={styles.email_auth_wrapper}>
@@ -267,7 +320,7 @@ SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
           className={styles.email_form}
           replace
           method="POST"
-          action="/signin?type=register"
+          action="/signin?step=4&type=register"
         >
           <AuthenticityTokenInput />
           <HoneypotInputs />
@@ -286,6 +339,7 @@ SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
             aria-label="Email address"
             autoComplete="email"
             placeholder="Enter your email address"
+            defaultValue={email}
           />
           <Input
             type="password"
@@ -313,7 +367,7 @@ SigninForm.Register = function Item({ onChangeStep }: RegisterProps) {
         </Form>
         <button
           type="button"
-          onClick={onChangeStep}
+          onClick={onReset}
           data-step="1"
           className={cn(styles.btn_email, styles.btn_email_signin)}
         >
