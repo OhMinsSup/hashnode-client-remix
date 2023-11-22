@@ -12,13 +12,7 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 export const loader = ({ context, request }: LoaderFunctionArgs) => {
   return defer({
-    trendingTag: context.api.tag.getTagsByBaseList(
-      {
-        type: "popular",
-        limit: 4,
-      },
-      request
-    ),
+    trendingTag: context.api.tag.getMainTrendingTagsLimit4(request),
   });
 };
 

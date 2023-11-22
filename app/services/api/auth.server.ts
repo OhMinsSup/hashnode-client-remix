@@ -8,11 +8,9 @@ import { schema as $signupSchema } from "~/services/validate/signup-api.validate
 
 import { signinApi as $signinApi } from "~/services/fetch/auth/signin-api.server";
 import { signupApi as $signupApi } from "~/services/fetch/auth/signup-api.server";
-import { signoutApi as $signoutApi } from "~/services/fetch/auth/signout-api.server";
 import { getMeApi as $getMeApi } from "~/services/fetch/users/me-api.server";
 
 import { FetchService } from "~/services/fetch/fetch.api";
-import { FetchError } from "~/services/fetch/fetch.error";
 
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
@@ -62,11 +60,6 @@ export class AuthApiService {
 
       return data.result;
     } catch (error) {
-      if (error instanceof FetchError) {
-        if ([403, 401].includes(error.response.status)) {
-          await this.signout(request);
-        }
-      }
       return null;
     }
   }
@@ -91,42 +84,10 @@ export class AuthApiService {
 
   /**
    * @version 2023-08-17
-   * @description 로그아웃
-   * @param {Request} request
-   */
-  async signout(request: Request) {
-    const cookie = this.$server.readHeaderCookie(request);
-
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-
-    if (!accessToken) {
-      return true;
-    }
-
-    try {
-      const response = await $signoutApi({ request });
-      const data = await FetchService.toJson(response);
-      if (data.resultCode !== RESULT_CODE.OK) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  /**
-   * @version 2023-08-17
    * @description 로그아웃 API
    * @param {Request} request
    */
   async signoutWithAuth(request: Request) {
-    await this.signout(request);
-
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers: this.$server.getClearAuthHeaders(),
     });

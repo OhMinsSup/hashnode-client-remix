@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import styles from "./styles.module.css";
 
 // components
@@ -10,12 +10,9 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 // constants
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
-// types
-import type { UserRespSchema } from "~/api/schema/resp";
-
 interface MainMenuUserProfileMenuProps {
   open: boolean;
-  session: UserRespSchema;
+  session: FetchRespSchema.UserResponse;
 }
 
 export default function MainMenuUserProfileMenu({
@@ -43,10 +40,10 @@ export default function MainMenuUserProfileMenu({
 
   return (
     <>
-      <DropdownMenu.Item asChild>
+      <DropdownMenu.Item>
         <Link
           aria-label="User Profile"
-          to={PAGE_ENDPOINTS.USERS.ID(session.username)}
+          to={PAGE_ENDPOINTS.USERS.ID(session.id)}
           className={styles.username_link}
         >
           <div className={styles.username_link_container}>
@@ -55,21 +52,26 @@ export default function MainMenuUserProfileMenu({
                 <div className={styles.thumbnail_container}>
                   <img
                     loading="lazy"
-                    src={session.profile.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR}
-                    alt={session.username}
+                    src={
+                      session?.userImage?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR
+                    }
+                    alt={session?.userProfile?.username ?? "profile"}
                   />
                 </div>
               </div>
               <div className="flex min-w-0 flex-1 items-center justify-between">
                 <div className="min-w-0">
-                  <p title={session.username} className={styles.username}>
-                    {session.username}
+                  <p
+                    title={session?.userProfile?.username}
+                    className={styles.username}
+                  >
+                    {session?.userProfile?.username}
                   </p>
                   <p
-                    title={`@${session.profile.name}`}
+                    title={`@${session?.userProfile?.nickname}`}
                     className={styles.profile_name}
                   >
-                    @{session.profile.name}
+                    @{session?.userProfile?.nickname}
                   </p>
                 </div>
               </div>
@@ -78,7 +80,7 @@ export default function MainMenuUserProfileMenu({
         </Link>
       </DropdownMenu.Item>
       <DropdownMenu.Separator className={styles.separator} />
-      <DropdownMenu.Item asChild>
+      <DropdownMenu.Item>
         <MenuLink
           to={PAGE_ENDPOINTS.DRAFT.ROOT}
           text="My drafts"
@@ -106,7 +108,7 @@ export default function MainMenuUserProfileMenu({
           }
         />
       </DropdownMenu.Item>
-      <DropdownMenu.Item asChild>
+      <DropdownMenu.Item>
         <MenuLink
           to={PAGE_ENDPOINTS.SETTINGS.ROOT}
           text="Account settings"
@@ -135,7 +137,7 @@ export default function MainMenuUserProfileMenu({
         />
       </DropdownMenu.Item>
       <DropdownMenu.Separator className={styles.separator} />
-      <DropdownMenu.Item asChild>
+      <DropdownMenu.Item>
         <Logout />
       </DropdownMenu.Item>
     </>

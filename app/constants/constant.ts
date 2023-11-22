@@ -31,7 +31,7 @@ export const API_ENDPOINTS = {
   TAGS: {
     ROOT: "tags",
     TAG: (tag: string) => `tags/${tag}`,
-    TAG_FOLLOW: (tag: string) => `tags/${tag}/follow`,
+    TAG_FOLLOW: "tags/follow",
     TAG_TRENDING: "tags/trending",
   },
   DRAFT: {
@@ -85,6 +85,7 @@ export const ASSET_URL = {
   PLACEHOLDER: "/images/placeholder.png",
   SEO_IMAGE: "/images/seo_image.png",
   WRITE_TEAM_LOGO: "/images/write_team_logo.png",
+  DEFAULT_TAG: "/images/default_tag.png",
 };
 
 export const PAGE_ENDPOINTS = {

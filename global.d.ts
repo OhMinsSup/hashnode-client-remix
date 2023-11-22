@@ -15,62 +15,66 @@ declare namespace FetchSchema {
 
   export type AuthRespSchema = {
     userId: number;
-    accessToken: string;
+    authToken: string;
   };
 
   // User
 
-  export type Skill = {
-    id: number;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: string | null;
+  export type UserImage = {
+    id: string;
+    cfId: string;
+    avatarUrl: string;
+    filename: string;
+    mimeType: string;
+    fk_user_id: string | null;
   };
 
   export type UserProfile = {
-    id: number;
-    userId: number;
-    name: string;
-    tagline?: string | null;
-    avatarUrl?: string | null;
-    location?: string | null;
-    bio?: string | null;
-    availableText?: string | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: string | null;
+    id: string;
+    username: string;
+    nickname: string | null;
+    tagline: string | null;
+    location: string | null;
+    bio: string | null;
+    availableText: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    fk_user_id: string | null;
   };
 
   export type UserSocial = {
+    id: string;
     github: string | null;
     twitter: string | null;
     facebook: string | null;
     instagram: string | null;
     website: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    fk_user_id: string | null;
   };
 
   export type User = {
-    id: number;
+    id: string;
     email: string;
-    username: string;
-    profile: Omit<
-      UserProfile,
-      "id" | "userId" | "createdAt" | "updatedAt" | "deletedAt"
-    >;
-    skills: Pick<Skill, "id" | "name">[];
-    socials: UserSocial;
-    createdAt: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    lastActiveAt: Date | null;
+    lastActiveIp: string | null;
+    lastSignInAt: Date | null;
+    lastSignInIp: string | null;
   };
 
   // Tags
 
   export type Tag = {
-    id: number;
+    id: string;
     name: string;
-    createdAt: number;
-    updatedAt: number;
-    deletedAt?: number | null;
+    description: string | null;
+    image: string | null;
+    createdAt: Date;
+    updatedAt: Date;
   };
 
   // Posts
@@ -128,6 +132,51 @@ declare namespace FetchSchema {
   };
 }
 
+declare namespace SerializeSchema {
+  export type SerializeUserProfile = Omit<
+    FetchSchema.UserProfile,
+    "id" | "createdAt" | "updatedAt" | "fk_user_id"
+  >;
+
+  export type SerializeUserImage = Omit<
+    FetchSchema.UserImage,
+    "id" | "cfId" | "fk_user_id" | "filename" | "mimeType"
+  >;
+
+  export type SerializeUserSocial = Omit<
+    FetchSchema.UserSocial,
+    "id" | "createdAt" | "updatedAt" | "fk_user_id"
+  >;
+
+  export type SerializeUserTag = Omit<
+    FetchSchema.Tag,
+    "description" | "image" | "createdAt" | "updatedAt"
+  >;
+
+  export type SerializeUser = {
+    userProfile: SerializeUserProfile;
+    userImage: SerializeUserImage;
+    userSocial: SerializeUserSocial;
+    userTags: SerializeUserTag[];
+  } & Pick<FetchSchema.User, "id" | "email" | "createdAt">;
+
+  export type SerializeTagCount = {
+    postCount: number;
+    isFollow: boolean;
+  } & Pick<FetchSchema.Tag, "id" | "name">;
+
+  export type SerializeTagCountList = SerializeTagCount[];
+
+  export type SerializeDataID<ID = string> = {
+    dataId: ID;
+  };
+
+  export type SerializeDataIDWithCount<ID = string> = {
+    count: number;
+    type: "create" | "delete" | "none";
+  } & SerializeDataID<ID>;
+}
+
 declare namespace FetchQuerySchema {
   export type Pagination = {
     limit?: number;
@@ -163,21 +212,15 @@ declare namespace FetchRespSchema {
     };
   };
 
-  export type DataIDResp = {
-    dataId: number;
-  };
+  export type DataIDResp = SerializeSchema.SerializeDataID;
 
-  export type UserResponse = FetchSchema.User;
+  export type UserResponse = SerializeSchema.SerializeUser;
 
   export type PostResp = DataIDResp;
 
-  export type TagWithPostCountResp = {
-    postsCount: number;
-  } & Omit<FetchSchema.Tag, "deletedAt">;
-
   export type FileListResp = ListResp<FetchSchema.File>;
 
-  export type TagListResp = ListResp<TagWithPostCountResp>;
+  export type TagListResp = ListResp<SerializeSchema.SerializeTagCount>;
 
   export interface TagDetailResp {
     id: number;
@@ -187,10 +230,7 @@ declare namespace FetchRespSchema {
     isFollowing: boolean;
   }
 
-  export type TagFollowResp = {
-    dataId: number;
-    count: number;
-  };
+  export type TagFollowResp = SerializeSchema.SerializeDataIDWithCount;
 
   export type PostDetailResp = FetchSchema.Post & {
     count: FetchSchema.PostCount;

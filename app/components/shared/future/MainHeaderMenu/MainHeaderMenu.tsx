@@ -84,10 +84,10 @@ export default function MainHeaderMenu() {
               className={styles.menus_user_profile}
             >
               <div className={styles.menus_user_profile_container}>
-                {session?.profile.avatarUrl ? (
+                {session?.userImage?.avatarUrl ? (
                   <img
                     loading="lazy"
-                    src={session.profile.avatarUrl}
+                    src={session.userImage.avatarUrl}
                     alt="profile"
                   />
                 ) : (

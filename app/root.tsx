@@ -92,14 +92,12 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     });
 
     const headers = context.services.server.getClearAuthHeaders();
-    if (csrfHeader) {
-      headers.append("set-cookie", csrfHeader);
-    }
 
     return json($data, {
       headers: context.services.server.combineHeaders(
         csrfHeader ? { "set-cookie": csrfHeader } : null,
-        toastHeaders
+        toastHeaders,
+        session ? null : headers
       ),
     });
   } catch (error) {

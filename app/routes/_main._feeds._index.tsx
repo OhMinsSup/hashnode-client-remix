@@ -31,7 +31,7 @@ export default function Routes() {
         <>
           <Suspense fallback={<></>}>
             <Await resolve={data?.trendingTag}>
-              {(data) => <TrendingTagsBox />}
+              {(data) => <TrendingTagsBox data={data} />}
             </Await>
           </Suspense>
         </>

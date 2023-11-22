@@ -1,11 +1,10 @@
-import type { UserRespSchema } from "~/api/schema/resp";
 import { useMatchesData } from "~/libs/hooks/useMatchesData";
 
-function isSession(user: any): user is UserRespSchema {
-  return user && typeof user === "object" && typeof user.id === "number";
+function isSession(user: any): user is FetchRespSchema.UserResponse {
+  return user && typeof user === "object" && typeof user.id === "string";
 }
 
-export function useOptionalSession(): UserRespSchema | undefined {
+export function useOptionalSession(): FetchRespSchema.UserResponse | undefined {
   const data = useMatchesData("root") as any;
   if (!data || !isSession(data.currentProfile)) {
     return undefined;
@@ -13,7 +12,7 @@ export function useOptionalSession(): UserRespSchema | undefined {
   return data.currentProfile;
 }
 
-export function useSession(): UserRespSchema {
+export function useSession(): FetchRespSchema.UserResponse {
   const maybeUser = useOptionalSession();
   if (!maybeUser) {
     throw new Error(
