@@ -130,7 +130,6 @@ export default function Routes() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log("error ---->", error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

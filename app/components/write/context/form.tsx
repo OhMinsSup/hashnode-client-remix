@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   schema,
   type FormFieldValues,
-} from "services/validate/post-create-api.validate";
+} from "~/services/validate/post-create-api.validate";
 
 interface Props {
   initialValues?: FetchRespSchema.PostDetailResp;
@@ -38,8 +38,6 @@ export function WriteFormProvider({ children, initialValues }: Props) {
     reValidateMode: "onSubmit",
     criteriaMode: "firstError",
   });
-
-  console.log(methods.watch());
 
   return <FormProvider {...methods}>{children}</FormProvider>;
 }

@@ -54,6 +54,7 @@ export default function DrawerSeoImage() {
         ) : null}
         {fetcher.state === "idle" && fetcher.data != null ? (
           <DrawerSeoImage.Success
+            // @ts-ignore TODO: fix this
             urls={fetcher.data.result?.publicUrl ?? []}
             onImageDelete={onImageDelete}
           />

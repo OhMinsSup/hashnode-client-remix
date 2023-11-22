@@ -2,15 +2,15 @@ import React, { useCallback } from "react";
 import Json from "superjson";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schema } from "services/validate/user-update-api.validate";
+import { schema } from "~/services/validate/user-update-api.validate";
 
-import { useOptionalSession } from "services/hooks/useSession";
+import { useOptionalSession } from "~/services/hooks/useSession";
 import { useForm, FormProvider } from "react-hook-form";
 import { useFetcher } from "@remix-run/react";
 
 // types
 import type { SubmitHandler } from "react-hook-form";
-import type { FormFieldValues } from "services/validate/user-update-api.validate";
+import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
 
 interface SettingUserFormProps {
   children: React.ReactNode;

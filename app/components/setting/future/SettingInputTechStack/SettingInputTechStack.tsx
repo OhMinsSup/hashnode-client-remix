@@ -10,7 +10,7 @@ import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
 import { isEmpty } from "~/utils/assertion";
 import { getPath } from "~/routes/_loader._protected.loader.tags[.]json";
 
-import type { FormFieldValues } from "services/validate/user-update-api.validate";
+import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
 import type { Loader } from "~/routes/_loader._protected.loader.tags[.]json";
 
 export default function SettingInputTechStack() {

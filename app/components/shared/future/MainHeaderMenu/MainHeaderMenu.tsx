@@ -12,7 +12,7 @@ import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
 // hooks
 import { Theme, useTheme } from "~/context/useThemeContext";
-import { useOptionalSession } from "services/hooks/useSession";
+import { useOptionalSession } from "~/services/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 export default function MainHeaderMenu() {

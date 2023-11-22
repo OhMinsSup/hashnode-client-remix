@@ -6,7 +6,7 @@ import { MainHeader } from "~/components/shared/future/MainHeader";
 export default function Routes() {
   return (
     <NotificationsLayout header={<MainHeader />}>
-      <Outlet />;
+      <Outlet />
     </NotificationsLayout>
   );
 }

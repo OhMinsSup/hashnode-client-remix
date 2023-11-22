@@ -6,7 +6,7 @@ import { useNavigation } from "@remix-run/react";
 import { useFormContext } from "react-hook-form";
 
 import type { FieldPath } from "react-hook-form";
-import type { FormFieldValues } from "services/validate/user-update-api.validate";
+import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
 
 interface SettingTextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

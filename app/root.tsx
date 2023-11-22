@@ -11,6 +11,7 @@ import {
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
 import { HoneypotProvider } from "remix-utils/honeypot/react";
+import { Toaster, toast as showToast } from "sonner";
 
 import classNames from "classnames";
 import { getDomainUrl } from "~/utils/util";
@@ -32,12 +33,14 @@ import globalStyles from "~/styles/global.css";
 
 // types
 import type { Theme } from "~/context/useThemeContext";
+import type { Toast } from "./services/validate/toast.validate";
 import type { HoneypotInputProps } from "remix-utils/honeypot/server";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
+import { useEffect, useRef } from "react";
 
 export const links: LinksFunction = () => {
   return [
@@ -51,6 +54,9 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     API_BASE_URL: context.API_BASE_URL,
   };
 
+  const { toast, headers: toastHeaders } =
+    await context.services.toast.getToast(request);
+
   const values = await context.services.csrf.csrf.commitToken(request);
   const [csrfToken, csrfHeader] = values;
 
@@ -60,6 +66,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     currentProfile: null,
     theme: null,
     csrfToken,
+    toast,
     origin: getDomainUrl(request),
     env,
     honeyProps,
@@ -68,6 +75,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     csrfToken: string;
     env: typeof env;
     theme: Theme | null;
+    toast: Toast | null;
     origin: string;
     honeyProps: HoneypotInputProps;
   };
@@ -88,18 +96,12 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       headers.append("set-cookie", csrfHeader);
     }
 
-    return json(
-      $data,
-      session
-        ? csrfHeader
-          ? {
-              headers: { "set-cookie": csrfHeader },
-            }
-          : undefined
-        : {
-            headers,
-          }
-    );
+    return json($data, {
+      headers: context.services.server.combineHeaders(
+        csrfHeader ? { "set-cookie": csrfHeader } : null,
+        toastHeaders
+      ),
+    });
   } catch (error) {
     return json($object);
   }
@@ -166,6 +168,27 @@ export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
   ];
 };
 
+function ShowToast({ toast }: { toast: Toast }) {
+  const { id, type, title, description } = toast;
+  const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    ref.current = setTimeout(() => {
+      showToast[type](title, {
+        id,
+        description,
+        onAutoClose: (toast) => {
+          if (ref.current) {
+            clearTimeout(ref.current);
+            ref.current = null;
+          }
+        },
+      });
+    }, 0);
+  }, [description, id, title, type]);
+  return null;
+}
+
 function Document({
   children,
   origin,
@@ -206,6 +229,7 @@ function Document({
             __html: `window.ENV = ${JSON.stringify(env)}`,
           }}
         />
+        <Toaster closeButton position="top-center" />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -221,6 +245,7 @@ function App() {
   return (
     <Document origin={data.origin} theme={theme} env={data.env}>
       <Outlet />
+      {data.toast ? <ShowToast toast={data.toast} /> : null}
     </Document>
   );
 }

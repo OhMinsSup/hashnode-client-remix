@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { Link, Form } from "@remix-run/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
-import { useSession } from "services/hooks/useSession";
+import { useSession } from "~/services/hooks/useSession";
 import { useWriteContext } from "~/context/useWriteContext";
 import { MyDraftList } from "../MyDraftList";
 import { PublishedList } from "../PublishedList";
