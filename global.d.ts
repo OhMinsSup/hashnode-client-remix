@@ -197,6 +197,12 @@ declare namespace FetchQuerySchema {
     tag?: string;
   };
 
+  export type UserList = Pagination & {
+    name?: string;
+    type?: "default" | "trending";
+    category?: "week" | "all" | "month" | "year";
+  };
+
   export type GetTopPost = {
     duration: number;
   };
@@ -215,6 +221,8 @@ declare namespace FetchRespSchema {
   export type DataIDResp = SerializeSchema.SerializeDataID;
 
   export type UserResponse = SerializeSchema.SerializeUser;
+
+  export type UserListResp = ListResp<UserResponse>;
 
   export type PostResp = DataIDResp;
 

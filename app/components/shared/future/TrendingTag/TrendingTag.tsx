@@ -58,11 +58,7 @@ export default function TrendingTag({ tag }: TrendingTagProps) {
           aria-label="Follow blog"
           onClick={onClick}
         >
-          {tag.isFollow ? (
-            <Icons.V2.FollowCheckedTag />
-          ) : (
-            <Icons.V2.FollowTag />
-          )}
+          {tag.isFollow ? <Icons.V2.FollowChecked /> : <Icons.V2.FollowTag />}
         </button>
       </div>
     </div>

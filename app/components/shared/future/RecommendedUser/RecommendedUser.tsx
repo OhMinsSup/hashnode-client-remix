@@ -1,33 +1,52 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { Icons } from "../../Icons";
-import { ASSET_URL } from "~/constants/constant";
+import { Icons } from "~/components/shared/Icons";
+import { Link } from "@remix-run/react";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import type { SerializeFrom } from "@remix-run/cloudflare";
 
-export default function RecommendedUser() {
+interface RecommendedUserProps {
+  user: SerializeFrom<FetchRespSchema.UserResponse>;
+}
+
+export default function RecommendedUser({ user }: RecommendedUserProps) {
   return (
     <div className={styles.root}>
-      <a className={styles.image_link} href="#">
+      <Link className={styles.image_link} to={PAGE_ENDPOINTS.USERS.ID(user.id)}>
         <div className="w-full h-full">
           <div className={styles.image_container}>
-            <img src={ASSET_URL.DEFAULT_AVATAR} alt="" />
+            <img
+              loading="lazy"
+              src={user?.userImage?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR}
+              alt={user?.userProfile?.username ?? "profile"}
+            />
           </div>
         </div>
-      </a>
+      </Link>
       <div className={styles.content_container}>
         <h3 className={styles.title}>
-          <a aria-label="Random Thoughts" href="/n/devops">
-            Random Thoughts
-          </a>
+          <Link
+            aria-label={user?.userProfile?.username}
+            to={PAGE_ENDPOINTS.USERS.ID(user.id)}
+          >
+            {user?.userProfile?.username}
+          </Link>
         </h3>
         <p className={styles.count}>
-          <a aria-label="hameteman.com" href="/n/devops">
-            hameteman.com
+          <a
+            target="_blank"
+            rel="noreferrer"
+            aria-label="hameteman.com"
+            href="https://avocadev.hashnode.dev/"
+          >
+            avocadev.hashnode.dev
           </a>
         </p>
       </div>
       <div className={styles.btn_follow_container}>
         <button className={styles.btn_follow} aria-label="Follow user">
           <Icons.V2.FollowUser />
+          {/* <Icons.V2.FollowChecked /> */}
         </button>
       </div>
     </div>

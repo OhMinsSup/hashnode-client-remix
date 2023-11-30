@@ -819,7 +819,7 @@ export const Icons = {
         ></path>
       </svg>
     ),
-    FollowCheckedTag: (props: IconProps) => (
+    FollowChecked: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
         <path
           stroke="currentColor"

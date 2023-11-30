@@ -4,9 +4,10 @@ import { isEmpty, isUndefined } from "~/utils/assertion";
 import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import type { SerializeFrom } from "@remix-run/cloudflare";
 
 interface TrendingTagsBoxProps {
-  data?: FetchRespSchema.TagListResp;
+  data?: SerializeFrom<FetchRespSchema.TagListResp>;
 }
 
 export default function TrendingTagsBox({ data }: TrendingTagsBoxProps) {

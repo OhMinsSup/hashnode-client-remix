@@ -7,7 +7,8 @@ export const API_ENDPOINTS = {
     SIGNIN: "auth/signin",
   },
   USERS: {
-    ME: "users",
+    ROOT: "users",
+    ME: "users/me",
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
     USERNAME: (username: string) => `users/${username}`,
@@ -128,7 +129,7 @@ export const PAGE_ENDPOINTS = {
   },
   USERS: {
     ROOT: "/users",
-    ID: (username: string) => `/blog/@${username}`,
+    ID: (id: string) => `/blog/${id}`,
   },
   WRITE: {
     ROOT: "/write",

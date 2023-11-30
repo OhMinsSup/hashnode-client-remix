@@ -6,6 +6,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { deleteUserApi as $deleteUserApi } from "~/services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "~/services/fetch/users/put-api.server";
 import { getUserApi as $getUserApi } from "~/services/fetch/users/get-api.server";
+import { getUsersApi as $getUsersApi } from "~/services/fetch/users/gets-api.server";
 import { getOwnerPostDetailApi as $getOwnerPostDetailApi } from "~/services/fetch/users/get-owner-post-api.server";
 
 import {
@@ -19,12 +20,24 @@ import { schema as $getSchema } from "~/services/validate/user-get-api.validate"
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { Params } from "@remix-run/react";
+import { parseUrlParams } from "~/utils/util";
 
 export class UserApiService {
   constructor(
     private readonly $env: Env,
     private readonly $server: ServerService
   ) {}
+
+  /**
+   * @description 아이템 리스트
+   * @param {FetchQuerySchema.UserList} query
+   * @param {Request} request
+   */
+  async list(query: FetchQuerySchema.UserList, request: Request) {
+    return await $getUsersApi(query, {
+      request,
+    });
+  }
 
   /**
    * @version 2023-08-17
@@ -174,5 +187,70 @@ export class UserApiService {
 
       return null;
     }
+  }
+
+  /**
+   * @version 2023-08-16
+   * @description loader에서 호출 할 때 사용하는 함수 (일반)
+   * @param {FetchQuerySchema.UserList} params
+   * @param {Request} request
+   */
+  async getUsersByBaseList(
+    params: FetchQuerySchema.UserList,
+    request: Request
+  ) {
+    try {
+      const response = await this.list(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.UserListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultUserList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultUserList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 리스트 가져오기
+   * @param {Request} request
+   */
+  async getUsersByList(request: Request) {
+    const params = parseUrlParams(request.url);
+    return this.getUsersByBaseList(params, request);
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 메인화면에서 최대 4개만 보여주는 인기 유저 리스트
+   * @param {Request} request
+   */
+  async getMainTrendingUsersLimit4(request: Request) {
+    const params = {
+      limit: 4,
+    };
+    return this.getUsersByBaseList(params, request);
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 기본 포스트 리스트
+   */
+  private getDefaultUserList() {
+    return {
+      list: [],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+      totalCount: 0,
+    };
   }
 }

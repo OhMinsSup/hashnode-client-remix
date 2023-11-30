@@ -10,6 +10,7 @@ import {
 // components
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
 import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
+import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";
 
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
@@ -22,9 +23,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
 export type Loader = typeof loader;
 
 export default function Routes() {
-  // recent
   const data = useRouteLoaderData<MainRoutesLoader>("routes/_main");
-
   return (
     <HashnodeList
       trendingTags={
@@ -36,7 +35,15 @@ export default function Routes() {
           </Suspense>
         </>
       }
-      recommendedUsers={<></>}
+      recommendedUsers={
+        <>
+          <Suspense fallback={<></>}>
+            <Await resolve={data?.trendingUser}>
+              {(data) => <RecommendedUsersBox data={data} />}
+            </Await>
+          </Suspense>
+        </>
+      }
     />
   );
 }
