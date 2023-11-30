@@ -1,5 +1,6 @@
 import type { AuthApiService } from "./api/auth.server";
 import type { UserApiService } from "./api/user.server";
+import type { NotificationApiService } from "./api/notification.server";
 import type { ThemeService } from "./app/theme.server";
 import type { ServerService } from "./app/server.server";
 import type { RuntimeEnv } from "./app/env.server";
@@ -26,5 +27,6 @@ export interface RemixContext extends RuntimeEnv {
     tag: TagApiService;
     file: FileApiService;
     post: PostApiService;
+    notification: NotificationApiService;
   };
 }

@@ -28,6 +28,12 @@ export const API_ENDPOINTS = {
   FILES: {
     ROOT: "files",
   },
+  NOTIFICATIONS: {
+    ROOT: "notifications",
+    GET_COUNT: "notifications/count",
+    READ_ALL: "notifications/read-all",
+    READ: (id: string | number) => `notifications/${id}/read`,
+  },
   TAGS: {
     ROOT: "tags",
     TAG: (tag: string) => `tags/${tag}`,

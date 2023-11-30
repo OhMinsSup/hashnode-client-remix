@@ -8,6 +8,7 @@ import { UserApiService } from "./app/services/api/user.server";
 import { TagApiService } from "./app/services/api/tag.server";
 import { FileApiService } from "./app/services/api/file.server";
 import { PostApiService } from "./app/services/api/post.server";
+import { NotificationApiService } from "./app/services/api/notification.server";
 
 import { ThemeService } from "./app/services/app/theme.server";
 import { ToastService } from "./app/services/app/toast.server";
@@ -50,6 +51,7 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       post: new PostApiService(env, server),
       tag: new TagApiService(env, server, toast),
       file: new FileApiService(env, server),
+      notification: new NotificationApiService(env, server),
     };
 
     return {

@@ -13,10 +13,11 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 export const loader = ({ context, request }: LoaderFunctionArgs) => {
   return defer({
     trendingTag: context.api.tag.getMainTrendingTagsLimit4(request),
+    notificationCount: context.api.notification.count(request),
   });
 };
 
-export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export default function Routes() {
   return (

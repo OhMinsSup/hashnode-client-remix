@@ -12,7 +12,7 @@ import { HashnodeList } from "~/components/shared/future/HashnodeList";
 import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import type { Loader as MainLoader } from "~/routes/_main";
+import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const response = await context.api.post.getPostsByList(request);
@@ -50,14 +50,14 @@ export const meta: MetaFunction<Loader> = ({ data, matches }) => {
 };
 
 export default function Routes() {
-  const data = useRouteLoaderData<MainLoader>("routes/_main");
+  const data = useRouteLoaderData<MainRoutesLoader>("routes/_main");
 
   return (
     <HashnodeList
       trendingTags={
         <Suspense fallback={<></>}>
           <Await resolve={data?.trendingTag}>
-            {(data) => <TrendingTagsBox />}
+            {(data) => <TrendingTagsBox data={data} />}
           </Await>
         </Suspense>
       }
