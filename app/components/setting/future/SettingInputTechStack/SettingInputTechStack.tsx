@@ -58,11 +58,11 @@ export default function SettingInputTechStack() {
           value={inputValue}
           onChange={onChange}
         />
-        <SettingInputTechStack.Popover
+        {/* <SettingInputTechStack.Popover
           fetcherData={fetcher.data}
           inputValue={inputValue}
           onReset={onReset}
-        />
+        /> */}
       </div>
       <SettingInputTechStack.Tags />
       <ErrorMessage
@@ -150,6 +150,8 @@ SettingInputTechStack.Tags = function Tags() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const watchSkills = watch("skills") ?? [];
+
+  console.log("watchSkills", watchSkills);
 
   const onRemove = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: string) => {

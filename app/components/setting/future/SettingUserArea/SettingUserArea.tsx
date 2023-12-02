@@ -18,7 +18,7 @@ export default function SettingUserArea() {
                 type="text"
                 text="Full name"
                 id="nameField"
-                name="name"
+                name="nickname"
                 placeholder="Enter your full name"
               />
             </div>

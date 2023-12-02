@@ -156,7 +156,7 @@ export default function AsideTrendingArticle() {
                       aria-label="Post Author"
                       title="ByteScrum Technologies"
                     >
-                      {item.user.username}
+                      {item.user.email}
                     </a>
                   </p>
                   <span className="inline-block mx-2 font-bold opacity-50 ml-0">

@@ -63,7 +63,7 @@ export const socialSchema = z.object({
 });
 
 export const schema = z.object({
-  name: z.string().min(1).max(20),
+  nickname: z.string().min(1).max(20),
   username: z.string().min(1).max(20),
   email: z.string().email(),
   tagline: z.string().max(255).optional(),
