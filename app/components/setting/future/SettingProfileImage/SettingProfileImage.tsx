@@ -3,18 +3,17 @@ import styles from "./styles.module.css";
 
 // hooks
 import { useFetcher } from "@remix-run/react";
-import { useFormContext } from "react-hook-form";
+import { useSettingUserFormContext } from "~/components/setting/context/form";
 import { Icons } from "~/components/shared/Icons";
 import { getPath } from "~/routes/_action._protected.action.upload";
 
-import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
 import type { Action } from "~/routes/_action._protected.action.upload";
 
 interface SettingProfileImageProps {}
 
 export default function SettingProfileImage(props: SettingProfileImageProps) {
   const fetcher = useFetcher<Action>();
-  const { setValue } = useFormContext<FormFieldValues>();
+  const { setValue } = useSettingUserFormContext();
 
   const onImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +121,7 @@ SettingProfileImage.Success = function Success({
   urls,
   onDelete,
 }: SuccessProps) {
-  const { setValue, watch } = useFormContext<FormFieldValues>();
+  const { setValue, watch } = useSettingUserFormContext();
 
   const url = watch("avatarUrl");
 

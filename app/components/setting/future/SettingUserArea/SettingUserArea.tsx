@@ -1,12 +1,20 @@
-import React from "react";
+import { useMemo } from "react";
 import styles from "./styles.module.css";
 import { SettingInput } from "~/components/setting/future/SettingInput";
 import { SettingTextarea } from "~/components/setting/future/SettingTextarea";
 import { SettingInputIdentity } from "~/components/setting/future/SettingInputIdentity";
 import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
 import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
+import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
+import { useSession } from "~/services/hooks/useSession";
 
 export default function SettingUserArea() {
+  const session = useSession();
+
+  const initialTags = useMemo(() => {
+    return (session?.userTags ?? []).map((tag) => tag.name);
+  }, [session]);
+
   return (
     <div className={styles.root}>
       <div>
@@ -53,7 +61,9 @@ export default function SettingUserArea() {
               />
             </div>
             <div className="mb-6">
-              <SettingInputTechStack />
+              <SettingTagsProvider initialValue={initialTags}>
+                <SettingInputTechStack />
+              </SettingTagsProvider>
             </div>
             <div className="mb-6">
               <SettingTextarea

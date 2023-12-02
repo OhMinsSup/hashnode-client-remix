@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
 
 import { useNavigation } from "@remix-run/react";
-import { useFormContext } from "react-hook-form";
+import { useSettingUserFormContext } from "~/components/setting/context/form";
 
 import type { FieldPath } from "react-hook-form";
 import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
@@ -23,7 +23,7 @@ export default function SettingInputIdentity({
   name,
   ...otherPros
 }: SettingInputIdentityProps) {
-  const { register, formState } = useFormContext<FormFieldValues>();
+  const { register, formState } = useSettingUserFormContext();
 
   const navigation = useNavigation();
 

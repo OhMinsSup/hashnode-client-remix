@@ -1,46 +1,48 @@
-import React, { useCallback, useMemo, useState, useTransition } from "react";
-import unionBy from "lodash-es/unionBy";
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useTransition,
+  useId,
+  useEffect,
+} from "react";
 import styles from "./styles.module.css";
 
 import { useFetcher, useNavigation } from "@remix-run/react";
-import { useFormContext } from "react-hook-form";
+import { useSettingTagsContext } from "~/components/setting/context/setting-tag";
+import { useSettingUserFormContext } from "~/components/setting/context/form";
 import { Icons } from "~/components/shared/Icons";
 import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
 
 import { isEmpty } from "~/utils/assertion";
 import { getPath } from "~/routes/_loader._protected.loader.tags[.]json";
 
-import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
-import type { Loader } from "~/routes/_loader._protected.loader.tags[.]json";
+import type { RoutesLoader } from "~/routes/_loader._protected.loader.tags[.]json";
 
 export default function SettingInputTechStack() {
-  const [inputValue, setInputValue] = useState("");
-  const fetcher = useFetcher<Loader>();
-  const [, startTransition] = useTransition();
+  // const fetcher = useFetcher<RoutesLoader>();
+  // const [, startTransition] = useTransition();
   const navigation = useNavigation();
 
-  const { formState } = useFormContext<FormFieldValues>();
+  const {
+    formState: { errors },
+  } = useSettingUserFormContext();
 
   const isSubmitting = useMemo(
     () => navigation.state === "submitting",
     [navigation.state]
   );
 
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setInputValue(value);
-
-      startTransition(() => {
-        fetcher.load(getPath({ name: value, limit: 10 }));
-      });
-    },
-    [fetcher]
-  );
-
-  const onReset = useCallback(() => {
-    setInputValue("");
-  }, []);
+  // const onChange = useCallback(
+  //   (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const value = e.target.value;
+  //     changeInput(value);
+  //     startTransition(() => {
+  //       fetcher.load(getPath({ name: value, limit: 10 }));
+  //     });
+  //   },
+  //   [fetcher, changeInput]
+  // );
 
   return (
     <>
@@ -48,151 +50,220 @@ export default function SettingInputTechStack() {
         Tech Stack
       </label>
       <div className="relative mb-2">
-        <input
-          type="text"
-          className="input-text"
-          id="skills"
-          data-toggle="dropdown"
-          placeholder="Search technologies, topics, more…"
-          autoComplete="off"
-          value={inputValue}
-          onChange={onChange}
+        <SettingInputTechStack.Input
+          popover={<SettingInputTechStack.Popover />}
         />
-        {/* <SettingInputTechStack.Popover
-          fetcherData={fetcher.data}
-          inputValue={inputValue}
-          onReset={onReset}
-        /> */}
       </div>
       <SettingInputTechStack.Tags />
-      <ErrorMessage
-        isSubmitting={isSubmitting}
-        errors={formState.errors}
-        name="skills"
-      />
+      <ErrorMessage isSubmitting={isSubmitting} errors={errors} name="skills" />
     </>
   );
 }
 
-interface PopoverProps {
-  inputValue: string;
-  onReset: () => void;
-  fetcherData: FetchRespSchema.TagListRespSchema | undefined;
-}
+SettingInputTechStack.Popover = function Item() {
+  const { inputValue, tags, upsertTags } = useSettingTagsContext();
 
-SettingInputTechStack.Popover = function Popover({
-  inputValue,
-  onReset,
-  fetcherData,
-}: PopoverProps) {
-  const { setValue, watch } = useFormContext<FormFieldValues>();
+  const fetcher = useFetcher<RoutesLoader>();
 
-  const watchSkills = watch("skills");
+  const id = useId();
 
-  const unionSkills = useMemo(() => {
-    const _data: string[] = [];
-    if (watchSkills?.length) {
-      _data.push(...watchSkills);
-    }
-    if (fetcherData) {
-      const { list } = fetcherData;
-      _data.push(...list.map((tag) => tag.name));
-    }
+  const isDone = fetcher.state === "idle" && fetcher.data != null;
+
+  const skills = useMemo(() => {
+    const data = new Set<string>(tags);
+    if (inputValue) data.add(inputValue);
+    return [...data];
+  }, [inputValue, tags]);
+
+  useEffect(() => {
     if (inputValue) {
-      _data.push(inputValue);
+      fetcher.load(getPath({ name: inputValue, limit: 10 }));
     }
-    return unionBy(_data, (item) => item);
-  }, [fetcherData, inputValue, watchSkills]);
+  }, [inputValue]);
 
-  const onClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      e.preventDefault();
-      const dataValue = e.currentTarget.dataset.value;
-      if (dataValue) {
-        const _skills = [...(watchSkills ?? [])];
-        const index = _skills.indexOf(dataValue);
-        if (index === -1) {
-          _skills.push(dataValue);
-        } else {
-          _skills.splice(index, 1);
-        }
-        setValue("skills", _skills, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-        onReset();
-      }
-    },
-    [onReset, setValue, watchSkills]
-  );
+  useEffect(() => {
+    if (isDone && !isEmpty(fetcher.data?.list)) {
+      const appendTags = fetcher.data?.list.map((tag) => tag.name);
+      if (appendTags) upsertTags(appendTags);
+    }
+  }, [isDone]);
 
   return (
     <div className={styles.popover}>
-      {unionSkills.map((tag, index) => (
+      {skills.map((tag, index) => (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a
-          key={`popover-${tag}-${index}`}
-          className={styles.popover_item}
-          href="#"
-          data-index={index}
-          data-value={tag}
-          onClick={onClick}
-        >
-          {tag}
-        </a>
+        <SettingInputTechStack.PopoverTag
+          key={`popover-tag-${tag}-${id}`}
+          tag={tag}
+          index={index}
+        />
       ))}
     </div>
   );
 };
 
-SettingInputTechStack.Tags = function Tags() {
-  const { setValue, watch } = useFormContext<FormFieldValues>();
+interface PopoverTagProps {
+  tag: string;
+  index: number;
+}
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const watchSkills = watch("skills") ?? [];
+SettingInputTechStack.PopoverTag = function Item({
+  tag,
+  index,
+}: PopoverTagProps) {
+  const { upsertTag, changeInput } = useSettingTagsContext();
+  const { getValues, setValue } = useSettingUserFormContext();
+  const [isPending, startTransition] = useTransition();
 
-  console.log("watchSkills", watchSkills);
-
-  const onRemove = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: string) => {
+  const onClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       e.preventDefault();
-      const _skills = [...watchSkills];
-      const index = _skills.indexOf(value);
-      if (index !== -1) {
-        _skills.splice(index, 1);
-        setValue("skills", _skills, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      }
+      upsertTag(tag);
+      startTransition(() => {
+        const _skills = getValues("skills") ?? [];
+        const index = _skills.indexOf(tag);
+        if (index === -1) {
+          _skills.push(tag);
+          setValue("skills", _skills, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+        changeInput("");
+      });
     },
-    [setValue, watchSkills]
+    [changeInput, getValues, setValue, tag, upsertTag]
   );
 
-  if (isEmpty(watchSkills)) {
+  return (
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+    <a
+      className={styles.popover_item}
+      href="#"
+      data-index={index}
+      data-value={tag}
+      onClick={onClick}
+      aria-disabled={isPending}
+    >
+      {tag}
+    </a>
+  );
+};
+
+SettingInputTechStack.Tags = function Item() {
+  const { tags } = useSettingTagsContext();
+  const id = useId();
+
+  const skills = useMemo(() => {
+    return [...tags];
+  }, [tags]);
+
+  if (isEmpty(skills)) {
     return null;
   }
 
   return (
     <div className="flex flex-row flex-wrap">
-      {watchSkills.map((tag, index) => (
-        <div
-          key={`tag-${tag}-${index}`}
-          className="button-primary small mr-2 mb-2 flex flex-row items-center"
-        >
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#" className="mr-2">
-            <span>{tag}</span>
-          </a>
-          <button
-            data-index={index}
-            type="button"
-            onClick={(e) => onRemove(e, tag)}
-          >
-            <Icons.V2.SettingTagX className="h-4 w-4 fill-current" />
-          </button>
-        </div>
+      {skills.map((tag, index) => (
+        <SettingInputTechStack.Tag
+          key={`tag-${tag}-${id}`}
+          tag={tag}
+          index={index}
+        />
       ))}
+    </div>
+  );
+};
+
+interface InputProps {
+  popover?: React.ReactNode;
+}
+
+SettingInputTechStack.Input = function Item({ popover }: InputProps) {
+  const [input, setInput] = useState("");
+  const [, startTransition] = useTransition();
+  const { inputValue, changeInput, reset, taskQueue } = useSettingTagsContext();
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setInput(value);
+
+      startTransition(() => {
+        taskQueue.enqueue(value, (lastValue) => {
+          changeInput(lastValue);
+        });
+      });
+    },
+    [changeInput]
+  );
+
+  useEffect(() => {
+    setInput("");
+  }, [reset]);
+
+  return (
+    <>
+      <input
+        type="text"
+        className="input-text"
+        id="skills"
+        data-toggle="dropdown"
+        placeholder="Search technologies, topics, more…"
+        autoComplete="off"
+        value={input}
+        onChange={onChange}
+      />
+      {inputValue.length ? popover : null}
+    </>
+  );
+};
+
+interface TagProps {
+  tag: string;
+  index: number;
+}
+
+SettingInputTechStack.Tag = function Item({ tag, index }: TagProps) {
+  const { removeTag, resetInput } = useSettingTagsContext();
+  const { getValues, setValue } = useSettingUserFormContext();
+  const [isPending, startTransition] = useTransition();
+
+  const onRemove = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      removeTag(tag);
+      resetInput();
+      startTransition(() => {
+        const _skills = getValues("skills") ?? [];
+        const index = _skills.indexOf(tag);
+        if (index !== -1) {
+          _skills.splice(index, 1);
+          setValue("skills", _skills, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+      });
+    },
+    [getValues, removeTag, setValue, tag, resetInput]
+  );
+
+  return (
+    <div className="button-primary small mr-2 mb-2 flex flex-row items-center">
+      {/*  eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" className="mr-2">
+        <span>{tag}</span>
+      </a>
+      <button
+        data-index={index}
+        data-value={tag}
+        type="button"
+        disabled={isPending}
+        onClick={onRemove}
+      >
+        <Icons.V2.SettingTagX className="h-4 w-4 fill-current" />
+      </button>
     </div>
   );
 };

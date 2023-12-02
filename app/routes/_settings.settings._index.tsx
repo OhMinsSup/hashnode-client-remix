@@ -2,6 +2,7 @@ import { json } from "@remix-run/cloudflare";
 
 import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
 import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
+import SettingUserFormProvider from "~/components/setting/context/form";
 
 // hooks
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
@@ -52,9 +53,11 @@ export type Action = typeof action;
 
 export default function Routes() {
   return (
-    <SettingUserForm>
-      <SettingUserArea />
-    </SettingUserForm>
+    <SettingUserFormProvider>
+      <SettingUserForm>
+        <SettingUserArea />
+      </SettingUserForm>
+    </SettingUserFormProvider>
   );
 }
 

@@ -6,7 +6,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   return json(response);
 };
 
-export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export const getPath = (params?: Record<string, any>) => {
   const _base = "/loader/tags.json";
