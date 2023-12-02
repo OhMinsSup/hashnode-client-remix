@@ -158,6 +158,7 @@ declare namespace SerializeSchema {
     userImage: SerializeUserImage;
     userSocial: SerializeUserSocial;
     userTags: SerializeUserTag[];
+    isFollow?: boolean;
   } & Pick<FetchSchema.User, "id" | "email" | "createdAt">;
 
   export type SerializeTagCount = {
@@ -171,9 +172,12 @@ declare namespace SerializeSchema {
     dataId: ID;
   };
 
-  export type SerializeDataIDWithCount<ID = string> = {
+  export type SerializeDataIDTypeWithCount<ID = string> = {
     count: number;
-    type: "create" | "delete" | "none";
+  } & SerializeDataIDWithType<ID>;
+
+  export type SerializeDataIDWithType<ID = string> = {
+    type: "create" | "delete" | "none" | "follow" | "unfollow";
   } & SerializeDataID<ID>;
 }
 
@@ -238,7 +242,9 @@ declare namespace FetchRespSchema {
     isFollowing: boolean;
   }
 
-  export type TagFollowResp = SerializeSchema.SerializeDataIDWithCount;
+  export type TagFollowResp = SerializeSchema.SerializeDataIDTypeWithCount;
+
+  export type UserFollowResp = SerializeSchema.SerializeDataIDWithType;
 
   export type PostDetailResp = FetchSchema.Post & {
     count: FetchSchema.PostCount;

@@ -63,13 +63,11 @@ export default function Routes() {
         </Suspense>
       }
       recommendedUsers={
-        <>
-          <Suspense fallback={<></>}>
-            <Await resolve={data?.trendingUser}>
-              {(data) => <RecommendedUsersBox data={data} />}
-            </Await>
-          </Suspense>
-        </>
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.trendingUser}>
+            {(data) => <RecommendedUsersBox data={data} />}
+          </Await>
+        </Suspense>
       }
     />
   );

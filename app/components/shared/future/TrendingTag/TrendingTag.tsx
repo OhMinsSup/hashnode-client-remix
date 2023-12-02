@@ -6,10 +6,11 @@ import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { getPath } from "~/routes/_action._protected.action.tag.follow";
 
 // types
+import type { SerializeFrom } from "@remix-run/cloudflare";
 import type { Action } from "~/routes/_action._protected.action.tag.follow";
 
 interface TrendingTagProps {
-  tag: SerializeSchema.SerializeTagCount;
+  tag: SerializeFrom<SerializeSchema.SerializeTagCount>;
 }
 
 export default function TrendingTag({ tag }: TrendingTagProps) {

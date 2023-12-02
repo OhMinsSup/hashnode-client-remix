@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { Icons } from "~/components/shared/Icons";
-import { Link } from "@remix-run/react";
+import { Link, useFetcher, useLocation } from "@remix-run/react";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import { getPath } from "~/routes/_action._protected.action.user.follow";
+
 import type { SerializeFrom } from "@remix-run/cloudflare";
+import type { Action } from "~/routes/_action._protected.action.user.follow";
 
 interface RecommendedUserProps {
   user: SerializeFrom<FetchRespSchema.UserResponse>;
 }
 
 export default function RecommendedUser({ user }: RecommendedUserProps) {
+  const fetcher = useFetcher<Action>();
+  const location = useLocation();
+
+  const onClick = useCallback(() => {
+    const formData = new FormData();
+    formData.append("userId", user.id);
+    formData.append("redirectUrl", location.pathname);
+    fetcher.submit(formData, {
+      action: getPath(),
+      method: "POST",
+      encType: "multipart/form-data",
+      navigate: false,
+      preventScrollReset: false,
+    });
+  }, [user, fetcher, location.pathname]);
+
   return (
     <div className={styles.root}>
       <Link className={styles.image_link} to={PAGE_ENDPOINTS.USERS.ID(user.id)}>
@@ -44,9 +63,17 @@ export default function RecommendedUser({ user }: RecommendedUserProps) {
         </p>
       </div>
       <div className={styles.btn_follow_container}>
-        <button className={styles.btn_follow} aria-label="Follow user">
-          <Icons.V2.FollowUser />
-          {/* <Icons.V2.FollowChecked /> */}
+        <button
+          type="button"
+          className={styles.btn_follow}
+          aria-label="Follow user"
+          onClick={onClick}
+        >
+          {user?.isFollow ? (
+            <Icons.V2.FollowChecked />
+          ) : (
+            <Icons.V2.FollowUser />
+          )}
         </button>
       </div>
     </div>

@@ -2,31 +2,51 @@ import Json from "superjson";
 import { redirect } from "@remix-run/cloudflare";
 
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
+import { parseUrlParams } from "~/utils/util";
 
 import { deleteUserApi as $deleteUserApi } from "~/services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "~/services/fetch/users/put-api.server";
 import { getUserApi as $getUserApi } from "~/services/fetch/users/get-api.server";
 import { getUsersApi as $getUsersApi } from "~/services/fetch/users/gets-api.server";
 import { getOwnerPostDetailApi as $getOwnerPostDetailApi } from "~/services/fetch/users/get-owner-post-api.server";
+import { postUserFollowApi as $postUserFollowApi } from "~/services/fetch/users/user-follow-api.server";
 
 import {
   schema as $updateSchema,
-  type FormFieldValues as $UpdateFormFieldValues,
+  type FormFieldValues as UpdateFormFieldValues,
 } from "~/services/validate/user-update-api.validate";
+import {
+  schema as $followSchema,
+  type FormFieldValues as FollowFormFieldValues,
+} from "~/services/validate/user-follow-api.validate";
 import { FetchService } from "~/services/fetch/fetch.api";
+
 import { schema as $getSchema } from "~/services/validate/user-get-api.validate";
 
 // types
+import type { ToastService } from "../app/toast.server";
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { Params } from "@remix-run/react";
-import { parseUrlParams } from "~/utils/util";
 
 export class UserApiService {
   constructor(
     private readonly $env: Env,
-    private readonly $server: ServerService
+    private readonly $server: ServerService,
+    private readonly $toast: ToastService
   ) {}
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 팔로우 API
+   * @param {FollowFormFieldValues} input
+   * @param {Request} request
+   */
+  follow(input: FollowFormFieldValues, request: Request) {
+    return $postUserFollowApi(input, {
+      request,
+    });
+  }
 
   /**
    * @description 아이템 리스트
@@ -72,7 +92,7 @@ export class UserApiService {
   async update(request: Request) {
     const formData = await this.$server.readFormData(request);
     const bodyString = formData.get("body")?.toString() ?? "{}";
-    const body = Json.parse<$UpdateFormFieldValues>(bodyString);
+    const body = Json.parse<UpdateFormFieldValues>(bodyString);
     const input = await $updateSchema.parseAsync(body);
     return $putUserApi(input, {
       request,
@@ -186,6 +206,61 @@ export class UserApiService {
       }
 
       return null;
+    }
+  }
+
+  async upsertUserFollow(request: Request) {
+    const formData = await this.$server.readFormData(request);
+
+    const defaultToastOpts = {
+      title: "error",
+      description: "failed to follow the user. Please try again later.",
+      type: "error" as const,
+    };
+
+    const redirectUrl = (formData.get("redirectUrl") ||
+      PAGE_ENDPOINTS.ROOT) as string;
+
+    const input = {
+      userId: formData.get("userId"),
+    };
+
+    try {
+      const parse = await $followSchema.parseAsync(input);
+      const response = await this.follow(parse, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.UserFollowResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        const error = new Error();
+        error.name = "UserFollowError";
+        error.message = "failed to follow the user. Please try again later.";
+        throw error;
+      }
+      return json.result;
+    } catch (error) {
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl,
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl,
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
+      }
+
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        defaultToastOpts,
+        this.$toast.createToastHeaders
+      );
     }
   }
 

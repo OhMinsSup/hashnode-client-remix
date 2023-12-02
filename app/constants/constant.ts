@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
     ME: "users/me",
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
+    USER_FOLLOW: "users/follow",
     USERNAME: (username: string) => `users/${username}`,
     USERNAME_POSTS: (username: string) => `users/${username}/posts`,
     TRENDING_USERS: "users/treanding",

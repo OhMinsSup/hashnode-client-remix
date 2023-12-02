@@ -27,22 +27,18 @@ export default function Routes() {
   return (
     <HashnodeList
       trendingTags={
-        <>
-          <Suspense fallback={<></>}>
-            <Await resolve={data?.trendingTag}>
-              {(data) => <TrendingTagsBox data={data} />}
-            </Await>
-          </Suspense>
-        </>
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.trendingTag}>
+            {(data) => <TrendingTagsBox data={data} />}
+          </Await>
+        </Suspense>
       }
       recommendedUsers={
-        <>
-          <Suspense fallback={<></>}>
-            <Await resolve={data?.trendingUser}>
-              {(data) => <RecommendedUsersBox data={data} />}
-            </Await>
-          </Suspense>
-        </>
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.trendingUser}>
+            {(data) => <RecommendedUsersBox data={data} />}
+          </Await>
+        </Suspense>
       }
     />
   );
