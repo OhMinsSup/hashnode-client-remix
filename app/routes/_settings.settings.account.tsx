@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { json } from "@remix-run/cloudflare";
 import { Account } from "~/components/setting/future/Account";
 
 // hooks
@@ -47,8 +46,7 @@ export const meta: MetaFunction = ({ matches }) => {
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
   const response = await context.api.user.deleteByUser(request);
-  if (response instanceof Response) return response;
-  return json(response);
+  return response;
 };
 
 export type Action = typeof action;

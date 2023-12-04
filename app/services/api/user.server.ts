@@ -3,6 +3,7 @@ import { redirect } from "@remix-run/cloudflare";
 
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { parseUrlParams } from "~/utils/util";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 import { deleteUserApi as $deleteUserApi } from "~/services/fetch/users/delete-api.server";
 import { putUserApi as $putUserApi } from "~/services/fetch/users/put-api.server";
@@ -28,7 +29,6 @@ import type { ToastService } from "../app/toast.server";
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { Params } from "@remix-run/react";
-import { safeRedirect } from "remix-utils/safe-redirect";
 
 export class UserApiService {
   constructor(
@@ -163,7 +163,7 @@ export class UserApiService {
     this.$server.readValidateMethod(
       request,
       "DELETE",
-      PAGE_ENDPOINTS.SETTINGS.ROOT
+      PAGE_ENDPOINTS.SETTINGS.ACCOUNT
     );
 
     try {
@@ -175,10 +175,29 @@ export class UserApiService {
     } catch (error) {
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        return error_fetch;
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT),
+          {
+            title: "error",
+            description:
+              Object.values(error_fetch.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
-      return null;
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT),
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 
@@ -227,6 +246,17 @@ export class UserApiService {
           this.$toast.createToastHeaders
         );
       }
+
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 
