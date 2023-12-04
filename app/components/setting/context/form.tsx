@@ -6,7 +6,7 @@ import {
   type FormFieldValues,
 } from "~/services/validate/user-update-api.validate";
 
-import { useOptionalSession } from "~/services/hooks/useSession";
+import { useSession } from "~/services/hooks/useSession";
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
 
 interface SettingUserFormProps {
@@ -16,7 +16,7 @@ interface SettingUserFormProps {
 export default function SettingUserFormProvider({
   children,
 }: SettingUserFormProps) {
-  const session = useOptionalSession();
+  const session = useSession();
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -25,6 +25,10 @@ export default function SettingUserFormProvider({
       email: session?.email ?? "",
       tagline: session?.userProfile?.tagline ?? undefined,
       avatarUrl: session?.userImage?.avatarUrl ?? undefined,
+      image: {
+        id: undefined,
+        url: session?.userImage?.avatarUrl ?? undefined,
+      },
       location: session?.userProfile?.location ?? undefined,
       bio: session?.userProfile?.bio ?? undefined,
       skills: session?.userTags?.map((skill) => skill.name) ?? [],

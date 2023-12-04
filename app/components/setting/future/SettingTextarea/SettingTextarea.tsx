@@ -21,7 +21,11 @@ export default function SettingTextarea({
   className,
   ...otherPros
 }: SettingTextareaProps) {
-  const { register, formState, watch } = useSettingUserFormContext();
+  const {
+    register,
+    formState: { errors },
+    watch,
+  } = useSettingUserFormContext();
 
   const navigation = useNavigation();
 
@@ -32,6 +36,11 @@ export default function SettingTextarea({
     [navigation.state]
   );
 
+  const count = useMemo(() => {
+    const length = watchAvailableText?.length ?? 0;
+    return 140 - length;
+  }, [watchAvailableText]);
+
   return (
     <>
       <label htmlFor={id} className="input-label">
@@ -41,19 +50,15 @@ export default function SettingTextarea({
         id={id}
         className={classNames("input-text min-h-30", className, {
           // @ts-ignore
-          error: !!formState.errors[name],
+          error: !!errors[name],
         })}
         {...otherPros}
         {...register(name)}
       />
-      <ErrorMessage
-        isSubmitting={isSubmitting}
-        errors={formState.errors}
-        name={name}
-      />
+      <ErrorMessage isSubmitting={isSubmitting} errors={errors} name={name} />
       {name === "availableText" && (
         <small className="ml-2 mt-1 block leading-tight text-slate-600">
-          {watchAvailableText?.length ?? 0}/140
+          {count}/140
         </small>
       )}
     </>

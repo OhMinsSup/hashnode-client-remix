@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useMemo } from "react";
 import styles from "./styles.module.css";
 
 // hooks
@@ -8,12 +8,33 @@ import { Icons } from "~/components/shared/Icons";
 import { getPath } from "~/routes/_action._protected.action.upload";
 
 import type { Action } from "~/routes/_action._protected.action.upload";
+import { isUndefined } from "~/utils/assertion";
+import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
 
-interface SettingProfileImageProps {}
-
-export default function SettingProfileImage(props: SettingProfileImageProps) {
+export default function SettingProfileImage() {
   const fetcher = useFetcher<Action>();
-  const { setValue } = useSettingUserFormContext();
+  const { setValue, watch } = useSettingUserFormContext();
+
+  const image = watch("image");
+
+  const isInitImage = useMemo(() => {
+    return image && isUndefined(image.id) && image.url;
+  }, [image]);
+
+  const isIdle = useMemo(
+    () => fetcher.state === "idle" && fetcher.data == null,
+    [fetcher]
+  );
+
+  const isLoading = useMemo(
+    () => fetcher.state === "loading" || fetcher.state === "submitting",
+    [fetcher]
+  );
+
+  const isSuccess = useMemo(
+    () => fetcher.state === "idle" && fetcher.data != null,
+    [fetcher]
+  );
 
   const onImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +50,7 @@ export default function SettingProfileImage(props: SettingProfileImageProps) {
 
       fetcher.submit(formData, {
         method: "POST",
-        action: getPath(),
+        action: getPath(location.pathname),
         encType: "multipart/form-data",
       });
     },
@@ -37,34 +58,48 @@ export default function SettingProfileImage(props: SettingProfileImageProps) {
   );
 
   const onImageDelete = useCallback(() => {
-    fetcher.submit(
-      {},
-      {
-        method: "POST",
-        action: getPath(),
-        encType: "multipart/form-data",
-      }
-    );
-    setValue("avatarUrl", undefined, {
+    if (!isInitImage) {
+      fetcher.submit(
+        {},
+        {
+          method: "POST",
+          action: getPath(location.pathname),
+          encType: "multipart/form-data",
+        }
+      );
+    }
+    setValue("image", undefined, {
       shouldValidate: true,
       shouldDirty: true,
     });
-  }, [fetcher, setValue]);
+  }, [fetcher, setValue, isInitImage]);
 
   return (
     <>
       <label htmlFor="file" className="input-label">
         Profile Photo
       </label>
-      {fetcher.state === "idle" && fetcher.data == null ? (
+      {isIdle && isInitImage ? (
+        <SettingProfileImage.Success
+          data={{
+            id: undefined,
+            publicUrl: image?.url as unknown as string,
+          }}
+          mode="init"
+          onDelete={onImageDelete}
+        />
+      ) : null}
+      {isIdle && !isInitImage ? (
         <SettingProfileImage.Pending onChange={onImageUpload} />
       ) : null}
-      {fetcher.state === "loading" || fetcher.state === "submitting" ? (
-        <SettingProfileImage.Loading />
-      ) : null}
-      {fetcher.state === "idle" && fetcher.data != null ? (
+      {isLoading ? <SettingProfileImage.Loading /> : null}
+      {isSuccess ? (
         <SettingProfileImage.Success
-          urls={fetcher.data.result?.variants ?? []}
+          data={{
+            id: fetcher.data?.id as unknown as string,
+            publicUrl: fetcher.data?.publicUrl as unknown as string,
+          }}
+          mode="update"
           onDelete={onImageDelete}
         />
       ) : null}
@@ -76,7 +111,7 @@ interface PendingProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-SettingProfileImage.Pending = function Pending(props: PendingProps) {
+SettingProfileImage.Pending = function Item(props: PendingProps) {
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       props.onChange?.(event);
@@ -101,7 +136,7 @@ SettingProfileImage.Pending = function Pending(props: PendingProps) {
   );
 };
 
-SettingProfileImage.Loading = function Loading() {
+SettingProfileImage.Loading = function Item() {
   return (
     <label className="custom-file flex h-40 w-40 cursor-pointer flex-col items-center justify-center rounded-full border bg-white uppercase tracking-wide text-slate-500 shadow">
       <svg className="h-16 w-16 animate-spin fill-current" viewBox="0 0 24 24">
@@ -113,34 +148,48 @@ SettingProfileImage.Loading = function Loading() {
 };
 
 interface SuccessProps {
-  urls: string[];
+  mode: "update" | "init";
+  data: {
+    id: string | undefined;
+    publicUrl: string;
+  };
   onDelete?: () => void;
 }
 
-SettingProfileImage.Success = function Success({
-  urls,
+SettingProfileImage.Success = function Item({
+  data,
   onDelete,
+  mode,
 }: SuccessProps) {
   const { setValue, watch } = useSettingUserFormContext();
 
-  const url = watch("avatarUrl");
+  const image = watch("image");
 
-  useEffect(() => {
-    const first = urls.at(0);
-    if (first) {
-      setValue("avatarUrl", first, { shouldValidate: true, shouldDirty: true });
+  useDeepCompareEffect(() => {
+    if (data && mode === "update") {
+      setValue(
+        "image",
+        {
+          id: data.id,
+          url: data.publicUrl,
+        },
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+        }
+      );
     }
-  }, [urls]);
+  }, [data]);
 
   return (
     <div className="relative block h-40 w-40 rounded-full bg-slate-100 shadow-xl">
       <a
         className="block overflow-hidden rounded-full"
-        href={url}
+        href={image?.url}
         target="_blank"
         rel="noreferrer"
       >
-        <img className="block" src={url} alt="empty" />
+        <img className="block" src={image?.url} alt="empty" />
       </a>
       <button
         type="button"

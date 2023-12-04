@@ -62,12 +62,17 @@ export const socialSchema = z.object({
     ),
 });
 
+export const imageSchema = z.object({
+  id: z.string().optional(),
+  url: z.string(),
+});
+
 export const schema = z.object({
   nickname: z.string().min(1).max(20),
   username: z.string().min(1).max(20),
   email: z.string().email(),
   tagline: z.string().max(255).optional(),
-  avatarUrl: z.string().url().optional(),
+  image: imageSchema.optional(),
   location: z.string().max(255).optional(),
   bio: z.string().max(255).optional(),
   skills: z.array(z.string()).max(10).optional(),

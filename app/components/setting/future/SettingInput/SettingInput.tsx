@@ -21,7 +21,10 @@ export default function SettingInput({
   className,
   ...otherPros
 }: SettingInputProps) {
-  const { register, formState } = useSettingUserFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useSettingUserFormContext();
 
   const navigation = useNavigation();
 
@@ -39,16 +42,12 @@ export default function SettingInput({
         id={id}
         className={classNames("input-text", className, {
           // @ts-ignore
-          error: !!formState.errors[name],
+          error: !!errors[name],
         })}
         {...otherPros}
         {...register(name)}
       />
-      <ErrorMessage
-        isSubmitting={isSubmitting}
-        errors={formState.errors}
-        name={name}
-      />
+      <ErrorMessage isSubmitting={isSubmitting} errors={errors} name={name} />
     </>
   );
 }

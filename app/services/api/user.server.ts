@@ -28,6 +28,7 @@ import type { ToastService } from "../app/toast.server";
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { Params } from "@remix-run/react";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 export class UserApiService {
   constructor(
@@ -87,13 +88,10 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 수정 API
+   * @param {UpdateFormFieldValues} input
    * @param {Request} request
    */
-  async update(request: Request) {
-    const formData = await this.$server.readFormData(request);
-    const bodyString = formData.get("body")?.toString() ?? "{}";
-    const body = Json.parse<UpdateFormFieldValues>(bodyString);
-    const input = await $updateSchema.parseAsync(body);
+  update(input: UpdateFormFieldValues, request: Request) {
     return $putUserApi(input, {
       request,
     });
@@ -191,21 +189,44 @@ export class UserApiService {
    */
   async updateByUser(request: Request) {
     try {
-      await this.update(request);
+      const formData = await this.$server.readFormData(request);
+      const bodyString = formData.get("body")?.toString() ?? "{}";
+      const body = Json.parse<UpdateFormFieldValues>(bodyString);
+      const input = await $updateSchema.parseAsync(body);
 
-      return redirect(PAGE_ENDPOINTS.SETTINGS.ROOT);
+      const response = await this.update(input, request);
+      const json = await FetchService.toJson<null>(response);
+      return json.result;
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
-        return error_validation;
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
+          {
+            title: "error",
+            description:
+              Object.values(error_validation.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        return error_fetch;
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
+          {
+            title: "error",
+            description:
+              Object.values(error_fetch.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
-
-      return null;
     }
   }
 

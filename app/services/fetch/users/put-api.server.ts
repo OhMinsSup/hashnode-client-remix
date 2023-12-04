@@ -19,5 +19,5 @@ export function putUserApi(input: FormFieldValues, options?: ApiOptions) {
  * @description 로그아웃 API Path
  */
 export const getPath = () => {
-  return FetchService.defineApis.USERS.ME;
+  return FetchService.defineApis.USERS.ROOT;
 };

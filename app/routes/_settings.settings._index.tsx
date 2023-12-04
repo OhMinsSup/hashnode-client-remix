@@ -45,7 +45,6 @@ export const meta: MetaFunction = ({ matches }) => {
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
   const response = await context.api.user.updateByUser(request);
-  if (response instanceof Response) return response;
   return json(response);
 };
 

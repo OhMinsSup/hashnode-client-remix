@@ -23,7 +23,10 @@ export default function SettingInputIdentity({
   name,
   ...otherPros
 }: SettingInputIdentityProps) {
-  const { register, formState } = useSettingUserFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useSettingUserFormContext();
 
   const navigation = useNavigation();
 
@@ -43,17 +46,13 @@ export default function SettingInputIdentity({
           id={id}
           className={classNames("input-text", className, {
             // @ts-ignore
-            error: !!formState.errors[name],
+            error: !!errors[name],
           })}
           {...otherPros}
           {...register(name)}
         />
         <div className="z-100 absolute right-0 top-0 mr-4 mt-4"></div>
-        <ErrorMessage
-          isSubmitting={isSubmitting}
-          errors={formState.errors}
-          name={name}
-        />
+        <ErrorMessage isSubmitting={isSubmitting} errors={errors} name={name} />
       </div>
     </>
   );

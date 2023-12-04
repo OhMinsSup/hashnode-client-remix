@@ -3,8 +3,8 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/cloudflare";
 
-import { z } from "zod";
 import { schema } from "~/services/validate/cf-file.validate";
+import { parseUrlParams } from "~/utils/util";
 
 import {
   postCfDirectUploadApi,
@@ -13,20 +13,18 @@ import {
 } from "~/services/fetch/files/cf-file.server";
 import { getFilesApi as $getFilesApi } from "~/services/fetch/files/gets-api.server";
 
-import { FetchError } from "~/services/fetch/fetch.error";
-
-import { RESULT_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 // types
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
-import type { FormFieldValues } from "~/services/validate/cf-file.validate";
-import { parseUrlParams } from "~/utils/util";
+import type { ToastService } from "../app/toast.server";
 
 export class FileApiService {
   constructor(
     private readonly env: Env,
-    private readonly $server: ServerService
+    private readonly $server: ServerService,
+    private readonly $toast: ToastService
   ) {}
 
   /**
@@ -84,41 +82,45 @@ export class FileApiService {
    * @param {Request} request
    */
   async uploadWithCfImages(request: Request) {
-    let body: FormFieldValues | null = null;
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
 
     this.$server.readValidateMethod(request, "POST", request.url);
 
-    try {
-      const MAX_FILE_SIZE = 5_000_000; // 5MB
-      const uploadHandler = createMemoryUploadHandler({
-        maxPartSize: MAX_FILE_SIZE,
-      });
+    const defaultToastOpts = {
+      title: "error",
+      description: "failed to follow the user. Please try again later.",
+      type: "error" as const,
+    };
 
-      const formData = await parseMultipartFormData(request, uploadHandler);
+    const redirectUrl = searchParams.get("redirectUrl") || PAGE_ENDPOINTS.ROOT;
 
-      body = await schema.parseAsync({
-        file: formData.get("file"),
-        uploadType: formData.get("uploadType"),
-        mediaType: formData.get("mediaType"),
-      });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return {
-          data: {
-            ...this._getDefaultValues(),
-            errors: error.errors.map((e) => {
-              const { message } = e;
-              return { code: -1, message };
-            }),
-          },
-          status: 400,
-        };
-      }
-      return {
-        data: this._getDefaultValues(),
-        status: 500,
-      };
+    const MAX_FILE_SIZE = 5_000_000; // 5MB
+    const uploadHandler = createMemoryUploadHandler({
+      maxPartSize: MAX_FILE_SIZE,
+    });
+
+    const formData = await parseMultipartFormData(request, uploadHandler);
+
+    const validate = await schema.safeParseAsync({
+      file: formData.get("file"),
+      uploadType: formData.get("uploadType"),
+      mediaType: formData.get("mediaType"),
+    });
+    if (!validate.success) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl.toString(),
+        {
+          ...defaultToastOpts,
+          description:
+            Object.values(validate.error ?? {})?.at(0) ??
+            "An error occurred while signing in. Please try again later.",
+        },
+        this.$toast.createToastHeaders
+      );
     }
+
+    const body = validate.data;
 
     let directUploadResp: FetchRespSchema.CfDirectUploadResp | null = null;
     try {
@@ -126,25 +128,29 @@ export class FileApiService {
         cfAccountId: this.env.CF_ID,
         cfApiToken: this.env.CF_API_TOKEN,
       });
-      if (!directUploadResp) {
-        return {
-          data: this._getDefaultValues(),
-          status: 400,
-        };
-      }
     } catch (error) {
-      if (error instanceof FetchError) {
-        const $response = error.response;
-        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
-        return {
-          data,
-          status: $response.status,
-        };
+      const error_fetch = await this.$server.readCfFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl.toString(),
+          {
+            ...defaultToastOpts,
+            description: "cloudflare direct upload error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
-      return {
-        data: this._getDefaultValues(),
-        status: 500,
-      };
+    }
+
+    if (!directUploadResp) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl.toString(),
+        {
+          ...defaultToastOpts,
+          description: "cloudflare direct upload error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
 
     let uploaded: FetchRespSchema.CfUploadResp | null = null;
@@ -153,25 +159,29 @@ export class FileApiService {
         uploadUrl: directUploadResp.result.uploadURL,
         formFields: body,
       });
-      if (!uploaded) {
-        return {
-          data: this._getDefaultValues(),
-          status: 400,
-        };
-      }
     } catch (error) {
-      if (error instanceof FetchError) {
-        const $response = error.response;
-        const data = await $response.json<FetchRespSchema.CfCommonResp<null>>();
-        return {
-          data,
-          status: $response.status,
-        };
+      const error_fetch = await this.$server.readCfFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl.toString(),
+          {
+            ...defaultToastOpts,
+            description: "cloudflare upload error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
-      return {
-        data: this._getDefaultValues(),
-        status: 500,
-      };
+    }
+
+    if (!uploaded) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl.toString(),
+        {
+          ...defaultToastOpts,
+          description: "cloudflare upload error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
 
     try {
@@ -190,46 +200,22 @@ export class FileApiService {
       );
       const result =
         await this.$server.toJSON<FetchRespSchema.FileResp>(response);
-      if (result.resultCode !== RESULT_CODE.OK) {
-        return {
-          data: this._getDefaultValues(),
-          status: 400,
-        };
-      }
-      return {
-        data: {
-          ...this._getDefaultValues(),
-          success: true,
-          result: result.result,
-        },
-        status: 200,
-      };
+      return result.result;
     } catch (error) {
-      if (error instanceof FetchError) {
-        const $response = error.response;
-        const data = await $response.json();
-        return {
-          data: {
-            ...this._getDefaultValues(),
-            result: data,
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl,
+          {
+            ...defaultToastOpts,
+            description:
+              Object.values(error_fetch.error ?? {})?.at(0) ??
+              "An error occurred while signing in. Please try again later.",
           },
-          status: $response.status,
-        };
+          this.$toast.createToastHeaders
+        );
       }
-      return {
-        data: this._getDefaultValues(),
-        status: 500,
-      };
     }
-  }
-
-  private _getDefaultValues() {
-    return {
-      result: null,
-      success: false,
-      errors: [],
-      messages: [],
-    };
   }
 
   /**

@@ -328,7 +328,7 @@ declare namespace FetchRespSchema {
   }>;
 
   export type FileResp = {
-    id: number;
+    id: string;
     publicUrl: string;
   };
 }

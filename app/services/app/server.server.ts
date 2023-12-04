@@ -215,6 +215,37 @@ export class ServerService {
     return null;
   }
 
+  async readCfFetchError<Data = any>(
+    error: unknown
+  ): Promise<ResponseJSON<FetchRespSchema.CfCommonResp<Data>> | null> {
+    if (error instanceof FetchError) {
+      const $response = error.response;
+      const data = await $response.json<FetchRespSchema.CfCommonResp>();
+      const checkStatusCode = $response.status >= 400 && $response.status < 500;
+
+      if (checkStatusCode) {
+        return {
+          ok: false,
+          code: $response.status,
+          error: {
+            common: data.errors.at(0)?.message || "An unknown error occurred.",
+          },
+          data,
+        };
+      } else {
+        return {
+          ok: false,
+          code: $response.status,
+          error: {
+            common: "An unknown error occurred.",
+          },
+          data: null,
+        };
+      }
+    }
+    return null;
+  }
+
   /**
    * @version 2023-08-17
    * @description 요청
