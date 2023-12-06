@@ -4,18 +4,27 @@ import { UserBlockTags } from "~/components/users/future/UserBlockTags";
 import { UserFooter } from "~/components/users/future/UserFooter";
 import { UserRecentActivity } from "~/components/users/future/UserRecentActivity";
 import { UsersHeader } from "~/components/users/future/UsersHeader";
-// import { json } from "@remix-run/cloudflare";
+import { defer } from "@remix-run/cloudflare";
 
 // types
-// import type { LoaderArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-// export const loader = async ({ context, request, params }: LoaderArgs) => {
-//   const response = await context.api.user.usernameByUser(params, request);
-//   if (response instanceof Response) throw response;
-//   return json(response);
-// };
+export const loader = async ({
+  context,
+  request,
+  params,
+}: LoaderFunctionArgs) => {
+  const data = await context.api.user.getByUser({ id: params.userId }, request);
+  return defer({
+    ...data,
+    historiesPromise: context.api.user.getByUserHistories(
+      { id: params.userId },
+      request
+    ),
+  });
+};
 
-// export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export default function Routes() {
   return (

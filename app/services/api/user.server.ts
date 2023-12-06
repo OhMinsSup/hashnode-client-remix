@@ -9,6 +9,7 @@ import { deleteUserApi as $deleteUserApi } from "~/services/fetch/users/delete-a
 import { putUserApi as $putUserApi } from "~/services/fetch/users/put-api.server";
 import { getUserApi as $getUserApi } from "~/services/fetch/users/get-api.server";
 import { getUsersApi as $getUsersApi } from "~/services/fetch/users/gets-api.server";
+import { getUserHistoriesApi as $getUserHistoriesApi } from "~/services/fetch/users/get-histories.server";
 import { getOwnerPostDetailApi as $getOwnerPostDetailApi } from "~/services/fetch/users/get-owner-post-api.server";
 import { postUserFollowApi as $postUserFollowApi } from "~/services/fetch/users/user-follow-api.server";
 
@@ -22,13 +23,15 @@ import {
 } from "~/services/validate/user-follow-api.validate";
 import { FetchService } from "~/services/fetch/fetch.api";
 
-import { schema as $getSchema } from "~/services/validate/user-get-api.validate";
+import {
+  schema as $getSchema,
+  type FormFieldValues as GetFormFieldValues,
+} from "~/services/validate/user-get-api.validate";
 
 // types
 import type { ToastService } from "../app/toast.server";
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
-import type { Params } from "@remix-run/react";
 
 export class UserApiService {
   constructor(
@@ -75,12 +78,26 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 상세 정보 API
-   * @param {Params} params
+   * @param {Partial<GetFormFieldValues>} params
    * @param {Request} request
    */
-  async get(params: Params, request: Request) {
+  async get(params: Partial<GetFormFieldValues>, request: Request) {
     const input = await $getSchema.parseAsync(params);
-    return $getUserApi(input.username, {
+    return $getUserApi(input.id, {
+      request,
+    });
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 히스토리 정보 API
+   * @param {Partial<GetFormFieldValues>} params
+   * @param {Request} request
+   */
+  async getHistories(params: Partial<GetFormFieldValues>, request: Request) {
+    const input = await $getSchema.parseAsync(params);
+    console.log(input);
+    return $getUserHistoriesApi(input.id, {
       request,
     });
   }
@@ -137,20 +154,87 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 상세
-   * @param {Params} params
+   * @param {GetFormFieldValues} params
    * @param {Request} request
    */
-  async usernameByUser(params: Params, request: Request) {
+  async getByUserHistories(
+    params: Partial<GetFormFieldValues>,
+    request: Request
+  ) {
+    try {
+      const response = await this.getHistories(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.UserHistoryResp[]>(response);
+      console.log(json);
+      return json.result ?? [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 유저 상세
+   * @param {GetFormFieldValues} params
+   * @param {Request} request
+   */
+  async getByUser(params: Partial<GetFormFieldValues>, request: Request) {
     try {
       const response = await this.get(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.UserResponse>(response);
-      if (json.resultCode !== RESULT_CODE.OK) {
-        return new Response("Not Found", { status: 404 });
+
+      const data = json.result;
+      if (!data) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          {
+            title: "error",
+            description: "user not found. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
       }
-      return json.result;
+
+      return data;
     } catch (error) {
-      return new Response("Not Found", { status: 404 });
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          {
+            title: "error",
+            description: "user id is not valid. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          {
+            title: "error",
+            description: "user not found. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders
+        );
+      }
+
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.ROOT),
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 

@@ -52,6 +52,7 @@ export default function MainMenuUserProfileMenu({
                 <div className={styles.thumbnail_container}>
                   <img
                     loading="lazy"
+                    className="rounded-full"
                     src={
                       session?.userImage?.avatarUrl ?? ASSET_URL.DEFAULT_AVATAR
                     }

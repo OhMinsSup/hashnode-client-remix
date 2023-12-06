@@ -12,7 +12,8 @@ export const API_ENDPOINTS = {
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
     USER_FOLLOW: "users/follow",
-    USERNAME: (username: string) => `users/${username}`,
+    ID: (userId: string) => `users/${userId}`,
+    HISTORTIES: (userId: string) => `users/${userId}/histories`,
     USERNAME_POSTS: (username: string) => `users/${username}/posts`,
     TRENDING_USERS: "users/treanding",
     OWNER_POSTS: {
@@ -130,7 +131,8 @@ export const PAGE_ENDPOINTS = {
   },
   USERS: {
     ROOT: "/users",
-    ID: (id: string) => `/blog/${id}`,
+    ID: (id: string) => `/@${id}`,
+    FOLLOWING: (id: string) => `/@${id}/following`,
   },
   WRITE: {
     ROOT: "/write",

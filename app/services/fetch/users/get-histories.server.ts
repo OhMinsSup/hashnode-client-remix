@@ -10,7 +10,7 @@ import type { ApiOptions } from "~/services/fetch/fetch.type";
  * @param {string} userId
  * @param {ApiOptions?} options
  */
-export function getUserApi(userId: string, options?: ApiOptions) {
+export function getUserHistoriesApi(userId: string, options?: ApiOptions) {
   return FetchService.get(getPath(userId), options);
 }
 
@@ -19,5 +19,5 @@ export function getUserApi(userId: string, options?: ApiOptions) {
  * @description 유저정보 API Path
  */
 export const getPath = (userId: string) => {
-  return FetchService.defineApis.USERS.ID(userId);
+  return FetchService.defineApis.USERS.HISTORTIES(userId);
 };

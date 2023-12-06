@@ -1,24 +1,24 @@
-import React, { useEffect, useMemo } from "react";
+// import React, { useEffect, useMemo } from "react";
 import styles from "./styles.module.css";
-import { useFetcher } from "@remix-run/react";
+// import { useFetcher } from "@remix-run/react";
 import { Link } from "lucide-react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.]json";
+// import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.]json";
 
-import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.]json";
+// import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.]json";
 
 export default function AsideBookmark() {
-  const fetcher = useFetcher<Loader>();
+  // const fetcher = useFetcher<Loader>();
 
-  const items = useMemo(() => {
-    return fetcher.data?.list ?? [];
-  }, [fetcher]);
+  // const items = useMemo(() => {
+  //   return fetcher.data?.list ?? [];
+  // }, [fetcher]);
 
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data == null) {
-      fetcher.load(getPath({ limit: 2 }));
-    }
-  }, [fetcher]);
+  // useEffect(() => {
+  //   if (fetcher.state === "idle" && fetcher.data == null) {
+  //     fetcher.load(getPath({ limit: 2 }));
+  //   }
+  // }, [fetcher]);
 
   return (
     <div className={styles.root}>
@@ -27,7 +27,7 @@ export default function AsideBookmark() {
       </div>
       <div>
         <div className="flex flex-col gap-5 mb-1.5">
-          {items.map((item) => {
+          {/* {items.map((item) => {
             return (
               <div className="flex flex-col gap-1" key={`bookmarks-${item.id}`}>
                 <h2
@@ -54,7 +54,7 @@ export default function AsideBookmark() {
                 </div>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
       <div className="">
