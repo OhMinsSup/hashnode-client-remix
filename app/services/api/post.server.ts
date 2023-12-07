@@ -1,6 +1,6 @@
 import Json from "superjson";
 
-import { RESULT_CODE } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { getPostsApi as $getPostsApi } from "~/services/fetch/posts/gets-api.server";
 import { getLikePostsApi as $getLikePostsApi } from "~/services/fetch/posts/gets-like-api.server";
 import { getTopPostsApi as $getTopPostsApi } from "~/services/fetch/posts/gets-top-api.server";
@@ -20,11 +20,15 @@ import { parseUrlParams } from "~/utils/util";
 import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
+import type { ToastService } from "~/services/app/toast.server";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { redirect } from "@remix-run/cloudflare";
 
 export class PostApiService {
   constructor(
     private readonly env: Env,
-    private readonly $server: ServerService
+    private readonly $server: ServerService,
+    private readonly $toast: ToastService
   ) {}
 
   /**
@@ -65,7 +69,7 @@ export class PostApiService {
    * @param {FetchQuerySchema.Pagination} query
    * @param {Request} request
    */
-  async draftList(query: FetchQuerySchema.Pagination, request: Request) {
+  async getDraftList(query: FetchQuerySchema.Pagination, request: Request) {
     return await $getDraftPostsApi(query, {
       request,
     });
@@ -115,11 +119,27 @@ export class PostApiService {
     });
   }
 
+  async createWithDrfatList(request: Request) {
+    const { list } = await this.getPostsByDraftList(request);
+    const item = list.at(0);
+    if (item) {
+      throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(item.id)));
+    }
+    const { dataId } = await this.createDraft(request);
+    throw redirect(PAGE_ENDPOINTS.WRITE.ID(dataId));
+  }
+
   /**
    * @description 초안 게시물 작성하기
    * @param {Request} request
    */
   async createDraft(request: Request) {
+    const defaultToastOpts = {
+      title: "error",
+      description: "failed to follow the draft post. Please try again later.",
+      type: "error" as const,
+    };
+
     try {
       const response = await this.create(
         { title: "Untitled", isDraft: true },
@@ -128,21 +148,36 @@ export class PostApiService {
       const result =
         await this.$server.toJSON<FetchRespSchema.DataIDResp>(response);
       if (result.resultCode !== RESULT_CODE.OK) {
-        return null;
+        const error = new Error();
+        error.name = "CreateDraftError";
+        error.message = defaultToastOpts.description;
+        throw error;
       }
       return result.result;
     } catch (error) {
-      const error_body = this.$server.readBodyError(error);
-      if (error_body) {
-        return error_body;
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        return error_fetch;
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
       }
 
-      return null;
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.ROOT),
+        defaultToastOpts,
+        this.$toast.createToastHeaders
+      );
     }
   }
 
@@ -256,7 +291,7 @@ export class PostApiService {
   async getPostsByDraftList(request: Request) {
     try {
       const params = parseUrlParams(request.url);
-      const response = await this.draftList(params, request);
+      const response = await this.getDraftList(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {

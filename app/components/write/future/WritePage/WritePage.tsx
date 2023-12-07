@@ -6,8 +6,10 @@ import { WriteRightHeader } from "~/components/write/future/WriteRightHeader";
 import { WritePublishDrawer } from "~/components/write/future/WritePublishDrawer";
 import { WriteFormProvider } from "~/components/write/context/form";
 
+import type { SerializeFrom } from "@remix-run/cloudflare";
+
 interface WritePageProps {
-  initialValues?: FetchRespSchema.PostDetailResp;
+  initialValues?: SerializeFrom<FetchRespSchema.PostDetailResp>;
 }
 
 export default function WritePage({ initialValues }: WritePageProps) {

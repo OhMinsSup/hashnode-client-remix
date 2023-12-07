@@ -101,7 +101,7 @@ declare namespace FetchSchema {
     mediaType: MediaType;
     createdAt: string;
     updatedAt: string;
-    user?: Pick<User, "id" | "username">;
+    user: any;
   };
 
   export type PostCount = {
@@ -166,6 +166,7 @@ declare namespace SerializeSchema {
   export type SerializeTagCount = {
     postCount: number;
     isFollow: boolean;
+    followCount: number;
   } & Pick<FetchSchema.Tag, "id" | "name">;
 
   export type SerializeTagCountList = SerializeTagCount[];
@@ -193,6 +194,40 @@ declare namespace SerializeSchema {
     };
     dateAddedAt: Date;
     createdAt: Date;
+  };
+
+  export type SerializePostImage = {
+    id: string;
+    publicUrl: string;
+  };
+
+  export type SerializePostSeo = {
+    title: string;
+    description: string;
+    file: SerializePostImage;
+  };
+
+  export type SerializePostTag = {
+    id: number;
+    name: string;
+  };
+
+  export type SerializePostTags = SerializePostTag[];
+
+  export type SerializePost = {
+    id: string;
+    title: string;
+    subtitle: string;
+    content: string;
+    disabledComment: boolean;
+    publishingDate: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    user: SerializeUser;
+    postImage: SerializePostImage;
+    postTags: SerializePostTags;
+    postSeo: SerializePostSeo;
+    likeCount: number;
   };
 }
 
@@ -251,21 +286,13 @@ declare namespace FetchRespSchema {
 
   export type TagListResp = ListResp<SerializeSchema.SerializeTagCount>;
 
-  export interface TagDetailResp {
-    id: number;
-    name: string;
-    postCount: number;
-    followCount: number;
-    isFollowing: boolean;
-  }
+  export type TagDetailResp = SerializeSchema.SerializeTagCount;
 
   export type TagFollowResp = SerializeSchema.SerializeDataIDTypeWithCount;
 
   export type UserFollowResp = SerializeSchema.SerializeDataIDWithType;
 
-  export type PostDetailResp = FetchSchema.Post & {
-    count: FetchSchema.PostCount;
-  };
+  export type PostDetailResp = SerializeSchema.SerializePost;
 
   export type PostLikeResp = PostDetailResp & {
     cursorId: number;
@@ -285,22 +312,6 @@ declare namespace FetchRespSchema {
 
   export interface GetTopPostsResp {
     posts: PostDetailResp[];
-  }
-
-  export interface GetAritcleCircleResp {
-    id: number;
-    username: string;
-    email: string;
-    profile: Pick<
-      FetchSchema.UserProfile,
-      "name" | "bio" | "avatarUrl" | "tagline"
-    >;
-    count: FetchSchema.PostCount;
-    lastPost: Pick<FetchSchema.Post, "id" | "title" | "createdAt">;
-  }
-
-  export interface GetAritcleCirclesRespSchema {
-    circles: GetAritcleCircleResp[];
   }
 
   export interface GetWidgetBookmarkRespSchema {

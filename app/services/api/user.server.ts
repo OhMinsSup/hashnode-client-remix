@@ -27,6 +27,7 @@ import {
   schema as $getSchema,
   type FormFieldValues as GetFormFieldValues,
 } from "~/services/validate/user-get-api.validate";
+import { schema as $idSchema } from "~/services/validate/id.validate";
 
 // types
 import type { ToastService } from "../app/toast.server";
@@ -96,7 +97,6 @@ export class UserApiService {
    */
   async getHistories(params: Partial<GetFormFieldValues>, request: Request) {
     const input = await $getSchema.parseAsync(params);
-    console.log(input);
     return $getUserHistoriesApi(input.id, {
       request,
     });
@@ -136,18 +136,60 @@ export class UserApiService {
     id?: string | number | null
   ) {
     try {
-      if (!id || isNaN(Number(id))) {
-        return new Response("Not Found", { status: 404 });
-      }
-      const response = await this.getOwnerPostDetail(id, request);
+      const input = await $idSchema.parseAsync({ id });
+      const response = await this.getOwnerPostDetail(input.id, request);
       const json =
         await FetchService.toJson<FetchRespSchema.PostDetailResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
-        return new Response("Not Found", { status: 404 });
+        const error = new Error();
+        error.name = "PostDetailError";
+        error.message = "post not found. Please try again later.";
+        throw error;
       }
       return json.result;
     } catch (error) {
-      return new Response("Not Found", { status: 404 });
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          {
+            title: "error",
+            description: "post id is not valid. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders,
+          {
+            status: 404,
+          }
+        );
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          {
+            title: "error",
+            description: "post not found. Please try again later.",
+            type: "error",
+          },
+          this.$toast.createToastHeaders,
+          {
+            status: 404,
+          }
+        );
+      }
+
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.ROOT),
+        {
+          title: "error",
+          description:
+            "An error occurred while signing in. Please try again later.",
+          type: "error",
+        },
+        this.$toast.createToastHeaders
+      );
     }
   }
 

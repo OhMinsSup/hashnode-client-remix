@@ -11,19 +11,20 @@ export const loader = async ({
   context,
   request,
 }: LoaderFunctionArgs) => {
-  const response = await context.api.user.getOwnerPostDetailByUser(
+  const post = await context.api.user.getOwnerPostDetailByUser(
     request,
     params.postId
   );
-  if (response instanceof Response) throw response;
-  return json(response);
+  return json({
+    post,
+  });
 };
 
 export type RoutesData = typeof loader;
 
 export default function Routes() {
   const data = useLoaderData<RoutesData>();
-  return <WritePage initialValues={data} />;
+  return <WritePage initialValues={data.post} />;
 }
 
 export function ErrorBoundary() {

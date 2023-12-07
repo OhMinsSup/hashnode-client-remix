@@ -6,7 +6,7 @@ export const schema = z.object({
   content: z.string().optional().nullable(),
   thumbnail: z
     .object({
-      id: z.number().optional().nullable(),
+      id: z.string().optional().nullable(),
       url: z.string().url().optional().nullable(),
     })
     .optional()
@@ -14,24 +14,15 @@ export const schema = z.object({
   disabledComment: z.boolean().optional(),
   tableOfContents: z.boolean().optional(),
   publishingDate: z.date().optional().nullable(),
-  tags: z
-    .array(
-      z.object({
-        id: z.number().optional().nullable(),
-        name: z.string(),
-        selected: z.boolean(),
-        postsCount: z.number().optional().nullable(),
-        createdAt: z.number().optional().nullable(),
-        updatedAt: z.number().optional().nullable(),
-      })
-    )
-    .nullable()
-    .optional(),
+  tags: z.array(z.string().min(1)).nullable().optional(),
   seo: z
     .object({
       title: z.string().max(70).optional().nullable(),
       desc: z.string().max(156).optional().nullable(),
-      image: z.string().optional().nullable(),
+      image: z.object({
+        id: z.string().optional().nullable(),
+        url: z.string().optional().nullable(),
+      }),
     })
     .optional()
     .nullable(),

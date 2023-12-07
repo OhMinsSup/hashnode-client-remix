@@ -5,22 +5,25 @@ import {
   type FormFieldValues,
 } from "~/services/validate/post-create-api.validate";
 
+import type { SerializeFrom } from "@remix-run/cloudflare";
+
 interface Props {
-  initialValues?: FetchRespSchema.PostDetailResp;
+  initialValues?: SerializeFrom<FetchRespSchema.PostDetailResp>;
   children: React.ReactNode;
 }
 
 export function WriteFormProvider({ children, initialValues }: Props) {
+  console.log(initialValues);
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: initialValues?.title ?? undefined,
-      subTitle: initialValues?.subTitle ?? undefined,
+      subTitle: initialValues?.subtitle ?? undefined,
       content: initialValues?.content ?? undefined,
-      thumbnail: initialValues?.thumbnail
+      thumbnail: initialValues?.postImage
         ? {
-            id: null,
-            url: initialValues?.thumbnail,
+            id: initialValues?.postImage.id ?? null,
+            url: initialValues?.postImage.publicUrl ?? null,
           }
         : undefined,
       tags: undefined,
@@ -30,9 +33,14 @@ export function WriteFormProvider({ children, initialValues }: Props) {
         ? new Date(initialValues?.publishingDate)
         : undefined,
       seo: {
-        title: initialValues?.seo?.title ?? undefined,
-        desc: initialValues?.seo?.desc ?? undefined,
-        image: initialValues?.seo?.image,
+        title: initialValues?.postSeo?.title ?? undefined,
+        desc: initialValues?.postSeo?.description ?? undefined,
+        image: initialValues?.postSeo?.file
+          ? {
+              id: initialValues?.postSeo?.file.id ?? null,
+              url: initialValues?.postSeo?.file.publicUrl ?? null,
+            }
+          : undefined,
       },
     },
     reValidateMode: "onSubmit",
