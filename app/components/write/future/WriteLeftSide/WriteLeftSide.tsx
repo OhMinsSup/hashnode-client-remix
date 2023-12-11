@@ -1,26 +1,31 @@
 import React, { useCallback } from "react";
 import styles from "./styles.module.css";
-import { Link, Form } from "@remix-run/react";
+import { Link, useSubmit } from "@remix-run/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { useSession } from "~/services/hooks/useSession";
 import { useWriteContext } from "~/context/useWriteContext";
 import { MyDraftList } from "../MyDraftList";
 import { PublishedList } from "../PublishedList";
-import { DeletedList } from "../DeletedList";
+import * as Separator from "@radix-ui/react-separator";
 
 export default function WriteLeftSide() {
   return (
     <>
       <WriteLeftSide.Title />
       <WriteLeftSide.Search />
+      <WriteLeftSide.NewDraft />
+      <div className="px-4">
+        <Separator.Root className="w-full border-b" />
+      </div>
       <WriteLeftSide.List />
+      <hr className={styles.left_side_divider} />
       <WriteLeftSide.Footer />
     </>
   );
 }
 
-WriteLeftSide.Title = function Title() {
+WriteLeftSide.Title = function Item() {
   const { setSideClose } = useWriteContext();
   const session = useSession();
 
@@ -30,25 +35,12 @@ WriteLeftSide.Title = function Title() {
 
   return (
     <div className={styles.title}>
-      <div className="css-0">
-        <Link to={PAGE_ENDPOINTS.ROOT} className={styles.btn_back_title}>
-          <svg fill="none" viewBox="0 0 8 12">
-            <path
-              d="m6.667 1-5 5 5 5"
-              stroke="stroke-current"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
-        </Link>
-      </div>
       <div className="flex-1">
-        <div className={styles.title_info_area}>
+        <div className="grid items-center justify-center text-center h-full gap-2 w-full grid-cols-12">
           <div className="col-span-2">
-            <div className="relative h-8 w-full">
+            <div className="relative w-full h-8">
               <img
-                alt={`${session.username} team blog`}
+                alt={`${session.userProfile.username} team blog`}
                 src={ASSET_URL.WRITE_TEAM_LOGO}
                 decoding="async"
                 data-nimg="fill"
@@ -57,30 +49,129 @@ WriteLeftSide.Title = function Title() {
               />
             </div>
           </div>
-          <div className="col-span-8 text-ellipsis overflow-hidden whitespace-nowrap text-left">
-            <span className="text-ellipsis overflow-hidden whitespace-nowrap block">
-              {session.username} team blog
+          <div className=" col-span-10 truncate text-left">
+            <span className="truncate block font-bold">
+              {session.userProfile.username} team blog
             </span>
           </div>
         </div>
       </div>
-      <div className="ml-2">
-        <button
-          type="button"
-          className={styles.btn_close}
-          onClick={onClickClose}
-        >
-          <svg viewBox="0 0 320 512">
-            <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
+      <button
+        type="button"
+        className={styles.btn_sidebar}
+        onClick={onClickClose}
+      >
+        <div className="hidden w-5 h-5 sm:block">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="mask0_4792_34456"
+              maskUnits="userSpaceOnUse"
+              x="1"
+              y="1"
+              width="18"
+              height="18"
+              style={{ maskType: "alpha" }}
+            >
+              <rect
+                x="1.875"
+                y="1.875"
+                width="16.25"
+                height="16.25"
+                rx="3.12"
+                fill="#D9D9D9"
+              ></rect>
+            </mask>
+            <g mask="url(#mask0_4792_34456)">
+              <path
+                d="M2.5 15V5C2.5 3.61929 3.61929 2.5 5 2.5H7.91667H15C16.3807 2.5 17.5 3.61929 17.5 5V15C17.5 16.3807 16.3807 17.5 15 17.5H5C3.61929 17.5 2.5 16.3807 2.5 15Z"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M14.9974 9.9974H10.4141M10.4141 9.9974L12.4974 12.0807M10.4141 9.9974L12.4974 7.91406"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M7.91406 2.5V17.5"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            </g>
           </svg>
-        </button>
-      </div>
+        </div>
+        <div className="sm:hidden">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="mask0_4792_34456"
+              maskUnits="userSpaceOnUse"
+              x="1"
+              y="1"
+              width="18"
+              height="18"
+              style={{ maskType: "alpha" }}
+            >
+              <rect
+                x="1.875"
+                y="1.875"
+                width="16.25"
+                height="16.25"
+                rx="3.12"
+                fill="#D9D9D9"
+              ></rect>
+            </mask>
+            <g mask="url(#mask0_4792_34456)">
+              <path
+                d="M2.5 15V5C2.5 3.61929 3.61929 2.5 5 2.5H7.91667H15C16.3807 2.5 17.5 3.61929 17.5 5V15C17.5 16.3807 16.3807 17.5 15 17.5H5C3.61929 17.5 2.5 16.3807 2.5 15Z"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M14.9974 9.9974H10.4141M10.4141 9.9974L12.4974 12.0807M10.4141 9.9974L12.4974 7.91406"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M7.91406 2.5V17.5"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            </g>
+          </svg>
+        </div>
+      </button>
     </div>
   );
 };
 
-WriteLeftSide.Search = function Search() {
+WriteLeftSide.Search = function Item() {
   const { leftSideKeyword, changeLeftSideKeyword } = useWriteContext();
+
+  const isSearching = leftSideKeyword && leftSideKeyword.length > 0;
 
   const onChangeKeyword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +181,7 @@ WriteLeftSide.Search = function Search() {
   );
 
   return (
-    <div className="relative z-30 p-4">
+    <div className="relative z-30 px-4 pb-4 flex items-center">
       <input
         placeholder="Search drafts…"
         type="text"
@@ -109,7 +200,7 @@ WriteLeftSide.Search = function Search() {
           ></path>
         </svg>
       </span>
-      {leftSideKeyword && leftSideKeyword.length > 0 ? (
+      {isSearching ? (
         <button
           type="button"
           className={styles.btn_search_close}
@@ -124,13 +215,53 @@ WriteLeftSide.Search = function Search() {
   );
 };
 
-WriteLeftSide.List = function List() {
+WriteLeftSide.NewDraft = function Item() {
+  const submit = useSubmit();
+  const { leftSideKeyword } = useWriteContext();
+
+  const isSearching = leftSideKeyword && leftSideKeyword.length > 0;
+
+  const onClick = useCallback(() => {
+    const isConfirm = confirm("Are you sure you want to create a new draft?");
+    if (!isConfirm) return;
+    submit(
+      {},
+      {
+        action: "/write",
+        method: "POST",
+        navigate: false,
+        encType: "application/x-www-form-urlencoded",
+      }
+    );
+  }, [submit]);
+
+  if (isSearching) return null;
+
+  return (
+    <div className="px-4 pb-4">
+      <button type="button" className={styles.btn_new_draft} onClick={onClick}>
+        <div className="col-span-1">
+          <div className="block">
+            <svg fill="none" viewBox="0 0 20 20" width="20" height="20">
+              <path
+                fill="currentColor"
+                d="M14.792 9.583a.625.625 0 1 0 1.25 0h-1.25Zm-3.959 8.542a.625.625 0 1 0 0-1.25v1.25Zm2.084-11.667a.625.625 0 0 0 0-1.25v1.25ZM6.25 5.208a.625.625 0 0 0 0 1.25v-1.25Zm5 4.584a.625.625 0 1 0 0-1.25v1.25Zm-5-1.25a.625.625 0 1 0 0 1.25v-1.25Zm8.542 8.958a.625.625 0 1 0 1.25 0h-1.25Zm1.25-5a.625.625 0 0 0-1.25 0h1.25Zm-3.125 1.875a.625.625 0 1 0 0 1.25v-1.25Zm5 1.25a.625.625 0 0 0 0-1.25v1.25ZM6.25 3.125h6.667v-1.25H6.25v1.25ZM14.792 5v4.583h1.25V5h-1.25Zm-3.959 11.875H6.25v1.25h4.583v-1.25ZM4.375 15V5h-1.25v10h1.25Zm1.875 1.875A1.875 1.875 0 0 1 4.375 15h-1.25c0 1.726 1.4 3.125 3.125 3.125v-1.25Zm6.667-13.75c1.035 0 1.875.84 1.875 1.875h1.25c0-1.726-1.4-3.125-3.125-3.125v1.25ZM6.25 1.875A3.125 3.125 0 0 0 3.125 5h1.25c0-1.036.84-1.875 1.875-1.875v-1.25Zm6.667 3.333H6.25v1.25h6.667v-1.25ZM11.25 8.542h-5v1.25h5v-1.25Zm4.792 8.958V15h-1.25v2.5h1.25Zm0-2.5v-2.5h-1.25V15h1.25Zm-3.125.625h2.5v-1.25h-2.5v1.25Zm2.5 0h2.5v-1.25h-2.5v1.25Z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div className={styles.btn_new_draft_text}>New draft</div>
+      </button>
+    </div>
+  );
+};
+
+WriteLeftSide.List = function Item() {
   return (
     <ScrollArea.Root className={styles.list}>
       <ScrollArea.Viewport className="h-full">
         <MyDraftList />
         <PublishedList />
-        <DeletedList />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
         className="flex select-none touch-none p-0.5 bg-transparent transition-colors ease-out data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
@@ -149,23 +280,23 @@ WriteLeftSide.List = function List() {
   );
 };
 
-WriteLeftSide.Footer = function Footer() {
+WriteLeftSide.Footer = function Item() {
   return (
     <div className={styles.footer}>
-      <Form replace method="POST">
-        <button type="submit" className={styles.btn_new_draft}>
-          <svg fill="none" viewBox="0 0 15 18">
+      <Link to={PAGE_ENDPOINTS.ROOT} className={styles.btn_back}>
+        <div className="flex mx-auto items-center gap-2">
+          <svg fill="none" viewBox="0 0 20 20" width="20" height="20">
             <path
-              d="M13.5 9.375V5.1c0-1.26 0-1.89-.245-2.371a2.25 2.25 0 0 0-.984-.984C11.791 1.5 11.162 1.5 9.9 1.5H5.1c-1.26 0-1.89 0-2.371.245a2.25 2.25 0 0 0-.984.984C1.5 3.209 1.5 3.839 1.5 5.1v7.8c0 1.26 0 1.89.245 2.371.216.424.56.768.984.984.48.245 1.11.245 2.37.245h2.776m4.125 0v-2.25m0 0V12m0 2.25H9.75m2.25 0h2.25m-3.75-9h-6m4.5 3H4.5"
-              stroke="stroke-current"
-              strokeWidth="1.25"
+              stroke="currentColor"
+              d="M16.667 10H3.333m0 0 5 5m-5-5 5-5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              strokeWidth="1.25"
             ></path>
           </svg>
-          <span>New draft</span>
-        </button>
-      </Form>
+          <span className="text-sm"> Back to Hashnode</span>
+        </div>
+      </Link>
     </div>
   );
 };

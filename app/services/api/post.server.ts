@@ -12,6 +12,7 @@ import { getDeletePostsApi as $getDeletePostsApi } from "~/services/fetch/posts/
 
 import { FetchService } from "~/services/fetch/fetch.api";
 import { schema as $createSchema } from "~/services/validate/post-create-api.validate";
+import { schema as $idSchema } from "~/services/validate/id.validate";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -119,14 +120,18 @@ export class PostApiService {
     });
   }
 
-  async createWithDrfatList(request: Request) {
+  async createDraftForRedirectOrWrite(request: Request) {
     const { list } = await this.getPostsByDraftList(request);
     const item = list.at(0);
     if (item) {
       throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(item.id)));
     }
+    await this.createDraftForRedirect(request);
+  }
+
+  async createDraftForRedirect(request: Request) {
     const { dataId } = await this.createDraft(request);
-    throw redirect(PAGE_ENDPOINTS.WRITE.ID(dataId));
+    throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(dataId)));
   }
 
   /**
@@ -186,17 +191,55 @@ export class PostApiService {
    * @param {string | number} id
    * @param {Request} request
    */
-  async deleteItem(id: string | number, request: Request) {
+  async deleteDraft(request: Request) {
+    const defaultToastOpts = {
+      title: "error",
+      description: "failed to delete the post. Please try again later.",
+      type: "error" as const,
+    };
+
+    const formData = await request.formData();
+    const body = {
+      id: formData.get("id")?.toString(),
+    };
+
     try {
-      const response = await this.delete(id, request);
+      const input = await $idSchema.parseAsync(body);
+      const response = await this.delete(input.id, request);
       const result = await this.$server.toJSON(response);
       if (result.resultCode !== RESULT_CODE.OK) {
-        return false;
+        const error = new Error();
+        error.name = "DeletePostError";
+        error.message = defaultToastOpts.description;
+        throw error;
       }
-      return true;
+      return result.result;
     } catch (error) {
-      console.log(error);
-      return false;
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.ROOT),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
+      }
+
+      const error_fetch = await this.$server.readFetchError(error);
+      if (error_fetch) {
+        throw await this.$server.redirectWithToast(
+          // @ts-ignore
+          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(body.id)),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
+      }
+
+      throw await this.$server.redirectWithToast(
+        // @ts-ignore
+        safeRedirect(PAGE_ENDPOINTS.WRITE.ID(body.id)),
+        defaultToastOpts,
+        this.$toast.createToastHeaders
+      );
     }
   }
 

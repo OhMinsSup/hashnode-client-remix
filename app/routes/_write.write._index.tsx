@@ -5,7 +5,7 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  await context.api.post.createWithDrfatList(request);
+  await context.api.post.createDraftForRedirectOrWrite(request);
 };
 
 export default function Routes() {

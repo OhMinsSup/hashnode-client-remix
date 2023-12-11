@@ -71,42 +71,12 @@ export type RoutesData = typeof loader;
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   switch (request.method) {
     case "POST": {
-      const data = await context.api.post.createDraft(request);
-      if (!data) {
-        throw new Response(JSON.stringify({ ok: false }), {
-          status: 400,
-        });
-      }
-      if ("errors" in data) {
-        throw new Response(JSON.stringify({ ok: false }), {
-          status: 400,
-        });
-      }
-      const dataId = data.dataId;
-      if (!dataId) {
-        throw new Response(JSON.stringify({ ok: false }), {
-          status: 400,
-        });
-      }
-      return redirect(PAGE_ENDPOINTS.WRITE.ID(dataId));
+      await context.api.post.createDraftForRedirect(request);
+      return null;
     }
     case "DELETE": {
-      const formData = await request.formData();
-      const id = formData.get("id")?.toString();
-      if (!id) {
-        throw new Response(JSON.stringify({ ok: false }), {
-          status: 400,
-        });
-      }
-      const ok = await context.api.post.deleteItem(id, request);
-      return {
-        ok,
-      };
-    }
-    case "PUT": {
-      return {
-        ok: true,
-      };
+      await context.api.post.deleteDraft(request);
+      return null;
     }
     default: {
       throw new Response("Method Not Allowed", {
