@@ -2,17 +2,16 @@ import React, { useCallback, useRef } from "react";
 import styles from "./styles.module.css";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import { useFetcher } from "@remix-run/react";
-import {
-  type Action as UploadAction,
-  getPath as getUploadPath,
-} from "~/routes/_action._protected.action.upload";
+import { getPath as getUploadPath } from "~/routes/_action._protected.action.upload";
 import { useWriteFormContext } from "../../context/form";
 import { isEmpty } from "~/utils/assertion";
 import { useDrop } from "~/libs/hooks/useDrop";
 import { cn } from "~/utils/util";
 
+import type { Action } from "~/routes/_action._protected.action.upload";
+
 export default function DrawerSeoImage() {
-  const fetcher = useFetcher<UploadAction>();
+  const fetcher = useFetcher<Action>();
 
   const { setValue } = useWriteFormContext();
 
@@ -24,7 +23,7 @@ export default function DrawerSeoImage() {
       formData.append("mediaType", "IMAGE");
       fetcher.submit(formData, {
         method: "POST",
-        action: getUploadPath(),
+        action: getUploadPath(location.pathname),
         encType: "multipart/form-data",
       });
     },
@@ -36,11 +35,14 @@ export default function DrawerSeoImage() {
       {},
       {
         method: "POST",
-        action: getUploadPath(),
+        action: getUploadPath(location.pathname),
         encType: "multipart/form-data",
       }
     );
-    setValue("seo.image", undefined);
+    setValue("seo.image", {
+      id: undefined,
+      url: undefined,
+    });
   }, [fetcher, setValue]);
 
   return (
@@ -143,10 +145,21 @@ DrawerSeoImage.Upload = function Item({ onImageUpload }: UploadProps) {
   return (
     <AspectRatio.Root ratio={16 / 9}>
       <label className={styles.seo_image} ref={$container}>
-        <svg viewBox="0 0 512 512">
-          <path d="M122.6 155.1 240 51.63V368c0 8.844 7.156 16 16 16s16-7.156 16-16V51.63l117.4 104.3c3 2.77 6.8 4.07 10.6 4.07 4.406 0 8.812-1.812 11.97-5.375 5.875-6.594 5.25-16.72-1.344-22.58l-144-128a15.949 15.949 0 0 0-21.25 0l-144 128C94.78 137.9 94.16 148 100 154.6s16.1 7.2 22.6.5zM448 320H336c-8.836 0-16 7.162-16 16 0 8.836 7.164 16 16 16h112c17.67 0 32 14.33 32 32v64c0 17.67-14.33 32-32 32H64c-17.67 0-32-14.33-32-32v-64c0-17.67 14.33-32 32-32h112c8.8 0 16-7.2 16-16s-7.2-16-16-16H64c-35.35 0-64 28.65-64 64v64c0 35.35 28.65 64 64 64h384c35.35 0 64-28.65 64-64v-64c0-35.3-28.7-64-64-64zm-8 96c0-13.25-10.75-24-24-24s-24 10.75-24 24 10.75 24 24 24 24-10.7 24-24z"></path>
-        </svg>
-        <span>Upload Image</span>
+        <div className={styles.seo_image_alert}>
+          <svg fill="none" viewBox="0 0 24 24" width="24" height="24">
+            <path
+              stroke="currentColor"
+              d="M4 16.742A4.5 4.5 0 0 1 6.08 8.52a6.002 6.002 0 0 1 11.84 0A4.5 4.5 0 0 1 20 16.742M12 11v9m0-9 3 3m-3-3-3 3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+            ></path>
+          </svg>
+          <span className={styles.txt_01}>Click to upload image</span>
+          <span className={styles.txt_02}>
+            Recommended dimension: 1200 x 630 px
+          </span>
+        </div>
         <input
           name="ogImage"
           type="file"
@@ -164,7 +177,7 @@ DrawerSeoImage.Upload = function Item({ onImageUpload }: UploadProps) {
 DrawerSeoImage.Loading = function Item() {
   return (
     <AspectRatio.Root ratio={16 / 9}>
-      <div className={cn(styles.seo_image_loading, "absolute inset-0")}>
+      <div className={cn(styles.seo_image, "absolute inset-0")}>
         <svg className="animate-spin" viewBox="0 0 576 512">
           <path d="M288 16c0-8.836 7.2-16 16-16 141.4 0 256 114.6 256 256 0 46.6-12.5 90.4-34.3 128-4.4 7.7-14.2 10.3-21.8 5.9-7.7-4.5-10.3-14.2-5.9-21.9 19.1-32.9 30-71.2 30-112 0-123.7-100.3-224-224-224-8.8 0-16-7.16-16-16z"></path>
         </svg>
@@ -182,7 +195,7 @@ DrawerSeoImage.Success = function Item({ urls, onImageDelete }: SuccessProps) {
   const url = urls.at(0);
   return (
     <AspectRatio.Root ratio={16 / 9}>
-      <div className=" absolute inset-0">
+      <div className="absolute inset-0">
         <a
           href={url}
           target="_blank"
@@ -194,7 +207,7 @@ DrawerSeoImage.Success = function Item({ urls, onImageDelete }: SuccessProps) {
             src={url}
             alt="homepage illustrations"
             decoding="async"
-            className="rounded"
+            className="rounded w-full h-full object-cover"
           />
         </a>
         <button

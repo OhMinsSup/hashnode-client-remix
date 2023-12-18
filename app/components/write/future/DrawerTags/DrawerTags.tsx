@@ -1,219 +1,240 @@
-import React, { useCallback, useEffect, useState, useTransition } from "react";
+import React, {
+  useId,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
 import { useFetcher } from "@remix-run/react";
 
 import { isEmpty } from "~/utils/assertion";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useWriteFormContext } from "../../context/form";
+import { useSettingTagsContext } from "~/components/setting/context/setting-tag";
+import { getPath } from "~/routes/_loader._protected.loader.tags[.]json";
 
-import {
-  type Loader as TagsLoader,
-  getPath as getTagsPath,
-} from "~/routes/_loader._protected.loader.tags[.]json";
+import type { RoutesLoader } from "~/routes/_loader._protected.loader.tags[.]json";
+import { Icons } from "~/components/shared/Icons";
 
 export default function DrawerTags() {
-  const [input, setInput] = useState("");
-  const [visible, setVisible] = useState(false);
-  const [, startTransition] = useTransition();
+  // const navigation = useNavigation();
 
-  const fetcher = useFetcher<TagsLoader>();
-  const { setValue } = useWriteFormContext();
+  // const {
+  //   formState: { errors },
+  // } = useWriteFormContext();
 
-  const debounce = useDebounceFn(
-    (name: string) => {
-      if (fetcher.state === "idle") {
-        fetcher.load(
-          getTagsPath({
-            name,
-          })
-        );
-        return;
-      }
-    },
-    {
-      wait: 500,
-    }
-  );
-
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(e.target.value);
-
-      startTransition(() => {
-        debounce.run(e.target.value);
-      });
-    },
-    [debounce, setValue]
-  );
-
-  const onCloseDropdown = useCallback(() => {
-    setVisible(false);
-  }, []);
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data && !isEmpty(fetcher.data)) {
-      const _tags: any[] = [];
-      const _list = fetcher.data.list ?? [];
-      if (!isEmpty(_list)) {
-        _tags.push(
-          ..._list.map((item) => {
-            return {
-              id: item.id,
-              name: item.name,
-              postsCount: item.postsCount,
-              selected: false,
-              createdAt: item.createdAt,
-              updatedAt: item.updatedAt,
-            };
-          })
-        );
-      }
-
-      if (input) {
-        const exstis = _list.find((item) => item.name.trim() === input.trim());
-        if (!exstis) {
-          _tags.push({
-            id: _list.length + 1,
-            name: input,
-            postsCount: 0,
-            selected: true,
-            createdAt: new Date().getTime(),
-            updatedAt: new Date().getTime(),
-          });
-        }
-        setValue("tags", _tags);
-        setVisible(true);
-      } else {
-        setValue("tags", []);
-        setVisible(false);
-      }
-    }
-  }, [fetcher]);
+  // const isSubmitting = useMemo(
+  //   () => navigation.state === "submitting",
+  //   [navigation.state]
+  // );
 
   return (
     <div className="relative">
       <div className="relative mb-2">
-        <input
-          type="text"
-          id="dropdown-input"
-          value={input}
-          autoComplete="off"
-          data-toggle="dropdown"
-          placeholder="Start typing to search…"
-          className={styles.ipt_tag}
-          onChange={onChange}
-        />
-        {visible && <DrawerTags.Dropdown onClose={onCloseDropdown} />}
+        <DrawerTags.Input popover={<DrawerTags.Popover />} />
       </div>
-      <DrawerTags.Cateogries />
+      <DrawerTags.Tags />
     </div>
   );
 }
 
-interface DropdownProps {
-  onClose: () => void;
+interface InputProps {
+  popover?: React.ReactNode;
 }
 
-DrawerTags.Dropdown = function Item({ onClose }: DropdownProps) {
-  const { watch } = useWriteFormContext();
-
-  const tags = watch("tags") ?? [];
-
-  return (
-    <div className={cn(styles.tags_dropdown)}>
-      {tags.map((item) => (
-        <DrawerTags.DropdownItem
-          key={`drawer-tags-dropdown-item-${item.id}`}
-          item={item}
-          onClose={onClose}
-        />
-      ))}
-    </div>
-  );
-};
-
-interface DropdownItemProps extends DropdownProps {
-  item: Partial<{
-    id: number | null;
-    postsCount: number | null;
-    createdAt: number | null;
-    updatedAt: number | null;
-  }> & {
-    name: string;
-  };
-}
-
-DrawerTags.DropdownItem = function Item({ item, onClose }: DropdownItemProps) {
-  const { getValues, setValue } = useWriteFormContext();
+DrawerTags.Input = function Item({ popover }: InputProps) {
+  const [input, setInput] = useState("");
   const [, startTransition] = useTransition();
+  const { inputValue, changeInput, reset, taskQueue } = useSettingTagsContext();
 
-  const onSelectTag = useCallback(() => {
-    const _currentTags = getValues("tags") ?? [];
-    const _index = _currentTags.findIndex(
-      (tag) => tag.name.trim() === item.name.trim()
-    );
-    if (_index !== -1) {
-      _currentTags[_index].selected = true;
-    }
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setInput(value);
 
-    onClose();
+      startTransition(() => {
+        taskQueue.enqueue(value, (lastValue) => {
+          changeInput(lastValue);
+        });
+      });
+    },
+    [changeInput]
+  );
 
-    startTransition(() => {
-      setValue("tags", _currentTags);
-    });
-  }, [item, onClose, getValues, setValue]);
+  useEffect(() => {
+    setInput("");
+  }, [reset]);
 
   return (
-    <button
-      type="button"
-      className={styles.tags_dropdown_item}
-      data-index="0"
-      onClick={onSelectTag}
-    >
-      <div className="flex min-w-0 flex-col items-start">
-        <span className="mb-[1px] block w-full truncate font-semibold">
-          {item.name}
-        </span>
-        <span className="w-full truncate text-sm text-slate-500">
-          {item.postsCount ?? 0} posts
-        </span>
-      </div>
-    </button>
+    <>
+      <input
+        type="text"
+        id="dropdown-input"
+        value={input}
+        autoComplete="off"
+        data-toggle="dropdown"
+        placeholder="Start typing to search…"
+        className={styles.ipt_tag}
+        onChange={onChange}
+      />
+      {inputValue.length ? popover : null}
+    </>
   );
 };
 
-DrawerTags.Cateogries = function Item() {
-  const { watch } = useWriteFormContext();
+DrawerTags.Popover = function Item() {
+  const { inputValue, tags, upsertTags } = useSettingTagsContext();
 
-  const tags = (watch("tags") ?? []).filter((item) => item.selected);
+  const fetcher = useFetcher<RoutesLoader>();
+
+  const id = useId();
+
+  const isDone = fetcher.state === "idle" && fetcher.data != null;
+
+  const skills = useMemo(() => {
+    const data = new Set<string>(tags);
+    if (inputValue) data.add(inputValue);
+    return [...data];
+  }, [inputValue, tags]);
+
+  useEffect(() => {
+    if (inputValue) {
+      fetcher.load(getPath({ name: inputValue, limit: 10 }));
+    }
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (isDone && !isEmpty(fetcher.data?.list)) {
+      const appendTags = fetcher.data?.list.map((tag) => tag.name);
+      if (appendTags) upsertTags(appendTags);
+    }
+  }, [isDone]);
 
   return (
-    <div className={styles.tags_box}>
-      {tags.map((tag) => (
-        <DrawerTags.Category
-          key={`drawer-tags-category-${tag}`}
-          name={tag.name}
+    <div className={styles.tags_dropdown}>
+      {skills.map((tag, index) => (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <DrawerTags.PopoverTag
+          key={`popover-tag-${tag}-${id}`}
+          tag={tag}
+          index={index}
         />
       ))}
     </div>
   );
 };
 
-interface CategoryProps {
-  name: string;
+interface PopoverTagProps {
+  tag: string;
+  index: number;
 }
 
-DrawerTags.Category = function Item({ name }: CategoryProps) {
+DrawerTags.PopoverTag = function Item({ tag, index }: PopoverTagProps) {
+  const { upsertTag, changeInput } = useSettingTagsContext();
+  const { getValues, setValue } = useWriteFormContext();
+  const [isPending, startTransition] = useTransition();
+
+  const onClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.preventDefault();
+      upsertTag(tag);
+      startTransition(() => {
+        const _skills = getValues("tags") ?? [];
+        const index = _skills.indexOf(tag);
+        if (index === -1) {
+          _skills.push(tag);
+          setValue("tags", _skills, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+        changeInput("");
+      });
+    },
+    [changeInput, getValues, setValue, tag, upsertTag]
+  );
+
   return (
-    <div className={styles.tag}>
-      <span title="JavaScript" className={styles.tag_text}>
-        {name}
-      </span>
-      <button type="button">
-        <svg viewBox="0 0 320 512">
-          <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
-        </svg>
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+    <a
+      className={styles.tags_dropdown_item}
+      href="#"
+      data-index={index}
+      data-value={tag}
+      onClick={onClick}
+      aria-disabled={isPending}
+    >
+      {tag}
+    </a>
+  );
+};
+
+DrawerTags.Tags = function Item() {
+  const { tags } = useSettingTagsContext();
+  const id = useId();
+
+  const skills = useMemo(() => {
+    return [...tags];
+  }, [tags]);
+
+  if (isEmpty(skills)) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-row flex-wrap">
+      {skills.map((tag, index) => (
+        <DrawerTags.Tag key={`tag-${tag}-${id}`} tag={tag} index={index} />
+      ))}
+    </div>
+  );
+};
+
+interface TagProps {
+  tag: string;
+  index: number;
+}
+
+DrawerTags.Tag = function Item({ tag, index }: TagProps) {
+  const { removeTag, resetInput } = useSettingTagsContext();
+  const { getValues, setValue } = useWriteFormContext();
+  const [isPending, startTransition] = useTransition();
+
+  const onRemove = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      removeTag(tag);
+      resetInput();
+      startTransition(() => {
+        const _skills = getValues("tags") ?? [];
+        const index = _skills.indexOf(tag);
+        if (index !== -1) {
+          _skills.splice(index, 1);
+          setValue("tags", _skills, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+      });
+    },
+    [getValues, removeTag, setValue, tag, resetInput]
+  );
+
+  return (
+    <div className="button-primary small mr-2 mb-2 flex flex-row items-center">
+      {/*  eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" className="mr-2">
+        <span>{tag}</span>
+      </a>
+      <button
+        data-index={index}
+        data-value={tag}
+        type="button"
+        disabled={isPending}
+        onClick={onRemove}
+      >
+        <Icons.V2.SettingTagX className="h-4 w-4 fill-current" />
       </button>
     </div>
   );

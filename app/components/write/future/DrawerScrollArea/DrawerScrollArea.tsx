@@ -9,7 +9,7 @@ interface DrawerScrollAreaProps {
 export default function DrawerScrollArea({ children }: DrawerScrollAreaProps) {
   return (
     <ScrollArea.Root className={styles.scroll_area}>
-      <ScrollArea.Viewport className="h-full w-full">
+      <ScrollArea.Viewport className="h-full w-full p-6">
         {children}
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar

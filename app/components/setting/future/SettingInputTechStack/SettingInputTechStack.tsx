@@ -20,8 +20,6 @@ import { getPath } from "~/routes/_loader._protected.loader.tags[.]json";
 import type { RoutesLoader } from "~/routes/_loader._protected.loader.tags[.]json";
 
 export default function SettingInputTechStack() {
-  // const fetcher = useFetcher<RoutesLoader>();
-  // const [, startTransition] = useTransition();
   const navigation = useNavigation();
 
   const {
@@ -32,17 +30,6 @@ export default function SettingInputTechStack() {
     () => navigation.state === "submitting",
     [navigation.state]
   );
-
-  // const onChange = useCallback(
-  //   (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const value = e.target.value;
-  //     changeInput(value);
-  //     startTransition(() => {
-  //       fetcher.load(getPath({ name: value, limit: 10 }));
-  //     });
-  //   },
-  //   [fetcher, changeInput]
-  // );
 
   return (
     <>

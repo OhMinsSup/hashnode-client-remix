@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { useWriteFormContext } from "../../context/form";
+import * as Switch from "@radix-ui/react-switch";
 import type { FieldPath } from "react-hook-form";
 import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 
@@ -13,6 +14,8 @@ type Props = {
   id: string;
   name: FieldPath<FormFieldValues>;
   label: string;
+  title: string;
+  description?: string;
 };
 
 type DrawerCheckboxProps = Omit<
@@ -25,24 +28,35 @@ export default function DrawerCheckbox({
   id,
   name,
   label,
+  title,
+  description,
   ...props
 }: DrawerCheckboxProps) {
-  const { register } = useWriteFormContext();
+  const { setValue, watch } = useWriteFormContext();
+
+  const value = watch(name) as boolean | undefined;
+
+  const onCheckedChange = useCallback(
+    (checked: boolean) => {
+      setValue(name, checked);
+    },
+    [name, setValue]
+  );
 
   return (
-    <div>
-      <div>
-        <label htmlFor={id} className={styles.ipt_label}>
-          <input
-            type="checkbox"
-            id={id}
-            className={styles.ipt_checkbox}
-            {...props}
-            {...register(name)}
-          />
-          <span>{label}</span>
-        </label>
+    <label htmlFor={id} className={styles.root}>
+      <div className={styles.form_item}>
+        <p className={styles.form_item_title}>{title}</p>
+        {description && <p className={styles.form_item_desc}>{description}</p>}
       </div>
-    </div>
+      <Switch.Root
+        className={styles.btn_checkbox}
+        id={id}
+        checked={value}
+        onCheckedChange={onCheckedChange}
+      >
+        <Switch.Thumb className={styles.btn_checkbox_thumb} />
+      </Switch.Root>
+    </label>
   );
 }
