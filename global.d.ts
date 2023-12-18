@@ -101,7 +101,6 @@ declare namespace FetchSchema {
     mediaType: MediaType;
     createdAt: string;
     updatedAt: string;
-    user: any;
   };
 
   export type PostCount = {
@@ -229,6 +228,13 @@ declare namespace SerializeSchema {
     postSeo: SerializePostSeo;
     likeCount: number;
   };
+
+  export type SerializeFile = FetchSchema.File & {
+    id: string;
+    user: {
+      userProfile: Pick<SerializeUserProfile, "username">;
+    };
+  };
 }
 
 declare namespace FetchQuerySchema {
@@ -282,7 +288,7 @@ declare namespace FetchRespSchema {
 
   export type PostResp = DataIDResp;
 
-  export type FileListResp = ListResp<FetchSchema.File>;
+  export type FileListResp = ListResp<SerializeSchema.SerializeFile>;
 
   export type TagListResp = ListResp<SerializeSchema.SerializeTagCount>;
 

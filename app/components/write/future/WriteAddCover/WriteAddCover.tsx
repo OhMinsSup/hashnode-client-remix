@@ -11,7 +11,7 @@ import { getTargetElement } from "~/libs/browser-utils";
 import { isEmpty } from "~/utils/assertion";
 import { useDrop } from "~/libs/hooks/useDrop";
 import { Icons } from "~/components/shared/Icons";
-import { getPath } from "~/routes/_action._protected.action.upload";
+import { getPath as getUploadPath } from "~/routes/_action._protected.action.upload";
 import { getPath as getFilesPath } from "~/routes/_loader._protected.loader.get-uploaded-files[.]json";
 import { useWriteFormContext } from "~/components/write/context/form";
 
@@ -162,7 +162,7 @@ WriteAddCover.Upload = function Item() {
 
       fetcher.submit(formData, {
         method: "POST",
-        action: getPath(),
+        action: getUploadPath(location.pathname),
         encType: "multipart/form-data",
       });
     },
@@ -211,6 +211,7 @@ WriteAddCover.Upload = function Item() {
         alert("No file");
         return;
       }
+
       await upload(file);
     },
   });
@@ -218,19 +219,12 @@ WriteAddCover.Upload = function Item() {
   useEffect(() => {
     const fetcherData = fetcher.data;
     if (fetcher.state === "idle" && fetcherData != null) {
-      const result = fetcherData.result;
-      if (result && fetcherData.success) {
-        setCoverClose();
-        setUploadState("success");
-        const { id, publicUrl } = result as FetchRespSchema.FileResp;
-        setValue("thumbnail", {
-          id,
-          url: publicUrl,
-        });
-      } else {
-        setUploadState("idle");
-        setValue("thumbnail", undefined);
-      }
+      setCoverClose();
+      setUploadState("success");
+      setValue("thumbnail", {
+        id: fetcherData.id,
+        url: fetcherData.publicUrl,
+      });
     }
   }, [fetcher.state, fetcher.data]);
 
@@ -338,7 +332,7 @@ WriteAddCover.Library = function Item() {
 };
 
 WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
-  const [items, setItems] = useState<FetchSchema.File[]>([]);
+  const [items, setItems] = useState<SerializeSchema.SerializeFile[]>([]);
 
   const fetcher = useFetcher<Loader>();
 
@@ -347,6 +341,8 @@ WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
       fetcher.load(getFilesPath());
     }
   }, []);
+
+  console.log(fetcher.data);
 
   useEffect(() => {
     if (fetcher.data) {
@@ -358,7 +354,8 @@ WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
 
   const filteredItems = items.filter((item) => {
     if (!keyword) return true;
-    return item.user?.username?.includes(keyword) ?? true;
+    const regex = new RegExp(keyword, "gi");
+    return regex.test(item.filename);
   });
 
   return (
@@ -369,7 +366,7 @@ WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
             key={`library-${item.id}`}
             id={item.id}
             url={item.publicUrl}
-            username={item.user?.username}
+            filename={item.filename}
           />
         ))}
       </div>
@@ -377,15 +374,17 @@ WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
   );
 };
 
+type LibraryCardProps = {
+  id: string;
+  url: string;
+  filename: string;
+};
+
 WriteAddCover.LibraryCard = function Item({
   id,
   url,
-  username,
-}: {
-  id: number;
-  url: string;
-  username?: string;
-}) {
+  filename,
+}: LibraryCardProps) {
   const { setValue } = useWriteFormContext();
   const { setUploadState, setCoverClose } = useWriteContext();
 
@@ -416,12 +415,12 @@ WriteAddCover.LibraryCard = function Item({
         by{" "}
         <span>
           <a
-            href="https://unsplash.com/@andrewtneel?utm_source=Hashnode&amp;utm_medium=referral"
+            href={url}
             rel="noopener nofollow noreferrer"
             target="_blank"
             className="font-semibold"
           >
-            {username}
+            {filename}
           </a>
         </span>
       </p>

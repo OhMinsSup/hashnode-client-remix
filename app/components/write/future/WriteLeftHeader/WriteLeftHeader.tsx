@@ -4,15 +4,15 @@ import styles from "./styles.module.css";
 import { useWriteContext } from "~/context/useWriteContext";
 
 export default function WriteLeftHeader() {
-  const { setSideClose, setSideOpen, isSideOpen } = useWriteContext();
+  const { setSideOpen, isSideOpen } = useWriteContext();
 
   const onClickSideMenu = useCallback(() => {
-    if (isSideOpen) {
-      setSideClose();
-    } else {
-      setSideOpen();
-    }
-  }, [isSideOpen, setSideClose, setSideOpen]);
+    setSideOpen();
+  }, [setSideOpen]);
+
+  if (isSideOpen) {
+    return null;
+  }
 
   return (
     <Tooltip.Provider>
@@ -25,13 +25,53 @@ export default function WriteLeftHeader() {
             className={styles.root}
             onClick={onClickSideMenu}
           >
-            <svg fill="none" viewBox="0 0 20 20">
-              <path
-                d="M6.66667 9.16667H4.58333M6.66667 12.5H4.58333M6.66667 5.83333H4.58333M8.75 2.5V17.5M8.75 2.5H6.5C5.09987 2.5 4.3998 2.5 3.86502 2.77248C3.39462 3.01217 3.01217 3.39462 2.77248 3.86502C2.5 4.3998 2.5 5.09987 2.5 6.5V13.5C2.5 14.9001 2.5 15.6002 2.77248 16.135C3.01217 16.6054 3.39462 16.9878 3.86502 17.2275C4.3998 17.5 5.09987 17.5 6.5 17.5H8.75M8.75 2.5H13.5C14.9001 2.5 15.6002 2.5 16.135 2.77248C16.6054 3.01217 16.9878 3.39462 17.2275 3.86502C17.5 4.3998 17.5 5.09987 17.5 6.5V13.5C17.5 14.9001 17.5 15.6002 17.2275 16.135C16.9878 16.6054 16.6054 16.9878 16.135 17.2275C15.6002 17.5 14.9001 17.5 13.5 17.5H8.75"
-                strokeWidth="1.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="mask0_4792_34477"
+                maskUnits="userSpaceOnUse"
+                x="1"
+                y="1"
+                width="18"
+                height="18"
+                style={{ maskType: "alpha" }}
+              >
+                <rect
+                  width="16.25"
+                  height="16.25"
+                  rx="3.12"
+                  transform="matrix(-1 0 0 1 18.125 1.875)"
+                  fill="#D9D9D9"
+                ></rect>
+              </mask>
+              <g mask="url(#mask0_4792_34477)">
+                <path
+                  d="M17.5 15V5C17.5 3.61929 16.3807 2.5 15 2.5H12.0833H5C3.61929 2.5 2.5 3.61929 2.5 5V15C2.5 16.3807 3.61929 17.5 5 17.5H15C16.3807 17.5 17.5 16.3807 17.5 15Z"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+                <path
+                  d="M7.91406 2.5V17.5"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+                <path
+                  d="M10.4141 9.9974H14.9974M14.9974 9.9974L12.914 12.0807M14.9974 9.9974L12.914 7.91406"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </g>
             </svg>
           </button>
         </Tooltip.Trigger>

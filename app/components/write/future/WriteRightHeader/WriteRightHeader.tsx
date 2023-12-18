@@ -16,16 +16,16 @@ export default function WriteRightHeader() {
   return (
     <>
       <WriteRightHeader.HashnodeAiButton />
-      <WriteRightHeader.MenuPopover />
+      {/* <WriteRightHeader.MenuPopover /> */}
       <div
         data-orientation="vertical"
         aria-orientation="vertical"
         role="separator"
         className={styles.divider}
       ></div>
-      <button type="button" className={styles.btn_preview}>
+      {/* <button type="button" className={styles.btn_preview}>
         <span>Preview</span>
-      </button>
+      </button> */}
       <button type="button" className={styles.btn_publish} onClick={onOpen}>
         <span>Publish</span>
       </button>
