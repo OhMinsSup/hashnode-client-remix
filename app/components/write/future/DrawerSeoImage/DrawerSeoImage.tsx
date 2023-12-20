@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import { useFetcher } from "@remix-run/react";
@@ -56,8 +56,8 @@ export default function DrawerSeoImage() {
         ) : null}
         {fetcher.state === "idle" && fetcher.data != null ? (
           <DrawerSeoImage.Success
-            // @ts-ignore TODO: fix this
-            urls={fetcher.data.result?.publicUrl ?? []}
+            id={fetcher.data.id}
+            url={fetcher.data.publicUrl}
             onImageDelete={onImageDelete}
           />
         ) : null}
@@ -187,12 +187,27 @@ DrawerSeoImage.Loading = function Item() {
 };
 
 interface SuccessProps {
-  urls: string[];
+  id: string;
+  url: string;
   onImageDelete: () => void;
 }
 
-DrawerSeoImage.Success = function Item({ urls, onImageDelete }: SuccessProps) {
-  const url = urls.at(0);
+DrawerSeoImage.Success = function Item({
+  id,
+  url,
+  onImageDelete,
+}: SuccessProps) {
+  const { setValue } = useWriteFormContext();
+
+  useEffect(() => {
+    if (id && url) {
+      setValue("seo.image", {
+        id,
+        url,
+      });
+    }
+  }, []);
+
   return (
     <AspectRatio.Root ratio={16 / 9}>
       <div className="absolute inset-0">

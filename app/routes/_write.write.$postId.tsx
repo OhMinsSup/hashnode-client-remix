@@ -1,5 +1,9 @@
 import { WritePage } from "~/components/write/future/WritePage";
-import { type LoaderFunctionArgs, json } from "@remix-run/cloudflare";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+} from "@remix-run/cloudflare";
 import {
   isRouteErrorResponse,
   useLoaderData,
@@ -21,6 +25,17 @@ export const loader = async ({
 };
 
 export type RoutesData = typeof loader;
+
+export const action = async ({
+  params,
+  request,
+  context,
+}: ActionFunctionArgs) => {
+  await context.api.post.updateItem(request, params.postId);
+  return null;
+};
+
+export type RoutesActionData = typeof action;
 
 export default function Routes() {
   const data = useLoaderData<RoutesData>();

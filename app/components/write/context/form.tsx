@@ -13,7 +13,6 @@ interface Props {
 }
 
 export function WriteFormProvider({ children, initialValues }: Props) {
-  console.log(initialValues);
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(schema),
     defaultValues: {

@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import Json from "superjson";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import styles from "./styles.module.css";
 import { useWriteContext } from "~/context/useWriteContext";
@@ -12,15 +13,34 @@ import { DrawerDate } from "../DrawerDate";
 import { DrawerTags } from "../DrawerTags";
 import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
 import { getTargetElement } from "~/libs/browser-utils";
+import { useWriteFormContext } from "~/components/write/context/form";
+import { useFetcher } from "@remix-run/react";
+import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
+import type { RoutesActionData } from "~/routes/_write.write.$postId";
 
 export default function WritePublishDrawer() {
   const { isOpen } = useWriteContext();
+  const { handleSubmit } = useWriteFormContext();
+  const fetcher = useFetcher<RoutesActionData>();
+
+  const onSubmit = useCallback(
+    (input: FormFieldValues) => {
+      const stringified = Json.stringify(input);
+      const formData = new FormData();
+      formData.append("body", stringified);
+      fetcher.submit(formData, {
+        method: "POST",
+        encType: "multipart/form-data",
+      });
+    },
+    [fetcher]
+  );
 
   if (!isOpen) return null;
 
   return (
     <div className={styles.root}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <DrawerHeader />
         <DrawerScrollArea>
           <div className="flex flex-col gap-8">

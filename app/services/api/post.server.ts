@@ -6,6 +6,7 @@ import { getLikePostsApi as $getLikePostsApi } from "~/services/fetch/posts/gets
 import { getTopPostsApi as $getTopPostsApi } from "~/services/fetch/posts/gets-top-api.server";
 import { getDraftPostsApi as $getDraftPostsApi } from "~/services/fetch/posts/gets-draft-api.server";
 import { createPostApi as $createPostApi } from "~/services/fetch/posts/create-api.server";
+import { updatePostApi as $updatePostApi } from "~/services/fetch/posts/update-api.server";
 import { getPostApi as $getPostApi } from "~/services/fetch/posts/get-api.server";
 import { deletePostApi as $deletePostApi } from "~/services/fetch/posts/delete-api.server";
 import { getDeletePostsApi as $getDeletePostsApi } from "~/services/fetch/posts/gets-deleted-api.server";
@@ -105,6 +106,18 @@ export class PostApiService {
    */
   async create(input: FormFieldValues, request: Request) {
     return await $createPostApi(input, {
+      request,
+    });
+  }
+
+  /**
+   * @description 포스트 수정
+   * @param {string | number} id
+   * @param {FormFieldValues} input
+   * @param {Request} request
+   */
+  async update(id: string, input: FormFieldValues, request: Request) {
+    return await $updatePostApi(id, input, {
       request,
     });
   }
@@ -244,37 +257,76 @@ export class PostApiService {
   }
 
   /**
-   * @description 포스트 작성하기 (action, loader)
+   * @description 포스트 수정 (action)
    * @param {Request} request
+   * @param {string | undefined} id
    */
-  async createItem(request: Request) {
+  async updateItem(request: Request, id: string | undefined) {
+    const defaultToastOpts = {
+      title: "error",
+      description: "failed to delete the post. Please try again later.",
+      type: "error" as const,
+    };
+
+    if (!id) {
+      console.log("id is not defined.");
+      throw await this.$server.redirectWithToast(
+        safeRedirect(PAGE_ENDPOINTS.ROOT),
+        defaultToastOpts,
+        this.$toast.createToastHeaders
+      );
+    }
+
     try {
       const formData = await this.$server.readFormData(request);
       const bodyString = formData.get("body")?.toString();
       if (!bodyString) {
+        console.log("body is not defined.");
         throw new TypeError(
           "body is not defined. please check your request body."
         );
       }
       const input = await $createSchema.parseAsync(Json.parse(bodyString));
-      return await this.create(input, request);
-    } catch (error) {
-      const error_body = this.$server.readBodyError(error);
-      if (error_body) {
-        return error_body;
+      const response = await this.update(id, input, request);
+      const json = await this.$server.toJSON(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        console.log("failed to update the post.");
+        const error = new Error();
+        error.name = "UpdatePostError";
+        error.message = "failed to follow the tag. Please try again later.";
+        throw error;
       }
-
+      throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
+    } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
-        return error_validation;
+        console.log("validate = failed to update the post.", error_validation);
+        throw await this.$server.redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        return error_fetch;
+        console.log("fetch = failed to update the post.", error_fetch);
+        throw await this.$server.redirectWithToast(
+          // @ts-ignore
+          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
+          defaultToastOpts,
+          this.$toast.createToastHeaders
+        );
       }
 
-      return null;
+      console.log("errro = failed to update the post.", error);
+
+      throw await this.$server.redirectWithToast(
+        // @ts-ignore
+        safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
+        defaultToastOpts,
+        this.$toast.createToastHeaders
+      );
     }
   }
 
