@@ -34,79 +34,74 @@ export const useUrlState = <S extends UrlState = UrlState>(
     initialStateRef.current
   );
 
+  const _internalSetState = (
+    params: URLSearchParams | Record<string, any> | any[]
+  ) => {
+    const input =
+      params instanceof URLSearchParams
+        ? params.entries()
+        : Array.isArray(params)
+          ? params
+          : Object.entries(params);
+
+    const newSearchParams = new URLSearchParams(searchParams);
+    for (const [key, value] of input) {
+      if (isUndefined(value) || isNull(value)) continue;
+      if (isArray(value)) {
+        newSearchParams.set(key, value.join(","));
+        continue;
+      }
+
+      const hasToString = Object.prototype.hasOwnProperty.call(
+        value,
+        "toString"
+      );
+
+      if (hasToString) {
+        newSearchParams.set(key, value.toString());
+      } else {
+        newSearchParams.set(key, `${value}`);
+      }
+    }
+
+    return newSearchParams;
+  };
+
   const setState = (
     params: URLSearchParamsInit,
     navigateOpts?: Parameters<typeof setSearchParams>[1]
   ) => {
-    if (!params || isEmpty(params) || isString(params)) {
+    if (
+      !params ||
+      (!(params instanceof URLSearchParams) && isEmpty(params)) ||
+      isString(params)
+    ) {
       setSearchParams(searchParams, navigateOpts);
       return;
     }
 
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (params instanceof URLSearchParams) {
-      params.forEach((value, key) => {
-        if (isArray(value)) {
-          newSearchParams.set(key, value.join(","));
-        } else {
-          if (isUndefined(value) || isNull(value)) return;
-          const hasToString = Object.prototype.hasOwnProperty.call(
-            value,
-            "toString"
-          );
-          if (hasToString) {
-            newSearchParams.set(key, value.toString());
-          } else {
-            newSearchParams.set(key, `${value}`);
-          }
-        }
-      });
-      setSearchParams(newSearchParams, navigateOpts);
-      return;
-    }
-
-    if (isArray(params)) {
-      params.forEach(([key, value]) => {
-        if (isArray(value)) {
-          newSearchParams.set(key, value.join(","));
-        } else {
-          if (isUndefined(value) || isNull(value)) return;
-          const hasToString = Object.prototype.hasOwnProperty.call(
-            value,
-            "toString"
-          );
-          if (hasToString) {
-            newSearchParams.set(key, value.toString());
-          } else {
-            newSearchParams.set(key, `${value}`);
-          }
-        }
-      });
-      setSearchParams(newSearchParams, navigateOpts);
-      return;
-    }
-
-    Object.keys(params).forEach((key) => {
-      // @ts-ignore TODO: fix this
-      const value = params[key];
-      if (Array.isArray(value)) {
-        newSearchParams.set(key, value.join(","));
-      } else {
-        if (isUndefined(value) || isNull(value)) return;
-        const hasToString = Object.prototype.hasOwnProperty.call(
-          value,
-          "toString"
-        );
-        if (hasToString) {
-          newSearchParams.set(key, value.toString());
-        } else {
-          newSearchParams.set(key, `${value}`);
-        }
-      }
-    });
-
+    const newSearchParams = _internalSetState(params);
     setSearchParams(newSearchParams, navigateOpts);
   };
 
-  return [searchParams, useMemoizedFn(setState)] as const;
+  const removeState = (
+    params: string | string[],
+    navigateOpts?: Parameters<typeof setSearchParams>[1]
+  ) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (isString(params)) {
+      newSearchParams.delete(params);
+    } else {
+      params.forEach((key) => {
+        newSearchParams.delete(key);
+      });
+    }
+    setSearchParams(newSearchParams, navigateOpts);
+  };
+
+  return [
+    searchParams,
+    useMemoizedFn(setState),
+    useMemoizedFn(removeState),
+  ] as const;
 };

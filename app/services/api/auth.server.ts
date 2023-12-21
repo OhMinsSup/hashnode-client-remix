@@ -98,9 +98,12 @@ export class AuthApiService {
    * @description 회원가입 후 리다이렉트
    * @param {Request} request
    */
-  async signupWithAuth(request: Request) {
+  async signupWithRedirect(request: Request) {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);
+    const redirectUrl = safeRedirect(
+      `${PAGE_ENDPOINTS.AUTH.SIGNUP}?${searchParams.toString()}`
+    );
 
     const formData = await this.$server.readFormData(request);
 
@@ -113,8 +116,19 @@ export class AuthApiService {
 
     try {
       await this.$csrf.validateCSRF(formData, request.headers);
-      this.$honeypot.checkHoneypot(formData);
+      await this.$honeypot.checkHoneypot(formData);
+    } catch (error) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description:
+            "You tried to authenticate with an invalid access. Please try again.",
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
 
+    try {
       const parse = await $signupSchema.parseAsync(input);
       const response = await this.signup(parse);
       const cookie = response.headers.get("set-cookie");
@@ -125,51 +139,28 @@ export class AuthApiService {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         throw await this.$server.redirectWithToast(
-          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-          {
-            title: "error",
-            description:
-              Object.values(error_validation.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_validation.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        const isNotExistsUser =
-          error_fetch.data?.resultCode === RESULT_CODE.NOT_EXIST;
-        if (isNotExistsUser) {
-          throw redirect(
-            safeRedirect(
-              `${PAGE_ENDPOINTS.AUTH.SIGNIN}?step=3&type=register&email=${input.email}`
-            )
-          );
-        }
-
         throw await this.$server.redirectWithToast(
-          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-          {
-            title: "error",
-            description:
-              Object.values(error_fetch.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_fetch.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       throw await this.$server.redirectWithToast(
-        `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-        {
-          title: "error",
-          description:
-            "An error occurred while signing in. Please try again later.",
-          type: "error",
-        },
+        redirectUrl,
+        this.$toast.getToastMessage(),
         this.$toast.createToastHeaders
       );
     }
@@ -180,9 +171,12 @@ export class AuthApiService {
    * @description 로그인 후 리다이렉트
    * @param {Request} request
    */
-  async signinWithAuth(request: Request) {
+  async signinWithRedirect(request: Request) {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);
+    const redirectUrl = safeRedirect(
+      `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`
+    );
 
     const formData = await this.$server.readFormData(request);
 
@@ -193,63 +187,58 @@ export class AuthApiService {
 
     try {
       await this.$csrf.validateCSRF(formData, request.headers);
-      this.$honeypot.checkHoneypot(formData);
+      await this.$honeypot.checkHoneypot(formData);
+    } catch (error) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description:
+            "You tried to authenticate with an invalid access. Please try again.",
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
 
+    try {
       const parse = await $signinSchema.parseAsync(input);
       const response = await this.signin(parse);
       const cookie = response.headers.get("set-cookie");
-      return redirect(PAGE_ENDPOINTS.ROOT, {
+      return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
         headers: cookie ? this.$server.getAuthHeaders(cookie) : undefined,
       });
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         throw await this.$server.redirectWithToast(
-          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-          {
-            title: "error",
-            description:
-              Object.values(error_validation.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_validation.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
+      const redirectUrlToSignup = safeRedirect(
+        `${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${input.email}`
+      );
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         const isNotExistsUser =
           error_fetch.data?.resultCode === RESULT_CODE.NOT_EXIST;
-        if (isNotExistsUser) {
-          throw redirect(
-            safeRedirect(
-              `${PAGE_ENDPOINTS.AUTH.SIGNIN}?step=3&type=register&email=${input.email}`
-            )
-          );
-        }
+        if (isNotExistsUser) throw redirect(redirectUrlToSignup);
 
         throw await this.$server.redirectWithToast(
-          `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-          {
-            title: "error",
-            description:
-              Object.values(error_fetch.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_fetch.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       throw await this.$server.redirectWithToast(
-        `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`,
-        {
-          title: "error",
-          description:
-            "An error occurred while signing in. Please try again later.",
-          type: "error",
-        },
+        redirectUrl,
+        this.$toast.getToastMessage(),
         this.$toast.createToastHeaders
       );
     }
