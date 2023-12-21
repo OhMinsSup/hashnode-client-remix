@@ -15,6 +15,7 @@ export const loader = ({ context, request }: LoaderFunctionArgs) => {
     trendingUser: context.api.user.getMainTrendingUsersLimit4(request),
     trendingTag: context.api.tag.getMainTrendingTagsLimit4(request),
     notificationCount: context.api.notification.count(request),
+    getDraftList: context.api.post.getMainDraftPostsLimit4(request),
   });
 };
 

@@ -10,6 +10,7 @@ import styles from "./styles.module.css";
 // components
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Icons } from "~/components/shared/Icons";
+import take from "lodash-es/take";
 
 import { getPath } from "~/routes/_loader._public.loader.get-top-posts[.]json";
 
@@ -20,6 +21,7 @@ import type { Loader } from "~/routes/_loader._public.loader.get-top-posts[.]jso
 export default function AsideTrendingArticle() {
   const [, startTransition] = useTransition();
   const [duration, setDuration] = useState<string>("7");
+  const [seeMore, setSeeMore] = useState(false);
 
   const fetcher = useFetcher<Loader>();
 
@@ -41,6 +43,7 @@ export default function AsideTrendingArticle() {
   const onDurationChange = useCallback(
     (value: string) => {
       setDuration(value);
+      setSeeMore(false);
 
       startTransition(() => {
         fetcher.load(getPath(value));
@@ -49,9 +52,14 @@ export default function AsideTrendingArticle() {
     [fetcher]
   );
 
+  const onClickSeeMore = useCallback(() => {
+    setSeeMore(true);
+  }, []);
+
   const items = useMemo(() => {
-    return fetcher.data?.list ?? [];
-  }, [fetcher.data]);
+    const _items = fetcher.data?.list ?? [];
+    return take(_items, seeMore ? _items.length : 5);
+  }, [fetcher.data, seeMore]);
 
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data == null) {
@@ -156,10 +164,10 @@ export default function AsideTrendingArticle() {
                       aria-label="Post Author"
                       title="ByteScrum Technologies"
                     >
-                      {item.user.email}
+                      {item?.user?.userProfile?.username}
                     </a>
                   </p>
-                  <span className="inline-block mx-2 font-bold opacity-50 ml-0">
+                  <span className="inline-block mx-2 font-bold opacity-50">
                     ·
                   </span>
                   <p>54 reads</p>
@@ -169,14 +177,20 @@ export default function AsideTrendingArticle() {
           })}
         </div>
       </div>
-      <div>
-        <button className={styles.btn_see_more}>
-          <span className="flex flex-row gap-2 w-full items-center justify-center text-sm font-medium">
-            <span>See more</span>
-            <Icons.V2.SeeMoreArrowBottom />
-          </span>
-        </button>
-      </div>
+      {seeMore ? null : (
+        <div>
+          <button
+            type="button"
+            className={styles.btn_see_more}
+            onClick={onClickSeeMore}
+          >
+            <span className="flex flex-row gap-2 w-full items-center justify-center text-sm font-medium">
+              <span>See more</span>
+              <Icons.V2.SeeMoreArrowBottom />
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

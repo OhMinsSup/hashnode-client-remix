@@ -405,6 +405,35 @@ export class PostApiService {
 
   /**
    * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
+   * @param {Request} request
+   */
+  async getMainDraftPostsLimit4(request: Request) {
+    try {
+      const response = await this.getDraftList(
+        {
+          limit: 4,
+        },
+        request
+      );
+      const json =
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (삭제여부)
    * @param {Request} request
    */
