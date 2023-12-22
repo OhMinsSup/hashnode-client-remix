@@ -15,8 +15,6 @@ export default function RecommendedUsersBox({
 }: RecommendedUsersBoxProps) {
   if (isUndefined(data)) return null;
 
-  console.log(data);
-
   const users = data.list ?? [];
 
   if (isEmpty(users)) return null;

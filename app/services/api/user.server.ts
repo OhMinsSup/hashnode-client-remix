@@ -207,7 +207,6 @@ export class UserApiService {
       const response = await this.getHistories(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.UserHistoryResp[]>(response);
-      console.log(json);
       return json.result ?? [];
     } catch (error) {
       return [];

@@ -1,70 +1,49 @@
-// import React, { useEffect, useMemo } from "react";
+import { Await, useLoaderData } from "@remix-run/react";
 import styles from "./styles.module.css";
-// import { useFetcher } from "@remix-run/react";
 import { Link } from "lucide-react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-// import { getPath } from "~/routes/_loader._protected.loader.bookmarks[.]json";
-
-// import type { Loader } from "~/routes/_loader._protected.loader.bookmarks[.]json";
+import type { RoutesLoader } from "~/routes/_main";
+import { Suspense } from "react";
+import { isEmpty } from "~/utils/assertion";
+import { AsideLikeItem } from "~/components/shared/future/AsideLikeItem";
 
 export default function AsideBookmark() {
-  // const fetcher = useFetcher<Loader>();
-
-  // const items = useMemo(() => {
-  //   return fetcher.data?.list ?? [];
-  // }, [fetcher]);
-
-  // useEffect(() => {
-  //   if (fetcher.state === "idle" && fetcher.data == null) {
-  //     fetcher.load(getPath({ limit: 2 }));
-  //   }
-  // }, [fetcher]);
+  const data = useLoaderData<RoutesLoader>();
 
   return (
-    <div className={styles.root}>
-      <div>
-        <h2 className={styles.title}>Bookmarks</h2>
-      </div>
-      <div>
-        <div className="flex flex-col gap-5 mb-1.5">
-          {/* {items.map((item) => {
-            return (
-              <div className="flex flex-col gap-1" key={`bookmarks-${item.id}`}>
-                <h2
-                  className={styles.item_title}
-                  aria-label="Post Title"
-                  title={item.title}
-                >
-                  {item.title}
-                </h2>
-                <div className={styles.item_desc}>
-                  <p>
-                    <a
-                      href="/@ltemihai"
-                      aria-label="Post Author"
-                      title={item.user.username}
-                    >
-                      {item.user.username}
-                    </a>
-                  </p>
-                  <span className="inline-block mx-2 font-bold opacity-50">
-                    ·
-                  </span>
-                  <p>9 min read</p>
+    <Suspense fallback={<></>}>
+      <Await resolve={data.getLikeList}>
+        {(data) => {
+          if (isEmpty(data.list)) return null;
+          return (
+            <div className={styles.root}>
+              <div>
+                <h2 className={styles.title}>Bookmarks</h2>
+              </div>
+              <div>
+                <div className="flex flex-col gap-5 mb-1.5">
+                  {data.list.map((item) => {
+                    return (
+                      <AsideLikeItem
+                        key={`like-aside-${item.id}`}
+                        data={item}
+                      />
+                    );
+                  })}
                 </div>
               </div>
-            );
-          })} */}
-        </div>
-      </div>
-      <div className="">
-        <Link
-          href={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
-          className={styles.btn_see_all}
-        >
-          See all bookmarks
-        </Link>
-      </div>
-    </div>
+              <div className="">
+                <Link
+                  href={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
+                  className={styles.btn_see_all}
+                >
+                  See all bookmarks
+                </Link>
+              </div>
+            </div>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }

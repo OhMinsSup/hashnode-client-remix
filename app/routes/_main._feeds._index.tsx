@@ -16,11 +16,11 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.post.getPostsByList(request);
+  const response = await context.api.post.getPosts(request);
   return json(response);
 };
 
-export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export default function Routes() {
   const data = useRouteLoaderData<MainRoutesLoader>("routes/_main");

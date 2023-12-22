@@ -3,7 +3,7 @@ import { json } from "@remix-run/cloudflare";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.post.getPostsByTop(request);
+  const response = await context.api.post.getTopPosts(request);
   return json(response);
 };
 

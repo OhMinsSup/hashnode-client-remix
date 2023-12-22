@@ -19,8 +19,6 @@ export default function SearchTabs({ children }: SearchTabsProps) {
     [navigate]
   );
 
-  console.log(location.pathname);
-
   return (
     <section className="mb-8">
       <Tabs.Root

@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import styles from "./styles.module.css";
 import { Icons } from "../../Icons";
 import classNames from "classnames";
 import { cn } from "~/utils/util";
+import type { SerializeFrom } from "@remix-run/cloudflare";
+import { useEditor } from "@tiptap/react";
+import { TiptapExtensions } from "~/components/shared/future/Tiptap/extensions";
+import { TiptapEditorProps } from "~/components/shared/future/Tiptap/props";
 
 export default function HashnodeCard() {
   return (
@@ -157,7 +161,23 @@ export default function HashnodeCard() {
   );
 }
 
-HashnodeCard.V2 = function HashnodeCardV2() {
+interface HashnodeCardV2Props {
+  data: SerializeFrom<SerializeSchema.SerializePost>;
+}
+
+HashnodeCard.V2 = function HashnodeCardV2({ data }: HashnodeCardV2Props) {
+  const editor = useEditor({
+    editable: false,
+    editorProps: TiptapEditorProps(),
+    extensions: TiptapExtensions(),
+    content: data?.content,
+  });
+
+  const text = useMemo(() => {
+    if (!editor) return "";
+    return editor.getText();
+  }, [editor]);
+
   return (
     <article className="w-full first-of-type:border-t-0 border-t lg:!border border-slate-200 dark:border-slate-800/80 rounded-none lg:rounded-2xl pt-5 md:pt-8 lg:p-6 lg:pb-5 bg-white dark:bg-slate-950 flex flex-col gap-4 md:gap-5">
       <section className="flex flex-col gap-2 sm:gap-4">
@@ -229,8 +249,7 @@ HashnodeCard.V2 = function HashnodeCardV2() {
                   href="https://aircode.hashnode.dev/building-a-blog-subscription-and-pusher-with-aircode-and-resend"
                 >
                   <h1 className="font-heading text-base sm:text-xl font-semibold sm:font-bold  text-slate-700 dark:text-slate-200 hn-break-words cursor-pointer">
-                    Building a Blog Subscription and Pusher with AirCode and
-                    Resend
+                    {data?.title}
                   </h1>
                 </a>
               </div>
@@ -240,11 +259,7 @@ HashnodeCard.V2 = function HashnodeCardV2() {
                   href="https://aircode.hashnode.dev/building-a-blog-subscription-and-pusher-with-aircode-and-resend"
                 >
                   <span className="text-base hidden font-normal text-slate-500 dark:text-slate-400 hn-break-words cursor-pointer md:line-clamp-2">
-                    Introduction Learn how to build subscription and push
-                    notification services in Node.js and Next.js, and send your
-                    first email using the Resend Node.js SDK on AirCode. Here's
-                    what the finished page and email will look like: In this
-                    tutorial, I'll gui...
+                    {text}
                   </span>
                 </a>
               </div>

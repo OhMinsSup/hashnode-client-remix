@@ -37,7 +37,6 @@ import { HashnodeList } from "~/components/shared/future/HashnodeList";
 // export type nTagIndexLoader = typeof loader;
 
 export default function Routes() {
-  console.log("nTagIndex");
   return <HashnodeList />;
 }
 

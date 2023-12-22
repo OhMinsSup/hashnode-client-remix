@@ -342,8 +342,6 @@ WriteAddCover.LibraryList = function Item({ keyword }: { keyword?: string }) {
     }
   }, []);
 
-  console.log(fetcher.data);
-
   useEffect(() => {
     if (fetcher.data) {
       setItems((prevItems) =>

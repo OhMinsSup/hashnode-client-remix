@@ -14,6 +14,8 @@ import { getDeletePostsApi as $getDeletePostsApi } from "~/services/fetch/posts/
 import { FetchService } from "~/services/fetch/fetch.api";
 import { schema as $createSchema } from "~/services/validate/post-create-api.validate";
 import { schema as $idSchema } from "~/services/validate/id.validate";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { redirect } from "@remix-run/cloudflare";
 
 // utils
 import { parseUrlParams } from "~/utils/util";
@@ -23,8 +25,6 @@ import type { Env } from "../app/env.server";
 import type { ServerService } from "~/services/app/server.server";
 import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 import type { ToastService } from "~/services/app/toast.server";
-import { safeRedirect } from "remix-utils/safe-redirect";
-import { redirect } from "@remix-run/cloudflare";
 
 export class PostApiService {
   constructor(
@@ -38,7 +38,7 @@ export class PostApiService {
    * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
    */
-  async list(query: FetchQuerySchema.PostList, request: Request) {
+  async getList(query: FetchQuerySchema.PostList, request: Request) {
     return await $getPostsApi(query, {
       request,
     });
@@ -49,7 +49,7 @@ export class PostApiService {
    * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
    */
-  async likeList(query: FetchQuerySchema.PostList, request: Request) {
+  async getLikeList(query: FetchQuerySchema.PostList, request: Request) {
     return await $getLikePostsApi(query, {
       request,
     });
@@ -60,7 +60,7 @@ export class PostApiService {
    * @param {FetchQuerySchema.GetTopPost} query
    * @param {Request} request
    */
-  async topList(query: FetchQuerySchema.GetTopPost, request: Request) {
+  async getTopList(query: FetchQuerySchema.GetTopPost, request: Request) {
     return await $getTopPostsApi(query, {
       request,
     });
@@ -134,7 +134,7 @@ export class PostApiService {
   }
 
   async createDraftForRedirectOrWrite(request: Request) {
-    const { list } = await this.getPostsByDraftList(request);
+    const { list } = await this.getDraftPosts(request);
     const item = list.at(0);
     if (item) {
       throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(item.id)));
@@ -356,12 +356,9 @@ export class PostApiService {
    * @param {FetchQuerySchema.PostList} params
    * @param {Request} request
    */
-  async getPostsByBaseList(
-    params: FetchQuerySchema.PostList,
-    request: Request
-  ) {
+  async getBasePosts(params: FetchQuerySchema.PostList, request: Request) {
     try {
-      const response = await this.list(params, request);
+      const response = await this.getList(params, request);
       const json =
         await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
@@ -383,10 +380,39 @@ export class PostApiService {
    * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
    * @param {Request} request
    */
-  async getPostsByDraftList(request: Request) {
+  async getDraftPosts(request: Request) {
     try {
       const params = parseUrlParams(request.url);
       const response = await this.getDraftList(params, request);
+      const json =
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
+      if (json.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = json.result;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
+   * @param {Request} request
+   */
+  async getMainLikePostsLimit4(request: Request) {
+    try {
+      const response = await this.getLikeList(
+        {
+          limit: 4,
+        },
+        request
+      );
       const json =
         await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
@@ -462,9 +488,9 @@ export class PostApiService {
    * @description 태그 리스트 가져오기
    * @param {Request} request
    */
-  async getPostsByList(request: Request) {
+  async getPosts(request: Request) {
     const params = parseUrlParams(request.url);
-    return this.getPostsByBaseList(params, request);
+    return this.getBasePosts(params, request);
   }
 
   /**
@@ -472,12 +498,12 @@ export class PostApiService {
    * @description loader에서 호출 할 때 사용하는 함수 (좋아요)
    * @param {Request} request
    */
-  async getPostsByLikeList(request: Request) {
+  async getLikePosts(request: Request) {
     try {
       const params = parseUrlParams(request.url);
-      const response = await this.likeList(params, request);
+      const response = await this.getLikeList(params, request);
       const json =
-        await FetchService.toJson<FetchRespSchema.PostLikeListResp>(response);
+        await FetchService.toJson<FetchRespSchema.PostListResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
         return this.getDefaultPostList();
       }
@@ -497,7 +523,7 @@ export class PostApiService {
    * @description loader에서 호출 할 때 사용하는 함수 (top posts)
    * @param {Request} request
    */
-  async getPostsByTop(request: Request) {
+  async getTopPosts(request: Request) {
     try {
       const params = parseUrlParams(request.url);
       let duration = 7;
@@ -505,7 +531,7 @@ export class PostApiService {
         duration = parseInt(params.duration);
       }
 
-      const response = await this.topList(
+      const response = await this.getTopList(
         {
           duration,
         },

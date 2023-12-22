@@ -26,7 +26,6 @@ export class ToastService {
   }
 
   getToastMessage(params?: Partial<OptionalToast>) {
-    console.log("getToastMessage", params);
     const _default: OptionalToast = {
       title: "error",
       description: "An error occurred. Please try again later.",
@@ -44,8 +43,6 @@ export class ToastService {
       // 값이 있는 경우 해당 값으로 설정
       Object.assign(opts, { [keyName]: value });
     }
-
-    console.log("getToastMessage", opts);
 
     return opts;
   }
