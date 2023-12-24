@@ -83,7 +83,7 @@ export default function MainMenuUserProfileMenu({
       <DropdownMenu.Separator className={styles.separator} />
       <DropdownMenu.Item>
         <MenuLink
-          to={PAGE_ENDPOINTS.DRAFT.ROOT}
+          to={PAGE_ENDPOINTS.WRITE.ROOT}
           text="My drafts"
           iconMd={
             <svg fill="none" viewBox="0 0 24 24" width="24" height="24">

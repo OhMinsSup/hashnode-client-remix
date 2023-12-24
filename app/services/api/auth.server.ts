@@ -69,7 +69,7 @@ export class AuthApiService {
    * @description 로그인 API
    * @param {SigninFormFieldValues} input
    */
-  async signin(input: SigninFormFieldValues) {
+  signin(input: SigninFormFieldValues) {
     return $signinApi(input);
   }
 
@@ -78,7 +78,7 @@ export class AuthApiService {
    * @description 회원가입 API
    * @param {SignupFormFieldValues} input
    */
-  async signup(input: SignupFormFieldValues) {
+  signup(input: SignupFormFieldValues) {
     return $signupApi(omit(input, ["confirmPassword"]));
   }
 
@@ -87,7 +87,7 @@ export class AuthApiService {
    * @description 로그아웃 API
    * @param {Request} request
    */
-  async signoutWithAuth(request: Request) {
+  signoutWithAuth(request: Request) {
     return redirect(PAGE_ENDPOINTS.ROOT, {
       headers: this.$server.getClearAuthHeaders(),
     });
@@ -104,6 +104,8 @@ export class AuthApiService {
     const redirectUrl = safeRedirect(
       `${PAGE_ENDPOINTS.AUTH.SIGNUP}?${searchParams.toString()}`
     );
+
+    this.$server.readValidateMethod(request, "POST", redirectUrl);
 
     const formData = await this.$server.readFormData(request);
 
@@ -177,6 +179,8 @@ export class AuthApiService {
     const redirectUrl = safeRedirect(
       `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`
     );
+
+    this.$server.readValidateMethod(request, "POST", redirectUrl);
 
     const formData = await this.$server.readFormData(request);
 

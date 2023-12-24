@@ -252,7 +252,22 @@ export class ServerService {
    * @param {Request} request
    */
   readValidateMethod(request: Request, method: string, redirectUrl: any) {
-    if (request.method !== method) {
+    const methodLowerCase = method.toLowerCase();
+    const checkMethod = request.method.toLowerCase() === methodLowerCase;
+    if (!checkMethod) {
+      throw redirect(redirectUrl, {
+        status: STATUS_CODE.METHOD_NOT_ALLOED,
+      });
+    }
+  }
+
+  readValidateMethods(request: Request, methods: string[], redirectUrl: any) {
+    const method = request.method;
+    const methodLowerCase = method.toLowerCase();
+    const checkMethod = methods.some(
+      (item) => item.toLowerCase() === methodLowerCase
+    );
+    if (!checkMethod) {
       throw redirect(redirectUrl, {
         status: STATUS_CODE.METHOD_NOT_ALLOED,
       });

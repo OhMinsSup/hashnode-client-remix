@@ -1,5 +1,3 @@
-import { json } from "@remix-run/cloudflare";
-
 import { SettingUserForm } from "~/components/setting/future/SettingUserForm";
 import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
 import SettingUserFormProvider from "~/components/setting/context/form";
@@ -45,7 +43,7 @@ export const meta: MetaFunction = ({ matches }) => {
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
   const response = await context.api.user.updateByUser(request);
-  return json(response);
+  return response;
 };
 
 export type Action = typeof action;

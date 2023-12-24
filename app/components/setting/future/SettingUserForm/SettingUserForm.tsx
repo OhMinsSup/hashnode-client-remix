@@ -23,7 +23,7 @@ export default function SettingUserForm({ children }: SettingUserFormProps) {
           body: Json.stringify(input),
         },
         {
-          method: "POST",
+          method: "PUT",
           action: "/settings?index",
         }
       );

@@ -22,12 +22,10 @@ import {
   type FormFieldValues as FollowFormFieldValues,
 } from "~/services/validate/user-follow-api.validate";
 import { FetchService } from "~/services/fetch/fetch.api";
-
 import {
-  schema as $getSchema,
-  type FormFieldValues as GetFormFieldValues,
-} from "~/services/validate/user-get-api.validate";
-import { schema as $idSchema } from "~/services/validate/id.validate";
+  schema as $idSchema,
+  type FormFieldValues as IdFormFieldValues,
+} from "~/services/validate/id.validate";
 
 // types
 import type { ToastService } from "../app/toast.server";
@@ -58,8 +56,8 @@ export class UserApiService {
    * @param {FetchQuerySchema.UserList} query
    * @param {Request} request
    */
-  async list(query: FetchQuerySchema.UserList, request: Request) {
-    return await $getUsersApi(query, {
+  list(query: FetchQuerySchema.UserList, request: Request) {
+    return $getUsersApi(query, {
       request,
     });
   }
@@ -70,7 +68,7 @@ export class UserApiService {
    * @param {string | number} id
    * @param {Request} request
    */
-  async getOwnerPostDetail(id: string | number, request: Request) {
+  getOwnerPostDetail(id: string | number, request: Request) {
     return $getOwnerPostDetailApi(id, {
       request,
     });
@@ -79,12 +77,11 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 상세 정보 API
-   * @param {Partial<GetFormFieldValues>} params
+   * @param {string} id
    * @param {Request} request
    */
-  async get(params: Partial<GetFormFieldValues>, request: Request) {
-    const input = await $getSchema.parseAsync(params);
-    return $getUserApi(input.id, {
+  get(id: string, request: Request) {
+    return $getUserApi(id, {
       request,
     });
   }
@@ -92,12 +89,11 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 히스토리 정보 API
-   * @param {Partial<GetFormFieldValues>} params
+   * @param {string} id
    * @param {Request} request
    */
-  async getHistories(params: Partial<GetFormFieldValues>, request: Request) {
-    const input = await $getSchema.parseAsync(params);
-    return $getUserHistoriesApi(input.id, {
+  getHistories(id: string, request: Request) {
+    return $getUserHistoriesApi(id, {
       request,
     });
   }
@@ -119,7 +115,7 @@ export class UserApiService {
    * @description 삭제 API
    * @param {Request} request
    */
-  async delete(request: Request) {
+  delete(request: Request) {
     return $deleteUserApi({
       request,
     });
@@ -196,15 +192,16 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 상세
-   * @param {GetFormFieldValues} params
+   * @param {IdFormFieldValues} params
    * @param {Request} request
    */
   async getByUserHistories(
-    params: Partial<GetFormFieldValues>,
+    params: Partial<IdFormFieldValues>,
     request: Request
   ) {
     try {
-      const response = await this.getHistories(params, request);
+      const input = await $idSchema.parseAsync(params);
+      const response = await this.getHistories(input.id, request);
       const json =
         await FetchService.toJson<FetchRespSchema.UserHistoryResp[]>(response);
       return json.result ?? [];
@@ -216,12 +213,13 @@ export class UserApiService {
   /**
    * @version 2023-08-17
    * @description 유저 상세
-   * @param {GetFormFieldValues} params
+   * @param {IdFormFieldValues} params
    * @param {Request} request
    */
-  async getByUser(params: Partial<GetFormFieldValues>, request: Request) {
+  async getByUser(params: Partial<IdFormFieldValues>, request: Request) {
     try {
-      const response = await this.get(params, request);
+      const input = await $idSchema.parseAsync(params);
+      const response = await this.get(input.id, request);
       const json =
         await FetchService.toJson<FetchRespSchema.UserResponse>(response);
 
@@ -285,42 +283,41 @@ export class UserApiService {
    * @param {Request} request
    */
   async deleteByUser(request: Request) {
-    this.$server.readValidateMethod(
-      request,
-      "DELETE",
-      PAGE_ENDPOINTS.SETTINGS.ACCOUNT
-    );
+    const redirectUrl = safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT);
+
+    this.$server.readValidateMethod(request, "DELETE", redirectUrl);
 
     try {
       await this.delete(request);
-
       return redirect(PAGE_ENDPOINTS.ROOT, {
         headers: this.$server.getClearAuthHeaders(),
       });
     } catch (error) {
+      const error_validation = this.$server.readValidateError(error);
+      if (error_validation) {
+        throw await this.$server.redirectWithToast(
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_validation.error ?? {})?.at(0),
+          }),
+          this.$toast.createToastHeaders
+        );
+      }
+
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT),
-          {
-            title: "error",
-            description:
-              Object.values(error_fetch.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_fetch.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       throw await this.$server.redirectWithToast(
-        safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT),
-        {
-          title: "error",
-          description:
-            "An error occurred while signing in. Please try again later.",
-          type: "error",
-        },
+        redirectUrl,
+        this.$toast.getToastMessage(),
         this.$toast.createToastHeaders
       );
     }
@@ -332,27 +329,29 @@ export class UserApiService {
    * @param {Request} request
    */
   async updateByUser(request: Request) {
-    try {
-      const formData = await this.$server.readFormData(request);
-      const bodyString = formData.get("body")?.toString() ?? "{}";
-      const body = Json.parse<UpdateFormFieldValues>(bodyString);
-      const input = await $updateSchema.parseAsync(body);
+    const redirectUrl = safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT);
 
-      const response = await this.update(input, request);
+    this.$server.readValidateMethod(request, "PUT", redirectUrl);
+
+    const formData = await this.$server.readFormData(request);
+
+    const input = {
+      body: Json.parse(formData.get("body")?.toString() ?? "{}"),
+    };
+
+    try {
+      const parse = await $updateSchema.parseAsync(input.body);
+      const response = await this.update(parse, request);
       const json = await FetchService.toJson<null>(response);
       return json.result;
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
         throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
-          {
-            title: "error",
-            description:
-              Object.values(error_validation.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_validation.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
@@ -360,42 +359,37 @@ export class UserApiService {
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
         throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
-          {
-            title: "error",
-            description:
-              Object.values(error_fetch.error ?? {})?.at(0) ??
-              "An error occurred while signing in. Please try again later.",
-            type: "error",
-          },
+          redirectUrl,
+          this.$toast.getToastMessage({
+            description: Object.values(error_fetch.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       throw await this.$server.redirectWithToast(
-        safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
-        {
-          title: "error",
-          description:
-            "An error occurred while signing in. Please try again later.",
-          type: "error",
-        },
+        redirectUrl,
+        this.$toast.getToastMessage(),
         this.$toast.createToastHeaders
       );
     }
   }
 
+  /**
+   * @version 2023-08-17
+   * @description 유저 팔로우 등록 및 취소
+   * @param {Request} request
+   */
   async upsertUserFollow(request: Request) {
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
+    const redirectUrl = safeRedirect(
+      searchParams.get("redirectUrl") ?? PAGE_ENDPOINTS.ROOT
+    );
+
+    this.$server.readValidateMethods(request, ["POST", "DELETE"], redirectUrl);
+
     const formData = await this.$server.readFormData(request);
-
-    const defaultToastOpts = {
-      title: "error",
-      description: "failed to follow the user. Please try again later.",
-      type: "error" as const,
-    };
-
-    const redirectUrl = (formData.get("redirectUrl") ||
-      PAGE_ENDPOINTS.ROOT) as string;
 
     const input = {
       userId: formData.get("userId"),
@@ -418,7 +412,9 @@ export class UserApiService {
       if (error_validation) {
         throw await this.$server.redirectWithToast(
           redirectUrl,
-          defaultToastOpts,
+          this.$toast.getToastMessage({
+            description: Object.values(error_validation.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
@@ -427,14 +423,16 @@ export class UserApiService {
       if (error_fetch) {
         throw await this.$server.redirectWithToast(
           redirectUrl,
-          defaultToastOpts,
+          this.$toast.getToastMessage({
+            description: Object.values(error_fetch.error ?? {})?.at(0),
+          }),
           this.$toast.createToastHeaders
         );
       }
 
       throw await this.$server.redirectWithToast(
         redirectUrl,
-        defaultToastOpts,
+        this.$toast.getToastMessage(),
         this.$toast.createToastHeaders
       );
     }

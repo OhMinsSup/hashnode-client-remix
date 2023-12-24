@@ -165,7 +165,9 @@ interface HashnodeCardV2Props {
   data: SerializeFrom<SerializeSchema.SerializePost>;
 }
 
-HashnodeCard.V2 = function HashnodeCardV2({ data }: HashnodeCardV2Props) {
+HashnodeCard.V2 = React.memo(function HashnodeCardV2({
+  data,
+}: HashnodeCardV2Props) {
   const editor = useEditor({
     editable: false,
     editorProps: TiptapEditorProps(),
@@ -418,4 +420,4 @@ HashnodeCard.V2 = function HashnodeCardV2({ data }: HashnodeCardV2Props) {
       </section>
     </article>
   );
-};
+});

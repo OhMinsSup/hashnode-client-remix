@@ -3,12 +3,18 @@ import styles from "./styles.module.css";
 import { HashnodeCard } from "~/components/shared/future/HashnodeCard";
 import { ReachedEnd } from "~/components/shared/future/ReachedEnd";
 import { isBrowser } from "~/libs/browser-utils";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import {
+  type ItemContent,
+  type VirtuosoHandle,
+  type ComputeItemKey,
+  Virtuoso,
+} from "react-virtuoso";
 import { useIsHydrating } from "~/libs/hooks/useIsHydrating";
 import { isEmpty } from "~/utils/assertion";
 import { useLoaderData } from "@remix-run/react";
 import type { RoutesLoader } from "~/routes/_main._feeds._index";
 import { cn } from "~/utils/util";
+import type { SerializeFrom } from "@remix-run/cloudflare";
 
 interface HashnodeListProps {
   type?: "feed.index" | "feed.following" | "feed.featured";
@@ -81,6 +87,35 @@ export default function HashnodeList({
   //   }
   // };
 
+  const itemContent: ItemContent<
+    SerializeFrom<SerializeSchema.SerializePost>,
+    any
+  > = useCallback(
+    (index, item) => {
+      return (
+        <>
+          {index === 3 && recommendedUsers}
+          {index === 7 && trendingTags}
+          <HashnodeCard.V2 data={item} />
+        </>
+      );
+    },
+    [recommendedUsers, trendingTags]
+  );
+
+  const computeItemKey: ComputeItemKey<
+    SerializeFrom<SerializeSchema.SerializePost>,
+    any
+  > = useCallback(
+    (index, item) => {
+      if (!item) {
+        return `${type}-hashnode-${index}`;
+      }
+      return `${type}-hashnode-${item.id}-${index}`;
+    },
+    [type]
+  );
+
   return (
     <Virtuoso
       components={{
@@ -92,36 +127,12 @@ export default function HashnodeList({
         },
         Footer: () => <ReachedEnd />,
       }}
-      computeItemKey={(index, item) => {
-        if (!item) {
-          return `${type}-hashnode-${index}`;
-        }
-        return `${type}-hashnode-${item.id}-${index}`;
-      }}
+      computeItemKey={computeItemKey}
       data={data?.list ?? []}
       data-hydrating-signal
       endReached={() => {}}
       initialItemCount={(data?.list ?? []).length - 1}
-      itemContent={(index, item) => {
-        if (index === 3) {
-          return (
-            <>
-              {recommendedUsers}
-              <HashnodeCard.V2 data={item} />
-            </>
-          );
-        }
-
-        if (index === 7) {
-          return (
-            <>
-              {trendingTags}
-              <HashnodeCard.V2 data={item} />
-            </>
-          );
-        }
-        return <HashnodeCard.V2 data={item} />;
-      }}
+      itemContent={itemContent}
       overscan={10}
       ref={$virtuoso}
       totalCount={data?.totalCount ?? 0}

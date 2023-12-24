@@ -49,10 +49,10 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
   return response;
 };
 
-export type Action = typeof action;
+export type RoutesActionData = typeof action;
 
 export default function Routes() {
-  const fetcher = useFetcher<Action>();
+  const fetcher = useFetcher<RoutesActionData>();
 
   const onDeleteAccount = useCallback(() => {
     const confirmDelete = confirm(

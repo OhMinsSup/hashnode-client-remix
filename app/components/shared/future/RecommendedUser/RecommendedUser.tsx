@@ -19,9 +19,10 @@ export default function RecommendedUser({ user }: RecommendedUserProps) {
   const onClick = useCallback(() => {
     const formData = new FormData();
     formData.append("userId", user.id);
-    formData.append("redirectUrl", location.pathname);
     fetcher.submit(formData, {
-      action: getPath(),
+      action: getPath({
+        redirectUrl: location.pathname,
+      }),
       method: "POST",
       encType: "multipart/form-data",
       navigate: false,
