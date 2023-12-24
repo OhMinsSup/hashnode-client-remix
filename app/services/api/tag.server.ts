@@ -5,8 +5,8 @@ import { getTagsApi as $getTagsApi } from "~/services/fetch/tags/gets-api.server
 import { getTagApi as $getTagApi } from "~/services/fetch/tags/get-api.server";
 import { postTagFollowApi as $tagFollowApi } from "~/services/fetch/tags/tag-follow-api.server";
 
-import { schema as $getSchema } from "~/services/validate/tag-get.api.validate";
 import { schema as $tagFollowSchema } from "~/services/validate/tag-follow-api.validate";
+import { schema as $idSchema } from "~/services/validate/id.validate";
 import { FetchService } from "~/services/fetch/fetch.api";
 
 // types
@@ -50,12 +50,11 @@ export class TagApiService {
   /**
    * @version 2023-08-17
    * @description 태그 상세 정보 API
-   * @param {Params} params
+   * @param {IdFormFieldValues} id
    * @param {Request} request
    */
-  async get(params: Params, request: Request) {
-    const input = await $getSchema.parseAsync(params);
-    return $getTagApi(input.name, {
+  get(id: string, request: Request) {
+    return $getTagApi(id, {
       request,
     });
   }
@@ -121,9 +120,10 @@ export class TagApiService {
    * @param {Params} params
    * @param {Request} request
    */
-  async getTagByName(params: Params, request: Request) {
+  async getTag(params: Params, request: Request) {
     try {
-      const response = await this.get(params, request);
+      const input = await $idSchema.parseAsync(params);
+      const response = await this.get(input.id, request);
       const json =
         await FetchService.toJson<FetchRespSchema.TagDetailResp>(response);
       if (json.resultCode !== RESULT_CODE.OK) {
@@ -141,7 +141,7 @@ export class TagApiService {
    * @param {FetchQuerySchema.TagList} query
    * @param {Request} request
    */
-  async getTagsByBaseList(query: FetchQuerySchema.TagList, request: Request) {
+  async getBaseTags(query: FetchQuerySchema.TagList, request: Request) {
     try {
       const response = await this.list(query, request);
       const json =
@@ -165,9 +165,9 @@ export class TagApiService {
    * @description 태그 리스트 가져오기
    * @param {Request} request
    */
-  async getTagsByList(request: Request) {
+  async getTags(request: Request) {
     const params = parseUrlParams(request.url);
-    return this.getTagsByBaseList(params, request);
+    return this.getBaseTags(params, request);
   }
 
   /**
@@ -180,7 +180,7 @@ export class TagApiService {
       type: "popular" as const,
       limit: 4,
     };
-    return this.getTagsByBaseList(params, request);
+    return this.getBaseTags(params, request);
   }
 
   private getDefaultTagList() {
