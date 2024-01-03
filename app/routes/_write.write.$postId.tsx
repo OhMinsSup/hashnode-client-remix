@@ -31,8 +31,7 @@ export const action = async ({
   request,
   context,
 }: ActionFunctionArgs) => {
-  await context.api.post.updateItem(request, params.postId);
-  return null;
+  return await context.api.post.updateItem(request, params.postId);
 };
 
 export type RoutesActionData = typeof action;

@@ -269,7 +269,6 @@ export class PostApiService {
     };
 
     if (!id) {
-      console.log("id is not defined.");
       throw await this.$server.redirectWithToast(
         safeRedirect(PAGE_ENDPOINTS.ROOT),
         defaultToastOpts,
@@ -281,7 +280,6 @@ export class PostApiService {
       const formData = await this.$server.readFormData(request);
       const bodyString = formData.get("body")?.toString();
       if (!bodyString) {
-        console.log("body is not defined.");
         throw new TypeError(
           "body is not defined. please check your request body."
         );
@@ -290,17 +288,15 @@ export class PostApiService {
       const response = await this.update(id, input, request);
       const json = await this.$server.toJSON(response);
       if (json.resultCode !== RESULT_CODE.OK) {
-        console.log("failed to update the post.");
         const error = new Error();
         error.name = "UpdatePostError";
         error.message = "failed to follow the tag. Please try again later.";
         throw error;
       }
-      throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
+      return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
     } catch (error) {
       const error_validation = this.$server.readValidateError(error);
       if (error_validation) {
-        console.log("validate = failed to update the post.", error_validation);
         throw await this.$server.redirectWithToast(
           safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
           defaultToastOpts,
@@ -310,7 +306,6 @@ export class PostApiService {
 
       const error_fetch = await this.$server.readFetchError(error);
       if (error_fetch) {
-        console.log("fetch = failed to update the post.", error_fetch);
         throw await this.$server.redirectWithToast(
           // @ts-ignore
           safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
@@ -318,8 +313,6 @@ export class PostApiService {
           this.$toast.createToastHeaders
         );
       }
-
-      console.log("errro = failed to update the post.", error);
 
       throw await this.$server.redirectWithToast(
         // @ts-ignore

@@ -227,6 +227,7 @@ declare namespace SerializeSchema {
     postTags: SerializePostTags;
     postSeo: SerializePostSeo;
     likeCount: number;
+    readCount: number;
   };
 
   export type SerializeFile = FetchSchema.File & {

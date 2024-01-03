@@ -55,7 +55,12 @@ export default function HashnodeList({
 
   const data = useLoaderData<RoutesLoader>();
 
-  console.log("hash", data);
+  const initialItemCount = useMemo(() => {
+    const _list = data?.list ?? [];
+    return _list.length;
+  }, [data]);
+
+  // console.log("hash", data);
 
   const closeMutationObserver = () => {
     if ($observer.current) {
@@ -87,56 +92,41 @@ export default function HashnodeList({
   //   }
   // };
 
-  const itemContent: ItemContent<
-    SerializeFrom<SerializeSchema.SerializePost>,
-    any
-  > = useCallback(
-    (index, item) => {
-      return (
-        <>
-          {index === 3 && recommendedUsers}
-          {index === 7 && trendingTags}
-          <HashnodeCard.V2 data={item} />
-        </>
-      );
-    },
-    [recommendedUsers, trendingTags]
-  );
-
-  const computeItemKey: ComputeItemKey<
-    SerializeFrom<SerializeSchema.SerializePost>,
-    any
-  > = useCallback(
-    (index, item) => {
-      if (!item) {
-        return `${type}-hashnode-${index}`;
-      }
-      return `${type}-hashnode-${item.id}-${index}`;
-    },
-    [type]
-  );
-
   return (
-    <Virtuoso
-      components={{
-        List: React.forwardRef((props, ref) => {
-          return <div className={styles.root} {...props} ref={ref} />;
-        }),
-        Item: ({ item, ...otherProps }) => {
-          return <div className="w-full" {...otherProps} />;
-        },
-        Footer: () => <ReachedEnd />,
-      }}
-      computeItemKey={computeItemKey}
-      data={data?.list ?? []}
-      data-hydrating-signal
-      endReached={() => {}}
-      initialItemCount={(data?.list ?? []).length - 1}
-      itemContent={itemContent}
-      overscan={10}
-      ref={$virtuoso}
-      totalCount={data?.totalCount ?? 0}
-      useWindowScroll
-    />
+    <div className={styles.root}>
+      {data?.list?.map((item, index) => {
+        return (
+          <div className="w-full" key={`${type}-hashnode-${item.id}`}>
+            {index === 3 && recommendedUsers}
+            {index === 7 && trendingTags}
+            <HashnodeCard.V2 data={item} />
+          </div>
+        );
+      })}
+    </div>
   );
+
+  // return (
+  //   <Virtuoso
+  //     components={{
+  //       List: React.forwardRef((props, ref) => {
+  //         return <div className={styles.root} {...props} ref={ref} />;
+  //       }),
+  //       Item: ({ item, ...otherProps }) => {
+  //         return <div className="w-full" {...otherProps} />;
+  //       },
+  //       Footer: () => <ReachedEnd />,
+  //     }}
+  //     computeItemKey={computeItemKey}
+  //     data={data?.list ?? []}
+  //     data-hydrating-signal
+  //     endReached={() => {}}
+  //     initialItemCount={initialItemCount}
+  //     itemContent={itemContent}
+  //     overscan={10}
+  //     ref={$virtuoso}
+  //     totalCount={data?.totalCount ?? 0}
+  //     useWindowScroll
+  //   />
+  // );
 }

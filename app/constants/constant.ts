@@ -138,6 +138,9 @@ export const PAGE_ENDPOINTS = {
     ROOT: "/write",
     ID: (id: string | number) => `/write/${id}`,
   },
+  POSTS: {
+    ID: (id: string | number) => `/posts/${id}`,
+  },
 } as const;
 
 export const NAVIGATION_ITEMS = [

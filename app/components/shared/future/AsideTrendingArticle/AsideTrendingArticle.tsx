@@ -170,7 +170,7 @@ export default function AsideTrendingArticle() {
                   <span className="inline-block mx-2 font-bold opacity-50">
                     ·
                   </span>
-                  <p>54 reads</p>
+                  <p>{item?.readCount ?? 0} reads</p>
                 </div>
               </div>
             );
