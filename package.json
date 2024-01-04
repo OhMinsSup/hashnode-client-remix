@@ -10,6 +10,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@epic-web/cachified": "^4.0.0",
     "@hookform/resolvers": "^3.3.3",
     "@paralleldrive/cuid2": "^2.2.2",
     "@radix-ui/colors": "^3.0.0",
@@ -61,6 +62,7 @@
     "isbot": "latest",
     "lodash-es": "^4.17.21",
     "lowlight": "^3.1.0",
+    "lru-cache": "^10.1.0",
     "lucide-react": "^0.303.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
