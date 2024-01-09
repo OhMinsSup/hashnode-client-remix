@@ -5,7 +5,7 @@ import { PostsNamespace } from "~/services/agent/client/posts";
 import { TagsNamespace } from "~/services/agent/client/tags";
 import { UsersNamespace } from "~/services/agent/client/users";
 
-import type { AgentFetchHandler } from "~/services/agent/core/types";
+import type { AgentFetchHandler } from "~/services/agent/types";
 export class BaseClient {
   fetch: AgentFetchHandler = defaultFetchHandler;
 

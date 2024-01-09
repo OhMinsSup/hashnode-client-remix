@@ -18,6 +18,7 @@ import { CsrfService } from "./app/services/app/csrf.server";
 import { HoneypotService } from "./app/services/app/honeypot.server";
 
 import * as build from "@remix-run/dev/server-build";
+import { HashnodeAgent } from "~/services/agent";
 
 if (process.env.NODE_ENV === "development") {
   logDevReady(build);
@@ -28,6 +29,11 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
   mode: process.env.NODE_ENV,
   getLoadContext: (context) => {
     const env = EnvSchema.parse(context.env);
+
+    const agent = new HashnodeAgent({
+      service: env.API_BASE_URL,
+      prefix: "/v1",
+    });
 
     const server = new ServerService(env);
     const theme = new ThemeService(env);
@@ -43,10 +49,14 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       csrf,
       honeypot,
       toast,
+      agent,
     };
 
     const api = {
-      auth: new AuthApiService(env, server, csrf, honeypot, toast),
+      auth: new AuthApiService({
+        env,
+        services,
+      }),
       user: new UserApiService(env, server, toast),
       post: new PostApiService(env, server, toast),
       tag: new TagApiService(env, server, toast),

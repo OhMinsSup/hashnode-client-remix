@@ -1,19 +1,15 @@
-import type {
-  FetchHandlerOptions,
-  FetchHandlerResponse,
-  QueryParams,
-} from "../fetch/types";
+import type { FetchHandlerOptions, FetchHandlerResponse } from "../fetch/types";
 
 export type CallOptions = Partial<
   Pick<FetchHandlerOptions, "headers" | "reqBody">
 >;
 
-export type PostTestHandler = (
+export type SignupHandler = (
   body: any,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
-export type GetTestHandler = (
-  params: QueryParams,
+export type SigninHandler = (
+  body: any,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;

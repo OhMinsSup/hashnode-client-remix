@@ -1,5 +1,5 @@
-import { LRUCache } from "lru-cache";
-import { cachified, CacheEntry } from "@epic-web/cachified";
+// import { LRUCache } from "lru-cache";
+// import { , CacheEntry } from "@epic-web/cachified";
 import { ZodError } from "zod";
 import { FetchError } from "~/services/fetch/fetch.error";
 import { ASSET_URL, STATUS_CODE } from "~/constants/constant";
@@ -25,15 +25,15 @@ export type ResponseJSON<Data = any> = {
 };
 
 export class ServerService {
-  private _cache = new LRUCache<string, CacheEntry>({
-    max: 1000,
-  });
+  // private _cache = new LRUCache<string, CacheEntry>({
+  //   max: 1000,
+  // });
 
   constructor(private readonly env: Env) {}
 
-  get cache() {
-    return this._cache;
-  }
+  // get cache() {
+  //   return this._cache;
+  // }
 
   getHashnodeonboard() {
     return {

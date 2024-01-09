@@ -6,6 +6,7 @@ import type { ApiOptions } from "~/services/fetch/fetch.type";
 import type { FormFieldValues } from "~/services/validate/signin-api.validate";
 
 /**
+ * @deprecated
  * @version 2023-08-17
  * @description 로그인 API
  * @param {FormFieldValues} body

@@ -11,22 +11,33 @@ import type { PostApiService } from "./api/post.server";
 import type { CsrfService } from "./app/csrf.server";
 import type { HoneypotService } from "./app/honeypot.server";
 import type { ToastService } from "./app/toast.server";
+import type { HashnodeAgent } from "./agent";
+
+export type HashnodeServices = {
+  theme: ThemeService;
+  server: ServerService;
+  images: ImagesService;
+  csrf: CsrfService;
+  honeypot: HoneypotService;
+  toast: ToastService;
+  agent: HashnodeAgent;
+};
+
+export type HashnodeApi = {
+  auth: AuthApiService;
+  user: UserApiService;
+  tag: TagApiService;
+  file: FileApiService;
+  post: PostApiService;
+  notification: NotificationApiService;
+};
+
+export type HashnodeApiConstructorOptions = {
+  env: RuntimeEnv;
+  services: HashnodeServices;
+};
 
 export interface RemixContext extends RuntimeEnv {
-  services: {
-    theme: ThemeService;
-    server: ServerService;
-    images: ImagesService;
-    csrf: CsrfService;
-    honeypot: HoneypotService;
-    toast: ToastService;
-  };
-  api: {
-    auth: AuthApiService;
-    user: UserApiService;
-    tag: TagApiService;
-    file: FileApiService;
-    post: PostApiService;
-    notification: NotificationApiService;
-  };
+  services: HashnodeServices;
+  api: HashnodeApi;
 }

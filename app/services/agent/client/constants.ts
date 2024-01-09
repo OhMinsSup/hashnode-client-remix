@@ -15,11 +15,31 @@ export const API_ENDPOINTS = {
   TAGS: {
     ROOT: "/tags",
     ID: (id: string) => `/tags/${id}`,
-    FOLLOW: (id: string) => `/tags/${id}/follow`,
+    FOLLOW: "/tags/follow",
     SLUG: (slug: string) => `/tags/${slug}/slug`,
   },
-  POSTS: {},
-  USERS: {},
+  POSTS: {
+    ROOT: "posts",
+    GET_TOP_POSTS: "posts/get-top-posts",
+    GET_DRAFT_POSTS: "posts/get-draft-posts",
+    GET_DELETED_POSTS: "posts/get-deleted-posts",
+    GET_LIKES: "posts/get-likes",
+    ID: (id: string | number) => `posts/${id}`,
+  },
+  USERS: {
+    ROOT: "users",
+    ME: "users/me",
+    LOGOUT: "users/logout",
+    MY_POSTS: "users/my-posts",
+    USER_FOLLOW: "users/follow",
+    ID: (username: string) => `users/${username}`,
+    HISTORTIES: (username: string) => `users/${username}/histories`,
+    USERNAME_POSTS: (username: string) => `users/${username}/posts`,
+    TRENDING_USERS: "users/treanding",
+    OWNER_POSTS: {
+      ID: (id: string | number) => `users/owner-posts/${id}`,
+    },
+  },
 } as const;
 
 export const CLOUDFLARE = {

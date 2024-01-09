@@ -15,4 +15,19 @@ export class NotificationsNamespace {
   get defineApis() {
     return this._defineApis;
   }
+
+  getCount(opts?: CallOptions | undefined) {
+    const httpUri = constructMethodCallUri(
+      this._service.makePathname(this._defineApis.COUNT),
+      this._service.uri
+    );
+    const httpHeaders = opts?.headers;
+
+    return this._service._baseClient.fetch({
+      uri: httpUri,
+      method: "GET",
+      headers: httpHeaders,
+      reqBody: undefined,
+    });
+  }
 }
