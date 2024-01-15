@@ -14,7 +14,6 @@ import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { Toaster, toast as showToast } from "sonner";
 
 import classNames from "classnames";
-import { getDomainUrl } from "~/utils/util";
 
 import { ExternalLink } from "~/components/shared/future/ExternalLink";
 import { CanonicalLink } from "~/components/shared/future/CanonicalLink";
@@ -34,7 +33,6 @@ import globalStyles from "~/styles/global.css";
 // types
 import type { Theme } from "~/context/useThemeContext";
 import type { Toast } from "./services/validate/toast.validate";
-import type { HoneypotInputProps } from "remix-utils/honeypot/server";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -50,59 +48,12 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const env = {
-    API_BASE_URL: context.API_BASE_URL,
-  };
+  const getSessionApi = context.api.auth.getSession(request);
 
-  const { toast, headers: toastHeaders } =
-    await context.services.toast.getToast(request);
-
-  const values = await context.services.csrf.csrf.commitToken(request);
-  const [csrfToken, csrfHeader] = values;
-
-  const honeyProps = context.services.honeypot.honeypot.getInputProps();
-
-  const $object = {
-    currentProfile: null,
-    theme: null,
-    csrfToken,
-    toast,
-    origin: getDomainUrl(request),
-    env,
-    honeyProps,
-  } as {
-    currentProfile: FetchRespSchema.UserResponse | null;
-    csrfToken: string;
-    env: typeof env;
-    theme: Theme | null;
-    toast: Toast | null;
-    origin: string;
-    honeyProps: HoneypotInputProps;
-  };
-
-  try {
-    const [session, theme] = await Promise.all([
-      context.api.auth.getSession(request),
-      context.services.theme.getTheme(request),
-    ]);
-
-    const $data = Object.assign({}, $object, {
-      currentProfile: session,
-      theme,
-    });
-
-    const headers = context.services.server.getClearAuthHeaders();
-
-    return json($data, {
-      headers: context.services.server.combineHeaders(
-        csrfHeader ? { "set-cookie": csrfHeader } : null,
-        toastHeaders,
-        session ? null : headers
-      ),
-    });
-  } catch (error) {
-    return json($object);
-  }
+  const { data, headers } = await context.api.app.root(request, getSessionApi);
+  return json(data, {
+    headers,
+  });
 };
 
 export type RoutesData = typeof loader;

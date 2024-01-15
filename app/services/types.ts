@@ -12,6 +12,7 @@ import type { CsrfService } from "./app/csrf.server";
 import type { HoneypotService } from "./app/honeypot.server";
 import type { ToastService } from "./app/toast.server";
 import type { HashnodeAgent } from "./agent";
+import type { AppApiService } from "./api/app.server";
 
 export type HashnodeServices = {
   theme: ThemeService;
@@ -30,6 +31,7 @@ export type HashnodeApi = {
   file: FileApiService;
   post: PostApiService;
   notification: NotificationApiService;
+  app: AppApiService;
 };
 
 export type HashnodeApiConstructorOptions = {

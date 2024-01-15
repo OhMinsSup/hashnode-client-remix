@@ -4,6 +4,8 @@ export type CallOptions = Partial<
   Pick<FetchHandlerOptions, "headers" | "reqBody">
 >;
 
+// Auth
+
 export type SignupHandler = (
   body: any,
   opts?: CallOptions | undefined
@@ -11,5 +13,11 @@ export type SignupHandler = (
 
 export type SigninHandler = (
   body: any,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
+
+// Users
+
+export type GetMeHandler = (
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;

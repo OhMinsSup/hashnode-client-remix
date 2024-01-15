@@ -6,10 +6,6 @@ import { safeRedirect } from "remix-utils/safe-redirect";
 import { schema as $signinSchema } from "~/services/validate/signin-api.validate";
 import { schema as $signupSchema } from "~/services/validate/signup-api.validate";
 
-import { getMeApi as $getMeApi } from "~/services/fetch/users/me-api.server";
-
-import { FetchService } from "~/services/fetch/fetch.api";
-
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 // types
@@ -61,7 +57,7 @@ export class AuthApiService {
       `${PAGE_ENDPOINTS.AUTH.SIGNUP}?${searchParams.toString()}`
     );
 
-    this.$server.readValidateMethod(request, "POST", redirectUrl);
+    this.$server.readValidateMethods(request, ["POST"], redirectUrl);
 
     const formData = await this.$server.readFormData(request);
 
@@ -112,7 +108,7 @@ export class AuthApiService {
       `${PAGE_ENDPOINTS.AUTH.SIGNIN}?${searchParams.toString()}`
     );
 
-    this.$server.readValidateMethod(request, "POST", redirectUrl);
+    this.$server.readValidateMethods(request, ["POST"], redirectUrl);
 
     const formData = await this.$server.readFormData(request);
 
@@ -158,28 +154,31 @@ export class AuthApiService {
    * @param {Request} request
    */
   async getSession(request: Request) {
-    const cookie = this.$server.readHeaderCookie(request);
-
-    let accessToken: string | null = null;
-    if (cookie) {
-      const { access_token } = cookies.parse(cookie);
-      if (access_token) accessToken = access_token;
-    }
-
-    if (!accessToken) {
-      return null;
-    }
-
     try {
-      const response = await $getMeApi({ request });
-      const data =
-        await FetchService.toJson<FetchRespSchema.UserResponse>(response);
-      if (data.resultCode !== RESULT_CODE.OK) {
+      const cookie = this.$server.readHeaderCookie(request);
+      if (!cookie) {
         return null;
       }
 
-      return data.result;
+      const { access_token } = cookies.parse(cookie);
+      if (!access_token) {
+        return null;
+      }
+
+      const response = await this.$agent.getMeHandler({
+        headers: {
+          Cookie: cookie,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.body;
+      if (data?.resultCode !== RESULT_CODE.OK) {
+        return null;
+      }
+      return data.result as SerializeSchema.SerializeUser;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

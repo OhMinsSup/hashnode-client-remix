@@ -19,12 +19,15 @@ import { HoneypotService } from "./app/services/app/honeypot.server";
 
 import * as build from "@remix-run/dev/server-build";
 import { HashnodeAgent } from "~/services/agent";
+import { AppApiService } from "~/services/api/app.server";
 
 if (process.env.NODE_ENV === "development") {
+  // @ts-expect-error isSpaMode is not defined
   logDevReady(build);
 }
 
 export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
+  // @ts-expect-error isSpaMode is not defined
   build,
   mode: process.env.NODE_ENV,
   getLoadContext: (context) => {
@@ -62,6 +65,10 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
       tag: new TagApiService(env, server, toast),
       file: new FileApiService(env, server, toast),
       notification: new NotificationApiService(env, server),
+      app: new AppApiService({
+        env,
+        services,
+      }),
     };
 
     return {

@@ -25,15 +25,7 @@ export type ResponseJSON<Data = any> = {
 };
 
 export class ServerService {
-  // private _cache = new LRUCache<string, CacheEntry>({
-  //   max: 1000,
-  // });
-
   constructor(private readonly env: Env) {}
-
-  // get cache() {
-  //   return this._cache;
-  // }
 
   getHashnodeonboard() {
     return {
