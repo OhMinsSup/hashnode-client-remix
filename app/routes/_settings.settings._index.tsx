@@ -42,11 +42,11 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const response = await context.api.user.updateByUser(request);
+  const response = await context.api.user.putUser(request);
   return response;
 };
 
-export type Action = typeof action;
+export type RoutesActionData = typeof action;
 
 export default function Routes() {
   return (

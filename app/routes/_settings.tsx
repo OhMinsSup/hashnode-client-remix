@@ -24,7 +24,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   return null;
 };
 
-export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export default function Routes() {
   return (

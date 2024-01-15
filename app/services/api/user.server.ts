@@ -1,6 +1,6 @@
 import Json from "superjson";
 import { redirect } from "@remix-run/cloudflare";
-
+import { BaseError, ErrorType } from "~/services/error";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { parseUrlParams } from "~/utils/util";
 import { safeRedirect } from "remix-utils/safe-redirect";
@@ -28,16 +28,22 @@ import {
 } from "~/services/validate/id.validate";
 
 // types
-import type { ToastService } from "../app/toast.server";
-import type { Env } from "../app/env.server";
-import type { ServerService } from "~/services/app/server.server";
+import type { HashnodeApiConstructorOptions } from "~/services/types";
 
 export class UserApiService {
-  constructor(
-    private readonly $env: Env,
-    private readonly $server: ServerService,
-    private readonly $toast: ToastService
-  ) {}
+  constructor(private readonly opts: HashnodeApiConstructorOptions) {}
+
+  private get $server() {
+    return this.opts.services.server;
+  }
+
+  private get $toast() {
+    return this.opts.services.toast;
+  }
+
+  private get $agent() {
+    return this.opts.services.agent;
+  }
 
   /**
    * @version 2023-08-17
@@ -328,50 +334,47 @@ export class UserApiService {
    * @description 유저 수정
    * @param {Request} request
    */
-  async updateByUser(request: Request) {
+  async putUser(request: Request) {
     const redirectUrl = safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT);
 
-    this.$server.readValidateMethod(request, "PUT", redirectUrl);
-
-    const formData = await this.$server.readFormData(request);
-
-    const input = {
-      body: Json.parse(formData.get("body")?.toString() ?? "{}"),
-    };
-
     try {
-      const parse = await $updateSchema.parseAsync(input.body);
-      const response = await this.update(parse, request);
-      const json = await FetchService.toJson<null>(response);
-      return json.result;
+      const cookie = this.$server.readHeaderCookie(request);
+      if (!cookie) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "authentication failed. Please try again later."
+        );
+        throw error;
+      }
+
+      this.$server.readValidateMethods(request, ["PUT"], redirectUrl);
+
+      const formData = await this.$server.readFormData(request);
+
+      const input = Json.parse(formData.get("body")?.toString() ?? "{}");
+
+      const parse = await $updateSchema.parseAsync(input);
+      const response = await this.$agent.putMeHandler(parse, {
+        headers: {
+          Cookie: cookie,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data?.resultCode !== RESULT_CODE.OK) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "failed to update the user. Please try again later."
+        );
+        throw error;
+      }
+      return redirect(redirectUrl);
     } catch (error) {
-      const error_validation = this.$server.readValidateError(error);
-      if (error_validation) {
-        throw await this.$server.redirectWithToast(
-          redirectUrl,
-          this.$toast.getToastMessage({
-            description: Object.values(error_validation.error ?? {})?.at(0),
-          }),
-          this.$toast.createToastHeaders
-        );
-      }
+      await this.validateInput(error, redirectUrl);
 
-      const error_fetch = await this.$server.readFetchError(error);
-      if (error_fetch) {
-        throw await this.$server.redirectWithToast(
-          redirectUrl,
-          this.$toast.getToastMessage({
-            description: Object.values(error_fetch.error ?? {})?.at(0),
-          }),
-          this.$toast.createToastHeaders
-        );
-      }
+      await this.validateFetchError(error, redirectUrl);
 
-      throw await this.$server.redirectWithToast(
-        redirectUrl,
-        this.$toast.getToastMessage(),
-        this.$toast.createToastHeaders
-      );
+      await this.errorToast(error, redirectUrl);
     }
   }
 
@@ -501,5 +504,70 @@ export class UserApiService {
       },
       totalCount: 0,
     };
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 입력값 검증
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateInput(error: unknown, redirectUrl: string) {
+    const error_validation = this.$server.readValidateError(error);
+    if (error_validation) {
+      const response = await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_validation.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+      throw response;
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그인 응답값에 대한 에러처리
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateFetchError(error: unknown, redirectUrl: string) {
+    const error_fetch = await this.$server.readFetchError(error);
+    if (error_fetch) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_fetch.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 에러 공통 처리 (토스트)
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async errorToast(error: unknown, redirectUrl: string) {
+    if (error instanceof BaseError) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: error.message,
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
+
+    const response = await this.$server.redirectWithToast(
+      redirectUrl,
+      this.$toast.getToastMessage(),
+      this.$toast.createToastHeaders
+    );
+
+    throw response;
   }
 }

@@ -21,3 +21,8 @@ export type SigninHandler = (
 export type GetMeHandler = (
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
+
+export type UserUpdateHandler = (
+  body: any,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
