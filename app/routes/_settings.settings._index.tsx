@@ -42,8 +42,7 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const response = await context.api.user.putUser(request);
-  return response;
+  return await context.api.user.putUser(request);
 };
 
 export type RoutesActionData = typeof action;

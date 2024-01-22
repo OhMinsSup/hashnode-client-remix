@@ -6,6 +6,7 @@ import type { ApiOptions } from "~/services/fetch/fetch.type";
 
 /**
  * @version 2023-08-17
+ * @deprecated
  * @description 유저 삭제 API
  * @param {ApiOptions?} options
  */

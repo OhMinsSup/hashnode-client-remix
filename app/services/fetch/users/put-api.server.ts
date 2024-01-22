@@ -7,6 +7,7 @@ import type { FormFieldValues } from "~/services/validate/user-update-api.valida
 
 /**
  * @version 2023-08-17
+ * @deprecated
  * @description 유저 수정 API
  * @param {ApiOptions?} options
  */

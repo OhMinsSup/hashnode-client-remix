@@ -49,19 +49,18 @@ export class UsersNamespace {
     });
   }
 
-  delete(body: any, opts?: CallOptions | undefined) {
+  delete(opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ME),
       this._service.uri
     );
     const httpHeaders = opts?.headers;
-    const httpReqBody = body as unknown;
 
     return this._service._baseClient.fetch({
       uri: httpUri,
       method: "DELETE",
       headers: httpHeaders,
-      reqBody: httpReqBody,
+      reqBody: undefined,
     });
   }
 

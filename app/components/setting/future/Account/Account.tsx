@@ -17,7 +17,7 @@ export default function Account({ onDeleteAccount }: AccountProps) {
       </h2>
       <p className="mb-2">
         Your Hashnode account administers these blogs:
-        <strong>{session.username}.hashnode.dev</strong>
+        <strong>{session?.userProfile?.username}.hashnode.dev</strong>
       </p>
       <p className="mb-10">
         Your personal data will be deleted permanently when you delete your

@@ -26,3 +26,7 @@ export type UserUpdateHandler = (
   body: any,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
+
+export type UserDeleteHandler = (
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;

@@ -45,8 +45,7 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const response = await context.api.user.deleteByUser(request);
-  return response;
+  return await context.api.user.deleteUser(request);
 };
 
 export type RoutesActionData = typeof action;

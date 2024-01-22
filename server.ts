@@ -22,12 +22,10 @@ import { HashnodeAgent } from "~/services/agent";
 import { AppApiService } from "~/services/api/app.server";
 
 if (process.env.NODE_ENV === "development") {
-  // @ts-expect-error isSpaMode is not defined
   logDevReady(build);
 }
 
 export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
-  // @ts-expect-error isSpaMode is not defined
   build,
   mode: process.env.NODE_ENV,
   getLoadContext: (context) => {

@@ -13,6 +13,13 @@ declare namespace FetchSchema {
     description: string;
   };
 
+  export type SettingEmailItems = {
+    id: number;
+    label: string;
+    description: string;
+    checked: boolean;
+  };
+
   export type AuthRespSchema = {
     userId: number;
     authToken: string;

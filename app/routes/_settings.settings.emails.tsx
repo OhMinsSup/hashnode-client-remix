@@ -1,8 +1,10 @@
 // hooks
+import { json } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { Email } from "~/components/setting/future/Email";
 
 // types
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 
 export const meta: MetaFunction = ({ matches }) => {
   const Seo = {
@@ -37,8 +39,16 @@ export const meta: MetaFunction = ({ matches }) => {
   ];
 };
 
+export const loader = ({ context }: LoaderFunctionArgs) => {
+  return json({
+    items: context.services.server.getSettingEmailItems(),
+  });
+};
+
+export type RoutesLoader = typeof loader;
+
 export default function Routes() {
-  return <></>;
+  return <Email />;
 }
 
 export function ErrorBoundary() {

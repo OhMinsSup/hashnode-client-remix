@@ -5,18 +5,13 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { parseUrlParams } from "~/utils/util";
 import { safeRedirect } from "remix-utils/safe-redirect";
 
-import { deleteUserApi as $deleteUserApi } from "~/services/fetch/users/delete-api.server";
-import { putUserApi as $putUserApi } from "~/services/fetch/users/put-api.server";
 import { getUserApi as $getUserApi } from "~/services/fetch/users/get-api.server";
 import { getUsersApi as $getUsersApi } from "~/services/fetch/users/gets-api.server";
 import { getUserHistoriesApi as $getUserHistoriesApi } from "~/services/fetch/users/get-histories.server";
 import { getOwnerPostDetailApi as $getOwnerPostDetailApi } from "~/services/fetch/users/get-owner-post-api.server";
 import { postUserFollowApi as $postUserFollowApi } from "~/services/fetch/users/user-follow-api.server";
 
-import {
-  schema as $updateSchema,
-  type FormFieldValues as UpdateFormFieldValues,
-} from "~/services/validate/user-update-api.validate";
+import { schema as $updateSchema } from "~/services/validate/user-update-api.validate";
 import {
   schema as $followSchema,
   type FormFieldValues as FollowFormFieldValues,
@@ -100,29 +95,6 @@ export class UserApiService {
    */
   getHistories(id: string, request: Request) {
     return $getUserHistoriesApi(id, {
-      request,
-    });
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 수정 API
-   * @param {UpdateFormFieldValues} input
-   * @param {Request} request
-   */
-  update(input: UpdateFormFieldValues, request: Request) {
-    return $putUserApi(input, {
-      request,
-    });
-  }
-
-  /**
-   * @version 2023-08-17
-   * @description 삭제 API
-   * @param {Request} request
-   */
-  delete(request: Request) {
-    return $deleteUserApi({
       request,
     });
   }
@@ -288,44 +260,42 @@ export class UserApiService {
    * @description 유저 탈퇴
    * @param {Request} request
    */
-  async deleteByUser(request: Request) {
+  async deleteUser(request: Request) {
     const redirectUrl = safeRedirect(PAGE_ENDPOINTS.SETTINGS.ACCOUNT);
 
-    this.$server.readValidateMethod(request, "DELETE", redirectUrl);
-
     try {
-      await this.delete(request);
-      return redirect(PAGE_ENDPOINTS.ROOT, {
+      const cookie = this.$server.readHeaderCookie(request);
+      if (!cookie) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "authentication failed. Please try again later."
+        );
+        throw error;
+      }
+
+      this.$server.readValidateMethods(request, ["DELETE"], redirectUrl);
+
+      const response = await this.$agent.deleteMeHandler({
+        headers: {
+          Cookie: cookie,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data?.resultCode !== RESULT_CODE.OK) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "failed to delete the user. Please try again later."
+        );
+        throw error;
+      }
+      return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
         headers: this.$server.getClearAuthHeaders(),
       });
     } catch (error) {
-      const error_validation = this.$server.readValidateError(error);
-      if (error_validation) {
-        throw await this.$server.redirectWithToast(
-          redirectUrl,
-          this.$toast.getToastMessage({
-            description: Object.values(error_validation.error ?? {})?.at(0),
-          }),
-          this.$toast.createToastHeaders
-        );
-      }
+      await this.validateFetchError(error, redirectUrl);
 
-      const error_fetch = await this.$server.readFetchError(error);
-      if (error_fetch) {
-        throw await this.$server.redirectWithToast(
-          redirectUrl,
-          this.$toast.getToastMessage({
-            description: Object.values(error_fetch.error ?? {})?.at(0),
-          }),
-          this.$toast.createToastHeaders
-        );
-      }
-
-      throw await this.$server.redirectWithToast(
-        redirectUrl,
-        this.$toast.getToastMessage(),
-        this.$toast.createToastHeaders
-      );
+      await this.errorToast(error, redirectUrl);
     }
   }
 
@@ -354,6 +324,7 @@ export class UserApiService {
       const input = Json.parse(formData.get("body")?.toString() ?? "{}");
 
       const parse = await $updateSchema.parseAsync(input);
+
       const response = await this.$agent.putMeHandler(parse, {
         headers: {
           Cookie: cookie,

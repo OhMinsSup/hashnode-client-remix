@@ -4,6 +4,7 @@ import type {
   SigninHandler,
   GetMeHandler,
   UserUpdateHandler,
+  UserDeleteHandler,
 } from "~/services/agent/client/types";
 
 export class HashnodeAgent extends Agent {
@@ -29,5 +30,9 @@ export class HashnodeAgent extends Agent {
 
   putMeHandler: UserUpdateHandler = (body, opts) => {
     return this.api.app.users.update(body, opts);
+  };
+
+  deleteMeHandler: UserDeleteHandler = (opts) => {
+    return this.api.app.users.delete(opts);
   };
 }
