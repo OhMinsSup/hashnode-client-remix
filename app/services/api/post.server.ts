@@ -1,5 +1,5 @@
 import Json from "superjson";
-
+import merge from "lodash-es/merge";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { getPostsApi as $getPostsApi } from "~/services/fetch/posts/gets-api.server";
 import { getLikePostsApi as $getLikePostsApi } from "~/services/fetch/posts/gets-like-api.server";
@@ -13,7 +13,6 @@ import { getDeletePostsApi as $getDeletePostsApi } from "~/services/fetch/posts/
 
 import { FetchService } from "~/services/fetch/fetch.api";
 import { schema as $createSchema } from "~/services/validate/post-create-api.validate";
-import { schema as $idSchema } from "~/services/validate/id.validate";
 import { safeRedirect } from "remix-utils/safe-redirect";
 import { redirect } from "@remix-run/cloudflare";
 
@@ -21,19 +20,27 @@ import { redirect } from "@remix-run/cloudflare";
 import { parseUrlParams } from "~/utils/util";
 
 // types
-import type { Env } from "../app/env.server";
-import type { ServerService } from "~/services/app/server.server";
 import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
-import type { ToastService } from "~/services/app/toast.server";
+import type { HashnodeApiConstructorOptions } from "~/services/types";
+import { BaseError } from "../error";
 
 export class PostApiService {
-  constructor(
-    private readonly env: Env,
-    private readonly $server: ServerService,
-    private readonly $toast: ToastService
-  ) {}
+  constructor(private readonly opts: HashnodeApiConstructorOptions) {}
+
+  private get $server() {
+    return this.opts.services.server;
+  }
+
+  private get $toast() {
+    return this.opts.services.toast;
+  }
+
+  private get $agent() {
+    return this.opts.services.agent;
+  }
 
   /**
+   * @deprecated
    * @description 아이템 리스트
    * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
@@ -45,6 +52,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 좋아요 아이템 리스트
    * @param {FetchQuerySchema.PostList} query
    * @param {Request} request
@@ -56,6 +64,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 탑 포스트 가져오기
    * @param {FetchQuerySchema.GetTopPost} query
    * @param {Request} request
@@ -67,6 +76,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 초안작성 포스트 가져오기
    * @param {FetchQuerySchema.Pagination} query
    * @param {Request} request
@@ -78,6 +88,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 삭제 포스트 가져오기
    * @param {FetchQuerySchema.Pagination} query
    * @param {Request} request
@@ -89,6 +100,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 포스트 상세 읽기
    * @param {string | number} id
    * @param {Request} request
@@ -101,6 +113,7 @@ export class PostApiService {
 
   /**
    * @description 포스트 작성하기
+   * @deprecated
    * @param {FormFieldValues} input
    * @param {Request} request
    */
@@ -112,6 +125,7 @@ export class PostApiService {
 
   /**
    * @description 포스트 수정
+   * @deprecated
    * @param {string | number} id
    * @param {FormFieldValues} input
    * @param {Request} request
@@ -123,6 +137,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @description 포스트 삭제하기
    * @param {string | number} id
    * @param {Request} request
@@ -131,129 +146,6 @@ export class PostApiService {
     return await $deletePostApi(id, {
       request,
     });
-  }
-
-  async createDraftForRedirectOrWrite(request: Request) {
-    const { list } = await this.getDraftPosts(request);
-    const item = list.at(0);
-    if (item) {
-      throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(item.id)));
-    }
-    await this.createDraftForRedirect(request);
-  }
-
-  async createDraftForRedirect(request: Request) {
-    const { dataId } = await this.createDraft(request);
-    throw redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(dataId)));
-  }
-
-  /**
-   * @description 초안 게시물 작성하기
-   * @param {Request} request
-   */
-  async createDraft(request: Request) {
-    const defaultToastOpts = {
-      title: "error",
-      description: "failed to follow the draft post. Please try again later.",
-      type: "error" as const,
-    };
-
-    try {
-      const response = await this.create(
-        { title: "Untitled", isDraft: true },
-        request
-      );
-      const result =
-        await this.$server.toJSON<FetchRespSchema.DataIDResp>(response);
-      if (result.resultCode !== RESULT_CODE.OK) {
-        const error = new Error();
-        error.name = "CreateDraftError";
-        error.message = defaultToastOpts.description;
-        throw error;
-      }
-      return result.result;
-    } catch (error) {
-      const error_validation = this.$server.readValidateError(error);
-      if (error_validation) {
-        throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.ROOT),
-          defaultToastOpts,
-          this.$toast.createToastHeaders
-        );
-      }
-
-      const error_fetch = await this.$server.readFetchError(error);
-      if (error_fetch) {
-        throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.ROOT),
-          defaultToastOpts,
-          this.$toast.createToastHeaders
-        );
-      }
-
-      throw await this.$server.redirectWithToast(
-        safeRedirect(PAGE_ENDPOINTS.ROOT),
-        defaultToastOpts,
-        this.$toast.createToastHeaders
-      );
-    }
-  }
-
-  /**
-   * @description 게시물 삭제하기
-   * @param {string | number} id
-   * @param {Request} request
-   */
-  async deleteDraft(request: Request) {
-    const defaultToastOpts = {
-      title: "error",
-      description: "failed to delete the post. Please try again later.",
-      type: "error" as const,
-    };
-
-    const formData = await request.formData();
-    const body = {
-      id: formData.get("id")?.toString(),
-    };
-
-    try {
-      const input = await $idSchema.parseAsync(body);
-      const response = await this.delete(input.id, request);
-      const result = await this.$server.toJSON(response);
-      if (result.resultCode !== RESULT_CODE.OK) {
-        const error = new Error();
-        error.name = "DeletePostError";
-        error.message = defaultToastOpts.description;
-        throw error;
-      }
-      return result.result;
-    } catch (error) {
-      const error_validation = this.$server.readValidateError(error);
-      if (error_validation) {
-        throw await this.$server.redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.ROOT),
-          defaultToastOpts,
-          this.$toast.createToastHeaders
-        );
-      }
-
-      const error_fetch = await this.$server.readFetchError(error);
-      if (error_fetch) {
-        throw await this.$server.redirectWithToast(
-          // @ts-ignore
-          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(body.id)),
-          defaultToastOpts,
-          this.$toast.createToastHeaders
-        );
-      }
-
-      throw await this.$server.redirectWithToast(
-        // @ts-ignore
-        safeRedirect(PAGE_ENDPOINTS.WRITE.ID(body.id)),
-        defaultToastOpts,
-        this.$toast.createToastHeaders
-      );
-    }
   }
 
   /**
@@ -324,6 +216,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (상세)
    * @param {string | number} id
@@ -344,6 +237,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {FetchQuerySchema.PostList} params
@@ -369,6 +263,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
    * @param {Request} request
@@ -394,6 +289,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
    * @param {Request} request
@@ -423,6 +319,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (초안작성여부)
    * @param {Request} request
@@ -452,6 +349,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (삭제여부)
    * @param {Request} request
@@ -476,7 +374,101 @@ export class PostApiService {
     }
   }
 
+  async getDraftPostList(
+    request: Request,
+    defaultValues?: FetchQuerySchema.PostList
+  ) {
+    try {
+      const params = parseUrlParams(request.url);
+      const input = defaultValues ? merge(defaultValues, params) : params;
+      const cookie = this.$server.readHeaderCookie(request);
+      const response = await this.$agent.getDraftPostListHandler(input, {
+        headers: {
+          ...(cookie && {
+            Cookie: cookie,
+          }),
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = data.result as FetchRespSchema.PostListResp;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  async getPostList(
+    request: Request,
+    defaultValues?: FetchQuerySchema.PostList
+  ) {
+    try {
+      const params = parseUrlParams(request.url);
+      const input = defaultValues ? merge(defaultValues, params) : params;
+      const cookie = this.$server.readHeaderCookie(request);
+      const response = await this.$agent.getPostListHandler(input, {
+        headers: {
+          ...(cookie && {
+            Cookie: cookie,
+          }),
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = data.result as FetchRespSchema.PostListResp;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
+  async getLikePostList(
+    request: Request,
+    defaultValues?: FetchQuerySchema.PostList
+  ) {
+    try {
+      const params = parseUrlParams(request.url);
+      const input = defaultValues ? merge(defaultValues, params) : params;
+      const cookie = this.$server.readHeaderCookie(request);
+      const response = await this.$agent.getLikePostListHandler(input, {
+        headers: {
+          ...(cookie && {
+            Cookie: cookie,
+          }),
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        return this.getDefaultPostList();
+      }
+      const result = data.result as FetchRespSchema.PostListResp;
+      return {
+        list: result.list,
+        pageInfo: result.pageInfo,
+        totalCount: result.totalCount,
+      };
+    } catch (error) {
+      return this.getDefaultPostList();
+    }
+  }
+
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 리스트 가져오기
    * @param {Request} request
@@ -487,6 +479,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (좋아요)
    * @param {Request} request
@@ -512,6 +505,7 @@ export class PostApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description loader에서 호출 할 때 사용하는 함수 (top posts)
    * @param {Request} request
@@ -562,5 +556,70 @@ export class PostApiService {
       },
       totalCount: 0,
     };
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 입력값 검증
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateInput(error: unknown, redirectUrl: string) {
+    const error_validation = this.$server.readValidateError(error);
+    if (error_validation) {
+      const response = await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_validation.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+      throw response;
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그인 응답값에 대한 에러처리
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateFetchError(error: unknown, redirectUrl: string) {
+    const error_fetch = await this.$server.readFetchError(error);
+    if (error_fetch) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_fetch.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 에러 공통 처리 (토스트)
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async errorToast(error: unknown, redirectUrl: string) {
+    if (error instanceof BaseError) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: error.message,
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
+
+    const response = await this.$server.redirectWithToast(
+      redirectUrl,
+      this.$toast.getToastMessage(),
+      this.$toast.createToastHeaders
+    );
+
+    throw response;
   }
 }

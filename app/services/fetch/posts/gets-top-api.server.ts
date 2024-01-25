@@ -5,6 +5,7 @@ import { FetchService } from "~/services/fetch/fetch.api";
 import type { ApiOptions } from "~/services/fetch/fetch.type";
 
 /**
+ * @deprecated
  * @version 2023-08-17
  * @description Get top posts
  * @param {FetchQuerySchema.GetTopPost} query

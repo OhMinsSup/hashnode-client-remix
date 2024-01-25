@@ -2,10 +2,17 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // types
-import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  await context.api.post.createDraftForRedirectOrWrite(request);
+  const { list } = await context.api.post.getDraftPostList(request);
+  const item = list.at(0);
+  if (item) {
+    return redirect(safeRedirect(PAGE_ENDPOINTS.WRITE.ID(item.id)));
+  }
+  return await context.api.draft.createDraft(request, true);
 };
 
 export default function Routes() {

@@ -20,6 +20,8 @@ import { HoneypotService } from "./app/services/app/honeypot.server";
 import * as build from "@remix-run/dev/server-build";
 import { HashnodeAgent } from "~/services/agent";
 import { AppApiService } from "~/services/api/app.server";
+import { PostDraftApiService } from "~/services/api/draft.server";
+import { WidgetApiService } from "~/services/api/widget.server";
 
 if (process.env.NODE_ENV === "development") {
   logDevReady(build);
@@ -62,7 +64,18 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
         env,
         services,
       }),
-      post: new PostApiService(env, server, toast),
+      post: new PostApiService({
+        env,
+        services,
+      }),
+      draft: new PostDraftApiService({
+        env,
+        services,
+      }),
+      widget: new WidgetApiService({
+        env,
+        services,
+      }),
       tag: new TagApiService(env, server, toast),
       file: new FileApiService(env, server, toast),
       notification: new NotificationApiService(env, server),

@@ -5,6 +5,7 @@ import { FetchService } from "~/services/fetch/fetch.api";
 import type { ApiOptions } from "~/services/fetch/fetch.type";
 
 /**
+ * @deprecated
  * @version 2023-08-17
  * @description 작성자만 볼 수 있는 포스트 상세 조회 API
  * @param {string | number} id

@@ -171,6 +171,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 메인화면에서 최대 4개만 보여주는 인기 태그 리스트
    * @param {Request} request

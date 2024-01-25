@@ -1,8 +1,13 @@
+import editorStyles from "~/styles/common/editor.css";
+
 // remix
 import { redirect } from "@remix-run/cloudflare";
 
 // components
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { WriteLayout } from "~/components/write/future/WriteLayout";
+import { WriteLeftSide } from "~/components/write/future/WriteLeftSide";
+import { WriteProvider } from "~/context/useWriteContext";
 
 // constants
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -14,10 +19,6 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import { WriteLayout } from "~/components/write/future/WriteLayout";
-import { WriteLeftSide } from "~/components/write/future/WriteLeftSide";
-import editorStyles from "~/styles/common/editor.css";
-import { WriteProvider } from "~/context/useWriteContext";
 
 export const meta: MetaFunction = ({ matches }) => {
   const Seo = {
@@ -66,24 +67,8 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   return null;
 };
 
-export type RoutesData = typeof loader;
-
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  switch (request.method) {
-    case "POST": {
-      await context.api.post.createDraftForRedirect(request);
-      return null;
-    }
-    case "DELETE": {
-      await context.api.post.deleteDraft(request);
-      return null;
-    }
-    default: {
-      throw new Response("Method Not Allowed", {
-        status: 405,
-      });
-    }
-  }
+  return await context.api.draft.createDraft(request);
 };
 
 export type ActionData = typeof action;

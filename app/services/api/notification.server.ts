@@ -12,6 +12,7 @@ export class NotificationApiService {
   ) {}
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 알림 카운트 조회 API
    * @param {Request} request
@@ -23,6 +24,7 @@ export class NotificationApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 작성자가 받은 총 알림 카운트 조회 API
    * @param {Request} request

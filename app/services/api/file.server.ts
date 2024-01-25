@@ -28,6 +28,7 @@ export class FileApiService {
   ) {}
 
   /**
+   * @deprecated
    * @description 파일 리스트
    * @param {FetchQuerySchema.Pagination} query
    * @param {Request} request
@@ -39,6 +40,7 @@ export class FileApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {FetchQuerySchema.Pagination} params
@@ -67,6 +69,7 @@ export class FileApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 파일 리스트 가져오기
    * @param {Request} request
@@ -77,6 +80,7 @@ export class FileApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-24
    * @description Cloudflare Images 를 사용하여 파일 업로드
    * @param {Request} request

@@ -1,6 +1,6 @@
 import { Icons } from "~/components/shared/Icons";
 import { TrendingTag } from "~/components/shared/future/TrendingTag";
-import { isEmpty, isUndefined } from "~/utils/assertion";
+
 import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -11,11 +11,11 @@ interface TrendingTagsBoxProps {
 }
 
 export default function TrendingTagsBox({ data }: TrendingTagsBoxProps) {
-  if (isUndefined(data)) return null;
+  const tags = data?.list ?? [];
 
-  const tags = data.list ?? [];
-
-  if (isEmpty(tags)) return null;
+  if (tags.length === 0) {
+    return null;
+  }
 
   return (
     <div className={styles.root}>

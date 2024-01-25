@@ -288,4 +288,6 @@ export const RESULT_CODE = {
   NO_AUTH_TOKEN: 4003,
   // 로그인 할 수 없음
   CANNOT_BE_LOGIN: 5000,
+  // 알수없는 에러
+  UNKNOWN_ERROR: 9999,
 } as const;

@@ -2,17 +2,16 @@ import React, { useMemo } from "react";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import take from "lodash-es/take";
 import type { SerializeFrom } from "@remix-run/cloudflare";
-import { useEditor } from "@tiptap/react";
-import { TiptapExtensions } from "~/components/shared/future/Tiptap/extensions";
-import { TiptapEditorProps } from "~/components/shared/future/Tiptap/props";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { TipTapEditor } from "../Tiptap";
 
 export default function HashnodeCard() {
   return null;
 }
 
 interface HashnodeCardV2Props {
+  index: number;
   data: SerializeFrom<SerializeSchema.SerializePost>;
 }
 
@@ -230,20 +229,9 @@ interface HashnodeCardTextProps {
 HashnodeCard.Text = React.memo(function Item({
   content,
 }: HashnodeCardTextProps) {
-  const editor = useEditor({
-    editable: false,
-    editorProps: TiptapEditorProps(),
-    extensions: TiptapExtensions(),
-    content,
-  });
-
-  const text = useMemo(() => {
-    return editor?.getText();
-  }, [editor]);
-
   return (
     <span className="text-base hidden font-normal text-slate-500 dark:text-slate-400 hn-break-words cursor-pointer md:line-clamp-2">
-      {text}
+      <TipTapEditor value={content ?? undefined} editable={false} />
     </span>
   );
 });

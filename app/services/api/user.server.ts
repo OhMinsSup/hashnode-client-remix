@@ -41,6 +41,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 팔로우 API
    * @param {FollowFormFieldValues} input
@@ -53,6 +54,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @description 아이템 리스트
    * @param {FetchQuerySchema.UserList} query
    * @param {Request} request
@@ -64,6 +66,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 작성자만 볼 수 있는 포스트 상세 조회 API
    * @param {string | number} id
@@ -76,6 +79,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 상세 정보 API
    * @param {string} id
@@ -88,6 +92,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 히스토리 정보 API
    * @param {string} id
@@ -100,6 +105,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 작성자만 볼 수 있는 포스트 상세 조회
    * @param {Request} request
@@ -168,6 +174,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 상세
    * @param {IdFormFieldValues} params
@@ -189,6 +196,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 상세
    * @param {IdFormFieldValues} params
@@ -256,6 +264,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 탈퇴
    * @param {Request} request
@@ -300,6 +309,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 수정
    * @param {Request} request
@@ -350,6 +360,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 팔로우 등록 및 취소
    * @param {Request} request
@@ -413,6 +424,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-16
    * @description loader에서 호출 할 때 사용하는 함수 (일반)
    * @param {FetchQuerySchema.UserList} params
@@ -441,6 +453,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 유저 리스트 가져오기
    * @param {Request} request
@@ -451,6 +464,7 @@ export class UserApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 메인화면에서 최대 4개만 보여주는 인기 유저 리스트
    * @param {Request} request

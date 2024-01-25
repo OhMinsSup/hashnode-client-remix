@@ -277,6 +277,13 @@ declare namespace FetchQuerySchema {
 }
 
 declare namespace FetchRespSchema {
+  export type Error<Result = any> = {
+    resultCode: number;
+    message: string;
+    error: string;
+    result: Result;
+  };
+
   export type ListResp<Item = Record<string, any>> = {
     list: Item[];
     totalCount: number;

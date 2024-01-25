@@ -6,6 +6,7 @@ import { TagsNamespace } from "~/services/agent/client/tags";
 import { UsersNamespace } from "~/services/agent/client/users";
 
 import type { AgentFetchHandler } from "~/services/agent/types";
+import { NotificationsNamespace } from "./notifications";
 export class BaseClient {
   fetch: AgentFetchHandler = defaultFetchHandler;
 
@@ -51,6 +52,7 @@ export class AppNamespace {
   posts: PostsNamespace;
   tags: TagsNamespace;
   users: UsersNamespace;
+  notifications: NotificationsNamespace;
 
   constructor(service: ServiceClient) {
     this._service = service;
@@ -59,5 +61,6 @@ export class AppNamespace {
     this.posts = new PostsNamespace(service);
     this.tags = new TagsNamespace(service);
     this.users = new UsersNamespace(service);
+    this.notifications = new NotificationsNamespace(service);
   }
 }

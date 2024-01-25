@@ -12,11 +12,9 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 export const loader = ({ context, request }: LoaderFunctionArgs) => {
   return defer({
-    trendingUser: context.api.user.getMainTrendingUsersLimit4(request),
-    trendingTag: context.api.tag.getMainTrendingTagsLimit4(request),
-    notificationCount: context.api.notification.count(request),
-    getDraftList: context.api.post.getMainDraftPostsLimit4(request),
-    getLikeList: context.api.post.getMainLikePostsLimit4(request),
+    notificationCount: context.api.widget.getWidgetNotificationCount(request),
+    getDraftList: context.api.widget.getWidgetDraftPostList(request),
+    getLikeList: context.api.widget.getWidgetLikePostList(request),
   });
 };
 

@@ -5,6 +5,18 @@ import type {
   GetMeHandler,
   UserUpdateHandler,
   UserDeleteHandler,
+  PostCreateHandler,
+  PostUpdateHandler,
+  PostDeleteHandler,
+  GetDraftPostListHandler,
+  GetLikePostListHandler,
+  GetPostListHandler,
+  GetTopPostListHandler,
+  GetPostHandler,
+  GetTagListHandler,
+  GetTagHandler,
+  GetUserListHandler,
+  GetNotificationCountHandler,
 } from "~/services/agent/client/types";
 
 export class HashnodeAgent extends Agent {
@@ -34,5 +46,59 @@ export class HashnodeAgent extends Agent {
 
   deleteMeHandler: UserDeleteHandler = (opts) => {
     return this.api.app.users.delete(opts);
+  };
+
+  getUserListHandler: GetUserListHandler = (params, opts) => {
+    return this.api.app.users.getUserList(params, opts);
+  };
+
+  // posts
+
+  postCreateHandler: PostCreateHandler = (body, opts) => {
+    return this.api.app.posts.create(body, opts);
+  };
+
+  postUpdateHandler: PostUpdateHandler = (id, body, opts) => {
+    return this.api.app.posts.update(id, body, opts);
+  };
+
+  postDeleteHandler: PostDeleteHandler = (id, opts) => {
+    return this.api.app.posts.delete(id, opts);
+  };
+
+  getPostHandler: GetPostHandler = (id, opts) => {
+    return this.api.app.posts.getPost(id, opts);
+  };
+
+  getPostListHandler: GetPostListHandler = (params, opts) => {
+    return this.api.app.posts.getPosts(params, opts);
+  };
+
+  getTopPostListHandler: GetTopPostListHandler = (params, opts) => {
+    return this.api.app.posts.getTopPosts(params, opts);
+  };
+
+  getLikePostListHandler: GetLikePostListHandler = (params, opts) => {
+    return this.api.app.posts.getLikedPosts(params, opts);
+  };
+
+  getDraftPostListHandler: GetDraftPostListHandler = (params, opts) => {
+    return this.api.app.posts.getDraftPosts(params, opts);
+  };
+
+  // tags
+
+  getTagListHandler: GetTagListHandler = (params, opts) => {
+    return this.api.app.tags.getTags(params, opts);
+  };
+
+  getTagHandler: GetTagHandler = (name, opts) => {
+    return this.api.app.tags.getTag(name, opts);
+  };
+
+  // notifications
+
+  getNotificationCountHandler: GetNotificationCountHandler = (opts) => {
+    return this.api.app.notifications.getCount(opts);
   };
 }

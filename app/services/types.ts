@@ -13,6 +13,8 @@ import type { HoneypotService } from "./app/honeypot.server";
 import type { ToastService } from "./app/toast.server";
 import type { HashnodeAgent } from "./agent";
 import type { AppApiService } from "./api/app.server";
+import type { PostDraftApiService } from "./api/draft.server";
+import type { WidgetApiService } from "./api/widget.server";
 
 export type HashnodeServices = {
   theme: ThemeService;
@@ -32,6 +34,8 @@ export type HashnodeApi = {
   post: PostApiService;
   notification: NotificationApiService;
   app: AppApiService;
+  draft: PostDraftApiService;
+  widget: WidgetApiService;
 };
 
 export type HashnodeApiConstructorOptions = {

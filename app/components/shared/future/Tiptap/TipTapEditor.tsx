@@ -11,7 +11,7 @@ import { useDebouncedCallback } from "use-debounce";
 // define your extension array
 
 export interface ITipTapRichTextEditor {
-  value: string;
+  value?: string | undefined;
   onChange?: (json: any, html: string) => void;
   setIsSubmitting?: (
     isSubmitting: "submitting" | "submitted" | "saved"
@@ -72,7 +72,10 @@ const Tiptap = (props: ITipTapRichTextEditor) => {
     1000
   );
 
-  if (!editor) return null;
+  if (!editor) {
+    return null;
+  }
+
   editorRef.current = editor;
 
   return (

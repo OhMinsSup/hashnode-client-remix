@@ -2,7 +2,6 @@ import styles from "./styles.module.css";
 import { Icons } from "~/components/shared/Icons";
 import RecommendedUser from "~/components/shared/future/RecommendedUser/RecommendedUser";
 import { Link } from "@remix-run/react";
-import { isEmpty, isUndefined } from "~/utils/assertion";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import type { SerializeFrom } from "@remix-run/cloudflare";
 
@@ -13,11 +12,11 @@ interface RecommendedUsersBoxProps {
 export default function RecommendedUsersBox({
   data,
 }: RecommendedUsersBoxProps) {
-  if (isUndefined(data)) return null;
+  const users = data?.list ?? [];
 
-  const users = data.list ?? [];
-
-  if (isEmpty(users)) return null;
+  if (users.length === 0) {
+    return null;
+  }
 
   return (
     <div className={styles.root}>

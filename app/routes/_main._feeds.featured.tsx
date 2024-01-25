@@ -1,22 +1,13 @@
-import { Suspense } from "react";
 import { json } from "@remix-run/cloudflare";
-import {
-  Await,
-  isRouteErrorResponse,
-  useRouteError,
-  useRouteLoaderData,
-} from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 // components
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
-import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
-import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";
 
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.post.getPostsByList(request);
+  const response = await context.api.post.getPostList(request);
   return json(response);
 };
 
@@ -51,26 +42,7 @@ export const meta: MetaFunction<Loader> = ({ data, matches }) => {
 };
 
 export default function Routes() {
-  const data = useRouteLoaderData<MainRoutesLoader>("routes/_main");
-
-  return (
-    <HashnodeList
-      trendingTags={
-        <Suspense fallback={<></>}>
-          <Await resolve={data?.trendingTag}>
-            {(data) => <TrendingTagsBox data={data} />}
-          </Await>
-        </Suspense>
-      }
-      recommendedUsers={
-        <Suspense fallback={<></>}>
-          <Await resolve={data?.trendingUser}>
-            {(data) => <RecommendedUsersBox data={data} />}
-          </Await>
-        </Suspense>
-      }
-    />
-  );
+  return <HashnodeList />;
 }
 
 export function ErrorBoundary() {
