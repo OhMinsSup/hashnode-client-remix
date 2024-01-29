@@ -17,6 +17,8 @@ import type {
   GetTagHandler,
   GetUserListHandler,
   GetNotificationCountHandler,
+  GetTagIdHandler,
+  PostTagFollowHandler,
 } from "~/services/agent/client/types";
 
 export class HashnodeAgent extends Agent {
@@ -94,6 +96,14 @@ export class HashnodeAgent extends Agent {
 
   getTagHandler: GetTagHandler = (name, opts) => {
     return this.api.app.tags.getTag(name, opts);
+  };
+
+  getTagIdHandler: GetTagIdHandler = (name, opts) => {
+    return this.api.app.tags.getTagId(name, opts);
+  };
+
+  postTagFollowHandler: PostTagFollowHandler = (body, opts) => {
+    return this.api.app.tags.follow(body, opts);
   };
 
   // notifications

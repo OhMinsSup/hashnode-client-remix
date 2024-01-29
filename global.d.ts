@@ -171,7 +171,7 @@ declare namespace SerializeSchema {
 
   export type SerializeTagCount = {
     postCount: number;
-    isFollow: boolean;
+    isFollowing: boolean;
     followCount: number;
   } & Pick<FetchSchema.Tag, "id" | "name">;
 

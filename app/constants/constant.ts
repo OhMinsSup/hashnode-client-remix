@@ -95,6 +95,7 @@ export const ASSET_URL = {
   SEO_IMAGE: "/images/seo_image.png",
   WRITE_TEAM_LOGO: "/images/write_team_logo.png",
   DEFAULT_TAG: "/images/default_tag.png",
+  SHAP: "/images/shap.png",
 };
 
 export const PAGE_ENDPOINTS = {

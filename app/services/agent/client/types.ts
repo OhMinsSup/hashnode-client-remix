@@ -95,6 +95,16 @@ export type GetTagHandler = (
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
+export type GetTagIdHandler = (
+  id: string,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
+
+export type PostTagFollowHandler = (
+  body: any,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
+
 // notifications
 
 export type GetNotificationCountHandler = (

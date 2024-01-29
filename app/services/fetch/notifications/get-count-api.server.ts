@@ -5,6 +5,7 @@ import { FetchService } from "~/services/fetch/fetch.api";
 import type { ApiOptions } from "~/services/fetch/fetch.type";
 
 /**
+ * @deprecated
  * @version 2023-08-17
  * @description 알림 카운트 조회 API
  * @param {ApiOptions?} options
@@ -14,6 +15,7 @@ export function getNotificationCountApi(options?: ApiOptions) {
 }
 
 /**
+ * @deprecated
  * @version 2023-08-17
  * @description API Path
  */

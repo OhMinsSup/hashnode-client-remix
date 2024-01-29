@@ -32,21 +32,21 @@ export default function TrendingTag({ tag }: TrendingTagProps) {
 
   return (
     <div className={styles.root}>
-      <Link className={styles.image_link} to={PAGE_ENDPOINTS.N.TAG(tag.id)}>
+      <Link className={styles.image_link} to={PAGE_ENDPOINTS.N.TAG(tag.name)}>
         <div className={styles.image_container}>
           <img loading="lazy" src={ASSET_URL.DEFAULT_TAG} alt={tag.name} />
         </div>
       </Link>
       <div className={styles.content_container}>
         <h3 className={styles.title}>
-          <Link aria-label={tag.name} to={PAGE_ENDPOINTS.N.TAG(tag.id)}>
+          <Link aria-label={tag.name} to={PAGE_ENDPOINTS.N.TAG(tag.name)}>
             {tag.name}
           </Link>
         </h3>
         <p className={styles.count}>
           <Link
             aria-label={`${tag.postCount} articles`}
-            to={PAGE_ENDPOINTS.N.TAG(tag.id)}
+            to={PAGE_ENDPOINTS.N.TAG(tag.name)}
           >
             {tag.postCount} articles
           </Link>
@@ -59,7 +59,11 @@ export default function TrendingTag({ tag }: TrendingTagProps) {
           aria-label="Follow blog"
           onClick={onClick}
         >
-          {tag.isFollow ? <Icons.V2.FollowChecked /> : <Icons.V2.FollowTag />}
+          {tag.isFollowing ? (
+            <Icons.V2.FollowChecked />
+          ) : (
+            <Icons.V2.FollowTag />
+          )}
         </button>
       </div>
     </div>

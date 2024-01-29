@@ -1,40 +1,29 @@
-import React from "react";
-// import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-// import { STATUS_CODE } from "~/constants/constant";
 
 // types
-// import type { LoaderArgs } from "@remix-run/cloudflare";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-// export const loader = async ({ request, context, params }: LoaderArgs) => {
-//   const tagName = params.tag?.toString();
-//   if (!tagName) {
-//     throw new Response("Not Found", { status: STATUS_CODE.NOT_FOUND });
-//   }
-//   let cursor = undefined;
-//   if (params.cursor) {
-//     cursor = parseInt(params.cursor);
-//   }
-//   let limit = undefined;
-//   if (params.limit) {
-//     limit = parseInt(params.limit);
-//   }
+export const loader = async ({
+  context,
+  request,
+  params,
+}: LoaderFunctionArgs) => {
+  const tag = params.tag?.toString();
+  if (!tag) {
+    throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
+  }
+  const response = await context.api.post.getPostList(request, {
+    type: "featured",
+    tag,
+  });
+  return json(response);
+};
 
-//   const args = {
-//     cursor,
-//     limit,
-//     type: "featured",
-//     tag: tagName,
-//   } as const;
-
-//   const { json: data } = await context.api.item.getItems(request, args);
-//   return json({
-//     posts: data?.result,
-//   });
-// };
-
-// export type nTagHotLoader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export default function Routes() {
   return <HashnodeList />;

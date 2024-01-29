@@ -76,9 +76,15 @@ export const onRequest = createPagesFunctionHandler<RuntimeEnv>({
         env,
         services,
       }),
-      tag: new TagApiService(env, server, toast),
+      tag: new TagApiService({
+        env,
+        services,
+      }),
       file: new FileApiService(env, server, toast),
-      notification: new NotificationApiService(env, server),
+      notification: new NotificationApiService({
+        env,
+        services,
+      }),
       app: new AppApiService({
         env,
         services,

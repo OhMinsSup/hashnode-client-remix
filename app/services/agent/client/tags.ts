@@ -17,6 +17,21 @@ export class TagsNamespace {
     return this._defineApis;
   }
 
+  getTagId(id: string, opts?: CallOptions | undefined) {
+    const httpUri = constructMethodCallUri(
+      this._service.makePathname(this._defineApis.ID(id)),
+      this._service.uri
+    );
+    const httpHeaders = opts?.headers;
+
+    return this._service._baseClient.fetch({
+      uri: httpUri,
+      method: "GET",
+      headers: httpHeaders,
+      reqBody: undefined,
+    });
+  }
+
   getTag(name: string, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.SLUG(name)),

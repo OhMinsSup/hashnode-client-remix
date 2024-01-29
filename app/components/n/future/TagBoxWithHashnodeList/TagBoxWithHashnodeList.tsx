@@ -1,5 +1,8 @@
 import React from "react";
 import styles from "./styles.module.css";
+import { Link, useLoaderData, Form } from "@remix-run/react";
+import type { RoutesLoader } from "~/routes/_n.n.$tag";
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface TagBoxWithHashnodeListProps {
   children: React.ReactNode;
@@ -20,13 +23,15 @@ export default function TagBoxWithHashnodeList({
 }
 
 TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
+  const data = useLoaderData<RoutesLoader>();
   return (
     <>
       <div className="sm:hidden flex flex-row justify-between w-full items-start">
         <div className="relative flex items-center w-[64px] h-[64px] rounded-full overflow-visible ">
           <img
-            alt="hackathon"
-            src="https://cdn.hashnode.com/res/hashnode/image/upload/v1690883253640/dce6d784-5d60-483d-9292-afa1f701fbd0.png?w=200&amp;h=200&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp"
+            alt={data?.tagInfo?.name}
+            loading="lazy"
+            src={ASSET_URL.SHAP}
             className="object-cover rounded-full w-12 h-12"
           />
           <TagBoxWithHashnodeList.TagsBoxIcon />
@@ -38,9 +43,9 @@ TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
       </div>
       <div className="flex flex-row items-center w-full justify-between sm:hidden">
         <div className={styles.tag_info}>
-          <span>278 followers</span>
+          <span>{data?.tagInfo?.followCount} followers</span>
           <span className="block font-bold">·</span>
-          <span>696 articles</span>
+          <span>{data?.tagInfo?.postCount} articles</span>
         </div>
       </div>
     </>
@@ -48,51 +53,75 @@ TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
 };
 
 TagBoxWithHashnodeList.Desktop = function TagBoxWithHashnodeListDesktop() {
+  const data = useLoaderData<RoutesLoader>();
+
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full">
         <div className="flex flex-col justify-start gap-0.5">
-          <div className={styles.tag}>hackathon</div>
+          <div className={styles.tag}>{data?.tagInfo?.name}</div>
           <div className="flex-row gap-2 hidden sm:flex">
             <div className={styles.tag_info}>
-              <span className="z-10">#hackathon</span>
-              <span className="font-bold hidden sm:block">·</span>
+              <span className="z-10">#{data?.tagInfo?.name}</span>
+              <span className={styles.dot}>·</span>
             </div>
             <div className={styles.tag_info}>
-              <span>278 followers</span>
-              <span className="block font-bold">·</span>
-              <span>696 articles</span>
+              <span>{data?.tagInfo?.followCount} followers</span>
+              <span className={styles.dot_2}>·</span>
+              <span>{data?.tagInfo?.postCount} articles</span>
             </div>
           </div>
           <div className="block sm:hidden">
             <div className={styles.tag_info}>
-              <span className="z-10">#hackathon</span>
-              <span className="font-bold hidden sm:block">·</span>
+              <span className="z-10">#{data?.tagInfo?.name}</span>
+              <span className={styles.dot}>·</span>
             </div>
           </div>
         </div>
         <div className="hidden sm:block">
-          <div className="relative flex items-center w-[64px] h-[64px] rounded-full overflow-visible ">
+          <div className="relative flex items-center w-[64px] h-[64px] rounded-full overflow-visible">
             <img
-              alt="hackathon"
-              src="https://cdn.hashnode.com/res/hashnode/image/upload/v1690883253640/dce6d784-5d60-483d-9292-afa1f701fbd0.png?w=200&amp;h=200&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp"
+              alt={data?.tagInfo?.name}
+              loading="lazy"
+              src={ASSET_URL.SHAP}
               className="object-cover rounded-full w-12 h-12"
             />
             <TagBoxWithHashnodeList.TagsBoxIcon />
           </div>
         </div>
       </div>
-      <div className="flex flex-row gap-2  items-center z-10 ">
+      <div className="flex flex-row gap-2 items-center z-10 ">
         <div className="flex flex-row gap-2 align-middle z-10">
-          <button className={styles.btn_follow}>
-            <span className="font-medium text-sm">Follow tag</span>
-          </button>
-          <a
+          <Form method="post" navigate={false}>
+            {data?.tagInfo?.isFollowing ? (
+              <button type="submit" className={styles.btn_following}>
+                <div className={styles.btn_following_wrapper}>
+                  <svg fill="none" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                      stroke="currentColor"
+                      d="M2.667 8.667 6 12l7.333-8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                  <span>Following</span>
+                </div>
+              </button>
+            ) : (
+              <button type="submit" className={styles.btn_follow}>
+                <span className="text-sm">Follow Tag</span>
+              </button>
+            )}
+          </Form>
+          <Link
             className={styles.link_write}
-            href="/draft?new=true&amp;tag=eyJfaWQiOiI1Njc0NDcyMDk1OGVmMTM4NzliOTQ3ZDQiLCJuYW1lIjoiaGFja2F0aG9uIiwic2x1ZyI6ImhhY2thdGhvbiJ9"
+            to={{
+              pathname: PAGE_ENDPOINTS.WRITE.ROOT,
+              search: `?tag=${data?.tagInfo?.name}`,
+            }}
           >
-            <span className="font-medium text-sm">Write an article</span>
-          </a>
+            <span className="text-sm">Write an article</span>
+          </Link>
         </div>
         <div className="sm:flex hidden">
           <div className="flex flex-row gap-2 justify-end z-10">

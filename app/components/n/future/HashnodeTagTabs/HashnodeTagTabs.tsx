@@ -9,9 +9,13 @@ import { cn } from "~/utils/util";
 
 interface HashnodeTagTabsProps {
   children: React.ReactNode;
+  slug: string;
 }
 
-export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
+export default function HashnodeTagTabs({
+  children,
+  slug,
+}: HashnodeTagTabsProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -24,7 +28,7 @@ export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
 
   return (
     <Tabs.Root
-      defaultValue={PAGE_ENDPOINTS.N.TAG("hashnode")}
+      defaultValue={PAGE_ENDPOINTS.N.TAG(slug)}
       value={location.pathname}
       onValueChange={onNavigation}
     >
@@ -33,7 +37,7 @@ export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
           aria-label="hashnode list tabs"
           className="flex radix-orientation-horizontal:flex-row radix-orientation-vertical:flex-col gap-1"
         >
-          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG("hashnode")} asChild>
+          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG(slug)} asChild>
             <button type="button" className="group flex flex-col">
               <div
                 className={cn(
@@ -51,7 +55,7 @@ export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
               <span className="inline-block h-0"></span>
             </button>
           </Tabs.Trigger>
-          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG_HOT("hashnode")} asChild>
+          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG_HOT(slug)} asChild>
             <button type="button" className="group flex flex-col">
               <div
                 className={cn(
@@ -71,10 +75,8 @@ export default function HashnodeTagTabs({ children }: HashnodeTagTabsProps) {
           </Tabs.Trigger>
         </Tabs.List>
       </div>
-      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG("hashnode")}>
-        {children}
-      </Tabs.Content>
-      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG_HOT("hashnode")}>
+      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG(slug)}>{children}</Tabs.Content>
+      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG_HOT(slug)}>
         {children}
       </Tabs.Content>
     </Tabs.Root>

@@ -10,20 +10,29 @@ import { schema as $idSchema } from "~/services/validate/id.validate";
 import { FetchService } from "~/services/fetch/fetch.api";
 
 // types
-import type { Env } from "../app/env.server";
-import type { ServerService } from "~/services/app/server.server";
-import type { Params } from "@remix-run/react";
+import type { HashnodeApiConstructorOptions } from "~/services/types";
+import { redirect, type Params } from "@remix-run/react";
 import type { FormFieldValues } from "../validate/tag-follow-api.validate";
-import type { ToastService } from "../app/toast.server";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { BaseError, ErrorType } from "../error";
 
 export class TagApiService {
-  constructor(
-    private readonly env: Env,
-    private readonly $server: ServerService,
-    private readonly $toast: ToastService
-  ) {}
+  constructor(private readonly opts: HashnodeApiConstructorOptions) {}
+
+  private get $server() {
+    return this.opts.services.server;
+  }
+
+  private get $toast() {
+    return this.opts.services.toast;
+  }
+
+  private get $agent() {
+    return this.opts.services.agent;
+  }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 리스트 가져오기
    * @param {FetchQuerySchema.TagList} query
@@ -36,6 +45,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 팔로우 API
    * @param {FormFieldValues} input
@@ -48,6 +58,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 상세 정보 API
    * @param {IdFormFieldValues} id
@@ -59,6 +70,11 @@ export class TagApiService {
     });
   }
 
+  /**
+   * @deprecated
+   * @param request
+   * @returns
+   */
   async upsertTagFollow(request: Request) {
     const formData = await this.$server.readFormData(request);
 
@@ -115,6 +131,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 상세 정보 API
    * @param {Params} params
@@ -136,6 +153,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 리스트 가져오기
    * @param {FetchQuerySchema.TagList} query
@@ -161,6 +179,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @version 2023-08-17
    * @description 태그 리스트 가져오기
    * @param {Request} request
@@ -171,6 +190,7 @@ export class TagApiService {
   }
 
   /**
+   * @deprecated
    * @deprecated
    * @version 2023-08-17
    * @description 메인화면에서 최대 4개만 보여주는 인기 태그 리스트
@@ -193,5 +213,123 @@ export class TagApiService {
       },
       totalCount: 0,
     };
+  }
+
+  async getTagInfo(name: string, request: Request) {
+    try {
+      const cookie = this.$server.readHeaderCookie(request);
+      const response = await this.$agent.getTagHandler(name, {
+        headers: {
+          ...(cookie && {
+            Cookie: cookie,
+          }),
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
+      }
+      return data.result as FetchRespSchema.TagDetailResp;
+    } catch (error) {
+      throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
+    }
+  }
+
+  async followByTag(name: string, request: Request) {
+    const redirectUrl = safeRedirect(PAGE_ENDPOINTS.N.TAG(name));
+
+    try {
+      this.$server.readValidateMethods(request, ["POST"], redirectUrl);
+
+      const cookie = this.$server.readHeaderCookie(request);
+      if (!cookie) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "authentication failed. Please try again later."
+        );
+        throw error;
+      }
+      const input = await $tagFollowSchema.parseAsync({
+        slug: name,
+      });
+      const response = await this.$agent.postTagFollowHandler(input, {
+        headers: {
+          Cookie: cookie,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "failed to follow the tag. Please try again later."
+        );
+        throw error;
+      }
+      return data.result as FetchRespSchema.TagDetailResp;
+    } catch (error) {
+      console.log(error);
+      await this.validateInput(error, redirectUrl);
+
+      await this.validateFetchError(error, redirectUrl);
+
+      await this.errorToast(error, redirectUrl);
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 로그인 응답값에 대한 에러처리
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateFetchError(error: unknown, redirectUrl: string) {
+    const error_fetch = await this.$server.readFetchError(error);
+    if (error_fetch) {
+      throw await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_fetch.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 입력값 검증
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async validateInput(error: unknown, redirectUrl: string) {
+    const error_validation = this.$server.readValidateError(error);
+    if (error_validation) {
+      const response = await this.$server.redirectWithToast(
+        redirectUrl,
+        this.$toast.getToastMessage({
+          description: Object.values(error_validation.error ?? {})?.at(0),
+        }),
+        this.$toast.createToastHeaders
+      );
+      throw response;
+    }
+  }
+
+  /**
+   * @version 2023-08-17
+   * @description 에러 공통 처리 (토스트)
+   * @param {unknown} error
+   * @param {string} redirectUrl
+   */
+  async errorToast(error: unknown, redirectUrl: string) {
+    const response = await this.$server.redirectWithToast(
+      redirectUrl,
+      this.$toast.getToastMessage(),
+      this.$toast.createToastHeaders
+    );
+
+    throw response;
   }
 }
