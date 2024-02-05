@@ -1,13 +1,10 @@
-import { json } from "@remix-run/cloudflare";
-
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.post.getDraftPosts(request);
-  return json(response);
+  return await context.api.post.getDraftPostList(request);
 };
 
-export type Loader = typeof loader;
+export type RoutesLoader = typeof loader;
 
 export const getPath = (query?: FetchQuerySchema.Pagination) => {
   const search = new URLSearchParams();

@@ -1,19 +1,39 @@
 .logo {
-  @apply block text-slate-900 dark:text-white;
+  display: block;
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity));
 }
 
-.logo_icon {
-  @apply hidden w-36 fill-current;
+:global(.dark) .logo {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.logo_icon_mobile {
+.logo_mobile {
+  width: 2rem;
+  fill: currentColor;
   --tw-text-opacity: 1;
   color: rgb(41 98 255 / var(--tw-text-opacity));
-  @apply w-8 fill-current dark:text-white;
+}
+
+:global(.dark) .logo_mobile {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.logo_desktop {
+  display: none;
+  width: 9rem;
+  fill: currentColor;
 }
 
 @media (min-width: 768px) {
-  .logo_icon {
-    @apply block w-44;
+  .logo_mobile {
+    display: none;
+  }
+
+  .logo_desktop {
+    display: block;
+    width: 11rem;
   }
 }

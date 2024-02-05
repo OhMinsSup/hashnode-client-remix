@@ -1,9 +1,18 @@
 .item {
-  @apply inline-flex items-center justify-center gap-2 rounded-3xl border border-transparent px-5 py-2.5 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+  @apply font-semibold text-sm border border-transparent hover:border hover:border-slate-200 inline-flex justify-center items-center gap-2 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 text-slate-600 rounded-3xl py-2.5 px-5;
 }
 
-.item {
-  @apply dark:text-slate-300 dark:hover:border-slate-800;
+:global(.dark) .item {
+  --tw-text-opacity: 1;
+  color: rgb(203 213 225 / var(--tw-text-opacity));
+}
+:global(.dark) .item:focus {
+  --tw-ring-offset-color: #1e293b;
+}
+
+:global(.dark) .item:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(30 41 59 / var(--tw-border-opacity));
 }
 
 .active {

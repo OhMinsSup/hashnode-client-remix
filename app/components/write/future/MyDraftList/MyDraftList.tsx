@@ -5,7 +5,7 @@ import { LeftSidebarContentItem } from "../LeftSidebarContentItem";
 import styles from "./styles.module.css";
 import uniqBy from "lodash-es/uniqBy";
 import { getPath } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
-import type { Loader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
+import type { RoutesLoader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
 import { useWriteContext } from "~/context/useWriteContext";
 
 const LIMIT = 30;
@@ -13,27 +13,33 @@ const LIMIT = 30;
 export default function MyDraftList() {
   const [items, setItems] = useState<FetchRespSchema.PostDetailResp[]>([]);
 
-  const fetcher = useFetcher<Loader>();
+  const fetcher = useFetcher<RoutesLoader>();
 
   const { leftSideKeyword } = useWriteContext();
 
-  const totalCount = fetcher?.data?.totalCount ?? 0;
+  const { data } = fetcher;
 
-  const pageInfo = fetcher?.data?.pageInfo;
+  const isIdle = fetcher.state === "idle" && fetcher.data == null;
+  const isSuccessful = fetcher.state === "idle" && fetcher.data != null;
+
+  const totalCount = data?.totalCount ?? 0;
+  const pageInfo = data?.pageInfo;
+  const list = data?.list ?? [];
 
   useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data == null) {
+    if (isIdle) {
       fetcher.load(getPath({ limit: LIMIT }));
     }
   }, []);
 
   useEffect(() => {
-    if (fetcher.data) {
-      setItems((prevItems) =>
-        uniqBy([...prevItems, ...(fetcher.data?.list ?? [])], "id")
-      );
+    if (isSuccessful) {
+      const oldItems = items;
+      const nextItems = list;
+      const newItems = uniqBy([...oldItems, ...nextItems], "id");
+      setItems(newItems);
     }
-  }, [fetcher.data]);
+  }, [isSuccessful]);
 
   const onClickLoadMore = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

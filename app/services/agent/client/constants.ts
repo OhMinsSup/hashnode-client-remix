@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
     GET_DRAFT_POSTS: "posts/get-draft-posts",
     GET_DELETED_POSTS: "posts/get-deleted-posts",
     GET_LIKES: "posts/get-likes",
+    OWNER_ID: (id: string | number) => `posts/${id}/owner`,
     ID: (id: string | number) => `posts/${id}`,
   },
   USERS: {

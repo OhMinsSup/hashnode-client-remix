@@ -72,6 +72,10 @@ export class HashnodeAgent extends Agent {
     return this.api.app.posts.getPost(id, opts);
   };
 
+  getOwnerPostHandler: GetPostHandler = (id, opts) => {
+    return this.api.app.posts.getOwnerPost(id, opts);
+  };
+
   getPostListHandler: GetPostListHandler = (params, opts) => {
     return this.api.app.posts.getPosts(params, opts);
   };

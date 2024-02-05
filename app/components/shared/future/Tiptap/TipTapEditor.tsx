@@ -1,4 +1,4 @@
-import { useImperativeHandle, useRef, forwardRef } from "react";
+import React, { useImperativeHandle, useRef, forwardRef } from "react";
 import type { Editor } from "@tiptap/react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
@@ -22,7 +22,7 @@ export interface ITipTapRichTextEditor {
   debouncedUpdatesEnabled?: boolean;
 }
 
-const Tiptap = (props: ITipTapRichTextEditor) => {
+const Tiptap = React.memo((props: ITipTapRichTextEditor) => {
   const {
     onChange,
     debouncedUpdatesEnabled,
@@ -91,7 +91,7 @@ const Tiptap = (props: ITipTapRichTextEditor) => {
       {/* {editor?.isActive("image") && <ImageResizer editor={editor} />} */}
     </div>
   );
-};
+});
 
 const TipTapEditor = forwardRef<ITipTapRichTextEditor, ITipTapRichTextEditor>(
   (props, ref) => <Tiptap {...props} forwardedRef={ref} />

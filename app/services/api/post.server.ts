@@ -22,7 +22,7 @@ import { parseUrlParams } from "~/utils/util";
 // types
 import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 import type { HashnodeApiConstructorOptions } from "~/services/types";
-import { BaseError } from "../error";
+import { BaseError, ErrorType } from "../error";
 
 export class PostApiService {
   constructor(private readonly opts: HashnodeApiConstructorOptions) {}
@@ -464,6 +464,37 @@ export class PostApiService {
       };
     } catch (error) {
       return this.getDefaultPostList();
+    }
+  }
+
+  async getOwnerPostDetail(postId: string, request: Request) {
+    const redirectUrl = safeRedirect(PAGE_ENDPOINTS.ROOT);
+
+    try {
+      const cookie = this.$server.readHeaderCookie(request);
+      if (!cookie) {
+        const error = new BaseError(
+          ErrorType.HTTPError,
+          "authentication failed. Please try again later."
+        );
+        throw error;
+      }
+
+      const response = await this.$agent.getOwnerPostHandler(postId, {
+        headers: {
+          ...(cookie && {
+            Cookie: cookie,
+          }),
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.body;
+      if (data.resultCode !== RESULT_CODE.OK) {
+        throw redirect(redirectUrl);
+      }
+      return data.result as FetchRespSchema.PostDetailResp;
+    } catch (error) {
+      throw redirect(redirectUrl);
     }
   }
 

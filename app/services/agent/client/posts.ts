@@ -79,6 +79,21 @@ export class PostsNamespace {
     });
   }
 
+  getOwnerPost(id: string, opts?: CallOptions | undefined) {
+    const httpUri = constructMethodCallUri(
+      this._service.makePathname(this._defineApis.OWNER_ID(id)),
+      this._service.uri
+    );
+    const httpHeaders = opts?.headers;
+
+    return this._service._baseClient.fetch({
+      uri: httpUri,
+      method: "GET",
+      headers: httpHeaders,
+      reqBody: undefined,
+    });
+  }
+
   getPosts(params: QueryParams, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ROOT),

@@ -1,9 +1,12 @@
 .btn_menu {
-  @apply mr-2 inline-flex items-center justify-center gap-2 rounded-full border border-transparent p-2 text-sm font-semibold text-slate-600 hover:border hover:border-slate-200 focus:outline-none;
+  @apply font-semibold text-sm border border-transparent hover:border hover:border-slate-200 inline-flex justify-center items-center gap-2 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600  text-slate-600  rounded-full p-2 mr-2 xl:hidden;
 }
 
-.btn_menu {
-  @apply dark:text-slate-300 dark:hover:border-slate-800;
+:global(.dark) .btn_menu {
+  --tw-border-opacity: 1;
+  --tw-ring-offset-color: #1e293b;
+  border-color: rgb(30 41 59 / var(--tw-border-opacity)) !important;
+  color: rgb(203 213 225 / var(--tw-text-opacity)) !important;
 }
 
 .btn_menu > svg {
@@ -13,11 +16,11 @@
 }
 
 .overlay {
-  @apply fixed inset-0 z-50 opacity-50 bg-slate-900 dark:bg-slate-600;
+  @apply fixed inset-0 z-50 opacity-50 bg-slate-950 dark:bg-slate-600;
 }
 
 .content {
-  @apply fixed top-0 bottom-0 left-0 flex flex-col z-50 w-[323px] bg-white dark:bg-slate-900;
+  @apply fixed top-0 bottom-0 left-0 flex flex-col z-50 w-[323px] bg-white dark:bg-slate-950;
 }
 
 .container {
@@ -25,7 +28,7 @@
 }
 
 .btn_close {
-  @apply flex items-center justify-center transition-colors duration-100 text-slate-600 dark:text-slate-300 focus:outline-none border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:text-slate-300 disabled:dark:text-slate-800 disabled:hover:bg-transparent disabled:dark:hover:bg-transparent disabled:cursor-not-allowed rounded-full p-2;
+  @apply flex items-center justify-center transition-colors duration-100 text-slate-600 dark:text-slate-300 focus:outline-none border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-800 disabled:text-slate-300 disabled:dark:text-slate-800 disabled:hover:bg-transparent disabled:dark:hover:bg-transparent disabled:cursor-not-allowed rounded-full p-2;
 }
 
 .logo {
@@ -41,7 +44,7 @@
 }
 
 .nav_link {
-  @apply flex flex-row justify-between items-center gap-2 w-full py-2 px-3 rounded-lg font-sans cursor-pointer transition-colors duration-150 ease-in-out active:bg-slate-100 dark:active:bg-slate-800 md:hover:bg-slate-100 md:dark:hover:bg-slate-800 focus:outline-none text-slate-600 dark:text-slate-300 text-lg font-semibold;
+  @apply flex flex-row items-center gap-2 w-full py-2 px-3 rounded-lg font-sans cursor-pointer transition-colors duration-150 ease-in-out active:bg-slate-100 dark:active:bg-slate-800 md:hover:bg-slate-100 md:dark:hover:bg-slate-800 focus:outline-none text-slate-600 dark:text-slate-300 text-lg font-semibold;
 }
 
 .nav_link_active {

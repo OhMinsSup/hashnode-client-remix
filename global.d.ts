@@ -44,8 +44,8 @@ declare namespace FetchSchema {
     location: string | null;
     bio: string | null;
     availableText: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     fk_user_id: string | null;
   };
 
@@ -56,20 +56,20 @@ declare namespace FetchSchema {
     facebook: string | null;
     instagram: string | null;
     website: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     fk_user_id: string | null;
   };
 
   export type User = {
     id: string;
     email: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-    lastActiveAt: Date | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    lastActiveAt: string | null;
     lastActiveIp: string | null;
-    lastSignInAt: Date | null;
+    lastSignInAt: string | null;
     lastSignInIp: string | null;
   };
 
@@ -80,8 +80,8 @@ declare namespace FetchSchema {
     name: string;
     description: string | null;
     image: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
   };
 
   // Posts
@@ -198,8 +198,8 @@ declare namespace SerializeSchema {
       id: string;
       username: string;
     };
-    dateAddedAt: Date;
-    createdAt: Date;
+    dateAddedAt: string;
+    createdAt: string;
   };
 
   export type SerializePostImage = {
@@ -226,9 +226,9 @@ declare namespace SerializeSchema {
     subtitle: string;
     content: string;
     disabledComment: boolean;
-    publishingDate: Date;
-    createdAt: Date;
-    updatedAt: Date;
+    publishingDate: string;
+    createdAt: string;
+    updatedAt: string;
     user: SerializeUser;
     postImage: SerializePostImage;
     postTags: SerializePostTags;

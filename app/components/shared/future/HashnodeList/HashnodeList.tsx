@@ -63,7 +63,7 @@ export default function HashnodeList({
     pages: [(data?.list ?? []) as unknown as SerializeSchema.SerializePost[]],
   });
 
-  console.log("scrollState", scrollState);
+  // console.log("scrollState", scrollState);
 
   const listToRender = useMemo(() => {
     const { pages } = scrollState;
