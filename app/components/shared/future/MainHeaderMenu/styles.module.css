@@ -1,15 +1,31 @@
-.search {
-  @apply relative z-20;
+.search_container {
+  position: relative;
+  z-index: 20;
 }
 
 .btn_search {
-  @apply hidden font-semibold text-sm border border-transparent hover:border hover:border-slate-200 justify-center items-center gap-2 dark:hover:border-slate-800 focus:outline-none text-slate-600 dark:text-slate-300 rounded-full p-2;
+  @apply font-semibold text-sm border border-transparent hover:border hover:border-slate-200 inline-flex justify-center items-center gap-2 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 text-slate-600 rounded-full p-2;
 }
 
 .btn_search > svg {
   height: 1.5rem;
   width: 1.5rem;
   stroke: currentColor;
+}
+
+/* dark */
+:global(.dark) .btn_search {
+  --tw-text-opacity: 1;
+  color: rgb(203 213 225 / var(--tw-text-opacity));
+}
+
+:global(.dark) .btn_search:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(30 41 59 / var(--tw-border-opacity));
+}
+
+:global(.dark) .btn_search:focus {
+  --tw-ring-offset-color: #1e293b;
 }
 
 .write {

@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback, useState } from "react";
 import styles from "./styles.module.css";
 import classNames from "classnames";
-
 import { Icons } from "~/components/shared/Icons";
 import { Await, Link, useRouteLoaderData } from "@remix-run/react";
 import { MainMenuUserMenu } from "~/components/shared/future/MainMenuUserMenu";
@@ -16,21 +15,24 @@ import { useOptionalSession } from "~/services/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
+import { SearchDialog } from "../SearchhDialog";
 
 export default function MainHeaderMenu() {
   return (
-    <MainHeaderMenu.Wrapper
-      btnMobileWrite={<MainHeaderMenu.MobileWrite />}
-      btnWrite={<MainHeaderMenu.Write />}
-      btnTheme={<MainHeaderMenu.Theme />}
-      btnNotification={<MainHeaderMenu.Notification />}
-      menus={<MainHeaderMenu.Menus />}
-    />
+    <>
+      <MainHeaderMenu.SearchButton />
+      <MainHeaderMenu.WriteButton />
+      <MainHeaderMenu.Wrapper
+        btnMobileWrite={<MainHeaderMenu.MobileWrite />}
+        btnTheme={<MainHeaderMenu.Theme />}
+        btnNotification={<MainHeaderMenu.Notification />}
+        menus={<MainHeaderMenu.Menus />}
+      />
+    </>
   );
 }
 
 interface InternalWapperProps {
-  btnWrite: React.ReactNode;
   btnMobileWrite: React.ReactNode;
   btnTheme: React.ReactNode;
   btnNotification: React.ReactNode;
@@ -38,7 +40,6 @@ interface InternalWapperProps {
 }
 
 MainHeaderMenu.Wrapper = function Item({
-  btnWrite,
   btnMobileWrite,
   btnNotification,
   btnTheme,
@@ -46,12 +47,6 @@ MainHeaderMenu.Wrapper = function Item({
 }: InternalWapperProps) {
   return (
     <>
-      <div className={styles.search}>
-        <button type="button" className={styles.btn_search}>
-          <Icons.Search />
-        </button>
-      </div>
-      {btnWrite}
       <div className={styles.menus}>
         <div className={styles.menus_btn_area}>
           {btnMobileWrite}
@@ -62,6 +57,10 @@ MainHeaderMenu.Wrapper = function Item({
       </div>
     </>
   );
+};
+
+MainHeaderMenu.SearchButton = function Item() {
+  return <SearchDialog />;
 };
 
 MainHeaderMenu.Notification = function Item() {
@@ -114,7 +113,7 @@ MainHeaderMenu.Theme = function Item() {
   );
 };
 
-MainHeaderMenu.Write = function Item() {
+MainHeaderMenu.WriteButton = function Item() {
   const session = useOptionalSession();
   if (!session) return null;
 
