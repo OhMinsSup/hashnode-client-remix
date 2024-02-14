@@ -23,7 +23,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
 export type RoutesLoaderData = ReturnType<typeof loader>;
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  return await context.api.auth.signupWithRedirect(request);
+  // return await context.api.auth.signupWithRedirect(request);
 };
 
 export type RoutesActionData = ReturnType<typeof action>;
@@ -34,7 +34,7 @@ export default function Routes() {
 }
 
 export function ErrorBoundary() {
-  let error = useRouteError();
+  const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

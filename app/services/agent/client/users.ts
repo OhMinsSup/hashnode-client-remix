@@ -17,7 +17,7 @@ export class UsersNamespace {
     return this._defineApis;
   }
 
-  follow(body: any, opts?: CallOptions | undefined) {
+  follow(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.USER_FOLLOW),
       this._service.uri
@@ -33,7 +33,7 @@ export class UsersNamespace {
     });
   }
 
-  update(body: any, opts?: CallOptions | undefined) {
+  update(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ROOT),
       this._service.uri

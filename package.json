@@ -3,10 +3,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix build",
-    "deploy": "wrangler publish",
-    "dev": "remix dev --manual -c \"npm run start\"",
-    "start": "wrangler pages dev ./public --compatibility-date=\"2023-06-21\" --compatibility-flags=\"nodejs_compat\" --kv PostDafts",
+    "build": "remix vite:build",
+    "deploy": "wrangler pages deploy ./build/client",
+    "dev": "remix vite:dev",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "start": "wrangler pages dev ./build/client",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -27,7 +28,6 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@remix-run/cloudflare": "^2.6.0",
     "@remix-run/cloudflare-pages": "^2.6.0",
-    "@remix-run/css-bundle": "^2.6.0",
     "@remix-run/react": "^2.6.0",
     "@tanstack/react-virtual": "^3.0.4",
     "@tanstack/virtual-core": "^3.0.4",
@@ -55,7 +55,6 @@
     "clsx": "^2.1.0",
     "cookie": "^0.6.0",
     "cross-env": "^7.0.3",
-    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.3",
     "highlight.js": "^11.9.0",
@@ -90,17 +89,27 @@
     "@types/node": "^20.11.17",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
     "tailwindcss-radix": "^2.8.0",
     "typescript": "^5.3.3",
+    "vite": "^5.1.1",
+    "vite-env-only": "^2.2.0",
+    "vite-tsconfig-paths": "^4.3.1",
     "wrangler": "^3.28.1"
   },
   "engines": {
-    "node": ">=16.13"
+    "node": ">=18.0.0"
   }
 }

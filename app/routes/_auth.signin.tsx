@@ -6,7 +6,7 @@ import { SigninForm } from "~/components/auth/future/SigninForm";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  return await context.api.auth.signinWithRedirect(request);
+  // return await context.api.auth.signinWithRedirect(request);
 };
 
 export type RoutesActionData = ReturnType<typeof action>;
@@ -16,7 +16,7 @@ export default function Routes() {
 }
 
 export function ErrorBoundary() {
-  let error = useRouteError();
+  const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

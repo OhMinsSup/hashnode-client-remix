@@ -20,6 +20,9 @@ import type {
   GetTagIdHandler,
   PostTagFollowHandler,
 } from "~/services/agent/client/types";
+import type { AgentOpts } from "~/services/agent/types";
+
+let hashnodeAgent: HashnodeAgent | undefined;
 
 export class HashnodeAgent extends Agent {
   get app() {
@@ -115,4 +118,19 @@ export class HashnodeAgent extends Agent {
   getNotificationCountHandler: GetNotificationCountHandler = (opts) => {
     return this.api.app.notifications.getCount(opts);
   };
+}
+
+export function setHashnodeAgent(opts: AgentOpts) {
+  if (hashnodeAgent) {
+    return hashnodeAgent;
+  }
+  hashnodeAgent = new HashnodeAgent(opts);
+  return hashnodeAgent;
+}
+
+export function getHashnodeAgent() {
+  if (!hashnodeAgent) {
+    throw new Error("HashnodeAgent is not set");
+  }
+  return hashnodeAgent;
 }

@@ -3,10 +3,9 @@ import styles from "./styles.module.css";
 import { cn } from "~/utils/util";
 import { Form, useNavigate } from "@remix-run/react";
 import { Input } from "~/components/auth/future/Input";
-import { AuthenticityTokenInput } from "remix-utils/csrf/react";
-import { HoneypotInputs } from "remix-utils/honeypot/react";
 import { useUrlState } from "~/libs/hooks/useUrlState";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { Icons } from "~/components/shared/Icons";
 
 const socials = [
   {
@@ -73,16 +72,13 @@ export default function SigninForm() {
 
   const loginWithEmail = searchParams.get("loginWithEmail") === "true";
 
-  const onSigninEmail = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const newSearchParams = new URLSearchParams();
-      newSearchParams.set("loginWithEmail", "true");
-      setSearchParams(newSearchParams, {
-        replace: true,
-      });
-    },
-    [setSearchParams]
-  );
+  const onSigninEmail = useCallback(() => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set("loginWithEmail", "true");
+    setSearchParams(newSearchParams, {
+      replace: true,
+    });
+  }, [setSearchParams]);
 
   return (
     <div className={styles.root}>
@@ -143,12 +139,9 @@ SigninForm.Lending = function Item({ onSigninEmail }: LendingProps) {
 SigninForm.EmailAuth = function Item() {
   const [, , removeSearchParams] = useUrlState();
 
-  const onReset = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      removeSearchParams("loginWithEmail", { replace: true });
-    },
-    [removeSearchParams]
-  );
+  const onReset = useCallback(() => {
+    removeSearchParams("loginWithEmail", { replace: true });
+  }, [removeSearchParams]);
 
   return (
     <>
@@ -160,8 +153,6 @@ SigninForm.EmailAuth = function Item() {
           method="POST"
           action="/signin?loginWithEmail=true"
         >
-          <AuthenticityTokenInput />
-          <HoneypotInputs />
           <Input
             id="email"
             type="email"
@@ -191,17 +182,9 @@ SigninForm.EmailAuth = function Item() {
         <button
           type="button"
           onClick={onReset}
-          data-step="1"
           className={cn(styles.btn_email, styles.btn_email_signin)}
         >
-          <svg fill="none" viewBox="0 0 16 16" width="16" height="16">
-            <path
-              stroke="currentColor"
-              d="m9.333 4-4 4 4 4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
+          <Icons.V2.GotoRightArrow />
           Back to login options
         </button>
       </div>
@@ -216,14 +199,11 @@ interface RegisterProps {
 SigninForm.Register = function Item({ email }: RegisterProps) {
   const navigate = useNavigate();
 
-  const onReset = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      navigate(PAGE_ENDPOINTS.AUTH.SIGNIN, {
-        replace: true,
-      });
-    },
-    [navigate]
-  );
+  const onReset = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.AUTH.SIGNIN, {
+      replace: true,
+    });
+  }, [navigate]);
 
   return (
     <div className={styles.root}>
@@ -235,8 +215,6 @@ SigninForm.Register = function Item({ email }: RegisterProps) {
           method="POST"
           action="/signin"
         >
-          <AuthenticityTokenInput />
-          <HoneypotInputs />
           <Input
             id="username"
             type="text"
@@ -284,14 +262,7 @@ SigninForm.Register = function Item({ email }: RegisterProps) {
           data-step="1"
           className={cn(styles.btn_email, styles.btn_email_signin)}
         >
-          <svg fill="none" viewBox="0 0 16 16" width="16" height="16">
-            <path
-              stroke="currentColor"
-              d="m9.333 4-4 4 4 4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
+          <Icons.V2.GotoRightArrow />
           Back to login options
         </button>
       </div>

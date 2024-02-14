@@ -16,7 +16,7 @@ export class AuthNamespace {
     return this._defineApis;
   }
 
-  signup(body: any, opts?: CallOptions | undefined) {
+  signup(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.SIGNUP),
       this._service.uri
@@ -32,7 +32,7 @@ export class AuthNamespace {
     });
   }
 
-  signin(body: any, opts?: CallOptions | undefined) {
+  signin(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.SIGNIN),
       this._service.uri

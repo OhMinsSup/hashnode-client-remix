@@ -653,6 +653,16 @@ export const Icons = {
   Write: WriteIcon,
   V2: {
     Menu: MenuIcon,
+    GotoRightArrow: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 16 16" width="16" height="16">
+        <path
+          stroke="currentColor"
+          d="m9.333 4-4 4 4 4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </svg>
+    ),
     Logo: ({ isDark, ...props }: IconProps & { isDark: boolean }) => (
       <svg {...props} fill="none" viewBox="0 0 334 56">
         <path
@@ -721,9 +731,9 @@ export const Icons = {
       >
         <path
           d="M21 21L15.8091 15.8091M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         ></path>
       </svg>
     ),
@@ -846,7 +856,7 @@ export const Icons = {
       </svg>
     ),
     FollowUser: (props: IconProps) => (
-      <svg fill="none" viewBox="0 0 24 24" width="24" height="24">
+      <svg {...props} fill="none" viewBox="0 0 24 24" width="24" height="24">
         <path
           stroke="currentColor"
           d="M18.07 19.516s-1.8-3.512-6.07-3.512c-4.27 0-6.07 3.512-6.07 3.512m15.946-9.094c.082.514.124 1.041.124 1.578 0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2c.431 0 .856.027 1.273.08M19.5 7V4.5m0 0V2m0 2.5H17m2.5 0H22m-6.665 5.432a3.335 3.335 0 1 1-6.67 0 3.335 3.335 0 0 1 6.67 0Z"

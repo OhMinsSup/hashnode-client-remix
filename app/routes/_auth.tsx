@@ -1,31 +1,28 @@
 // remix
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { redirect } from "@remix-run/cloudflare";
 import { AuthLayout } from "~/components/auth/future/AuthLayout";
-
-// constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-
-// styles
-import authStyles from "~/styles/routes/auth.css";
-
-// types
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction,
+import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
+import "~/styles/routes/auth.css";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
 } from "@remix-run/cloudflare";
+import { redirectIfLoggedInLoader } from "~/server/auth";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: authStyles }];
-};
-
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const isAuthenticated = await context.api.auth.isAuthenticated(request);
-  if (isAuthenticated) {
-    return redirect(PAGE_ENDPOINTS.ROOT);
-  }
-  return context.services.server.getHashnodeonboard();
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  redirectIfLoggedInLoader(request, PAGE_ENDPOINTS.ROOT);
+  const data = {
+    image: ASSET_URL.DEFAULT_AVATAR,
+    username: "Guillermo Rauch",
+    job: "CEO, Vercel",
+    description: `It's amazing to see how fast devs go from 0 to Blog under a domain they own on Hashnode 🤯. It reminds me a lot of what Substack did for journalists.`,
+  } as FetchSchema.Hashnodeonboard;
+  return json(data, {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=3600",
+    },
+  });
 };
 
 export type RoutesLoader = Promise<FetchSchema.Hashnodeonboard>;

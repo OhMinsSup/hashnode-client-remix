@@ -43,7 +43,6 @@ export type HashnodeApiConstructorOptions = {
   services: HashnodeServices;
 };
 
-export interface RemixContext extends RuntimeEnv {
-  services: HashnodeServices;
-  api: HashnodeApi;
+export interface RemixContext {
+  env: RuntimeEnv;
 }

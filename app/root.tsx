@@ -3,18 +3,12 @@ import {
   Links,
   Meta,
   Outlet,
-  LiveReload,
   Scripts,
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { cssBundleHref } from "@remix-run/css-bundle";
-import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
-import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { Toaster, toast as showToast } from "sonner";
-
 import classNames from "classnames";
-
 import { ExternalLink } from "~/components/shared/future/ExternalLink";
 import { CanonicalLink } from "~/components/shared/future/CanonicalLink";
 import { Body } from "~/components/shared/future/Body";
@@ -23,42 +17,26 @@ import {
   ThemeProvider,
   useTheme,
 } from "~/context/useThemeContext";
-
-// api
 import { ASSET_URL } from "~/constants/constant";
-
-// styles
-import globalStyles from "~/styles/global.css";
-
-// types
+import "~/styles/global.css";
 import type { Theme } from "~/context/useThemeContext";
 import type { Toast } from "./services/validate/toast.validate";
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { useEffect, useRef } from "react";
+import { rootLoader } from "./server/routes/root.server";
 
-export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: globalStyles },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-  ];
-};
-
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const getSessionApi = context.api.auth.getSession(request);
-
-  const { data, headers } = await context.api.app.root(request, getSessionApi);
-  return json(data, {
-    headers,
+export const loader = async (args: LoaderFunctionArgs) => {
+  const result = await rootLoader(args);
+  console.log("result =>", result);
+  return json(result.data, {
+    headers: result.headers,
   });
 };
 
 export type RoutesData = typeof loader;
 
 export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
+  console.log("location", location, data);
   const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",
@@ -126,7 +104,7 @@ function ShowToast({ toast }: { toast: Toast }) {
       showToast[type](title, {
         id,
         description,
-        onAutoClose: (toast) => {
+        onAutoClose: () => {
           if (ref.current) {
             clearTimeout(ref.current);
             ref.current = null;
@@ -181,7 +159,6 @@ function Document({
         <Toaster closeButton position="top-center" />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </Body>
     </html>
   );
@@ -202,13 +179,9 @@ function App() {
 export default function AppWithProviders() {
   const data = useLoaderData<RoutesData>();
   return (
-    <HoneypotProvider {...data.honeyProps}>
-      <AuthenticityTokenProvider token={data.csrfToken}>
-        <ThemeProvider specifiedTheme={data.theme}>
-          <App />
-        </ThemeProvider>
-      </AuthenticityTokenProvider>
-    </HoneypotProvider>
+    <ThemeProvider specifiedTheme={data.theme}>
+      <App />
+    </ThemeProvider>
   );
 }
 
