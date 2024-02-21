@@ -11,12 +11,12 @@ export type CallOptions = Partial<
 // Auth
 
 export type SignupHandler = (
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
 export type SigninHandler = (
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
@@ -27,7 +27,7 @@ export type GetMeHandler = (
 ) => Promise<FetchHandlerResponse>;
 
 export type UserUpdateHandler = (
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
@@ -43,13 +43,13 @@ export type GetUserListHandler = (
 // Posts
 
 export type PostCreateHandler = (
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
 export type PostUpdateHandler = (
   id: string,
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 
@@ -101,7 +101,7 @@ export type GetTagIdHandler = (
 ) => Promise<FetchHandlerResponse>;
 
 export type PostTagFollowHandler = (
-  body: any,
+  body: unknown,
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
 

@@ -277,14 +277,14 @@ declare namespace FetchQuerySchema {
 }
 
 declare namespace FetchRespSchema {
-  export type Error<Result = any> = {
+  export type Error<Result = unknown> = {
     resultCode: number;
     message: string;
     error: string;
     result: Result;
   };
 
-  export type ListResp<Item = Record<string, any>> = {
+  export type ListResp<Item = Record<string, unknown>> = {
     list: Item[];
     totalCount: number;
     pageInfo: {
@@ -349,7 +349,7 @@ declare namespace FetchRespSchema {
 
   /// Cloudflare file upload
 
-  export type CfCommonResp<Result = any> = {
+  export type CfCommonResp<Result = unknown> = {
     result: Result;
     success: boolean;
     errors: Array<{

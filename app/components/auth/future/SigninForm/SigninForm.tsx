@@ -1,11 +1,17 @@
 import React, { useCallback } from "react";
 import styles from "./styles.module.css";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
 import { cn } from "~/utils/util";
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, useNavigate, useActionData } from "@remix-run/react";
 import { Input } from "~/components/auth/future/Input";
 import { useUrlState } from "~/libs/hooks/useUrlState";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { Icons } from "~/components/shared/Icons";
+import { type RoutesActionData as SigninRoutesActionData } from "~/server/routes/signin/siginin-action.server";
+import { type RoutesActionData as SignupRoutesActionData } from "~/server/routes/signup/siginup-action.server";
+import { schema as $signinSchema } from "~/services/validate/signin-api.validate";
+import { schema as $signupSchema } from "~/services/validate/signup-api.validate";
 
 const socials = [
   {
@@ -83,7 +89,7 @@ export default function SigninForm() {
   return (
     <div className={styles.root}>
       {!loginWithEmail && <SigninForm.Lending onSigninEmail={onSigninEmail} />}
-      {loginWithEmail && <SigninForm.EmailAuth />}
+      {loginWithEmail && <SigninForm.Signin />}
     </div>
   );
 }
@@ -136,46 +142,73 @@ SigninForm.Lending = function Item({ onSigninEmail }: LendingProps) {
   );
 };
 
-SigninForm.EmailAuth = function Item() {
+SigninForm.Signin = function Item() {
   const [, , removeSearchParams] = useUrlState();
 
   const onReset = useCallback(() => {
     removeSearchParams("loginWithEmail", { replace: true });
   }, [removeSearchParams]);
 
+  // Last submission returned by the server
+  const lastResult = useActionData<SigninRoutesActionData>();
+
+  const [form, fields] = useForm({
+    // Sync the result of last submission
+    lastResult,
+    // Reuse the validation logic on the client
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: $signinSchema });
+    },
+    // Validate the form on blur event triggered
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onSubmit",
+  });
+
   return (
     <>
       <div className={styles.email_auth_wrapper}>
         <span className={styles.form_title}>Sign in with email</span>
         <Form
-          replace
           className={styles.email_form}
-          method="POST"
-          action="/signin?loginWithEmail=true"
+          method="post"
+          id={form.id}
+          onSubmit={form.onSubmit}
+          aria-invalid={form.errors ? true : undefined}
+          aria-describedby={form.errors ? form.errorId : undefined}
         >
           <Input
-            id="email"
             type="email"
-            name="email"
-            value="mins5190@naver.com"
+            id={fields.email.id}
+            name={fields.email.name}
+            defaultValue="mins5190@naver.com"
             aria-label="Email address"
             autoComplete="email"
             placeholder="Enter your email address"
+            required={fields.email.required}
+            errors={fields.email.errors}
+            errorId={fields.email.errorId}
+            aria-invalid={fields.email.errors ? true : undefined}
+            aria-describedby={
+              fields.email.errors ? fields.email.errorId : undefined
+            }
           />
           <Input
             type="password"
-            name="password"
-            id="password"
-            value="1q2w3e4r!@"
+            id={fields.password.id}
+            name={fields.password.name}
+            defaultValue="1q2w3e4r!@"
             autoComplete="current-password"
             aria-label="Password"
             placeholder="Enter your password"
+            required={fields.password.required}
+            errors={fields.password.errors}
+            errorId={fields.password.errorId}
+            aria-invalid={fields.password.errors ? true : undefined}
+            aria-describedby={
+              fields.password.errors ? fields.password.errorId : undefined
+            }
           />
-          <button
-            type="submit"
-            className={styles.btn_google}
-            data-id="Continue"
-          >
+          <button type="submit" className={styles.btn_google}>
             Continue
           </button>
         </Form>
@@ -205,54 +238,96 @@ SigninForm.Register = function Item({ email }: RegisterProps) {
     });
   }, [navigate]);
 
+  // Last submission returned by the server
+  const lastResult = useActionData<SignupRoutesActionData>();
+
+  const [form, fields] = useForm({
+    // Sync the result of last submission
+    lastResult,
+    // Reuse the validation logic on the client
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: $signupSchema });
+    },
+    // Validate the form on blur event triggered
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onSubmit",
+  });
+
   return (
     <div className={styles.root}>
       <div className={styles.email_auth_wrapper}>
         <span className={styles.form_title}>Sign up with email</span>
         <Form
           className={styles.email_form}
-          replace
-          method="POST"
-          action="/signin"
+          method="post"
+          id={form.id}
+          onSubmit={form.onSubmit}
+          aria-invalid={form.errors ? true : undefined}
+          aria-describedby={form.errors ? form.errorId : undefined}
         >
           <Input
-            id="username"
             type="text"
-            name="username"
+            id={fields.username.id}
+            name={fields.username.name}
             autoComplete="username"
             aria-label="Username"
             placeholder="Enter your username."
+            required={fields.username.required}
+            errors={fields.username.errors}
+            errorId={fields.username.errorId}
+            aria-invalid={fields.username.errors ? true : undefined}
+            aria-describedby={
+              fields.username.errors ? fields.username.errorId : undefined
+            }
           />
           <Input
-            id="email"
             type="email"
-            name="email"
+            id={fields.email.id}
+            name={fields.email.name}
             aria-label="Email address"
             autoComplete="email"
             placeholder="Enter your email address"
             defaultValue={email}
+            required={fields.email.required}
+            errors={fields.email.errors}
+            errorId={fields.email.errorId}
+            aria-invalid={fields.email.errors ? true : undefined}
+            aria-describedby={
+              fields.email.errors ? fields.email.errorId : undefined
+            }
           />
           <Input
-            type="password"
-            name="password"
-            id="password"
+            id={fields.password.id}
+            name={fields.password.name}
             autoComplete="current-password"
             aria-label="Password"
             placeholder="Enter your password"
+            required={fields.password.required}
+            errors={fields.password.errors}
+            errorId={fields.password.errorId}
+            aria-invalid={fields.password.errors ? true : undefined}
+            aria-describedby={
+              fields.password.errors ? fields.password.errorId : undefined
+            }
           />
           <Input
             type="password"
-            name="confirmPassword"
-            id="confirmPassword"
+            name={fields.confirmPassword.name}
+            id={fields.confirmPassword.id}
             autoComplete="new-password"
             aria-label="confirmPassword"
             placeholder="Confirm your password."
+            required={fields.confirmPassword.required}
+            errors={fields.confirmPassword.errors}
+            errorId={fields.confirmPassword.errorId}
+            aria-invalid={fields.confirmPassword.errors ? true : undefined}
+            aria-describedby={
+              fields.confirmPassword.errors
+                ? fields.confirmPassword.errorId
+                : undefined
+            }
           />
-          <button
-            type="submit"
-            className={styles.btn_google}
-            data-id="Continue"
-          >
+          <button type="submit" className={styles.btn_google}>
             Continue
           </button>
         </Form>

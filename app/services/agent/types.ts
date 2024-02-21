@@ -1,7 +1,7 @@
 export interface AgentFetchHandlerResponse {
   status: number;
   headers: Record<string, string>;
-  body: any;
+  body: unknown;
 }
 
 export interface AgentFetchHandlerOptions {

@@ -27,7 +27,6 @@ import { rootLoader } from "./server/routes/root.server";
 
 export const loader = async (args: LoaderFunctionArgs) => {
   const result = await rootLoader(args);
-  console.log("result =>", result);
   return json(result.data, {
     headers: result.headers,
   });
@@ -36,7 +35,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
 export type RoutesData = typeof loader;
 
 export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
-  console.log("location", location, data);
   const url = new URL(location.pathname, data?.origin);
   const Seo = {
     title: "Hashnode - Blogging community for developers, and people in tech",

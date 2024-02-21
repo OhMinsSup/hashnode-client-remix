@@ -1,8 +1,8 @@
-import { constructMethodCallUri } from "~/services/agent/fetch/utils";
+import { constructMethodCallUri } from "../fetch/utils";
 import { API_ENDPOINTS, CLOUDFLARE } from "./constants";
-import type { CallOptions } from "~/services/agent/client/types";
-import type { ServiceClient } from "~/services/agent/client";
-import type { QueryParams } from "~/services/agent/fetch/types";
+import type { CallOptions } from "../client/types";
+import type { ServiceClient } from "../client";
+import type { QueryParams } from "../fetch/types";
 
 export class FilesNamespace {
   _service: ServiceClient;
@@ -35,7 +35,7 @@ export class FilesNamespace {
     });
   }
 
-  create(body: any, opts?: CallOptions | undefined) {
+  create(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ROOT),
       this._service.uri

@@ -6,14 +6,8 @@ import {
   clearAuthHeaders,
   combineHeaders,
 } from "~/server/utils/request.server";
-import { setHashnodeAgent } from "~/services/agent/hashnode-agent";
 
 export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
-  setHashnodeAgent({
-    service: context.env.API_BASE_URL,
-    prefix: "/api",
-  });
-
   initializeTheme(context.env.COOKIE_SESSION_SECRET);
   initializeToast(context.env.COOKIE_SESSION_SECRET);
 

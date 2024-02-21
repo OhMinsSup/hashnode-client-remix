@@ -652,6 +652,16 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    Error: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          fill="currentColor"
+          d="M10 1.042a8.958 8.958 0 1 0 0 17.916 8.958 8.958 0 0 0 0-17.916Zm0 4.541c.345 0 .625.28.625.625v4a.625.625 0 0 1-1.25 0v-4c0-.345.28-.625.625-.625Zm0 6.875a.98.98 0 1 0 0 1.958.98.98 0 0 0 0-1.958Z"
+          fillRule="evenodd"
+          clipRule="evenodd"
+        ></path>
+      </svg>
+    ),
     Menu: MenuIcon,
     GotoRightArrow: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 16 16" width="16" height="16">

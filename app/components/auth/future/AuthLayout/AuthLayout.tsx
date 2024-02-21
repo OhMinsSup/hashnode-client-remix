@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./styles.module.css";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { cn } from "~/utils/util";
-
 import type { RoutesLoader } from "~/routes/_auth";
+import { Icons } from "~/components/shared/Icons";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -20,14 +20,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         className={cn(styles.btn_top, styles.btn_top_go_back)}
         onClick={() => navigate(-1)}
       >
-        <svg fill="none" viewBox="0 0 16 16" width="16" height="16">
-          <path
-            stroke="currentColor"
-            d="m9.333 4-4 4 4 4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
+        <Icons.V2.GotoRightArrow />
         Go back
       </button>
       <div className={styles.root}>
@@ -50,8 +43,8 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             </svg>
             <div className={styles.form_content}>{children}</div>
             <p className={styles.terms}>
-              By logging in or signing up using the options above, you agree to
-              Hashnode's
+              {`By logging in or signing up using the options above, you agree to
+              Hashnode's`}
               <a target="_blank" className="font-medium" href="/terms">
                 Terms &amp; Conditions
               </a>{" "}

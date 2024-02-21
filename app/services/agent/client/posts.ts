@@ -1,7 +1,7 @@
-import { constructMethodCallUri } from "~/services/agent/fetch/utils";
-import type { CallOptions } from "~/services/agent/client/types";
-import type { ServiceClient } from "~/services/agent/client";
-import type { QueryParams } from "~/services/agent/fetch/types";
+import { constructMethodCallUri } from "../fetch/utils";
+import type { CallOptions } from "../client/types";
+import type { ServiceClient } from "../client";
+import type { QueryParams } from "../fetch/types";
 import { API_ENDPOINTS } from "./constants";
 
 export class PostsNamespace {
@@ -17,7 +17,7 @@ export class PostsNamespace {
     return this._defineApis;
   }
 
-  create(body: any, opts?: CallOptions | undefined) {
+  create(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ROOT),
       this._service.uri
@@ -48,7 +48,7 @@ export class PostsNamespace {
     });
   }
 
-  update(id: string, body: any, opts?: CallOptions | undefined) {
+  update(id: string, body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.ID(id)),
       this._service.uri

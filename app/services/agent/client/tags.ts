@@ -1,8 +1,8 @@
-import { constructMethodCallUri } from "~/services/agent/fetch/utils";
-import type { CallOptions } from "~/services/agent/client/types";
-import type { ServiceClient } from "~/services/agent/client";
+import { constructMethodCallUri } from "../fetch/utils";
+import type { CallOptions } from "../client/types";
+import type { ServiceClient } from "../client";
 import { API_ENDPOINTS } from "./constants";
-import type { QueryParams } from "~/services/agent/fetch/types";
+import type { QueryParams } from "../fetch/types";
 
 export class TagsNamespace {
   _service: ServiceClient;
@@ -63,7 +63,7 @@ export class TagsNamespace {
     });
   }
 
-  follow(body: any, opts?: CallOptions | undefined) {
+  follow(body: unknown, opts?: CallOptions | undefined) {
     const httpUri = constructMethodCallUri(
       this._service.makePathname(this._defineApis.FOLLOW),
       this._service.uri

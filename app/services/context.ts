@@ -1,6 +1,5 @@
 import { EnvSchema } from "./app/env.server";
 
-import { AuthApiService } from "./api/auth.server";
 import { UserApiService } from "./api/user.server";
 import { TagApiService } from "./api/tag.server";
 import { FileApiService } from "./api/file.server";
@@ -46,10 +45,6 @@ export const getLoadContext = (context: any) => {
   };
 
   const api = {
-    auth: new AuthApiService({
-      env,
-      services,
-    }),
     user: new UserApiService({
       env,
       services,

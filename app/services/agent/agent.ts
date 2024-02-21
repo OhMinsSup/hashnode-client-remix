@@ -1,9 +1,8 @@
-import { BaseError, ErrorType } from "~/services/error";
-import { defaultFetchHandler } from "~/services/agent/fetch";
-import { BaseClient } from "~/services/agent/client";
-
-import type { ServiceClient } from "~/services/agent/client";
-import type { FetchHandlerOptions } from "~/services/agent/fetch/types";
+import { BaseError, ErrorType } from "../error";
+import { defaultFetchHandler } from "../agent/fetch";
+import { BaseClient } from "../agent/client";
+import type { ServiceClient } from "../agent/client";
+import type { FetchHandlerOptions } from "../agent/fetch/types";
 import type {
   AgentConfigureOptions,
   AgentFetchHandler,

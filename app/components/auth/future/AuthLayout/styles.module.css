@@ -4,7 +4,7 @@
 }
 
 .btn_top {
-  @apply rounded-full bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent disabled:hover:dark:bg-transparent text-slate-600 dark:text-slate-300 disabled:text-slate-300 disabled:dark:text-slate-800 border border-transparent focus:border focus:border-blue-600 disabled:cursor-not-allowed text-base py-3 px-6;
+  @apply rounded-full flex bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent disabled:hover:dark:bg-transparent text-slate-600 dark:text-slate-300 disabled:text-slate-300 disabled:dark:text-slate-800 border border-transparent focus:border focus:border-blue-600 disabled:cursor-not-allowed text-base py-3 px-6;
 }
 
 .btn_bottom {
@@ -89,6 +89,10 @@
   padding-right: 1rem;
 }
 
+:global(.dark) .right {
+  @apply bg-zinc-900;
+}
+
 .form {
   margin-top: -220px;
   display: -webkit-box;
@@ -118,6 +122,10 @@
   padding-bottom: 3rem;
   padding-left: 2rem;
   padding-right: 2rem;
+}
+
+:global(.dark) .form {
+  @apply bg-slate-950 border-slate-900;
 }
 
 .form_content {
@@ -155,6 +163,10 @@
   font-weight: 400;
   --tw-text-opacity: 1;
   color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+
+:global(.dark) .info_content {
+  @apply text-slate-300;
 }
 
 .profile {

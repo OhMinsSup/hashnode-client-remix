@@ -1,12 +1,12 @@
-import { defaultFetchHandler } from "~/services/agent/fetch";
-import { AuthNamespace } from "~/services/agent/client/auth";
-import { FilesNamespace } from "~/services/agent/client/files";
-import { PostsNamespace } from "~/services/agent/client/posts";
-import { TagsNamespace } from "~/services/agent/client/tags";
-import { UsersNamespace } from "~/services/agent/client/users";
-
-import type { AgentFetchHandler } from "~/services/agent/types";
+import { defaultFetchHandler } from "../fetch";
+import { AuthNamespace } from "../client/auth";
+import { FilesNamespace } from "../client/files";
+import { PostsNamespace } from "../client/posts";
+import { TagsNamespace } from "../client/tags";
+import { UsersNamespace } from "../client/users";
+import type { AgentFetchHandler } from "../types";
 import { NotificationsNamespace } from "./notifications";
+
 export class BaseClient {
   fetch: AgentFetchHandler = defaultFetchHandler;
 

@@ -1,6 +1,6 @@
-import { constructMethodCallUri } from "~/services/agent/fetch/utils";
-import type { CallOptions } from "~/services/agent/client/types";
-import type { ServiceClient } from "~/services/agent/client";
+import { constructMethodCallUri } from "../fetch/utils";
+import type { CallOptions } from "../client/types";
+import type { ServiceClient } from "../client";
 import { API_ENDPOINTS } from "./constants";
 
 export class NotificationsNamespace {

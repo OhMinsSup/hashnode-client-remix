@@ -4,11 +4,13 @@ import {
   getParsedCookie,
   readHeaderCookie,
 } from "./utils/request.server";
-import { getHashnodeAgent } from "~/services/agent/hashnode-agent";
-import { redirect } from "@remix-run/cloudflare";
+import { type AppLoadContext, redirect } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
 
-export async function getAuthFromRequest(request: Request) {
+export async function getAuthFromRequest(
+  request: Request,
+  context: AppLoadContext
+) {
   try {
     const cookie = readHeaderCookie(request);
     if (!cookie) {
@@ -20,7 +22,7 @@ export async function getAuthFromRequest(request: Request) {
       return null;
     }
 
-    const response = await getHashnodeAgent().getMeHandler({
+    const response = await context.api.getMeHandler({
       headers: {
         Cookie: cookie,
         "Content-Type": "application/json",
@@ -38,8 +40,12 @@ export async function getAuthFromRequest(request: Request) {
   }
 }
 
-export async function requireAuthCookie(request: Request, redirectUrl: string) {
-  const session = await getAuthFromRequest(request);
+export async function requireAuthCookie(
+  request: Request,
+  context: AppLoadContext,
+  redirectUrl: string
+) {
+  const session = await getAuthFromRequest(request, context);
   if (!session) {
     throw redirect(safeRedirect(redirectUrl), {
       headers: clearAuthHeaders(),
@@ -50,9 +56,10 @@ export async function requireAuthCookie(request: Request, redirectUrl: string) {
 
 export async function redirectIfLoggedInLoader(
   request: Request,
+  context: AppLoadContext,
   redirectUrl: string
 ) {
-  const session = await getAuthFromRequest(request);
+  const session = await getAuthFromRequest(request, context);
   if (session) {
     throw redirect(safeRedirect(redirectUrl));
   }

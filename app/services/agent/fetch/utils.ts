@@ -1,4 +1,4 @@
-import { BaseError, ErrorType } from "~/services/error";
+import { BaseError, ErrorType } from "../../error";
 import type { QueryParams } from "./types";
 
 export const getSearchParams = (
@@ -34,7 +34,7 @@ export function normalizeHeaders(
 
 export function encodeMethodCallBody(
   headers: Headers | undefined,
-  data?: any
+  data?: unknown
 ): ArrayBuffer | undefined {
   if (typeof headers === "undefined") {
     return undefined;
@@ -168,7 +168,7 @@ export function encodeQueryParam(
     | "datetime"
     | "array"
     | "unknown",
-  value: any
+  value: unknown
 ): string {
   if (type === "string" || type === "unknown") {
     return String(value);

@@ -2,16 +2,16 @@
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { AuthLayout } from "~/components/auth/future/AuthLayout";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
-import "~/styles/routes/auth.css";
 import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { redirectIfLoggedInLoader } from "~/server/auth";
+import { redirectIfLoggedInLoader } from "~/server/auth.server";
+import { mergeMeta } from "~/utils/util";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  redirectIfLoggedInLoader(request, PAGE_ENDPOINTS.ROOT);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  redirectIfLoggedInLoader(request, context, PAGE_ENDPOINTS.ROOT);
   const data = {
     image: ASSET_URL.DEFAULT_AVATAR,
     username: "Guillermo Rauch",
@@ -27,41 +27,24 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export type RoutesLoader = Promise<FetchSchema.Hashnodeonboard>;
 
-export const meta: MetaFunction<RoutesLoader> = ({ location }) => {
-  const Seo = {
-    signin: "Sign in to Hashnode",
-    signup: "Sign up to Hashnode",
-    description:
-      "Start your programming blog. Share your knowledge and build your own brand",
-  };
-  const isSigninPage = location.pathname === PAGE_ENDPOINTS.AUTH.SIGNIN;
-  const title = isSigninPage ? Seo.signin : Seo.signup;
+export const meta: MetaFunction<RoutesLoader> = mergeMeta(() => {
+  const content =
+    "Start your programming blog. Share your knowledge and build your own brand";
   return [
     {
-      title,
-    },
-    {
       name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:title",
-      content: title,
+      content,
     },
     {
       name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:title",
-      content: title,
+      content,
     },
     {
       name: "twitter:description",
-      content: Seo.description,
+      content,
     },
   ];
-};
+});
 
 export default function Routes() {
   return (

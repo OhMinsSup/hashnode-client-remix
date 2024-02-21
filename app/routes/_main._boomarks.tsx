@@ -12,14 +12,14 @@ import type {
 import { redirect } from "@remix-run/cloudflare";
 
 // styles
-import homeListStyle from "~/styles/routes/home-list.css";
-import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
+// import homeListStyle from "~/styles/routes/home-list.css";
+// import homeBookmarkStyle from "~/styles/routes/home-bookmark.css";
 import { CategoryBoxWithHashnodeList } from "~/components/shared/future/CategoryBoxWithHashnodeList";
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: homeListStyle },
-    { rel: "stylesheet", href: homeBookmarkStyle },
+    // { rel: "stylesheet", href: homeListStyle },
+    // { rel: "stylesheet", href: homeBookmarkStyle },
   ];
 };
 

@@ -1,6 +1,7 @@
 export interface FetchHandlerResponse {
   status: number;
   headers: Record<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any;
 }
 
@@ -28,4 +29,4 @@ export enum ResponseType {
   UpstreamTimeout = 504,
 }
 
-export type QueryParams = Record<string, any> | URLSearchParams;
+export type QueryParams = Record<string, unknown> | URLSearchParams;

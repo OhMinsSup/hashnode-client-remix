@@ -1,8 +1,8 @@
-import { constructMethodCallUri } from "~/services/agent/fetch/utils";
-import type { CallOptions } from "~/services/agent/client/types";
-import type { ServiceClient } from "~/services/agent/client";
+import { constructMethodCallUri } from "../fetch/utils";
+import type { CallOptions } from "../client/types";
+import type { ServiceClient } from "../client";
 import { API_ENDPOINTS } from "./constants";
-import type { QueryParams } from "~/services/agent/fetch/types";
+import type { QueryParams } from "../fetch/types";
 
 export class UsersNamespace {
   _service: ServiceClient;

@@ -1,3 +1,4 @@
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { isNull, isUndefined } from "./assertion";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -16,9 +17,9 @@ export function optimizeAnimation(callback: () => void) {
   };
 }
 
-export function parseUrlParams<T = Record<string, any>>(url: string) {
+export function parseUrlParams<T = Record<string, unknown>>(url: string) {
   const params = new URLSearchParams(new URL(url).searchParams);
-  const result = {} as any;
+  const result = {} as Record<string, unknown>;
   for (const [key, value] of params) {
     result[key] = value;
   }
@@ -39,7 +40,7 @@ export const firstLetterToUpperCase = (str?: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const valueToBoolean = (value: any) => {
+export const valueToBoolean = (value: string | boolean | undefined | null) => {
   if (value === "true") {
     return true;
   }
@@ -93,3 +94,36 @@ export function getDomainUrl(request: Request) {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const mergeMeta = <
+  Loader extends LoaderFunction | unknown = unknown,
+  ParentsLoaders extends Record<string, LoaderFunction | unknown> = Record<
+    string,
+    unknown
+  >,
+>(
+  leafMetaFn: MetaFunction<Loader, ParentsLoaders>
+): MetaFunction<Loader, ParentsLoaders> => {
+  return (arg) => {
+    const leafMeta = leafMetaFn(arg);
+    return arg.matches.reduceRight((acc, match) => {
+      for (const parentMeta of match.meta) {
+        const index = acc.findIndex(
+          (meta) =>
+            ("name" in meta &&
+              "name" in parentMeta &&
+              meta.name === parentMeta.name) ||
+            ("property" in meta &&
+              "property" in parentMeta &&
+              meta.property === parentMeta.property) ||
+            ("title" in meta && "title" in parentMeta)
+        );
+        if (index == -1) {
+          // Parent meta not found in acc, so add it
+          acc.push(parentMeta);
+        }
+      }
+      return acc;
+    }, leafMeta);
+  };
+};

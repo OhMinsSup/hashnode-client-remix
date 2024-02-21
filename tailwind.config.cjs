@@ -5,7 +5,7 @@ const { colors } = require("tailwindcss/defaultTheme");
 module.exports = {
   mode: "jit",
   content: ["./app/**/*.{ts,tsx,jsx,js}"],
-  darkMode: ["class", ":global(.dark)"],
+  darkMode: ["class", ":global(.dark)", "media"],
   theme: {
     extend: {
       colors: {

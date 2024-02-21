@@ -1,4 +1,6 @@
+import { redirect } from "@remix-run/cloudflare";
 import cookies from "cookie";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 export function combineHeaders(
   ...headers: Array<ResponseInit["headers"] | null>
@@ -43,4 +45,24 @@ export function readHeaderCookie(request: Request) {
 
 export function getParsedCookie(cookie: string) {
   return cookies.parse(cookie);
+}
+
+export function getTokenFromCookie(cookie: string) {
+  const { access_token } = getParsedCookie(cookie);
+  return access_token;
+}
+
+export function validateMethods(
+  request: Request,
+  methods: string[],
+  redirectUrl: string
+) {
+  const method = request.method;
+  const methodLowerCase = method.toLowerCase();
+  const checkMethod = methods.some(
+    (item) => item.toLowerCase() === methodLowerCase
+  );
+  if (!checkMethod) {
+    throw redirect(safeRedirect(redirectUrl));
+  }
 }
