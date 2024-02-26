@@ -2,19 +2,23 @@ import { Await, useLoaderData } from "@remix-run/react";
 import styles from "./styles.module.css";
 import { Link } from "lucide-react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import type { RoutesLoader } from "~/routes/_main";
+import type { RoutesLoaderData } from "~/server/routes/widget/widget-loader.server";
 import { Suspense } from "react";
 import { isEmpty } from "~/utils/assertion";
 import { AsideLikeItem } from "~/components/shared/future/AsideLikeItem";
 
 export default function AsideBookmark() {
-  const data = useLoaderData<RoutesLoader>();
+  const data = useLoaderData<RoutesLoaderData>();
 
   return (
     <Suspense fallback={<></>}>
       <Await resolve={data.getLikeList}>
         {(data) => {
-          if (isEmpty(data.list)) return null;
+          const result = data?.body?.result;
+          const items = result?.list ?? [];
+          if (isEmpty(items)) {
+            return null;
+          }
           return (
             <div className={styles.root}>
               <div>
@@ -22,7 +26,7 @@ export default function AsideBookmark() {
               </div>
               <div>
                 <div className="flex flex-col gap-5 mb-1.5">
-                  {data.list.map((item) => {
+                  {items.map((item: SerializeSchema.SerializePost) => {
                     return (
                       <AsideLikeItem
                         key={`like-aside-${item.id}`}

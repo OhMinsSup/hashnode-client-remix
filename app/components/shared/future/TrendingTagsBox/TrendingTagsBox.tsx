@@ -1,21 +1,15 @@
 import { Icons } from "~/components/shared/Icons";
 import { TrendingTag } from "~/components/shared/future/TrendingTag";
-
 import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import type { SerializeFrom } from "@remix-run/cloudflare";
 
 interface TrendingTagsBoxProps {
-  data?: SerializeFrom<FetchRespSchema.TagListResp>;
+  data?: FetchRespSchema.TagListResp;
 }
 
 export default function TrendingTagsBox({ data }: TrendingTagsBoxProps) {
   const tags = data?.list ?? [];
-
-  if (tags.length === 0) {
-    return null;
-  }
 
   return (
     <div className={styles.root}>

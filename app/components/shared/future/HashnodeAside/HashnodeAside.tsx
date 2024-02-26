@@ -1,14 +1,9 @@
-import React from "react";
 import styles from "./styles.module.css";
-
-// components
 import { AsideChangelog } from "~/components/shared/future/AsideChangelog";
 import { AsideDraft } from "~/components/shared/future/AsideDraft";
 import { AsideTrendingArticle } from "~/components/shared/future/AsideTrendingArticle";
 import { AsideBookmark } from "~/components/shared/future/AsideBookmark";
 import { AsideFooter } from "~/components/shared/future/AsideFooter";
-
-// hooks
 import { useOptionalSession } from "~/services/hooks/useSession";
 import { AsideProvider, useAsideContext } from "./provider/aside";
 

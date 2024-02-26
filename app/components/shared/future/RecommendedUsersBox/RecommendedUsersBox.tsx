@@ -3,20 +3,15 @@ import { Icons } from "~/components/shared/Icons";
 import RecommendedUser from "~/components/shared/future/RecommendedUser/RecommendedUser";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import type { SerializeFrom } from "@remix-run/cloudflare";
 
 interface RecommendedUsersBoxProps {
-  data?: SerializeFrom<FetchRespSchema.UserListResp>;
+  data?: FetchRespSchema.UserListResp;
 }
 
 export default function RecommendedUsersBox({
   data,
 }: RecommendedUsersBoxProps) {
   const users = data?.list ?? [];
-
-  if (users.length === 0) {
-    return null;
-  }
 
   return (
     <div className={styles.root}>

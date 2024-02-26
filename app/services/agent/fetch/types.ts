@@ -1,6 +1,6 @@
 export interface FetchHandlerResponse {
   status: number;
-  headers: Record<string, string>;
+  headers: Headers | Record<string, unknown> | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any;
 }
@@ -8,7 +8,7 @@ export interface FetchHandlerResponse {
 export interface FetchHandlerOptions {
   uri: string;
   method: string;
-  headers: Headers | Record<string, string> | undefined;
+  headers: Headers | Record<string, unknown> | undefined;
   reqBody: unknown;
 }
 

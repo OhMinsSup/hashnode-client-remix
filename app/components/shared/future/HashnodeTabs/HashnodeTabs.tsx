@@ -11,6 +11,24 @@ interface HashnodeTabsProps {
   children: React.ReactNode;
 }
 
+const TABS = [
+  {
+    id: PAGE_ENDPOINTS.ROOT,
+    icon: <Icons.V2.Personalized />,
+    text: "Personalized",
+  },
+  {
+    id: PAGE_ENDPOINTS.FOLLOWING,
+    icon: <Icons.V2.UserGroup />,
+    text: "Following",
+  },
+  {
+    id: PAGE_ENDPOINTS.FEATURED,
+    icon: <Icons.V2.Featured />,
+    text: "Featured",
+  },
+];
+
 export default function HashnodeTabs({ children }: HashnodeTabsProps) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,68 +57,46 @@ export default function HashnodeTabs({ children }: HashnodeTabsProps) {
                 )}
                 aria-label="hashnode list tabs"
               >
-                <Tabs.Trigger value={PAGE_ENDPOINTS.ROOT} asChild>
-                  <button type="button" className={cn("group", styles.tab_btn)}>
-                    <div
-                      className={cn(
-                        styles.tab_btn_container,
-                        styles.tab_btn_active,
-                        "group-radix-state-active:text-blue-500 group-radix-state-active:bg-blue-50 hover:group-radix-state-active:bg-blue-50 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900"
-                      )}
+                {TABS.map((tab) => {
+                  return (
+                    <Tabs.Trigger
+                      value={tab.id}
+                      asChild
+                      key={`tab-item-${tab.id}`}
                     >
-                      <div className={styles.feed_best_content}>
-                        <span className="hidden md:inline">
-                          <Icons.V2.Personalized />
-                        </span>
-                        <span>Personalized</span>
-                      </div>
-                    </div>
-                  </button>
-                </Tabs.Trigger>
-                <Tabs.Trigger value={PAGE_ENDPOINTS.FOLLOWING} asChild>
-                  <button type="button" className={cn("group", styles.tab_btn)}>
-                    <div
-                      className={cn(
-                        styles.tab_btn_container,
-                        styles.tab_btn_active,
-                        "group-radix-state-active:text-blue-500 group-radix-state-active:bg-blue-50 hover:group-radix-state-active:bg-blue-50 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900"
-                      )}
-                    >
-                      <div className={styles.feed_best_content}>
-                        <span className="hidden md:inline">
-                          <Icons.V2.UserGroup />
-                        </span>
-                        <span>Following</span>
-                      </div>
-                    </div>
-                  </button>
-                </Tabs.Trigger>
-                <Tabs.Trigger value={PAGE_ENDPOINTS.FEATURED} asChild>
-                  <button type="button" className={cn("group", styles.tab_btn)}>
-                    <div
-                      className={cn(
-                        styles.tab_btn_container,
-                        styles.tab_btn_active,
-                        "group-radix-state-active:text-blue-500 group-radix-state-active:bg-blue-50 hover:group-radix-state-active:bg-blue-50 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900"
-                      )}
-                    >
-                      <div className={styles.feed_best_content}>
-                        <span className="hidden md:inline">
-                          <Icons.V2.Featured />
-                        </span>
-                        <span>Featured</span>
-                      </div>
-                    </div>
-                  </button>
-                </Tabs.Trigger>
+                      <button
+                        type="button"
+                        className={cn("group", styles.tab_btn)}
+                      >
+                        <div
+                          className={cn(
+                            styles.tab_btn_container,
+                            location.pathname === tab.id
+                              ? styles.tab_btn_active
+                              : undefined
+                          )}
+                        >
+                          <div className={styles.feed_best_content}>
+                            <span className="hidden md:inline">{tab.icon}</span>
+                            <span>{tab.text}</span>
+                          </div>
+                        </div>
+                      </button>
+                    </Tabs.Trigger>
+                  );
+                })}
               </Tabs.List>
             </div>
           </ScrollArea.Viewport>
         </ScrollArea.Root>
       </div>
-      <Tabs.Content value={PAGE_ENDPOINTS.ROOT}>{children}</Tabs.Content>
-      <Tabs.Content value={PAGE_ENDPOINTS.FOLLOWING}>{children}</Tabs.Content>
-      <Tabs.Content value={PAGE_ENDPOINTS.FEATURED}>{children}</Tabs.Content>
+      {TABS.map((tab) => {
+        return (
+          <Tabs.Content key={`tab-content-${tab.id}`} value={tab.id}>
+            {children}
+          </Tabs.Content>
+        );
+      })}
     </Tabs.Root>
   );
 }

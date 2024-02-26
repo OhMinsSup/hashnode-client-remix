@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import styles from "./styles.module.css";
 import { cn, optimizeAnimation } from "~/utils/util";
 import { useEventListener } from "~/libs/hooks/useEventListener";

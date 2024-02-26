@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
 import { initializeTheme, getTheme } from "~/server/utils/theme.server";
 import { initializeToast, getToast } from "~/server/utils/toast.server";
 import { getDomainUrl } from "~/utils/util";
@@ -6,6 +7,7 @@ import {
   clearAuthHeaders,
   combineHeaders,
 } from "~/server/utils/request.server";
+import { getAuthFromRequest } from "~/server/auth.server";
 
 export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);
@@ -25,7 +27,7 @@ export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   };
 
   try {
-    const session = null;
+    const session = await getAuthFromRequest(request, context);
 
     const $data = Object.assign({}, $object, {
       currentProfile: session,
@@ -33,14 +35,14 @@ export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
 
     const headers = clearAuthHeaders();
 
-    return {
-      data: $data,
+    return json($data, {
       headers: combineHeaders(toastHeaders, session ? null : headers),
-    };
+    });
   } catch (error) {
-    return {
-      data: $object,
+    return json($object, {
       headers: combineHeaders(toastHeaders),
-    };
+    });
   }
 };
+
+export type RoutesLoaderData = typeof rootLoader;

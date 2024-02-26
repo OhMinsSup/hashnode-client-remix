@@ -42,7 +42,7 @@ export async function defaultFetchHandler(
     return {
       status: response.status,
       headers: normalizeResponseHeaders(response.headers),
-      body: httpResponseBodyParse(contentType, response),
+      body: await httpResponseBodyParse(contentType, response),
     };
   } finally {
     clearTimeout(to);

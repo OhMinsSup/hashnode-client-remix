@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { Logo } from "~/components/shared/future/Logo";
 import { MainHeaderNavigation } from "~/components/shared/future/MainHeaderNavigation";

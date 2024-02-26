@@ -7,13 +7,28 @@
 }
 
 .tab_btn_container {
-  @apply text-slate-600 dark:text-slate-300 border-transparent flex items-center py-2 px-4 rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 font-medium text-sm;
+  @apply text-slate-600 border-transparent flex items-center py-2 px-4 rounded-full hover:bg-slate-100 font-medium text-sm;
+}
+
+:global(.dark) .tab_btn_container {
+  @apply text-slate-300 hover:bg-slate-900;
 }
 
 .tab_btn_active {
-  @apply group-radix-state-active:text-blue-500 group-radix-state-active:bg-blue-50 hover:group-radix-state-active:bg-blue-50 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900;
+  @apply text-blue-500 bg-blue-50 hover:bg-blue-50;
+}
+
+:global(.dark) .tab_btn_active {
+  @apply text-slate-100 bg-slate-900;
 }
 
 .feed_best_content {
-  @apply flex flex-row gap-2;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  gap: 0.5rem;
 }

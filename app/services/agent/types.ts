@@ -1,13 +1,13 @@
 export interface AgentFetchHandlerResponse {
   status: number;
-  headers: Record<string, string>;
+  headers: Headers | Record<string, unknown> | undefined;
   body: unknown;
 }
 
 export interface AgentFetchHandlerOptions {
   uri: string;
   method: string;
-  headers: Headers | Record<string, string> | undefined;
+  headers: Headers | Record<string, unknown> | undefined;
   reqBody: unknown;
 }
 

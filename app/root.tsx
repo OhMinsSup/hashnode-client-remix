@@ -1,4 +1,3 @@
-import { json } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -6,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
 import { Toaster, toast as showToast } from "sonner";
 import classNames from "classnames";
@@ -17,81 +17,19 @@ import {
   ThemeProvider,
   useTheme,
 } from "~/context/useThemeContext";
-import { ASSET_URL } from "~/constants/constant";
 import "~/styles/global.css";
 import type { Theme } from "~/context/useThemeContext";
 import type { Toast } from "./services/validate/toast.validate";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { useEffect, useRef } from "react";
-import { rootLoader } from "./server/routes/root.server";
+import {
+  rootLoader,
+  type RoutesLoaderData,
+} from "~/server/routes/root/root-loader.server";
+import { rootMeta } from "~/server/routes/root/root-meta";
 
-export const loader = async (args: LoaderFunctionArgs) => {
-  const result = await rootLoader(args);
-  return json(result.data, {
-    headers: result.headers,
-  });
-};
+export const loader = rootLoader;
 
-export type RoutesData = typeof loader;
-
-export const meta: MetaFunction<RoutesData> = ({ location, data }) => {
-  const url = new URL(location.pathname, data?.origin);
-  const Seo = {
-    title: "Hashnode - Blogging community for developers, and people in tech",
-    description:
-      "Start a blog for free instantly and share your ideas with people in tech, developers, and engineers. Hashnode is a free blogging platform.",
-    image: ASSET_URL.SEO_IMAGE,
-  };
-  return [
-    {
-      title: Seo.title,
-    },
-    {
-      name: "description",
-      content: Seo.description,
-    },
-    {
-      name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "og:description",
-      content: Seo.description,
-    },
-    {
-      name: "og:type",
-      content: "website",
-    },
-    {
-      name: "og:site_name",
-      content: "Hashnode",
-    },
-    {
-      name: "og:url",
-      content: url.href,
-    },
-    {
-      name: "og:image",
-      content: Seo.image,
-    },
-    {
-      name: "twitter:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:description",
-      content: Seo.description,
-    },
-    {
-      name: "twitter:card",
-      content: "summary_large_image",
-    },
-    {
-      name: "twitter:image",
-      content: Seo.image,
-    },
-  ];
-};
+export const meta = rootMeta;
 
 function ShowToast({ toast }: { toast: Toast }) {
   const { id, type, title, description } = toast;
@@ -139,8 +77,6 @@ function Document({
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="theme-color" content="#0F172A" />
         <CanonicalLink origin={origin} />
         <ExternalLink />
         <Meta />
@@ -164,7 +100,7 @@ function Document({
 
 function App() {
   const [theme] = useTheme();
-  const data = useLoaderData<RoutesData>();
+  const data = useLoaderData<RoutesLoaderData>();
 
   return (
     <Document origin={data.origin} theme={theme} env={data.env}>
@@ -175,7 +111,7 @@ function App() {
 }
 
 export default function AppWithProviders() {
-  const data = useLoaderData<RoutesData>();
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <ThemeProvider specifiedTheme={data.theme}>
       <App />
@@ -184,5 +120,7 @@ export default function AppWithProviders() {
 }
 
 export function ErrorBoundary() {
-  return <Document>Error</Document>;
+  const error = useRouteError();
+  console.log("route ===>", error);
+  return <>Error</>;
 }

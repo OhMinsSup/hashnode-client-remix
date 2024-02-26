@@ -12,7 +12,7 @@ const themes: Array<Theme> = Object.values(Theme);
 
 type ThemeContextType = [
   Theme | null,
-  React.Dispatch<React.SetStateAction<Theme | null>>
+  React.Dispatch<React.SetStateAction<Theme | null>>,
 ];
 
 const ThemeContext = React.createContext<ThemeContextType | undefined>(
@@ -145,7 +145,7 @@ function handleDarkAndLightModeEls() {
   for (const darkEl of darkEls) {
     if (theme === "dark") {
       for (const child of darkEl.childNodes) {
-        // @ts-expect-error
+        // @ts-expect-error this is fine
         darkEl.parentElement?.append(child);
       }
     }
@@ -154,7 +154,7 @@ function handleDarkAndLightModeEls() {
   for (const lightEl of lightEls) {
     if (theme === "light") {
       for (const child of lightEl.childNodes) {
-        // @ts-expect-error
+        // @ts-expect-error this is fine
         lightEl.parentElement?.append(child);
       }
     }

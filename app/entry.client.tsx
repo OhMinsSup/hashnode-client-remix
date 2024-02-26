@@ -7,7 +7,7 @@
 import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { handleDarkAndLightModeEls } from "./context/useThemeContext";
+import { handleDarkAndLightModeEls } from "~/context/useThemeContext";
 
 handleDarkAndLightModeEls();
 startTransition(() => {

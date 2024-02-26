@@ -1,4 +1,4 @@
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -6,24 +6,44 @@ import React, {
   useTransition,
 } from "react";
 import styles from "./styles.module.css";
-
-// components
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Icons } from "~/components/shared/Icons";
 import take from "lodash-es/take";
+import { Link, useFetcher } from "@remix-run/react";
+import {
+  getPath,
+  type RoutesLoaderData,
+} from "~/routes/_loader._public.loader.get-top-posts[.]json";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { isEmpty } from "~/utils/assertion";
 
-import { getPath } from "~/routes/_loader._public.loader.get-top-posts[.]json";
-
-import { useFetcher } from "@remix-run/react";
-
-import type { Loader } from "~/routes/_loader._public.loader.get-top-posts[.]json";
+const MENUS = [
+  {
+    text: "1 week",
+    value: "7",
+  },
+  {
+    text: "1 month",
+    value: "30",
+  },
+  {
+    text: "3 months",
+    value: "90",
+  },
+  {
+    text: "6 months",
+    value: "180",
+  },
+];
 
 export default function AsideTrendingArticle() {
   const [, startTransition] = useTransition();
   const [duration, setDuration] = useState<string>("7");
   const [seeMore, setSeeMore] = useState(false);
+  const fetcher = useFetcher<RoutesLoaderData>();
 
-  const fetcher = useFetcher<Loader>();
+  const isIdle = fetcher.state === "idle" && fetcher.data == null;
+  // const isSuccessful = fetcher.state === "idle" && fetcher.data != null;
 
   const text = useMemo(() => {
     switch (duration) {
@@ -57,15 +77,15 @@ export default function AsideTrendingArticle() {
   }, []);
 
   const items = useMemo(() => {
-    const _items = fetcher.data?.list ?? [];
+    const _items = fetcher.data?.result?.posts ?? [];
     return take(_items, seeMore ? _items.length : 5);
   }, [fetcher.data, seeMore]);
 
   useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data == null) {
+    if (isIdle) {
       fetcher.load(getPath(duration));
     }
-  }, [fetcher]);
+  }, []);
 
   return (
     <div className={styles.root}>
@@ -85,58 +105,24 @@ export default function AsideTrendingArticle() {
               value={duration}
               onValueChange={onDurationChange}
             >
-              <DropdownMenu.RadioItem
-                value="7"
-                className={styles.dropdown_menu_item}
-              >
-                <span>1 week</span>
-                {duration === "7" && (
-                  <span>
-                    <DropdownMenu.ItemIndicator>
-                      <Icons.V2.DropdownMenuCheck />
-                    </DropdownMenu.ItemIndicator>
-                  </span>
-                )}
-              </DropdownMenu.RadioItem>
-              <DropdownMenu.RadioItem
-                value="30"
-                className={styles.dropdown_menu_item}
-              >
-                <span>1 month</span>
-                {duration === "30" && (
-                  <span>
-                    <DropdownMenu.ItemIndicator>
-                      <Icons.V2.DropdownMenuCheck />
-                    </DropdownMenu.ItemIndicator>
-                  </span>
-                )}
-              </DropdownMenu.RadioItem>
-              <DropdownMenu.RadioItem
-                value="90"
-                className={styles.dropdown_menu_item}
-              >
-                <span>3 months</span>
-                {duration === "90" && (
-                  <span>
-                    <DropdownMenu.ItemIndicator>
-                      <Icons.V2.DropdownMenuCheck />
-                    </DropdownMenu.ItemIndicator>
-                  </span>
-                )}
-              </DropdownMenu.RadioItem>
-              <DropdownMenu.RadioItem
-                value="180"
-                className={styles.dropdown_menu_item}
-              >
-                <span>6 months</span>
-                {duration === "180" && (
-                  <span>
-                    <DropdownMenu.ItemIndicator>
-                      <Icons.V2.DropdownMenuCheck />
-                    </DropdownMenu.ItemIndicator>
-                  </span>
-                )}
-              </DropdownMenu.RadioItem>
+              {MENUS.map((menu) => {
+                return (
+                  <DropdownMenu.RadioItem
+                    key={menu.value}
+                    value={menu.value}
+                    className={styles.dropdown_menu_item}
+                  >
+                    <span>{menu.text}</span>
+                    {duration === menu.value && (
+                      <span>
+                        <DropdownMenu.ItemIndicator>
+                          <Icons.V2.DropdownMenuCheck />
+                        </DropdownMenu.ItemIndicator>
+                      </span>
+                    )}
+                  </DropdownMenu.RadioItem>
+                );
+              })}
             </DropdownMenu.RadioGroup>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
@@ -144,53 +130,65 @@ export default function AsideTrendingArticle() {
       <div>
         <div className="flex flex-col gap-5 mb-1.5">
           {items.map((item) => {
+            const post = item as unknown as SerializeSchema.SerializePost;
             return (
-              <div
-                className="flex flex-col gap-1"
-                key={`trending-articles-${duration}-${item.id}`}
-              >
-                <h2
-                  className={styles.item_title}
-                  aria-label="Post Title"
-                  title={item.title}
-                >
-                  {item.title}
-                </h2>
-                <div className={styles.item_desc}>
-                  <p>
-                    {/* TODO: Link */}
-                    <a
-                      href="/@bytescrum"
-                      aria-label="Post Author"
-                      title="ByteScrum Technologies"
-                    >
-                      {item?.user?.userProfile?.username}
-                    </a>
-                  </p>
-                  <span className="inline-block mx-2 font-bold opacity-50">
-                    ·
-                  </span>
-                  <p>{item?.readCount ?? 0} reads</p>
-                </div>
-              </div>
+              <AsideTrendingArticle.Item
+                key={`trending-articles-${duration}-${post.id}`}
+                item={post}
+              />
             );
           })}
         </div>
       </div>
-      {seeMore ? null : (
-        <div>
-          <button
-            type="button"
-            className={styles.btn_see_more}
-            onClick={onClickSeeMore}
-          >
-            <span className="flex flex-row gap-2 w-full items-center justify-center text-sm font-medium">
-              <span>See more</span>
-              <Icons.V2.SeeMoreArrowBottom />
-            </span>
-          </button>
-        </div>
+      {isEmpty(items) ? null : (
+        <>
+          {seeMore ? null : (
+            <div>
+              <button
+                type="button"
+                className={styles.btn_see_more}
+                onClick={onClickSeeMore}
+              >
+                <span className="flex flex-row gap-2 w-full items-center justify-center text-sm font-medium">
+                  <span>See more</span>
+                  <Icons.V2.SeeMoreArrowBottom />
+                </span>
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
+
+interface AsideTrendingArticleProps {
+  item: SerializeSchema.SerializePost;
+}
+
+AsideTrendingArticle.Item = function Item({ item }: AsideTrendingArticleProps) {
+  return (
+    <div className="flex flex-col gap-1">
+      <h2
+        className={styles.item_title}
+        aria-label="Post Title"
+        title={item.title}
+      >
+        {item.title}
+      </h2>
+      <div className={styles.item_desc}>
+        <p>
+          <Link
+            to={PAGE_ENDPOINTS.USERS.ID(item.user.id)}
+            aria-label={`User Profile: ${item.user.userProfile.username}`}
+            title={item.user.userProfile.username}
+          >
+            {item?.user?.userProfile?.username}
+          </Link>
+        </p>
+        <span className="inline-block mx-2 font-bold opacity-50">·</span>
+        <p>{item?.readCount ?? 0} reads</p>
+      </div>
+    </div>
+  );
+};

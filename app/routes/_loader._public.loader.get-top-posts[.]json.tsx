@@ -1,13 +1,28 @@
 import { json } from "@remix-run/cloudflare";
-
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { readHeaderCookie } from "~/server/utils/request.server";
+import { parseUrlParams } from "~/utils/util";
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.widget.getWidgetTopPostList(request);
-  return json(response);
+  const params = parseUrlParams(request.url);
+  const cookie = readHeaderCookie(request);
+  const response = await context.api.getTopPostListHandler(params, {
+    headers: {
+      ...(cookie && {
+        Cookie: cookie,
+      }),
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.body;
+  return json(data, {
+    headers: {
+      "Cache-Control": "public, max-age=120, immutable",
+    },
+  });
 };
 
-export type Loader = typeof loader;
+export type RoutesLoaderData = typeof loader;
 
 export const getPath = (duration: number | string) =>
   `/loader/get-top-posts.json?duration=${duration}`;

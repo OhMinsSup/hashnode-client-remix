@@ -1,8 +1,9 @@
 import { json, redirect } from "@remix-run/cloudflare";
 import { isTheme } from "~/context/useThemeContext";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { commit, setTheme } from "~/server/utils/theme.server";
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
   const theme = form.get("theme");
@@ -13,12 +14,12 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     });
   }
 
-  const session = await context.services.theme.setTheme(request, theme);
+  const session = await setTheme(request, theme);
   return json(
     { success: true },
     {
       headers: {
-        "Set-Cookie": await context.services.theme.commit(request, session),
+        "Set-Cookie": await commit(request, session),
       },
     }
   );

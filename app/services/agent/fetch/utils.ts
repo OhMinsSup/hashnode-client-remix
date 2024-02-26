@@ -18,7 +18,7 @@ export const getSearchParams = (
 };
 
 export function normalizeHeaders(
-  headers: Headers | Record<string, string> | undefined
+  headers: Headers | Record<string, unknown> | undefined
 ): Headers | undefined {
   if (typeof headers === "undefined") {
     return undefined;
@@ -85,7 +85,7 @@ export async function httpResponseBodyParse(
   if (mimeType) {
     if (mimeType.includes("application/json")) {
       try {
-        return res.json();
+        return await res.json();
       } catch (e) {
         throw new BaseError(
           ErrorType.ResponseError,
@@ -96,7 +96,7 @@ export async function httpResponseBodyParse(
 
     if (mimeType.startsWith("text/")) {
       try {
-        return res.text();
+        return await res.text();
       } catch (e) {
         throw new BaseError(
           ErrorType.ResponseError,
@@ -107,7 +107,7 @@ export async function httpResponseBodyParse(
 
     if (mimeType.startsWith("application/octet-stream")) {
       try {
-        return res.blob();
+        return await res.blob();
       } catch (error) {
         throw new BaseError(
           ErrorType.ResponseError,
