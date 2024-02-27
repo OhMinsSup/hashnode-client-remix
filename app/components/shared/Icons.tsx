@@ -652,6 +652,28 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    Bookmark: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M10 6.77v1.874m0 0v1.875m0-1.875h1.875m-1.875 0H8.125M7.083 2.5h5.834a2.5 2.5 0 0 1 2.5 2.5v12.5l-4.98-3.065a.833.833 0 0 0-.874 0L4.583 17.5V5a2.5 2.5 0 0 1 2.5-2.5Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    Discuss: (props: IconProps) => (
+      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
+        <path
+          stroke="currentColor"
+          d="M8.709 14.155a4.793 4.793 0 0 1 5.412-6.55m-5.412 6.55a4.793 4.793 0 0 0 6.31 2.54c.1-.044.21-.06.317-.042l2.213.37c.18.03.337-.127.307-.307l-.371-2.21a.566.566 0 0 1 .041-.316 4.793 4.793 0 0 0-3.405-6.586m-5.412 6.55a5.845 5.845 0 0 1-2.682-.461.689.689 0 0 0-.385-.05l-2.695.45a.324.324 0 0 1-.373-.373l.452-2.69a.689.689 0 0 0-.05-.386 5.835 5.835 0 0 1 9.482-6.435 5.808 5.808 0 0 1 1.663 3.395"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
     Error: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
         <path

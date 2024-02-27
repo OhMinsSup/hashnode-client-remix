@@ -284,6 +284,13 @@ declare namespace FetchRespSchema {
     result: Result;
   };
 
+  export type Success<Result = unknown> = {
+    resultCode: number;
+    message: string | null;
+    result: Result;
+    error: null;
+  };
+
   export type ListResp<Item = Record<string, unknown>> = {
     list: Item[];
     totalCount: number;

@@ -23,7 +23,11 @@ export const feedsLoader = async ({ context, request }: LoaderFunctionArgs) => {
 
   const { body } = await context.api.getPostListHandler(params, commonHeaders);
 
-  const data = await body;
+  const data: Awaited<
+    FetchRespSchema.Success<
+      FetchRespSchema.ListResp<FetchRespSchema.PostDetailResp>
+    >
+  > = await body;
 
   return json(data, {
     headers: {

@@ -6,3 +6,7 @@ import dayjs from "dayjs";
 export function mainWidgetDraftItemFormatter(date: string | Date) {
   return dayjs(date).format("MMM D");
 }
+
+export function feedCardDateFormatter(date: string | Date) {
+  return dayjs(date).format("MMM D, YYYY");
+}

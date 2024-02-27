@@ -1,23 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useLayoutEffect,
-  useState,
-} from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import { HashnodeCard } from "~/components/shared/future/HashnodeCard";
-import { ReachedEnd } from "~/components/shared/future/ReachedEnd";
-import { type VirtuosoHandle, Virtuoso } from "react-virtuoso";
-import {
-  useLoaderData,
-  useSearchParams,
-  useBeforeUnload,
-} from "@remix-run/react";
-import type { RoutesLoader } from "~/routes/_main._feeds._index";
-import { isBrowser, scheduleMicrotask } from "~/libs/browser-utils";
-import { useIsHydrating } from "~/libs/hooks/useIsHydrating";
+// import { ReachedEnd } from "~/components/shared/future/ReachedEnd";
+import { useLoaderData } from "@remix-run/react";
+import { getTargetElement } from "~/libs/browser-utils";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import type { RoutesLoaderData } from "~/server/routes/feeds/feeds-loader.server";
 
 interface HashnodeListProps {
   type?: "feed.index" | "feed.following" | "feed.featured";
@@ -27,178 +15,92 @@ interface HashnodeListProps {
 
 const LIMIT = 10;
 
-const useSSRLayoutEffect = isBrowser ? useLayoutEffect : () => {};
-
-const getCursorLimit = (searchParams: URLSearchParams) => ({
-  cursor: Number(searchParams.get("cursor")) || undefined,
-  limit: Number(searchParams.get("limit") || LIMIT.toString()),
-});
-
-type ScrollState = {
-  hasNextPage: boolean;
-  cursor: number | undefined;
-  pages: SerializeSchema.SerializePost[][];
-};
+const CLIENT_LIMIT_SIZE = 30;
+const CLIENT_DATA_OVERSCAN = 10;
 
 export default function HashnodeList({
   type = "feed.index",
   trendingTags,
   recommendedUsers,
 }: HashnodeListProps) {
-  // const scrollKey = useRef(`infinite-scroll-${type}`);
-  // const $virtuoso = useRef<VirtuosoHandle>(null);
-  // const isMounted = useRef(false);
-  // const transition = useRef(false);
-  // const data = useLoaderData<RoutesLoader>();
-  // const hydrating = useIsHydrating("[data-hydrating-signal]");
+  const $list = useRef<HTMLDivElement>(null);
 
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const data = useLoaderData<RoutesLoaderData>();
 
-  // const { cursor } = getCursorLimit(searchParams);
-  // const [] = useState(() => cursor);
+  const total = data?.result?.totalCount ?? 0;
 
-  // const [scrollState, setScrollState] = useState<ScrollState>({
-  //   hasNextPage: data?.pageInfo?.hasNextPage ?? false,
-  //   cursor: data?.pageInfo?.endCursor ?? undefined,
-  //   pages: [(data?.list ?? []) as unknown as SerializeSchema.SerializePost[]],
-  // });
+  const rowVirtualizer = useWindowVirtualizer({
+    count: total,
+    estimateSize: () => 512,
+    overscan: CLIENT_DATA_OVERSCAN,
+    scrollMargin: getTargetElement($list)?.offsetTop ?? 0,
+  });
 
-  // // console.log("scrollState", scrollState);
+  const flatList = data?.result?.list ?? [];
 
-  // const listToRender = useMemo(() => {
-  //   const { pages } = scrollState;
-  //   return pages.flatMap((page) => page);
-  // }, [scrollState]);
+  useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
 
-  // useBeforeUnload(
-  //   useCallback(() => {
-  //     const $api = $virtuoso.current;
-  //     if (!$api) return;
-  //     $api.getState((state) => {
-  //       const positions = JSON.stringify({
-  //         top: state.scrollTop,
-  //       });
-  //       sessionStorage.setItem(scrollKey.current, positions);
-  //     });
-  //   }, [])
-  // );
+    if (!lastItem) {
+      return;
+    }
 
-  // useSSRLayoutEffect(() => {
-  //   if (!hydrating) return;
-  //   if (!$virtuoso.current) return;
+    if (
+      lastItem.index >=
+      flatList.length - 1
+      // lastItem.index >= flatList.length - 1 &&
+      // hasNextPage &&
+      // !isFetchingNextPage
+    ) {
+      console.log("fetchNextPage");
+      // fetchNextPage();
+    }
+  }, [
+    // hasNextPage,
+    // fetchNextPage,
+    flatList.length,
+    // isFetchingNextPage,
+    rowVirtualizer.getVirtualItems(),
+  ]);
 
-  //   const infiniteScrollTop = sessionStorage.getItem(scrollKey.current);
-  //   if (!infiniteScrollTop) return;
-
-  //   $virtuoso.current.scrollTo({
-  //     top: Number(infiniteScrollTop),
-  //   });
-
-  //   return () => {
-  //     sessionStorage.removeItem(scrollKey.current);
-  //   };
-  // }, [hydrating]);
-
-  // const fetchMore = () => {
-  //   const { hasNextPage, endCursor } = data.pageInfo;
-
-  //   setScrollState((old) => {
-  //     const pages = old.pages.filter((page) => {
-  //       return !data.list.some((item) => {
-  //         return page.some((pageItem) => pageItem.id === item.id);
-  //       });
-  //     });
-
-  //     const newPages = [
-  //       ...pages,
-  //       data.list as unknown as SerializeSchema.SerializePost[],
-  //     ];
-
-  //     return {
-  //       hasNextPage,
-  //       cursor: endCursor ?? undefined,
-  //       pages: newPages,
-  //     };
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (!isMounted.current) {
-  //     return;
-  //   }
-
-  //   transition.current = false;
-
-  //   scheduleMicrotask(() => {
-  //     if (transition.current) return;
-  //     fetchMore();
-  //   });
-
-  //   return () => {
-  //     transition.current = true;
-  //   };
-  // }, [data]);
-
-  // useEffect(() => {
-  //   isMounted.current = true;
-  // }, []);
-
-  // const loadMore = (index: number) => {
-  //   if (index <= 0) return;
-
-  //   const { endCursor, hasNextPage } = data.pageInfo;
-
-  //   if (endCursor && hasNextPage) {
-  //     const nextSearchParams = new URLSearchParams();
-  //     nextSearchParams.set("cursor", endCursor.toString());
-  //     nextSearchParams.set("limit", LIMIT.toString());
-  //     setSearchParams(nextSearchParams, {
-  //       replace: true,
-  //       preventScrollReset: true,
-  //     });
-  //   }
-  // };
-
-  // return (
-  //   <Virtuoso
-  //     components={{
-  //       List: React.forwardRef((props, ref) => {
-  //         return <div className={styles.root} {...props} ref={ref} />;
-  //       }),
-  //       Item: ({ item, ...otherProps }) => {
-  //         return <div className="w-full" {...otherProps} />;
-  //       },
-  //       Footer: () => {
-  //         if (scrollState.hasNextPage) {
-  //           return null;
-  //         }
-  //         return <ReachedEnd />;
-  //       },
-  //     }}
-  //     computeItemKey={(index, item) => {
-  //       if (!item) {
-  //         return `${type}-items-${index}`;
-  //       }
-  //       return `${type}-items-${item.id}-${index}`;
-  //     }}
-  //     data={listToRender}
-  //     data-hydrating-signal
-  //     endReached={loadMore}
-  //     initialItemCount={data.list.length - 1}
-  //     itemContent={(index, item) => {
-  //       return <HashnodeCard.V2 index={index} data={item as any} />;
-  //     }}
-  //     overscan={900}
-  //     ref={$virtuoso}
-  //     style={{ height: "100%" }}
-  //     totalCount={data.totalCount}
-  //     useWindowScroll
-  //   />
-  // );
   return (
-    <>
-      {recommendedUsers}
-      {trendingTags}
-    </>
+    <div ref={$list}>
+      <div className={styles.root}>
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const isLoaderRow = virtualRow.index > flatList.length - 1;
+          const item = flatList.at(virtualRow.index);
+          if (!item) {
+            return null;
+          }
+
+          if (isLoaderRow) {
+            return (
+              <div
+                key={`hashnode:${item.id}:loading`}
+                style={{
+                  height: virtualRow.size,
+                  position: "absolute",
+                  top: virtualRow.start,
+                  left: 0,
+                  right: 0,
+                }}
+              >
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <React.Fragment key={`hashnode:${item.id}`}>
+              {virtualRow.index === 3 && recommendedUsers}
+              <HashnodeCard index={virtualRow.index} data={item} />
+              {virtualRow.index === 7 && trendingTags}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
   );
 }
