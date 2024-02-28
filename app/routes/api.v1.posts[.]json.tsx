@@ -62,14 +62,7 @@ export function usePostListInfiniteQuery({
   const queryFn: QueryFunction<Data, QueryKey, string> = async (ctx) => {
     const lastKey = ctx.queryKey.at(-1);
     const response = await fetch(getPath(lastKey));
-    const data =
-      await response.json<
-        Awaited<
-          FetchRespSchema.Success<
-            FetchRespSchema.ListResp<FetchRespSchema.PostDetailResp>
-          >
-        >
-      >();
+    const data = await response.json<Data>();
     return data;
   };
 

@@ -1,19 +1,9 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import styles from "./styles.module.css";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Icons } from "~/components/shared/Icons";
-import take from "lodash-es/take";
-import { Link, useFetcher } from "@remix-run/react";
-import {
-  getPath,
-  type RoutesLoaderData,
-} from "~/routes/_loader._public.loader.get-top-posts[.]json";
+import { Link } from "@remix-run/react";
+import { useTopPostQuery } from "~/routes/api.v1.posts.top[.]json";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { isEmpty } from "~/utils/assertion";
 
@@ -40,51 +30,25 @@ export default function AsideTrendingArticle() {
   const [, startTransition] = useTransition();
   const [duration, setDuration] = useState<string>("7");
   const [seeMore, setSeeMore] = useState(false);
-  const fetcher = useFetcher<RoutesLoaderData>();
 
-  const isIdle = fetcher.state === "idle" && fetcher.data == null;
-  // const isSuccessful = fetcher.state === "idle" && fetcher.data != null;
+  const { data: items } = useTopPostQuery({
+    duration,
+  });
 
   const text = useMemo(() => {
-    switch (duration) {
-      case "7":
-        return "1 week";
-      case "30":
-        return "1 month";
-      case "90":
-        return "3 months";
-      case "180":
-        return "6 months";
-      default:
-        return "1 week";
-    }
+    const menu = MENUS.find((menu) => menu.value === duration);
+    return menu?.text ?? "1 week";
   }, [duration]);
 
-  const onDurationChange = useCallback(
-    (value: string) => {
+  const onDurationChange = useCallback((value: string) => {
+    startTransition(() => {
       setDuration(value);
       setSeeMore(false);
-
-      startTransition(() => {
-        fetcher.load(getPath(value));
-      });
-    },
-    [fetcher]
-  );
+    });
+  }, []);
 
   const onClickSeeMore = useCallback(() => {
     setSeeMore(true);
-  }, []);
-
-  const items = useMemo(() => {
-    const _items = fetcher.data?.result?.posts ?? [];
-    return take(_items, seeMore ? _items.length : 5);
-  }, [fetcher.data, seeMore]);
-
-  useEffect(() => {
-    if (isIdle) {
-      fetcher.load(getPath(duration));
-    }
   }, []);
 
   return (
@@ -129,7 +93,7 @@ export default function AsideTrendingArticle() {
       </div>
       <div>
         <div className="flex flex-col gap-5 mb-1.5">
-          {items.map((item) => {
+          {items?.map((item) => {
             const post = item as unknown as SerializeSchema.SerializePost;
             return (
               <AsideTrendingArticle.Item
