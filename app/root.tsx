@@ -20,12 +20,13 @@ import {
 import "~/styles/global.css";
 import type { Theme } from "~/context/useThemeContext";
 import type { Toast } from "./services/validate/toast.validate";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   rootLoader,
   type RoutesLoaderData,
 } from "~/server/routes/root/root-loader.server";
 import { rootMeta } from "~/server/routes/root/root-meta";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const loader = rootLoader;
 
@@ -102,11 +103,26 @@ function App() {
   const [theme] = useTheme();
   const data = useLoaderData<RoutesLoaderData>();
 
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // With SSR, we usually want to set some default staleTime
+            // above 0 to avoid refetching immediately on the client
+            staleTime: 60 * 1000,
+          },
+        },
+      })
+  );
+
   return (
-    <Document origin={data.origin} theme={theme} env={data.env}>
-      <Outlet />
-      {data.toast ? <ShowToast toast={data.toast} /> : null}
-    </Document>
+    <QueryClientProvider client={queryClient}>
+      <Document origin={data.origin} theme={theme} env={data.env}>
+        <Outlet />
+        {data.toast ? <ShowToast toast={data.toast} /> : null}
+      </Document>
+    </QueryClientProvider>
   );
 }
 

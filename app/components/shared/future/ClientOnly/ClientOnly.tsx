@@ -1,14 +1,24 @@
-import React from "react";
-import { useHydrated } from "~/libs/hooks/useHydrated";
+"use client";
+import * as React from "react";
 
 interface ClientOnlyProps {
-  children(): React.ReactNode;
+  children: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
-export default function ClientOnly({
-  children,
-  fallback = null,
-}: ClientOnlyProps) {
-  return useHydrated() ? <>{children()}</> : <>{fallback}</>;
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const emptySubscribe = () => () => {};
+
+export default function ClientOnly({ children, fallback }: ClientOnlyProps) {
+  const value = React.useSyncExternalStore(
+    emptySubscribe,
+    () => "client",
+    () => "server"
+  );
+
+  if (value === "server") {
+    return fallback ? <>{fallback}</> : null;
+  }
+
+  return <>{children}</>;
 }

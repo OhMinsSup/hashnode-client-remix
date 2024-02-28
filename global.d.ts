@@ -295,7 +295,7 @@ declare namespace FetchRespSchema {
     list: Item[];
     totalCount: number;
     pageInfo: {
-      endCursor: number | null;
+      endCursor: string | null;
       hasNextPage: boolean;
     };
   };

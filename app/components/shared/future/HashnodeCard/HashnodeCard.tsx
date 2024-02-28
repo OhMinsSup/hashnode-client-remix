@@ -7,6 +7,8 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { feedCardDateFormatter } from "~/utils/date";
 import { cn } from "~/utils/util";
 import { Icons } from "~/components/shared/Icons";
+import { LazyImage } from "~/components/shared/future/LazyImage";
+import { ClientOnly } from "~/components/shared/future/ClientOnly";
 
 interface HashnodeCardProps {
   index: number;
@@ -167,13 +169,17 @@ HashnodeCard.Image = function Item({
       className={styles.post_image_mobile}
       to={PAGE_ENDPOINTS.POSTS.ID(postId)}
     >
-      <img
-        alt={title}
-        src={image}
-        decoding="async"
-        data-nimg="fill"
-        className="w-full h-full object-cover"
-      />
+      <ClientOnly fallback={<LazyImage.Skeleton />}>
+        <React.Suspense fallback={<LazyImage.Skeleton />}>
+          <LazyImage
+            src={image}
+            alt={title}
+            decoding="async"
+            data-nimg="fill"
+            className="w-full h-full object-cover"
+          />
+        </React.Suspense>
+      </ClientOnly>
     </Link>
   );
 };
@@ -196,7 +202,7 @@ HashnodeCard.ProfileImage = function Item({
           <img
             alt={username}
             src={image}
-            className="object-cover"
+            className="w-full h-full object-cover"
             decoding="async"
             data-nimg="fill"
             loading="lazy"

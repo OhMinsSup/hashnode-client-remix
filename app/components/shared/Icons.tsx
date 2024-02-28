@@ -1137,17 +1137,6 @@ export const Icons = {
         ></path>
       </svg>
     ),
-    Bookmark: (props: IconProps) => (
-      <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
-        <path
-          stroke="currentColor"
-          d="M10 6.77v1.874m0 0v1.875m0-1.875h1.875m-1.875 0H8.125M7.083 2.5h5.834a2.5 2.5 0 0 1 2.5 2.5v12.5l-4.98-3.065a.833.833 0 0 0-.874 0L4.583 17.5V5a2.5 2.5 0 0 1 2.5-2.5Z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1.25"
-        ></path>
-      </svg>
-    ),
     Comment: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
         <path
