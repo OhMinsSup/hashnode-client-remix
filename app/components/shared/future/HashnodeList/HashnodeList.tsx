@@ -40,6 +40,13 @@ export default function HashnodeList({
     estimateSize: () => 512,
     overscan: CLIENT_DATA_OVERSCAN,
     scrollMargin: getTargetElement($list)?.offsetTop ?? 0,
+    initialRect:
+      total > 0
+        ? {
+            height: 1024,
+            width: 0,
+          }
+        : undefined,
   });
 
   const virtualizerList = rowVirtualizer.getVirtualItems();

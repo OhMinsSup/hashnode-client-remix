@@ -1,53 +1,68 @@
-import React, { useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import classNames from "classnames";
-import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
+import { getTargetElement } from "~/libs/browser-utils";
+import { Icons } from "~/components/shared/Icons";
+import { cn } from "~/utils/util";
 
-import { useNavigation } from "@remix-run/react";
-import { useSettingUserFormContext } from "~/components/setting/context/form";
+type InputProps = React.HTMLProps<HTMLInputElement>;
 
-import type { FieldPath } from "react-hook-form";
-import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
+type LabelProps = React.HTMLProps<HTMLLabelElement>;
 
-interface SettingInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+type ErrorProps = React.HTMLProps<HTMLParagraphElement>;
+
+interface SettingInputProps {
+  inputProps: InputProps;
+  labelProps: LabelProps;
+  errorProps?: ErrorProps;
+  errorId?: string;
+  errors?: string[] | undefined;
   text: string;
-  name: FieldPath<FormFieldValues>;
 }
 
 export default function SettingInput({
+  labelProps,
+  inputProps,
+  errorProps,
+  errorId,
+  errors,
   text,
-  id,
-  name,
-  className,
-  ...otherPros
 }: SettingInputProps) {
-  const {
-    register,
-    formState: { errors },
-  } = useSettingUserFormContext();
+  const $ipt = useRef<HTMLInputElement | null>(null);
 
-  const navigation = useNavigation();
-
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
+  useEffect(() => {
+    const $el = getTargetElement($ipt);
+    if (errors && errors.length && $el) {
+      $el.focus();
+    }
+  }, [errors]);
 
   return (
     <>
-      <label htmlFor={id} className="input-label">
+      <label
+        {...labelProps}
+        className={cn("input-label", labelProps.className)}
+      >
         {text}
       </label>
       <input
-        id={id}
-        className={classNames("input-text", className, {
-          // @ts-ignore
-          error: !!errors[name],
+        {...inputProps}
+        ref={$ipt}
+        className={classNames("input-text", inputProps.className, {
+          error: Boolean(errors?.length),
         })}
-        {...otherPros}
-        {...register(name)}
       />
-      <ErrorMessage isSubmitting={isSubmitting} errors={errors} name={name} />
+      {errorId &&
+        errors?.map((error, index) => (
+          <p
+            {...errorProps}
+            key={`error-${errorId}-${index}`}
+            className={cn("error-message", errorProps?.className)}
+            id={errorId}
+          >
+            <Icons.V2.Error />
+            {error}
+          </p>
+        ))}
     </>
   );
 }

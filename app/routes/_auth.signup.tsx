@@ -4,31 +4,18 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { SigninForm } from "~/components/auth/future/SigninForm";
-import type { MetaFunction } from "@remix-run/cloudflare";
-import { mergeMeta } from "~/utils/util";
-import { signupAction } from "~/server/routes/signup/siginup-action.server";
+import { signupAction } from "~/server/routes/signup/signup-action.server";
 import {
   signupLoader,
   type RoutesLoaderData,
 } from "~/server/routes/signup/signup-loader.server";
+import { signupMeta } from "~/server/routes/signup/signup-meta";
 
 export const loader = signupLoader;
 
 export const action = signupAction;
 
-export const meta: MetaFunction = mergeMeta(() => [
-  {
-    signup: "Sign up to Hashnode",
-  },
-  {
-    name: "twitter:title",
-    signup: "Sign up to Hashnode",
-  },
-  {
-    name: "og:title",
-    signup: "Sign up to Hashnode",
-  },
-]);
+export const meta = signupMeta;
 
 export default function Routes() {
   const { email } = useLoaderData<RoutesLoaderData>();

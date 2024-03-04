@@ -1,7 +1,6 @@
-import React from "react";
 import styles from "./styles.module.css";
 import { useLoaderData } from "@remix-run/react";
-import type { RoutesLoader } from "~/routes/_settings.settings.emails";
+import type { RoutesLoaderData } from "~/server/routes/settings-email/settings-email-loader.server";
 
 interface CheckboxProps {
   label: string;
@@ -14,6 +13,7 @@ interface CheckboxProps {
 function Checkbox({ id, value, label, description, checked }: CheckboxProps) {
   return (
     <div className={styles.ipt_checkbox_container}>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="flex flex-row items-start" htmlFor={id}>
         <input
           type="checkbox"
@@ -32,7 +32,7 @@ function Checkbox({ id, value, label, description, checked }: CheckboxProps) {
 }
 
 export default function Email() {
-  const data = useLoaderData<RoutesLoader>();
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <div className={styles.root}>
       {data.items.map((item) => {

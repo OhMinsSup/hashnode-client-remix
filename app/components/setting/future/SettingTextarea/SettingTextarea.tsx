@@ -1,64 +1,75 @@
-import React, { useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import classNames from "classnames";
-import { ErrorMessage } from "~/components/shared/future/ErrorMessage";
+import { getTargetElement } from "~/libs/browser-utils";
+import { Icons } from "~/components/shared/Icons";
+import { cn } from "~/utils/util";
 
-import { useNavigation } from "@remix-run/react";
-import { useSettingUserFormContext } from "~/components/setting/context/form";
+type TextareaProps = React.HTMLProps<HTMLTextAreaElement>;
 
-import type { FieldPath } from "react-hook-form";
-import type { FormFieldValues } from "~/services/validate/user-update-api.validate";
+type LabelProps = React.HTMLProps<HTMLLabelElement>;
 
-interface SettingTextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+type ErrorProps = React.HTMLProps<HTMLParagraphElement>;
+
+interface SettingTextareaProps {
+  textareaProps: TextareaProps;
+  labelProps: LabelProps;
+  errorProps?: ErrorProps;
+  errorId?: string;
+  errors?: string[] | undefined;
   text: string;
-  name: FieldPath<FormFieldValues>;
+  count?: number;
 }
 
+const MAX_LENGTH = 140;
+
 export default function SettingTextarea({
+  labelProps,
+  textareaProps,
+  errorProps,
+  errorId,
+  errors,
   text,
-  id,
-  name,
-  className,
-  ...otherPros
+  count,
 }: SettingTextareaProps) {
-  const {
-    register,
-    formState: { errors },
-    watch,
-  } = useSettingUserFormContext();
+  const $txt = useRef<HTMLTextAreaElement | null>(null);
 
-  const navigation = useNavigation();
-
-  const watchAvailableText = watch("availableText");
-
-  const isSubmitting = useMemo(
-    () => navigation.state === "submitting",
-    [navigation.state]
-  );
-
-  const count = useMemo(() => {
-    const length = watchAvailableText?.length ?? 0;
-    return 140 - length;
-  }, [watchAvailableText]);
+  useEffect(() => {
+    const $el = getTargetElement($txt);
+    if (errors && errors.length && $el) {
+      $el.focus();
+    }
+  }, [errors]);
 
   return (
     <>
-      <label htmlFor={id} className="input-label">
+      <label
+        {...labelProps}
+        className={cn("input-label", labelProps.className)}
+      >
         {text}
       </label>
       <textarea
-        id={id}
-        className={classNames("input-text min-h-30", className, {
-          // @ts-ignore
-          error: !!errors[name],
+        {...textareaProps}
+        ref={$txt}
+        className={classNames("input-text min-h-30", textareaProps.className, {
+          error: Boolean(errors?.length),
         })}
-        {...otherPros}
-        {...register(name)}
       />
-      <ErrorMessage isSubmitting={isSubmitting} errors={errors} name={name} />
-      {name === "availableText" && (
+      {errorId &&
+        errors?.map((error, index) => (
+          <p
+            {...errorProps}
+            key={`error-${errorId}-${index}`}
+            className={cn("error-message", errorProps?.className)}
+            id={errorId}
+          >
+            <Icons.V2.Error />
+            {error}
+          </p>
+        ))}
+      {textareaProps.name === "availableText" && (
         <small className="ml-2 mt-1 block leading-tight text-slate-600">
-          {count}/140
+          {count}/{MAX_LENGTH}
         </small>
       )}
     </>

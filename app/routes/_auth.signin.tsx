@@ -1,24 +1,11 @@
 import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { SigninForm } from "~/components/auth/future/SigninForm";
-import { mergeMeta } from "~/utils/util";
-import { signinAction } from "~/server/routes/signin/siginin-action.server";
-import type { MetaFunction } from "@remix-run/cloudflare";
+import { signinAction } from "~/server/routes/signin/signin-action.server";
+import { signinmeta } from "~/server/routes/signin/signin-meta";
 
 export const action = signinAction;
 
-export const meta: MetaFunction = mergeMeta(() => [
-  {
-    title: "Sign in to Hashnode",
-  },
-  {
-    name: "twitter:title",
-    content: "Sign in to Hashnode",
-  },
-  {
-    name: "og:title",
-    content: "Sign in to Hashnode",
-  },
-]);
+export const meta = signinmeta;
 
 export default function Routes() {
   return <SigninForm />;

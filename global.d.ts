@@ -388,3 +388,11 @@ declare namespace FetchRespSchema {
     publicUrl: string;
   };
 }
+
+declare namespace UntilsTypes {
+  type DeepObjectKeyOf<T> = {
+    [K in keyof T]: T[K] extends Record<string, unknown>
+      ? `${K}.${DeepObjectKeyOf<T[K]>}`
+      : K;
+  }[keyof T];
+}

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { Account } from "~/components/setting/future/Account";
 
 // hooks
@@ -9,43 +9,15 @@ import {
 } from "@remix-run/react";
 
 // types
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { settingsAccountMeta } from "~/server/routes/settings-account/settings-account-meta";
 
-export const meta: MetaFunction = ({ matches }) => {
-  const Seo = {
-    title: "Account Settings — Hashnode",
-  };
-  const rootMeta =
-    // @ts-ignore
-    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
-  const rootMetas = rootMeta.filter(
-    // @ts-ignore
-    (meta: any) =>
-      meta.name !== "description" &&
-      meta.name !== "og:title" &&
-      meta.name !== "og:description" &&
-      meta.name !== "twitter:title" &&
-      meta.name !== "twitter:description" &&
-      !("title" in meta)
-  );
-  return [
-    ...rootMetas,
-    {
-      title: Seo.title,
-    },
-    {
-      name: "og:title",
-      content: Seo.title,
-    },
-    {
-      name: "twitter:title",
-      content: Seo.title,
-    },
-  ];
-};
+export const meta = settingsAccountMeta;
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  return await context.api.user.deleteUser(request);
+  console.log("request", request, context);
+  // return await context.api.user.deleteUser(request);
+  return {};
 };
 
 export type RoutesActionData = typeof action;

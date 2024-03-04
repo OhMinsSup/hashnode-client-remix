@@ -20,7 +20,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   } as FetchSchema.Hashnodeonboard;
   return json(data, {
     headers: {
-      "Cache-Control": "public, max-age=0, s-maxage=3600",
+      "Cache-Control": "public, max-age=3600",
     },
   });
 };
