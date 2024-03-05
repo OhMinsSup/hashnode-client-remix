@@ -19,6 +19,9 @@ import type {
   GetNotificationCountHandler,
   GetTagIdHandler,
   PostTagFollowHandler,
+  PostCloudflareUploadHandler,
+  PostDirectUploadHandler,
+  PostFileHandler,
 } from "./client/types";
 
 export class HashnodeAgent extends Agent {
@@ -114,5 +117,26 @@ export class HashnodeAgent extends Agent {
 
   getNotificationCountHandler: GetNotificationCountHandler = (opts) => {
     return this.api.app.notifications.getCount(opts);
+  };
+
+  // files
+  postCloudflareUploadHandler: PostCloudflareUploadHandler = (
+    uploadUrl,
+    file,
+    opts
+  ) => {
+    return this.api.app.files.cloudflareUpload(uploadUrl, file, opts);
+  };
+
+  postDirectUploadHandler: PostDirectUploadHandler = (
+    accountId,
+    token,
+    opts
+  ) => {
+    return this.api.app.files.directUpload(accountId, token, opts);
+  };
+
+  postFileHandler: PostFileHandler = (body, opts) => {
+    return this.api.app.files.create(body, opts);
   };
 }

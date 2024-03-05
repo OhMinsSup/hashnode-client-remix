@@ -110,3 +110,22 @@ export type PostTagFollowHandler = (
 export type GetNotificationCountHandler = (
   opts?: CallOptions | undefined
 ) => Promise<FetchHandlerResponse>;
+
+// files
+
+export type PostCloudflareUploadHandler = (
+  uploadUrl: string,
+  file: File,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
+
+export type PostDirectUploadHandler = (
+  accountId: string,
+  token: string,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;
+
+export type PostFileHandler = (
+  body: unknown,
+  opts?: CallOptions | undefined
+) => Promise<FetchHandlerResponse>;

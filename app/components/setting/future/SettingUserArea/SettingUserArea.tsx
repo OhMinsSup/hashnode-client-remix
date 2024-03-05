@@ -2,10 +2,10 @@ import styles from "./styles.module.css";
 import { SettingInput } from "~/components/setting/future/SettingInput";
 import { SettingTextarea } from "~/components/setting/future/SettingTextarea";
 import { SettingInputIdentity } from "~/components/setting/future/SettingInputIdentity";
-// import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
+import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
 // import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
-// import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
-// import { useSession } from "~/services/hooks/useSession";
+import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
+import { useSession } from "~/services/hooks/useSession";
 import { cn } from "~/utils/util";
 import {
   getInputProps,
@@ -15,16 +15,17 @@ import {
 } from "@conform-to/react";
 import { FormFieldValues } from "~/services/validate/user-update-api.validate";
 import { FORM_ID } from "~/components/setting/context/form";
+import { useMemo } from "react";
 
 export default function SettingUserArea() {
   const formMetadata = useFormMetadata<FormFieldValues>(FORM_ID);
   const fields = formMetadata.getFieldset();
 
-  // const session = useSession();
+  const session = useSession();
 
-  // const initialTags = useMemo(() => {
-  //   return (session?.userTags ?? []).map((tag) => tag.name);
-  // }, [session]);
+  const initialTags = useMemo(() => {
+    return (session?.userTags ?? []).map((tag) => tag.name);
+  }, [session]);
 
   const socialsFieldset = fields.socials.getFieldset();
 
@@ -125,9 +126,9 @@ export default function SettingUserArea() {
               />
             </div>
             <div className="mb-6">
-              {/* <SettingTagsProvider initialValue={initialTags}>
+              <SettingTagsProvider initialValue={initialTags}>
                 <SettingInputTechStack />
-              </SettingTagsProvider> */}
+              </SettingTagsProvider>
             </div>
             <div className="mb-6">
               <SettingTextarea

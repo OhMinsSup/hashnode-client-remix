@@ -42,7 +42,7 @@ type SettingTagsAction =
   | ResetInputAction;
 
 interface SettingTagsState {
-  reset: Symbol;
+  reset: symbol;
   inputValue: string;
   tags: Set<string>;
   open: boolean;
