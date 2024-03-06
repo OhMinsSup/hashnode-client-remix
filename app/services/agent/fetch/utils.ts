@@ -44,6 +44,7 @@ export function encodeMethodCallBody(
   if (!contentType || typeof data === "undefined") {
     return undefined;
   }
+
   if (data instanceof ArrayBuffer) {
     return data;
   }

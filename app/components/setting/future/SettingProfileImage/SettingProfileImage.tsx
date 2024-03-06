@@ -1,40 +1,46 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
 import styles from "./styles.module.css";
-
-// hooks
 import { useFetcher } from "@remix-run/react";
-import { useSettingUserFormContext } from "~/components/setting/context/form";
+import { FORM_ID } from "~/components/setting/context/form";
 import { Icons } from "~/components/shared/Icons";
-import { getPath } from "~/routes/_action._protected.action.upload";
-
-import type { Action } from "~/routes/_action._protected.action.upload";
-import { isUndefined } from "~/utils/assertion";
-import { useDeepCompareEffect } from "~/libs/hooks/useDeepCompareEffect";
+import { getPath, type RoutesActionData } from "~/routes/api.v1.upload";
+import { useFormMetadata } from "@conform-to/react";
+import { FormFieldValues } from "~/services/validate/user-update-api.validate";
 
 export default function SettingProfileImage() {
-  const fetcher = useFetcher<Action>();
-  const { setValue, watch } = useSettingUserFormContext();
+  const form = useFormMetadata<FormFieldValues>(FORM_ID);
+  const fields = form.getFieldset();
 
-  const image = watch("image");
+  const fetcher = useFetcher<RoutesActionData>();
 
-  const isInitImage = useMemo(() => {
-    return image && isUndefined(image.id) && image.url;
-  }, [image]);
+  const image = fields.image.getFieldset();
 
-  const isIdle = useMemo(
-    () => fetcher.state === "idle" && fetcher.data == null,
-    [fetcher]
-  );
+  const isLoading =
+    fetcher.state === "loading" || fetcher.state === "submitting";
 
-  const isLoading = useMemo(
-    () => fetcher.state === "loading" || fetcher.state === "submitting",
-    [fetcher]
-  );
+  const data = image.url.value
+    ? {
+        id: image.id.value,
+        publicUrl: image.url.value,
+      }
+    : undefined;
 
-  const isSuccess = useMemo(
-    () => fetcher.state === "idle" && fetcher.data != null,
-    [fetcher]
-  );
+  useEffect(() => {
+    const fetcherData = fetcher.data;
+    if (fetcher.state === "idle" && fetcherData) {
+      const { status, result } = fetcherData;
+      if (status === "success" && result) {
+        form.update({
+          name: fields.image.name,
+          value: {
+            id: result.id,
+            url: result.publicUrl,
+          },
+          validated: true,
+        });
+      }
+    }
+  }, [fetcher]);
 
   const onImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +56,10 @@ export default function SettingProfileImage() {
 
       fetcher.submit(formData, {
         method: "POST",
-        action: getPath(location.pathname),
+        action: getPath({
+          redirectUrl: location.pathname,
+          timestamp: Date.now().toString(),
+        }),
         encType: "multipart/form-data",
       });
     },
@@ -58,51 +67,29 @@ export default function SettingProfileImage() {
   );
 
   const onImageDelete = useCallback(() => {
-    if (!isInitImage) {
-      fetcher.submit(
-        {},
-        {
-          method: "POST",
-          action: getPath(location.pathname),
-          encType: "multipart/form-data",
-        }
-      );
-    }
-    setValue("image", undefined, {
-      shouldValidate: true,
-      shouldDirty: true,
+    form.update({
+      name: fields.image.name,
+      value: undefined,
+      validated: false,
     });
-  }, [fetcher, setValue, isInitImage]);
+  }, [fields.image.name, form]);
 
   return (
     <>
       <label htmlFor="file" className="input-label">
         Profile Photo
       </label>
-      {isIdle && isInitImage ? (
-        <SettingProfileImage.Success
-          data={{
-            id: undefined,
-            publicUrl: image?.url as unknown as string,
-          }}
-          mode="init"
-          onDelete={onImageDelete}
-        />
-      ) : null}
-      {isIdle && !isInitImage ? (
-        <SettingProfileImage.Pending onChange={onImageUpload} />
-      ) : null}
-      {isLoading ? <SettingProfileImage.Loading /> : null}
-      {isSuccess ? (
-        <SettingProfileImage.Success
-          data={{
-            id: fetcher.data?.id as unknown as string,
-            publicUrl: fetcher.data?.publicUrl as unknown as string,
-          }}
-          mode="update"
-          onDelete={onImageDelete}
-        />
-      ) : null}
+      {isLoading ? (
+        <SettingProfileImage.Loading />
+      ) : (
+        <>
+          {data ? (
+            <SettingProfileImage.Success data={data} onDelete={onImageDelete} />
+          ) : (
+            <SettingProfileImage.Pending onChange={onImageUpload} />
+          )}
+        </>
+      )}
     </>
   );
 }
@@ -138,6 +125,7 @@ SettingProfileImage.Pending = function Item(props: PendingProps) {
 
 SettingProfileImage.Loading = function Item() {
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label className="custom-file flex h-40 w-40 cursor-pointer flex-col items-center justify-center rounded-full border bg-white uppercase tracking-wide text-slate-500 shadow">
       <svg className="h-16 w-16 animate-spin fill-current" viewBox="0 0 24 24">
         <path fill="none" d="M0 0h24v24H0V0z"></path>
@@ -148,7 +136,6 @@ SettingProfileImage.Loading = function Item() {
 };
 
 interface SuccessProps {
-  mode: "update" | "init";
   data: {
     id: string | undefined;
     publicUrl: string;
@@ -156,40 +143,21 @@ interface SuccessProps {
   onDelete?: () => void;
 }
 
-SettingProfileImage.Success = function Item({
-  data,
-  onDelete,
-  mode,
-}: SuccessProps) {
-  const { setValue, watch } = useSettingUserFormContext();
-
-  const image = watch("image");
-
-  useDeepCompareEffect(() => {
-    if (data && mode === "update") {
-      setValue(
-        "image",
-        {
-          id: data.id,
-          url: data.publicUrl,
-        },
-        {
-          shouldValidate: true,
-          shouldDirty: true,
-        }
-      );
-    }
-  }, [data]);
-
+SettingProfileImage.Success = function Item({ data, onDelete }: SuccessProps) {
   return (
     <div className="relative block h-40 w-40 rounded-full bg-slate-100 shadow-xl">
       <a
         className="block overflow-hidden rounded-full"
-        href={image?.url}
+        href={data.publicUrl}
         target="_blank"
         rel="noreferrer"
       >
-        <img className="block" src={image?.url} alt="empty" />
+        <img
+          className="block"
+          src={data.publicUrl}
+          alt="user profile"
+          loading="lazy"
+        />
       </a>
       <button
         type="button"

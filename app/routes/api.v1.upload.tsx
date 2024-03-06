@@ -5,10 +5,18 @@ import {
   json,
 } from "@remix-run/cloudflare";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import { requireAuthCookie } from "~/server/auth.server";
 import { parseWithZod } from "@conform-to/zod";
 import { schema } from "~/services/validate/cf-file.validate";
+import { readHeaderCookie } from "~/server/utils/request.server";
+
+type SearchParams =
+  | string
+  | string[][]
+  | Record<string, string>
+  | URLSearchParams
+  | undefined;
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
@@ -26,7 +34,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (submission.status !== "success") {
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -36,21 +44,21 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
   let uploadURL: string | undefined;
   try {
+    const formData = new FormData();
+    // Now + 2 minutes (2021-01-02T02:20:00Z)
+    const expiry = new Date(Date.now() + 120000).toISOString();
+    formData.append("expiry", expiry);
+
     const { body, status } = await context.api.postDirectUploadHandler(
       context.env.CF_ID,
-      context.env.CF_API_TOKEN,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      context.env.CF_API_TOKEN
     );
 
     const data: Awaited<FetchRespSchema.CfDirectUploadResp> = await body;
     if (!data.success) {
       return json(
         {
-          status: "error",
+          status: "error" as const,
           result: submission.reply(),
           cloudflareErrors: data.errors,
         },
@@ -65,7 +73,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     console.error(error);
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -76,7 +84,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (!uploadURL) {
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -92,19 +100,14 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   try {
     const { body, status } = await context.api.postCloudflareUploadHandler(
       uploadURL,
-      file,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      file
     );
 
     const data: Awaited<FetchRespSchema.CfUploadResp> = await body;
     if (!data.success) {
       return json(
         {
-          status: "error",
+          status: "error" as const,
           result: submission.reply(),
           cloudflareErrors: data.errors,
         },
@@ -115,10 +118,11 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
     cfData = data.result;
   } catch (error) {
+    console.log("cloudflareUpload error:");
     console.error(error);
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -129,7 +133,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (!cfData) {
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -138,20 +142,43 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   }
 
   try {
-    const { body, status } = await context.api.postFileHandler({
-      cfId: cfData.id,
-      filename: file.name,
-      mimeType: file.type,
-      publicUrl: cfData.variants[0],
-      mediaType: mediaType as FetchSchema.MediaType,
-      uploadType: uploadType as FetchSchema.UploadType,
-    });
+    const cookie = readHeaderCookie(request);
 
-    const data: Awaited<FetchRespSchema.FileResp> = await body;
+    const { body, status } = await context.api.postFileHandler(
+      {
+        cfId: cfData.id,
+        filename: file.name,
+        mimeType: file.type,
+        publicUrl: cfData.variants[0],
+        mediaType: mediaType as FetchSchema.MediaType,
+        uploadType: uploadType as FetchSchema.UploadType,
+      },
+      {
+        headers: {
+          Cookie: cookie,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data: Awaited<FetchRespSchema.Success<FetchRespSchema.FileResp>> =
+      await body;
+    if (data.resultCode !== RESULT_CODE.OK) {
+      return json(
+        {
+          status: "error" as const,
+          result: submission.reply(),
+          cloudflareErrors: [],
+        },
+        {
+          status,
+        }
+      );
+    }
     return json(
       {
-        status: "success",
-        result: data,
+        status: "success" as const,
+        result: data.result,
         cloudflareErrors: [],
       },
       {
@@ -159,10 +186,11 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       }
     );
   } catch (error) {
+    console.log("postFile error:");
     console.error(error);
     return json(
       {
-        status: "error",
+        status: "error" as const,
         result: submission.reply(),
         cloudflareErrors: [],
       },
@@ -175,8 +203,15 @@ export type RoutesActionData = typeof action;
 
 export const loader = () => redirect("/", { status: 404 });
 
-export const getPath = (redirectUrl: string) =>
-  "/api/v1/upload?redirectUrl=" + redirectUrl;
+export const getPath = (searchParams?: SearchParams) => {
+  if (searchParams) {
+    const query = new URLSearchParams(searchParams).toString();
+    if (query) {
+      return `/api/v1/upload?${query}`;
+    }
+  }
+  return "/api/v1/upload";
+};
 
 export default function Routes() {
   return <div>Oops... You should not see this.</div>;

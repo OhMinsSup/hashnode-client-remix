@@ -1,8 +1,13 @@
-import { constructMethodCallUri } from "../fetch/utils";
+import {
+  constructMethodCallUri,
+  httpResponseBodyParse,
+  normalizeResponseHeaders,
+} from "../fetch/utils";
 import { API_ENDPOINTS, CLOUDFLARE } from "./constants";
 import type { CallOptions } from "../client/types";
 import type { ServiceClient } from "../client";
 import type { QueryParams } from "../fetch/types";
+import { ResponseError } from "../../error";
 
 export class FilesNamespace {
   _service: ServiceClient;
@@ -57,9 +62,7 @@ export class FilesNamespace {
     opts?: CallOptions | undefined
   ) {
     const httpUri = constructMethodCallUri(
-      this._service.makePathname(
-        this._cloudflareApis.CF_DIRECT_UPLOAD(accountId)
-      ),
+      this._cloudflareApis.CF_DIRECT_UPLOAD(accountId),
       this._cloudflareApis.uri
     );
     const httpHeaders = {
@@ -75,22 +78,30 @@ export class FilesNamespace {
     });
   }
 
-  cloudflareUpload(
+  async cloudflareUpload(
     uploadUrl: string,
     file: File,
     opts?: CallOptions | undefined
   ) {
     const httpUri = uploadUrl;
-    const httpHeaders = opts?.headers;
-    const formData = new FormData();
-    formData.append("file", file);
-    const httpReqBody = formData;
+    const httpReqBody = new FormData();
+    httpReqBody.append("file", file);
 
-    return this._service._baseClient.fetch({
-      uri: httpUri,
+    const request = new Request(httpUri, {
       method: "POST",
-      headers: httpHeaders,
-      reqBody: httpReqBody,
+      body: httpReqBody,
     });
+
+    const response = await fetch(request);
+    if (!response.ok) {
+      throw new ResponseError(response, request, opts);
+    }
+
+    const contentType = response.headers.get("content-type");
+    return {
+      status: response.status,
+      headers: normalizeResponseHeaders(response.headers),
+      body: await httpResponseBodyParse(contentType, response),
+    };
   }
 }

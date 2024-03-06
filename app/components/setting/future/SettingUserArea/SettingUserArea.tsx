@@ -3,7 +3,7 @@ import { SettingInput } from "~/components/setting/future/SettingInput";
 import { SettingTextarea } from "~/components/setting/future/SettingTextarea";
 import { SettingInputIdentity } from "~/components/setting/future/SettingInputIdentity";
 import { SettingInputTechStack } from "~/components/setting/future/SettingInputTechStack";
-// import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
+import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
 import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
 import { useSession } from "~/services/hooks/useSession";
 import { cn } from "~/utils/util";
@@ -18,8 +18,8 @@ import { FORM_ID } from "~/components/setting/context/form";
 import { useMemo } from "react";
 
 export default function SettingUserArea() {
-  const formMetadata = useFormMetadata<FormFieldValues>(FORM_ID);
-  const fields = formMetadata.getFieldset();
+  const form = useFormMetadata<FormFieldValues>(FORM_ID);
+  const fields = form.getFieldset();
 
   const session = useSession();
 
@@ -29,31 +29,31 @@ export default function SettingUserArea() {
 
   const socialsFieldset = fields.socials.getFieldset();
 
-  const [metaNickname] = useField(fields.nickname.name);
+  const [nickname] = useField(fields.nickname.name);
 
-  const [metaTagline] = useField(fields.tagline.name);
+  const [tagline] = useField(fields.tagline.name);
 
-  const [metaLocation] = useField(fields.location.name);
+  const [location] = useField(fields.location.name);
 
-  const [metaBio] = useField(fields.bio.name);
+  const [bio] = useField(fields.bio.name);
 
-  const [metaTwitter] = useField(socialsFieldset.twitter.name);
+  const [twitter] = useField(socialsFieldset.twitter.name);
 
-  const [metaInstagram] = useField(socialsFieldset.instagram.name);
+  const [instagram] = useField(socialsFieldset.instagram.name);
 
-  const [metaGithub] = useField(socialsFieldset.github.name);
+  const [github] = useField(socialsFieldset.github.name);
 
-  const [metaFacebook] = useField(socialsFieldset.facebook.name);
+  const [facebook] = useField(socialsFieldset.facebook.name);
 
-  const [metaWebsite] = useField(socialsFieldset.website.name);
+  const [website] = useField(socialsFieldset.website.name);
 
-  const [metaAvailableText] = useField(fields.availableText.name);
+  const [availableText] = useField(fields.availableText.name);
 
-  const [metaUsername] = useField(fields.username.name);
+  const [username] = useField(fields.username.name);
 
-  const [metaEmail] = useField(fields.email.name);
+  const [email] = useField(fields.email.name);
 
-  const textLength = formMetadata.value?.availableText?.length ?? 0;
+  const textLength = form.value?.availableText?.length ?? 0;
 
   return (
     <div className={styles.root}>
@@ -64,49 +64,51 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaNickname.id,
+                  htmlFor: nickname.id,
                 }}
                 inputProps={{
                   placeholder: "Enter your full name",
-                  ...getInputProps(metaNickname, {
+                  ...getInputProps(nickname, {
                     type: "text",
                   }),
                 }}
-                errors={metaNickname.errors}
-                errorId={metaNickname.errorId}
+                errors={nickname.errors}
+                errorId={nickname.errorId}
                 text="Full name"
               />
             </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaTagline.id,
+                  htmlFor: tagline.id,
                 }}
                 inputProps={{
                   placeholder: "Software Developer @ …",
-                  ...getInputProps(metaTagline, {
+                  ...getInputProps(tagline, {
                     type: "text",
                   }),
                 }}
-                errors={metaTagline.errors}
-                errorId={metaTagline.errorId}
+                errors={tagline.errors}
+                errorId={tagline.errorId}
                 text="Profile Tagline"
               />
             </div>
-            <div className="mb-6">{/* <SettingProfileImage /> */}</div>
+            <div className="mb-6">
+              <SettingProfileImage />
+            </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaLocation.id,
+                  htmlFor: location.id,
                 }}
                 inputProps={{
                   placeholder: "California, US",
-                  ...getInputProps(metaLocation, {
+                  ...getInputProps(location, {
                     type: "text",
                   }),
                 }}
-                errors={metaLocation.errors}
-                errorId={metaLocation.errorId}
+                errors={location.errors}
+                errorId={location.errorId}
                 text="Location"
               />
             </div>
@@ -114,14 +116,14 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingTextarea
                 labelProps={{
-                  htmlFor: metaBio.id,
+                  htmlFor: bio.id,
                 }}
                 textareaProps={{
                   placeholder: "I am a developer from …",
-                  ...getTextareaProps(metaBio),
+                  ...getTextareaProps(bio),
                 }}
-                errors={metaBio.errors}
-                errorId={metaBio.errorId}
+                errors={bio.errors}
+                errorId={bio.errorId}
                 text="Profile Bio (About you)"
               />
             </div>
@@ -133,14 +135,14 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingTextarea
                 labelProps={{
-                  htmlFor: metaAvailableText.id,
+                  htmlFor: availableText.id,
                 }}
                 textareaProps={{
                   placeholder: "I am available for mentoring, …",
-                  ...getTextareaProps(metaAvailableText),
+                  ...getTextareaProps(availableText),
                 }}
-                errors={metaAvailableText.errors}
-                errorId={metaAvailableText.errorId}
+                errors={availableText.errors}
+                errorId={availableText.errorId}
                 text="Available for"
                 count={textLength}
               />
@@ -151,88 +153,88 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaTwitter.id,
+                  htmlFor: twitter.id,
                 }}
                 inputProps={{
                   placeholder: "https://twitter.com/johndoe",
                   pattern:
                     "(http|https)://twitter.com/(.+)|(http|https)://www.twitter.com/(.+)",
-                  ...getInputProps(metaTwitter, {
+                  ...getInputProps(twitter, {
                     type: "url",
                   }),
                 }}
-                errors={metaTwitter.errors}
-                errorId={metaTwitter.errorId}
+                errors={twitter.errors}
+                errorId={twitter.errorId}
                 text="Twitter Profile"
               />
             </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaInstagram.id,
+                  htmlFor: instagram.id,
                 }}
                 inputProps={{
                   placeholder: "https://instagram.com/johndoe",
                   pattern:
                     "(http|https)://instagram.com/(.+)|(http|https)://www.instagram.com/(.+)",
-                  ...getInputProps(metaInstagram, {
+                  ...getInputProps(instagram, {
                     type: "url",
                   }),
                 }}
-                errors={metaInstagram.errors}
-                errorId={metaInstagram.errorId}
+                errors={instagram.errors}
+                errorId={instagram.errorId}
                 text="Instagram Profile"
               />
             </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaGithub.id,
+                  htmlFor: github.id,
                 }}
                 inputProps={{
                   placeholder: "https://github.com/johndoe",
                   pattern:
                     "(http|https)://github.com/(.+)|(http|https)://www.github.com/(.+)",
-                  ...getInputProps(metaGithub, {
+                  ...getInputProps(github, {
                     type: "url",
                   }),
                 }}
-                errors={metaGithub.errors}
-                errorId={metaGithub.errorId}
+                errors={github.errors}
+                errorId={github.errorId}
                 text="GitHub Profile"
               />
             </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaFacebook.id,
+                  htmlFor: facebook.id,
                 }}
                 inputProps={{
                   placeholder: "https://facebook.com/johndoe",
                   pattern:
                     "(http|https)://facebook.com/(.+)|(http|https)://www.facebook.com/(.+)|(http|https)://fb.com/(.+)|(http|https)://www.fb.com/(.+)",
-                  ...getInputProps(metaFacebook, {
+                  ...getInputProps(facebook, {
                     type: "url",
                   }),
                 }}
-                errors={metaFacebook.errors}
-                errorId={metaFacebook.errorId}
+                errors={facebook.errors}
+                errorId={facebook.errorId}
                 text="Facebook Profile"
               />
             </div>
             <div className="mb-6">
               <SettingInput
                 labelProps={{
-                  htmlFor: metaWebsite.id,
+                  htmlFor: website.id,
                 }}
                 inputProps={{
                   placeholder: "https://johndoe.com",
-                  ...getInputProps(metaWebsite, {
+                  ...getInputProps(website, {
                     type: "url",
                   }),
                 }}
-                errors={metaWebsite.errors}
-                errorId={metaWebsite.errorId}
+                errors={website.errors}
+                errorId={website.errorId}
                 text="Website URL"
               />
             </div>
@@ -240,15 +242,15 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingInputIdentity
                 labelProps={{
-                  htmlFor: metaUsername.id,
+                  htmlFor: username.id,
                 }}
                 inputProps={{
-                  ...getInputProps(metaUsername, {
+                  ...getInputProps(username, {
                     type: "text",
                   }),
                 }}
-                errors={metaUsername.errors}
-                errorId={metaUsername.errorId}
+                errors={username.errors}
+                errorId={username.errorId}
                 text="username"
                 desc="You can change username once. This is the last chance."
               />
@@ -256,15 +258,15 @@ export default function SettingUserArea() {
             <div className="mb-6">
               <SettingInputIdentity
                 labelProps={{
-                  htmlFor: metaEmail.id,
+                  htmlFor: email.id,
                 }}
                 inputProps={{
-                  ...getInputProps(metaEmail, {
+                  ...getInputProps(email, {
                     type: "email",
                   }),
                 }}
-                errors={metaEmail.errors}
-                errorId={metaEmail.errorId}
+                errors={email.errors}
+                errorId={email.errorId}
                 text="Email address"
                 desc={`Changing your email address might break your OAuth sign-in if your
                 social media accounts do not use the same email address. Please
