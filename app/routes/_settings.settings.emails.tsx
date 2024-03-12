@@ -7,8 +7,6 @@ export const meta = settingsEmailMeta;
 
 export const loader = settingsEmailLayoutLoader;
 
-export type RoutesLoader = typeof loader;
-
 export default function Routes() {
   return <Email />;
 }

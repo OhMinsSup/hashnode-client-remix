@@ -146,6 +146,12 @@ SettingInputTechStack.Tags = function Item() {
               >
                 <Icons.V2.SettingTagX className="h-4 w-4 fill-current" />
               </button>
+              <input
+                type="text"
+                name={fields.skills.name}
+                defaultValue={field.value}
+                hidden
+              />
             </div>
           );
         })}

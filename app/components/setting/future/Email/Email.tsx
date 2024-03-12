@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import type { RoutesLoaderData } from "~/server/routes/settings-email/settings-email-loader.server";
 
 interface CheckboxProps {
@@ -34,7 +34,7 @@ function Checkbox({ id, value, label, description, checked }: CheckboxProps) {
 export default function Email() {
   const data = useLoaderData<RoutesLoaderData>();
   return (
-    <div className={styles.root}>
+    <Form className={styles.root}>
       {data.items.map((item) => {
         const id = item.id.toString();
         return (
@@ -49,10 +49,10 @@ export default function Email() {
         );
       })}
       <div className="mt-5 pt-4">
-        <button className="button-primary big" type="button">
+        <button className="button-primary big" type="submit">
           Update
         </button>
       </div>
-    </div>
+    </Form>
   );
 }

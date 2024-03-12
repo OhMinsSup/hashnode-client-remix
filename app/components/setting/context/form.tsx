@@ -34,7 +34,7 @@ export default function SettingUserFormProvider({
 
   return (
     <FormProvider context={form.context}>
-      <Form method="post" className="content" {...getFormProps(form)}>
+      <Form replace method="post" className="content" {...getFormProps(form)}>
         {childrenWithProps}
       </Form>
       <FormStateInput />

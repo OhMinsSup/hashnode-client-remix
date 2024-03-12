@@ -2,7 +2,10 @@ import { redirect, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { parseWithZod } from "@conform-to/zod";
 import { safeRedirect } from "remix-utils/safe-redirect";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
-import { validateMethods } from "~/server/utils/request.server";
+import {
+  readHeaderCookie,
+  validateMethods,
+} from "~/server/utils/request.server";
 import { schema } from "~/services/validate/user-update-api.validate";
 import { ErrorType, ResponseError } from "~/services/error";
 
@@ -22,23 +25,29 @@ export const settingsAction = async ({
     return submission.reply();
   }
 
-  console.log(submission.value);
-
   try {
-    return submission.reply({});
+    const cookie = readHeaderCookie(request);
+
+    const response = await context.api.putMeHandler(submission.value, {
+      headers: {
+        Cookie: cookie,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const body: Awaited<FetchRespSchema.Success> = await response.body;
+    if (body.resultCode !== RESULT_CODE.OK) {
+      return submission.reply({
+        formErrors: ["회원정보 수정에 실패했습니다. 다시 시도해주세요."],
+      });
+    }
+
+    return redirect(safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT));
   } catch (e) {
     if (e instanceof Error && e.name === ErrorType.ResponseError) {
       const typesafeError = e as ResponseError;
       const data = typesafeError.getErrorData();
       const response = await data.response.json<FetchRespSchema.Error>();
-      const isNotExistsUser = response.resultCode === RESULT_CODE.NOT_EXIST;
-      if (isNotExistsUser) {
-        throw redirect(
-          safeRedirect(
-            `${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${submission.value.email}`
-          )
-        );
-      }
 
       return submission.reply({
         fieldErrors: {
@@ -47,7 +56,7 @@ export const settingsAction = async ({
       });
     }
     return submission.reply({
-      formErrors: ["로그인에 실패했습니다. 다시 시도해주세요."],
+      formErrors: ["회원정보 수정에 실패했습니다. 다시 시도해주세요."],
     });
   }
 };

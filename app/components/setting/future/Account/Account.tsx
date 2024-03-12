@@ -2,16 +2,13 @@ import React from "react";
 import styles from "./styles.module.css";
 import { cn } from "~/utils/util";
 import { useSession } from "~/services/hooks/useSession";
+import { Form } from "@remix-run/react";
 
-interface AccountProps {
-  onDeleteAccount: () => void;
-}
-
-export default function Account({ onDeleteAccount }: AccountProps) {
+export default function Account() {
   const session = useSession();
 
   return (
-    <div className={styles.root}>
+    <Form method="delete" className={styles.root}>
       <h2 className="mb-4 text-xl font-semibold text-red-600">
         Delete account
       </h2>
@@ -24,12 +21,11 @@ export default function Account({ onDeleteAccount }: AccountProps) {
         account on Hashnode. This action is irreversible.{" "}
       </p>
       <button
-        type="button"
+        type="submit"
         className={cn("button-transparent", styles.btn_delete)}
-        onClick={onDeleteAccount}
       >
         Delete your account
       </button>
-    </div>
+    </Form>
   );
 }

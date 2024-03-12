@@ -157,7 +157,6 @@ SigninForm.Signin = function Item() {
     lastResult,
     // Reuse the validation logic on the client
     onValidate({ formData }) {
-      console.log("formData", formData);
       return parseWithZod(formData, { schema: $signinSchema });
     },
     // Validate the form on blur event triggered

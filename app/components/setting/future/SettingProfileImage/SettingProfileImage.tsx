@@ -144,6 +144,13 @@ interface SuccessProps {
 }
 
 SettingProfileImage.Success = function Item({ data, onDelete }: SuccessProps) {
+  const form = useFormMetadata<FormFieldValues>(FORM_ID);
+  const fields = form.getFieldset();
+
+  const fetcher = useFetcher<RoutesActionData>();
+
+  const image = fields.image.getFieldset();
+
   return (
     <div className="relative block h-40 w-40 rounded-full bg-slate-100 shadow-xl">
       <a
@@ -166,6 +173,13 @@ SettingProfileImage.Success = function Item({ data, onDelete }: SuccessProps) {
       >
         <Icons.Trash className="h-4 w-4 stroke-current" />
       </button>
+      <input type="text" name={image.id.name} hidden defaultValue={data.id} />
+      <input
+        type="text"
+        name={image.url.name}
+        hidden
+        defaultValue={data.publicUrl}
+      />
     </div>
   );
 };
