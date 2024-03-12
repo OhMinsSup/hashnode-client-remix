@@ -8,7 +8,7 @@ type Data = FetchRespSchema.Success<
   FetchRespSchema.ListResp<FetchRespSchema.PostDetailResp>
 >;
 
-type SearchParams =
+export type SearchParams =
   | string
   | string[][]
   | Record<string, string>

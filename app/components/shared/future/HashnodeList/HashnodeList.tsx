@@ -6,12 +6,15 @@ import { useLoaderData } from "@remix-run/react";
 import { getTargetElement } from "~/libs/browser-utils";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import type { RoutesLoaderData } from "~/server/routes/feeds/feeds-loader.server";
-import { usePostListInfiniteQuery } from "~/routes/api.v1.posts[.]json";
+import {
+  usePostListInfiniteQuery,
+  type SearchParams,
+} from "~/routes/api.v1.posts[.]json";
 
 interface HashnodeListProps {
-  type?: "feed.index" | "feed.following" | "feed.featured";
   recommendedUsers?: React.ReactNode;
   trendingTags?: React.ReactNode;
+  searchParams?: SearchParams;
 }
 
 const CLIENT_DATA_OVERSCAN = 10;
@@ -19,6 +22,7 @@ const CLIENT_DATA_OVERSCAN = 10;
 export default function HashnodeList({
   trendingTags,
   recommendedUsers,
+  searchParams,
 }: HashnodeListProps) {
   const $list = useRef<HTMLDivElement>(null);
 
@@ -29,6 +33,7 @@ export default function HashnodeList({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePostListInfiniteQuery({
       initialData,
+      searchParams,
     });
 
   const flatList = data?.pages?.map((page) => page?.result.list).flat() ?? [];

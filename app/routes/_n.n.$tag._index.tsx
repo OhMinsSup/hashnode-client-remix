@@ -1,33 +1,23 @@
-import { json, redirect } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-
-// types
+import {
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
+} from "@remix-run/react";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { safeRedirect } from "remix-utils/safe-redirect";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import type { RoutesLoaderData } from "~/server/routes/n-layout/n-layout-loader.server";
+import { nLoader } from "~/server/routes/n/n-loader.server";
 
-export const loader = async ({
-  context,
-  request,
-  params,
-}: LoaderFunctionArgs) => {
-  const tag = params.tag?.toString();
-  if (!tag) {
-    throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
-  }
-  const response = await context.api.post.getPostList(request, {
-    type: "recent",
-    tag,
-  });
-  return json(response);
-};
-
-export type RoutesLoader = typeof loader;
+export const loader = nLoader;
 
 export default function Routes() {
-  console.log("hello");
-  return <HashnodeList />;
+  const data = useRouteLoaderData<RoutesLoaderData>("routes/_n.n.$tag");
+  return (
+    <HashnodeList
+      searchParams={
+        data?.result ? { tag: data.result.name, limit: "10" } : undefined
+      }
+    />
+  );
 }
 
 export function ErrorBoundary() {

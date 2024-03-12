@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { Link, useLoaderData, Form } from "@remix-run/react";
-import type { RoutesLoader } from "~/routes/_n.n.$tag";
+import { type RoutesLoaderData } from "~/server/routes/n-layout/n-layout-loader.server";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface TagBoxWithHashnodeListProps {
@@ -23,13 +23,13 @@ export default function TagBoxWithHashnodeList({
 }
 
 TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
-  const data = useLoaderData<RoutesLoader>();
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <>
       <div className="sm:hidden flex flex-row justify-between w-full items-start">
         <div className="relative flex items-center w-[64px] h-[64px] rounded-full overflow-visible ">
           <img
-            alt={data?.tagInfo?.name}
+            alt={data?.result?.name}
             loading="lazy"
             src={ASSET_URL.SHAP}
             className="object-cover rounded-full w-12 h-12"
@@ -43,9 +43,9 @@ TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
       </div>
       <div className="flex flex-row items-center w-full justify-between sm:hidden">
         <div className={styles.tag_info}>
-          <span>{data?.tagInfo?.followCount} followers</span>
+          <span>{data?.result?.followCount} followers</span>
           <span className="block font-bold">·</span>
-          <span>{data?.tagInfo?.postCount} articles</span>
+          <span>{data?.result?.postCount} articles</span>
         </div>
       </div>
     </>
@@ -53,27 +53,27 @@ TagBoxWithHashnodeList.Mobile = function TagBoxWithHashnodeListMobile() {
 };
 
 TagBoxWithHashnodeList.Desktop = function TagBoxWithHashnodeListDesktop() {
-  const data = useLoaderData<RoutesLoader>();
+  const data = useLoaderData<RoutesLoaderData>();
 
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full">
         <div className="flex flex-col justify-start gap-0.5">
-          <div className={styles.tag}>{data?.tagInfo?.name}</div>
+          <div className={styles.tag}>{data?.result?.name}</div>
           <div className="flex-row gap-2 hidden sm:flex">
             <div className={styles.tag_info}>
-              <span className="z-10">#{data?.tagInfo?.name}</span>
+              <span className="z-10">#{data?.result?.name}</span>
               <span className={styles.dot}>·</span>
             </div>
             <div className={styles.tag_info}>
-              <span>{data?.tagInfo?.followCount} followers</span>
+              <span>{data?.result?.followCount} followers</span>
               <span className={styles.dot_2}>·</span>
-              <span>{data?.tagInfo?.postCount} articles</span>
+              <span>{data?.result?.postCount} articles</span>
             </div>
           </div>
           <div className="block sm:hidden">
             <div className={styles.tag_info}>
-              <span className="z-10">#{data?.tagInfo?.name}</span>
+              <span className="z-10">#{data?.result?.name}</span>
               <span className={styles.dot}>·</span>
             </div>
           </div>
@@ -81,7 +81,7 @@ TagBoxWithHashnodeList.Desktop = function TagBoxWithHashnodeListDesktop() {
         <div className="hidden sm:block">
           <div className="relative flex items-center w-[64px] h-[64px] rounded-full overflow-visible">
             <img
-              alt={data?.tagInfo?.name}
+              alt={data?.result?.name}
               loading="lazy"
               src={ASSET_URL.SHAP}
               className="object-cover rounded-full w-12 h-12"
@@ -93,15 +93,15 @@ TagBoxWithHashnodeList.Desktop = function TagBoxWithHashnodeListDesktop() {
       <div className="flex flex-row gap-2 items-center z-10 ">
         <div className="flex flex-row gap-2 align-middle z-10">
           <Form method="post" navigate={false}>
-            {data?.tagInfo?.isFollowing ? (
+            {data?.result?.isFollowing ? (
               <button type="submit" className={styles.btn_following}>
                 <div className={styles.btn_following_wrapper}>
                   <svg fill="none" viewBox="0 0 16 16" width="16" height="16">
                     <path
                       stroke="currentColor"
                       d="M2.667 8.667 6 12l7.333-8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></path>
                   </svg>
                   <span>Following</span>
@@ -117,7 +117,7 @@ TagBoxWithHashnodeList.Desktop = function TagBoxWithHashnodeListDesktop() {
             className={styles.link_write}
             to={{
               pathname: PAGE_ENDPOINTS.WRITE.ROOT,
-              search: `?tag=${data?.tagInfo?.name}`,
+              search: `?tag=${data?.result?.name}`,
             }}
           >
             <span className="text-sm">Write an article</span>

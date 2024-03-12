@@ -1,4 +1,3 @@
-import type { Nullable } from "~/api/schema/api";
 import { Icons } from "~/components/shared/Icons";
 
 export const API_ENDPOINTS = {
@@ -69,7 +68,7 @@ export const QUERIES_KEY = {
       "getTopPostsApi",
       { duration },
     ],
-    ID: (id?: Nullable<string | number>): [string, number?] => {
+    ID: (id?: string | number | null): [string, number?] => {
       const keys: [string, number?] = ["getPostApi"];
       if (id) keys.push(id);
       return keys;

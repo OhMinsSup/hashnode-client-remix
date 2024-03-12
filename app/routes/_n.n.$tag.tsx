@@ -1,59 +1,29 @@
-import { defer, redirect } from "@remix-run/cloudflare";
 import {
   isRouteErrorResponse,
   Outlet,
   useRouteError,
   useLoaderData,
 } from "@remix-run/react";
-
-// components
 import { TagBoxWithHashnodeList } from "~/components/n/future/TagBoxWithHashnodeList";
 import { HashnodeTagTabs } from "~/components/n/future/HashnodeTagTabs";
+import {
+  nLayoutLoader,
+  type RoutesLoaderData,
+} from "~/server/routes/n-layout/n-layout-loader.server";
+import { nLayoutMeta } from "~/server/routes/n-layout/n-layout-meta";
+import { nLayoutAction } from "~/server/routes/n-layout/n-layout-action.server";
 
-// constants
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { safeRedirect } from "remix-utils/safe-redirect";
+export const loader = nLayoutLoader;
 
-// types
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-} from "@remix-run/cloudflare";
+export const meta = nLayoutMeta;
 
-export const loader = async ({
-  context,
-  request,
-  params,
-}: LoaderFunctionArgs) => {
-  const tag = params.tag?.toString();
-  if (!tag) {
-    throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
-  }
-
-  const tagInfo = await context.api.tag.getTagInfo(tag, request);
-
-  return defer({
-    tagInfo,
-  });
-};
-
-export const action = ({ context, request, params }: ActionFunctionArgs) => {
-  const tag = params.tag?.toString();
-  if (!tag) {
-    throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
-  }
-  return context.api.tag.followByTag(tag, request);
-};
-
-export type RoutesLoader = typeof loader;
-
-export type RoutesActionData = typeof action;
+export const action = nLayoutAction;
 
 export default function Routes() {
-  const data = useLoaderData<RoutesLoader>();
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <TagBoxWithHashnodeList>
-      <HashnodeTagTabs slug={data?.tagInfo?.name}>
+      <HashnodeTagTabs slug={data?.result?.name}>
         <Outlet />
       </HashnodeTagTabs>
     </TagBoxWithHashnodeList>
