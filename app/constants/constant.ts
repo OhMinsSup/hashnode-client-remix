@@ -122,7 +122,8 @@ export const PAGE_ENDPOINTS = {
   },
   N: {
     TAG: (tag: string) => `/n/${tag}`,
-    TAG_HOT: (tag: string) => `/n/${tag}/hot`,
+    TAG_RECENT: (tag: string) => `/n/${tag}/recent`,
+    TAG_RSS: (tag: string) => `/n/${tag}/rss.xml`,
   },
   SETTINGS: {
     ROOT: "/settings",

@@ -652,6 +652,62 @@ export const Icons = {
   UserGruop: UserGruopIcon,
   Write: WriteIcon,
   V2: {
+    TagFollowing: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 16 16" width="16" height="16" {...props}>
+        <path
+          stroke="currentColor"
+          d="M2.667 8.667 6 12l7.333-8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </svg>
+    ),
+    RssLink: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
+        <path
+          stroke="currentColor"
+          d="M3.333 3.333a13.333 13.333 0 0 1 13.334 13.334m-13.334-7.5a7.5 7.5 0 0 1 7.5 7.5m-7.5-.834a.833.833 0 0 1 1.667 0m-1.667 0a.833.833 0 0 0 1.667 0m-1.667 0H5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    ShareLink: (props: IconProps) => (
+      <svg fill="none" viewBox="0 0 20 20" width="20" height="20" {...props}>
+        <path
+          stroke="currentColor"
+          d="M8.491 10.754a3.77 3.77 0 0 0 5.688.407L16.44 8.9a3.772 3.772 0 0 0-5.332-5.333L9.81 4.856m1.697 4.39a3.772 3.772 0 0 0-5.687-.408L3.56 11.101a3.771 3.771 0 0 0 5.332 5.333l1.29-1.29"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.25"
+        ></path>
+      </svg>
+    ),
+    TagBox: (props: IconProps) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="400"
+        height="400"
+        fill="none"
+        {...props}
+      >
+        <g className="dark:hidden block">
+          <circle cx="200" cy="200" r="48" stroke="#E2E8F0cc"></circle>
+          <circle cx="200" cy="200" r="72" stroke="#E2E8F0aa"></circle>
+          <circle cx="200" cy="200" r="96" stroke="#E2E8F055"></circle>
+          <circle cx="200" cy="200" r="120" stroke="#E2E8F033"></circle>
+          <circle cx="200" cy="200" r="144" stroke="#E2E8F005"></circle>
+        </g>
+        <g className="hidden dark:block">
+          <circle cx="200" cy="200" r="48" stroke="#334155cc"></circle>
+          <circle cx="200" cy="200" r="72" stroke="#334155aa"></circle>
+          <circle cx="200" cy="200" r="96" stroke="#33415555"></circle>
+          <circle cx="200" cy="200" r="120" stroke="#33415533"></circle>
+          <circle cx="200" cy="200" r="144" stroke="#33415505"></circle>
+        </g>
+      </svg>
+    ),
     Bookmark: (props: IconProps) => (
       <svg {...props} fill="none" viewBox="0 0 20 20" width="20" height="20">
         <path

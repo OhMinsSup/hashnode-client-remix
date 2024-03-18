@@ -5,7 +5,7 @@ import merge from "lodash-es/merge";
 import { safeRedirect } from "remix-utils/safe-redirect";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-export const nLoader = async ({
+export const nRecentLoader = async ({
   context,
   request,
   params,
@@ -50,4 +50,4 @@ export const nLoader = async ({
   });
 };
 
-export type RoutesLoaderData = typeof nLoader;
+export type RoutesLoaderData = typeof nRecentLoader;

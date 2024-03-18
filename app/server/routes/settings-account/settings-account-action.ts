@@ -47,7 +47,7 @@ export const settingsAccountAction = async ({
     if (e instanceof Error && e.name === ErrorType.ResponseError) {
       const typesafeError = e as ResponseError;
       const data = typesafeError.getErrorData();
-      const response = await data.response.json<FetchRespSchema.Error>();
+      // const response = await data.response.json<FetchRespSchema.Error>();
       return json(
         {
           status: "error" as const,

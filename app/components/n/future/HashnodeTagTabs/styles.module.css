@@ -1,42 +1,47 @@
-.tab_list {
+.root {
   margin-bottom: -1.25rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
+.tab_list {
+  @apply flex gap-1 relative;
+}
+
 .tab_btn {
-  @apply text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 border-transparent flex items-center py-2 px-4 rounded-full font-medium text-sm;
+  @apply flex flex-col;
 }
 
-.tab_btn_inner {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  gap: 0.5rem;
+.tab_btn_container {
+  @apply text-slate-600 border-transparent flex items-center py-2 px-4 rounded-full hover:bg-slate-100 font-medium text-sm;
 }
 
-.tab_btn_inner > span:first-child {
-  display: none;
+:global(.dark) .tab_btn_container {
+  @apply text-slate-300 hover:bg-slate-900;
+}
+
+.tab_btn_active {
+  @apply text-blue-500 bg-blue-50 hover:bg-blue-50;
+}
+
+:global(.dark) .tab_btn_active {
+  @apply text-slate-100 bg-slate-900;
+}
+
+.tab_content {
+  @apply flex flex-row gap-2;
 }
 
 @media (min-width: 768px) {
-  .tab_list {
+  .root {
     margin-bottom: -2rem;
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
   }
-
-  .tab_btn_inner > span:first-child {
-    display: inline;
-  }
 }
 
 @media (min-width: 1024px) {
-  .tab_list {
+  .root {
     margin-bottom: 0px;
     padding-bottom: 1.25rem;
   }

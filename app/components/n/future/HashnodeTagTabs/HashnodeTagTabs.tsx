@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useLocation, useNavigate } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-
 import styles from "./styles.module.css";
 import { Icons } from "~/components/shared/Icons";
 import { cn } from "~/utils/util";
@@ -11,6 +10,19 @@ interface HashnodeTagTabsProps {
   children: React.ReactNode;
   slug: string;
 }
+
+const TABS = [
+  {
+    id: (tag: string) => PAGE_ENDPOINTS.N.TAG(tag),
+    icon: <Icons.V2.TagHot />,
+    text: "Hot",
+  },
+  {
+    id: (tag: string) => PAGE_ENDPOINTS.N.TAG_RECENT(tag),
+    icon: <Icons.V2.TagNew />,
+    text: "New",
+  },
+];
 
 export default function HashnodeTagTabs({
   children,
@@ -32,53 +44,49 @@ export default function HashnodeTagTabs({
       value={location.pathname}
       onValueChange={onNavigation}
     >
-      <div className={styles.tab_list}>
+      <div className={styles.root}>
         <Tabs.List
           aria-label="hashnode list tabs"
-          className="flex radix-orientation-horizontal:flex-row radix-orientation-vertical:flex-col gap-1"
+          className={cn(
+            styles.tab_list,
+            "radix-orientation-horizontal:flex-row radix-orientation-vertical:flex-col"
+          )}
         >
-          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG(slug)} asChild>
-            <button type="button" className="group flex flex-col">
-              <div
-                className={cn(
-                  "group-radix-state-active:text-blue-600 group-radix-state-active:bg-blue-50/80 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900",
-                  styles.tab_btn
-                )}
+          {TABS.map((tab) => {
+            return (
+              <Tabs.Trigger
+                value={tab.id(slug)}
+                key={`tab-item-${tab.id(slug)}`}
+                asChild
               >
-                <div className={styles.tab_btn_inner}>
-                  <span>
-                    <Icons.V2.TagNew />
-                  </span>
-                  <span>New</span>
-                </div>
-              </div>
-              <span className="inline-block h-0"></span>
-            </button>
-          </Tabs.Trigger>
-          <Tabs.Trigger value={PAGE_ENDPOINTS.N.TAG_HOT(slug)} asChild>
-            <button type="button" className="group flex flex-col">
-              <div
-                className={cn(
-                  "group-radix-state-active:text-blue-600 group-radix-state-active:bg-blue-50/80 group-radix-state-active:dark:text-slate-100 group-radix-state-active:dark:bg-slate-900",
-                  styles.tab_btn
-                )}
-              >
-                <div className={styles.tab_btn_inner}>
-                  <span>
-                    <Icons.V2.TagHot />
-                  </span>
-                  <span>Hot</span>
-                </div>
-              </div>
-              <span className="inline-block h-0"></span>
-            </button>
-          </Tabs.Trigger>
+                <button type="button" className={cn("group", styles.tab_btn)}>
+                  <div
+                    className={cn(
+                      styles.tab_btn_container,
+                      location.pathname === tab.id(slug)
+                        ? styles.tab_btn_active
+                        : undefined
+                    )}
+                  >
+                    <div className={styles.tab_content}>
+                      <span className="hidden md:inline">{tab.icon}</span>
+                      <span>{tab.text}</span>
+                    </div>
+                  </div>
+                  <span className="inline-block h-0"></span>
+                </button>
+              </Tabs.Trigger>
+            );
+          })}
         </Tabs.List>
       </div>
-      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG(slug)}>{children}</Tabs.Content>
-      <Tabs.Content value={PAGE_ENDPOINTS.N.TAG_HOT(slug)}>
-        {children}
-      </Tabs.Content>
+      {TABS.map((tab) => {
+        return (
+          <Tabs.Content key={`tab-content-${tab.id}`} value={tab.id(slug)}>
+            {children}
+          </Tabs.Content>
+        );
+      })}
     </Tabs.Root>
   );
 }
