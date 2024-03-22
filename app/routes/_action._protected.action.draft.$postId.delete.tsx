@@ -2,6 +2,9 @@ import { json, redirect } from "@remix-run/cloudflare";
 import { RESULT_CODE, STATUS_CODE } from "~/constants/constant";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
+/**
+ * @deprecated
+ */
 export const action = async ({
   context,
   request,
@@ -23,10 +26,19 @@ export const action = async ({
   return json(data, { status: data.statusCode });
 };
 
+/**
+ * @deprecated
+ */
 export type Action = typeof action;
 
+/**
+ * @deprecated
+ */
 export const loader = () => redirect("/", { status: 404 });
 
+/**
+ * @deprecated
+ */
 export const getPath = (id: string) => {
   return `/action/draft/${id}/delete`;
 };

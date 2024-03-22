@@ -3,6 +3,9 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { readHeaderCookie } from "~/server/utils/request.server";
 import { parseUrlParams } from "~/utils/util";
 
+/**
+ * @deprecated
+ */
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const params = parseUrlParams(request.url);
   const cookie = readHeaderCookie(request);
@@ -22,7 +25,13 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   });
 };
 
+/**
+ * @deprecated
+ */
 export type RoutesLoaderData = typeof loader;
 
+/**
+ * @deprecated
+ */
 export const getPath = (duration: number | string) =>
   `/loader/get-top-posts.json?duration=${duration}`;

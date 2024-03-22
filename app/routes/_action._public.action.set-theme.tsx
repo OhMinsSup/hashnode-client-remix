@@ -3,6 +3,9 @@ import { isTheme } from "~/context/useThemeContext";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { commit, setTheme } from "~/server/utils/theme.server";
 
+/**
+ * @deprecated
+ */
 export const action = async ({ request }: ActionFunctionArgs) => {
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
@@ -25,8 +28,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 };
 
+/**
+ * @deprecated
+ */
 export const loader = () => redirect("/", { status: 404 });
 
+/**
+ * @deprecated
+ */
 export const getPath = () => "/action/set-theme";
 
 export default function MarkRead() {

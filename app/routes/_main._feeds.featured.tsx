@@ -1,48 +1,54 @@
-import { json } from "@remix-run/cloudflare";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-
-// components
+import {
+  Await,
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
+} from "@remix-run/react";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
+import { feedsLoader } from "~/server/routes/feeds/feeds-loader.server";
+import { RoutesLoaderData } from "~/server/routes/feeds-layout/feeds-layout-loader.server";
+import { Suspense } from "react";
+import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
+import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";
+import { isEmpty } from "~/utils/assertion";
 
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const response = await context.api.post.getPostList(request);
-  return json(response);
-};
-
-export type Loader = typeof loader;
-
-export const meta: MetaFunction<Loader> = ({ data, matches }) => {
-  const title = "Featured posts on Hashnode";
-  const rootMeta =
-    // @ts-ignore
-    matches.filter((match) => match.id === "root")?.at(0)?.meta ?? [];
-  const rootMetas = rootMeta.filter(
-    // @ts-ignore
-    (meta: any) =>
-      meta.name !== "og:title" &&
-      meta.name !== "twitter:title" &&
-      !("title" in meta)
-  );
-  return [
-    ...rootMetas,
-    {
-      title,
-    },
-    {
-      name: "og:title",
-      content: title,
-    },
-    {
-      name: "twitter:title",
-      content: title,
-    },
-  ];
-};
+export const loader = feedsLoader;
 
 export default function Routes() {
-  return <HashnodeList />;
+  const data = useRouteLoaderData<RoutesLoaderData>("routes/_main._feeds");
+
+  return (
+    <HashnodeList
+      trendingTags={
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.getTags}>
+            {(data) => {
+              const result = data?.body?.result;
+              const items = result?.list ?? [];
+              if (isEmpty(items)) {
+                return null;
+              }
+              return <TrendingTagsBox data={result} />;
+            }}
+          </Await>
+        </Suspense>
+      }
+      recommendedUsers={
+        <Suspense fallback={<></>}>
+          <Await resolve={data?.getUsers}>
+            {(data) => {
+              const result = data?.body?.result;
+              const items = result?.list ?? [];
+              if (isEmpty(items)) {
+                return null;
+              }
+              return <RecommendedUsersBox data={result} />;
+            }}
+          </Await>
+        </Suspense>
+      }
+    />
+  );
 }
 
 export function ErrorBoundary() {

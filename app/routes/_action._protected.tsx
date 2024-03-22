@@ -3,6 +3,9 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
+/**
+ * @deprecated
+ */
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const isAuthenticated = await context.api.auth.isAuthenticated(request);
   if (!isAuthenticated) {
