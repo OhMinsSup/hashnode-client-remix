@@ -2,8 +2,12 @@ import { redirect, json } from "@remix-run/cloudflare";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { requireAuthCookie } from "~/.server/utils/auth.server";
-import { isTheme } from "~/context/useThemeContext";
-import { commit, setTheme } from "~/.server/utils/theme.server";
+import {
+  clearAuthHeaders,
+  combineHeaders,
+} from "~/.server/utils/request.server";
+import { parseUrlParams } from "~/utils/util";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 type SearchParams =
   | string
@@ -14,33 +18,22 @@ type SearchParams =
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
-
-  const requestText = await request.text();
-  const form = new URLSearchParams(requestText);
-  const theme = form.get("theme");
-  if (!isTheme(theme)) {
-    return json({
-      status: "error" as const,
-      result: {
-        success: false,
-      },
-      message: `theme value of ${theme} is not a valid theme.`,
+  const params = parseUrlParams(request.url);
+  const redirectUrl = params.redirectUrl as string | undefined;
+  if (redirectUrl) {
+    throw redirect(safeRedirect(redirectUrl), {
+      headers: combineHeaders(clearAuthHeaders()),
     });
   }
 
-  const session = await setTheme(request, theme);
   return json(
     {
-      status: "success" as const,
-      result: {
-        success: true,
-      },
-      message: null,
+      status: "success",
+      result: null,
+      message: "로그아웃 되었습니다.",
     },
     {
-      headers: {
-        "Set-Cookie": await commit(request, session),
-      },
+      headers: combineHeaders(clearAuthHeaders()),
     }
   );
 };
@@ -53,10 +46,10 @@ export const getPath = (searchParams?: SearchParams) => {
   if (searchParams) {
     const query = new URLSearchParams(searchParams).toString();
     if (query) {
-      return `/api/v1/set-theme?${query}`;
+      return `/api/v1/logout?${query}`;
     }
   }
-  return "/api/v1/set-theme";
+  return "/api/v1/logout";
 };
 
 export default function Routes() {

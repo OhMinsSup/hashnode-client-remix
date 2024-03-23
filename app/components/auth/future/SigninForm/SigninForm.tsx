@@ -8,8 +8,8 @@ import { Input } from "~/components/auth/future/Input";
 import { useUrlState } from "~/libs/hooks/useUrlState";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { Icons } from "~/components/shared/Icons";
-import { type RoutesActionData as SigninRoutesActionData } from "~/.server/routes/signin/signin-action.server";
-import { type RoutesActionData as SignupRoutesActionData } from "~/.server/routes/signup/signup-action.server";
+import { type RoutesActionData as SigninRoutesActionData } from "~/.server/routes/signin/signin-action";
+import { type RoutesActionData as SignupRoutesActionData } from "~/.server/routes/signup/signup-action";
 import { schema as $signinSchema } from "~/services/validate/signin-api.validate";
 import { schema as $signupSchema } from "~/services/validate/signup-api.validate";
 

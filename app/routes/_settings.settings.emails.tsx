@@ -1,7 +1,7 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { Email } from "~/components/setting/future/Email";
-import { settingsEmailMeta } from "~/.server/routes/settings-email/settings-email-meta";
-import { settingsEmailLayoutLoader } from "~/.server/routes/settings-email/settings-email-loader.server";
+import { settingsEmailLayoutLoader } from "~/.server/routes/settings-email/settings-email-loader";
+import { settingsEmailMeta } from "~/.client/settings-email/settings-email-meta";
 
 export const meta = settingsEmailMeta;
 

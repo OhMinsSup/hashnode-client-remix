@@ -7,7 +7,7 @@ import {
   clearAuthHeaders,
   combineHeaders,
 } from "~/.server/utils/request.server";
-import { getAuthFromRequest } from "~/.server/auth.server";
+import { getAuthFromRequest } from "~/.server/utils/auth.server";
 
 export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);

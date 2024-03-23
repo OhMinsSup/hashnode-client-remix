@@ -3,7 +3,7 @@ import {
   clearAuthHeaders,
   getParsedCookie,
   readHeaderCookie,
-} from "./utils/request.server";
+} from "./request.server";
 import { type AppLoadContext, redirect } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
 

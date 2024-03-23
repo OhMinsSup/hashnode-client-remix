@@ -1,7 +1,7 @@
 import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { SigninForm } from "~/components/auth/future/SigninForm";
-import { signinAction } from "~/.server/routes/signin/signin-action.server";
-import { signinmeta } from "~/.server/routes/signin/signin-meta";
+import { signinAction } from "~/.server/routes/signin/signin-action";
+import { signinmeta } from "~/.client/signin/signin-meta";
 
 export const action = signinAction;
 

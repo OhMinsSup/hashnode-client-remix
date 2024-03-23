@@ -1,6 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { isBrowser } from "~/libs/browser-utils";
+import { getPath } from "~/routes/api.v1.set-theme";
 import { isFunction } from "~/utils/assertion";
 
 enum Theme {
@@ -76,7 +77,7 @@ function ThemeProvider({
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },
-          { action: "action/set-theme", method: "POST" }
+          { action: getPath(), method: "POST" }
         );
       }
       setThemeState(newTheme);

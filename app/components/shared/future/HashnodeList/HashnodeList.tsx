@@ -5,7 +5,7 @@ import { ReachedEnd } from "~/components/shared/future/ReachedEnd";
 import { useLoaderData } from "@remix-run/react";
 import { getTargetElement } from "~/libs/browser-utils";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import type { RoutesLoaderData } from "~/.server/routes/feeds/feeds-loader.server";
+import type { RoutesLoaderData } from "~/.server/routes/feeds/feeds-loader";
 import {
   usePostListInfiniteQuery,
   type SearchParams,

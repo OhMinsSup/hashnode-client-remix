@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { requireAuthCookie } from "~/.server/auth.server";
+import { requireAuthCookie } from "~/.server/utils/auth.server";
 
 export const settingsLayoutLoader = async ({
   context,

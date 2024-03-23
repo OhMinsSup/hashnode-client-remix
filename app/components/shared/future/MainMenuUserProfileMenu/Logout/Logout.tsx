@@ -1,7 +1,8 @@
 import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { useFetcher } from "@remix-run/react";
-import { REMIX_ACTIONS_KEY } from "~/constants/constant";
+import { getPath } from "~/routes/api.v1.auth.logout";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 export default function Logout() {
   const fetcher = useFetcher();
@@ -11,7 +12,9 @@ export default function Logout() {
       e.preventDefault();
       fetcher.submit(null, {
         method: "POST",
-        action: REMIX_ACTIONS_KEY.LOGOUT,
+        action: getPath({
+          redirectUrl: PAGE_ENDPOINTS.ROOT,
+        }),
       });
     },
     [fetcher]

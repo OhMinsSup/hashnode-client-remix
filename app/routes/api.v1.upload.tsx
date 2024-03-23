@@ -6,7 +6,7 @@ import {
 } from "@remix-run/cloudflare";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
-import { requireAuthCookie } from "~/.server/auth.server";
+import { requireAuthCookie } from "~/.server/utils/auth.server";
 import { parseWithZod } from "@conform-to/zod";
 import { schema } from "~/services/validate/cf-file.validate";
 import { readHeaderCookie } from "~/.server/utils/request.server";

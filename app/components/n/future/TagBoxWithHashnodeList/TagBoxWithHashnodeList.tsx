@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { Link, useLoaderData, Form, useActionData } from "@remix-run/react";
-import { type RoutesLoaderData } from "~/.server/routes/n-layout/n-layout-loader.server";
+import { type RoutesLoaderData } from "~/.server/routes/n-layout/n-layout-loader";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 import { Icons } from "~/components/shared/Icons";
-import type { RoutesActionData } from "~/.server/routes/n-layout/n-layout-action.server";
+import type { RoutesActionData } from "~/.server/routes/n-layout/n-layout-action";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { schema } from "~/services/validate/tag-follow-api.validate";

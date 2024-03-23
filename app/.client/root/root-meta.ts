@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import type { RoutesLoaderData } from "~/.server/routes/root/root-loader.server";
+import type { RoutesLoaderData } from "~/.server/routes/root/root-loader";
 import { ASSET_URL } from "~/constants/constant";
 
 export const rootMeta: MetaFunction<RoutesLoaderData> = ({

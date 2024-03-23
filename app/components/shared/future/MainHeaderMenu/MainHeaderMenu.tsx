@@ -14,8 +14,8 @@ import { Theme, useTheme } from "~/context/useThemeContext";
 import { useOptionalSession } from "~/services/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
-import type { RoutesLoader as MainRoutesLoader } from "~/routes/_main";
 import { SearchDialog } from "../SearchhDialog";
+import { RoutesLoaderData } from "~/.server/routes/widget/widget-loader";
 
 export default function MainHeaderMenu() {
   return (
@@ -65,7 +65,7 @@ MainHeaderMenu.SearchButton = function Item() {
 
 MainHeaderMenu.Notification = function Item() {
   const session = useOptionalSession();
-  const data = useRouteLoaderData<MainRoutesLoader>("routes/_main");
+  const data = useRouteLoaderData<RoutesLoaderData>("routes/_main");
 
   if (!session) return null;
 
@@ -73,13 +73,15 @@ MainHeaderMenu.Notification = function Item() {
     <Suspense fallback={<></>}>
       <Await resolve={data?.notificationCount}>
         {(data) => {
-          const count = data ?? 0;
+          const count = data?.body ?? 0;
           return (
             <div className={styles.btn_wrapper}>
               <button type="button" className={styles.meus_btn_notification}>
                 <Icons.Notification />
                 {count > 0 ? (
-                  <span className={styles.menu_notification_count}>{data}</span>
+                  <span className={styles.menu_notification_count}>
+                    {count}
+                  </span>
                 ) : null}
               </button>
             </div>

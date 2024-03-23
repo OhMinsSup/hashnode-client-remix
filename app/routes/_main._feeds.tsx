@@ -1,7 +1,7 @@
 import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
 import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import { feedsLayoutLoader } from "~/.server/routes/feeds-layout/feeds-layout-loader.server";
+import { feedsLayoutLoader } from "~/.server/routes/feeds-layout/feeds-layout-loader";
 
 export const loader = feedsLayoutLoader;
 
