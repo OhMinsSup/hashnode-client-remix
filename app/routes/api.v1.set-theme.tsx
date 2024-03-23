@@ -1,9 +1,9 @@
 import { redirect, json } from "@remix-run/cloudflare";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { requireAuthCookie } from "~/server/auth.server";
+import { requireAuthCookie } from "~/.server/auth.server";
 import { isTheme } from "~/context/useThemeContext";
-import { commit, setTheme } from "~/server/utils/theme.server";
+import { commit, setTheme } from "~/.server/utils/theme.server";
 
 type SearchParams =
   | string

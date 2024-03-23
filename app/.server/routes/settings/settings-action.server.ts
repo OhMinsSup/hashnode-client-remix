@@ -5,7 +5,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import {
   readHeaderCookie,
   validateMethods,
-} from "~/server/utils/request.server";
+} from "~/.server/utils/request.server";
 import { schema } from "~/services/validate/user-update-api.validate";
 import { ErrorType, ResponseError } from "~/services/error";
 

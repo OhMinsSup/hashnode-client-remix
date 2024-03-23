@@ -1,7 +1,7 @@
 import { redirect, type LoaderFunctionArgs, json } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { readHeaderCookie } from "~/server/utils/request.server";
+import { readHeaderCookie } from "~/.server/utils/request.server";
 
 export const nLayoutLoader = async ({
   context,

@@ -5,8 +5,8 @@ import {
   json,
   useRouteError,
 } from "@remix-run/react";
-import { settingsAccountMeta } from "~/server/routes/settings-account/settings-account-meta";
-import { settingsAccountAction } from "~/server/routes/settings-account/settings-account-action";
+import { settingsAccountMeta } from "~/.server/routes/settings-account/settings-account-meta";
+import { settingsAccountAction } from "~/.server/routes/settings-account/settings-account-action";
 
 export const meta = settingsAccountMeta;
 

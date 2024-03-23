@@ -5,8 +5,8 @@ import {
   useRouteLoaderData,
 } from "@remix-run/react";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
-import { feedsLoader } from "~/server/routes/feeds/feeds-loader.server";
-import { RoutesLoaderData } from "~/server/routes/feeds-layout/feeds-layout-loader.server";
+import { feedsLoader } from "~/.server/routes/feeds/feeds-loader.server";
+import { RoutesLoaderData } from "~/.server/routes/feeds-layout/feeds-layout-loader.server";
 import { Suspense } from "react";
 import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
 import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";

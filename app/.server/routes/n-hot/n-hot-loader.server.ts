@@ -1,5 +1,5 @@
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { readHeaderCookie } from "~/server/utils/request.server";
+import { readHeaderCookie } from "~/.server/utils/request.server";
 import { parseUrlParams } from "~/utils/util";
 import merge from "lodash-es/merge";
 import { safeRedirect } from "remix-utils/safe-redirect";

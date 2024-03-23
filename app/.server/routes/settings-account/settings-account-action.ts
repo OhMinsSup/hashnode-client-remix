@@ -4,7 +4,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import {
   readHeaderCookie,
   validateMethods,
-} from "~/server/utils/request.server";
+} from "~/.server/utils/request.server";
 import { ErrorType, ResponseError } from "~/services/error";
 
 export const settingsAccountAction = async ({

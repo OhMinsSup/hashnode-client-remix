@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 import { Form, useLoaderData } from "@remix-run/react";
-import type { RoutesLoaderData } from "~/server/routes/settings-email/settings-email-loader.server";
+import type { RoutesLoaderData } from "~/.server/routes/settings-email/settings-email-loader.server";
 
 interface CheckboxProps {
   label: string;

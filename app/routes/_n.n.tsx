@@ -4,7 +4,7 @@ import { MainFooter } from "~/components/shared/future/MainFooter";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 import { TagsLayout } from "~/components/n/future/TagsLayout";
 import { MainHeader } from "~/components/shared/future/MainHeader";
-import { widgetLoader } from "~/server/routes/widget/widget-loader.server";
+import { widgetLoader } from "~/.server/routes/widget/widget-loader.server";
 
 export const loader = widgetLoader;
 

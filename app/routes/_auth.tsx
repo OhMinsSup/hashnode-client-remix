@@ -7,7 +7,7 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { redirectIfLoggedInLoader } from "~/server/auth.server";
+import { redirectIfLoggedInLoader } from "~/.server/auth.server";
 import { mergeMeta } from "~/utils/util";
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {

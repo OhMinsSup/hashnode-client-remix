@@ -2,7 +2,7 @@ import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { SettingLayout } from "~/components/setting/future/SettingLayout";
 import { AsideMenus } from "~/components/setting/future/AsideMenus";
 import { MainHeader } from "~/components/shared/future/MainHeader";
-import { settingsLayoutLoader } from "~/server/routes/settings-layout/settings-layout-loader.server";
+import { settingsLayoutLoader } from "~/.server/routes/settings-layout/settings-layout-loader.server";
 
 export const loader = settingsLayoutLoader;
 

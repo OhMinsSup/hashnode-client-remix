@@ -1,5 +1,5 @@
 import { defer, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { readHeaderCookie } from "~/server/utils/request.server";
+import { readHeaderCookie } from "~/.server/utils/request.server";
 
 export const widgetLoader = async ({
   context,

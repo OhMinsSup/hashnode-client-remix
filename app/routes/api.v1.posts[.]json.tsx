@@ -1,6 +1,6 @@
 import { json } from "@remix-run/cloudflare";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { readHeaderCookie } from "~/server/utils/request.server";
+import { readHeaderCookie } from "~/.server/utils/request.server";
 import { parseUrlParams } from "~/utils/util";
 import { type QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
 

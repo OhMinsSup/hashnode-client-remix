@@ -4,8 +4,8 @@ import {
   useRouteLoaderData,
 } from "@remix-run/react";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
-import type { RoutesLoaderData } from "~/server/routes/n-layout/n-layout-loader.server";
-import { nRecentLoader } from "~/server/routes/n-recent/n-recent-loader.server";
+import type { RoutesLoaderData } from "~/.server/routes/n-layout/n-layout-loader.server";
+import { nRecentLoader } from "~/.server/routes/n-recent/n-recent-loader.server";
 
 export const loader = nRecentLoader;
 

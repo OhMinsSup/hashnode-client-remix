@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/cloudflare";
 import { isTheme } from "~/context/useThemeContext";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
-import { commit, setTheme } from "~/server/utils/theme.server";
+import { commit, setTheme } from "~/.server/utils/theme.server";
 
 /**
  * @deprecated

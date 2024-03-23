@@ -24,8 +24,8 @@ import { useEffect, useRef, useState } from "react";
 import {
   rootLoader,
   type RoutesLoaderData,
-} from "~/server/routes/root/root-loader.server";
-import { rootMeta } from "~/server/routes/root/root-meta";
+} from "~/.server/routes/root/root-loader.server";
+import { rootMeta } from "~/.server/routes/root/root-meta";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const loader = rootLoader;

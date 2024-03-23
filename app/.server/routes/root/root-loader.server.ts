@@ -1,13 +1,13 @@
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { initializeTheme, getTheme } from "~/server/utils/theme.server";
-import { initializeToast, getToast } from "~/server/utils/toast.server";
+import { initializeTheme, getTheme } from "~/.server/utils/theme.server";
+import { initializeToast, getToast } from "~/.server/utils/toast.server";
 import { getDomainUrl } from "~/utils/util";
 import {
   clearAuthHeaders,
   combineHeaders,
-} from "~/server/utils/request.server";
-import { getAuthFromRequest } from "~/server/auth.server";
+} from "~/.server/utils/request.server";
+import { getAuthFromRequest } from "~/.server/auth.server";
 
 export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);

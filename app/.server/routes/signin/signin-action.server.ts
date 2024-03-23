@@ -5,7 +5,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 import {
   getTokenFromCookie,
   validateMethods,
-} from "~/server/utils/request.server";
+} from "~/.server/utils/request.server";
 import { schema as $signinSchema } from "~/services/validate/signin-api.validate";
 import { ErrorType, ResponseError } from "~/services/error";
 

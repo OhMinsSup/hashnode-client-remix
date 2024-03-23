@@ -1,6 +1,6 @@
 // @ts-expect-error - no types for this package
 import mimeFromBuffer from "mime-tree";
-import { MemoryCache } from "~/server/utils/memory-cache.server";
+import { MemoryCache } from "~/.server/utils/memory-cache.server";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 interface SearchParams {
