@@ -184,14 +184,6 @@ export const NAVIGATION_ITEMS = [
     position: ["left", "top"] as string[],
   },
   {
-    id: 5,
-    title: "My Items",
-    href: PAGE_ENDPOINTS.USERS.ROOT,
-    icon: Icons.UserProfile,
-    applyActiveLinks: [] as string[],
-    position: ["left", "top"] as string[],
-  },
-  {
     id: 6,
     title: "Search",
     href: PAGE_ENDPOINTS.ROOT,

@@ -22,11 +22,9 @@ export const nHotLoader = async ({
     tag,
     type: "featured",
   };
-  const nextValues = parseUrlParams(request.url);
-  console.log("nextValues", nextValues);
-  const input = merge(defaultValues, nextValues);
 
-  console.log("input", input);
+  const nextValues = parseUrlParams(request.url);
+  const input = merge(defaultValues, nextValues);
 
   const commonHeaders = {
     headers: {

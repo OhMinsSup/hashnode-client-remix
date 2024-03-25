@@ -1,8 +1,7 @@
 import styles from "./styles.module.css";
-import { NAVIGATION_ITEMS, PAGE_ENDPOINTS } from "~/constants/constant";
+import { NAVIGATION_ITEMS } from "~/constants/constant";
 import { NavLink, useLocation } from "@remix-run/react";
 import { cn } from "~/utils/util";
-import { useOptionalSession } from "~/services/hooks/useSession";
 
 export default function MainHeaderNavigation() {
   return (
@@ -33,10 +32,6 @@ MainHeaderNavigation.Item = function MainHeaderNavigationItem(
   const { to, text, applyActiveLinks, ...resetProps } = props;
 
   const location = useLocation();
-  const session = useOptionalSession();
-  if (!session && to === PAGE_ENDPOINTS.USERS.ROOT) {
-    return null;
-  }
 
   return (
     <NavLink
