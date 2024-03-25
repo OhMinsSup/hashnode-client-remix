@@ -18,62 +18,6 @@ export const rootMeta: MetaFunction<RoutesLoaderData> = ({
       title: Seo.title,
     },
     {
-      charSet: "utf-8",
-    },
-    {
-      tagName: "meta",
-      viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
-    },
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url.pathname,
-    },
-    {
-      tagName: "link",
-      rel: "manifest",
-      href: "/manifest.json",
-    },
-    {
-      tagName: "link",
-      rel: "search",
-      href: "/opensearch.xml",
-      type: "application/opensearchdescription+xml",
-      title: "Hashnode",
-    },
-    {
-      tagName: "link",
-      rel: "preload",
-      href: "/fonts/SuisseIntl-Book-WebXL.woff2",
-      as: "font",
-      type: "font/woff2",
-      crossOrigin: "anonymous",
-    },
-    {
-      tagName: "link",
-      rel: "preload",
-      href: "/fonts/SuisseIntl-Medium-WebXL.woff2",
-      as: "font",
-      type: "font/woff2",
-      crossOrigin: "anonymous",
-    },
-    {
-      tagName: "link",
-      rel: "preload",
-      href: "/fonts/SuisseIntl-SemiBold-WebXL.woff2",
-      as: "font",
-      type: "font/woff2",
-      crossOrigin: "anonymous",
-    },
-    {
-      tagName: "link",
-      rel: "preload",
-      href: "/fonts/SuisseIntl-Bold-WebXL.woff2",
-      as: "font",
-      type: "font/woff2",
-      crossOrigin: "anonymous",
-    },
-    {
       name: "description",
       content: Seo.description,
     },
@@ -116,42 +60,6 @@ export const rootMeta: MetaFunction<RoutesLoaderData> = ({
     {
       name: "twitter:image",
       content: Seo.image,
-    },
-    {
-      tagName: "link",
-      rel: "apple-touch-icon",
-      sizes: "180x180",
-      href: "/images/logo_180x180.png",
-    },
-    {
-      tagName: "link",
-      rel: "icon",
-      type: "image/png",
-      sizes: "32x32",
-      href: "/images/logo_32x32.png",
-    },
-    {
-      tagName: "link",
-      rel: "icon",
-      type: "image/png",
-      sizes: "16x16",
-      href: "/images/logo_16x16.png",
-    },
-    {
-      tagName: "link",
-      rel: "mask-icon",
-      href: "/images/safari-pinned-tab-new.svg",
-      color: "#2962ff",
-    },
-    {
-      "script:ld+json": {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        url: url.href,
-        name: Seo.title,
-        description: Seo.description,
-        image: Seo.image,
-      },
     },
   ];
 };

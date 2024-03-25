@@ -20,12 +20,16 @@ import { InputPassword } from "~/components/ui/input-password";
 import {
   FormFieldValues,
   resolver,
-} from "~/services/validate/signin-api.validate";
+} from "~/services/validate/signup-api.validate";
 import { type RoutesActionData } from "~/.server/routes/signin/signin.action";
 import { createFormData } from "~/utils/utils";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
-export default function SigninForm() {
+interface SignupFormProps {
+  email?: string;
+}
+
+export default function SignupForm({ email }: SignupFormProps) {
   const navigation = useNavigation();
   const submit = useSubmit();
   const actionData = useActionData<RoutesActionData>();
@@ -35,8 +39,11 @@ export default function SigninForm() {
   const form = useForm<FormFieldValues>({
     resolver,
     defaultValues: {
-      email: "",
+      username: "",
+      email,
       password: "",
+      nickname: "",
+      confirmPassword: "",
     },
     reValidateMode: "onBlur",
     errors: actionData?.errors as FieldErrors<FormFieldValues> | undefined,
@@ -55,6 +62,24 @@ export default function SigninForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      autoComplete="username"
+                      aria-label="Username"
+                      placeholder="Enter your username"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -81,13 +106,6 @@ export default function SigninForm() {
                 <FormItem className="space-y-1">
                   <div className="flex items-center justify-between">
                     <FormLabel>Password</FormLabel>
-                    <Link
-                      to="/forgot-password"
-                      aria-disabled={isSubmittingForm}
-                      className="text-sm font-medium text-muted-foreground hover:opacity-75"
-                    >
-                      Forgot password?
-                    </Link>
                   </div>
                   <FormControl>
                     <InputPassword
@@ -101,11 +119,35 @@ export default function SigninForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-2" disabled={isSubmittingForm}>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Confirm Password</FormLabel>
+                  </div>
+                  <FormControl>
+                    <InputPassword
+                      aria-label="Confirm Password"
+                      autoComplete="current-password"
+                      placeholder="********"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="mt-2 space-x-2"
+              disabled={isSubmittingForm}
+            >
               {isSubmittingForm ? (
                 <Icons.spinner className="animate-spin" />
               ) : null}
-              Login
+              <span>Sign up</span>
             </Button>
 
             <div className="relative my-2">
@@ -142,14 +184,14 @@ export default function SigninForm() {
 
             <div>
               <p className="text-sm text-muted-foreground">
-                {`Don't have an account?`}{" "}
+                {`Already have an account?`}{" "}
                 <Link
-                  to={PAGE_ENDPOINTS.AUTH.SIGNUP}
+                  to={PAGE_ENDPOINTS.AUTH.SIGNIN}
                   className="text-primary"
                   aria-disabled={isSubmittingForm}
                   unstable_viewTransition
                 >
-                  Sign up
+                  Sign in
                 </Link>
               </p>
             </div>

@@ -1,14 +1,19 @@
 import omit from "lodash-es/omit";
 import { redirect, type ActionFunctionArgs } from "@remix-run/cloudflare";
-import { parseWithZod } from "@conform-to/zod";
 import { safeRedirect } from "remix-utils/safe-redirect";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import {
   getTokenFromCookie,
   validateMethods,
 } from "~/.server/utils/request.server";
-import { schema as $signupSchema } from "~/services/validate/signup-api.validate";
+import {
+  resolver,
+  FormFieldValues,
+} from "~/services/validate/signup-api.validate";
 import { ErrorType, ResponseError } from "~/services/error";
+import { getValidatedFormData } from "~/utils/utils";
+import { json } from "@remix-run/cloudflare";
+import { FieldErrors } from "react-hook-form";
 
 export const signupAction = async ({
   request,
@@ -17,18 +22,23 @@ export const signupAction = async ({
   // 유효성 검사
   validateMethods(request, ["POST"], PAGE_ENDPOINTS.ROOT);
 
-  const formData = await request.formData();
+  const { errors, data } = await getValidatedFormData<FormFieldValues>(
+    request,
+    resolver
+  );
 
-  const submission = parseWithZod(formData, { schema: $signupSchema });
-
-  // Report the submission to client if it is not successful
-  if (submission.status !== "success") {
-    return submission.reply();
+  if (errors) {
+    return json({
+      status: "error" as const,
+      result: null,
+      errors,
+      message: null,
+    });
   }
 
   try {
     const response = await context.api.signupHandler(
-      omit(submission.value, ["confirmPassword"]),
+      omit(data, ["confirmPassword"]),
       {
         headers: {
           "Content-Type": "application/json",
@@ -39,8 +49,21 @@ export const signupAction = async ({
     const cookie = response.headers?.["set-cookie"];
     const token = getTokenFromCookie(cookie);
     if (!token) {
-      return submission.reply({
-        formErrors: ["회원가입에 실패했습니다. 다시 시도해주세요."],
+      return json({
+        status: "error" as const,
+        result: null,
+        errors: {
+          username: {
+            message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+          },
+          email: {
+            message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+          },
+          password: {
+            message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+          },
+        } as FieldErrors<FormFieldValues>,
+        message: null,
       });
     }
 
@@ -54,14 +77,32 @@ export const signupAction = async ({
       const typesafeError = e as ResponseError;
       const data = typesafeError.getErrorData();
       const response = await data.response.json<FetchRespSchema.Error>();
-      return submission.reply({
-        fieldErrors: {
-          [response.error]: [response.message],
-        },
+      return json({
+        status: "error" as const,
+        result: null,
+        errors: {
+          [response.error]: {
+            message: response.message,
+          },
+        } as FieldErrors<FormFieldValues>,
+        message: null,
       });
     }
-    return submission.reply({
-      formErrors: ["회원가입에 실패했습니다. 다시 시도해주세요."],
+    return json({
+      status: "error" as const,
+      result: null,
+      errors: {
+        username: {
+          message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+        },
+        email: {
+          message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+        },
+        password: {
+          message: "회원가입에 실패했습니다. 다시 시도해주세요.",
+        },
+      } as FieldErrors<FormFieldValues>,
+      message: null,
     });
   }
 };

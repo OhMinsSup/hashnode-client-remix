@@ -3,12 +3,12 @@ import {
   isRouteErrorResponse,
   useLoaderData,
 } from "@remix-run/react";
-import { SigninForm } from "~/components/auth/future/SigninForm";
 import { signupAction } from "~/.server/routes/signup/signup.action";
 import {
   signupLoader,
   type RoutesLoaderData,
 } from "~/.server/routes/signup/signup.loader";
+import { SignupForm } from "~/components/auth/future/SignupForm";
 import { signupMeta } from "~/services/seo/signup/signup.meta";
 
 export const loader = signupLoader;
@@ -19,7 +19,7 @@ export const meta = signupMeta;
 
 export default function Routes() {
   const { email } = useLoaderData<RoutesLoaderData>();
-  return <SigninForm.Register email={email} />;
+  return <SignupForm email={email} />;
 }
 
 export function ErrorBoundary() {

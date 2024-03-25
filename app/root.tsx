@@ -52,15 +52,14 @@ function ShowToast({ toast }: { toast: Toast }) {
   return null;
 }
 
-function Document({
-  children,
-  theme,
-  env,
-}: {
+interface DocumentProps {
   children: React.ReactNode;
   theme?: Theme | null;
+  origin?: string;
   env?: Record<string, string>;
-}) {
+}
+
+function Document({ children, theme, origin, env }: DocumentProps) {
   return (
     <html
       id="current-style"
@@ -70,6 +69,64 @@ function Document({
       className={cn(theme)}
     >
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="canonical" href={origin} />
+        <link
+          rel="search"
+          href="/opensearch.xml"
+          type="application/opensearchdescription+xml"
+          title="Hashnode"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/logo_180x180.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/logo_32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/logo_16x16.png"
+        />
+        <link
+          rel="mask-icon"
+          href="/images/safari-pinned-tab-new.svg"
+          color="#2962ff"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SuisseIntl-Book-WebXL.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SuisseIntl-Medium-WebXL.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SuisseIntl-SemiBold-WebXL.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SuisseIntl-Bold-WebXL.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <Meta />
         <Links />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
@@ -95,7 +152,7 @@ function App() {
 
   return (
     <ClientQueryProvider>
-      <Document theme={theme} env={data.env}>
+      <Document theme={theme} env={data.env} origin={data.origin}>
         <Outlet />
         {data.toast ? <ShowToast toast={data.toast} /> : null}
       </Document>
