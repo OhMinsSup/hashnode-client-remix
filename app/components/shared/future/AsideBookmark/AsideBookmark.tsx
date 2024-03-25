@@ -2,7 +2,7 @@ import { Await, useLoaderData } from "@remix-run/react";
 import styles from "./styles.module.css";
 import { Link } from "lucide-react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import type { RoutesLoaderData } from "~/.server/routes/widget/widget-loader";
+import type { RoutesLoaderData } from "~/.server/routes/widget/widget.loader";
 import { Suspense } from "react";
 import { isEmpty } from "~/utils/assertion";
 import { AsideLikeItem } from "~/components/shared/future/AsideLikeItem";

@@ -9,9 +9,9 @@ import { HashnodeTagTabs } from "~/components/n/future/HashnodeTagTabs";
 import {
   nLayoutLoader,
   type RoutesLoaderData,
-} from "~/.server/routes/n-layout/n-layout-loader";
-import { nLayoutAction } from "~/.server/routes/n-layout/n-layout-action";
-import { nLayoutMeta } from "~/.client/n-layout/n-layout-meta";
+} from "~/.server/routes/n-layout/n-layout.loader";
+import { nLayoutAction } from "~/.server/routes/n-layout/n-layout.action";
+import { nLayoutMeta } from "~/.client/n-layout/n-layout.meta";
 
 export const loader = nLayoutLoader;
 

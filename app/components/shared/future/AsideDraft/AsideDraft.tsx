@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import styles from "./styles.module.css";
 import { Await, Link, useLoaderData } from "@remix-run/react";
-import type { RoutesLoaderData } from "~/.server/routes/widget/widget-loader";
+import type { RoutesLoaderData } from "~/.server/routes/widget/widget.loader";
 import { AsideDraftItem } from "../AsideDraftItem";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { isEmpty } from "~/utils/assertion";

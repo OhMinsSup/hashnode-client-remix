@@ -3,7 +3,7 @@ import { MainLayout } from "~/components/shared/future/MainLayout";
 import { MainFooter } from "~/components/shared/future/MainFooter";
 import { HashnodeAside } from "~/components/shared/future/HashnodeAside";
 import { MainHeader } from "~/components/shared/future/MainHeader";
-import { widgetLoader } from "~/.server/routes/widget/widget-loader";
+import { widgetLoader } from "~/.server/routes/widget/widget.loader";
 
 export const loader = widgetLoader;
 

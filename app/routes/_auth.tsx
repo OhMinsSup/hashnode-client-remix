@@ -1,8 +1,8 @@
 // remix
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { AuthLayout } from "~/components/auth/future/AuthLayout";
-import { authLayoutLoader } from "~/.server/routes/auth-layout/auth-layout-loader";
-import { authLayoutMeta } from "~/.client/auth-layout/auth-layout-meta";
+import { authLayoutLoader } from "~/.server/routes/auth-layout/auth-layout.loader";
+import { authLayoutMeta } from "~/.client/auth-layout/auth-layout.meta";
 
 export const loader = authLayoutLoader;
 

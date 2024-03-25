@@ -4,8 +4,8 @@ import {
   useRouteLoaderData,
 } from "@remix-run/react";
 import { HashnodeList } from "~/components/shared/future/HashnodeList";
-import { nHotLoader } from "~/.server/routes/n-hot/n-hot-loader";
-import type { RoutesLoaderData } from "~/.server/routes/n-layout/n-layout-loader";
+import { nHotLoader } from "~/.server/routes/n-hot/n-hot.loader";
+import type { RoutesLoaderData } from "~/.server/routes/n-layout/n-layout.loader";
 
 export const loader = nHotLoader;
 

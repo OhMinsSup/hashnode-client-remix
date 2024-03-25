@@ -1,8 +1,8 @@
 import { SettingUserArea } from "~/components/setting/future/SettingUserArea";
 import SettingUserFormProvider from "~/components/setting/context/form";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { settingsAction } from "~/.server/routes/settings/settings-action";
-import { settingsMeta } from "~/.client/settings/settings-meta";
+import { settingsAction } from "~/.server/routes/settings/settings.action";
+import { settingsMeta } from "~/.client/settings/settings.meta";
 
 export const meta = settingsMeta;
 

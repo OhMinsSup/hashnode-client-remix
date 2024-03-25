@@ -15,7 +15,7 @@ import { useOptionalSession } from "~/services/hooks/useSession";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 
 import { SearchDialog } from "../SearchhDialog";
-import { RoutesLoaderData } from "~/.server/routes/widget/widget-loader";
+import { RoutesLoaderData } from "~/.server/routes/widget/widget.loader";
 
 export default function MainHeaderMenu() {
   return (

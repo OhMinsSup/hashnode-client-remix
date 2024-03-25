@@ -1,6 +1,6 @@
 import { MetaFunction } from "@remix-run/cloudflare";
 import { mergeMeta } from "~/utils/util";
-import type { RoutesLoaderData } from "~/.server/routes/n-layout/n-layout-loader";
+import type { RoutesLoaderData } from "~/.server/routes/n-layout/n-layout.loader";
 
 export const nLayoutMeta: MetaFunction<RoutesLoaderData> = mergeMeta(
   ({ data }) => {
