@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { WriteAddCover } from "../WriteAddCover";
 import { useWriteContext } from "~/context/useWriteContext";
 import { useWriteFormContext } from "../../context/form";

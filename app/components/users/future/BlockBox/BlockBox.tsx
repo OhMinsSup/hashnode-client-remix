@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { isNull, isUndefined } from "~/utils/assertion";
 
 interface BlockBoxProps {

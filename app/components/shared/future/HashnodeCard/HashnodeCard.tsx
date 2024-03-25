@@ -5,7 +5,7 @@ import take from "lodash-es/take";
 import { Link } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { feedCardDateFormatter } from "~/utils/date";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { Icons } from "~/components/shared/Icons";
 import { LazyImage } from "~/components/shared/future/LazyImage";
 import { ClientOnly } from "~/components/shared/future/ClientOnly";

@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { Logo } from "~/components/shared/future/Logo";
 import { MainHeaderNavigation } from "~/components/shared/future/MainHeaderNavigation";
 import { MainHeaderMenu } from "~/components/shared/future/MainHeaderMenu";
-import { optimizeAnimation } from "~/utils/util";
+import { optimizeAnimation } from "~/utils/utils";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { getTargetElement, getWindowScrollTop } from "~/libs/browser-utils";
 import { useMemoizedFn } from "~/libs/hooks/useMemoizedFn";

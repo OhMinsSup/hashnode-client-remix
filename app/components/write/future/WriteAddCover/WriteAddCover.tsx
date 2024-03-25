@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import uniqBy from "lodash-es/uniqBy";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import * as Popover from "@radix-ui/react-popover";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";

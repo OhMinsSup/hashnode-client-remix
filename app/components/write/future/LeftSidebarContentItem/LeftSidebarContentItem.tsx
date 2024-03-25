@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState, useTransition } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { useNavigate, useParams, useSubmit } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import useHover from "~/libs/hooks/useHover";

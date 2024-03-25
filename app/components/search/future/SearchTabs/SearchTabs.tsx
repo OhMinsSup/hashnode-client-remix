@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import styles from "./styles.module.css";
 import { useLocation, useNavigate } from "@remix-run/react";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface SearchTabsProps {
   children: React.ReactNode;

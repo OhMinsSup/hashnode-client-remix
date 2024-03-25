@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { Icons } from "~/components/shared/Icons";
 import { useLocation, useNavigate } from "@remix-run/react";
 

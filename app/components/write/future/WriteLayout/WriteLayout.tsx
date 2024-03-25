@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "./styles.module.css";
 import { useWriteContext } from "~/context/useWriteContext";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
 import { useIsHydrating } from "~/libs/hooks/useIsHydrating";
 

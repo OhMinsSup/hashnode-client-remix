@@ -14,7 +14,7 @@ import {
 import { Dispatch, FC, SetStateAction } from "react";
 
 import { BubbleMenuItem } from ".";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface NodeSelectorProps {
   editor: Editor;

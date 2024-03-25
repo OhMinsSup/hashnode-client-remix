@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { Icons } from "~/components/shared/Icons";
 import styles from "./styles.module.css";
 import { NavLink } from "@remix-run/react";

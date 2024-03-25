@@ -10,7 +10,7 @@ import { useSettingTagsContext } from "~/components/setting/context/setting-tag"
 import { FORM_ID } from "~/components/setting/context/form";
 import { Icons } from "~/components/shared/Icons";
 import { useTagListQuery } from "~/routes/api.v1.tags[.]json";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { useFormMetadata } from "@conform-to/react";
 import { FormFieldValues } from "~/services/validate/user-update-api.validate";
 

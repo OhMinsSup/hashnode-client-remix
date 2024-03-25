@@ -1,7 +1,7 @@
 import React from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface LeftSidebarContentAreaProps {
   title: string;

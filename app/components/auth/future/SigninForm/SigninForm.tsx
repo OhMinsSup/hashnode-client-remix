@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import styles from "./styles.module.css";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { Form, useNavigate, useActionData } from "@remix-run/react";
 import { Input } from "~/components/auth/future/Input";
 import { useUrlState } from "~/libs/hooks/useUrlState";

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "@remix-run/react";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import styles from "./styles.module.css";
 import { Icons } from "~/components/shared/Icons";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface HashnodeTagTabsProps {
   children: React.ReactNode;

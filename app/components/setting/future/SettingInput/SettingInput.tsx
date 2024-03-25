@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import classNames from "classnames";
 import { getTargetElement } from "~/libs/browser-utils";
 import { Icons } from "~/components/shared/Icons";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 type InputProps = React.HTMLProps<HTMLInputElement>;
 

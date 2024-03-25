@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
-import { cn, optimizeAnimation } from "~/utils/util";
+import { cn, optimizeAnimation } from "~/utils/utils";
 import { getTargetElement, getWindowScrollTop } from "~/libs/browser-utils";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 

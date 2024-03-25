@@ -26,7 +26,7 @@ import {
   Table,
 } from "lucide-react";
 import { startImageUpload } from "../plugins/upload-image";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface CommandItemProps {
   title: string;

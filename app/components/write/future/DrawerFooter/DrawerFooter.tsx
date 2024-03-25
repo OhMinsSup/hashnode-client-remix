@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 export default function DrawerFooter() {
   return (

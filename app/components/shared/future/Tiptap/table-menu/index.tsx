@@ -5,7 +5,7 @@ import InsertLeftTableIcon from "./InsertLeftTableIcon";
 import InsertRightTableIcon from "./InsertRightTableIcon";
 import InsertTopTableIcon from "./InsertTopTableIcon";
 import InsertBottomTableIcon from "./InsertBottomTableIcon";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface TableMenuItem {
   command: () => void;

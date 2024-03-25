@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import type { RoutesLoader } from "~/routes/_auth";
 import { Icons } from "~/components/shared/Icons";
 

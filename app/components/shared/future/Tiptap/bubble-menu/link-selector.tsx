@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useEffect, useRef } from "react";
 
 import isValidHttpUrl from "./utils/link-validator";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 interface LinkSelectorProps {
   editor: Editor;
   isOpen: boolean;

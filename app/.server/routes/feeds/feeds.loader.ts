@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { readHeaderCookie } from "~/.server/utils/request.server";
-import { parseUrlParams } from "~/utils/util";
+import { parseUrlParams } from "~/utils/utils";
 import merge from "lodash-es/merge";
 
 export const feedsLoader = async ({ context, request }: LoaderFunctionArgs) => {

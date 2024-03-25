@@ -12,7 +12,7 @@ import { useState } from "react";
 
 import { NodeSelector } from "./node-selector";
 import { LinkSelector } from "./link-selector";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 export interface BubbleMenuItem {
   name: string;

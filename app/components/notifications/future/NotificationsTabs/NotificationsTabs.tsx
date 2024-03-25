@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "@remix-run/react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface NotificationsTabsProps {
   children: React.ReactNode;

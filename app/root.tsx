@@ -8,9 +8,6 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { Toaster, toast as showToast } from "sonner";
-import classNames from "classnames";
-import { ExternalLink } from "~/components/shared/future/ExternalLink";
-import { CanonicalLink } from "~/components/shared/future/CanonicalLink";
 import { Body } from "~/components/shared/future/Body";
 import {
   NonFlashOfWrongThemeEls,
@@ -19,14 +16,15 @@ import {
 } from "~/context/useThemeContext";
 import "~/styles/global.css";
 import type { Theme } from "~/context/useThemeContext";
-import type { Toast } from "./services/validate/toast.validate";
-import { useEffect, useRef, useState } from "react";
+import type { Toast } from "~/services/validate/toast.validate";
+import { useEffect, useRef } from "react";
 import {
   rootLoader,
   type RoutesLoaderData,
 } from "~/.server/routes/root/root.loader";
-import { rootMeta } from "~/.client/root/root.meta";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { rootMeta } from "~/services/seo/root/root.meta";
+import { ClientQueryProvider } from "~/services/react-query";
+import { cn } from "~/utils/utils";
 
 export const loader = rootLoader;
 
@@ -50,17 +48,16 @@ function ShowToast({ toast }: { toast: Toast }) {
       });
     }, 0);
   }, [description, id, title, type]);
+
   return null;
 }
 
 function Document({
   children,
-  origin,
   theme,
   env,
 }: {
   children: React.ReactNode;
-  origin?: string;
   theme?: Theme | null;
   env?: Record<string, string>;
 }) {
@@ -70,16 +67,9 @@ function Document({
       lang="en"
       itemScope
       itemType="http://schema.org/WebSite"
-      className={classNames(theme)}
+      className={cn(theme)}
     >
       <head>
-        <meta charSet="UTF-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <CanonicalLink origin={origin} />
-        <ExternalLink />
         <Meta />
         <Links />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
@@ -103,26 +93,13 @@ function App() {
   const [theme] = useTheme();
   const data = useLoaderData<RoutesLoaderData>();
 
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            // With SSR, we usually want to set some default staleTime
-            // above 0 to avoid refetching immediately on the client
-            staleTime: 60 * 1000,
-          },
-        },
-      })
-  );
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <Document origin={data.origin} theme={theme} env={data.env}>
+    <ClientQueryProvider>
+      <Document theme={theme} env={data.env}>
         <Outlet />
         {data.toast ? <ShowToast toast={data.toast} /> : null}
       </Document>
-    </QueryClientProvider>
+    </ClientQueryProvider>
   );
 }
 

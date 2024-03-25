@@ -1,7 +1,7 @@
 import styles from "./styles.module.css";
 import { NAVIGATION_ITEMS } from "~/constants/constant";
 import { NavLink, useLocation } from "@remix-run/react";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 export default function MainHeaderNavigation() {
   return (

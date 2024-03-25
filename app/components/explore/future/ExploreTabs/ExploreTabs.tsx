@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles.module.css";
 import { NAVIGATION_EXPLORE_ITEMS } from "~/constants/constant";
 import { NavLink } from "@remix-run/react";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 interface ExploreTabsProps {
   children: React.ReactNode;

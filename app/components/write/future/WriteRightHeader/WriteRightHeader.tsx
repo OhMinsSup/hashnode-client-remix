@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import * as Popover from "@radix-ui/react-popover";
 
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { useWriteContext } from "~/context/useWriteContext";
 
 export default function WriteRightHeader() {

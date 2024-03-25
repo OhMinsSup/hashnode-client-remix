@@ -6,7 +6,7 @@ import { SettingInputTechStack } from "~/components/setting/future/SettingInputT
 import { SettingProfileImage } from "~/components/setting/future/SettingProfileImage";
 import { SettingTagsProvider } from "~/components/setting/context/setting-tag";
 import { useSession } from "~/services/hooks/useSession";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import {
   getInputProps,
   getTextareaProps,

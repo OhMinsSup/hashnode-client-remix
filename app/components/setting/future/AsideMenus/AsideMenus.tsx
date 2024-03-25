@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 import { NavLink } from "@remix-run/react";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { NAVIGATION_USER_MENU_ITEMS } from "~/constants/constant";
 
 export default function AsideMenus() {

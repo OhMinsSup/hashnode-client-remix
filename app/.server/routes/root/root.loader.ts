@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { initializeTheme, getTheme } from "~/.server/utils/theme.server";
 import { initializeToast, getToast } from "~/.server/utils/toast.server";
-import { getDomainUrl } from "~/utils/util";
+import { getDomainUrl } from "~/utils/utils";
 import {
   clearAuthHeaders,
   combineHeaders,

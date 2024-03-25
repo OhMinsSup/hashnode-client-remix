@@ -6,7 +6,7 @@ import { getPath as getUploadPath } from "~/routes/_action._protected.action.upl
 import { useWriteFormContext } from "../../context/form";
 import { isEmpty } from "~/utils/assertion";
 import { useDrop } from "~/libs/hooks/useDrop";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 import type { Action } from "~/routes/_action._protected.action.upload";
 

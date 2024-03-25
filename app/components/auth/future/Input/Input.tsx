@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { Icons } from "~/components/shared/Icons";
 import { getTargetElement } from "~/libs/browser-utils";
 

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import styles from "./styles.module.css";
-import { cn, optimizeAnimation } from "~/utils/util";
+import { cn, optimizeAnimation } from "~/utils/utils";
 import { useEventListener } from "~/libs/hooks/useEventListener";
 import { getTargetElement } from "~/libs/browser-utils";
 import { useAsideContext } from "~/components/shared/future/HashnodeAside/provider/aside";

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 import { useSession } from "~/services/hooks/useSession";
 import { Form } from "@remix-run/react";
 

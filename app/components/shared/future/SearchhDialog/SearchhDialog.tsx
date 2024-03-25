@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styles from "./styles.module.css";
 import { Icons } from "~/components/shared/Icons";
-import { cn } from "~/utils/util";
+import { cn } from "~/utils/utils";
 
 export default function SearchhDialog() {
   const [open, setOpen] = useState(false);
