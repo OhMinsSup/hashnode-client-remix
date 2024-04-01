@@ -1,85 +1,186 @@
-import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
-import { Logo } from "~/components/shared/future/Logo";
-import { MainHeaderNavigation } from "~/components/shared/future/MainHeaderNavigation";
-import { MainHeaderMenu } from "~/components/shared/future/MainHeaderMenu";
-import { optimizeAnimation } from "~/utils/utils";
-import { useEventListener } from "~/libs/hooks/useEventListener";
-import { getTargetElement, getWindowScrollTop } from "~/libs/browser-utils";
-import { useMemoizedFn } from "~/libs/hooks/useMemoizedFn";
+import { cn } from "~/utils/utils";
+import { Link, NavLink, useParams } from "@remix-run/react";
+import { NAV_CONFIG, NavItem } from "~/constants/navigation";
+import { Icons } from "~/components/icons";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer";
+import { Button, buttonVariants } from "~/components/ui/button";
 
-interface MainHeaderProps {
-  disableScroll?: boolean;
-}
-
-export default function MainHeader({ disableScroll }: MainHeaderProps) {
-  const ref = useRef<HTMLElement>(null);
-  const [translateY, setTranslateY] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  const prevScrollTop = useRef(0);
-
-  const scrollMethod = useMemoizedFn(
-    optimizeAnimation(() => {
-      const scrollTop = getWindowScrollTop();
-
-      // 현재 스크롤이 내려가는지 올라가는지 판단
-      const isScrollDown = scrollTop > prevScrollTop.current;
-
-      // 스크롤이 내려가는 경우
-      if (isScrollDown) {
-        // 헤더가 사라지는 경우
-        if (scrollTop > height) {
-          setTranslateY(-height);
-        } else {
-          setTranslateY(-scrollTop);
-        }
-      } else {
-        // 애니메이션처럼 점점 보이게 하는 경우
-        setTranslateY((old) => {
-          if (old >= 0) return 0;
-          const x = height / 10;
-          return old + x;
-        });
-      }
-
-      prevScrollTop.current = scrollTop;
-    })
-  );
-
-  useEventListener("scroll", scrollMethod);
-
-  useEffect(() => {
-    const $ele = getTargetElement(ref);
-    if (!$ele) return;
-    setHeight($ele.clientHeight);
-  }, []);
-
+export default function MainHeader() {
   return (
-    <header
-      className={styles.root}
-      style={{
-        ...(disableScroll
-          ? {
-              position: "relative",
-            }
-          : { transform: `translateY(${translateY}px)` }),
-      }}
-      ref={ref}
+    <div
+      className={cn(
+        styles.header_container,
+        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
+      )}
     >
-      <div className={styles.header}>
-        <div className={styles.header__layout}>
-          <div className={styles.header__layout__logo}>
-            <Logo />
-          </div>
-          <div className={styles.header__layout__navigation}>
-            {disableScroll ? null : <MainHeaderNavigation />}
-          </div>
-          <div className={styles.header__layout__menu}>
-            <MainHeaderMenu />
+      <div className={styles.header_layout}>
+        <div className={styles.left}>
+          <MainHeader.Menu />
+          <Link
+            to={PAGE_ENDPOINTS.ROOT}
+            className="mr-6 flex items-center space-x-2"
+            aria-label="Hashnode Logo"
+          >
+            <Icons.hashnodeTypeHeader className="w-36 fill-current hidden md:block" />
+            <Icons.hashnodeTypeHeaderMobile className="w-8 fill-current text-blue-600 block md:hidden dark:text-transparent" />
+            <span className="sr-only">Hashnode</span>
+          </Link>
+        </div>
+        <div
+          role="navigation"
+          aria-label="hashnode service"
+          className={styles.center}
+        >
+          <nav className="items-center justify-center space-x-2 w-full flex">
+            {NAV_CONFIG.mainNav.map((item) => {
+              return (
+                <MainHeader.Navigation
+                  key={`header-navigation-${item.id}`}
+                  item={item}
+                />
+              );
+            })}
+          </nav>
+        </div>
+        <div className={styles.right}>
+          <div className="relative z-20">asdasd</div>
+          <div className="hidden relative md:block">asdasd</div>
+          <div className="flex flex-row items-center justify-end gap-4">
+            asdasd
           </div>
         </div>
       </div>
-    </header>
+    </div>
   );
 }
+
+MainHeader.Menu = function Item() {
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button size="sm" variant="link" className="xl:hidden">
+          <Icons.menu className="w-6 fill-current" />
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent className="rounded-none inset-0 top-0 left-0 bottom-0 m-0 h-full w-[323px]">
+        <DrawerHeader>
+          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button>Submit</Button>
+          <DrawerClose>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+interface ItemProps {
+  item: NavItem;
+}
+
+MainHeader.Navigation = function Item({ item }: ItemProps) {
+  switch (item.type) {
+    case "link": {
+      return <MainHeader.Link item={item} />;
+    }
+    case "dropdown": {
+      return <MainHeader.Dropdown item={item} />;
+    }
+    case "external_link": {
+      return <MainHeader.ExternalLink item={item} />;
+    }
+    default: {
+      return null;
+    }
+  }
+};
+
+MainHeader.Link = function Item({ item }: ItemProps) {
+  const params = useParams();
+  const to =
+    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+  return (
+    <NavLink
+      to={to}
+      unstable_viewTransition
+      className={({ isActive }) => {
+        return cn(
+          buttonVariants({
+            variant: "ghost",
+            size: "default",
+          }),
+          styles.btn_common,
+          styles.link,
+          isActive && styles.active
+        );
+      }}
+    >
+      {item.title}
+    </NavLink>
+  );
+};
+
+MainHeader.Dropdown = function Item({ item }: ItemProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className={cn("group", styles.btn_common)}>
+          {item.title}
+          <span className={'group-data-[state="open"]:-rotate-180'}>
+            <Icons.chevronLeft className="-rotate-90" />
+          </span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Explore</DropdownMenuItem>
+        <DropdownMenuItem>Hackathons</DropdownMenuItem>
+        <DropdownMenuItem>Changelogs</DropdownMenuItem>
+        <DropdownMenuItem>The Commit Podcast</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+MainHeader.ExternalLink = function Item({ item }: ItemProps) {
+  const params = useParams();
+  const to =
+    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+  return (
+    <a
+      href={to}
+      className={cn(
+        buttonVariants({
+          variant: "ghost",
+          size: "default",
+        }),
+        styles.btn_common,
+        styles.link
+      )}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {item.title}
+    </a>
+  );
+};

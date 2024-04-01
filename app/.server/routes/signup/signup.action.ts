@@ -56,12 +56,6 @@ export const signupAction = async ({
           username: {
             message: "회원가입에 실패했습니다. 다시 시도해주세요.",
           },
-          email: {
-            message: "회원가입에 실패했습니다. 다시 시도해주세요.",
-          },
-          password: {
-            message: "회원가입에 실패했습니다. 다시 시도해주세요.",
-          },
         } as FieldErrors<FormFieldValues>,
         message: null,
       });
@@ -93,12 +87,6 @@ export const signupAction = async ({
       result: null,
       errors: {
         username: {
-          message: "회원가입에 실패했습니다. 다시 시도해주세요.",
-        },
-        email: {
-          message: "회원가입에 실패했습니다. 다시 시도해주세요.",
-        },
-        password: {
           message: "회원가입에 실패했습니다. 다시 시도해주세요.",
         },
       } as FieldErrors<FormFieldValues>,

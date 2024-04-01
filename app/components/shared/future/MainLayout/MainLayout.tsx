@@ -1,36 +1,28 @@
 import React from "react";
 import styles from "./styles.module.css";
 
-type LayoutType = "main";
-
 interface MainLayoutProps {
   children: React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
-  sidebar?: React.ReactNode;
-  layout?: LayoutType;
+  hiddenHeader?: boolean;
+  hiddenFooter?: boolean;
 }
 
 export default function MainLayout({
   children,
   footer,
   header,
-  sidebar,
-  layout = "main",
+  hiddenHeader,
+  hiddenFooter,
 }: MainLayoutProps) {
   return (
-    <div>
-      {/* react-joyride */}
-      <div className={styles.root}>
-        {layout === "main" && header}
-        <main className={styles.main}>
-          {children}
-          {sidebar}
-        </main>
-        <aside className={styles.aside}></aside>
-        {footer}
-      </div>
-      {/* google one tap */}
+    <div className="min-h-screen bg-white text-slate-900">
+      {hiddenHeader ? null : (
+        <header className={styles.header}>{header}</header>
+      )}
+      <main className={styles.main}>{children}</main>
+      {hiddenFooter ? null : <nav className={styles.nav}>{footer}</nav>}
     </div>
   );
 }

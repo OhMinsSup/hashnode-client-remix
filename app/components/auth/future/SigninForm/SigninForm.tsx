@@ -105,7 +105,7 @@ export default function SigninForm() {
               {isSubmittingForm ? (
                 <Icons.spinner className="animate-spin" />
               ) : null}
-              Login
+              <span>Login</span>
             </Button>
 
             <div className="relative my-2">
