@@ -21,6 +21,8 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { SearchDialog } from "~/components/shared/future/SearchhDialog";
+import { SearchDialogProvider } from "~/context/useSearchDialogContext";
 
 export default function MainHeader() {
   return (
@@ -60,7 +62,11 @@ export default function MainHeader() {
           </nav>
         </div>
         <div className={styles.right}>
-          <div className="relative z-20">asdasd</div>
+          <div className="relative z-20">
+            <SearchDialogProvider>
+              <SearchDialog />
+            </SearchDialogProvider>
+          </div>
           <div className="hidden relative md:block">asdasd</div>
           <div className="flex flex-row items-center justify-end gap-4">
             asdasd

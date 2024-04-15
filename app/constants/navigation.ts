@@ -45,4 +45,26 @@ export const NAV_CONFIG = {
       title: "More",
     },
   ] as NavItem[],
+  searchDialogTabs: [
+    {
+      id: "top",
+      title: "Top",
+    },
+    {
+      id: "latest",
+      title: "Latest",
+    },
+    {
+      id: "tags",
+      title: "Tags",
+    },
+    {
+      id: "people",
+      title: "People",
+    },
+    {
+      id: "posts",
+      title: "Posts",
+    },
+  ],
 };
