@@ -1,5 +1,4 @@
 import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
 import { Link, NavLink, useNavigate, useParams } from "@remix-run/react";
 import { NAV_CONFIG, NavItem } from "~/constants/navigation";
 import { Icons } from "~/components/icons";
@@ -8,7 +7,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "~/components/ui/dropdown-menu";
 import {
   Drawer,
@@ -26,6 +29,17 @@ import { SearchDialogProvider } from "~/context/useSearchDialogContext";
 import { Theme, useTheme } from "~/context/useThemeContext";
 import { useCallback } from "react";
 import { useOptionalSession } from "~/services/hooks/useSession";
+import { cn } from "~/services/libs";
+import {
+  CreditCard,
+  Keyboard,
+  LogOut,
+  Plus,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 export default function MainHeader() {
   const navigate = useNavigate();
@@ -44,20 +58,24 @@ export default function MainHeader() {
     navigate(PAGE_ENDPOINTS.WRITE.ROOT);
   }, [navigate]);
 
-  const renderWriteButton = useCallback(() => {
-    return (
-      <Button
-        aria-label="Go to Write Page"
-        className="space-x-3"
-        role="link"
-        data-href={PAGE_ENDPOINTS.WRITE.ROOT}
-        onClick={onClickWritePage}
-      >
-        <Icons.pen className="size-5" />
-        <span className="hidden md:block">Write</span>
-      </Button>
-    );
-  }, [onClickWritePage]);
+  const renderWriteButton = useCallback(
+    (variant: "ghost" | "default") => {
+      return (
+        <Button
+          aria-label="Go to Write Page"
+          className="space-x-3"
+          role="link"
+          variant={variant}
+          data-href={PAGE_ENDPOINTS.WRITE.ROOT}
+          onClick={onClickWritePage}
+        >
+          <Icons.pen className="size-5" />
+          <span className="hidden md:block">Write</span>
+        </Button>
+      );
+    },
+    [onClickWritePage]
+  );
 
   return (
     <div
@@ -103,13 +121,13 @@ export default function MainHeader() {
           </div>
           {session ? (
             <div className="hidden relative md:block">
-              {renderWriteButton()}
+              {renderWriteButton("default")}
             </div>
           ) : null}
           <div className="flex flex-row items-center justify-end gap-4">
             <div className="flex gap-2">
               {session ? (
-                <div className="md:hidden">{renderWriteButton()}</div>
+                <div className="md:hidden">{renderWriteButton("ghost")}</div>
               ) : null}
               <Button
                 variant="ghost"
@@ -124,6 +142,58 @@ export default function MainHeader() {
                 </Button>
               </div>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className=" cursor-pointer hover:opacity-80">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Billing</span>
+                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Keyboard className="mr-2 h-4 w-4" />
+                    <span>Keyboard shortcuts</span>
+                    <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>Team</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Plus className="mr-2 h-4 w-4" />
+                    <span>New Team</span>
+                    <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
