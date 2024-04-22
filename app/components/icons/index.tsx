@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  Bell,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -37,9 +38,12 @@ import {
   ChevronDown,
   ChevronUp,
   Menu,
+  CircleAlert,
 } from "lucide-react";
 
 export const Icons = {
+  circleAlert: CircleAlert,
+  bell: Bell,
   menu: Menu,
   logo: Command,
   close: X,

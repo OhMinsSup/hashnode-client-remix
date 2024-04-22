@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 import { cn } from "~/utils/utils";
-import { Link, NavLink, useParams } from "@remix-run/react";
+import { Link, NavLink, useNavigate, useParams } from "@remix-run/react";
 import { NAV_CONFIG, NavItem } from "~/constants/navigation";
 import { Icons } from "~/components/icons";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -23,8 +23,42 @@ import {
 import { Button, buttonVariants } from "~/components/ui/button";
 import { SearchDialog } from "~/components/shared/future/SearchhDialog";
 import { SearchDialogProvider } from "~/context/useSearchDialogContext";
+import { Theme, useTheme } from "~/context/useThemeContext";
+import { useCallback } from "react";
+import { useOptionalSession } from "~/services/hooks/useSession";
 
 export default function MainHeader() {
+  const navigate = useNavigate();
+
+  const session = useOptionalSession();
+
+  const [theme, setTheme] = useTheme();
+
+  const onToggleTheme = useCallback(() => {
+    setTheme((previousTheme) =>
+      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK
+    );
+  }, [setTheme]);
+
+  const onClickWritePage = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.WRITE.ROOT);
+  }, [navigate]);
+
+  const renderWriteButton = useCallback(() => {
+    return (
+      <Button
+        aria-label="Go to Write Page"
+        className="space-x-3"
+        role="link"
+        data-href={PAGE_ENDPOINTS.WRITE.ROOT}
+        onClick={onClickWritePage}
+      >
+        <Icons.pen className="size-5" />
+        <span className="hidden md:block">Write</span>
+      </Button>
+    );
+  }, [onClickWritePage]);
+
   return (
     <div
       className={cn(
@@ -62,14 +96,34 @@ export default function MainHeader() {
           </nav>
         </div>
         <div className={styles.right}>
-          <div className="relative z-20">
+          <div className="relative z-20 md:inline hidden">
             <SearchDialogProvider>
               <SearchDialog />
             </SearchDialogProvider>
           </div>
-          <div className="hidden relative md:block">asdasd</div>
+          {session ? (
+            <div className="hidden relative md:block">
+              {renderWriteButton()}
+            </div>
+          ) : null}
           <div className="flex flex-row items-center justify-end gap-4">
-            asdasd
+            <div className="flex gap-2">
+              {session ? (
+                <div className="md:hidden">{renderWriteButton()}</div>
+              ) : null}
+              <Button
+                variant="ghost"
+                aria-label="Toggle Theme"
+                onClick={onToggleTheme}
+              >
+                {theme === Theme.DARK ? <Icons.sun /> : <Icons.moon />}
+              </Button>
+              <div className="hidden md:block">
+                <Button variant="ghost" aria-label="">
+                  <Icons.bell />
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

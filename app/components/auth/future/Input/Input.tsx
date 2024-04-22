@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import { cn } from "~/utils/utils";
-import { Icons } from "~/components/shared/Icons";
+import { Icons } from "~/components/icons";
 import { getTargetElement } from "~/libs/browser-utils";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
@@ -38,7 +38,7 @@ export default function Input({
       />
       {errors?.map((error, index) => (
         <p key={`error-${name}-${index}`} className={styles.error} id={errorId}>
-          <Icons.V2.Error />
+          <Icons.circleAlert />
           {error}
         </p>
       ))}
