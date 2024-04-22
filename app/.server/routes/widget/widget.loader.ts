@@ -5,39 +5,39 @@ export const widgetLoader = async ({
   context,
   request,
 }: LoaderFunctionArgs) => {
-  const cookie = readHeaderCookie(request);
+  // const cookie = readHeaderCookie(request);
 
-  const commonHeaders = {
-    headers: {
-      ...(cookie && {
-        Cookie: cookie,
-      }),
-      "Content-Type": "application/json",
-    },
-  };
+  // const commonHeaders = {
+  //   headers: {
+  //     ...(cookie && {
+  //       Cookie: cookie,
+  //     }),
+  //     "Content-Type": "application/json",
+  //   },
+  // };
 
-  const getLikeList = context.api.getLikePostListHandler(
-    {
-      limit: 4,
-    },
-    commonHeaders
-  );
+  // const getLikeList = context.api.getLikePostListHandler(
+  //   {
+  //     limit: 4,
+  //   },
+  //   commonHeaders
+  // );
 
-  const getDraftList = context.api.getDraftPostListHandler(
-    {
-      limit: 4,
-    },
-    commonHeaders
-  );
+  // const getDraftList = context.api.getDraftPostListHandler(
+  //   {
+  //     limit: 4,
+  //   },
+  //   commonHeaders
+  // );
 
-  const notificationCount =
-    context.api.getNotificationCountHandler(commonHeaders);
+  // const notificationCount =
+  //   context.api.getNotificationCountHandler(commonHeaders);
 
   return defer(
     {
-      notificationCount: notificationCount,
-      getDraftList: getDraftList,
-      getLikeList: getLikeList,
+      // notificationCount: notificationCount,
+      // getDraftList: getDraftList,
+      // getLikeList: getLikeList,
     },
     {
       headers: {

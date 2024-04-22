@@ -22,18 +22,17 @@ export async function getAuthFromRequest(
       return null;
     }
 
-    const response = await context.api.getMeHandler({
+    const response = await context.agent.api.app.user.getMyInfoHandler({
       headers: {
         Cookie: cookie,
-        "Content-Type": "application/json",
       },
     });
 
-    const data = await response.body;
+    const data = response._data;
     if (data?.resultCode !== RESULT_CODE.OK) {
       return null;
     }
-    return data.result as SerializeSchema.SerializeUser;
+    return data.result;
   } catch (error) {
     console.error(error);
     return null;

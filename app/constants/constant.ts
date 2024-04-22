@@ -5,7 +5,6 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     ROOT: "users",
-    ME: "users/me",
     LOGOUT: "users/logout",
     MY_POSTS: "users/my-posts",
     USER_FOLLOW: "users/follow",

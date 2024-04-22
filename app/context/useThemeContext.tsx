@@ -2,7 +2,6 @@ import { useFetcher } from "@remix-run/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { isBrowser } from "~/libs/browser-utils";
 import { getPath } from "~/routes/api.v1.set-theme";
-import { isFunction } from "~/utils/assertion";
 
 enum Theme {
   DARK = "dark",
@@ -73,7 +72,7 @@ function ThemeProvider({
 
   const setTheme = useCallback(
     (cb: Parameters<typeof setThemeState>[0]) => {
-      const newTheme = isFunction(cb) ? cb(theme) : cb;
+      const newTheme = typeof cb === "function" ? cb(theme) : cb;
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },

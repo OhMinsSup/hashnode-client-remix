@@ -1,6 +1,7 @@
 import type { FetchHandler } from "../fetch/types";
 import { fetchHandler } from "../fetch";
-import { TestNamespace } from "./test";
+import { AuthNamespace } from "./auth";
+import { UserNamespace } from "./user";
 
 export class BaseClient {
   fetch: FetchHandler = fetchHandler;
@@ -28,14 +29,20 @@ export class ServiceClient {
     this.prefix = prefix;
     this.app = new AppNamespace(this);
   }
+
+  constructMethodCallUri(endpoint: string): string {
+    return `${this.prefix ? `${this.prefix}/${endpoint}` : endpoint}`;
+  }
 }
 
 export class AppNamespace {
   _service: ServiceClient;
-  test: TestNamespace;
+  auth: AuthNamespace;
+  user: UserNamespace;
 
   constructor(service: ServiceClient) {
     this._service = service;
-    this.test = new TestNamespace(service);
+    this.auth = new AuthNamespace(service);
+    this.user = new UserNamespace(service);
   }
 }

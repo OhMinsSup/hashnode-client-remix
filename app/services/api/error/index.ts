@@ -17,7 +17,7 @@ export class FetchError<T = any> extends Error implements IFetchError<T> {
     }
   }
 
-  public static isFetchError(value: unknown): value is FetchError {
+  public static isFetchError<T = any>(value: unknown): value is IFetchError<T> {
     return value instanceof FetchError;
   }
 }

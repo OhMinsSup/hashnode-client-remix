@@ -16,7 +16,7 @@ export const authLayoutLoader = async ({
         username: "Guillermo Rauch",
         job: "CEO, Vercel",
         description: `It's amazing to see how fast devs go from 0 to Blog under a domain they own on Hashnode 🤯. It reminds me a lot of what Substack did for journalists.`,
-      } as FetchSchema.Hashnodeonboard,
+      } as SerializeSchema.Hashnodeonboard,
       message: null,
     },
     {
