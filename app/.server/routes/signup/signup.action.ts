@@ -10,8 +10,7 @@ import {
   resolver,
   FormFieldValues,
 } from "~/services/validate/signup-api.validate";
-import { ErrorType, ResponseError } from "~/services/error";
-import { getValidatedFormData } from "~/utils/utils";
+import { getValidatedFormData } from "~/services/libs";
 import { json } from "@remix-run/cloudflare";
 import { FieldErrors } from "react-hook-form";
 
@@ -45,7 +44,6 @@ export const signupAction = async ({
         },
       }
     );
-    // @ts-expect-error - response type is not defined
     const cookie = response.headers?.["set-cookie"];
     const token = getTokenFromCookie(cookie);
     if (!token) {
@@ -67,21 +65,21 @@ export const signupAction = async ({
       },
     });
   } catch (e) {
-    if (e instanceof Error && e.name === ErrorType.ResponseError) {
-      const typesafeError = e as ResponseError;
-      const data = typesafeError.getErrorData();
-      const response = await data.response.json<FetchRespSchema.Error>();
-      return json({
-        status: "error" as const,
-        result: null,
-        errors: {
-          [response.error]: {
-            message: response.message,
-          },
-        } as FieldErrors<FormFieldValues>,
-        message: null,
-      });
-    }
+    // if (e instanceof Error && e.name === ErrorType.ResponseError) {
+    //   const typesafeError = e as ResponseError;
+    //   const data = typesafeError.getErrorData();
+    //   const response = await data.response.json<FetchRespSchema.Error>();
+    //   return json({
+    //     status: "error" as const,
+    //     result: null,
+    //     errors: {
+    //       [response.error]: {
+    //         message: response.message,
+    //       },
+    //     } as FieldErrors<FormFieldValues>,
+    //     message: null,
+    //   });
+    // }
     return json({
       status: "error" as const,
       result: null,

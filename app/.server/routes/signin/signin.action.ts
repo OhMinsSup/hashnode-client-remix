@@ -9,8 +9,7 @@ import {
   FormFieldValues,
   resolver,
 } from "~/services/validate/signin-api.validate";
-import { ErrorType, ResponseError } from "~/services/error";
-import { getValidatedFormData } from "~/utils/utils";
+import { getValidatedFormData } from "~/services/libs";
 import { json } from "@remix-run/cloudflare";
 import { type FieldErrors } from "react-hook-form";
 
@@ -41,7 +40,6 @@ export const signinAction = async ({
         "Content-Type": "application/json",
       },
     });
-    // @ts-expect-error - response type is not defined
     const cookie = response.headers?.["set-cookie"];
     const token = getTokenFromCookie(cookie);
     if (!token) {
@@ -66,28 +64,28 @@ export const signinAction = async ({
       },
     });
   } catch (e) {
-    if (e instanceof Error && e.name === ErrorType.ResponseError) {
-      const typesafeError = e as ResponseError;
-      const errorData = typesafeError.getErrorData();
-      const response = await errorData.response.json<FetchRespSchema.Error>();
-      const isNotExistsUser = response.resultCode === RESULT_CODE.NOT_EXIST;
-      if (isNotExistsUser) {
-        throw redirect(
-          safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`)
-        );
-      }
+    // if (e instanceof Error && e.name === ErrorType.ResponseError) {
+    //   const typesafeError = e as ResponseError;
+    //   const errorData = typesafeError.getErrorData();
+    //   const response = await errorData.response.json<FetchRespSchema.Error>();
+    //   const isNotExistsUser = response.resultCode === RESULT_CODE.NOT_EXIST;
+    //   if (isNotExistsUser) {
+    //     throw redirect(
+    //       safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`)
+    //     );
+    //   }
 
-      return json({
-        status: "error" as const,
-        result: null,
-        errors: {
-          [response.error]: {
-            message: response.message,
-          },
-        } as FieldErrors<FormFieldValues>,
-        message: null,
-      });
-    }
+    //   return json({
+    //     status: "error" as const,
+    //     result: null,
+    //     errors: {
+    //       [response.error]: {
+    //         message: response.message,
+    //       },
+    //     } as FieldErrors<FormFieldValues>,
+    //     message: null,
+    //   });
+    // }
     return json({
       status: "error" as const,
       result: null,

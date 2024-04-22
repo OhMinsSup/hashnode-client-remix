@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { mergeMeta } from "~/utils/utils";
+import { mergeMeta } from "~/services/libs";
 
 export const signupMeta: MetaFunction = mergeMeta(() => [
   {

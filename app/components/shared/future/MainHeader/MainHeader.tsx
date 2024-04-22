@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { cn } from "~/utils/utils";
+import { cn } from "~/services/libs";
 import { Link, NavLink, useNavigate, useParams } from "@remix-run/react";
 import { NAV_CONFIG, NavItem } from "~/constants/navigation";
 import { Icons } from "~/components/icons";

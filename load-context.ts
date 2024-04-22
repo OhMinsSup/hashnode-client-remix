@@ -1,6 +1,6 @@
 import { type PlatformProxy } from "wrangler";
 import { type AppLoadContext } from "@remix-run/cloudflare";
-import { HashnodeAgent } from "./app/services/agent";
+import { HashnodeAgent } from "./app/services/api";
 
 type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
 

@@ -7,7 +7,7 @@ function useRafState<S>(
 ): [S, Dispatch<SetStateAction<S>>];
 function useRafState<S = undefined>(): [
   S | undefined,
-  Dispatch<SetStateAction<S | undefined>>
+  Dispatch<SetStateAction<S | undefined>>,
 ];
 
 function useRafState<S>(initialState?: S | (() => S)) {

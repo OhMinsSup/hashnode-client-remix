@@ -1,5 +1,3 @@
-import { Icons } from "~/components/shared/Icons";
-
 export const API_ENDPOINTS = {
   AUTH: {
     SIGNUP: "auth/signup",
@@ -51,41 +49,6 @@ export const API_ENDPOINTS = {
     BOOKMARKS: "widget/bookmarks",
   },
 } as const;
-
-export const QUERIES_KEY = {
-  FILE: {
-    ROOT: ["getFileListApi"],
-  },
-  POSTS: {
-    GET_MY_POSTS: (
-      query?: FetchQuerySchema.PostList
-    ): [string, FetchQuerySchema.PostList?] => {
-      const keys: [string, FetchQuerySchema.PostList?] = ["getMyPostListApi"];
-      if (query) keys.push(query);
-      return keys;
-    },
-    GET_TOP_POSTS: (duration: number): [string, { duration: number }] => [
-      "getTopPostsApi",
-      { duration },
-    ],
-    ID: (id?: string | number | null): [string, number?] => {
-      const keys: [string, number?] = ["getPostApi"];
-      if (id) keys.push(id);
-      return keys;
-    },
-  },
-};
-
-export const MUTATIONS_KEY = {
-  FILES: {
-    UPLOAD: "postImageUploadApi",
-  },
-};
-
-export const REMIX_ACTIONS_KEY = {
-  LOGOUT: "/action/logout",
-  TAG_FOLLOW: "/action/tag/follow",
-};
 
 export const ASSET_URL = {
   DEFAULT_AVATAR: "/images/default_profile.png",
@@ -143,104 +106,6 @@ export const PAGE_ENDPOINTS = {
     ID: (id: string | number) => `/posts/${id}`,
   },
 } as const;
-
-export const NAVIGATION_ITEMS = [
-  {
-    id: 1,
-    title: "My Feed",
-    href: PAGE_ENDPOINTS.ROOT,
-    icon: Icons.MyFeed,
-    applyActiveLinks: [
-      PAGE_ENDPOINTS.FEATURED,
-      PAGE_ENDPOINTS.FOLLOWING,
-    ] as string[],
-    position: ["left", "top"] as string[],
-  },
-  {
-    id: 2,
-    title: "Explore",
-    href: PAGE_ENDPOINTS.EXPLORE.ROOT,
-    icon: Icons.Explore,
-    applyActiveLinks: [
-      PAGE_ENDPOINTS.EXPLORE.TAGS,
-      PAGE_ENDPOINTS.EXPLORE.BLOGS,
-    ] as string[],
-    position: ["left", "top"] as string[],
-  },
-  {
-    id: 3,
-    title: "Drafts",
-    href: PAGE_ENDPOINTS.DRAFT.ROOT,
-    icon: Icons.MyDraft,
-    applyActiveLinks: [] as string[],
-    position: ["left"] as string[],
-  },
-  {
-    id: 4,
-    title: "Bookmarks",
-    href: PAGE_ENDPOINTS.BOOKMARKS.ROOT,
-    icon: Icons.MyBookmark,
-    applyActiveLinks: [] as string[],
-    position: ["left", "top"] as string[],
-  },
-  {
-    id: 6,
-    title: "Search",
-    href: PAGE_ENDPOINTS.ROOT,
-    icon: Icons.Search,
-    applyActiveLinks: [] as string[],
-    position: ["left"] as string[],
-  },
-] as const;
-
-export const NAVIGATION_USER_MENU_ITEMS = [
-  {
-    id: 1,
-    title: "Profile",
-    href: PAGE_ENDPOINTS.SETTINGS.ROOT,
-    icon: Icons.V2.SettingUser,
-  },
-  {
-    id: 2,
-    title: "Email Notifications",
-    href: PAGE_ENDPOINTS.SETTINGS.EMAILS,
-    icon: Icons.V2.SettingEmail,
-  },
-  {
-    id: 3,
-    title: "Account",
-    href: PAGE_ENDPOINTS.SETTINGS.ACCOUNT,
-    icon: Icons.V2.SettingAccount,
-  },
-];
-
-export const NAVIGATION_EXPLORE_ITEMS = [
-  {
-    id: 1,
-    name: "Treanding",
-    href: PAGE_ENDPOINTS.EXPLORE.ROOT,
-  },
-  {
-    id: 2,
-    name: "Tags",
-    href: PAGE_ENDPOINTS.EXPLORE.TAGS,
-  },
-  {
-    id: 3,
-    name: "Blogs",
-    href: PAGE_ENDPOINTS.EXPLORE.BLOGS,
-  },
-  {
-    id: 4,
-    name: "Tags You Follow",
-    href: "/explore/tags-following",
-  },
-  {
-    id: 5,
-    name: "Blogs You Follow",
-    href: "/explore/blogs-following",
-  },
-] as const;
 
 export const STATUS_CODE = {
   OK: 200,

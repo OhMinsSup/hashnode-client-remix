@@ -24,7 +24,7 @@ import {
 } from "~/.server/routes/root/root.loader";
 import { rootMeta } from "~/services/seo/root/root.meta";
 import { ClientQueryProvider } from "~/services/react-query";
-import { cn } from "~/utils/utils";
+import { cn } from "~/services/libs";
 
 export const loader = rootLoader;
 

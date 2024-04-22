@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { isNumber, isString } from "~/utils/assertion";
 
 export const FORMAT = {
   YYYYMMDD: "YYYY-MM-DD",
@@ -22,7 +21,7 @@ export const getDateFormat = (
   format = ""
 ) => {
   if (!date) return format;
-  if (!isNumber(date) && !isString(date)) {
+  if (typeof date !== "number" || typeof date !== "string") {
     if (date instanceof Date) {
       const mom = dayjsWrap(date);
       if (mom.isValid()) {

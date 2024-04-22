@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import type { RoutesLoaderData } from "~/.server/routes/auth-layout/auth-layout.loader";
 import { Icons } from "~/components/icons";
-import { cn } from "~/utils/utils";
+import { cn } from "~/services/libs";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 interface AuthLayoutProps {

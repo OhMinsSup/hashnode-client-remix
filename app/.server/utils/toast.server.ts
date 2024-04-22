@@ -1,7 +1,6 @@
 import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { schema, type OptionalToast } from "~/services/validate/toast.validate";
 import type { SessionData, SessionStorage } from "@remix-run/cloudflare";
-import { isNull, isUndefined } from "~/utils/assertion";
 
 const NAME = "hashnode.toast";
 const TOAST_KEY = "toast";
@@ -35,7 +34,7 @@ export function getToastMessage(params?: Partial<OptionalToast>) {
   for (const [key, value] of Object.entries(params ?? {})) {
     const keyName = key as keyof OptionalToast;
     // 값이 없는 경우 기본값으로 설정
-    if (isUndefined(value) || isNull(value)) {
+    if (typeof value === "undefined" || value === null) {
       Object.assign(opts, { [keyName]: _default[keyName] });
       continue;
     }
