@@ -32,7 +32,7 @@ import { Button, buttonVariants } from "~/components/ui/button";
 import { SearchDialog } from "~/components/shared/future/SearchhDialog";
 import { SearchDialogProvider } from "~/context/useSearchDialogContext";
 import { Theme, useTheme } from "~/context/useThemeContext";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useOptionalSession } from "~/services/hooks/useSession";
 import { cn } from "~/services/libs";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -232,24 +232,50 @@ export default function MainHeader() {
 }
 
 MainHeader.Menu = function Item() {
+  const [open, setOpen] = useState(false);
+
+  const onOpenChange = useCallback((value: boolean) => {
+    setOpen(value);
+  }, []);
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
   return (
-    <Drawer>
+    <Drawer direction="left" open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         <Button size="sm" variant="link" className="xl:hidden">
           <Icons.menu className="w-6 fill-current" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="rounded-none inset-0 top-0 left-0 bottom-0 m-0 h-full w-[323px]">
-        <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+        <DrawerHeader className="border-b border-slate-200 dark:border-slate-800">
+          <DrawerTitle>
+            <div className="flex flex-row justify-between">
+              <Link
+                aria-label="Hashnode Logo"
+                className="block w-[168px] text-slate-900 dark:text-white"
+                to={PAGE_ENDPOINTS.ROOT}
+              >
+                <Icons.hashnode className="w-full fill-current dark:hidden" />
+                <Icons.hashnodeDark className="w-full fill-current hidden dark:block" />
+              </Link>
+              <Button variant="ghost" onClick={onClose}>
+                <Icons.close />
+              </Button>
+            </div>
+          </DrawerTitle>
         </DrawerHeader>
-        <DrawerFooter>
-          <Button>Submit</Button>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
+        <nav className="py-4 px-3 list-none p-0 m-0">
+          {NAV_CONFIG.mainNav.map((item) => {
+            return (
+              <li key={`drawer-mneu-navigation-${item.id}`}>
+                <MainHeader.Navigation item={item} renderType="drawer" />
+              </li>
+            );
+          })}
+        </nav>
       </DrawerContent>
     </Drawer>
   );
@@ -257,18 +283,19 @@ MainHeader.Menu = function Item() {
 
 interface ItemProps {
   item: NavItem;
+  renderType?: "default" | "drawer";
 }
 
-MainHeader.Navigation = function Item({ item }: ItemProps) {
+MainHeader.Navigation = function Item({ item, renderType }: ItemProps) {
   switch (item.type) {
     case "link": {
-      return <MainHeader.Link item={item} />;
+      return <MainHeader.Link item={item} renderType={renderType} />;
     }
     case "dropdown": {
-      return <MainHeader.Dropdown item={item} />;
+      return <MainHeader.Dropdown item={item} renderType={renderType} />;
     }
     case "external_link": {
-      return <MainHeader.ExternalLink item={item} />;
+      return <MainHeader.ExternalLink item={item} renderType={renderType} />;
     }
     default: {
       return null;
@@ -276,7 +303,7 @@ MainHeader.Navigation = function Item({ item }: ItemProps) {
   }
 };
 
-MainHeader.Link = function Item({ item }: ItemProps) {
+MainHeader.Link = function Item({ item, renderType }: ItemProps) {
   const params = useParams();
   const to =
     typeof item.href === "function" ? item.href(params) : item.href ?? "#";
@@ -293,6 +320,7 @@ MainHeader.Link = function Item({ item }: ItemProps) {
           styles.btn_common,
           styles.link,
           isActive && styles.active,
+          renderType === "drawer" ? styles.drawer_link : undefined,
         );
       }}
     >
@@ -301,13 +329,20 @@ MainHeader.Link = function Item({ item }: ItemProps) {
   );
 };
 
-MainHeader.Dropdown = function Item({ item }: ItemProps) {
+MainHeader.Dropdown = function Item({ item, renderType }: ItemProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("group", styles.btn_common)}>
-          {item.title}
-          <span className={'group-data-[state="open"]:-rotate-180'}>
+        <Button
+          variant="ghost"
+          className={cn(
+            "group",
+            styles.btn_common,
+            renderType === "drawer" ? styles.drawer_dropdown : undefined,
+          )}
+        >
+          <span>{item.title}</span>
+          <span className={cn(`group-data-[state="open"]:-rotate-180`)}>
             <Icons.chevronLeft className="-rotate-90" />
           </span>
         </Button>
@@ -322,7 +357,7 @@ MainHeader.Dropdown = function Item({ item }: ItemProps) {
   );
 };
 
-MainHeader.ExternalLink = function Item({ item }: ItemProps) {
+MainHeader.ExternalLink = function Item({ item, renderType }: ItemProps) {
   const params = useParams();
   const to =
     typeof item.href === "function" ? item.href(params) : item.href ?? "#";
@@ -336,6 +371,7 @@ MainHeader.ExternalLink = function Item({ item }: ItemProps) {
         }),
         styles.btn_common,
         styles.link,
+        renderType === "drawer" ? styles.drawer_link : undefined,
       )}
       target="_blank"
       rel="noreferrer"

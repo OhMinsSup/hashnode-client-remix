@@ -26,6 +26,14 @@
   @apply text-muted-foreground;
 }
 
+.drawer_link {
+  @apply w-full justify-start;
+}
+
+.drawer_dropdown {
+  @apply w-full justify-between;
+}
+
 .active {
   @apply text-primary;
 }
