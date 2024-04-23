@@ -22,6 +22,14 @@ export type NavItem = {
   relationIcons?: Record<string, LucideIcon>;
 };
 
+export type NavTabItem = {
+  id: "personalized" | "following" | "featured";
+  title: string;
+  href: string | ((...args: unknown[]) => string);
+  disabled?: boolean;
+  icon?: LucideIcon;
+};
+
 export type ScrollNavItem = Pick<NavItem, "id" | "type" | "title"> & {
   href: string;
 };
@@ -95,6 +103,26 @@ export const NAV_CONFIG = {
       relationHrefs: [PAGE_ENDPOINTS.ROOT],
     },
   ] as NavItem[],
+  mainTabs: [
+    {
+      id: "personalized",
+      title: "Personalized",
+      href: PAGE_ENDPOINTS.ROOT,
+      icon: Icons.wandSparkles,
+    },
+    {
+      id: "following",
+      title: "Following",
+      href: PAGE_ENDPOINTS.FOLLOWING,
+      icon: Icons.users,
+    },
+    {
+      id: "featured",
+      title: "Featured",
+      href: PAGE_ENDPOINTS.FEATURED,
+      icon: Icons.award,
+    },
+  ] as NavTabItem[],
   searchDialogTabs: [
     {
       id: "top",

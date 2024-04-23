@@ -42,9 +42,13 @@ import {
   Bookmark,
   History,
   LogOut,
+  WandSparkles,
+  Award,
 } from "lucide-react";
 
 export const Icons = {
+  award: Award,
+  wandSparkles: WandSparkles,
   logout: LogOut,
   history: History,
   bookmark: Bookmark,

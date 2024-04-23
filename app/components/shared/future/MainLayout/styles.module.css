@@ -24,7 +24,7 @@
 
 @media (min-width: 1024px) {
   .main {
-    @apply p-0 max-w-[1024px];
+    @apply px-0 max-w-[1024px];
   }
 }
 
