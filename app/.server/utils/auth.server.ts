@@ -9,7 +9,7 @@ import { safeRedirect } from "remix-utils/safe-redirect";
 
 export async function getAuthFromRequest(
   request: Request,
-  context: AppLoadContext
+  context: AppLoadContext,
 ) {
   try {
     const cookie = readHeaderCookie(request);
@@ -17,12 +17,14 @@ export async function getAuthFromRequest(
       return null;
     }
 
-    const { access_token } = getParsedCookie(cookie);
-    if (!access_token) {
+    const cookieData = getParsedCookie(cookie);
+    if (!cookieData["hashnode.access_token"]) {
       return null;
     }
 
-    const response = await context.agent.api.app.user.getMyInfoHandler({
+    const response = await context.agent.api.app.user.getMyInfoHandler<
+      FetchRespSchema.Success<SerializeSchema.SerializeUser>
+    >({
       headers: {
         Cookie: cookie,
       },
@@ -42,7 +44,7 @@ export async function getAuthFromRequest(
 export async function requireAuthCookie(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string
+  redirectUrl: string,
 ) {
   const session = await getAuthFromRequest(request, context);
   if (!session) {
@@ -56,7 +58,7 @@ export async function requireAuthCookie(
 export async function redirectIfLoggedInLoader(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string
+  redirectUrl: string,
 ) {
   const session = await getAuthFromRequest(request, context);
   if (session) {

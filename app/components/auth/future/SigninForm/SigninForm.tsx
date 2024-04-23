@@ -101,7 +101,11 @@ export default function SigninForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-2" disabled={isSubmittingForm}>
+            <Button
+              type="submit"
+              className="mt-2 space-x-2"
+              disabled={isSubmittingForm}
+            >
               {isSubmittingForm ? (
                 <Icons.spinner className="animate-spin" />
               ) : null}

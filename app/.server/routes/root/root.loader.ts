@@ -11,7 +11,7 @@ import { getAuthFromRequest } from "~/.server/utils/auth.server";
 
 export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);
-  initializeToast(context.env.COOKIE_SESSION_SECRET);
+  initializeToast(context.env.TOAST_SECRET);
 
   const { toast, headers: toastHeaders } = await getToast(request);
   const theme = await getTheme(request);

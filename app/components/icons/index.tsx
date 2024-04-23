@@ -39,9 +39,15 @@ import {
   ChevronUp,
   Menu,
   CircleAlert,
+  Bookmark,
+  History,
+  LogOut,
 } from "lucide-react";
 
 export const Icons = {
+  logout: LogOut,
+  history: History,
+  bookmark: Bookmark,
   circleAlert: CircleAlert,
   bell: Bell,
   menu: Menu,
@@ -54,7 +60,7 @@ export const Icons = {
   chevronUp: ChevronUp,
   share: Share,
   trash: Trash,
-  post: FileText,
+  filetext: FileText,
   page: File,
   media: Image,
   settings: Settings,

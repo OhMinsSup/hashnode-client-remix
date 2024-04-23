@@ -2,6 +2,7 @@ import { createCookieSessionStorage, redirect } from "@remix-run/cloudflare";
 import { schema, type OptionalToast } from "~/services/validate/toast.validate";
 import type { SessionData, SessionStorage } from "@remix-run/cloudflare";
 import { combineHeaders } from "~/.server/utils/request.server";
+import { safeRedirect } from "remix-utils/safe-redirect";
 
 const NAME = "hashnode.toast";
 const TOAST_KEY = "toast";
@@ -80,9 +81,9 @@ export async function redirectWithToast(
   url: string,
   toast: OptionalToast,
   createToastHeaders: (optionalToast: OptionalToast) => Promise<Headers>,
-  init?: ResponseInit
+  init?: ResponseInit,
 ) {
-  return redirect(url, {
+  return redirect(safeRedirect(url), {
     ...init,
     headers: combineHeaders(init?.headers, await createToastHeaders(toast)),
   });

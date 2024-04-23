@@ -27,7 +27,7 @@ export const signinAction = async ({
 
   const { errors, data } = await getValidatedFormData<FormFieldValues>(
     request,
-    resolver
+    resolver,
   );
 
   if (errors) {
@@ -46,13 +46,13 @@ export const signinAction = async ({
     const cookie = response.headers.get("set-cookie");
     const token = cookie ? getTokenFromCookie(cookie) : null;
     if (!token || !cookie) {
-      throw redirectWithToast(
-        safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNIN),
+      return redirectWithToast(
+        PAGE_ENDPOINTS.AUTH.SIGNIN,
         {
           type: "error",
           description: "로그인에 실패했습니다. 다시 시도해주세요.",
         },
-        createToastHeaders
+        createToastHeaders,
       );
     }
 
@@ -67,8 +67,8 @@ export const signinAction = async ({
       if (error.data) {
         const isNotExistsUser = error.data.resultCode === RESULT_CODE.NOT_EXIST;
         if (isNotExistsUser) {
-          throw redirect(
-            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`)
+          return redirect(
+            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`),
           );
         }
         return json({
@@ -83,13 +83,13 @@ export const signinAction = async ({
         });
       }
     }
-    throw redirectWithToast(
+    return redirectWithToast(
       safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNIN),
       {
         type: "error",
         description: "로그인에 실패했습니다. 다시 시도해주세요.",
       },
-      createToastHeaders
+      createToastHeaders,
     );
   }
 };

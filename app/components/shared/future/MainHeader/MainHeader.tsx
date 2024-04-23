@@ -1,5 +1,11 @@
 import styles from "./styles.module.css";
-import { Link, NavLink, useNavigate, useParams } from "@remix-run/react";
+import {
+  Link,
+  NavLink,
+  useNavigate,
+  useParams,
+  useSubmit,
+} from "@remix-run/react";
 import { NAV_CONFIG, NavItem } from "~/constants/navigation";
 import { Icons } from "~/components/icons";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
@@ -7,7 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
   DropdownMenuGroup,
   DropdownMenuLabel,
@@ -30,27 +35,30 @@ import { Theme, useTheme } from "~/context/useThemeContext";
 import { useCallback } from "react";
 import { useOptionalSession } from "~/services/hooks/useSession";
 import { cn } from "~/services/libs";
-import {
-  CreditCard,
-  Keyboard,
-  LogOut,
-  Plus,
-  Settings,
-  User,
-  Users,
-} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { getPath } from "~/routes/api.v1.auth.logout";
 
 export default function MainHeader() {
   const navigate = useNavigate();
 
   const session = useOptionalSession();
 
+  const submit = useSubmit();
+
   const [theme, setTheme] = useTheme();
+
+  const onLogout = useCallback(() => {
+    const formData = new FormData();
+    submit(formData, {
+      action: getPath(),
+      method: "POST",
+      navigate: false,
+    });
+  }, [submit]);
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
-      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK
+      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK,
     );
   }, [setTheme]);
 
@@ -74,14 +82,22 @@ export default function MainHeader() {
         </Button>
       );
     },
-    [onClickWritePage]
+    [onClickWritePage],
   );
+
+  const onSigninPage = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.AUTH.SIGNIN);
+  }, [navigate]);
+
+  const onSignupPage = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.AUTH.SIGNUP);
+  }, [navigate]);
 
   return (
     <div
       className={cn(
         styles.header_container,
-        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
+        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800",
       )}
     >
       <div className={styles.header_layout}>
@@ -136,64 +152,78 @@ export default function MainHeader() {
               >
                 {theme === Theme.DARK ? <Icons.sun /> : <Icons.moon />}
               </Button>
-              <div className="hidden md:block">
-                <Button variant="ghost" aria-label="">
-                  <Icons.bell />
-                </Button>
-              </div>
+              {session ? (
+                <div className="hidden md:block">
+                  <Button variant="ghost" aria-label="">
+                    <Icons.bell />
+                  </Button>
+                </div>
+              ) : null}
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className=" cursor-pointer hover:opacity-80">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer hover:opacity-80">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <Icons.filetext className="mr-2 h-4 w-4" />
+                      <span>My drafts</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Icons.bookmark className="mr-2 h-4 w-4" />
+                      <span>Bookmarks</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Icons.user className="mr-2 h-4 w-4" />
+                      <span>Account settings</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Icons.history className="mr-2 h-4 w-4" />
+                      <span>My reading history</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={onLogout}>
+                    <Icons.logout className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Billing</span>
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Keyboard className="mr-2 h-4 w-4" />
-                    <span>Keyboard shortcuts</span>
-                    <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Users className="mr-2 h-4 w-4" />
-                    <span>Team</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Plus className="mr-2 h-4 w-4" />
-                    <span>New Team</span>
-                    <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button
+                  className="md:hidden block"
+                  data-href={PAGE_ENDPOINTS.AUTH.SIGNIN}
+                  onClick={onSigninPage}
+                >
+                  Sign in
+                </Button>
+                <section className="md:flex hidden gap-3">
+                  <Button
+                    variant="link"
+                    role="link"
+                    data-href={PAGE_ENDPOINTS.AUTH.SIGNIN}
+                    onClick={onSigninPage}
+                  >
+                    Log in
+                  </Button>
+                  <Button
+                    role="link"
+                    data-href={PAGE_ENDPOINTS.AUTH.SIGNUP}
+                    onClick={onSignupPage}
+                  >
+                    Sign up
+                  </Button>
+                </section>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -262,7 +292,7 @@ MainHeader.Link = function Item({ item }: ItemProps) {
           }),
           styles.btn_common,
           styles.link,
-          isActive && styles.active
+          isActive && styles.active,
         );
       }}
     >
@@ -305,7 +335,7 @@ MainHeader.ExternalLink = function Item({ item }: ItemProps) {
           size: "default",
         }),
         styles.btn_common,
-        styles.link
+        styles.link,
       )}
       target="_blank"
       rel="noreferrer"

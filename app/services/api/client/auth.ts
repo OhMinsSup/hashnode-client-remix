@@ -11,25 +11,25 @@ export class AuthNamespace {
     this._service = service;
   }
 
-  signupHandler: FetchWithoutRequestHandler = (options) => {
-    return this._service._baseClient.fetch(
+  signupHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.SIGNUP),
       {
         method: "POST",
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
-  signinHandler: FetchWithoutRequestHandler = (options) => {
-    return this._service._baseClient.fetch(
+  signinHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.SIGNIN),
       {
         method: "POST",
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 }

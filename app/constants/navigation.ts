@@ -67,4 +67,22 @@ export const NAV_CONFIG = {
       title: "Posts",
     },
   ],
+  notificationDialogTabs: [
+    {
+      id: "all",
+      title: "All",
+    },
+    {
+      id: "comments",
+      title: "Comments",
+    },
+    {
+      id: "likes",
+      title: "Likes",
+    },
+    {
+      id: "mentions",
+      title: "Mentions",
+    },
+  ],
 };

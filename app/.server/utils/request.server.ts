@@ -32,7 +32,7 @@ export function clearAuthHeaders() {
   const headers = new Headers();
   headers.append(
     "Set-Cookie",
-    "access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    "hashnode.access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
   );
   return headers;
 }
@@ -48,19 +48,19 @@ export function getParsedCookie(cookie: string) {
 }
 
 export function getTokenFromCookie(cookie: string) {
-  const { access_token } = getParsedCookie(cookie);
-  return access_token;
+  const cookies = getParsedCookie(cookie);
+  return cookies["hashnode.access_token"];
 }
 
 export function validateMethods(
   request: Request,
   methods: string[],
-  redirectUrl: string
+  redirectUrl: string,
 ) {
   const method = request.method;
   const methodLowerCase = method.toLowerCase();
   const checkMethod = methods.some(
-    (item) => item.toLowerCase() === methodLowerCase
+    (item) => item.toLowerCase() === methodLowerCase,
   );
   if (!checkMethod) {
     throw redirect(safeRedirect(redirectUrl));

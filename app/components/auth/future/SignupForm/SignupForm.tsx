@@ -40,7 +40,7 @@ export default function SignupForm({ email }: SignupFormProps) {
     resolver,
     defaultValues: {
       username: "",
-      email,
+      email: email || "",
       password: "",
       nickname: "",
       confirmPassword: "",
