@@ -20,10 +20,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -338,6 +335,7 @@ MainHeader.Dropdown = function Item({ item, renderType }: ItemProps) {
           className={cn(
             "group",
             styles.btn_common,
+            styles.link,
             renderType === "drawer" ? styles.drawer_dropdown : undefined,
           )}
         >

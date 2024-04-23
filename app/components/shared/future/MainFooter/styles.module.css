@@ -1,0 +1,7 @@
+.link {
+  @apply text-muted-foreground;
+}
+
+.active {
+  @apply text-primary;
+}

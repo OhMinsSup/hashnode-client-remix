@@ -1,5 +1,6 @@
 import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { widgetLoader } from "~/.server/routes/widget/widget.loader";
+import { MainFooter } from "~/components/shared/future/MainFooter";
 import { MainHeader } from "~/components/shared/future/MainHeader";
 import { MainLayout } from "~/components/shared/future/MainLayout";
 
@@ -7,7 +8,7 @@ export const loader = widgetLoader;
 
 export default function Routes() {
   return (
-    <MainLayout header={<MainHeader />}>
+    <MainLayout header={<MainHeader />} footer={<MainFooter />}>
       <Outlet />
     </MainLayout>
   );

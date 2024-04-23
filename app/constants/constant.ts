@@ -63,10 +63,16 @@ export const PAGE_ENDPOINTS = {
   BOOKMARKS: {
     ROOT: "/bookmarks",
   },
+  NOTIFICATIONS: {
+    ROOT: "/notifications",
+  },
   EXPLORE: {
     ROOT: "/explore",
     TAGS: "/explore/tags",
     BLOGS: "/explore/blogs",
+  },
+  SEARCH: {
+    ROOT: "/search",
   },
   ROOT: "/",
   FEATURED: "/featured",
