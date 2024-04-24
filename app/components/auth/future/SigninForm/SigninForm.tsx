@@ -21,7 +21,7 @@ import {
   FormFieldValues,
   resolver,
 } from "~/services/validate/signin-api.validate";
-import { type RoutesActionData } from "~/.server/routes/signin/signin.action";
+import { type RoutesActionData } from "~/.server/routes/auth/signin.action";
 import { createFormData } from "~/services/libs";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 

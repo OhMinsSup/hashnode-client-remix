@@ -3,13 +3,13 @@ import {
   isRouteErrorResponse,
   useLoaderData,
 } from "@remix-run/react";
-import { signupAction } from "~/.server/routes/signup/signup.action";
+import { signupAction } from "~/.server/routes/auth/signup.action";
 import {
   signupLoader,
   type RoutesLoaderData,
-} from "~/.server/routes/signup/signup.loader";
+} from "~/.server/routes/auth/signup.loader";
 import { SignupForm } from "~/components/auth/future/SignupForm";
-import { signupMeta } from "~/services/seo/signup/signup.meta";
+import { signupMeta } from "~/services/seo/auth/signup.meta";
 
 export const loader = signupLoader;
 

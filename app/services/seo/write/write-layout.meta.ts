@@ -1,16 +1,16 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { mergeMeta } from "~/services/libs";
 
-export const signinmeta: MetaFunction = mergeMeta(() => [
+export const writeLayoutMeta: MetaFunction = mergeMeta(() => [
   {
-    title: "Sign in to Hashnode",
+    title: "Editing Article",
   },
   {
     name: "twitter:title",
-    content: "Sign in to Hashnode",
+    content: "Editing Article",
   },
   {
     name: "og:title",
-    content: "Sign in to Hashnode",
+    content: "Editing Article",
   },
 ]);

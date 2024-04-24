@@ -7,7 +7,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 type Data = FetchRespSchema.Success<
-  FetchRespSchema.ListResp<SerializeSchema.SerializeTagCount>
+  FetchRespSchema.ListResp<Record<string, unknown>>
 >;
 
 type SearchParams =
@@ -19,7 +19,7 @@ type SearchParams =
 
 type QueryKey = [string, SearchParams];
 
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookie = readHeaderCookie(request);
   if (!cookie) {
     return json(
@@ -50,18 +50,29 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
     );
   }
 
-  const response = await context.api.getNotificationCountHandler({
-    headers: {
-      Cookie: cookie,
-      "Content-Type": "application/json",
+  // const response = await context.agent.api.app. .api.getNotificationCountHandler({
+  //   headers: {
+  //     Cookie: cookie,
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // const data: Awaited<Data> = await response.body;
+  // return json(data, {
+  //   headers: {
+  //     "Cache-Control": "public, max-age=120, immutable",
+  //   },
+  // });
+  return json(
+    {
+      status: "error" as const,
+      result: null,
+      errors: null,
+      message: "로그인이 필요합니다.",
     },
-  });
-  const data: Awaited<Data> = await response.body;
-  return json(data, {
-    headers: {
-      "Cache-Control": "public, max-age=120, immutable",
-    },
-  });
+    {
+      status: 401,
+    }
+  );
 };
 
 export type RoutesLoaderData = typeof loader;
