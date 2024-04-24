@@ -5,47 +5,15 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     ROOT: "users",
-    LOGOUT: "users/logout",
-    MY_POSTS: "users/my-posts",
-    USER_FOLLOW: "users/follow",
-    ID: (userId: string) => `users/${userId}`,
-    HISTORTIES: (userId: string) => `users/${userId}/histories`,
-    USERNAME_POSTS: (username: string) => `users/${username}/posts`,
-    TRENDING_USERS: "users/treanding",
-    OWNER_POSTS: {
-      ID: (id: string | number) => `users/owner-posts/${id}`,
-    },
   },
   POSTS: {
     ROOT: "posts",
-    GET_TOP_POSTS: "posts/get-top-posts",
-    GET_DRAFT_POSTS: "posts/get-draft-posts",
-    GET_DELETED_POSTS: "posts/get-deleted-posts",
-    GET_LIKES: "posts/get-likes",
-    ID: (id: string | number) => `posts/${id}`,
+    ID: (id: string) => `posts/${id}`,
+    BY_OWNER: (id: string) => `posts/by-owner/${id}`,
   },
-  FILES: {
-    ROOT: "files",
-  },
-  NOTIFICATIONS: {
-    ROOT: "notifications",
-    GET_COUNT: "notifications/count",
-    READ_ALL: "notifications/read-all",
-    READ: (id: string | number) => `notifications/${id}/read`,
-  },
-  TAGS: {
-    ROOT: "tags",
-    TAG: (tag: string) => `tags/${tag}`,
-    TAG_FOLLOW: "tags/follow",
-    TAG_TRENDING: "tags/trending",
-  },
-  DRAFT: {
-    ROOT: "draft",
-    ID: (id: string | number) => `draft/${id}`,
-  },
-  WIDGET: {
-    ARTICLE_CIRCLES: "widget/article-circles",
-    BOOKMARKS: "widget/bookmarks",
+  DRAFTS: {
+    ROOT: "drafts",
+    SYNC: "drafts/sync",
   },
 } as const;
 

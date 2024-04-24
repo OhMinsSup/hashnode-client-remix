@@ -28,7 +28,7 @@ export const signupAction = async ({
 
   const { errors, data } = await getValidatedFormData<FormFieldValues>(
     request,
-    resolver,
+    resolver
   );
 
   if (errors) {
@@ -55,7 +55,7 @@ export const signupAction = async ({
           type: "error",
           description: "회원가입에 실패했습니다. 다시 시도해주세요.",
         },
-        createToastHeaders,
+        createToastHeaders
       );
     }
 
@@ -65,6 +65,7 @@ export const signupAction = async ({
       },
     });
   } catch (e) {
+    console.error(e);
     if (e instanceof Error && e.name === "FetchError") {
       const error = e as IFetchError<FetchRespSchema.Error>;
       if (error.data) {
@@ -87,7 +88,7 @@ export const signupAction = async ({
         type: "error",
         description: "회원가입에 실패했습니다. 다시 시도해주세요.",
       },
-      createToastHeaders,
+      createToastHeaders
     );
   }
 };

@@ -131,6 +131,10 @@ declare namespace FetchRespSchema {
     userId: string;
     authToken;
   };
+
+  export type Id<T = string> = {
+    dataId: T;
+  };
 }
 
 declare namespace UntilsTypes {

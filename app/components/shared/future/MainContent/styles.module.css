@@ -1,5 +1,5 @@
 .root {
-  @apply h-full relative min-w-full pt-5 pb-24 md:w-[680px] md:min-w-0 md:pt-8 lg:w-[728px] xl:col-span-8;
+  @apply relative min-w-full pt-5 pb-24 md:w-[680px] md:min-w-0 md:pt-8 lg:w-[728px] xl:col-span-8;
 }
 
 .aside {
