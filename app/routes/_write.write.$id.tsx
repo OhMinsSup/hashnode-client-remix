@@ -7,13 +7,19 @@ import {
   writeByIdLoader,
   type RoutesLoaderData,
 } from "~/.server/routes/write/write.$id.loader";
+import { WriteEditor } from "~/components/write/future/WriteEditor";
+import { WritePageHeader } from "~/components/write/future/WritePageHeader";
 
 export const loader = writeByIdLoader;
 
 export default function Routes() {
-  const data = useLoaderData<RoutesLoaderData>();
-  console.log(data);
-  return <>Post Write: {JSON.stringify(data)}</>;
+  const _ = useLoaderData<RoutesLoaderData>();
+  return (
+    <>
+      <WritePageHeader />
+      <WriteEditor />
+    </>
+  );
 }
 
 export function ErrorBoundary() {

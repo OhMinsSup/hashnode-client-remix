@@ -100,7 +100,7 @@ interface WriteContext extends WriteState {
 
 const initialState: WriteState = {
   isOpen: false,
-  isSideOpen: false,
+  isSideOpen: true,
   isSubtitleOpen: false,
   isCoverOpen: false,
   uploadState: "idle",

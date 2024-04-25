@@ -1,0 +1,102 @@
+.root {
+}
+
+.container {
+  @apply relative mx-auto min-h-screen max-w-[1536px];
+}
+
+.container_without_sidebar {
+  @apply relative mx-auto min-h-screen max-w-[1536px];
+}
+
+.content {
+  @apply 2xl:border-r;
+}
+
+.content_hidden {
+  @apply border-x;
+}
+
+.sidebar {
+  --tw-translate-x: 0px;
+  @apply fixed inset-0 z-50 h-auto bg-white transition-transform flex flex-col transform-cpu;
+}
+
+.sidebar_hidden {
+  --tw-translate-x: -100%;
+  @apply fixed inset-0 z-50 h-auto bg-white transition-transform transform-cpu;
+}
+
+:global(.dark) .root {
+  @apply bg-slate-950 border-slate-800;
+}
+
+:global(.dark) .sidebar {
+  @apply bg-slate-950;
+}
+
+:global(.dark) .sidebar_hidden {
+  @apply bg-slate-950;
+}
+
+:global(.dark) .content {
+  @apply border-slate-800;
+}
+
+:global(.dark) .content_hidden {
+  @apply border-slate-800;
+}
+
+@media (min-width: 640px) {
+  .container {
+    grid-template-columns: 272px auto;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 272px auto;
+    transition-property: grid-template-columns;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  .container_without_sidebar {
+    grid-template-columns: 0px auto;
+  }
+
+  .container_without_sidebar {
+    display: grid;
+    grid-template-columns: 0px auto;
+    transition-property: grid-template-columns;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  .sidebar {
+    @apply sticky top-0 left-0 h-screen z-auto transform-none border-r transition-opacity visible;
+  }
+
+  .sidebar_hidden {
+    @apply sticky top-0 left-0 h-screen z-auto transform-none border-r transition-opacity overflow-hidden invisible;
+  }
+
+  :global(.dark) .sidebar {
+    @apply border-slate-800;
+  }
+
+  :global(.dark) .sidebar_hidden {
+    @apply border-slate-800;
+  }
+}
+
+@media (min-width: 1536px) {
+  @media (min-width: 640px) {
+    .sidebar {
+      border-left-width: 1px;
+    }
+
+    .sidebar_hidden {
+      border-left-width: 1px;
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
-import { readHeaderCookie } from "~/.server/utils/request.server";
+import {
+  getTokenFromCookie,
+  readHeaderCookie,
+} from "~/.server/utils/request.server";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 export const writeByIdLoader = async ({
@@ -21,6 +24,13 @@ export const writeByIdLoader = async ({
     if (!cookie) {
       const error = new Error();
       error.name = "InvalidCookieError";
+      throw error;
+    }
+
+    const token = getTokenFromCookie(cookie);
+    if (!token) {
+      const error = new Error();
+      error.name = "InvalidTokenError";
       throw error;
     }
 

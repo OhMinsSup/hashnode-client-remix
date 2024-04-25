@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ArrowLeft,
   Bell,
   Check,
   ChevronLeft,
@@ -44,9 +45,12 @@ import {
   LogOut,
   WandSparkles,
   Award,
+  FilePlus2,
+  Files,
 } from "lucide-react";
 
 export const Icons = {
+  files: Files,
   award: Award,
   wandSparkles: WandSparkles,
   logout: LogOut,
@@ -74,6 +78,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
@@ -89,6 +94,7 @@ export const Icons = {
   messageSquare: MessageSquare,
   rotateCcw: RotateCcw,
   users: Users,
+  filePlus2: FilePlus2,
   repostCheck: ({ ...props }: LucideProps) => (
     <svg
       aria-label="리포스트"
@@ -180,4 +186,107 @@ export const Icons = {
   ),
   arrowLeftRight: ArrowLeftRight,
   check: Check,
+  closeLeftSidebar: ({ ...props }: LucideProps) => (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <mask
+        id="mask0_4792_34456"
+        maskUnits="userSpaceOnUse"
+        x="1"
+        y="1"
+        width="18"
+        height="18"
+        style={{ maskType: "alpha" }}
+      >
+        <rect
+          x="1.875"
+          y="1.875"
+          width="16.25"
+          height="16.25"
+          rx="3.12"
+          fill="#D9D9D9"
+        ></rect>
+      </mask>
+      <g mask="url(#mask0_4792_34456)">
+        <path
+          d="M2.5 15V5C2.5 3.61929 3.61929 2.5 5 2.5H7.91667H15C16.3807 2.5 17.5 3.61929 17.5 5V15C17.5 16.3807 16.3807 17.5 15 17.5H5C3.61929 17.5 2.5 16.3807 2.5 15Z"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+        <path
+          d="M14.9974 9.9974H10.4141M10.4141 9.9974L12.4974 12.0807M10.4141 9.9974L12.4974 7.91406"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+        <path
+          d="M7.91406 2.5V17.5"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </g>
+    </svg>
+  ),
+  openLeftSidebar: ({ ...props }: LucideProps) => (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <mask
+        id="mask0_4792_34477"
+        maskUnits="userSpaceOnUse"
+        x="1"
+        y="1"
+        width="18"
+        height="18"
+        style={{ maskType: "alpha" }}
+      >
+        <rect
+          width="16.25"
+          height="16.25"
+          rx="3.12"
+          transform="matrix(-1 0 0 1 18.125 1.875)"
+          fill="#D9D9D9"
+        ></rect>
+      </mask>
+      <g mask="url(#mask0_4792_34477)">
+        <path
+          d="M17.5 15V5C17.5 3.61929 16.3807 2.5 15 2.5H12.0833H5C3.61929 2.5 2.5 3.61929 2.5 5V15C2.5 16.3807 3.61929 17.5 5 17.5H15C16.3807 17.5 17.5 16.3807 17.5 15Z"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+        <path
+          d="M7.91406 2.5V17.5"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+        <path
+          d="M10.4141 9.9974H14.9974M14.9974 9.9974L12.914 12.0807M14.9974 9.9974L12.914 7.91406"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </g>
+    </svg>
+  ),
 };
