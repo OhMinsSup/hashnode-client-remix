@@ -7,9 +7,14 @@ import {
 import { type AppLoadContext, redirect } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
 
+interface GetAuthFromRequestOptions {
+  throwException?: boolean;
+}
+
 export async function getAuthFromRequest(
   request: Request,
   context: AppLoadContext,
+  options = { throwException: false } as GetAuthFromRequestOptions
 ) {
   try {
     const cookie = readHeaderCookie(request);
@@ -36,7 +41,10 @@ export async function getAuthFromRequest(
     }
     return data.result;
   } catch (error) {
-    console.error(error);
+    if (options.throwException) {
+      throw error;
+    }
+
     return null;
   }
 }
@@ -44,7 +52,7 @@ export async function getAuthFromRequest(
 export async function requireAuthCookie(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string,
+  redirectUrl: string
 ) {
   const session = await getAuthFromRequest(request, context);
   if (!session) {
@@ -58,7 +66,7 @@ export async function requireAuthCookie(
 export async function redirectIfLoggedInLoader(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string,
+  redirectUrl: string
 ) {
   const session = await getAuthFromRequest(request, context);
   if (session) {

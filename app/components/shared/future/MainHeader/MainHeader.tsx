@@ -30,7 +30,7 @@ import { SearchDialog } from "~/components/shared/future/SearchhDialog";
 import { SearchDialogProvider } from "~/context/useSearchDialogContext";
 import { Theme, useTheme } from "~/context/useThemeContext";
 import { useCallback, useState } from "react";
-import { useOptionalSession } from "~/services/hooks/useSession";
+import { useOptionalSession } from "~/libs/hooks/useSession";
 import { cn } from "~/services/libs";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { getPath } from "~/routes/api.v1.auth.logout";
@@ -55,7 +55,7 @@ export default function MainHeader() {
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
-      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK,
+      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK
     );
   }, [setTheme]);
 
@@ -79,7 +79,7 @@ export default function MainHeader() {
         </Button>
       );
     },
-    [onClickWritePage],
+    [onClickWritePage]
   );
 
   const onSigninPage = useCallback(() => {
@@ -94,7 +94,7 @@ export default function MainHeader() {
     <div
       className={cn(
         styles.header_container,
-        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800",
+        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
       )}
     >
       <div className={styles.header_layout}>
@@ -317,7 +317,7 @@ MainHeader.Link = function Item({ item, renderType }: ItemProps) {
           styles.btn_common,
           styles.link,
           isActive && styles.active,
-          renderType === "drawer" ? styles.drawer_link : undefined,
+          renderType === "drawer" ? styles.drawer_link : undefined
         );
       }}
     >
@@ -336,7 +336,7 @@ MainHeader.Dropdown = function Item({ item, renderType }: ItemProps) {
             "group",
             styles.btn_common,
             styles.link,
-            renderType === "drawer" ? styles.drawer_dropdown : undefined,
+            renderType === "drawer" ? styles.drawer_dropdown : undefined
           )}
         >
           <span>{item.title}</span>
@@ -369,7 +369,7 @@ MainHeader.ExternalLink = function Item({ item, renderType }: ItemProps) {
         }),
         styles.btn_common,
         styles.link,
-        renderType === "drawer" ? styles.drawer_link : undefined,
+        renderType === "drawer" ? styles.drawer_link : undefined
       )}
       target="_blank"
       rel="noreferrer"
