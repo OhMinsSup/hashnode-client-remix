@@ -4,7 +4,7 @@ import type {
   ResponseMapType,
 } from "../fetch/types";
 
-export class FetchError<T = any> extends Error implements IFetchError<T> {
+export class FetchError<T = unknown> extends Error implements IFetchError<T> {
   constructor(message: string, opts?: { cause: unknown }) {
     // https://v8.dev/features/error-cause
     super(message, opts);
@@ -17,17 +17,20 @@ export class FetchError<T = any> extends Error implements IFetchError<T> {
     }
   }
 
-  public static isFetchError<T = any>(value: unknown): value is IFetchError<T> {
+  public static isFetchError<T = unknown>(
+    value: unknown
+  ): value is IFetchError<T> {
     return value instanceof FetchError;
   }
 }
 
 // Augment `FetchError` type to include `IFetchError` properties
-export type FetchErrorType<T = any> = IFetchError<T>;
+export type FetchErrorType<T = unknown> = IFetchError<T>;
 
-export function createFetchError<T = any, R extends ResponseMapType = "json">(
-  ctx: FetchContext<T, R>
-): IFetchError<T> {
+export function createFetchError<
+  T = unknown,
+  R extends ResponseMapType = "json",
+>(ctx: FetchContext<T, R>): IFetchError<T> {
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- `ctx.error` can be `null`
   const errorMessage = ctx.error?.message || ctx.error?.toString() || "";
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- `ctx.request` can be `null`

@@ -39,7 +39,10 @@ const retryStatusCodes = new Set([
 // https://developer.mozilla.org/en-US/docs/Web/API/Response/body
 const nullBodyResponses = new Set([101, 204, 205, 304]);
 
-export async function fetchHandler<T = any, R extends ResponseMapType = "json">(
+export async function fetchHandler<
+  T = unknown,
+  R extends ResponseMapType = "json",
+>(
   _request: FetchRequest,
   _options?: FetchOptions<R>
 ): Promise<FetchResponse<MappedResponseType<R, T>>> {

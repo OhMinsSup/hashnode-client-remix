@@ -1,19 +1,11 @@
-import {
-  isRouteErrorResponse,
-  useLoaderData,
-  useRouteError,
-} from "@remix-run/react";
-import {
-  writeByIdLoader,
-  type RoutesLoaderData,
-} from "~/.server/routes/write/write.$id.loader";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { writeByIdLoader } from "~/.server/routes/write/write.$id.loader";
 import { WriteEditor } from "~/components/write/future/WriteEditor";
 import { WritePageHeader } from "~/components/write/future/WritePageHeader";
 
 export const loader = writeByIdLoader;
 
 export default function Routes() {
-  const _ = useLoaderData<RoutesLoaderData>();
   return (
     <>
       <WritePageHeader />

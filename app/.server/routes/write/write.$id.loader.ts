@@ -6,6 +6,8 @@ import {
 } from "~/.server/utils/request.server";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
+type Data = FetchRespSchema.Success<SerializeSchema.SerializePost>;
+
 export const writeByIdLoader = async ({
   request,
   context,
@@ -34,13 +36,14 @@ export const writeByIdLoader = async ({
       throw error;
     }
 
-    const response = await context.agent.api.app.post.getOwnerByIdHandler<
-      FetchRespSchema.Success<SerializeSchema.SerializePost>
-    >(id, {
-      headers: {
-        Cookie: cookie,
-      },
-    });
+    const response = await context.agent.api.app.post.getOwnerByIdHandler<Data>(
+      id,
+      {
+        headers: {
+          Cookie: cookie,
+        },
+      }
+    );
 
     const data = response._data;
     if (!data) {

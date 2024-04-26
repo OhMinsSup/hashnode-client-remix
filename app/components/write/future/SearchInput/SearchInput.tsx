@@ -15,7 +15,7 @@ export default function SearchInput({
   isSearch,
 }: SearchInputProps) {
   const { changeLeftSideKeyword } = useWriteContext();
-  const [query, setQuery] = useState(initialKeyword);
+  const [query, setQuery] = useState(initialKeyword ?? "");
   const [, startTransition] = useTransition();
 
   const { run } = useDebounceFn(
@@ -56,7 +56,7 @@ export default function SearchInput({
   );
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Icons.search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
       <Input
         type="text"

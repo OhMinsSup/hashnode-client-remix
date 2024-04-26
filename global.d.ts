@@ -122,7 +122,8 @@ declare namespace FetchRespSchema {
     list: Item[];
     totalCount: number;
     pageInfo: {
-      endCursor: string | null;
+      currentPage: number;
+      nextPage: number | null;
       hasNextPage: boolean;
     };
   };

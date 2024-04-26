@@ -1,4 +1,4 @@
-import React, { useCallback, useDeferredValue, useState } from "react";
+import { useCallback, useDeferredValue } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -14,14 +14,9 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { Link, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/components/ui/collapsible";
-import { SidebarDraftItem } from "../SidebarDraftItem";
 import { cn } from "~/services/libs";
-import { useDraftListInfiniteQuery } from "~/routes/api.v1.drafts";
+import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
+import { MyDraftList } from "~/components/write/future/MyDraftList";
 
 export default function LeftSidebar() {
   const session = useSession();
@@ -31,6 +26,7 @@ export default function LeftSidebar() {
 
   const isStale = leftSideKeyword !== deferredQuery;
   const isSearch = Boolean(deferredQuery) && deferredQuery.length > 0;
+  console.log("isSearch", isSearch, isStale);
 
   const onToggleSidebar = useCallback(() => {
     setSideClose();
@@ -106,9 +102,7 @@ export default function LeftSidebar() {
       <ScrollArea className="flex-1 overflow-auto">
         <div className="pt-4">
           <SubmittedDraftList />
-          <React.Suspense fallback={<>Loading....</>}>
-            <MyDraftList />
-          </React.Suspense>
+          <MyDraftList />
           <PublishedList />
         </div>
       </ScrollArea>
@@ -154,121 +148,33 @@ export default function LeftSidebar() {
 }
 
 function PublishedList() {
-  const [open, setOpen] = useState(false);
   return (
-    <Collapsible
-      className="relative w-full px-4 pb-5"
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <CollapsibleTrigger asChild>
-        <Button
-          variant="link"
-          className="w-full justify-between hover:no-underline"
-        >
-          <span>Published (0)</span>
-          <div>
-            {open ? (
-              <Icons.chevronUp className="size-3" />
-            ) : (
-              <Icons.chevronDown className="size-3" />
-            )}
-          </div>
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-2">
+    <CollapsibleWrapper
+      title="Published"
+      totalCount={0}
+      emptyComponent={
         <p className="px-4 text-sm text-muted-foreground">
           You have not published anything.
         </p>
-        {/* <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem /> */}
-      </CollapsibleContent>
-    </Collapsible>
+      }
+    >
+      asdasd
+    </CollapsibleWrapper>
   );
 }
 
 function SubmittedDraftList() {
-  const [open, setOpen] = useState(false);
-
   return (
-    <Collapsible
-      className="relative w-full px-4 pb-5"
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <CollapsibleTrigger asChild>
-        <Button
-          variant="link"
-          className="w-full justify-between hover:no-underline"
-        >
-          <span>Submitted Drafts (0)</span>
-          <div>
-            {open ? (
-              <Icons.chevronUp className="size-3" />
-            ) : (
-              <Icons.chevronDown className="size-3" />
-            )}
-          </div>
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-2">
+    <CollapsibleWrapper
+      title="Submitted Drafts"
+      totalCount={0}
+      emptyComponent={
         <p className="px-4 text-sm text-muted-foreground">
           You do not have any incoming drafts.
         </p>
-        {/* <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem /> */}
-      </CollapsibleContent>
-    </Collapsible>
-  );
-}
-
-function MyDraftList() {
-  const [open, setOpen] = useState(false);
-
-  const { data } = useDraftListInfiniteQuery();
-
-  console.log(data);
-
-  return (
-    <Collapsible
-      className="relative w-full px-4 pb-5"
-      open={open}
-      onOpenChange={setOpen}
+      }
     >
-      <CollapsibleTrigger asChild>
-        <Button
-          variant="link"
-          className="w-full justify-between hover:no-underline"
-        >
-          <span>My Drafts (31)</span>
-          <div>
-            {open ? (
-              <Icons.chevronUp className="size-3" />
-            ) : (
-              <Icons.chevronDown className="size-3" />
-            )}
-          </div>
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-2">
-        {/* <p className="px-4 text-sm text-muted-foreground">
-          You have not created any drafts.
-        </p> */}
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-        <SidebarDraftItem />
-      </CollapsibleContent>
-    </Collapsible>
+      asdasd
+    </CollapsibleWrapper>
   );
 }
