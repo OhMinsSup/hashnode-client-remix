@@ -49,10 +49,12 @@ import {
   FilePlus2,
   Files,
   icons,
+  FileSearch,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
 export const Icons = {
+  fileSearch: FileSearch,
   files: Files,
   award: Award,
   wandSparkles: WandSparkles,

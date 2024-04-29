@@ -34,14 +34,6 @@ export default function WritePageHeader() {
           )}
         </div>
         <div className={styles.container_right}>
-          <Button
-            type="button"
-            size="sm"
-            aria-label="Open left sidebar"
-            variant="ghost"
-          >
-            AI
-          </Button>
           <div className="relative">
             <Popover>
               <PopoverTrigger asChild>
@@ -68,8 +60,11 @@ export default function WritePageHeader() {
             className="mx-4 min-h-full h-px"
             role="separator"
           />
-          <div className="space-x-3">
-            <Button variant="outline">Preview</Button>
+          <div className="flex flex-row space-x-2 md:space-x-3">
+            <Button variant="outline">
+              <span className="hidden md:flex">Preview</span>
+              <Icons.fileSearch className="flex md:hidden" />
+            </Button>
             <Button variant="default">Publish</Button>
           </div>
         </div>
