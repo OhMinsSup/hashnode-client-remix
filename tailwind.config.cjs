@@ -8,6 +8,7 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
+  safelist: ["ProseMirror"],
   theme: {
     container: {
       center: true,

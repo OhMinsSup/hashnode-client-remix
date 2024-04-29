@@ -1,6 +1,20 @@
 import React from "react";
 import styles from "./styles.module.css";
 
-export default function WriteEditor() {
-  return <div className={styles.root}>WriteEditor</div>;
+interface WriteEditorProps {
+  header: React.ReactNode;
+  children: React.ReactNode;
+}
+
+export default function WriteEditor({ header, children }: WriteEditorProps) {
+  return (
+    <div className={styles.root}>
+      <div className={styles.container}>
+        <div className={styles.editor_container}>
+          <div>{header}</div>
+          <div>{children}</div>
+        </div>
+      </div>
+    </div>
+  );
 }

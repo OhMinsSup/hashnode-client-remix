@@ -1,5 +1,6 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { writeByIdLoader } from "~/.server/routes/write/write.$id.loader";
+import { BlockEditor } from "~/components/editor/future/BlockEditor";
 import { WriteEditor } from "~/components/write/future/WriteEditor";
 import { WritePageHeader } from "~/components/write/future/WritePageHeader";
 
@@ -9,7 +10,9 @@ export default function Routes() {
   return (
     <>
       <WritePageHeader />
-      <WriteEditor />
+      <WriteEditor header={<>Editor Header</>}>
+        <BlockEditor />
+      </WriteEditor>
     </>
   );
 }

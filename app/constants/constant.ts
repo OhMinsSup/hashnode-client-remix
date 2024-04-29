@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   DRAFTS: {
     ROOT: "drafts",
     SYNC: "drafts/sync",
+    SUBMITTED: "drafts/submitted",
   },
 } as const;
 

@@ -1,3 +1,4 @@
+import "~/styles/editor/index.css";
 import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { writeLayoutMeta } from "~/services/seo/write/write-layout.meta";
 import { writeLayoutLoader } from "~/.server/routes/write/write-layout.loader";

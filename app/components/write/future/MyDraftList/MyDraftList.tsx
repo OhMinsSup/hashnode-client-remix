@@ -65,18 +65,16 @@ export default function MyDraftList() {
       title="My Drafts"
       totalCount={totalCount}
       emptyComponent={
-        loading ? null : items.length === 0 ? (
+        items.length === 0 ? (
           <p className="px-4 text-sm text-muted-foreground">
             You have not created any drafts.
           </p>
         ) : null
       }
     >
-      {loading
-        ? null
-        : pages.map((item) => (
-            <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
-          ))}
+      {pages.map((item) => (
+        <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
+      ))}
 
       {fetcher.data?.result?.pageInfo?.hasNextPage && (
         <div className="group grid relative grid-cols-12 sm:block">

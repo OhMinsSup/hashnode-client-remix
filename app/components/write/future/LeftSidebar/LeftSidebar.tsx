@@ -17,6 +17,7 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
 import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { MyDraftList } from "~/components/write/future/MyDraftList";
+import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
 
 export default function LeftSidebar() {
   const session = useSession();
@@ -155,22 +156,6 @@ function PublishedList() {
       emptyComponent={
         <p className="px-4 text-sm text-muted-foreground">
           You have not published anything.
-        </p>
-      }
-    >
-      asdasd
-    </CollapsibleWrapper>
-  );
-}
-
-function SubmittedDraftList() {
-  return (
-    <CollapsibleWrapper
-      title="Submitted Drafts"
-      totalCount={0}
-      emptyComponent={
-        <p className="px-4 text-sm text-muted-foreground">
-          You do not have any incoming drafts.
         </p>
       }
     >
