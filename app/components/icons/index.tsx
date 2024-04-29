@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -47,7 +48,9 @@ import {
   Award,
   FilePlus2,
   Files,
+  icons,
 } from "lucide-react";
+import { cn } from "~/services/libs";
 
 export const Icons = {
   files: Files,
@@ -290,3 +293,31 @@ export const Icons = {
     </svg>
   ),
 };
+
+export type EditorIconType = keyof typeof icons;
+
+export type EditorIconProps = {
+  name: EditorIconType;
+  className?: string;
+  strokeWidth?: number;
+};
+
+export const EditorIcon = React.memo(
+  ({ name, className, strokeWidth }: EditorIconProps) => {
+    // eslint-disable-next-line import/namespace -- This is a valid import
+    const IconComponent = icons[name];
+
+    if (!IconComponent) {
+      return null;
+    }
+
+    return (
+      <IconComponent
+        className={cn("w-4 h-4", className)}
+        strokeWidth={strokeWidth || 2.5}
+      />
+    );
+  }
+);
+
+EditorIcon.displayName = "EditorIcon";

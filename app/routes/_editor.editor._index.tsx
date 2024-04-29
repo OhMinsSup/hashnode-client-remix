@@ -16,6 +16,7 @@ export default function Routes() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  console.log("ErrorBoundary", error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {
