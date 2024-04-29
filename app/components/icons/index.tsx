@@ -50,6 +50,7 @@ import {
   Files,
   icons,
   FileSearch,
+  GanttChart,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
@@ -100,6 +101,7 @@ export const Icons = {
   rotateCcw: RotateCcw,
   users: Users,
   filePlus2: FilePlus2,
+
   repostCheck: ({ ...props }: LucideProps) => (
     <svg
       aria-label="리포스트"
@@ -294,6 +296,7 @@ export const Icons = {
       </g>
     </svg>
   ),
+  subtitle: GanttChart,
 };
 
 export type EditorIconType = keyof typeof icons;

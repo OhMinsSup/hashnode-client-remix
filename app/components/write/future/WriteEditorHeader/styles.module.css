@@ -1,0 +1,67 @@
+.title {
+  font-family:
+    "Suisse Intl",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: 1.875rem;
+  outline: transparent solid 2px;
+  line-height: 1.375 !important;
+  @apply outline-offset-2 font-bold text-slate-900 bg-transparent w-full resize-none appearance-none overflow-hidden;
+}
+
+.subtitle {
+  width: 100%;
+  resize: none;
+  appearance: none;
+  background-color: transparent;
+  padding-right: 2.5rem;
+  font-family:
+    "Suisse Intl",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: 1.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+  outline: transparent solid 2px;
+  line-height: 1.375 !important;
+  @apply outline-offset-2 font-medium text-slate-700 bg-transparent w-full resize-none appearance-none;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+:global(.dark) .title {
+  @apply text-white;
+}
+
+:global(.dark) .subtitle {
+  @apply text-slate-400;
+}
