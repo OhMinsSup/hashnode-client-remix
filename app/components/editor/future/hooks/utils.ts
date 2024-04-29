@@ -5,7 +5,7 @@ import {
   HorizontalRule,
   ImageBlock,
   Link,
-} from "../extensions";
+} from "../extensions/modules";
 
 export const getRenderContainer = (editor: Editor, nodeType: string) => {
   const {

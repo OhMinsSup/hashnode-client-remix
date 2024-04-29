@@ -28,7 +28,7 @@ import {
   Column,
   TaskItem,
   TaskList,
-} from ".";
+} from "./modules";
 
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { createLowlight } from "lowlight";
