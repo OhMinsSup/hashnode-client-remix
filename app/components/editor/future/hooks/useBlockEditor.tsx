@@ -35,10 +35,10 @@ export const useBlockEditor = () => {
 
   console.log(editor);
 
-  // const characterCount = editor?.storage.characterCount || {
-  //   characters: () => 0,
-  //   words: () => 0,
-  // };
+  const characterCount = editor?.storage.characterCount || {
+    characters: () => 0,
+    words: () => 0,
+  };
 
   if (isBrowser) {
     window.editor = editor;
@@ -46,6 +46,6 @@ export const useBlockEditor = () => {
 
   return {
     editor,
-    // characterCount
+    characterCount,
   };
 };

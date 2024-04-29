@@ -4,8 +4,8 @@ unset TIPTAP_PRO_TOKEN
 # typegen
 pnpm run typegen
 
-# .npmrc 제거
-rm -f .npmrc
+# .npmrc 파일에 환경 변수 설정
+echo "legacy-peer-deps=true" > .npmrc
 
 # 종료
 exit 0

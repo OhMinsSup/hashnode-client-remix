@@ -1,8 +1,13 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import React from "react";
 import { writeByIdLoader } from "~/.server/routes/write/write.$id.loader";
-import { BlockEditor } from "~/components/editor/future/BlockEditor";
+import { Spinner } from "~/components/editor/future/components/Spinner";
 import { WriteEditor } from "~/components/write/future/WriteEditor";
 import { WritePageHeader } from "~/components/write/future/WritePageHeader";
+
+const Editor = React.lazy(
+  () => import("~/components/editor/future/BlockEditor/BlockEditor")
+);
 
 export const loader = writeByIdLoader;
 
@@ -11,7 +16,9 @@ export default function Routes() {
     <>
       <WritePageHeader />
       <WriteEditor header={<>Editor Header</>}>
-        <BlockEditor />
+        <React.Suspense fallback={<Spinner />}>
+          <Editor />
+        </React.Suspense>
       </WriteEditor>
     </>
   );

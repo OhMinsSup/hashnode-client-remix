@@ -54,7 +54,6 @@ export default function MyDraftList() {
         fetching.current = false;
         const searchParams = new URLSearchParams();
         searchParams.set("pageNo", `${pageInfo.nextPage}`);
-        console.log("loading next", pageInfo.nextPage);
         fetcher.load(getPath(searchParams));
       }
     }

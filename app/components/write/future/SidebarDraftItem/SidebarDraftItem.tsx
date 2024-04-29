@@ -1,17 +1,37 @@
+import { useNavigate, useParams } from "@remix-run/react";
+import { useCallback } from "react";
 import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
+import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { cn } from "~/services/libs";
 
 interface SidebarDraftItemProps {
   item: SerializeSchema.SerializePost<false>;
 }
 
 export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
+  const { id } = useParams<{ id: string }>();
+
+  const navigate = useNavigate();
+
+  const onClickWritePage = useCallback(() => {
+    navigate(PAGE_ENDPOINTS.WRITE.ID(item.id), {
+      unstable_viewTransition: true,
+    });
+  }, [item.id, navigate]);
+
   return (
     <div className="group grid relative grid-cols-12 sm:block">
       <Button
         type="button"
         variant="ghost"
-        className="grid grid-cols-10 justify-start space-x-2 col-span-8 md:col-auto"
+        role="link"
+        data-href={PAGE_ENDPOINTS.WRITE.ID(item.id)}
+        onClick={onClickWritePage}
+        className={cn(
+          id === item.id ? "bg-accent text-accent-foreground" : undefined,
+          "grid grid-cols-10 justify-start space-x-2 col-span-8 md:col-auto"
+        )}
       >
         <div className="col-span-1">
           <div className="block">

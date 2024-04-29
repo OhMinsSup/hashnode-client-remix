@@ -12,11 +12,7 @@ export default function BlockEditor() {
   const menuContainerRef = useRef(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
-  console.log("BlockEditor", editorRef);
-
   const { editor } = useBlockEditor();
-
-  console.log(editor);
 
   if (!editor) {
     return null;

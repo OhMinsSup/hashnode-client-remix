@@ -8,10 +8,11 @@
 @import "./partials/typography.css";
 
 .ProseMirror {
-  @apply caret-black dark:caret-white outline-0 pr-8 pl-20 py-16 z-0 lg:pl-8 lg:pr-8;
+  @apply caret-black dark:caret-white outline-0 py-16 z-0;
 
   & > * {
-    @apply mx-auto max-w-2xl;
+    /* @apply mx-auto max-w-2xl; */
+    @apply max-w-2xl;
   }
 
   .selection {
