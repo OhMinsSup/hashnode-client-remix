@@ -37,6 +37,7 @@ declare namespace SerializeSchema {
     createdAt: string;
     UserProfile: SerializeUserProfile;
     UserSocial: SerializeUserSocial;
+    UserTags: SerializeTag<false>[];
   };
 
   export type SerializeTagStats = {

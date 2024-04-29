@@ -158,6 +158,7 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
     <DragHandle
       pluginKey="ContentItemMenu"
       editor={editor}
+      // @ts-expect-error - `onNodeChange` is not a valid prop
       onNodeChange={data.handleNodeChange}
       tippyOptions={{
         offset: [-2, 16],
