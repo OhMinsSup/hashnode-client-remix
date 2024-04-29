@@ -8,7 +8,13 @@ import {
 import { useFetcher } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 
-export default function SubmittedDraftList() {
+interface SubmittedDraftListProps {
+  searchKeyword: string;
+}
+
+export default function SubmittedDraftList({
+  searchKeyword,
+}: SubmittedDraftListProps) {
   const [totalCount, setTotalCount] = useState(0);
   const [items, setItems] = useState<SerializeSchema.SerializePost<false>[][]>(
     []
@@ -63,11 +69,15 @@ export default function SubmittedDraftList() {
     }
   };
 
-  console.log(items);
-
   return (
     <CollapsibleWrapper
       title="Submitted Drafts"
+      searchTitle={
+        searchKeyword
+          ? `Showing results for Submitted: ${searchKeyword}`
+          : undefined
+      }
+      isSearch={Boolean(searchKeyword)}
       totalCount={totalCount}
       emptyComponent={
         items.length === 0 ? (
@@ -77,9 +87,16 @@ export default function SubmittedDraftList() {
         ) : null
       }
     >
-      {pages.map((item) => (
-        <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
-      ))}
+      {pages
+        .filter((page) => {
+          if (searchKeyword && searchKeyword.length > 0) {
+            return page.title.includes(searchKeyword);
+          }
+          return true;
+        })
+        .map((item) => (
+          <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
+        ))}
 
       {fetcher.data?.result?.pageInfo?.hasNextPage && (
         <div className="group grid relative grid-cols-12 sm:block">

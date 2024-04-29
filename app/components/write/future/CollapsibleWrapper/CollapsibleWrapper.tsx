@@ -6,9 +6,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
+import { cn } from "~/services/libs";
 
 interface CollapsibleWrapperProps {
   title: string;
+  searchTitle?: string;
+  isSearch?: boolean;
   emptyComponent: React.ReactNode;
   totalCount: number;
   children: React.ReactNode;
@@ -17,10 +20,12 @@ interface CollapsibleWrapperProps {
 export default function CollapsibleWrapper({
   emptyComponent,
   totalCount,
+  isSearch,
+  searchTitle,
   children,
   title,
 }: CollapsibleWrapperProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <Collapsible
       className="relative w-full px-4 pb-5"
@@ -30,10 +35,14 @@ export default function CollapsibleWrapper({
       <CollapsibleTrigger asChild>
         <Button
           variant="link"
-          className="w-full justify-between hover:no-underline"
+          className="w-full justify-between hover:no-underline max-w-60"
         >
-          <span>
-            {title} ({totalCount})
+          <span
+            className={cn({
+              truncate: isSearch,
+            })}
+          >
+            {isSearch ? searchTitle : `${title} (${totalCount})`}
           </span>
           <div>
             {open ? (

@@ -40,6 +40,7 @@ export default function SearchInput({
 
   const onClear = useCallback(() => {
     setQuery("");
+    changeLeftSideKeyword("");
   }, []);
 
   const onKeyDown = useCallback(

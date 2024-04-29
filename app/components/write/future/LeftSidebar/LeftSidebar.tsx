@@ -15,9 +15,9 @@ import { Link, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
-import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { MyDraftList } from "~/components/write/future/MyDraftList";
 import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
+import { PublishedList } from "~/components/write/future/PublishedList";
 
 export default function LeftSidebar() {
   const session = useSession();
@@ -25,16 +25,16 @@ export default function LeftSidebar() {
   const deferredQuery = useDeferredValue(leftSideKeyword);
   const navigate = useNavigate();
 
-  const isStale = leftSideKeyword !== deferredQuery;
   const isSearch = Boolean(deferredQuery) && deferredQuery.length > 0;
-  console.log("isSearch", isSearch, isStale);
 
   const onToggleSidebar = useCallback(() => {
     setSideClose();
   }, [setSideClose]);
 
   const onClickWritePage = useCallback(() => {
-    navigate(`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`);
+    navigate(`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`, {
+      unstable_viewTransition: true,
+    });
   }, [navigate]);
 
   return (
@@ -100,11 +100,15 @@ export default function LeftSidebar() {
           role="separator"
         />
       </div>
-      <ScrollArea className="flex-1 overflow-auto">
+      <ScrollArea
+        className={cn("flex-1 overflow-auto", {
+          "opacity-75": false,
+        })}
+      >
         <div className="pt-4">
-          <SubmittedDraftList />
-          <MyDraftList />
-          <PublishedList />
+          <SubmittedDraftList searchKeyword={deferredQuery} />
+          <MyDraftList searchKeyword={deferredQuery} />
+          <PublishedList searchKeyword={deferredQuery} />
         </div>
       </ScrollArea>
       <hr className="css-1a5r2w9" />
@@ -145,21 +149,5 @@ export default function LeftSidebar() {
         </div>
       </div>
     </>
-  );
-}
-
-function PublishedList() {
-  return (
-    <CollapsibleWrapper
-      title="Published"
-      totalCount={0}
-      emptyComponent={
-        <p className="px-4 text-sm text-muted-foreground">
-          You have not published anything.
-        </p>
-      }
-    >
-      asdasd
-    </CollapsibleWrapper>
   );
 }

@@ -5,7 +5,11 @@ import { type RoutesLoaderData, getPath } from "~/routes/api.v1.drafts";
 import { useFetcher } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 
-export default function MyDraftList() {
+interface MyDraftListProps {
+  searchKeyword: string;
+}
+
+export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
   const [totalCount, setTotalCount] = useState(0);
   const [items, setItems] = useState<SerializeSchema.SerializePost<false>[][]>(
     []
@@ -58,10 +62,17 @@ export default function MyDraftList() {
       }
     }
   };
-
+  // SHOWING RESULTS FOR:
+  // S
   return (
     <CollapsibleWrapper
       title="My Drafts"
+      searchTitle={
+        searchKeyword
+          ? `Showing results for Draft: ${searchKeyword}`
+          : undefined
+      }
+      isSearch={Boolean(searchKeyword)}
       totalCount={totalCount}
       emptyComponent={
         items.length === 0 ? (
@@ -71,9 +82,16 @@ export default function MyDraftList() {
         ) : null
       }
     >
-      {pages.map((item) => (
-        <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
-      ))}
+      {pages
+        .filter((page) => {
+          if (searchKeyword && searchKeyword.length > 0) {
+            return page.title.includes(searchKeyword);
+          }
+          return true;
+        })
+        .map((item) => (
+          <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
+        ))}
 
       {fetcher.data?.result?.pageInfo?.hasNextPage && (
         <div className="group grid relative grid-cols-12 sm:block">
