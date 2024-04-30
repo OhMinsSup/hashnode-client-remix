@@ -20,6 +20,33 @@
   color: rgb(71 85 105 / var(--tw-text-opacity));
 }
 
+.input:focus {
+  background-color: transparent !important;
+}
+
+.input:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+}
+
+:global(.dark) .input {
+  @apply border-slate-700 text-slate-300;
+}
+
+:global(.dark) .input:focus {
+  @apply border-blue-500;
+}
+
+.error {
+  margin-top: -22px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  column-gap: 0.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
 @media (min-width: 768px) {
   .input {
     padding: 1rem;

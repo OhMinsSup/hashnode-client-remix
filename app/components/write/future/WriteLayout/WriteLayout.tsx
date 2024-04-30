@@ -1,39 +1,32 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./styles.module.css";
-import { useWriteContext } from "~/context/useWriteContext";
-import { cn } from "~/utils/util";
-import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
-import { useIsHydrating } from "~/libs/hooks/useIsHydrating";
+import { cn } from "~/services/libs";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
 
 interface WriteLayoutProps {
-  sidebar?: React.ReactNode;
   children: React.ReactNode;
+  sidebar: React.ReactNode;
 }
 
 export default function WriteLayout({ children, sidebar }: WriteLayoutProps) {
-  const { isSideOpen, setSideClose } = useWriteContext();
-
-  const hydrating = useIsHydrating("[data-hydrating-signal]");
-
-  // 768px 이하
-  const isMobile = useMediaQuery("(max-width: 640px)", hydrating);
-
-  useEffect(() => {
-    if (isMobile) setSideClose();
-  }, [isMobile]);
-
+  const { isSideOpen } = useWriteContext();
   return (
-    <div
-      className={cn(isSideOpen ? styles.root : styles.root_left_closed)}
-      data-hydrating-signal
-    >
-      <div className={cn(isSideOpen ? styles.left : styles.left_closed)}>
-        {sidebar}
-      </div>
+    <div className={styles.root}>
       <div
-        className={cn(isSideOpen ? styles.content : styles.content_left_closed)}
+        className={cn(
+          isSideOpen ? styles.container : styles.container_without_sidebar
+        )}
       >
-        {children}
+        <div
+          className={cn(isSideOpen ? styles.sidebar : styles.sidebar_hidden)}
+        >
+          {sidebar}
+        </div>
+        <div
+          className={cn(isSideOpen ? styles.content : styles.content_hidden)}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { useSearchParams } from "@remix-run/react";
-import {
-  isArray,
-  isEmpty,
-  isFunction,
-  isNull,
-  isString,
-  isUndefined,
-} from "~/utils/assertion";
+// import {
+//   isArray,
+//   isEmpty,
+//   isFunction,
+//   isNull,
+//   isString,
+//   isUndefined,
+// } from "~/utils/assertion";
 import { useMemoizedFn } from "./useMemoizedFn";
 
 export interface Options {
@@ -27,7 +27,9 @@ export const useUrlState = <S extends UrlState = UrlState>(
   initialState?: S | (() => S)
 ) => {
   const initialStateRef = useRef(
-    isFunction(initialState) ? (initialState as () => S)() : initialState || {}
+    typeof initialState === "function"
+      ? (initialState as () => S)()
+      : initialState || {}
   );
 
   const [searchParams, setSearchParams] = useSearchParams(
@@ -46,8 +48,8 @@ export const useUrlState = <S extends UrlState = UrlState>(
 
     const newSearchParams = new URLSearchParams(searchParams);
     for (const [key, value] of input) {
-      if (isUndefined(value) || isNull(value)) continue;
-      if (isArray(value)) {
+      if (typeof value === "undefined" || value === null) continue;
+      if (Array.isArray(value)) {
         newSearchParams.set(key, value.join(","));
         continue;
       }
@@ -73,8 +75,8 @@ export const useUrlState = <S extends UrlState = UrlState>(
   ) => {
     if (
       !params ||
-      (!(params instanceof URLSearchParams) && isEmpty(params)) ||
-      isString(params)
+      !(params instanceof URLSearchParams) ||
+      typeof params === "string"
     ) {
       setSearchParams(searchParams, navigateOpts);
       return;
@@ -89,7 +91,7 @@ export const useUrlState = <S extends UrlState = UrlState>(
     navigateOpts?: Parameters<typeof setSearchParams>[1]
   ) => {
     const newSearchParams = new URLSearchParams(searchParams);
-    if (isString(params)) {
+    if (typeof params === "string") {
       newSearchParams.delete(params);
     } else {
       params.forEach((key) => {

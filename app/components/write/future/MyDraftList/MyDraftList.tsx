@@ -1,80 +1,88 @@
-import { useFetcher } from "@remix-run/react";
-import { LeftSidebarContentArea } from "../LeftSidebarContentArea";
-import { useCallback, useEffect, useState } from "react";
-import { LeftSidebarContentItem } from "../LeftSidebarContentItem";
-import styles from "./styles.module.css";
-import uniqBy from "lodash-es/uniqBy";
-import { getPath } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
-import type { RoutesLoader } from "~/routes/_loader._protected.loader.get-draft-posts[.]json";
-import { useWriteContext } from "~/context/useWriteContext";
+import { useCallback, useEffect } from "react";
+import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
+import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
+import { useDraftListInfiniteQuery } from "~/routes/api.v1.drafts";
+import { Button } from "~/components/ui/button";
+import { useLoaderData } from "@remix-run/react";
+import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
 
-const LIMIT = 30;
+interface MyDraftListProps {
+  isDifferentPathname: boolean;
+}
 
-export default function MyDraftList() {
-  const [items, setItems] = useState<FetchRespSchema.PostDetailResp[]>([]);
+export default function MyDraftList({ isDifferentPathname }: MyDraftListProps) {
+  const { leftSideKeyword: searchKeyword } = useWriteContext();
 
-  const fetcher = useFetcher<RoutesLoader>();
+  const { originUrl } = useLoaderData<RoutesLoaderData>();
 
-  const { leftSideKeyword } = useWriteContext();
-
-  const { data } = fetcher;
-
-  const isIdle = fetcher.state === "idle" && fetcher.data == null;
-  const isSuccessful = fetcher.state === "idle" && fetcher.data != null;
-
-  const totalCount = data?.totalCount ?? 0;
-  const pageInfo = data?.pageInfo;
-  const list = data?.list ?? [];
-
-  useEffect(() => {
-    if (isIdle) {
-      fetcher.load(getPath({ limit: LIMIT }));
+  const { data, fetchNextPage, isSuccess, refetch } = useDraftListInfiniteQuery(
+    {
+      originUrl,
+      searchParams: {
+        pageNo: "1",
+      },
     }
-  }, []);
-
-  useEffect(() => {
-    if (isSuccessful) {
-      const oldItems = items;
-      const nextItems = list;
-      const newItems = uniqBy([...oldItems, ...nextItems], "id");
-      setItems(newItems);
-    }
-  }, [isSuccessful]);
-
-  const onClickLoadMore = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      e.preventDefault();
-
-      if (pageInfo && pageInfo?.hasNextPage && pageInfo?.endCursor) {
-        fetcher.load(getPath({ cursor: pageInfo?.endCursor, limit: LIMIT }));
-      }
-    },
-    [fetcher, pageInfo]
   );
 
-  const filteredItems = items.filter((item) => {
-    if (!leftSideKeyword) return true;
-    return item.title.includes(leftSideKeyword);
-  });
+  const pages = data?.pages ?? [];
+
+  const result = pages.at(0)?.result;
+
+  const items = pages.map((page) => page?.result?.list ?? []).flat() ?? [];
+
+  const loadNext = useCallback(() => {
+    if (result && result.pageInfo.hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, result]);
+
+  useEffect(() => {
+    if (isDifferentPathname && isSuccess) {
+      console.log("MyDraftList - refetch");
+      refetch();
+    }
+  }, [isDifferentPathname, isSuccess]);
 
   return (
-    <LeftSidebarContentArea title={`My Drafts (${totalCount})`}>
-      {fetcher.data && !totalCount && (
-        <div className={styles.empty}>
-          <p>You have not my drafts anything.</p>
+    <CollapsibleWrapper
+      title="My Drafts"
+      searchTitle={
+        searchKeyword
+          ? `Showing results for Draft: ${searchKeyword}`
+          : undefined
+      }
+      isSearch={Boolean(searchKeyword)}
+      totalCount={result?.totalCount ?? 0}
+    >
+      {items
+        .filter((item) => {
+          if (searchKeyword && searchKeyword.length > 0) {
+            return item.title.includes(searchKeyword);
+          }
+          return true;
+        })
+        .map((item) => (
+          <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
+        ))}
+      {isSuccess && items.length === 0 ? (
+        <p className="px-4 text-sm text-muted-foreground">
+          You have not created any drafts.
+        </p>
+      ) : null}
+      {isSuccess && result?.pageInfo?.hasNextPage ? (
+        <div className="group grid relative grid-cols-12 sm:block">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className=" justify-start w-full"
+            onClick={() => loadNext()}
+          >
+            <div className="truncate text-left">더보기</div>
+          </Button>
         </div>
-      )}
-      {filteredItems.map((item) => {
-        return (
-          <LeftSidebarContentItem key={`my-draft-${item.id}`} item={item} />
-        );
-      })}
-      {pageInfo && pageInfo.hasNextPage && (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a href="#" className={styles.btn_load_more} onClick={onClickLoadMore}>
-          Load more drafts
-        </a>
-      )}
-    </LeftSidebarContentArea>
+      ) : null}
+    </CollapsibleWrapper>
   );
 }

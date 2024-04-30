@@ -1,7 +1,0 @@
-.root {
-  @apply p-8 bg-white border rounded-lg dark:bg-slate-950 dark:border-slate-800/80;
-}
-
-.title {
-  @apply mb-5 text-xl font-bold text-slate-900 dark:text-slate-100;
-}

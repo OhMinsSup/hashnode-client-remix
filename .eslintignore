@@ -12,3 +12,6 @@ build/**/*
 
 # cloudflare
 functions/**/*
+
+# ignore
+app/.routes/**/*

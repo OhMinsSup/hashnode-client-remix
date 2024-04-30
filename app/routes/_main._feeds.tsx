@@ -1,51 +1,12 @@
-import { Suspense } from "react";
-import { defer } from "@remix-run/cloudflare";
-
-// components
-import { HashnodeContainer } from "~/components/shared/future/HashnodeContainer";
-import { HashnodeTabs } from "~/components/shared/future/HashnodeTabs";
-import { TrendingTagsBox } from "~/components/shared/future/TrendingTagsBox";
-import { RecommendedUsersBox } from "~/components/shared/future/RecommendedUsersBox";
-
-// provider
-import {
-  isRouteErrorResponse,
-  Outlet,
-  useLoaderData,
-  useRouteError,
-  Await,
-} from "@remix-run/react";
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-
-export const loader = ({ context, request }: LoaderFunctionArgs) => {
-  return defer({
-    trendingUser: context.api.widget.getWidgetTrendingUserList(request),
-    trendingTag: context.api.widget.getWidgetTrendingTagList(request),
-  });
-};
-
-export type RoutesLoader = typeof loader;
+import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import { MainFeedTabs } from "~/components/shared/future/MainFeedTabs";
 
 export default function Routes() {
-  const data = useLoaderData<RoutesLoader>();
+  console.log("Routes1");
   return (
-    <HashnodeContainer>
-      <HashnodeTabs>
-        <div className="space-y-4">
-          <Suspense fallback={<></>}>
-            <Await resolve={data?.trendingTag}>
-              {(data) => <TrendingTagsBox data={data} />}
-            </Await>
-          </Suspense>
-          <Suspense fallback={<></>}>
-            <Await resolve={data?.trendingUser}>
-              {(data) => <RecommendedUsersBox data={data} />}
-            </Await>
-          </Suspense>
-          <Outlet />
-        </div>
-      </HashnodeTabs>
-    </HashnodeContainer>
+    <MainFeedTabs>
+      <Outlet />
+    </MainFeedTabs>
   );
 }
 

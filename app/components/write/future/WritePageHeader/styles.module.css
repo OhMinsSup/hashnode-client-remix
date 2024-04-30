@@ -1,0 +1,30 @@
+.root {
+  @apply transform-gpu duration-200 transition-transform sticky top-0 left-0 z-10 bg-white bg-opacity-70 p-4 shadow-sm backdrop-blur-md 2xl:px-5;
+}
+
+.container {
+  @apply mx-auto grid grid-cols-12 items-center;
+}
+
+.container_left {
+  @apply col-span-4;
+}
+
+.container_right {
+  @apply col-span-8 relative flex justify-end flex-row;
+}
+
+.separator {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+  @apply mx-2 min-h-full w-[1px];
+}
+
+:global(.dark) .root {
+  @apply bg-slate-950 border-slate-800 bg-opacity-70;
+}
+
+:gloabl(.dark) .separator {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+}

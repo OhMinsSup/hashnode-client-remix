@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { isBrowser } from "~/libs/browser-utils";
-import { isFunction } from "~/utils/assertion";
+import { getPath } from "~/routes/api.v1.set-theme";
 
 enum Theme {
   DARK = "dark",
@@ -12,7 +12,7 @@ const themes: Array<Theme> = Object.values(Theme);
 
 type ThemeContextType = [
   Theme | null,
-  React.Dispatch<React.SetStateAction<Theme | null>>
+  React.Dispatch<React.SetStateAction<Theme | null>>,
 ];
 
 const ThemeContext = React.createContext<ThemeContextType | undefined>(
@@ -72,11 +72,11 @@ function ThemeProvider({
 
   const setTheme = useCallback(
     (cb: Parameters<typeof setThemeState>[0]) => {
-      const newTheme = isFunction(cb) ? cb(theme) : cb;
+      const newTheme = typeof cb === "function" ? cb(theme) : cb;
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },
-          { action: "action/set-theme", method: "POST" }
+          { action: getPath(), method: "POST" }
         );
       }
       setThemeState(newTheme);
@@ -145,7 +145,7 @@ function handleDarkAndLightModeEls() {
   for (const darkEl of darkEls) {
     if (theme === "dark") {
       for (const child of darkEl.childNodes) {
-        // @ts-expect-error
+        // @ts-expect-error this is fine
         darkEl.parentElement?.append(child);
       }
     }
@@ -154,7 +154,7 @@ function handleDarkAndLightModeEls() {
   for (const lightEl of lightEls) {
     if (theme === "light") {
       for (const child of lightEl.childNodes) {
-        // @ts-expect-error
+        // @ts-expect-error this is fine
         lightEl.parentElement?.append(child);
       }
     }

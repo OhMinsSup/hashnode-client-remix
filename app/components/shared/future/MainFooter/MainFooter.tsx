@@ -1,105 +1,110 @@
-import React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { cn } from "~/utils/util";
-import { Icons } from "~/components/shared/Icons";
 import styles from "./styles.module.css";
-import { NavLink } from "@remix-run/react";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { AsideChangelog } from "~/components/shared/future/AsideChangelog";
-import { AsideDraft } from "~/components/shared/future/AsideDraft";
-import { AsideTrendingArticle } from "~/components/shared/future/AsideTrendingArticle";
-import { AsideBookmark } from "~/components/shared/future/AsideBookmark";
-import { AsideFooter } from "~/components/shared/future/AsideFooter";
+import { NAV_CONFIG, NavItem } from "~/constants/navigation";
+import { NavLink, useParams } from "@remix-run/react";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { cn } from "~/services/libs";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer";
+import { Icons } from "~/components/icons";
+import { useCallback, useState } from "react";
+import { useLinkActiveStateHandler } from "~/libs/hooks/useLinkActiveState";
 
 export default function MainFooter() {
   return (
-    <nav className={styles.root}>
-      <div className="relative w-max">
-        <NavLink
-          aria-label="My Feed"
-          className={({ isActive }) => {
-            return cn(styles.item, isActive ? styles.active : "");
-          }}
-          to={PAGE_ENDPOINTS.ROOT}
-        >
-          <Icons.V2.MyFeedFooter />
-        </NavLink>
-      </div>
-      <div className="relative w-max">
-        <NavLink
-          aria-label="Bookmarks"
-          className={({ isActive }) => {
-            return cn(styles.item, isActive ? styles.active : "");
-          }}
-          to={PAGE_ENDPOINTS.BOOKMARKS.ROOT}
-        >
-          <Icons.V2.BookmarkFooter />
-        </NavLink>
-      </div>
-      <div className="relative w-max">
-        <NavLink
-          aria-label="Search"
-          className={({ isActive }) => {
-            return cn(styles.item, isActive ? styles.active : "");
-          }}
-          to="/search"
-        >
-          <Icons.V2.SearchFooter />
-        </NavLink>
-      </div>
-      <div className="relative w-max">
-        <NavLink
-          aria-label="Notifications"
-          to="/notifications"
-          className={({ isActive }) => {
-            return cn(styles.item, isActive ? styles.active : "");
-          }}
-        >
-          <Icons.V2.NotificationsFooter />
-        </NavLink>
-      </div>
-      <div className="relative w-max">
-        <Dialog.Root>
-          <Dialog.Trigger asChild>
-            <button
-              type="button"
-              className={styles.item}
-              aria-label="Open sidebar"
-            >
-              <Icons.V2.SidebarFooter />
-            </button>
-          </Dialog.Trigger>
-          <Dialog.Portal>
-            <Dialog.Overlay
-              className={cn(
-                styles.dialog_overlay,
-                "radix-state-open:duration-200 radix-state-open:ease-in radix-state-open:animate-in radix-state-open:fade-in-0 radix-state-closed:duration-200 radix-state-closed:animate-out radix-state-closed:fade-out-0 radix-state-closed:ease-out"
-              )}
-            />
-            <Dialog.Content
-              className={cn(
-                styles.dialog_content,
-                "radix-state-open:duration-200 radix-state-open:ease-in radix-state-open:animate-in radix-state-open:slide-in-from-right radix-state-closed:duration-200 radix-state-closed:animate-out radix-state-closed:slide-out-to-right radix-state-closed:ease-out"
-              )}
-            >
-              <div className="absolute top-6 left-3">
-                <Dialog.Close asChild>
-                  <button className={styles.dialog_close} aria-label="Close">
-                    <Icons.V2.X />
-                  </button>
-                </Dialog.Close>
-              </div>
-              <div className={styles.dialog_body}>
-                <AsideChangelog />
-                <AsideDraft />
-                <AsideTrendingArticle />
-                <AsideBookmark />
-                <AsideFooter />
-              </div>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
-      </div>
-    </nav>
+    <>
+      {NAV_CONFIG.mainFooter.map((item) => {
+        return (
+          <div className="relative w-max" key={`footer-${item.id}`}>
+            <MainFooter.Navigation item={item} />
+          </div>
+        );
+      })}
+    </>
   );
 }
+
+interface ItemProps {
+  item: NavItem;
+}
+
+MainFooter.Navigation = function Item({ item }: ItemProps) {
+  const { handler } = useLinkActiveStateHandler();
+
+  switch (item.type) {
+    case "link": {
+      return <MainFooter.Link item={item} />;
+    }
+    case "drawer": {
+      const { isActive } = handler({ item });
+      return isActive ? <MainFooter.Dropdown item={item} /> : null;
+    }
+    default: {
+      return null;
+    }
+  }
+};
+
+MainFooter.Link = function Item({ item }: ItemProps) {
+  const params = useParams();
+  const to =
+    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+
+  return (
+    <NavLink
+      to={to}
+      unstable_viewTransition
+      className={({ isActive }) => {
+        return cn(
+          buttonVariants({
+            variant: "ghost",
+            size: "default",
+          }),
+          styles.link,
+          isActive && styles.active,
+        );
+      }}
+    >
+      {item.icon ? <item.icon /> : null}
+      <span className="sr-only">{item.title}</span>
+    </NavLink>
+  );
+};
+
+MainFooter.Dropdown = function Item({ item }: ItemProps) {
+  const [open, setOpen] = useState(false);
+
+  const onOpenChange = useCallback((value: boolean) => {
+    setOpen(value);
+  }, []);
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  return (
+    <Drawer direction="right" open={open} onOpenChange={onOpenChange}>
+      <DrawerTrigger asChild>
+        <Button size="default" variant="ghost" className={cn(styles.link)}>
+          {item.icon ? <item.icon /> : null}
+          <span className="sr-only">{item.title}</span>
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent className="rounded-none inset-0 top-0 left-0 bottom-0 m-0 h-full w-full">
+        <DrawerHeader>
+          <DrawerTitle>
+            <div className="flex flex-row justify-start">
+              <Button variant="ghost" onClick={onClose}>
+                <Icons.close />
+              </Button>
+            </div>
+          </DrawerTitle>
+        </DrawerHeader>
+      </DrawerContent>
+    </Drawer>
+  );
+};

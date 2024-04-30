@@ -1,30 +1,35 @@
 {
   "include": [
-    "remix.env.d.ts",
+    "env.d.ts",
+    "global.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts",
-    "cloudflare.d.ts",
-    "app/services/**/*.ts"
+    "**/.server/**/*.ts",
+    "**/.server/**/*.tsx",
+    "**/.client/**/*.ts",
+    "**/.client/**/*.tsx",
+    "node_modules/@remix-run/react/future/single-fetch.d.ts"
   ],
-  "exclude": ["_backup_routes"],
+  "exclude": ["**/.routes/**/*.ts", "**/.routes/**/*.tsx"],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "target": "ES2020",
+    "target": "ES2022",
     "strict": true,
     "allowJs": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     },
-    // Remix takes care of building everything in `remix build`.
-    "noEmit": true
+    // Vite takes care of building everything, not tsc.
+    "noEmit": true,
+    "types": ["node_modules/@remix-run/react/future/single-fetch.d.ts"]
   }
 }

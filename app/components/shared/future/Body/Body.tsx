@@ -1,11 +1,11 @@
 import React from "react";
-import classNames from "classnames";
 import styles from "./styles.module.css";
+import { cn } from "~/services/libs";
 
 interface BodyProps {
   children: React.ReactNode;
 }
 
 export default function Body({ children }: BodyProps) {
-  return <body className={classNames(styles.root)}>{children}</body>;
+  return <body className={cn(styles.root)}>{children}</body>;
 }

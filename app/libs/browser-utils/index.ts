@@ -1,3 +1,1 @@
-export * from './schedule';
-export * from './addEventListener';
-export * from './dom';
+export * from "./dom";

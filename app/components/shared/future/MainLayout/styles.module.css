@@ -1,76 +1,41 @@
-.root {
-  --tw-text-opacity: 1;
-  color: rgb(15 23 42 / var(--tw-text-opacity));
-  @apply min-h-screen bg-white dark:bg-slate-950;
-}
-
 .main {
-  width: 100%;
-  position: relative;
-  z-index: 40;
-  margin-left: auto;
-  margin-right: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  min-height: 100vh;
-  min-width: 100%;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  gap: 2.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  /* @apply relative z-40 grid min-h-screen w-full min-w-full gap-8; */
+  @apply w-full relative z-40 mx-auto min-h-screen flex flex-col items-center justify-center gap-10 px-6;
 }
 
-.aside {
+.header {
+  @apply sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60;
+}
+
+.nav {
+  @apply fixed bottom-0 flex justify-around items-center w-full border-t bg-white py-2 z-40 dark:text-slate-300 dark:bg-slate-950 dark:border-slate-800 md:hidden;
 }
 
 @media (min-width: 640px) {
   .main {
-    max-width: 640px;
+    @apply max-w-[640px];
   }
 }
 
 @media (min-width: 768px) {
   .main {
-    /* @apply max-w-3xl; */
-    max-width: 768px;
+    @apply max-w-[768px];
   }
 }
 
 @media (min-width: 1024px) {
   .main {
-    /* @apply mx-auto min-w-0 max-w-full grid-cols-10 px-20; */
-    max-width: 1024px;
-    padding-left: 0px;
-    padding-right: 0px;
+    @apply px-0 max-w-[1024px];
   }
 }
 
 @media (min-width: 1280px) {
   .main {
-    /* @apply mx-auto min-w-0 max-w-full grid-cols-10 px-32; */
-    max-width: 1280px;
-    display: grid;
-    min-width: 0px;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    padding-left: 5rem;
-    padding-right: 5rem;
+    @apply grid min-w-0 max-w-[1280px] px-20 grid-cols-12;
   }
 }
 
 @media (min-width: 1536px) {
   .main {
-    /* @apply mx-auto min-w-0 max-w-[1536px] grid-cols-10 px-52; */
-    max-width: 1536px;
-    display: grid;
-    min-width: 0px;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    padding-left: 13rem;
-    padding-right: 13rem;
+    @apply grid min-w-0 px-52 grid-cols-12 max-w-[1536px];
   }
 }

@@ -1,3 +1,0 @@
-.upload_pending {
-  @apply flex flex-col items-center justify-center w-40 h-40 tracking-wide text-slate-700 uppercase bg-white border rounded-full shadow cursor-pointer dark:text-slate-200 dark:bg-slate-800 dark:border-slate-800/80;
-}

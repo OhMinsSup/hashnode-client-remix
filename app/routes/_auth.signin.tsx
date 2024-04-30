@@ -1,22 +1,18 @@
-// components
 import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { SigninForm } from "~/components/auth/future/SigninForm";
+import { signinAction } from "~/.server/routes/auth/signin.action";
+import { signInMeta } from "~/services/seo/auth/signin.meta";
 
-// types
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+export const action = signinAction;
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
-  return await context.api.auth.signinWithRedirect(request);
-};
-
-export type RoutesActionData = ReturnType<typeof action>;
+export const meta = signInMeta;
 
 export default function Routes() {
   return <SigninForm />;
 }
 
 export function ErrorBoundary() {
-  let error = useRouteError();
+  const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {
