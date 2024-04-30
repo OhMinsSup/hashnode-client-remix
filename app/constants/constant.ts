@@ -16,6 +16,9 @@ export const API_ENDPOINTS = {
     SYNC: "drafts/sync",
     SUBMITTED: "drafts/submitted",
   },
+  FILES: {
+    ROOT: "files",
+  },
 } as const;
 
 export const ASSET_URL = {

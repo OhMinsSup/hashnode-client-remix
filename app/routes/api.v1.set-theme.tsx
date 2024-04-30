@@ -4,13 +4,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { requireAuthCookie } from "~/.server/utils/auth.server";
 import { isTheme } from "~/context/useThemeContext";
 import { commit, setTheme } from "~/.server/utils/theme.server";
-
-type SearchParams =
-  | string
-  | string[][]
-  | Record<string, string>
-  | URLSearchParams
-  | undefined;
+import { SearchParams } from "~/.server/utils/request.server";
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);

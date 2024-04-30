@@ -129,6 +129,11 @@ declare namespace FetchRespSchema {
     };
   };
 
+  export type File = {
+    id: string;
+    publicUrl: string;
+  };
+
   export type Auth = {
     userId: string;
     authToken;
@@ -137,6 +142,35 @@ declare namespace FetchRespSchema {
   export type Id<T = string> = {
     dataId: T;
   };
+}
+
+declare namespace CloudflareSchema {
+  export type CfCommonResp<Result = unknown> = {
+    result: Result;
+    success: boolean;
+    errors: Array<{
+      code: number;
+      message: string;
+    }>;
+    messages: Array<{
+      code: number;
+      message: string;
+    }>;
+  };
+
+  export type CfUpload = CfCommonResp<{
+    id: string;
+    metadata: Record<string, string>;
+    uploaded: string;
+    requireSignedURLs: boolean;
+    variants: string[];
+    draft: boolean;
+  }>;
+
+  export type CfDirectUpload = CfCommonResp<{
+    id: string;
+    uploadURL: string;
+  }>;
 }
 
 declare namespace UntilsTypes {
