@@ -12,8 +12,8 @@ export const useBlockEditor = () => {
   const editor = useEditor(
     {
       autofocus: true,
-      onCreate: ({ editor }) => {
-        console.log("editor created", editor);
+      onCreate: () => {
+        // console.log("editor created", editor);
         // provider?.on("synced", () => {
         //   if (editor.isEmpty) {
         //     editor.commands.setContent(initialContent);

@@ -12,13 +12,11 @@ interface CollapsibleWrapperProps {
   title: string;
   searchTitle?: string;
   isSearch?: boolean;
-  emptyComponent: React.ReactNode;
   totalCount: number;
   children: React.ReactNode;
 }
 
 export default function CollapsibleWrapper({
-  emptyComponent,
   totalCount,
   isSearch,
   searchTitle,
@@ -53,10 +51,7 @@ export default function CollapsibleWrapper({
           </div>
         </Button>
       </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-2">
-        {emptyComponent}
-        {children}
-      </CollapsibleContent>
+      <CollapsibleContent className="space-y-2">{children}</CollapsibleContent>
     </Collapsible>
   );
 }

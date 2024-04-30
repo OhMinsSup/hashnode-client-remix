@@ -1,13 +1,20 @@
-import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireAuthCookie } from "~/.server/utils/auth.server";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { getDomainUrl } from "~/services/libs";
 
 export const writeLayoutLoader = async ({
   request,
   context,
 }: LoaderFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
-  return null;
+
+  console.log("writeLayoutLoader");
+
+  // TODO: single fetch defer request infinite loop issue??
+  return json({
+    originUrl: getDomainUrl(request),
+  });
 };
 
 export type RoutesLoaderData = typeof writeLayoutLoader;

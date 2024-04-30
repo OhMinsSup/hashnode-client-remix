@@ -1,25 +1,26 @@
 import { json } from "@remix-run/cloudflare";
+import { type QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import {
   getTokenFromCookie,
   readHeaderCookie,
 } from "~/.server/utils/request.server";
 
-type Data = FetchRespSchema.Success<
-  FetchRespSchema.ListResp<SerializeSchema.SerializePost>
->;
+type Data = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
 
-const _defaultList: FetchRespSchema.ListResp<SerializeSchema.SerializePost> = {
-  totalCount: 0,
-  list: [],
-  pageInfo: {
-    currentPage: 1,
-    hasNextPage: false,
-    nextPage: null,
-  },
-};
+type DataSchema = FetchRespSchema.Success<Data>;
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const _defaultList: Data = {
+    totalCount: 0,
+    list: [],
+    pageInfo: {
+      currentPage: 1,
+      hasNextPage: false,
+      nextPage: null,
+    },
+  };
+
   const cookie = readHeaderCookie(request);
   if (!cookie) {
     return json(
@@ -52,7 +53,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const searchParams = url.searchParams;
   const query = Object.fromEntries(searchParams.entries());
   const response =
-    await context.agent.api.app.draft.getSubmittedDraftsHandler<Data>({
+    await context.agent.api.app.draft.getSubmittedDraftsHandler<DataSchema>({
       headers: {
         Cookie: cookie,
       },
@@ -95,3 +96,45 @@ export const getPath = (searchParams?: SearchParams) => {
   }
   return getBasePath;
 };
+
+type QueryKey = [string, SearchParams];
+
+interface UseSubmittedDraftListInfiniteQueryParams {
+  initialData?: DataSchema;
+  originUrl?: string;
+  searchParams?: SearchParams;
+}
+
+export function useSubmittedDraftListInfiniteQuery(
+  opts?: UseSubmittedDraftListInfiniteQueryParams
+) {
+  const queryKey: QueryKey = [getBasePath, opts?.searchParams];
+
+  const queryFn: QueryFunction<DataSchema, QueryKey, number> = async (ctx) => {
+    const lastKey = ctx.queryKey.at(-1);
+    const url = opts?.originUrl
+      ? new URL(getPath(lastKey), opts.originUrl)
+      : getPath(lastKey);
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const data = await response.json<DataSchema>();
+    return data;
+  };
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn,
+    // @ts-expect-error - This is a bug in react-query types
+    initialData: opts?.initialData
+      ? () => ({ pageParams: [null], pages: [opts.initialData] })
+      : undefined,
+    getNextPageParam: (lastPage) => {
+      const pageInfo = lastPage?.result?.pageInfo;
+      if (pageInfo?.hasNextPage) {
+        return pageInfo.nextPage;
+      }
+      return null;
+    },
+  });
+}

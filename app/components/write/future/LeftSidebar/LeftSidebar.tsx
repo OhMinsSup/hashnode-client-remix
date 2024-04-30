@@ -1,4 +1,4 @@
-import { useCallback, useDeferredValue } from "react";
+import React, { useCallback, useDeferredValue, useTransition } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -11,19 +11,22 @@ import { useSession } from "~/libs/hooks/useSession";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { SearchInput } from "~/components/write/future/SearchInput";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { Link, useNavigate } from "@remix-run/react";
+import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
 import { MyDraftList } from "~/components/write/future/MyDraftList";
 import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
 import { PublishedList } from "~/components/write/future/PublishedList";
+import { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
 
 export default function LeftSidebar() {
   const session = useSession();
   const { setSideClose, leftSideKeyword } = useWriteContext();
   const deferredQuery = useDeferredValue(leftSideKeyword);
   const navigate = useNavigate();
+
+  const [isPending, startTransition] = useTransition();
 
   const isSearch = Boolean(deferredQuery) && deferredQuery.length > 0;
 
@@ -32,8 +35,8 @@ export default function LeftSidebar() {
   }, [setSideClose]);
 
   const onClickWritePage = useCallback(() => {
-    navigate(`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`, {
-      unstable_viewTransition: true,
+    startTransition(() => {
+      navigate(`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`);
     });
   }, [navigate]);
 
@@ -102,7 +105,7 @@ export default function LeftSidebar() {
       </div>
       <ScrollArea
         className={cn("flex-1 overflow-auto", {
-          "opacity-75": false,
+          "opacity-75": isPending,
         })}
       >
         <div className="pt-4">

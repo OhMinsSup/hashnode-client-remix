@@ -7,8 +7,8 @@
     "**/.server/**/*.ts",
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-    // "node_modules/@remix-run/react/future/single-fetch.d.ts"
+    "**/.client/**/*.tsx",
+    "node_modules/@remix-run/react/future/single-fetch.d.ts"
   ],
   "exclude": ["**/.routes/**/*.ts", "**/.routes/**/*.tsx"],
   "compilerOptions": {
@@ -29,6 +29,7 @@
       "~/*": ["./app/*"]
     },
     // Vite takes care of building everything, not tsc.
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node_modules/@remix-run/react/future/single-fetch.d.ts"]
   }
 }

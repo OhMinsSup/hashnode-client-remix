@@ -1,69 +1,36 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
-import { type RoutesLoaderData, getPath } from "~/routes/api.v1.drafts";
-import { useFetcher } from "@remix-run/react";
+import { useDraftListInfiniteQuery } from "~/routes/api.v1.drafts";
 import { Button } from "~/components/ui/button";
+import { useLoaderData } from "@remix-run/react";
+import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
 
 interface MyDraftListProps {
   searchKeyword: string;
 }
 
 export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
-  const [totalCount, setTotalCount] = useState(0);
-  const [items, setItems] = useState<SerializeSchema.SerializePost<false>[][]>(
-    []
-  );
+  const { originUrl } = useLoaderData<RoutesLoaderData>();
+  const { data, fetchNextPage, isSuccess } = useDraftListInfiniteQuery({
+    originUrl,
+    searchParams: {
+      pageNo: "1",
+    },
+  });
 
-  const fetching = useRef(false);
-  const fetcher = useFetcher<RoutesLoaderData>();
+  const pages = data?.pages ?? [];
 
-  const pages = items.flat();
+  const result = pages.at(0)?.result;
 
-  const loading = !fetcher.data || fetcher.state === "loading";
+  const items = pages.map((page) => page?.result?.list ?? []).flat() ?? [];
 
-  useEffect(() => {
-    if (loading && !items.length) {
-      const searchParams = new URLSearchParams();
-      searchParams.set("pageNo", "1");
-      fetcher.load(getPath(searchParams));
+  const loadNext = useCallback(() => {
+    if (result && result.pageInfo.hasNextPage) {
+      fetchNextPage();
     }
-  }, []);
+  }, [fetchNextPage, result]);
 
-  useEffect(() => {
-    if (!fetcher.data || fetcher.state === "loading") {
-      return;
-    }
-    // If we have new data - append it
-    if (fetcher.data && fetcher.data.result) {
-      const result = fetcher.data.result;
-      const newItems =
-        result.list as unknown as SerializeSchema.SerializePost<false>[];
-
-      if (!fetching.current) {
-        setTotalCount(result.totalCount);
-        setItems((prev) => [...prev, newItems]);
-        fetching.current = true;
-      }
-    }
-  }, [fetcher.data]);
-
-  const loadNext = () => {
-    if (fetcher.data && fetcher.data.result) {
-      const { pageInfo } = fetcher.data
-        .result as unknown as FetchRespSchema.ListResp<
-        SerializeSchema.SerializePost<false>
-      >;
-      if (pageInfo.hasNextPage && pageInfo.nextPage) {
-        fetching.current = false;
-        const searchParams = new URLSearchParams();
-        searchParams.set("pageNo", `${pageInfo.nextPage}`);
-        fetcher.load(getPath(searchParams));
-      }
-    }
-  };
-  // SHOWING RESULTS FOR:
-  // S
   return (
     <CollapsibleWrapper
       title="My Drafts"
@@ -73,27 +40,24 @@ export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
           : undefined
       }
       isSearch={Boolean(searchKeyword)}
-      totalCount={totalCount}
-      emptyComponent={
-        items.length === 0 ? (
-          <p className="px-4 text-sm text-muted-foreground">
-            You have not created any drafts.
-          </p>
-        ) : null
-      }
+      totalCount={result?.totalCount ?? 0}
     >
-      {pages
-        .filter((page) => {
+      {items
+        .filter((item) => {
           if (searchKeyword && searchKeyword.length > 0) {
-            return page.title.includes(searchKeyword);
+            return item.title.includes(searchKeyword);
           }
           return true;
         })
         .map((item) => (
           <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
         ))}
-
-      {fetcher.data?.result?.pageInfo?.hasNextPage && (
+      {isSuccess && items.length === 0 ? (
+        <p className="px-4 text-sm text-muted-foreground">
+          You have not created any drafts.
+        </p>
+      ) : null}
+      {isSuccess && result?.pageInfo?.hasNextPage ? (
         <div className="group grid relative grid-cols-12 sm:block">
           <Button
             type="button"
@@ -105,7 +69,7 @@ export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
             <div className="truncate text-left">더보기</div>
           </Button>
         </div>
-      )}
+      ) : null}
     </CollapsibleWrapper>
   );
 }

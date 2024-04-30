@@ -22,17 +22,15 @@ export default function PublishedList({ searchKeyword }: MyDraftListProps) {
       }
       isSearch={Boolean(searchKeyword)}
       totalCount={totalCount}
-      emptyComponent={
-        items.length === 0 ? (
-          <p className="px-4 text-sm text-muted-foreground">
-            You have not published anything.
-          </p>
-        ) : null
-      }
     >
       {pages.map((item) => (
         <SidebarDraftItem key={`my-draft-${item.id}`} item={item} />
       ))}
+      {items.length === 0 ? (
+        <p className="px-4 text-sm text-muted-foreground">
+          You have not published anything.
+        </p>
+      ) : null}
     </CollapsibleWrapper>
   );
 }
