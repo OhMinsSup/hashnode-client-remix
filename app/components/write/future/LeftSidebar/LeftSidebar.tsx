@@ -1,4 +1,4 @@
-import React, { useCallback, useDeferredValue, useTransition } from "react";
+import { useCallback, useTransition } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -11,24 +11,25 @@ import { useSession } from "~/libs/hooks/useSession";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { SearchInput } from "~/components/write/future/SearchInput";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
 import { MyDraftList } from "~/components/write/future/MyDraftList";
 import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
 import { PublishedList } from "~/components/write/future/PublishedList";
-import { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { usePrevious } from "~/libs/hooks/usePrevious";
 
 export default function LeftSidebar() {
   const session = useSession();
-  const { setSideClose, leftSideKeyword } = useWriteContext();
-  const deferredQuery = useDeferredValue(leftSideKeyword);
+  const { setSideClose } = useWriteContext();
   const navigate = useNavigate();
 
-  const [isPending, startTransition] = useTransition();
+  const location = useLocation();
+  const lastestPathname = usePrevious(location.pathname);
+  const isDifferentPathname = lastestPathname !== location.pathname;
 
-  const isSearch = Boolean(deferredQuery) && deferredQuery.length > 0;
+  const [isPending, startTransition] = useTransition();
 
   const onToggleSidebar = useCallback(() => {
     setSideClose();
@@ -79,7 +80,7 @@ export default function LeftSidebar() {
         </TooltipProvider>
       </div>
       <div className=" relative z-30 flex items-center px-4 pb-4">
-        <SearchInput initialKeyword={leftSideKeyword} isSearch={isSearch} />
+        <SearchInput />
       </div>
       <div className="px-4 pb-4">
         <Button
@@ -109,9 +110,9 @@ export default function LeftSidebar() {
         })}
       >
         <div className="pt-4">
-          <SubmittedDraftList searchKeyword={deferredQuery} />
-          <MyDraftList searchKeyword={deferredQuery} />
-          <PublishedList searchKeyword={deferredQuery} />
+          <SubmittedDraftList isDifferentPathname={isDifferentPathname} />
+          <MyDraftList isDifferentPathname={isDifferentPathname} />
+          <PublishedList />
         </div>
       </ScrollArea>
       <hr className="css-1a5r2w9" />

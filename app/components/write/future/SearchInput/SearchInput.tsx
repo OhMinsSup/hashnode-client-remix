@@ -5,17 +5,9 @@ import { Input } from "~/components/ui/input";
 import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 
-interface SearchInputProps {
-  initialKeyword?: string;
-  isSearch?: boolean;
-}
-
-export default function SearchInput({
-  initialKeyword,
-  isSearch,
-}: SearchInputProps) {
-  const { changeLeftSideKeyword } = useWriteContext();
-  const [query, setQuery] = useState(initialKeyword ?? "");
+export default function SearchInput() {
+  const { changeLeftSideKeyword, leftSideKeyword } = useWriteContext();
+  const [query, setQuery] = useState(leftSideKeyword);
   const [, startTransition] = useTransition();
 
   const { run } = useDebounceFn(
@@ -55,6 +47,8 @@ export default function SearchInput({
     },
     [query, run]
   );
+
+  const isSearch = Boolean(leftSideKeyword) && leftSideKeyword.length > 0;
 
   return (
     <div className="relative w-full">

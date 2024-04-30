@@ -33,8 +33,6 @@ export const useBlockEditor = () => {
     []
   );
 
-  console.log(editor);
-
   const characterCount = editor?.storage.characterCount || {
     characters: () => 0,
     words: () => 0,

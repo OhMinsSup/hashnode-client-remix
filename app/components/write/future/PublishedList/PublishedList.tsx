@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
 
-interface MyDraftListProps {
-  searchKeyword: string;
-}
+interface MyDraftListProps {}
 
-export default function PublishedList({ searchKeyword }: MyDraftListProps) {
+export default function PublishedList(_: MyDraftListProps) {
+  const { leftSideKeyword: searchKeyword } = useWriteContext();
   const [totalCount] = useState(0);
   const [items] = useState<SerializeSchema.SerializePost<false>[][]>([]);
 

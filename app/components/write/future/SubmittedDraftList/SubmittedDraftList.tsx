@@ -1,27 +1,30 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
 import { useSubmittedDraftListInfiniteQuery } from "~/routes/api.v1.drafts.submitted";
 import { Button } from "~/components/ui/button";
 import { useLoaderData } from "@remix-run/react";
 import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
 
 interface SubmittedDraftListProps {
-  searchKeyword: string;
+  isDifferentPathname: boolean;
 }
 
 export default function SubmittedDraftList({
-  searchKeyword,
+  isDifferentPathname,
 }: SubmittedDraftListProps) {
+  const { leftSideKeyword: searchKeyword } = useWriteContext();
+
   const { originUrl } = useLoaderData<RoutesLoaderData>();
-  const { data, fetchNextPage, isSuccess } = useSubmittedDraftListInfiniteQuery(
-    {
+
+  const { data, fetchNextPage, isSuccess, refetch } =
+    useSubmittedDraftListInfiniteQuery({
       originUrl,
       searchParams: {
         pageNo: "1",
       },
-    }
-  );
+    });
 
   const pages = data?.pages ?? [];
 
@@ -34,6 +37,12 @@ export default function SubmittedDraftList({
       fetchNextPage();
     }
   }, [fetchNextPage, result]);
+
+  useEffect(() => {
+    if (isDifferentPathname && isSuccess) {
+      refetch();
+    }
+  }, [isDifferentPathname, isSuccess]);
 
   return (
     <CollapsibleWrapper

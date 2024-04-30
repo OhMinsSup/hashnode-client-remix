@@ -1,23 +1,29 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
 import { useDraftListInfiniteQuery } from "~/routes/api.v1.drafts";
 import { Button } from "~/components/ui/button";
 import { useLoaderData } from "@remix-run/react";
 import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
 
 interface MyDraftListProps {
-  searchKeyword: string;
+  isDifferentPathname: boolean;
 }
 
-export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
+export default function MyDraftList({ isDifferentPathname }: MyDraftListProps) {
+  const { leftSideKeyword: searchKeyword } = useWriteContext();
+
   const { originUrl } = useLoaderData<RoutesLoaderData>();
-  const { data, fetchNextPage, isSuccess } = useDraftListInfiniteQuery({
-    originUrl,
-    searchParams: {
-      pageNo: "1",
-    },
-  });
+
+  const { data, fetchNextPage, isSuccess, refetch } = useDraftListInfiniteQuery(
+    {
+      originUrl,
+      searchParams: {
+        pageNo: "1",
+      },
+    }
+  );
 
   const pages = data?.pages ?? [];
 
@@ -30,6 +36,13 @@ export default function MyDraftList({ searchKeyword }: MyDraftListProps) {
       fetchNextPage();
     }
   }, [fetchNextPage, result]);
+
+  useEffect(() => {
+    if (isDifferentPathname && isSuccess) {
+      console.log("MyDraftList - refetch");
+      refetch();
+    }
+  }, [isDifferentPathname, isSuccess]);
 
   return (
     <CollapsibleWrapper
