@@ -18,15 +18,10 @@
   font-size: 1.875rem;
   outline: transparent solid 2px;
   line-height: 1.375 !important;
-  @apply outline-offset-2 font-bold text-slate-900 bg-transparent w-full resize-none appearance-none overflow-hidden;
+  @apply px-4 outline-offset-2 font-bold text-slate-900 bg-transparent w-full resize-none appearance-none overflow-hidden;
 }
 
 .subtitle {
-  width: 100%;
-  resize: none;
-  appearance: none;
-  background-color: transparent;
-  padding-right: 2.5rem;
   font-family:
     "Suisse Intl",
     ui-sans-serif,
@@ -44,11 +39,9 @@
     "Segoe UI Symbol",
     "Noto Color Emoji";
   font-size: 1.5rem;
-  --tw-text-opacity: 1;
-  color: rgb(51 65 85 / var(--tw-text-opacity));
   outline: transparent solid 2px;
   line-height: 1.375 !important;
-  @apply outline-offset-2 font-medium text-slate-700 bg-transparent w-full resize-none appearance-none;
+  @apply pl-4 pr-10 outline-offset-2 font-medium text-slate-700 bg-transparent w-full resize-none appearance-none;
 }
 
 @media (min-width: 768px) {

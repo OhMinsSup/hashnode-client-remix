@@ -3,8 +3,21 @@ import styles from "./styles.module.css";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/icons";
+import { useWriteContext } from "~/components/write/context/useWriteContext";
+import { useCallback } from "react";
 
 export default function WriteEditorHeader() {
+  const { isSubtitleOpen, setSubtitleClose, setSubtitleOpen } =
+    useWriteContext();
+
+  const onRemoveSubtitle = useCallback(() => {
+    setSubtitleClose();
+  }, [setSubtitleClose]);
+
+  const onAddSubtitle = useCallback(() => {
+    setSubtitleOpen();
+  }, [setSubtitleOpen]);
+
   return (
     <div>
       <ScrollArea>
@@ -13,7 +26,12 @@ export default function WriteEditorHeader() {
             <Icons.media className="size-5" />
             <span>Add Cover</span>
           </Button>
-          <Button size="sm" variant="ghost" className="space-x-2">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="space-x-2"
+            onClick={onAddSubtitle}
+          >
             <Icons.subtitle className="size-5" />
             <span>Add Subtitle</span>
           </Button>
@@ -29,22 +47,25 @@ export default function WriteEditorHeader() {
           style={{ height: "50px" }}
         />
       </div>
-      <div className="group relative mt-3">
-        <textarea
-          maxLength={150}
-          placeholder="Article Subtitle..."
-          id="subtitle-input"
-          className={cn(styles.subtitle)}
-          style={{ height: "33px" }}
-        />
-        <Button
-          size="sm"
-          variant="ghost"
-          className=" inline-flex absolute top-0 right-0"
-        >
-          <Icons.close />
-        </Button>
-      </div>
+      {isSubtitleOpen && (
+        <div className="group relative mt-3">
+          <textarea
+            maxLength={150}
+            placeholder="Article Subtitle..."
+            id="subtitle-input"
+            className={cn(styles.subtitle)}
+            style={{ height: "33px" }}
+          />
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onRemoveSubtitle}
+            className=" inline-flex absolute top-0 right-0"
+          >
+            <Icons.close />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

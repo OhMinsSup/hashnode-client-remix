@@ -9,8 +9,6 @@ export const writeLayoutLoader = async ({
 }: LoaderFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
 
-  console.log("writeLayoutLoader");
-
   // TODO: single fetch defer request infinite loop issue??
   return json({
     originUrl: getDomainUrl(request),

@@ -2,6 +2,7 @@ import { json } from "@remix-run/cloudflare";
 import { type QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import {
+  type SearchParams,
   getTokenFromCookie,
   readHeaderCookie,
 } from "~/.server/utils/request.server";
@@ -79,13 +80,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 export type RoutesLoaderData = typeof loader;
 
 export const getBasePath = "/api/v1/drafts/submitted";
-
-export type SearchParams =
-  | string
-  | string[][]
-  | Record<string, string>
-  | URLSearchParams
-  | undefined;
 
 export const getPath = (searchParams?: SearchParams) => {
   if (searchParams) {
