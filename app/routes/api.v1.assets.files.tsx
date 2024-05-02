@@ -82,13 +82,21 @@ export type RoutesLoaderData = typeof loader;
 
 export const getBasePath = "/api/v1/assets/files";
 
-export const getPath = (searchParams?: SearchParams) => {
+export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
   if (searchParams) {
-    const query = new URLSearchParams(searchParams).toString();
-    if (query) {
-      return `${getBasePath}?${query}`;
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set("pageNo", String(pageNo));
     }
+    return `${getBasePath}?${params.toString()}`;
   }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set("pageNo", String(pageNo));
+    return `${getBasePath}?${params.toString()}`;
+  }
+
   return getBasePath;
 };
 
@@ -108,8 +116,8 @@ export function useAssetFileListInfiniteQuery(
   const queryFn: QueryFunction<DataSchema, QueryKey, number> = async (ctx) => {
     const lastKey = ctx.queryKey.at(-1);
     const url = opts?.originUrl
-      ? new URL(getPath(lastKey), opts.originUrl)
-      : getPath(lastKey);
+      ? new URL(getPath(lastKey, ctx.pageParam), opts.originUrl)
+      : getPath(lastKey, ctx.pageParam);
     const response = await fetch(url, {
       method: "GET",
     });
@@ -120,16 +128,17 @@ export function useAssetFileListInfiniteQuery(
   return useInfiniteQuery({
     queryKey,
     queryFn,
+    initialPageParam: 1,
     // @ts-expect-error - This is a bug in react-query types
     initialData: opts?.initialData
-      ? () => ({ pageParams: [null], pages: [opts.initialData] })
+      ? () => ({ pageParams: [undefined], pages: [opts.initialData] })
       : undefined,
     getNextPageParam: (lastPage) => {
       const pageInfo = lastPage?.result?.pageInfo;
       if (pageInfo?.hasNextPage) {
         return pageInfo.nextPage;
       }
-      return null;
+      return undefined;
     },
   });
 }
