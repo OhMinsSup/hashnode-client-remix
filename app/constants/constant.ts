@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
     ROOT: "drafts",
     SYNC: "drafts/sync",
     SUBMITTED: "drafts/submitted",
+    ID_SYNC: (id: string) => `drafts/${id}/sync`,
   },
   FILES: {
     ROOT: "files",

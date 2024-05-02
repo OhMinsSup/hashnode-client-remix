@@ -11,20 +11,54 @@ import {
 import { Separator } from "~/components/ui/separator";
 import { Switch } from "~/components/ui/switch";
 import { Label } from "~/components/ui/label";
+import { Theme, useTheme } from "~/context/useThemeContext";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default function WritePageHeader() {
-  const { setSideOpen, isSideOpen, isMarkdownMode, setMarkdownMode } =
-    useWriteContext();
+  const {
+    setSideOpen,
+    isSideOpen,
+    isMarkdownMode,
+    setMarkdownMode,
+    isOpen,
+    open,
+    close,
+  } = useWriteContext();
 
   const onToggleSidebar = useCallback(() => {
     setSideOpen();
   }, [setSideOpen]);
+
+  const [theme, setTheme] = useTheme();
 
   const onCheckedMarkdownChange = useCallback(
     (checked: boolean) => {
       setMarkdownMode(checked);
     },
     [setMarkdownMode]
+  );
+
+  const onCheckedThemeChange = useCallback(
+    (checked: boolean) => {
+      setTheme(checked ? Theme.DARK : Theme.LIGHT);
+    },
+    [setTheme]
+  );
+
+  const onOpenChange = useCallback(
+    (value: boolean) => {
+      value ? open() : close();
+    },
+    [close, open]
   );
 
   return (
@@ -65,6 +99,7 @@ export default function WritePageHeader() {
                     variant="ghost"
                     className="flex justify-start space-x-2"
                     size="sm"
+                    onClick={() => onOpenChange(true)}
                   >
                     <Icons.settings2 className="size-5" />
                     <span>Draft Settings</span>
@@ -77,12 +112,20 @@ export default function WritePageHeader() {
                   />
                   <div className="flex items-center justify-between space-x-2 px-3">
                     <div className="flex justify-center items-center space-x-2">
-                      <Icons.moon className="size-5" />
+                      {theme === Theme.DARK ? (
+                        <Icons.sun className="size-5" />
+                      ) : (
+                        <Icons.moon className="size-5" />
+                      )}
                       <Label htmlFor="theme-mode" className="text-xs">
-                        Dark mode
+                        {theme === Theme.DARK ? "Light" : "Dark"} mode
                       </Label>
                     </div>
-                    <Switch id="theme-mode" />
+                    <Switch
+                      id="theme-mode"
+                      checked={theme === Theme.DARK}
+                      onCheckedChange={onCheckedThemeChange}
+                    />
                   </div>
                   <div className="flex items-center justify-between space-x-2 px-3">
                     <div className="flex justify-center items-center space-x-2">
@@ -113,7 +156,40 @@ export default function WritePageHeader() {
               <span className="hidden md:flex">Preview</span>
               <Icons.fileSearch className="flex md:hidden" />
             </Button>
-            <Button variant="default">Publish</Button>
+            <Drawer direction="left" open={isOpen} onOpenChange={onOpenChange}>
+              <DrawerTrigger asChild>
+                <Button variant="default">Publish</Button>
+              </DrawerTrigger>
+              <DrawerContent className="rounded-none h-full w-full sm:w-[504px]">
+                <DrawerHeader className="border-b">
+                  <DrawerTitle>
+                    <div className="flex flex-row justify-between items-center">
+                      <h2>Draft settings</h2>
+                      <DrawerClose>
+                        <Button variant="ghost">
+                          <Icons.close />
+                        </Button>
+                      </DrawerClose>
+                    </div>
+                  </DrawerTitle>
+                </DrawerHeader>
+                <div className="flex-1 overflow-auto">
+                  <ScrollArea className="w-full h-full p-6">
+                    {Array.from({ length: 300 }).map((_, index) => (
+                      <div key={index} className="py-2">
+                        <div>adasdsa</div>
+                      </div>
+                    ))}
+                  </ScrollArea>
+                </div>
+                <DrawerFooter className="border">
+                  <div className="flex items-center space-x-2 justify-end">
+                    <Button variant="outline">Submit for review</Button>
+                    <Button>Publish</Button>
+                  </div>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
       </div>
