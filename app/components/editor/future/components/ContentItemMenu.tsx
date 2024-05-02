@@ -161,7 +161,7 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
       // @ts-expect-error - `onNodeChange` is not a valid prop
       onNodeChange={data.handleNodeChange}
       tippyOptions={{
-        offset: [-2, 16],
+        offset: [-2, 0],
         zIndex: 99,
       }}
     >
