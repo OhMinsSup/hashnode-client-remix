@@ -19,9 +19,6 @@ export default function MyDraftList({ isDifferentPathname }: MyDraftListProps) {
   const { data, fetchNextPage, isSuccess, refetch } = useDraftListInfiniteQuery(
     {
       originUrl,
-      searchParams: {
-        pageNo: "1",
-      },
     }
   );
 

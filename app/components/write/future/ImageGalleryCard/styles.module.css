@@ -1,0 +1,19 @@
+.item {
+  @apply flex flex-col cursor-pointer box-border;
+}
+
+.item_cover {
+  @apply w-full overflow-hidden rounded-md border outline-offset-2 outline-none hover:!border-primary;
+}
+
+.item_label {
+  @apply text-sm mt-1 text-slate-700;
+}
+
+:global(.dark) .item_label {
+  @apply text-slate-300;
+}
+
+:global(.dark) .item_cover {
+  @apply border-slate-800;
+}

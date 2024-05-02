@@ -100,6 +100,20 @@ declare namespace SerializeSchema {
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
     count: SerializePostCount;
   };
+
+  type UploadType = "IMAGE" | "POST_THUMBNAIL" | "SEO";
+
+  type MediaType = "IMAGE" | "VIDEO" | "AUDIO";
+
+  export type SerializeFile = {
+    id: string;
+    cfId: string;
+    publicUrl: string;
+    filename: string;
+    mimeType: string;
+    uploadType: UploadType;
+    mediaType: MediaType;
+  };
 }
 
 declare namespace FetchQuerySchema {}

@@ -21,6 +21,17 @@ export class FileNamespace {
     this._service = service;
   }
 
+  getFilesHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ROOT),
+      {
+        method: "GET",
+        baseURL: this._service.uri.toString(),
+        ...options,
+      }
+    );
+  };
+
   postFileCreateHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),

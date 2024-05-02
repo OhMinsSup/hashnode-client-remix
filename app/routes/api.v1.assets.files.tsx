@@ -7,7 +7,7 @@ import {
   readHeaderCookie,
 } from "~/.server/utils/request.server";
 
-type Data = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
+type Data = FetchRespSchema.ListResp<SerializeSchema.SerializeFile>;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
@@ -53,13 +53,14 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const query = Object.fromEntries(searchParams.entries());
-  const response =
-    await context.agent.api.app.draft.getSubmittedDraftsHandler<DataSchema>({
+  const response = await context.agent.api.app.file.getFilesHandler<DataSchema>(
+    {
       headers: {
         Cookie: cookie,
       },
       query,
-    });
+    }
+  );
 
   const data = response._data;
   if (!data || (data && !data.result)) {
@@ -79,43 +80,36 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/drafts/submitted";
+export const getBasePath = "/api/v1/assets/files";
 
-export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
+export const getPath = (searchParams?: SearchParams) => {
   if (searchParams) {
-    const params = new URLSearchParams(searchParams);
-    if (pageNo) {
-      params.set("pageNo", String(pageNo));
+    const query = new URLSearchParams(searchParams).toString();
+    if (query) {
+      return `${getBasePath}?${query}`;
     }
-    return `${getBasePath}?${params.toString()}`;
-  }
-
-  if (pageNo) {
-    const params = new URLSearchParams();
-    params.set("pageNo", String(pageNo));
-    return `${getBasePath}?${params.toString()}`;
   }
   return getBasePath;
 };
 
 type QueryKey = [string, SearchParams];
 
-interface UseSubmittedDraftListInfiniteQueryParams {
+interface UseAssetFileListInfiniteQueryParams {
   initialData?: DataSchema;
   originUrl?: string;
   searchParams?: SearchParams;
 }
 
-export function useSubmittedDraftListInfiniteQuery(
-  opts?: UseSubmittedDraftListInfiniteQueryParams
+export function useAssetFileListInfiniteQuery(
+  opts?: UseAssetFileListInfiniteQueryParams
 ) {
   const queryKey: QueryKey = [getBasePath, opts?.searchParams];
 
   const queryFn: QueryFunction<DataSchema, QueryKey, number> = async (ctx) => {
     const lastKey = ctx.queryKey.at(-1);
     const url = opts?.originUrl
-      ? new URL(getPath(lastKey, ctx.pageParam), opts.originUrl)
-      : getPath(lastKey, ctx.pageParam);
+      ? new URL(getPath(lastKey), opts.originUrl)
+      : getPath(lastKey);
     const response = await fetch(url, {
       method: "GET",
     });
@@ -126,17 +120,16 @@ export function useSubmittedDraftListInfiniteQuery(
   return useInfiniteQuery({
     queryKey,
     queryFn,
-    initialPageParam: 1,
     // @ts-expect-error - This is a bug in react-query types
     initialData: opts?.initialData
-      ? () => ({ pageParams: [undefined], pages: [opts.initialData] })
+      ? () => ({ pageParams: [null], pages: [opts.initialData] })
       : undefined,
     getNextPageParam: (lastPage) => {
       const pageInfo = lastPage?.result?.pageInfo;
       if (pageInfo?.hasNextPage) {
         return pageInfo.nextPage;
       }
-      return undefined;
+      return null;
     },
   });
 }

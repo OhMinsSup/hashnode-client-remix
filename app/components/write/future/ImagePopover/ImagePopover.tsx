@@ -4,6 +4,7 @@ import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/icons";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { ImageUpload } from "~/components/write/future/ImageUpload";
+import { ImageGallery } from "~/components/write/future/ImageGallery";
 
 export default function ImagePopover() {
   const { setCoverClose } = useWriteContext();
@@ -32,7 +33,7 @@ export default function ImagePopover() {
           <ImageUpload />
         </TabsContent>
         <TabsContent value="unsplash" className="mb-4 mt-6">
-          <div>Unsplash</div>
+          <ImageGallery />
         </TabsContent>
       </Tabs>
     </div>
