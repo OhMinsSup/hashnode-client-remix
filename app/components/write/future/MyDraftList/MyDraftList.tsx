@@ -42,17 +42,17 @@ export default function MyDraftList({ isDifferentPathname }: MyDraftListProps) {
       console.log("MyDraftList - refetch");
       refetch();
     }
-  }, [isDifferentPathname, isSuccess]);
+  }, [isDifferentPathname, isSuccess, refetch]);
+
+  const isSearch = Boolean(searchKeyword);
 
   return (
     <CollapsibleWrapper
       title="My Drafts"
       searchTitle={
-        searchKeyword
-          ? `Showing results for Draft: ${searchKeyword}`
-          : undefined
+        isSearch ? `Showing results for Draft: ${searchKeyword}` : undefined
       }
-      isSearch={Boolean(searchKeyword)}
+      isSearch={isSearch}
       totalCount={result?.totalCount ?? 0}
     >
       {items
@@ -70,7 +70,7 @@ export default function MyDraftList({ isDifferentPathname }: MyDraftListProps) {
           You have not created any drafts.
         </p>
       ) : null}
-      {isSuccess && result?.pageInfo?.hasNextPage ? (
+      {!isSearch && isSuccess && result?.pageInfo?.hasNextPage ? (
         <div className="group grid relative grid-cols-12 sm:block">
           <Button
             type="button"
