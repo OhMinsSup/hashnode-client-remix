@@ -1,0 +1,7 @@
+.tab_content_upload {
+  @apply flex flex-col items-center justify-center border-dashed border border-slate-200 rounded-md p-8;
+}
+
+.recommended_text {
+  @apply text-center text-sm text-slate-500 mt-2;
+}

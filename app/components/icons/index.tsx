@@ -51,10 +51,12 @@ import {
   icons,
   FileSearch,
   GanttChart,
+  CloudUpload,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
 export const Icons = {
+  cloudUpload: CloudUpload,
   fileSearch: FileSearch,
   files: Files,
   award: Award,
