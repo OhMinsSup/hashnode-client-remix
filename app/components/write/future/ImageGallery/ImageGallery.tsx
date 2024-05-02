@@ -27,7 +27,7 @@ export default function ImageGallery() {
   };
 
   return (
-    <div className="pt-4">
+    <div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-row w-full space-x-2 mb-5"
