@@ -30,6 +30,6 @@
     },
     // Vite takes care of building everything, not tsc.
     "noEmit": true,
-    "types": ["node_modules/@remix-run/react/future/single-fetch.d.ts"]
+    "types": ["@remix-run/react/future/single-fetch.d.ts"]
   }
 }
