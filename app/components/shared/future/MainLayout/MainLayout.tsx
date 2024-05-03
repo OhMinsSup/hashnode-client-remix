@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
+import { cn } from "~/services/libs";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -22,7 +23,16 @@ export default function MainLayout({
         <header className={styles.header}>{header}</header>
       )}
       <main className={styles.main}>{children}</main>
-      {hiddenFooter ? null : <nav className={styles.nav}>{footer}</nav>}
+      {hiddenFooter ? null : (
+        <nav
+          className={cn(
+            styles.nav,
+            "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
+          )}
+        >
+          {footer}
+        </nav>
+      )}
     </div>
   );
 }

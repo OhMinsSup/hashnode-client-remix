@@ -7,7 +7,7 @@ import {
   readHeaderCookie,
 } from "~/.server/utils/request.server";
 
-type Data = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
+type Data = FetchRespSchema.ListResp<SerializeSchema.SerializeFile>;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
@@ -53,13 +53,14 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const query = Object.fromEntries(searchParams.entries());
-  const response =
-    await context.agent.api.app.draft.getSubmittedDraftsHandler<DataSchema>({
+  const response = await context.agent.api.app.file.getFilesHandler<DataSchema>(
+    {
       headers: {
         Cookie: cookie,
       },
       query,
-    });
+    }
+  );
 
   const data = response._data;
   if (!data || (data && !data.result)) {
@@ -79,7 +80,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/drafts/submitted";
+export const getBasePath = "/api/v1/assets/files";
 
 export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
   if (searchParams) {
@@ -95,19 +96,20 @@ export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
     params.set("pageNo", String(pageNo));
     return `${getBasePath}?${params.toString()}`;
   }
+
   return getBasePath;
 };
 
 type QueryKey = [string, SearchParams];
 
-interface UseSubmittedDraftListInfiniteQueryParams {
+interface UseAssetFileListInfiniteQueryParams {
   initialData?: DataSchema;
   originUrl?: string;
   searchParams?: SearchParams;
 }
 
-export function useSubmittedDraftListInfiniteQuery(
-  opts?: UseSubmittedDraftListInfiniteQueryParams
+export function useAssetFileListInfiniteQuery(
+  opts?: UseAssetFileListInfiniteQueryParams
 ) {
   const queryKey: QueryKey = [getBasePath, opts?.searchParams];
 

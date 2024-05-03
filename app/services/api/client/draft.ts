@@ -1,6 +1,12 @@
 import { API_ENDPOINTS } from "../../../constants/constant";
 import { type ServiceClient } from ".";
-import { FetchWithoutRequestHandler } from "../fetch/types";
+import type {
+  FetchOptions,
+  FetchResponse,
+  FetchWithoutRequestHandler,
+  MappedResponseType,
+  ResponseType,
+} from "../fetch/types";
 
 export class DraftNamespace {
   _service: ServiceClient;
@@ -49,6 +55,20 @@ export class DraftNamespace {
       this._service.constructMethodCallUri(this.endpoint.SYNC),
       {
         method: "POST",
+        baseURL: this._service.uri.toString(),
+        ...options,
+      }
+    );
+  };
+
+  putSyncDraftHandler = async <T = unknown, R extends ResponseType = "json">(
+    id: string,
+    options?: FetchOptions<R>
+  ): Promise<FetchResponse<MappedResponseType<R, T>>> => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ID_SYNC(id)),
+      {
+        method: "PUT",
         baseURL: this._service.uri.toString(),
         ...options,
       }

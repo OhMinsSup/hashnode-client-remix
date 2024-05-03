@@ -12,15 +12,15 @@ export default function PublishedList(_: MyDraftListProps) {
 
   const pages = items.flat();
 
+  const isSearch = Boolean(searchKeyword);
+
   return (
     <CollapsibleWrapper
       title="PUBLISHED"
       searchTitle={
-        searchKeyword
-          ? `Showing results for Published: ${searchKeyword}`
-          : undefined
+        isSearch ? `Showing results for Published: ${searchKeyword}` : undefined
       }
-      isSearch={Boolean(searchKeyword)}
+      isSearch={isSearch}
       totalCount={totalCount}
     >
       {pages.map((item) => (

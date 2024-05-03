@@ -3,8 +3,8 @@ import type { Node, NodeType } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 interface NodeEqualsType {
-  types: NodeType[];
-  node: Node | null;
+  types: NodeType[] | NodeType;
+  node: Node;
 }
 
 function nodeEqualsType({ types, node }: NodeEqualsType) {
@@ -59,6 +59,9 @@ export const TrailingNode = Extension.create<TrailingNodeOptions>({
         state: {
           init: (_, state) => {
             const lastNode = state.tr.doc.lastChild;
+            if (!lastNode) {
+              return false;
+            }
 
             return !nodeEqualsType({ node: lastNode, types: disabledNodes });
           },
@@ -68,6 +71,9 @@ export const TrailingNode = Extension.create<TrailingNodeOptions>({
             }
 
             const lastNode = tr.doc.lastChild;
+            if (!lastNode) {
+              return false;
+            }
 
             return !nodeEqualsType({ node: lastNode, types: disabledNodes });
           },

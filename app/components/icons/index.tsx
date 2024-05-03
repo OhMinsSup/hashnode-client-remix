@@ -51,10 +51,13 @@ import {
   icons,
   FileSearch,
   GanttChart,
+  CloudUpload,
+  Settings2,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
 export const Icons = {
+  cloudUpload: CloudUpload,
   fileSearch: FileSearch,
   files: Files,
   award: Award,
@@ -101,7 +104,7 @@ export const Icons = {
   rotateCcw: RotateCcw,
   users: Users,
   filePlus2: FilePlus2,
-
+  settings2: Settings2,
   repostCheck: ({ ...props }: LucideProps) => (
     <svg
       aria-label="리포스트"
@@ -294,6 +297,21 @@ export const Icons = {
           strokeLinejoin="round"
         ></path>
       </g>
+    </svg>
+  ),
+  markdown: ({ ...props }: LucideProps) => (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.75 12.5V7.49996L6.45833 9.99996L4.16667 7.49996V12.5M14.1667 7.49996V12.5M14.1667 12.5L15.8333 10.8333M14.1667 12.5L12.5 10.8333M2.5 4.16663H17.5M17.5 15.8333H2.5"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></path>
     </svg>
   ),
   subtitle: GanttChart,

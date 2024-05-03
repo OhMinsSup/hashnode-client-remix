@@ -1,15 +1,20 @@
-import { BubbleMenu as BaseBubbleMenu } from "@tiptap/react";
+import { BubbleMenu as BaseBubbleMenu, Editor } from "@tiptap/react";
 import { useCallback } from "react";
 import { sticky } from "tippy.js";
 import { createId as cuid } from "@paralleldrive/cuid2";
 
-import { MenuProps } from "@/components/menus/types";
 import { getRenderContainer } from "~/components/editor/future/hooks/utils";
 import { Toolbar } from "~/components/editor/future/components/Toolbar";
 import { ColumnLayout } from "../Columns";
 import { EditorIcon } from "~/components/icons";
 
-export const ColumnsMenu = ({ editor, appendTo }: MenuProps) => {
+interface ColumnsMenuProps {
+  editor: Editor;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  appendTo?: React.RefObject<any>;
+}
+
+export const ColumnsMenu = ({ editor, appendTo }: ColumnsMenuProps) => {
   const getReferenceClientRect = useCallback(() => {
     const renderContainer = getRenderContainer(editor, "columns");
     const rect =

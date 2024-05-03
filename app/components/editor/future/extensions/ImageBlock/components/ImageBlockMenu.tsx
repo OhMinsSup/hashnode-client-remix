@@ -1,4 +1,4 @@
-import { BubbleMenu as BaseBubbleMenu } from "@tiptap/react";
+import { BubbleMenu as BaseBubbleMenu, Editor } from "@tiptap/react";
 import { useCallback, useRef } from "react";
 import { Instance, sticky } from "tippy.js";
 import { createId as cuid } from "@paralleldrive/cuid2";
@@ -6,13 +6,15 @@ import { createId as cuid } from "@paralleldrive/cuid2";
 import { Toolbar } from "~/components/editor/future/components/Toolbar";
 import { EditorIcon } from "~/components/icons";
 import { ImageBlockWidth } from "./ImageBlockWidth";
-import { MenuProps } from "@/components/menus/types";
 import { getRenderContainer } from "~/components/editor/future/hooks/utils";
 
-export const ImageBlockMenu = ({
-  editor,
-  appendTo,
-}: MenuProps): JSX.Element => {
+interface ImageBlockMenuuProps {
+  editor: Editor;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  appendTo?: React.RefObject<any>;
+}
+
+export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const tippyInstance = useRef<Instance | null>(null);
 

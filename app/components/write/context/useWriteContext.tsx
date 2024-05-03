@@ -16,6 +16,8 @@ enum Action {
 
   SET_UPLOAD_STATE = "SET_UPLOAD_STATE",
 
+  SET_MARKDOWN_MODE = "SET_MARKDOWN_MODE",
+
   CHANGE_LEFT_SIDE_KEYWORD = "CHANGE_LEFT_SIDE_KEYWORD",
 }
 
@@ -56,6 +58,11 @@ type SetUploadStateAction = {
   payload: "idle" | "pending" | "success" | "error";
 };
 
+type SetMarkdownModeAction = {
+  type: Action.SET_MARKDOWN_MODE;
+  payload: boolean;
+};
+
 type ChangeLeftSideKeywordAction = {
   type: Action.CHANGE_LEFT_SIDE_KEYWORD;
   payload: string;
@@ -71,7 +78,8 @@ type WriteAction =
   | SetCoverOpenAction
   | SetCoverCloseAction
   | SetUploadStateAction
-  | ChangeLeftSideKeywordAction;
+  | ChangeLeftSideKeywordAction
+  | SetMarkdownModeAction;
 
 interface WriteState {
   isOpen: boolean;
@@ -79,6 +87,7 @@ interface WriteState {
   isSubtitleOpen: boolean;
   isCoverOpen: boolean;
   uploadState: "idle" | "pending" | "success" | "error";
+  isMarkdownMode: boolean;
   leftSideKeyword: string;
 }
 
@@ -92,6 +101,7 @@ interface WriteContext extends WriteState {
   setCoverOpen: () => void;
   setCoverClose: () => void;
   setUploadState: (payload: SetUploadStateAction["payload"]) => void;
+  setMarkdownMode: (payload: SetMarkdownModeAction["payload"]) => void;
   changeLeftSideKeyword: (
     payload: ChangeLeftSideKeywordAction["payload"]
   ) => void;
@@ -103,6 +113,7 @@ const initialState: WriteState = {
   isSideOpen: true,
   isSubtitleOpen: false,
   isCoverOpen: false,
+  isMarkdownMode: false,
   uploadState: "idle",
   leftSideKeyword: "",
 };
@@ -175,6 +186,12 @@ function reducer(state = initialState, action: WriteAction) {
         leftSideKeyword: action.payload,
       };
     }
+    case Action.SET_MARKDOWN_MODE: {
+      return {
+        ...state,
+        isMarkdownMode: action.payload,
+      };
+    }
     default:
       return state;
   }
@@ -203,6 +220,9 @@ function WriteProvider({ children }: Props) {
 
   const setCoverClose = () => dispatch({ type: Action.SET_COVER_CLOSE });
 
+  const setMarkdownMode = (payload: SetMarkdownModeAction["payload"]) =>
+    dispatch({ type: Action.SET_MARKDOWN_MODE, payload });
+
   const setUploadState = (payload: SetUploadStateAction["payload"]) =>
     dispatch({ type: Action.SET_UPLOAD_STATE, payload });
 
@@ -223,6 +243,7 @@ function WriteProvider({ children }: Props) {
       setCoverClose,
       setUploadState,
       changeLeftSideKeyword,
+      setMarkdownMode,
       dispatch,
     }),
     [state]

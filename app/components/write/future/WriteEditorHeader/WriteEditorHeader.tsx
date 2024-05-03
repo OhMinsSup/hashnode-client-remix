@@ -3,12 +3,36 @@ import styles from "./styles.module.css";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/icons";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { useCallback } from "react";
+import { ImagePopover } from "~/components/write/future/ImagePopover";
 
 export default function WriteEditorHeader() {
-  const { isSubtitleOpen, setSubtitleClose, setSubtitleOpen } =
-    useWriteContext();
+  const {
+    isSubtitleOpen,
+    isCoverOpen,
+    setCoverOpen,
+    setCoverClose,
+    setSubtitleClose,
+    setSubtitleOpen,
+    uploadState,
+  } = useWriteContext();
+
+  const onOpenChange = useCallback(
+    (value: boolean) => {
+      if (value) {
+        setCoverOpen();
+      } else {
+        setCoverClose();
+      }
+    },
+    [setCoverClose, setCoverOpen]
+  );
 
   const onRemoveSubtitle = useCallback(() => {
     setSubtitleClose();
@@ -22,10 +46,26 @@ export default function WriteEditorHeader() {
     <div>
       <ScrollArea>
         <div className=" flex flex-row px-4 font-semibold whitespace-nowrap mb-10">
-          <Button size="sm" variant="ghost" className="space-x-2">
-            <Icons.media className="size-5" />
-            <span>Add Cover</span>
-          </Button>
+          <Popover open={isCoverOpen} onOpenChange={onOpenChange}>
+            <PopoverTrigger asChild>
+              <Button size="sm" variant="ghost" className="space-x-2">
+                {uploadState === "pending" ? (
+                  <>
+                    <Icons.spinner className="size-5 animate-spin" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.media className="size-5" />
+                    <span>Add Cover</span>
+                  </>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-screen md:w-[725px]" align="start">
+              <ImagePopover />
+            </PopoverContent>
+          </Popover>
           <Button
             size="sm"
             variant="ghost"
