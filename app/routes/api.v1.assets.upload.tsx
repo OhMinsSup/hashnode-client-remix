@@ -10,16 +10,49 @@ import { requireAuthCookie } from "~/.server/utils/auth.server";
 import { schema } from "~/services/validate/cf-file.validate";
 import { SearchParams } from "~/.server/utils/request.server";
 import { parse } from "@conform-to/zod";
+import { type FetchResponse } from "~/services/api/fetch/types";
 
 type Data = FetchRespSchema.File;
 
 type DataSchema = FetchRespSchema.Success<Data>;
+
+type CfDirectSchema = CloudflareSchema.CfDirectUpload;
+
+type CfUploadSchema = CloudflareSchema.CfUpload;
 
 type ActionSchema = {
   status: "success" | "error";
   result: Data | null;
   errors: Record<string, string | string[]> | null;
 };
+
+type OverrideFetchResponse<T> = FetchResponse<T> & {
+  _data: T;
+};
+
+function invariantCloudflareResponse(
+  response: FetchResponse<CfDirectSchema | CfUploadSchema>
+): asserts response is OverrideFetchResponse<CfDirectSchema | CfUploadSchema> {
+  if (!response._data) {
+    const error = new Error();
+    error.name = "CloudflareResponseError";
+    error.message = JSON.stringify({
+      status: response.status,
+      errors: undefined,
+    });
+    throw error;
+  }
+
+  if (!response._data.success) {
+    const error = new Error();
+    error.name = "CloudflareResponseError";
+    error.message = JSON.stringify({
+      status: response.status,
+      errors: response._data.errors.at(0),
+    });
+    throw error;
+  }
+}
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
@@ -29,6 +62,8 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     result: null,
     errors: null,
   };
+
+  const fileApi = context.agent.api.app.file;
 
   const MAX_FILE_SIZE = 5_000_000; // 5MB
   const uploadHandler = createMemoryUploadHandler({
@@ -52,100 +87,39 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     );
   }
 
-  let uploadURL: string | undefined;
   try {
-    const formData = new FormData();
-    // Now + 2 minutes (2021-01-02T02:20:00Z)
-    const expiry = new Date(Date.now() + 120000).toISOString();
-    formData.append("expiry", expiry);
-
-    const response =
-      await context.agent.api.app.file.postDirectUploadHandler<CloudflareSchema.CfDirectUpload>(
+    // const formData = new FormData();
+    // // Now + 2 minutes (2021-01-02T02:20:00Z)
+    // const expiry = new Date(Date.now() + 120000).toISOString();
+    // formData.append("expiry", expiry);
+    const responseTypeCfDirect =
+      await fileApi.postDirectUploadHandler<CfDirectSchema>(
         context.env.CF_ID,
         context.env.CF_API_TOKEN
       );
+    invariantCloudflareResponse(responseTypeCfDirect);
 
-    const data = response._data;
-    if (!data) {
-      return json(defaultValue, {
-        status: response.status,
-      });
-    }
+    const { uploadURL } = responseTypeCfDirect._data.result;
 
-    if (!data.success) {
-      return json(
-        {
-          status: "error" as const,
-          result: null,
-          errors: data.errors.at(0) ?? null,
-        } as ActionSchema,
-        {
-          status: response.status,
-        }
-      );
-    }
-
-    uploadURL = data.result.uploadURL;
-  } catch (error) {
-    console.error(error);
-    return json(defaultValue, { status: 500 });
-  }
-
-  if (!uploadURL) {
-    return json(defaultValue, { status: 500 });
-  }
-
-  const { file, mediaType, uploadType } = submission.value;
-
-  let cfData: CloudflareSchema.CfUpload["result"] | undefined;
-  try {
-    const response =
-      await context.agent.api.app.file.postCloudflareUploadHandler<CloudflareSchema.CfUpload>(
+    const responseTypeCfUpload =
+      await fileApi.postCloudflareUploadHandler<CfUploadSchema>(
         uploadURL,
-        file
+        submission.value.file
       );
+    invariantCloudflareResponse(responseTypeCfUpload);
 
-    const data = response._data;
-    if (!data) {
-      return json(defaultValue, {
-        status: response.status,
-      });
-    }
+    const { id, variants } = responseTypeCfUpload._data.result;
 
-    if (!data.success) {
-      return json(
-        {
-          status: "error" as const,
-          result: null,
-          errors: data.errors.at(0) ?? null,
-        } as ActionSchema,
-        {
-          status: response.status,
-        }
-      );
-    }
-
-    cfData = data.result;
-  } catch (error) {
-    return json(defaultValue, { status: 500 });
-  }
-
-  if (!cfData) {
-    return json(defaultValue, { status: 500 });
-  }
-
-  try {
-    const response =
-      await context.agent.api.app.file.postFileCreateHandler<DataSchema>({
-        body: {
-          cfId: cfData.id,
-          filename: file.name,
-          mimeType: file.type,
-          publicUrl: cfData.variants[0],
-          mediaType: mediaType,
-          uploadType: uploadType,
-        },
-      });
+    const response = await fileApi.postFileCreateHandler<DataSchema>({
+      body: {
+        cfId: id,
+        filename: submission.value.file.name,
+        mimeType: submission.value.file.type,
+        publicUrl: variants[0],
+        mediaType: submission.value.mediaType,
+        uploadType: submission.value.uploadType,
+      },
+    });
 
     const data = response._data;
     if (!data) {
@@ -166,6 +140,22 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     );
   } catch (error) {
     console.error(error);
+    if (error instanceof Error && error.name === "CloudflareResponseError") {
+      const data = JSON.parse(error.message) as {
+        status: number;
+        errors: ActionSchema["errors"];
+      };
+      return json(
+        {
+          status: "error" as const,
+          result: null,
+          errors: data.errors,
+        } as ActionSchema,
+        {
+          status: data.status,
+        }
+      );
+    }
     return json(defaultValue, { status: 500 });
   }
 };
