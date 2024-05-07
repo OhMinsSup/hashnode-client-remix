@@ -22,6 +22,7 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { DraftSettingDrawer } from "../DraftSettingDrawer";
 
 export default function WritePageHeader() {
   const {
@@ -175,11 +176,7 @@ export default function WritePageHeader() {
                 </DrawerHeader>
                 <div className="flex-1 overflow-auto">
                   <ScrollArea className="w-full h-full p-6">
-                    {Array.from({ length: 300 }).map((_, index) => (
-                      <div key={index} className="py-2">
-                        <div>adasdsa</div>
-                      </div>
-                    ))}
+                    <DraftSettingDrawer />
                   </ScrollArea>
                 </div>
                 <DrawerFooter className="border">
