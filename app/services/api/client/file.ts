@@ -63,18 +63,36 @@ export class FileNamespace {
     });
   };
 
-  postCloudflareUploadHandler = <Data = unknown>(
-    uploadUrl: string,
-    file: File,
-    opts?: FetchOptions<"json"> | undefined
-  ) => {
+  postCloudflareUploadHandler = async (uploadUrl: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return fetchHandler<Data, "json">(uploadUrl, {
-      ...opts,
+    const responseInit = new Request(uploadUrl, {
       method: "POST",
-      body: file,
+      body: formData,
     });
+
+    const response = await fetch(responseInit);
+    if (!response.ok) {
+      const error = new Error();
+
+      const requestStr = `[${responseInit.method}] ${JSON.stringify(uploadUrl)}`;
+
+      const statusStr = response
+        ? `${response.status.toString()} ${response.statusText}`
+        : "<no response>";
+
+      const message = `${requestStr}: ${statusStr}`;
+
+      error.name = "CloudflareUploadError";
+      error.message = JSON.stringify({
+        status: response.status,
+        errors: message,
+      });
+
+      throw error;
+    }
+
+    return response.json<CloudflareSchema.CfUpload>();
   };
 }

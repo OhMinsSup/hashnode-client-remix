@@ -8,7 +8,7 @@ import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { requireAuthCookie } from "~/.server/utils/auth.server";
 import { schema } from "~/services/validate/cf-file.validate";
-import { SearchParams } from "~/.server/utils/request.server";
+import { SearchParams, readHeaderCookie } from "~/.server/utils/request.server";
 import { parse } from "@conform-to/zod";
 import { type FetchResponse } from "~/services/api/fetch/types";
 
@@ -63,6 +63,20 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     errors: null,
   };
 
+  const cookie = readHeaderCookie(request);
+  if (!cookie) {
+    return json(
+      {
+        status: "error" as const,
+        result: defaultValue,
+        message: "You are not logged in.",
+      },
+      {
+        status: 401,
+      }
+    );
+  }
+
   const fileApi = context.agent.api.app.file;
 
   const MAX_FILE_SIZE = 5_000_000; // 5MB
@@ -76,7 +90,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     schema,
   });
 
-  if (submission.error || !submission.value) {
+  if (Object.keys(submission.error).length || !submission.value) {
     return json(
       {
         status: "error" as const,
@@ -101,14 +115,12 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     const { uploadURL } = responseTypeCfDirect._data.result;
 
-    const responseTypeCfUpload =
-      await fileApi.postCloudflareUploadHandler<CfUploadSchema>(
-        uploadURL,
-        submission.value.file
-      );
-    invariantCloudflareResponse(responseTypeCfUpload);
+    const responseTypeCfUpload = await fileApi.postCloudflareUploadHandler(
+      uploadURL,
+      submission.value.file
+    );
 
-    const { id, variants } = responseTypeCfUpload._data.result;
+    const { id, variants } = responseTypeCfUpload.result;
 
     const response = await fileApi.postFileCreateHandler<DataSchema>({
       body: {
@@ -118,6 +130,9 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         publicUrl: variants[0],
         mediaType: submission.value.mediaType,
         uploadType: submission.value.uploadType,
+      },
+      headers: {
+        Cookie: cookie,
       },
     });
 
@@ -156,6 +171,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         }
       );
     }
+
     return json(defaultValue, { status: 500 });
   }
 };

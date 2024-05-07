@@ -17,6 +17,8 @@ export default function ImageUpload() {
 
   const fetcher = useFetcher<RoutesActionData>();
 
+  console.log(fetcher);
+
   const upload = useCallback(
     async (file: File) => {
       setUploadState("pending");

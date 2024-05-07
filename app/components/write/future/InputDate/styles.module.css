@@ -1,0 +1,8 @@
+.input_by_readonly {
+}
+
+@media (min-width: 500px) {
+  .input_by_readonly {
+    @apply max-w-96;
+  }
+}
