@@ -5,6 +5,7 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     ROOT: "users",
+    WIDGET: "users/widget",
   },
   POSTS: {
     ROOT: "posts",
@@ -19,6 +20,10 @@ export const API_ENDPOINTS = {
   },
   FILES: {
     ROOT: "files",
+  },
+  TAGS: {
+    ROOT: "tags",
+    WIDGET: "tags/widget",
   },
 } as const;
 
