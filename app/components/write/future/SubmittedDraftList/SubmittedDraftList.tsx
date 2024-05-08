@@ -1,32 +1,45 @@
-import { useCallback, useTransition } from "react";
-import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
+import { useCallback, useEffect, useMemo, useTransition } from "react";
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
-import { useSubmittedDraftListInfiniteQuery } from "~/routes/api.v1.drafts.submitted";
+import { useSubmittedDraftInfiniteQuery } from "~/routes/api.v1.drafts.submitted";
 import { Button } from "~/components/ui/button";
 import { useLoaderData } from "@remix-run/react";
 import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
+import { Icons } from "~/components/icons";
 
-export default function SubmittedDraftList() {
+interface SubmittedDraftListProps {
+  handleTotalCount: (count: number) => void;
+}
+
+export default function SubmittedDraftList({
+  handleTotalCount,
+}: SubmittedDraftListProps) {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
 
   const { originUrl } = useLoaderData<RoutesLoaderData>();
 
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
-  const { data, fetchNextPage, error } = useSubmittedDraftListInfiniteQuery({
-    originUrl,
-  });
+  const { data, fetchNextPage, error, isFetchingNextPage } =
+    useSubmittedDraftInfiniteQuery({
+      originUrl,
+    });
 
-  const isSuccess = !error && data && typeof data?.pages.at(0) !== "undefined";
+  const pages = useMemo(() => data?.pages ?? [], [data]);
 
-  const pages = data?.pages ?? [];
+  const result = useMemo(() => pages.at(-1)?.result, [pages]);
 
-  const result = pages.at(0)?.result;
+  const totalCount = useMemo(() => result?.totalCount ?? 0, [result]);
 
-  const totalCount = result?.totalCount ?? 0;
+  const items = useMemo(
+    () => pages.map((page) => page?.result?.list ?? []).flat() ?? [],
+    [pages]
+  );
 
-  const items = pages.map((page) => page?.result?.list ?? []).flat() ?? [];
+  const isSuccess = useMemo(
+    () => !error && data && items.length > 0,
+    [data, error, items.length]
+  );
 
   const loadNext = useCallback(() => {
     if (result && result.pageInfo.hasNextPage) {
@@ -36,15 +49,12 @@ export default function SubmittedDraftList() {
 
   const isSearch = Boolean(searchKeyword);
 
+  useEffect(() => {
+    handleTotalCount(totalCount);
+  }, [handleTotalCount, totalCount]);
+
   return (
-    <CollapsibleWrapper
-      title="Submitted Drafts"
-      searchTitle={
-        isSearch ? `Showing results for Submitted: ${searchKeyword}` : undefined
-      }
-      isSearch={isSearch}
-      totalCount={totalCount}
-    >
+    <>
       {items
         .filter((item) => {
           if (searchKeyword && searchKeyword.length > 0) {
@@ -60,19 +70,26 @@ export default function SubmittedDraftList() {
           You do not have any incoming drafts.
         </p>
       ) : null}
-      {!isSearch && isSuccess && result?.pageInfo?.hasNextPage ? (
-        <div className="group grid relative grid-cols-12 sm:block">
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className=" justify-start w-full"
-            onClick={() => startTransition(() => loadNext())}
-          >
-            <div className="truncate text-left">더보기</div>
-          </Button>
-        </div>
-      ) : null}
-    </CollapsibleWrapper>
+      {isSearch ? null : (
+        <>
+          {isSuccess && result?.pageInfo?.hasNextPage ? (
+            <div className="group grid relative grid-cols-12 sm:block">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="justify-start w-full space-x-2"
+                onClick={() => startTransition(() => loadNext())}
+              >
+                {isFetchingNextPage || isPending ? (
+                  <Icons.spinner className="animate-spin" />
+                ) : null}
+                <div className="truncate text-left">더보기</div>
+              </Button>
+            </div>
+          ) : null}
+        </>
+      )}
+    </>
   );
 }

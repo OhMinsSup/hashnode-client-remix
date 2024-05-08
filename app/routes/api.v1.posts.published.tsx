@@ -56,7 +56,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const searchParams = url.searchParams;
   const query = Object.fromEntries(searchParams.entries());
   const response =
-    await context.agent.api.app.draft.getSubmittedDraftsHandler<DataSchema>({
+    await context.agent.api.app.post.getPublishedHandler<DataSchema>({
       headers: {
         Cookie: cookie,
       },
@@ -68,7 +68,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     return json({
       status: "error" as const,
       result: _defaultList,
-      message: "Failed to get drafts.",
+      message: "Failed to get asset files.",
     });
   }
 
@@ -81,7 +81,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/drafts/submitted";
+export const getBasePath = "/api/v1/posts/published";
 
 export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
   return getInfinityQueryPath(getBasePath, searchParams, pageNo);
@@ -89,14 +89,14 @@ export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
 
 type QueryKey = [string, SearchParams];
 
-interface UseSubmittedDraftInfiniteQueryParams {
+interface UsePostPublishedInfiniteQueryParams {
   initialData?: DataSchema;
   originUrl?: string;
   searchParams?: SearchParams;
 }
 
-export function useSubmittedDraftInfiniteQuery(
-  opts?: UseSubmittedDraftInfiniteQueryParams
+export function usePostPublishedInfiniteQuery(
+  opts?: UsePostPublishedInfiniteQueryParams
 ) {
   const queryKey: QueryKey = [getBasePath, opts?.searchParams];
 

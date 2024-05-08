@@ -1,4 +1,4 @@
-import React, { useCallback, useTransition } from "react";
+import { useCallback, useTransition } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -15,14 +15,9 @@ import { Link, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
-import { MyDraftList } from "~/components/write/future/MyDraftList";
-import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { ErrorBoundary } from "react-error-boundary";
-
-const LazyPublishedList = React.lazy(
-  () => import("~/components/write/future/PublishedList/PublishedList")
-);
+import { MyDraftProvider } from "~/components/write/future/MyDraftList";
+import { SubmittedDraftProvider } from "~/components/write/future/SubmittedDraftList";
+import { PublishedProvider } from "~/components/write/future/PublishedList";
 
 export default function LeftSidebar() {
   const session = useSession();
@@ -110,9 +105,9 @@ export default function LeftSidebar() {
         })}
       >
         <div className="pt-4">
-          <SubmittedArea />
-          <MyDraftArea />
-          <PublishedArea />
+          <SubmittedDraftProvider />
+          <MyDraftProvider />
+          <PublishedProvider />
         </div>
       </ScrollArea>
       <hr className="css-1a5r2w9" />
@@ -153,74 +148,5 @@ export default function LeftSidebar() {
         </div>
       </div>
     </>
-  );
-}
-
-function SubmittedArea() {
-  return (
-    <QueryErrorResetBoundary>
-      {({ reset }) => (
-        <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <div>
-              There was an error!{" "}
-              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
-              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
-            </div>
-          )}
-          onReset={reset}
-        >
-          <React.Suspense fallback={<></>}>
-            <SubmittedDraftList />
-          </React.Suspense>
-        </ErrorBoundary>
-      )}
-    </QueryErrorResetBoundary>
-  );
-}
-
-function MyDraftArea() {
-  return (
-    <QueryErrorResetBoundary>
-      {({ reset }) => (
-        <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <div>
-              There was an error!{" "}
-              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
-              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
-            </div>
-          )}
-          onReset={reset}
-        >
-          <React.Suspense fallback={<></>}>
-            <MyDraftList />
-          </React.Suspense>
-        </ErrorBoundary>
-      )}
-    </QueryErrorResetBoundary>
-  );
-}
-
-function PublishedArea() {
-  return (
-    <QueryErrorResetBoundary>
-      {({ reset }) => (
-        <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <div>
-              There was an error!{" "}
-              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
-              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
-            </div>
-          )}
-          onReset={reset}
-        >
-          <React.Suspense fallback={<></>}>
-            <LazyPublishedList />
-          </React.Suspense>
-        </ErrorBoundary>
-      )}
-    </QueryErrorResetBoundary>
   );
 }

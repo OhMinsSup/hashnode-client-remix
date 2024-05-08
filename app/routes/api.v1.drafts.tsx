@@ -89,21 +89,20 @@ export const getPath = (searchParams?: SearchParams, pageNo?: number) => {
 
 type QueryKey = [string, SearchParams];
 
-interface UseDraftListInfiniteQueryParams {
+interface UseDraftInfiniteQueryParams {
   initialData?: DataSchema;
   originUrl?: string;
   searchParams?: SearchParams;
 }
 
-export function useDraftListInfiniteQuery(
-  opts?: UseDraftListInfiniteQueryParams
-) {
+export function useDraftInfiniteQuery(opts?: UseDraftInfiniteQueryParams) {
   const queryKey: QueryKey = [getBasePath, opts?.searchParams];
 
   return useSuspenseInfiniteQuery({
     queryKey,
     queryFn: getInfinityQueryFn(getPath, opts),
     initialPageParam: 1,
+    refetchOnMount: "always",
     // @ts-expect-error - This is a bug in react-query types
     initialData: opts?.initialData
       ? () => ({ pageParams: [undefined], pages: [opts.initialData] })

@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
     ROOT: "posts",
     ID: (id: string) => `posts/${id}`,
     BY_OWNER: (id: string) => `posts/by-owner/${id}`,
+    PUBLISHED: "posts/published",
   },
   DRAFTS: {
     ROOT: "drafts",
