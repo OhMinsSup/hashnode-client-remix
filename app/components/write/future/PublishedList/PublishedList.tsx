@@ -3,9 +3,7 @@ import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper
 import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 
-interface MyDraftListProps {}
-
-export default function PublishedList(_: MyDraftListProps) {
+export default function PublishedList() {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
   const [totalCount] = useState(0);
   const [items] = useState<SerializeSchema.SerializePost<false>[][]>([]);

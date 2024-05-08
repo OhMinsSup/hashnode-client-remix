@@ -83,7 +83,7 @@ declare namespace SerializeSchema {
     hasTableOfContents: boolean;
     isDraft: boolean;
     isMarkdown: boolean;
-    publishedAt: string | Date | undefined;
+    publishedAt: string | undefined;
   };
 
   export type SerializePost<IncludeStats = true> = {

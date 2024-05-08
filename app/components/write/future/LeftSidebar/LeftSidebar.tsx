@@ -1,4 +1,4 @@
-import { useCallback, useTransition } from "react";
+import React, { useCallback, useTransition } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -11,23 +11,23 @@ import { useSession } from "~/libs/hooks/useSession";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { SearchInput } from "~/components/write/future/SearchInput";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { Link, useLocation, useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
 import { MyDraftList } from "~/components/write/future/MyDraftList";
 import { SubmittedDraftList } from "~/components/write/future/SubmittedDraftList";
-import { PublishedList } from "~/components/write/future/PublishedList";
-import { usePrevious } from "~/libs/hooks/usePrevious";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+
+const LazyPublishedList = React.lazy(
+  () => import("~/components/write/future/PublishedList/PublishedList")
+);
 
 export default function LeftSidebar() {
   const session = useSession();
   const { setSideClose } = useWriteContext();
   const navigate = useNavigate();
-
-  const location = useLocation();
-  const lastestPathname = usePrevious(location.pathname);
-  const isDifferentPathname = lastestPathname !== location.pathname;
 
   const [isPending, startTransition] = useTransition();
 
@@ -110,9 +110,9 @@ export default function LeftSidebar() {
         })}
       >
         <div className="pt-4">
-          <SubmittedDraftList isDifferentPathname={isDifferentPathname} />
-          <MyDraftList isDifferentPathname={isDifferentPathname} />
-          <PublishedList />
+          <SubmittedArea />
+          <MyDraftArea />
+          <PublishedArea />
         </div>
       </ScrollArea>
       <hr className="css-1a5r2w9" />
@@ -153,5 +153,74 @@ export default function LeftSidebar() {
         </div>
       </div>
     </>
+  );
+}
+
+function SubmittedArea() {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <div>
+              There was an error!{" "}
+              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
+              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
+            </div>
+          )}
+          onReset={reset}
+        >
+          <React.Suspense fallback={<></>}>
+            <SubmittedDraftList />
+          </React.Suspense>
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
+  );
+}
+
+function MyDraftArea() {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <div>
+              There was an error!{" "}
+              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
+              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
+            </div>
+          )}
+          onReset={reset}
+        >
+          <React.Suspense fallback={<></>}>
+            <MyDraftList />
+          </React.Suspense>
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
+  );
+}
+
+function PublishedArea() {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <div>
+              There was an error!{" "}
+              <Button onClick={() => resetErrorBoundary()}>Try again</Button>
+              <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
+            </div>
+          )}
+          onReset={reset}
+        >
+          <React.Suspense fallback={<></>}>
+            <LazyPublishedList />
+          </React.Suspense>
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
   );
 }

@@ -9,8 +9,9 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { useCallback } from "react";
+import { useCallback, useTransition } from "react";
 import { ImagePopover } from "~/components/write/future/ImagePopover";
+import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
 
 export default function WriteEditorHeader() {
   const {
@@ -22,6 +23,10 @@ export default function WriteEditorHeader() {
     setSubtitleOpen,
     uploadState,
   } = useWriteContext();
+
+  const { register, setValue } = useWriteFormContext();
+
+  const [, startTransition] = useTransition();
 
   const onOpenChange = useCallback(
     (value: boolean) => {
@@ -36,7 +41,14 @@ export default function WriteEditorHeader() {
 
   const onRemoveSubtitle = useCallback(() => {
     setSubtitleClose();
-  }, [setSubtitleClose]);
+
+    startTransition(() => {
+      setValue("subTitle", undefined, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    });
+  }, [setSubtitleClose, setValue]);
 
   const onAddSubtitle = useCallback(() => {
     setSubtitleOpen();
@@ -80,9 +92,10 @@ export default function WriteEditorHeader() {
       </ScrollArea>
       <div className="group relative">
         <textarea
-          maxLength={150}
+          {...register("title", {
+            maxLength: 200,
+          })}
           placeholder="Article Title..."
-          id="title-input"
           className={cn(styles.title)}
           style={{ height: "50px" }}
         />
@@ -90,7 +103,9 @@ export default function WriteEditorHeader() {
       {isSubtitleOpen && (
         <div className="group relative mt-3">
           <textarea
-            maxLength={150}
+            {...register("subTitle", {
+              maxLength: 120,
+            })}
             placeholder="Article Subtitle..."
             id="subtitle-input"
             className={cn(styles.subtitle)}

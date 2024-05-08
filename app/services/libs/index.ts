@@ -2,6 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { FieldErrors, FieldValues, Resolver } from "react-hook-form";
+import type { SearchParams } from "~/.server/utils/request.server";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -270,4 +271,26 @@ export const getValidatedFormData = async <T extends FieldValues>(
 
   const validatedOutput = await validateFormData<T>(data, resolver);
   return { ...validatedOutput, receivedValues: data };
+};
+
+export const getInfinityQueryPath = (
+  basePath: string,
+  searchParams?: SearchParams,
+  pageNo?: number
+) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set("pageNo", String(pageNo));
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set("pageNo", String(pageNo));
+    return `${basePath}?${params.toString()}`;
+  }
+
+  return basePath;
 };

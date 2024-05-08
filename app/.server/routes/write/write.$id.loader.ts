@@ -6,7 +6,7 @@ import {
 } from "~/.server/utils/request.server";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
-type Data = FetchRespSchema.Success<SerializeSchema.SerializePost>;
+type Data = FetchRespSchema.Success<SerializeSchema.SerializePost<false>>;
 
 export const writeByIdLoader = async ({
   request,

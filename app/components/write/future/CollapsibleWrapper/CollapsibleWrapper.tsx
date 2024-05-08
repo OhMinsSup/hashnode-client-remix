@@ -23,7 +23,7 @@ export default function CollapsibleWrapper({
   children,
   title,
 }: CollapsibleWrapperProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <Collapsible
       className="relative w-full px-4 pb-5"
