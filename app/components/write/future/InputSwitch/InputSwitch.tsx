@@ -1,13 +1,24 @@
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
+import { type UseControllerProps, useController } from "react-hook-form";
+import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 
-interface InputSwitchProps {
+interface InputSwitchProps extends UseControllerProps<FormFieldValues> {
   id: string;
   text: string;
   help: string;
 }
 
-export default function InputSwitch({ id, text, help }: InputSwitchProps) {
+export default function InputSwitch({
+  id,
+  text,
+  help,
+  ...otherProps
+}: InputSwitchProps) {
+  const {
+    field: { value, onChange, ...field },
+  } = useController(otherProps);
+
   return (
     <Label
       htmlFor={id}
@@ -17,7 +28,12 @@ export default function InputSwitch({ id, text, help }: InputSwitchProps) {
         <p className="leading-7 [&:not(:first-child)]:mt-6">{text}</p>
         <p className="text-base text-muted-foreground">{help}</p>
       </div>
-      <Switch id={id} />
+      <Switch
+        id={id}
+        {...field}
+        onCheckedChange={onChange}
+        checked={value as unknown as boolean}
+      />
     </Label>
   );
 }

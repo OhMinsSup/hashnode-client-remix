@@ -22,31 +22,28 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { DraftSettingDrawer } from "../DraftSettingDrawer";
+import { DraftSettingDrawer } from "~/components/write/future/DraftSettingDrawer";
+import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
+import { useController } from "react-hook-form";
+import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
 
 export default function WritePageHeader() {
+  const { setSideOpen, isSideOpen, isOpen, open, close } = useWriteContext();
+
+  const { control } = useWriteFormContext();
+
   const {
-    setSideOpen,
-    isSideOpen,
-    isMarkdownMode,
-    setMarkdownMode,
-    isOpen,
-    open,
-    close,
-  } = useWriteContext();
+    field: { value, onChange, ...field },
+  } = useController<FormFieldValues>({
+    control,
+    name: "config.isMarkdown",
+  });
 
   const onToggleSidebar = useCallback(() => {
     setSideOpen();
   }, [setSideOpen]);
 
   const [theme, setTheme] = useTheme();
-
-  const onCheckedMarkdownChange = useCallback(
-    (checked: boolean) => {
-      setMarkdownMode(checked);
-    },
-    [setMarkdownMode]
-  );
 
   const onCheckedThemeChange = useCallback(
     (checked: boolean) => {
@@ -137,8 +134,9 @@ export default function WritePageHeader() {
                     </div>
                     <Switch
                       id="markdown-mode"
-                      checked={isMarkdownMode}
-                      onCheckedChange={onCheckedMarkdownChange}
+                      {...field}
+                      checked={value as unknown as boolean}
+                      onCheckedChange={onChange}
                     />
                   </div>
                 </div>
@@ -166,7 +164,7 @@ export default function WritePageHeader() {
                   <DrawerTitle>
                     <div className="flex flex-row justify-between items-center">
                       <h2>Draft settings</h2>
-                      <DrawerClose>
+                      <DrawerClose asChild>
                         <Button variant="ghost">
                           <Icons.close />
                         </Button>

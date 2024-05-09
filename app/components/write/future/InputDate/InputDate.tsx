@@ -1,37 +1,59 @@
 import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import styles from "./styles.module.css";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 import { cn } from "~/services/libs";
+import { Calendar } from "~/components/ui/calendar";
+import { type UseControllerProps, useController } from "react-hook-form";
+import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
+import type { SelectSingleEventHandler } from "react-day-picker";
+import { getDateFormat } from "~/libs/date";
 
-export default function InputDate() {
+export default function InputDate(props: UseControllerProps<FormFieldValues>) {
+  const { field } = useController(props);
+
+  const value = field.value as unknown as string;
+  const selected = typeof value === "string" ? new Date(value) : undefined;
+
+  const onChange: SelectSingleEventHandler = (day) => {
+    field.onChange(day?.toISOString());
+  };
+
   return (
-    <div className="border-slate-300 bg-transparent dark:border-slate-700 dark:text-slate-300 outline-none w-full py-3 pr-2 pl-4 items-center flex justify-between border rounded-xl">
-      <span
-        className={cn(
-          "truncate max-w-[250px] text-muted-foreground",
-          styles.input_slug_by_readonly
-        )}
-      >
-        Tomorrow at 6pm, 04/02...
-      </span>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" aria-label="Pick a date/time">
-              <Icons.calendar />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Pick a date/time</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
+    <>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "pl-3 text-left font-normal w-full",
+              !field.value && "text-muted-foreground"
+            )}
+          >
+            {field.value ? getDateFormat(selected) : <span>Pick a date</span>}
+            <Icons.calendar className="ml-auto h-4 w-4 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={selected}
+            onSelect={onChange}
+            disabled={(date) => date < new Date()}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+      {selected && (
+        <div className="flex w-full items-center justify-end">
+          <Button variant="outline" onClick={() => field.onChange(undefined)}>
+            <span>Clear date</span>
+          </Button>
+        </div>
+      )}
+    </>
   );
 }

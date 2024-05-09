@@ -1,15 +1,16 @@
 import { Separator } from "~/components/ui/separator";
-import { DrawerItemWrapper } from "../DrawerItemWrapper";
-import { LabelWithTooltip } from "../LabelWithTooltip";
-import { LabelWrapper } from "../LabelWrapper";
-import { InputSlug } from "../InputSlug";
-import { LabelWithTooltipWrapper } from "../LabelWithTooltipWrapper";
-import { InputDate } from "../InputDate";
-import { InputSwitch } from "../InputSwitch";
-import { Author } from "../Author";
-import { InputText } from "../InputText";
-import { InputTextarea } from "../InputTextarea";
-import { LabelWithDescription } from "../LabelWithDescription";
+import { DrawerItemWrapper } from "~/components/write/future/DrawerItemWrapper";
+import { LabelWithTooltip } from "~/components/write/future/LabelWithTooltip";
+import { LabelWrapper } from "~/components/write/future/LabelWrapper";
+import { InputSlug } from "~/components/write/future/InputSlug";
+import { LabelWithTooltipWrapper } from "~/components/write/future/LabelWithTooltipWrapper";
+import { InputDate } from "~/components/write/future/InputDate";
+import { InputSwitch } from "~/components/write/future/InputSwitch";
+import { Author } from "~/components/write/future/Author";
+import { InputText } from "~/components/write/future/InputText";
+import { InputTextarea } from "~/components/write/future/InputTextarea";
+import { LabelWithDescription } from "~/components/write/future/LabelWithDescription";
+import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
 
 const ComponentHelperItem = {
   author: {
@@ -52,16 +53,10 @@ const ComponentHelperItem = {
     text: "Hide article from Hashnode feed",
     help: "Hide this article from Hashnode feed and display it only on my blog",
   },
-  scheduleYourArticle: {
-    id: "scheduleYourArticle",
-    text: "Schedule your article",
-    help: (
-      <>
-        Select a publishing date/time (Based on your local time zone).
-        <br /> You can use natural language to pick your
-        <br /> date/time, or enter a standard date format instead.
-      </>
-    ),
+  draftArticle: {
+    id: "draftArticle",
+    text: "Draft article",
+    help: "Save your article as a draft",
   },
   publishOnBackdate: {
     id: "publishOnBackdate",
@@ -111,6 +106,8 @@ const ComponentHelperItem = {
 };
 
 export default function DraftSettingDrawer() {
+  const { control, watch } = useWriteFormContext();
+  console.log(watch());
   return (
     <>
       <DrawerItemWrapper>
@@ -127,7 +124,11 @@ export default function DraftSettingDrawer() {
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
-        <InputSwitch {...ComponentHelperItem["tableOfContents"]} />
+        <InputSwitch
+          control={control}
+          name="config.hasTableOfContents"
+          {...ComponentHelperItem["tableOfContents"]}
+        />
         <InputSlug />
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
@@ -139,7 +140,7 @@ export default function DraftSettingDrawer() {
           isOptional
           label={<LabelWithTooltip {...ComponentHelperItem["seoTitle"]} />}
         >
-          <InputText />
+          <InputText control={control} name="seo.title" />
         </LabelWithTooltipWrapper>
         <LabelWithTooltipWrapper
           isOptional
@@ -147,27 +148,39 @@ export default function DraftSettingDrawer() {
             <LabelWithTooltip {...ComponentHelperItem["seoDescription"]} />
           }
         >
-          <InputTextarea />
+          <InputTextarea control={control} name="seo.description" />
         </LabelWithTooltipWrapper>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
         <LabelWithTooltipWrapper
-          isOptional
           label={
-            <LabelWithTooltip {...ComponentHelperItem["scheduleYourArticle"]} />
+            <LabelWithTooltip
+              {...ComponentHelperItem["publishOnBackdate"]}
+              hasTooltip={false}
+            />
           }
         >
-          <InputDate />
-        </LabelWithTooltipWrapper>
-        <LabelWithTooltipWrapper>
-          <InputDate />
+          <InputDate control={control} name="config.publishedAt" />
         </LabelWithTooltipWrapper>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
-        <InputSwitch {...ComponentHelperItem["disabledComments"]} />
-        <InputSwitch {...ComponentHelperItem["hiddenArticle"]} />
+        <InputSwitch
+          control={control}
+          name="config.disabledComment"
+          {...ComponentHelperItem["disabledComments"]}
+        />
+        <InputSwitch
+          control={control}
+          name="config.hiddenArticle"
+          {...ComponentHelperItem["hiddenArticle"]}
+        />
+        <InputSwitch
+          control={control}
+          name="config.isDraft"
+          {...ComponentHelperItem["draftArticle"]}
+        />
       </DrawerItemWrapper>
     </>
   );

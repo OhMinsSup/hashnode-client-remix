@@ -13,14 +13,15 @@ interface Props {
 }
 
 export function WriteFormProvider({ children, initialValues }: Props) {
+  console.log(initialValues);
   const { setSubtitleOpen } = useWriteContext();
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      urlSlug: initialValues?.urlSlug ?? undefined,
+      urlSlug: initialValues?.urlSlug || initialValues?.title || undefined,
       title: initialValues?.title ?? undefined,
       subTitle: initialValues?.subTitle ?? undefined,
-      content: initialValues?.content ?? undefined,
+      content: initialValues?.content || undefined,
       image: initialValues?.image ?? undefined,
       tags: initialValues?.PostTags.map((tag) => tag.name) ?? [],
       seo: {
