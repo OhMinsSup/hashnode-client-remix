@@ -12,6 +12,7 @@ import { InputTextarea } from "~/components/write/future/InputTextarea";
 import { LabelWithDescription } from "~/components/write/future/LabelWithDescription";
 import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
 import { InputTag } from "~/components/write/future/InputTag";
+import { InputAuthors } from "~/components/write/future/InputAuthors";
 
 const ComponentHelperItem = {
   author: {
@@ -124,7 +125,7 @@ export default function DraftSettingDrawer() {
         <LabelWrapper
           label={<LabelWithTooltip {...ComponentHelperItem["coAuthors"]} />}
         >
-          <></>
+          <InputAuthors />
         </LabelWrapper>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />

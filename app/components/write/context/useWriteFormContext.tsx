@@ -28,6 +28,7 @@ export function WriteFormProvider({ children, initialValues }: Props) {
         description: initialValues?.PostSeo.description ?? undefined,
         image: initialValues?.PostSeo.image ?? undefined,
       },
+      authors: [],
       config: {
         disabledComment: initialValues?.PostConfig.disabledComment ?? false,
         hiddenArticle: initialValues?.PostConfig.hiddenArticle ?? false,

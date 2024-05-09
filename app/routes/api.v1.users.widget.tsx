@@ -6,7 +6,7 @@ import { getQueryPath, parseUrlParams } from "~/services/libs";
 import { getQueryFn } from "~/services/react-query/function";
 import { requireCookie } from "~/.server/utils/auth.server";
 
-export type Data = SerializeSchema.SerializeTag<false>;
+export type Data = SerializeSchema.SerializeUser;
 
 export type DataList = Data[];
 
@@ -27,9 +27,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     );
   }
 
-  const tag = context.agent.api.app.tag;
+  const user = context.agent.api.app.user;
 
-  const response = await tag.getWidgetHandler<DataSchema>({
+  const response = await user.getWidgetHandler<DataSchema>({
     headers: {
       Cookie: cookie,
     },
@@ -41,7 +41,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     return json({
       status: "error" as const,
       result: [] as DataList,
-      message: "Failed to get asset tags.",
+      message: "Failed to get asset users.",
     });
   }
 
@@ -54,7 +54,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/tags/widget";
+export const getBasePath = "/api/v1/users/widget";
 
 export const getPath = (searchParams?: SearchParams) => {
   return getQueryPath(getBasePath, searchParams);
@@ -62,13 +62,13 @@ export const getPath = (searchParams?: SearchParams) => {
 
 type QueryKey = [string, SearchParams];
 
-interface UseTagWidgetQueryParams {
+interface UseUserWidgetQueryParams {
   initialData?: DataSchema;
   originUrl?: string;
   searchParams?: SearchParams;
 }
 
-export function useTagWidgetQuery(opts?: UseTagWidgetQueryParams) {
+export function useUserWidgetQuery(opts?: UseUserWidgetQueryParams) {
   const queryKey: QueryKey = [getBasePath, opts?.searchParams];
   return useSuspenseQuery({
     queryKey,
