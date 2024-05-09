@@ -1,14 +1,11 @@
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
-import {
-  getTokenFromCookie,
-  readHeaderCookie,
-} from "~/.server/utils/request.server";
+import { requireCookie } from "~/.server/utils/auth.server";
 import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
-type Data = FetchRespSchema.Success<SerializeSchema.SerializePost>;
+type Data = FetchRespSchema.Success<SerializeSchema.SerializePost<false>>;
 
-export const writeByIdLoader = async ({
+export const loader = async ({
   request,
   context,
   params,
@@ -22,28 +19,21 @@ export const writeByIdLoader = async ({
       throw error;
     }
 
-    const cookie = readHeaderCookie(request);
+    const { cookie } = requireCookie(request);
     if (!cookie) {
       const error = new Error();
       error.name = "InvalidCookieError";
+      error.message = "Failed to get cookie";
       throw error;
     }
 
-    const token = getTokenFromCookie(cookie);
-    if (!token) {
-      const error = new Error();
-      error.name = "InvalidTokenError";
-      throw error;
-    }
+    const post = context.agent.api.app.post;
 
-    const response = await context.agent.api.app.post.getOwnerByIdHandler<Data>(
-      id,
-      {
-        headers: {
-          Cookie: cookie,
-        },
-      }
-    );
+    const response = await post.getOwnerByIdHandler<Data>(id, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
 
     const data = response._data;
     if (!data) {
@@ -72,4 +62,4 @@ export const writeByIdLoader = async ({
   }
 };
 
-export type RoutesLoaderData = typeof writeByIdLoader;
+export type RoutesLoaderData = typeof loader;

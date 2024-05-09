@@ -3,6 +3,7 @@ import { type ServiceClient } from ".";
 import {
   FetchOptions,
   FetchResponse,
+  FetchWithoutRequestHandler,
   MappedResponseType,
   ResponseType,
 } from "../fetch/types";
@@ -15,6 +16,17 @@ export class PostNamespace {
   constructor(service: ServiceClient) {
     this._service = service;
   }
+
+  getPublishedHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.PUBLISHED),
+      {
+        method: "GET",
+        baseURL: this._service.uri.toString(),
+        ...options,
+      }
+    );
+  };
 
   getIdHandler = async <T = unknown, R extends ResponseType = "json">(
     id: string,

@@ -53,10 +53,16 @@ import {
   GanttChart,
   CloudUpload,
   Settings2,
+  Info,
+  Save,
+  Calendar,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
 export const Icons = {
+  calendar: Calendar,
+  save: Save,
+  info: Info,
   cloudUpload: CloudUpload,
   fileSearch: FileSearch,
   files: Files,

@@ -18,7 +18,18 @@ export class UserNamespace {
         method: "GET",
         baseURL: this._service.uri.toString(),
         ...options,
-      },
+      }
+    );
+  };
+
+  getWidgetHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.WIDGET),
+      {
+        method: "GET",
+        baseURL: this._service.uri.toString(),
+        ...options,
+      }
     );
   };
 }

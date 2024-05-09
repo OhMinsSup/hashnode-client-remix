@@ -5,11 +5,13 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     ROOT: "users",
+    WIDGET: "users/widget",
   },
   POSTS: {
     ROOT: "posts",
     ID: (id: string) => `posts/${id}`,
     BY_OWNER: (id: string) => `posts/by-owner/${id}`,
+    PUBLISHED: "posts/published",
   },
   DRAFTS: {
     ROOT: "drafts",
@@ -19,6 +21,13 @@ export const API_ENDPOINTS = {
   },
   FILES: {
     ROOT: "files",
+  },
+  TAGS: {
+    ROOT: "tags",
+    WIDGET: "tags/widget",
+  },
+  WIDGETS: {
+    GET_LEFTSIDE_POST_COUNT: "widgets/get-leftside-post-count",
   },
 } as const;
 

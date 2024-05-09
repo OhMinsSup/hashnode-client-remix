@@ -2,6 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { FieldErrors, FieldValues, Resolver } from "react-hook-form";
+import type { SearchParams } from "~/.server/utils/request.server";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,13 +22,10 @@ export function optimizeAnimation(callback: () => void) {
   };
 }
 
-export function parseUrlParams<T = Record<string, unknown>>(url: string) {
-  const params = new URLSearchParams(new URL(url).searchParams);
-  const result = {} as Record<string, unknown>;
-  for (const [key, value] of params) {
-    result[key] = value;
-  }
-  return result as T;
+export function parseUrlParams(url: string) {
+  const _url = new URL(url);
+  const searchParams = _url.searchParams;
+  return Object.fromEntries(searchParams.entries());
 }
 
 export const delayPromise = (ms: number) =>
@@ -270,4 +268,34 @@ export const getValidatedFormData = async <T extends FieldValues>(
 
   const validatedOutput = await validateFormData<T>(data, resolver);
   return { ...validatedOutput, receivedValues: data };
+};
+
+export const getQueryPath = (basePath: string, searchParams?: SearchParams) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    return `${basePath}?${params.toString()}`;
+  }
+  return basePath;
+};
+
+export const getInfinityQueryPath = (
+  basePath: string,
+  searchParams?: SearchParams,
+  pageNo?: number
+) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set("pageNo", String(pageNo));
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set("pageNo", String(pageNo));
+    return `${basePath}?${params.toString()}`;
+  }
+
+  return basePath;
 };

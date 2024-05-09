@@ -83,7 +83,7 @@ declare namespace SerializeSchema {
     hasTableOfContents: boolean;
     isDraft: boolean;
     isMarkdown: boolean;
-    publishedAt: string | Date | undefined;
+    publishedAt: string | undefined;
   };
 
   export type SerializePost<IncludeStats = true> = {
@@ -113,6 +113,12 @@ declare namespace SerializeSchema {
     mimeType: string;
     uploadType: UploadType;
     mediaType: MediaType;
+  };
+
+  export type SerializeGetLeftSidePostCount = {
+    submitted: number;
+    draft: number;
+    published: number;
   };
 }
 
