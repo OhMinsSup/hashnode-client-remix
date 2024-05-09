@@ -59,28 +59,24 @@ export default function MainHeader() {
     );
   }, [setTheme]);
 
-  const onClickWritePage = useCallback(() => {
-    navigate(PAGE_ENDPOINTS.WRITE.ROOT);
-  }, [navigate]);
-
-  const renderWriteButton = useCallback(
-    (variant: "ghost" | "default") => {
-      return (
-        <Button
-          aria-label="Go to Write Page"
-          className="space-x-3"
-          role="link"
-          variant={variant}
-          data-href={PAGE_ENDPOINTS.WRITE.ROOT}
-          onClick={onClickWritePage}
-        >
-          <Icons.pen className="size-5" />
-          <span className="hidden md:block">Write</span>
-        </Button>
-      );
-    },
-    [onClickWritePage]
-  );
+  const renderWriteButton = useCallback((variant: "ghost" | "default") => {
+    return (
+      <Link
+        aria-label="Go to Write Page"
+        className={cn(
+          buttonVariants({
+            variant,
+          }),
+          "space-x-3"
+        )}
+        unstable_viewTransition
+        to={PAGE_ENDPOINTS.WRITE.ROOT}
+      >
+        <Icons.pen className="size-5" />
+        <span className="hidden md:block">Write</span>
+      </Link>
+    );
+  }, []);
 
   const onSigninPage = useCallback(() => {
     navigate(PAGE_ENDPOINTS.AUTH.SIGNIN);

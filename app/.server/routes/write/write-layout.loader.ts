@@ -1,14 +1,10 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { requireAuthCookie } from "~/.server/utils/auth.server";
-import { readHeaderCookie } from "~/.server/utils/request.server";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+import { requireCookie } from "~/.server/utils/auth.server";
 
 type DataSchema =
   FetchRespSchema.Success<SerializeSchema.SerializeGetLeftSidePostCount>;
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
-
   const widget = context.agent.api.app.widget;
 
   const data: SerializeSchema.SerializeGetLeftSidePostCount = {
@@ -18,7 +14,11 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   };
 
   try {
-    const cookie = readHeaderCookie(request) as unknown as string;
+    const { cookie } = requireCookie(request);
+    if (!cookie) {
+      return json(data);
+    }
+
     const response = await widget.getLeftSidePostCountHandler<DataSchema>({
       headers: {
         Cookie: cookie,

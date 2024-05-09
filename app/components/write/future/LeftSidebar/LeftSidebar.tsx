@@ -1,4 +1,4 @@
-import { useCallback, useTransition } from "react";
+import { useCallback } from "react";
 import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -11,7 +11,7 @@ import { useSession } from "~/libs/hooks/useSession";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { SearchInput } from "~/components/write/future/SearchInput";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import { Separator } from "~/components/ui/separator";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/services/libs";
@@ -22,19 +22,10 @@ import { PublishedProvider } from "~/components/write/future/PublishedList";
 export default function LeftSidebar() {
   const session = useSession();
   const { setSideClose } = useWriteContext();
-  const navigate = useNavigate();
-
-  const [isPending, startTransition] = useTransition();
 
   const onToggleSidebar = useCallback(() => {
     setSideClose();
   }, [setSideClose]);
-
-  const onClickWritePage = useCallback(() => {
-    startTransition(() => {
-      navigate(`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`);
-    });
-  }, [navigate]);
 
   return (
     <>
@@ -78,18 +69,23 @@ export default function LeftSidebar() {
         <SearchInput />
       </div>
       <div className="px-4 pb-4">
-        <Button
-          type="button"
-          variant="ghost"
-          className="w-full justify-start"
+        <Link
+          to={{
+            pathname: PAGE_ENDPOINTS.WRITE.ROOT,
+            search: "isNewDraft=true",
+          }}
+          unstable_viewTransition
+          className={cn(
+            buttonVariants({
+              variant: "ghost",
+            }),
+            "w-full justify-start"
+          )}
           aria-label="Go to New Draft page"
-          role="link"
-          data-href={`${PAGE_ENDPOINTS.WRITE.ROOT}?isNewDraft=true`}
-          onClick={onClickWritePage}
         >
           <Icons.filePlus2 className="size-5" />
           <span className="ml-2">New draft</span>
-        </Button>
+        </Link>
       </div>
       <div className="px-4">
         <Separator
@@ -99,11 +95,7 @@ export default function LeftSidebar() {
           role="separator"
         />
       </div>
-      <ScrollArea
-        className={cn("flex-1 overflow-auto", {
-          "opacity-75": isPending,
-        })}
-      >
+      <ScrollArea className="flex-1 overflow-auto">
         <div className="pt-4">
           <SubmittedDraftProvider />
           <MyDraftProvider />
@@ -120,6 +112,7 @@ export default function LeftSidebar() {
                 className: "flex justify-start space-x-2",
               })
             )}
+            unstable_viewTransition
             to={PAGE_ENDPOINTS.ROOT}
           >
             <div className="col-span-1">
@@ -136,6 +129,7 @@ export default function LeftSidebar() {
                 className: "flex justify-start space-x-2",
               })
             )}
+            unstable_viewTransition
             to={PAGE_ENDPOINTS.ROOT}
           >
             <div className="col-span-1">

@@ -2,6 +2,7 @@ import { RESULT_CODE } from "~/constants/constant";
 import {
   clearAuthHeaders,
   getParsedCookie,
+  getTokenFromCookie,
   readHeaderCookie,
 } from "./request.server";
 import { type AppLoadContext, redirect } from "@remix-run/cloudflare";
@@ -11,25 +12,22 @@ interface GetAuthFromRequestOptions {
   throwException?: boolean;
 }
 
+type Data = FetchRespSchema.Success<SerializeSchema.SerializeUser>;
+
 export async function getAuthFromRequest(
   request: Request,
   context: AppLoadContext,
   options = { throwException: false } as GetAuthFromRequestOptions
 ) {
   try {
-    const cookie = readHeaderCookie(request);
+    const { cookie } = requireCookie(request);
     if (!cookie) {
       return null;
     }
 
-    const cookieData = getParsedCookie(cookie);
-    if (!cookieData["hashnode.access_token"]) {
-      return null;
-    }
+    const user = context.agent.api.app.user;
 
-    const response = await context.agent.api.app.user.getMyInfoHandler<
-      FetchRespSchema.Success<SerializeSchema.SerializeUser>
-    >({
+    const response = await user.getMyInfoHandler<Data>({
       headers: {
         Cookie: cookie,
       },
@@ -47,6 +45,29 @@ export async function getAuthFromRequest(
 
     return null;
   }
+}
+
+export function requireCookie(request: Request) {
+  const cookie = readHeaderCookie(request);
+  if (!cookie) {
+    return {
+      cookie: null,
+      cookieData: null,
+    };
+  }
+
+  const token = getTokenFromCookie(cookie);
+  if (!token) {
+    return {
+      cookie: null,
+      cookieData: null,
+    };
+  }
+
+  return {
+    cookie,
+    token,
+  };
 }
 
 export async function requireAuthCookie(

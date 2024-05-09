@@ -1,9 +1,6 @@
 import { redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { safeRedirect } from "remix-utils/safe-redirect";
-import {
-  getTokenFromCookie,
-  readHeaderCookie,
-} from "~/.server/utils/request.server";
+import { requireCookie } from "~/.server/utils/auth.server";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 type Data = FetchRespSchema.Success<FetchRespSchema.Id<string>>;
@@ -15,31 +12,26 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const tags: string[] = tag ? tag.split(",") : [];
 
   try {
-    const cookie = readHeaderCookie(request);
+    const { cookie } = requireCookie(request);
     if (!cookie) {
       const error = new Error();
       error.name = "InvalidCookieError";
+      error.message = "Failed to get cookie";
       throw error;
     }
 
-    const token = getTokenFromCookie(cookie);
-    if (!token) {
-      const error = new Error();
-      error.name = "InvalidTokenError";
-      throw error;
-    }
+    const draft = context.agent.api.app.draft;
 
-    const response =
-      await context.agent.api.app.draft.postSyncDraftHandler<Data>({
-        headers: {
-          Cookie: cookie,
-        },
-        body: {
-          tags,
-          title: "Untitled",
-          isNewDraft: isNewDraft ? isNewDraft === "true" : false,
-        },
-      });
+    const response = await draft.postSyncDraftHandler<Data>({
+      headers: {
+        Cookie: cookie,
+      },
+      body: {
+        tags,
+        title: "Untitled",
+        isNewDraft: isNewDraft ? isNewDraft === "true" : false,
+      },
+    });
 
     const data = response._data;
     if (!data) {

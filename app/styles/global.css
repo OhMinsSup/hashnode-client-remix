@@ -1,3 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=block");
 
 @import "./common/tailwind.css";
+
+@keyframes opacityEnter {
+  to {
+    opacity: 0.5;
+  }
+}
+
+@keyframes opacityLeave {
+  from {
+    opacity: 1;
+  }
+}
+
+::view-transition-old(view-opacity) {
+  animation-name: opacityEnter;
+}
+::view-transition-new(view-opacity) {
+  animation-name: opacityLeave;
+}
