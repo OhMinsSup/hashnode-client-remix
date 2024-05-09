@@ -6,11 +6,12 @@ import {
 } from "@remix-run/cloudflare";
 import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { requireAuthCookie } from "~/.server/utils/auth.server";
+import { requireAuthCookie, requireCookie } from "~/.server/utils/auth.server";
 import { schema } from "~/services/validate/cf-file.validate";
-import { SearchParams, readHeaderCookie } from "~/.server/utils/request.server";
+import { SearchParams } from "~/.server/utils/request.server";
 import { parse } from "@conform-to/zod";
 import { type FetchResponse } from "~/services/api/fetch/types";
+import { getQueryPath } from "~/services/libs";
 
 type Data = FetchRespSchema.File;
 
@@ -63,7 +64,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     errors: null,
   };
 
-  const cookie = readHeaderCookie(request);
+  const { cookie } = requireCookie(request);
   if (!cookie) {
     return json(
       {
@@ -183,13 +184,7 @@ export const loader = () => redirect("/", { status: 404 });
 export const getBasePath = "/api/v1/assets/upload";
 
 export const getPath = (searchParams?: SearchParams) => {
-  if (searchParams) {
-    const query = new URLSearchParams(searchParams).toString();
-    if (query) {
-      return `${getBasePath}?${query}`;
-    }
-  }
-  return getBasePath;
+  return getQueryPath(getBasePath, searchParams);
 };
 
 export default function Routes() {

@@ -21,3 +21,20 @@ export const getInfinityQueryFn = <D, Q extends QueryKey>(
     return data;
   };
 };
+
+export const getQueryFn = <D, Q extends QueryKey>(
+  getPath: GetPathFn,
+  opts?: Options
+): QueryFunction<D, Q> => {
+  return async (ctx) => {
+    const lastKey = ctx.queryKey.at(-1) as SearchParams;
+    const url = opts?.originUrl
+      ? new URL(getPath(lastKey), opts.originUrl)
+      : getPath(lastKey);
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const data = await response.json<D>();
+    return data;
+  };
+};

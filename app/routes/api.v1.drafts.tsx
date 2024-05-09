@@ -1,35 +1,25 @@
 import { json } from "@remix-run/cloudflare";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import {
-  type SearchParams,
-  getTokenFromCookie,
-  readHeaderCookie,
-} from "~/.server/utils/request.server";
-import { getInfinityQueryPath } from "~/services/libs";
+import { type SearchParams } from "~/.server/utils/request.server";
+import { getInfinityQueryPath, parseUrlParams } from "~/services/libs";
 import { getInfinityQueryFn } from "~/services/react-query/function";
+import { requireCookie } from "~/.server/utils/auth.server";
+import { defaultPaginationResponse } from "~/.server/utils/response.server";
 
-type Data = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
+type Data = SerializeSchema.SerializePost<false>;
 
-type DataSchema = FetchRespSchema.Success<Data>;
+type DataList = FetchRespSchema.ListResp<Data>;
+
+type DataSchema = FetchRespSchema.Success<DataList>;
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const _defaultList: Data = {
-    totalCount: 0,
-    list: [],
-    pageInfo: {
-      currentPage: 1,
-      hasNextPage: false,
-      nextPage: null,
-    },
-  };
-
-  const cookie = readHeaderCookie(request);
+  const { cookie } = requireCookie(request);
   if (!cookie) {
     return json(
       {
         status: "error" as const,
-        result: _defaultList,
+        result: defaultPaginationResponse<Data>(),
         message: "You are not logged in.",
       },
       {
@@ -38,37 +28,20 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     );
   }
 
-  const token = getTokenFromCookie(cookie);
-  if (!token) {
-    return json(
-      {
-        status: "error" as const,
-        result: _defaultList,
-        message: "You are not logged in.",
-      },
-      {
-        status: 401,
-      }
-    );
-  }
-
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  const query = Object.fromEntries(searchParams.entries());
-  const response =
-    await context.agent.api.app.draft.getDraftsHandler<DataSchema>({
-      headers: {
-        Cookie: cookie,
-      },
-      query,
-    });
+  const draft = context.agent.api.app.draft;
+  const response = await draft.getDraftsHandler<DataSchema>({
+    headers: {
+      Cookie: cookie,
+    },
+    query: parseUrlParams(request.url),
+  });
 
   const data = response._data;
   if (!data || (data && !data.result)) {
     return json({
       status: "error" as const,
-      result: _defaultList,
-      message: "Failed to get asset files.",
+      result: defaultPaginationResponse<Data>(),
+      message: "Failed to get asset drafts.",
     });
   }
 

@@ -1,10 +1,9 @@
 import { json } from "@remix-run/cloudflare";
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import {
-  getTokenFromCookie,
-  readHeaderCookie,
-} from "~/.server/utils/request.server";
 import { useQuery } from "@tanstack/react-query";
+import { requireCookie } from "~/.server/utils/auth.server";
+import { getQueryPath } from "~/services/libs";
+import { getQueryFn } from "~/services/react-query/function";
 
 type Data = FetchRespSchema.Success<
   FetchRespSchema.ListResp<Record<string, unknown>>
@@ -20,23 +19,8 @@ type SearchParams =
 type QueryKey = [string, SearchParams];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookie = readHeaderCookie(request);
+  const { cookie } = requireCookie(request);
   if (!cookie) {
-    return json(
-      {
-        status: "error" as const,
-        result: null,
-        errors: null,
-        message: "로그인이 필요합니다.",
-      },
-      {
-        status: 401,
-      }
-    );
-  }
-
-  const token = getTokenFromCookie(cookie);
-  if (!token) {
     return json(
       {
         status: "error" as const,
@@ -77,14 +61,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export type RoutesLoaderData = typeof loader;
 
+export const getBasePath = "/api/v1/notifications/count";
+
 export const getPath = (searchParams?: SearchParams) => {
-  if (searchParams) {
-    const query = new URLSearchParams(searchParams).toString();
-    if (query) {
-      return `/api/v1/notifications/count?${query}`;
-    }
-  }
-  return "/api/v1/notifications/count";
+  return getQueryPath(getBasePath, searchParams);
 };
 
 interface UseNotificationCountQueryParams {
@@ -98,16 +78,12 @@ export function useNotificationCountQuery({
   searchParams,
   enabled = true,
 }: UseNotificationCountQueryParams) {
-  const queryKey: QueryKey = [getPath(), searchParams];
+  const queryKey: QueryKey = [getBasePath, searchParams];
 
   return useQuery({
     queryKey,
     enabled,
-    queryFn: async (ctx) => {
-      const response = await fetch(getPath(ctx.queryKey.at(-1)));
-      const data = await response.json<Data>();
-      return data;
-    },
+    queryFn: getQueryFn(getPath),
     initialData,
     staleTime: 2 * 60 * 1000,
   });

@@ -11,6 +11,7 @@ import { InputText } from "~/components/write/future/InputText";
 import { InputTextarea } from "~/components/write/future/InputTextarea";
 import { LabelWithDescription } from "~/components/write/future/LabelWithDescription";
 import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
+import { InputTag } from "~/components/write/future/InputTag";
 
 const ComponentHelperItem = {
   author: {
@@ -103,11 +104,15 @@ const ComponentHelperItem = {
       </>
     ),
   },
+  selectTags: {
+    id: "selectTags",
+    text: "Select tags",
+    help: <></>,
+  },
 };
 
 export default function DraftSettingDrawer() {
-  const { control, watch } = useWriteFormContext();
-  console.log(watch());
+  const { control } = useWriteFormContext();
   return (
     <>
       <DrawerItemWrapper>
@@ -130,6 +135,9 @@ export default function DraftSettingDrawer() {
           {...ComponentHelperItem["tableOfContents"]}
         />
         <InputSlug />
+        <LabelWithDescription {...ComponentHelperItem["selectTags"]}>
+          <InputTag />
+        </LabelWithDescription>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
@@ -153,16 +161,9 @@ export default function DraftSettingDrawer() {
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
-        <LabelWithTooltipWrapper
-          label={
-            <LabelWithTooltip
-              {...ComponentHelperItem["publishOnBackdate"]}
-              hasTooltip={false}
-            />
-          }
-        >
+        <LabelWithDescription {...ComponentHelperItem["publishOnBackdate"]}>
           <InputDate control={control} name="config.publishedAt" />
-        </LabelWithTooltipWrapper>
+        </LabelWithDescription>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>

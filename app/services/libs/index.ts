@@ -22,13 +22,10 @@ export function optimizeAnimation(callback: () => void) {
   };
 }
 
-export function parseUrlParams<T = Record<string, unknown>>(url: string) {
-  const params = new URLSearchParams(new URL(url).searchParams);
-  const result = {} as Record<string, unknown>;
-  for (const [key, value] of params) {
-    result[key] = value;
-  }
-  return result as T;
+export function parseUrlParams(url: string) {
+  const _url = new URL(url);
+  const searchParams = _url.searchParams;
+  return Object.fromEntries(searchParams.entries());
 }
 
 export const delayPromise = (ms: number) =>
@@ -271,6 +268,14 @@ export const getValidatedFormData = async <T extends FieldValues>(
 
   const validatedOutput = await validateFormData<T>(data, resolver);
   return { ...validatedOutput, receivedValues: data };
+};
+
+export const getQueryPath = (basePath: string, searchParams?: SearchParams) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    return `${basePath}?${params.toString()}`;
+  }
+  return basePath;
 };
 
 export const getInfinityQueryPath = (
