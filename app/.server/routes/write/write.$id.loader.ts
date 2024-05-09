@@ -8,7 +8,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
 
 type Data = FetchRespSchema.Success<SerializeSchema.SerializePost<false>>;
 
-export const writeByIdLoader = async ({
+export const loader = async ({
   request,
   context,
   params,
@@ -72,4 +72,4 @@ export const writeByIdLoader = async ({
   }
 };
 
-export type RoutesLoaderData = typeof writeByIdLoader;
+export type RoutesLoaderData = typeof loader;

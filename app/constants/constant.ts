@@ -26,6 +26,9 @@ export const API_ENDPOINTS = {
     ROOT: "tags",
     WIDGET: "tags/widget",
   },
+  WIDGETS: {
+    GET_LEFTSIDE_POST_COUNT: "widgets/get-leftside-post-count",
+  },
 } as const;
 
 export const ASSET_URL = {

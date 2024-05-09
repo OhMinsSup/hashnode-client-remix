@@ -114,6 +114,12 @@ declare namespace SerializeSchema {
     uploadType: UploadType;
     mediaType: MediaType;
   };
+
+  export type SerializeGetLeftSidePostCount = {
+    submitted: number;
+    draft: number;
+    published: number;
+  };
 }
 
 declare namespace FetchQuerySchema {}

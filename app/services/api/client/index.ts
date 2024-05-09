@@ -6,6 +6,7 @@ import { DraftNamespace } from "./draft";
 import { PostNamespace } from "./post";
 import { FileNamespace } from "./file";
 import { TagNamespace } from "./tags";
+import { WidgetNamespace } from "./widget";
 
 export class BaseClient {
   fetch: FetchHandler = fetchHandler;
@@ -47,6 +48,7 @@ export class AppNamespace {
   post: PostNamespace;
   file: FileNamespace;
   tag: TagNamespace;
+  widget: WidgetNamespace;
 
   constructor(service: ServiceClient) {
     this._service = service;
@@ -56,5 +58,6 @@ export class AppNamespace {
     this.post = new PostNamespace(service);
     this.file = new FileNamespace(service);
     this.tag = new TagNamespace(service);
+    this.widget = new WidgetNamespace(service);
   }
 }

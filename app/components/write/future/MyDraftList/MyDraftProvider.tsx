@@ -1,19 +1,17 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import MyDraftList from "./MyDraftList";
 import MyDraftCollapsibleWrapper from "./MyDraftCollapsibleWrapper";
 import { ErrorBoundary } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
+import type { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { useLoaderData } from "@remix-run/react";
 
 export default function MyDraftProvider() {
-  const [totalCount, setTotalCount] = useState(0);
-
-  const handleTotalCount = useCallback((count: number) => {
-    setTotalCount(count);
-  }, []);
+  const data = useLoaderData<RoutesLoaderData>();
 
   return (
-    <MyDraftCollapsibleWrapper totalCount={totalCount}>
+    <MyDraftCollapsibleWrapper totalCount={data.draft}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
@@ -27,7 +25,7 @@ export default function MyDraftProvider() {
             onReset={reset}
           >
             <React.Suspense fallback={<></>}>
-              <MyDraftList handleTotalCount={handleTotalCount} />
+              <MyDraftList />
             </React.Suspense>
           </ErrorBoundary>
         )}

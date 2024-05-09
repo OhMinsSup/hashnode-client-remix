@@ -1,19 +1,17 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import PublishedList from "./PublishedList";
 import PublishedCollapsibleWrapper from "./PublishedCollapsibleWrapper";
 import { ErrorBoundary } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
+import type { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import { useLoaderData } from "@remix-run/react";
 
 export default function PublishedProvider() {
-  const [totalCount, setTotalCount] = useState(0);
-
-  const handleTotalCount = useCallback((count: number) => {
-    setTotalCount(count);
-  }, []);
+  const data = useLoaderData<RoutesLoaderData>();
 
   return (
-    <PublishedCollapsibleWrapper totalCount={totalCount}>
+    <PublishedCollapsibleWrapper totalCount={data.published}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
@@ -27,7 +25,7 @@ export default function PublishedProvider() {
             onReset={reset}
           >
             <React.Suspense fallback={<></>}>
-              <PublishedList handleTotalCount={handleTotalCount} />
+              <PublishedList />
             </React.Suspense>
           </ErrorBoundary>
         )}

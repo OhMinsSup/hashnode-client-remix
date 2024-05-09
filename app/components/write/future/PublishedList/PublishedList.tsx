@@ -1,29 +1,17 @@
-import { useCallback, useEffect, useMemo, useTransition } from "react";
+import { useCallback, useMemo, useTransition } from "react";
 import { SidebarPublishedItem } from "~/components/write/future/SidebarPublishedItem";
 import { usePostPublishedInfiniteQuery } from "~/routes/api.v1.posts.published";
 import { Button } from "~/components/ui/button";
-import { useLoaderData } from "@remix-run/react";
-import { type RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
 import { useWriteContext } from "~/components/write/context/useWriteContext";
 import { Icons } from "~/components/icons";
 
-interface PublishedListProps {
-  handleTotalCount: (count: number) => void;
-}
-
-export default function PublishedList({
-  handleTotalCount,
-}: PublishedListProps) {
+export default function PublishedList() {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
-
-  const { originUrl } = useLoaderData<RoutesLoaderData>();
 
   const [isPending, startTransition] = useTransition();
 
   const { data, fetchNextPage, error, isFetchingNextPage } =
-    usePostPublishedInfiniteQuery({
-      originUrl,
-    });
+    usePostPublishedInfiniteQuery();
 
   const pages = useMemo(() => data?.pages ?? [], [data]);
 
@@ -48,10 +36,6 @@ export default function PublishedList({
   }, [fetchNextPage, result]);
 
   const isSearch = Boolean(searchKeyword);
-
-  useEffect(() => {
-    handleTotalCount(totalCount);
-  }, [handleTotalCount, totalCount]);
 
   return (
     <>

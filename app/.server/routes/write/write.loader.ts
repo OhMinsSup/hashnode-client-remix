@@ -8,7 +8,7 @@ import { PAGE_ENDPOINTS } from "~/constants/constant";
 
 type Data = FetchRespSchema.Success<FetchRespSchema.Id<string>>;
 
-export const writeLoader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
   const isNewDraft = searchParams.get("isNewDraft");
   const tag = searchParams.get("tag");
@@ -65,4 +65,4 @@ export const writeLoader = async ({ request, context }: LoaderFunctionArgs) => {
   }
 };
 
-export type RoutesLoaderData = typeof writeLoader;
+export type RoutesLoaderData = typeof loader;

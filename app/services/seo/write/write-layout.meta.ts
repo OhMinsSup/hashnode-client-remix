@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { mergeMeta } from "~/services/libs";
 
-export const writeLayoutMeta: MetaFunction = mergeMeta(() => [
+export const meta: MetaFunction = mergeMeta(() => [
   {
     title: "Editing Article",
   },
