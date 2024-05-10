@@ -5,7 +5,7 @@ import type { RoutesActionData } from '~/routes/api.v1.assets.upload';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
-import { getTargetElement } from '~/libs/browser-utils';
+import { getTargetElement } from '~/libs/browser-utils/dom';
 import { useDrop } from '~/libs/hooks/useDrop';
 import { getPath } from '~/routes/api.v1.assets.upload';
 import styles from './styles.module.css';

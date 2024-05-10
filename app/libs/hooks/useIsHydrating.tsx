@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { isBrowser } from '../browser-utils';
+import { isBrowser } from '../browser-utils/dom';
 
 export function useIsHydrating(queryString: string) {
   const isServerRender = !isBrowser;

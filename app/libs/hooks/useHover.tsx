@@ -1,4 +1,4 @@
-import type { BasicTarget } from '../browser-utils';
+import type { BasicTarget } from '../browser-utils/dom';
 import { useBoolean } from './useBoolean';
 import { useEventListener } from './useEventListener';
 

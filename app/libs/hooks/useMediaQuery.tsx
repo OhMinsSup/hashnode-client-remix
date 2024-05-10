@@ -1,6 +1,6 @@
 import { useMemo, useSyncExternalStore } from 'react';
 
-import { isBrowser } from '../browser-utils';
+import { isBrowser } from '../browser-utils/dom';
 import { useMemoizedFn } from './useMemoizedFn';
 
 export const MEDIA_QUERY = {

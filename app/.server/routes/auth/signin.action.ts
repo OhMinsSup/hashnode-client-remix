@@ -59,9 +59,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       },
     });
   } catch (e) {
-    console.error(e);
     if (isError<string>(e)) {
-      console.error(e);
       if (e.displayType === ErrorDisplayType.TOAST) {
         return redirectWithToast(
           safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNUP),
@@ -75,7 +73,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     if (isFetchError<FetchRespSchema.Error>(e)) {
-      console.error(e);
       if (e.data) {
         const body =
           e.options?.body && typeof e.options.body === 'string'

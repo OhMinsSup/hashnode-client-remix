@@ -1,8 +1,8 @@
 import type { DependencyList, EffectCallback } from 'react';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 
-import type { BasicTarget } from '../browser-utils';
-import { getTargetElement, isBrowser } from '../browser-utils';
+import type { BasicTarget } from '../browser-utils/dom';
+import { getTargetElement, isBrowser } from '../browser-utils/dom';
 import { useUnmount } from '../hooks/useUnmount';
 import { depsAreSame } from './depsAreSame';
 

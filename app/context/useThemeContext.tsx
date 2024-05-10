@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFetcher } from '@remix-run/react';
 
-import { isBrowser } from '~/libs/browser-utils';
+import { isBrowser } from '~/libs/browser-utils/dom';
 import { getPath } from '~/routes/api.v1.set-theme';
 
 enum Theme {

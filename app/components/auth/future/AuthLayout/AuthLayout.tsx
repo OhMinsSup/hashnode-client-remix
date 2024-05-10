@@ -5,7 +5,6 @@ import type { RoutesLoaderData } from '~/.server/routes/auth/auth-layout.loader'
 import { Icons } from '~/components/icons';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
 import { cn } from '~/services/libs';
-import styles from './styles.module.css';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -22,7 +21,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 flex items-center text-lg font-medium">
-            <Icons.hashnode className={styles.logo} />
+            <Icons.hashnode className="w-36 fill-current md:w-44" />
           </div>
 
           <div className="relative z-20 mt-auto">

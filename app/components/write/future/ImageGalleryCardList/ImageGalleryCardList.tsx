@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { ImageGalleryCard } from '~/components/write/future/ImageGalleryCard';
-import { getTargetElement } from '~/libs/browser-utils';
+import { getTargetElement } from '~/libs/browser-utils/dom';
 import { useAssetFileListInfiniteQuery } from '~/routes/api.v1.assets.files';
 
 const MIN_ITEM_HEIGHT_SIZE = 154;

@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import noop from 'lodash-es/noop';
 
-import { getOwnerDocument } from '../browser-utils';
+import { getOwnerDocument } from '../browser-utils/dom';
 import { useMemoizedFn } from './useMemoizedFn';
 
 export interface UseOutsideClickProps {

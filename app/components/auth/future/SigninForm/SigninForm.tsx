@@ -45,8 +45,7 @@ export default function SigninForm() {
   });
 
   const onSubmit = (input: FormFieldValues) => {
-    const formData = createFormData(input);
-    submit(formData, {
+    submit(createFormData(input), {
       method: 'post',
       replace: true,
     });

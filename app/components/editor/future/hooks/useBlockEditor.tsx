@@ -1,7 +1,7 @@
 import { Editor, useEditor } from '@tiptap/react';
 
 import { ExtensionKit } from '~/components/editor/future/extensions/extension-kit';
-import { isBrowser } from '~/libs/browser-utils';
+import { isBrowser } from '~/libs/browser-utils/dom';
 
 declare global {
   interface Window {

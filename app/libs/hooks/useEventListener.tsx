@@ -1,5 +1,5 @@
-import type { BasicTarget } from '../browser-utils';
-import { getTargetElement } from '../browser-utils';
+import type { BasicTarget } from '../browser-utils/dom';
+import { getTargetElement } from '../browser-utils/dom';
 import { useEffectWithTarget } from '../react-utils/createEffectWithTarget';
 import { useLatest } from './useLatest';
 
