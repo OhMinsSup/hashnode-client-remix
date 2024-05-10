@@ -21,7 +21,7 @@ import {
 import { Input } from '~/components/ui/input';
 import { InputPassword } from '~/components/ui/input-password';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
-import { createFormData } from '~/services/libs';
+import { createFormData } from '~/services/libs/form-data';
 import {
   FormFieldValues,
   resolver,
