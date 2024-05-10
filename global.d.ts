@@ -200,6 +200,19 @@ declare namespace CloudflareSchema {
   }>;
 }
 
+declare namespace RemixDataFlow {
+  export type Status = "success" | "error";
+
+  export type Message = string | null;
+
+  export type Response<D = unknown, E = unknown> = {
+    status: Status;
+    result: D;
+    message: Message;
+    errors: E;
+  };
+}
+
 declare namespace UntilsTypes {
   type DeepObjectKeyOf<T> = {
     [K in keyof T]: T[K] extends Record<string, unknown>

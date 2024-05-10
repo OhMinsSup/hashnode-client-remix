@@ -1,12 +1,12 @@
-import type { FetchHandler } from "../fetch/types";
-import { fetchHandler } from "../fetch";
-import { AuthNamespace } from "./auth";
-import { UserNamespace } from "./user";
-import { DraftNamespace } from "./draft";
-import { PostNamespace } from "./post";
-import { FileNamespace } from "./file";
-import { TagNamespace } from "./tags";
-import { WidgetNamespace } from "./widget";
+import type { FetchHandler } from '../fetch/types';
+import { fetchHandler } from '../fetch';
+import { AuthNamespace } from './auth';
+import { DraftNamespace } from './draft';
+import { FileNamespace } from './file';
+import { PostNamespace } from './post';
+import { TagNamespace } from './tags';
+import { UserNamespace } from './user';
+import { WidgetNamespace } from './widget';
 
 export class BaseClient {
   fetch: FetchHandler = fetchHandler;
@@ -26,11 +26,11 @@ export class ServiceClient {
   constructor(
     baseClient: BaseClient,
     serviceUri: string | URL,
-    prefix?: string
+    prefix?: string,
   ) {
     this._baseClient = baseClient;
     this.uri =
-      typeof serviceUri === "string" ? new URL(serviceUri) : serviceUri;
+      typeof serviceUri === 'string' ? new URL(serviceUri) : serviceUri;
     this.prefix = prefix;
     this.app = new AppNamespace(this);
   }

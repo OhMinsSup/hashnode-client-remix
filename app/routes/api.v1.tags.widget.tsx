@@ -1,10 +1,18 @@
-import { json } from "@remix-run/cloudflare";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { type SearchParams } from "~/.server/utils/request.server";
-import { getQueryPath, parseUrlParams } from "~/services/libs";
-import { getQueryFn } from "~/services/react-query/function";
-import { requireCookie } from "~/.server/utils/auth.server";
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import type { SearchParams } from '~/.server/utils/request.server';
+import { getCookie } from '~/.server/utils/request.server';
+import {
+  errorJsonDataResponse,
+  successJsonResponse,
+} from '~/.server/utils/response.server';
+import { isFetchError } from '~/services/api/error';
+import { getQueryPath, parseUrlParams } from '~/services/libs';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
+import { getQueryFn } from '~/services/react-query/function';
 
 export type Data = SerializeSchema.SerializeTag<false>;
 
@@ -13,48 +21,43 @@ export type DataList = Data[];
 export type DataSchema = FetchRespSchema.Success<DataList>;
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const { cookie } = requireCookie(request);
-  if (!cookie) {
-    return json(
-      {
-        status: "error" as const,
-        result: [] as DataList,
-        message: "You are not logged in.",
+  try {
+    const { cookies } = getCookie(request);
+    if (!cookies) {
+      throw createError({
+        statusMessage: 'Unauthorized',
+        statusCode: HttpStatus.UNAUTHORIZED,
+        displayType: ErrorDisplayType.NONE,
+        data: [] as DataList,
+      });
+    }
+
+    const tag = context.agent.api.app.tag;
+    const response = await tag.getWidgetHandler<DataSchema>({
+      headers: {
+        Cookie: cookies,
       },
-      {
-        status: 401,
-      }
-    );
-  }
-
-  const tag = context.agent.api.app.tag;
-
-  const response = await tag.getWidgetHandler<DataSchema>({
-    headers: {
-      Cookie: cookie,
-    },
-    query: parseUrlParams(request.url),
-  });
-
-  const data = response._data;
-  if (!data || (data && !data.result)) {
-    return json({
-      status: "error" as const,
-      result: [] as DataList,
-      message: "Failed to get asset tags.",
+      query: parseUrlParams(request.url),
     });
-  }
 
-  return json({
-    status: "success" as const,
-    result: data.result,
-    message: null,
-  });
+    const data = response._data;
+    return json(successJsonResponse(data ? data.result : []));
+  } catch (error) {
+    if (isError<DataSchema>(error)) {
+      return json(errorJsonDataResponse(error.data, error.message));
+    }
+
+    if (isFetchError<DataSchema>(error)) {
+      return json(errorJsonDataResponse([] as DataList, error.message));
+    }
+
+    throw error;
+  }
 };
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/tags/widget";
+export const getBasePath = '/api/v1/tags/widget';
 
 export const getPath = (searchParams?: SearchParams) => {
   return getQueryPath(getBasePath, searchParams);

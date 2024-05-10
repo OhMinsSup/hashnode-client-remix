@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
-import { Icons } from "~/components/icons";
-import { getTargetElement } from "~/libs/browser-utils";
+import React, { useEffect, useRef } from 'react';
+
+import { Icons } from '~/components/icons';
+import { getTargetElement } from '~/libs/browser-utils';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   id: string;

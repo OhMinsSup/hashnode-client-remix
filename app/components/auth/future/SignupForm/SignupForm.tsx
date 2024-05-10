@@ -1,12 +1,15 @@
+import type { FieldErrors } from 'react-hook-form';
 import {
   Link,
   useActionData,
   useNavigation,
   useSubmit,
-} from "@remix-run/react";
-import { type FieldErrors, useForm } from "react-hook-form";
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+} from '@remix-run/react';
+import { useForm } from 'react-hook-form';
+
+import { type RoutesActionData } from '~/.server/routes/auth/signin.action';
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,16 +17,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { InputPassword } from "~/components/ui/input-password";
+} from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
+import { InputPassword } from '~/components/ui/input-password';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { createFormData } from '~/services/libs';
 import {
   FormFieldValues,
   resolver,
-} from "~/services/validate/signup-api.validate";
-import { type RoutesActionData } from "~/.server/routes/auth/signin.action";
-import { createFormData } from "~/services/libs";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
+} from '~/services/validate/signup-api.validate';
 
 interface SignupFormProps {
   email?: string;
@@ -34,25 +36,25 @@ export default function SignupForm({ email }: SignupFormProps) {
   const submit = useSubmit();
   const actionData = useActionData<RoutesActionData>();
 
-  const isSubmittingForm = navigation.state !== "idle";
+  const isSubmittingForm = navigation.state !== 'idle';
 
   const form = useForm<FormFieldValues>({
     resolver,
     defaultValues: {
-      username: "",
-      email: email || "",
-      password: "",
-      nickname: "",
-      confirmPassword: "",
+      username: '',
+      email: email || '',
+      password: '',
+      nickname: '',
+      confirmPassword: '',
     },
-    reValidateMode: "onBlur",
+    reValidateMode: 'onBlur',
     errors: actionData?.errors as FieldErrors<FormFieldValues> | undefined,
   });
 
   const onSubmit = (input: FormFieldValues) => {
     const formData = createFormData(input);
     submit(formData, {
-      method: "post",
+      method: 'post',
       replace: true,
     });
   };
@@ -184,7 +186,7 @@ export default function SignupForm({ email }: SignupFormProps) {
 
             <div>
               <p className="text-sm text-muted-foreground">
-                {`Already have an account?`}{" "}
+                {`Already have an account?`}{' '}
                 <Link
                   to={PAGE_ENDPOINTS.AUTH.SIGNIN}
                   className="text-primary"

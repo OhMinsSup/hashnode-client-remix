@@ -1,93 +1,103 @@
-import { redirect, type ActionFunctionArgs } from "@remix-run/cloudflare";
-import { safeRedirect } from "remix-utils/safe-redirect";
-import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
-import {
-  getTokenFromCookie,
-  validateMethods,
-} from "~/.server/utils/request.server";
-import {
-  FormFieldValues,
-  resolver,
-} from "~/services/validate/signin-api.validate";
-import { getValidatedFormData } from "~/services/libs";
-import { json } from "@remix-run/cloudflare";
-import { type FieldErrors } from "react-hook-form";
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json, redirect } from '@remix-run/cloudflare';
+import { safeRedirect } from 'remix-utils/safe-redirect';
+
+import { errorJsonResponse } from '~/.server/utils/response.server';
 import {
   createToastHeaders,
   redirectWithToast,
-} from "~/.server/utils/toast.server";
-import { IFetchError } from "~/services/api/fetch/types";
+} from '~/.server/utils/toast.server';
+import { PAGE_ENDPOINTS, RESULT_CODE } from '~/constants/constant';
+import { isFetchError } from '~/services/api/error';
+import { getValidatedFormData } from '~/services/libs';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
+import { RequestMethod } from '~/services/libs/request-method.enum';
+import {
+  FormFieldValues,
+  resolver,
+} from '~/services/validate/signin-api.validate';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  // 유효성 검사
-  validateMethods(request, ["POST"], PAGE_ENDPOINTS.AUTH.SIGNIN);
-
-  const { errors, data } = await getValidatedFormData<FormFieldValues>(
-    request,
-    resolver
-  );
-
-  if (errors) {
-    return json({
-      status: "error" as const,
-      result: null,
-      errors,
-      message: null,
-    });
-  }
-
   try {
-    const response = await context.agent.api.app.auth.signinHandler({
+    if (request.method.toUpperCase() !== RequestMethod.POST) {
+      throw createError({
+        statusMessage: 'Method Not Allowed',
+        statusCode: HttpStatus.METHOD_NOT_ALLOWED,
+        displayType: ErrorDisplayType.TOAST,
+        data: 'not allowed method',
+      });
+    }
+
+    const { errors, data } = await getValidatedFormData<FormFieldValues>(
+      request,
+      resolver,
+    );
+
+    if (errors) {
+      return json(errorJsonResponse('validation failed', errors));
+    }
+
+    const auth = context.agent.api.app.auth;
+    const response = await auth.signinHandler({
       body: data,
     });
-    const cookie = response.headers.get("set-cookie");
-    const token = cookie ? getTokenFromCookie(cookie) : null;
-    if (!token || !cookie) {
-      return redirectWithToast(
-        PAGE_ENDPOINTS.AUTH.SIGNIN,
-        {
-          type: "error",
-          description: "로그인에 실패했습니다. 다시 시도해주세요.",
-        },
-        createToastHeaders
-      );
+
+    const cookie = response.headers.get('set-cookie');
+    if (!cookie) {
+      throw createError({
+        statusMessage: 'Forbidden',
+        statusCode: HttpStatus.FORBIDDEN,
+        displayType: ErrorDisplayType.TOAST,
+        data: 'failed to sign in',
+      });
     }
 
     return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
       headers: {
-        "Set-Cookie": cookie,
+        'Set-Cookie': cookie,
       },
     });
   } catch (e) {
-    if (e instanceof Error && e.name === "FetchError") {
-      const error = e as IFetchError<FetchRespSchema.Error>;
-      if (error.data) {
-        const isNotExistsUser = error.data.resultCode === RESULT_CODE.NOT_EXIST;
-        if (isNotExistsUser) {
-          return redirect(
-            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`)
-          );
-        }
-        return json({
-          status: "error" as const,
-          result: null,
-          errors: {
-            [error.data.error]: {
-              message: error.data.message,
-            },
-          } as FieldErrors<FormFieldValues>,
-          message: null,
-        });
+    console.error(e);
+    if (isError<string>(e)) {
+      console.error(e);
+      if (e.displayType === ErrorDisplayType.TOAST) {
+        return redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNUP),
+          {
+            type: 'error',
+            description: e.data ?? 'failed to sign in',
+          },
+          createToastHeaders,
+        );
       }
     }
-    return redirectWithToast(
-      safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNIN),
-      {
-        type: "error",
-        description: "로그인에 실패했습니다. 다시 시도해주세요.",
-      },
-      createToastHeaders
-    );
+
+    if (isFetchError<FetchRespSchema.Error>(e)) {
+      console.error(e);
+      if (e.data) {
+        const body =
+          e.options?.body && typeof e.options.body === 'string'
+            ? (JSON.parse(e.options.body ?? '{}') as Record<string, string>)
+            : null;
+        const isNotExistsUser = e.data.resultCode === RESULT_CODE.NOT_EXIST;
+        if (isNotExistsUser && body) {
+          return redirect(
+            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${body.email}`),
+          );
+        }
+        return json(
+          errorJsonResponse(e.message, {
+            [e.data.error]: {
+              message: e.data.message,
+            },
+          }),
+        );
+      }
+    }
+
+    throw e;
   }
 };
 

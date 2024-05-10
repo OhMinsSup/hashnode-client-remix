@@ -1,9 +1,9 @@
-import type { FetchOptions, ResponseMapType } from "./types";
+import type { FetchOptions, ResponseMapType } from './types';
 
-export function mergeFetchOptions<R extends ResponseMapType = "json">(
+export function mergeFetchOptions<R extends ResponseMapType = 'json'>(
   input: FetchOptions<R> | undefined,
   defaults: FetchOptions<R> | undefined,
-  Headers = globalThis.Headers
+  Headers = globalThis.Headers,
 ): FetchOptions<R> {
   const merged: FetchOptions<R> = {
     ...defaults,
@@ -53,15 +53,15 @@ export function isJSONSerializable(value: unknown): boolean {
   }
 
   if (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean" ||
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    typeof value === 'boolean' ||
     value === null
   ) {
     return true;
   }
 
-  if (typeof value !== "object") {
+  if (typeof value !== 'object') {
     return false; // bigint, function, symbol, undefined
   }
 
@@ -79,35 +79,35 @@ export function isJSONSerializable(value: unknown): boolean {
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- safe
-    (value.constructor && value.constructor.name === "Object") ||
-    ("toJSON" in value && typeof value.toJSON === "function")
+    (value.constructor && value.constructor.name === 'Object') ||
+    ('toJSON' in value && typeof value.toJSON === 'function')
   );
 }
 
 const textTypes = new Set([
-  "image/svg",
-  "application/xml",
-  "application/xhtml",
-  "application/html",
+  'image/svg',
+  'application/xml',
+  'application/xhtml',
+  'application/html',
 ]);
 
 const JSON_RE = /^application\/(?:[\w!#$%&*.^`~-]*\+)?json(?<temp1>;.+)?$/i;
 
-export function detectResponseType(_contentType = ""): ResponseMapType {
+export function detectResponseType(_contentType = ''): ResponseMapType {
   if (!_contentType) {
-    return "json";
+    return 'json';
   }
 
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- safe
-  const contentType = _contentType.split(";").shift() || "";
+  const contentType = _contentType.split(';').shift() || '';
 
   if (JSON_RE.test(contentType)) {
-    return "json";
+    return 'json';
   }
 
-  if (textTypes.has(contentType) || contentType.startsWith("text/")) {
-    return "text";
+  if (textTypes.has(contentType) || contentType.startsWith('text/')) {
+    return 'text';
   }
 
-  return "blob";
+  return 'blob';
 }

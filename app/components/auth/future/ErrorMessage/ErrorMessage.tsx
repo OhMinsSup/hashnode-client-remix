@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { get } from "react-hook-form";
-import styles from "./styles.module.css";
-import type { FieldErrors, FieldValues } from "react-hook-form";
+import type { FieldErrors, FieldValues } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { get } from 'react-hook-form';
+
+import styles from './styles.module.css';
 
 interface ErrorMessageProps<D extends FieldValues> {
   error?: string;
@@ -29,7 +30,7 @@ function ErrorMessage<D extends FieldValues>({
   if (!show) return null;
 
   const valid_error = get(errors, name);
-  
+
   if (!error && valid_error) {
     return <p className={styles.error}>{valid_error?.message}</p>;
   }

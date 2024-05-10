@@ -56,10 +56,12 @@ import {
   Info,
   Save,
   Calendar,
+  Link,
 } from "lucide-react";
 import { cn } from "~/services/libs";
 
 export const Icons = {
+  link: Link,
   calendar: Calendar,
   save: Save,
   info: Info,

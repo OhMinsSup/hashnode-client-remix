@@ -1,8 +1,10 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import type { FieldErrors, FieldValues, Resolver } from "react-hook-form";
-import type { SearchParams } from "~/.server/utils/request.server";
+import type { LoaderFunction, MetaFunction } from '@remix-run/cloudflare';
+import type { ClassValue } from 'clsx';
+import type { FieldErrors, FieldValues, Resolver } from 'react-hook-form';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+import type { SearchParams } from '~/.server/utils/request.server';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,13 +45,13 @@ export const firstLetterToUpperCase = (str?: string) => {
 };
 
 export const valueToBoolean = (value: string | boolean | undefined | null) => {
-  if (value === "true") {
+  if (value === 'true') {
     return true;
   }
-  if (value === "false") {
+  if (value === 'false') {
     return false;
   }
-  if (typeof value === "undefined" || value === null) {
+  if (typeof value === 'undefined' || value === null) {
     return false;
   }
   return value;
@@ -77,7 +79,7 @@ export const numberToEnglishUnit = (num?: number | null) => {
 };
 
 export function removeTrailingSlash(s: string) {
-  return s.endsWith("/") ? s.slice(0, -1) : s;
+  return s.endsWith('/') ? s.slice(0, -1) : s;
 }
 
 /**
@@ -85,11 +87,11 @@ export function removeTrailingSlash(s: string) {
  */
 export function getDomainUrl(request: Request) {
   const host =
-    request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
+    request.headers.get('X-Forwarded-Host') ?? request.headers.get('host');
   if (!host) {
-    throw new Error("Could not determine domain URL.");
+    throw new Error('Could not determine domain URL.');
   }
-  const protocol = host.includes("localhost") ? "http" : "https";
+  const protocol = host.includes('localhost') ? 'http' : 'https';
   return `${protocol}://${host}`;
 }
 
@@ -100,7 +102,7 @@ export const mergeMeta = <
     unknown
   >,
 >(
-  leafMetaFn: MetaFunction<Loader, ParentsLoaders>
+  leafMetaFn: MetaFunction<Loader, ParentsLoaders>,
 ): MetaFunction<Loader, ParentsLoaders> => {
   return (arg) => {
     const leafMeta = leafMetaFn(arg);
@@ -108,13 +110,13 @@ export const mergeMeta = <
       for (const parentMeta of match.meta) {
         const index = acc.findIndex(
           (meta) =>
-            ("name" in meta &&
-              "name" in parentMeta &&
+            ('name' in meta &&
+              'name' in parentMeta &&
               meta.name === parentMeta.name) ||
-            ("property" in meta &&
-              "property" in parentMeta &&
+            ('property' in meta &&
+              'property' in parentMeta &&
               meta.property === parentMeta.property) ||
-            ("title" in meta && "title" in parentMeta)
+            ('title' in meta && 'title' in parentMeta),
         );
         if (index == -1) {
           // Parent meta not found in acc, so add it
@@ -128,7 +130,7 @@ export const mergeMeta = <
 
 export const createFormData = <T extends FieldValues>(
   data: T,
-  stringifyAll = true
+  stringifyAll = true,
 ): FormData => {
   const formData = new FormData();
   if (!data) {
@@ -147,7 +149,7 @@ export const createFormData = <T extends FieldValues>(
       if (stringifyAll) {
         formData.append(key, JSON.stringify(value));
       } else {
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
           formData.append(key, value);
         } else if (value instanceof Date) {
           formData.append(key, value.toISOString());
@@ -161,8 +163,8 @@ export const createFormData = <T extends FieldValues>(
   return formData;
 };
 
-export const isGet = (request: Pick<Request, "method">) =>
-  request.method === "GET" || request.method === "get";
+export const isGet = (request: Pick<Request, 'method'>) =>
+  request.method === 'GET' || request.method === 'get';
 
 const tryParseJSON = (jsonString: string) => {
   try {
@@ -176,14 +178,14 @@ const tryParseJSON = (jsonString: string) => {
 
 export const generateFormData = (
   formData: FormData | URLSearchParams,
-  preserveStringified = false
+  preserveStringified = false,
 ) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const outputObject: Record<any, any> = {};
 
   for (const [key, value] of formData.entries()) {
     const data = preserveStringified ? value : tryParseJSON(value.toString());
-    const keyParts = key.split(".");
+    const keyParts = key.split('.');
     let currentObject = outputObject;
 
     for (let i = 0; i < keyParts.length - 1; i++) {
@@ -198,7 +200,7 @@ export const generateFormData = (
     const lastKeyPartIsArray = /\[\d*\]$|\[\]$/.test(lastKeyPart);
 
     if (lastKeyPartIsArray) {
-      const key = lastKeyPart.replace(/\[\d*\]$|\[\]$/, "");
+      const key = lastKeyPart.replace(/\[\d*\]$|\[\]$/, '');
       if (!currentObject[key]) {
         currentObject[key] = [];
       }
@@ -222,14 +224,14 @@ export const generateFormData = (
 export const validateFormData = async <T extends FieldValues>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
-  resolver: Resolver<T>
+  resolver: Resolver<T>,
 ) => {
   const dataToValidate =
     data instanceof FormData ? Object.fromEntries(data) : data;
   const { errors, values } = await resolver(
     dataToValidate,
     {},
-    { shouldUseNativeValidation: false, fields: {} }
+    { shouldUseNativeValidation: false, fields: {} },
   );
 
   if (Object.keys(errors).length > 0) {
@@ -242,7 +244,7 @@ export const validateFormData = async <T extends FieldValues>(
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint, @typescript-eslint/no-explicit-any
 export const parseFormData = async <T extends any>(
   request: Request | FormData,
-  preserveStringified = false
+  preserveStringified = false,
 ): Promise<T> => {
   const formData =
     request instanceof Request ? await request.formData() : request;
@@ -250,8 +252,8 @@ export const parseFormData = async <T extends any>(
 };
 
 export const getFormDataFromSearchParams = (
-  request: Pick<Request, "url">,
-  preserveStringified = false
+  request: Pick<Request, 'url'>,
+  preserveStringified = false,
 ) => {
   const searchParams = new URL(request.url).searchParams;
   return generateFormData(searchParams, preserveStringified);
@@ -260,7 +262,7 @@ export const getFormDataFromSearchParams = (
 export const getValidatedFormData = async <T extends FieldValues>(
   request: Request,
   resolver: Resolver<T>,
-  preserveStringified = false
+  preserveStringified = false,
 ) => {
   const data = isGet(request)
     ? getFormDataFromSearchParams(request, preserveStringified)
@@ -281,19 +283,19 @@ export const getQueryPath = (basePath: string, searchParams?: SearchParams) => {
 export const getInfinityQueryPath = (
   basePath: string,
   searchParams?: SearchParams,
-  pageNo?: number
+  pageNo?: number,
 ) => {
   if (searchParams) {
     const params = new URLSearchParams(searchParams);
     if (pageNo) {
-      params.set("pageNo", String(pageNo));
+      params.set('pageNo', String(pageNo));
     }
     return `${basePath}?${params.toString()}`;
   }
 
   if (pageNo) {
     const params = new URLSearchParams();
-    params.set("pageNo", String(pageNo));
+    params.set('pageNo', String(pageNo));
     return `${basePath}?${params.toString()}`;
   }
 

@@ -1,10 +1,11 @@
-import { type PlatformProxy } from "wrangler";
-import { type AppLoadContext } from "@remix-run/cloudflare";
-import { HashnodeAgent } from "./app/services/api/hashnode-agent";
+import { type AppLoadContext } from '@remix-run/cloudflare';
+import { type PlatformProxy } from 'wrangler';
 
-type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
+import { HashnodeAgent } from './app/services/api/hashnode-agent';
 
-declare module "@remix-run/cloudflare" {
+type Cloudflare = Omit<PlatformProxy<Env>, 'dispose'>;
+
+declare module '@remix-run/cloudflare' {
   interface AppLoadContext {
     cloudflare: Cloudflare;
     env: Env;
@@ -20,7 +21,7 @@ type GetLoadContext = (args: {
 export const getLoadContext: GetLoadContext = ({ context }) => {
   const agent = new HashnodeAgent({
     service: context.cloudflare.env.API_BASE_URL,
-    prefix: "/v1",
+    prefix: '/v1',
   });
 
   return {

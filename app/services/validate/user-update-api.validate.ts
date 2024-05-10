@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const socialSchema = z.object({
   github: z
@@ -11,7 +11,7 @@ export const socialSchema = z.object({
           /(http|https):\/\/github\.com\/(.+)|(http|https):\/\/www\.github\.com\/(.+)/;
         return regex.test(val);
       },
-      { message: "Invalid github url" }
+      { message: 'Invalid github url' },
     ),
   facebook: z
     .string()
@@ -23,7 +23,7 @@ export const socialSchema = z.object({
           /(http|https):\/\/facebook\.com\/(.+)|(http|https):\/\/www\.facebook\.com\/(.+)|(http|https):\/\/fb\.com\/(.+)|(http|https):\/\/www\.fb\.com\/(.+)/;
         return regex.test(val);
       },
-      { message: "Invalid facebook url" }
+      { message: 'Invalid facebook url' },
     ),
   twitter: z
     .string()
@@ -35,7 +35,7 @@ export const socialSchema = z.object({
           /(http|https):\/\/twitter\.com\/(.+)|(http|https):\/\/www\.twitter\.com\/(.+)/;
         return regex.test(val);
       },
-      { message: "Invalid twitter url" }
+      { message: 'Invalid twitter url' },
     ),
   instagram: z
     .string()
@@ -47,7 +47,7 @@ export const socialSchema = z.object({
           /(http|https):\/\/instagram\.com\/(.+)|(http|https):\/\/www\.instagram\.com\/(.+)/;
         return regex.test(val);
       },
-      { message: "Invalid instagram url" }
+      { message: 'Invalid instagram url' },
     ),
   website: z
     .string()
@@ -58,7 +58,7 @@ export const socialSchema = z.object({
         const regex = /(http|https):\/\/(.+)|(http|https):\/\/www\.(.+)/;
         return regex.test(val);
       },
-      { message: "Invalid website url" }
+      { message: 'Invalid website url' },
     ),
 });
 

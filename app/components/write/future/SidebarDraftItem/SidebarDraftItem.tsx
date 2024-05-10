@@ -1,9 +1,18 @@
-import { useNavigate, useParams } from "@remix-run/react";
-import { useCallback } from "react";
+import { Link, useParams, useSubmit } from "@remix-run/react";
+import { useCallback, useRef, useState } from "react";
 import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { PAGE_ENDPOINTS } from "~/constants/constant";
 import { cn } from "~/services/libs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { useMediaQuery } from "~/libs/hooks/useMediaQuery";
+import { useEventListener } from "~/libs/hooks/useEventListener";
 
 interface SidebarDraftItemProps {
   item: SerializeSchema.SerializePost<false>;
@@ -12,23 +21,70 @@ interface SidebarDraftItemProps {
 export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
   const { id } = useParams<{ id: string }>();
 
-  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
 
-  const onClickWritePage = useCallback(() => {
-    navigate(PAGE_ENDPOINTS.WRITE.ID(item.id), {
-      unstable_viewTransition: true,
-    });
-  }, [item.id, navigate]);
+  const [open, setOpen] = useState(false);
+
+  const isMobile = useMediaQuery("(max-width: 640px)", false);
+
+  const target = useRef<HTMLDivElement>(null);
+
+  const submit = useSubmit();
+
+  const onOpenChange = useCallback((nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      setVisible(false);
+    }
+  }, []);
+
+  const onDeleteDraft = useCallback(() => {
+    const isConfirm = confirm("Are you sure you want to delete this draft?");
+    if (isConfirm) {
+      console.log("Delete draft");
+
+      submit(
+        {
+          type: "DRAFT_DELETE",
+          postId: item.id,
+          redirectUrl: location.pathname,
+        },
+        { method: "delete", encType: "application/json" }
+      );
+    }
+  }, [item.id, submit]);
+
+  useEventListener(
+    "mouseenter",
+    () => {
+      setVisible(true);
+    },
+    {
+      target,
+    }
+  );
+
+  useEventListener(
+    "mouseleave",
+    () => {
+      if (open) return;
+      setVisible(false);
+    },
+    {
+      target,
+    }
+  );
 
   return (
-    <div className="group grid relative grid-cols-12 sm:block">
-      <Button
-        type="button"
-        variant="ghost"
-        role="link"
-        data-href={PAGE_ENDPOINTS.WRITE.ID(item.id)}
-        onClick={onClickWritePage}
+    <div className="group grid relative grid-cols-12 sm:block" ref={target}>
+      <Link
+        unstable_viewTransition
+        to={PAGE_ENDPOINTS.WRITE.ID(item.id)}
         className={cn(
+          buttonVariants({
+            variant: "ghost",
+          }),
           id === item.id ? "bg-accent text-accent-foreground" : undefined,
           "grid grid-cols-10 justify-start space-x-2 col-span-8 md:col-auto"
         )}
@@ -39,12 +95,56 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
           </div>
         </div>
         <div className="col-span-9 truncate text-left">{item.title}</div>
-      </Button>
-      <div className="h-full overflow-hidden col-span-4 sm:invisible sm:absolute sm:top-0 sm:bottom-0 sm:right-0 sm:col-auto">
+      </Link>
+      <div
+        className={cn(
+          "h-full overflow-hidden col-span-4 sm:absolute sm:top-0 sm:bottom-0 sm:right-0 sm:col-auto",
+          isMobile ? "visible" : visible ? "visible" : "invisible"
+        )}
+      >
         <div className="relative z-20 flex h-full w-full flex-row justify-end">
-          <Button variant="outline" size="sm">
-            <Icons.moreHorizontal />
-          </Button>
+          <DropdownMenu onOpenChange={onOpenChange} open={open}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-full">
+                <Icons.moreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="p-0">
+                <Button
+                  variant="ghost"
+                  className="space-x-2 w-full justify-start"
+                  size="sm"
+                >
+                  <Icons.link className="size-4" />
+                  <span>Copy preview link</span>
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="p-0">
+                <Button
+                  variant="ghost"
+                  className="space-x-2 w-full justify-start"
+                  size="sm"
+                >
+                  <Icons.fileSearch className="size-4" />
+                  <span>Preview draft</span>
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="p-0">
+                <Button
+                  variant="ghost"
+                  className="space-x-2 w-full justify-start"
+                  size="sm"
+                  onClick={onDeleteDraft}
+                >
+                  <Icons.trash className="size-4" />
+                  <span>Delete</span>
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

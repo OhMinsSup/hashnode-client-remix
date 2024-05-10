@@ -1,4 +1,4 @@
-export type ResponseType = keyof ResponseMap | "json";
+export type ResponseType = keyof ResponseMap | 'json';
 
 export type MappedResponseType<
   R extends ResponseType,
@@ -26,7 +26,7 @@ export interface ResponseMap {
   arrayBuffer: ArrayBuffer;
 }
 
-export type ResponseMapType = keyof ResponseMap | "json";
+export type ResponseMapType = keyof ResponseMap | 'json';
 
 export interface FetchContext<
   T = unknown,
@@ -39,9 +39,9 @@ export interface FetchContext<
 }
 
 export interface FetchOptions<R extends ResponseMapType = ResponseMapType>
-  extends Omit<RequestInit, "body"> {
+  extends Omit<RequestInit, 'body'> {
   baseURL?: string;
-  body?: RequestInit["body"] | Params;
+  body?: RequestInit['body'] | Params;
   params?: Params;
   query?: QueryParams;
   ignoreResponseError?: boolean;
@@ -60,28 +60,28 @@ export interface FetchOptions<R extends ResponseMapType = ResponseMapType>
   onRequest?: <T = any>(context: FetchContext<T, R>) => Promise<void> | void;
 
   onRequestError?: <T = any>(
-    context: FetchContext<T, R> & { error: Error }
+    context: FetchContext<T, R> & { error: Error },
   ) => Promise<void> | void;
 
   onResponse?: <T = any>(
-    context: FetchContext<T, R> & { response: FetchResponse<R> }
+    context: FetchContext<T, R> & { response: FetchResponse<R> },
   ) => Promise<void> | void;
 
   onResponseError?: <T = any>(
-    context: FetchContext<T, R> & { response: FetchResponse<R> }
+    context: FetchContext<T, R> & { response: FetchResponse<R> },
   ) => Promise<void> | void;
 }
 
-export type FetchHandler = <T = any, R extends ResponseType = "json">(
+export type FetchHandler = <T = any, R extends ResponseType = 'json'>(
   request: FetchRequest,
-  options?: FetchOptions<R>
+  options?: FetchOptions<R>,
 ) => Promise<FetchResponse<MappedResponseType<R, T>>>;
 
 export type FetchWithoutRequestHandler = <
   T = any,
-  R extends ResponseType = "json",
+  R extends ResponseType = 'json',
 >(
-  options?: FetchOptions<R>
+  options?: FetchOptions<R>,
 ) => Promise<FetchResponse<MappedResponseType<R, T>>>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- FetchError is a class

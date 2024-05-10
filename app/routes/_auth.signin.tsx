@@ -1,8 +1,9 @@
-import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
-import { SigninForm } from "~/components/auth/future/SigninForm";
+import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-export { meta } from "~/services/seo/auth/signin.meta";
-export { action } from "~/.server/routes/auth/signin.action";
+import { SigninForm } from '~/components/auth/future/SigninForm';
+
+export { meta } from '~/services/seo/auth/signin.meta';
+export { action } from '~/.server/routes/auth/signin.action';
 
 export default function Routes() {
   return <SigninForm />;

@@ -1,17 +1,18 @@
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import {
-  redirect,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-  unstable_parseMultipartFormData as parseMultipartFormData,
   json,
-} from "@remix-run/cloudflare";
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { requireAuthCookie, requireCookie } from "~/.server/utils/auth.server";
-import { schema } from "~/services/validate/cf-file.validate";
-import { SearchParams } from "~/.server/utils/request.server";
-import { parse } from "@conform-to/zod";
-import { type FetchResponse } from "~/services/api/fetch/types";
-import { getQueryPath } from "~/services/libs";
+  unstable_parseMultipartFormData as parseMultipartFormData,
+  redirect,
+} from '@remix-run/cloudflare';
+import { parse } from '@conform-to/zod';
+
+import { requireAuthCookie } from '~/.server/utils/auth.server';
+import { getCookie, SearchParams } from '~/.server/utils/request.server';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { type FetchResponse } from '~/services/api/fetch/types';
+import { getQueryPath } from '~/services/libs';
+import { schema } from '~/services/validate/cf-file.validate';
 
 type Data = FetchRespSchema.File;
 
@@ -22,7 +23,7 @@ type CfDirectSchema = CloudflareSchema.CfDirectUpload;
 type CfUploadSchema = CloudflareSchema.CfUpload;
 
 type ActionSchema = {
-  status: "success" | "error";
+  status: 'success' | 'error';
   result: Data | null;
   errors: Record<string, string | string[]> | null;
 };
@@ -32,11 +33,11 @@ type OverrideFetchResponse<T> = FetchResponse<T> & {
 };
 
 function invariantCloudflareResponse(
-  response: FetchResponse<CfDirectSchema | CfUploadSchema>
+  response: FetchResponse<CfDirectSchema | CfUploadSchema>,
 ): asserts response is OverrideFetchResponse<CfDirectSchema | CfUploadSchema> {
   if (!response._data) {
     const error = new Error();
-    error.name = "CloudflareResponseError";
+    error.name = 'CloudflareResponseError';
     error.message = JSON.stringify({
       status: response.status,
       errors: undefined,
@@ -46,7 +47,7 @@ function invariantCloudflareResponse(
 
   if (!response._data.success) {
     const error = new Error();
-    error.name = "CloudflareResponseError";
+    error.name = 'CloudflareResponseError';
     error.message = JSON.stringify({
       status: response.status,
       errors: response._data.errors.at(0),
@@ -59,22 +60,22 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
 
   const defaultValue: ActionSchema = {
-    status: "error" as const,
+    status: 'error' as const,
     result: null,
     errors: null,
   };
 
-  const { cookie } = requireCookie(request);
-  if (!cookie) {
+  const { cookies } = getCookie(request);
+  if (!cookies) {
     return json(
       {
-        status: "error" as const,
+        status: 'error' as const,
         result: defaultValue,
-        message: "You are not logged in.",
+        message: 'You are not logged in.',
       },
       {
         status: 401,
-      }
+      },
     );
   }
 
@@ -94,11 +95,11 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (Object.keys(submission.error).length || !submission.value) {
     return json(
       {
-        status: "error" as const,
+        status: 'error' as const,
         result: null,
         errors: submission.error,
       } as ActionSchema,
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -110,7 +111,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     const responseTypeCfDirect =
       await fileApi.postDirectUploadHandler<CfDirectSchema>(
         context.env.CF_ID,
-        context.env.CF_API_TOKEN
+        context.env.CF_API_TOKEN,
       );
     invariantCloudflareResponse(responseTypeCfDirect);
 
@@ -118,7 +119,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     const responseTypeCfUpload = await fileApi.postCloudflareUploadHandler(
       uploadURL,
-      submission.value.file
+      submission.value.file,
     );
 
     const { id, variants } = responseTypeCfUpload.result;
@@ -133,7 +134,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         uploadType: submission.value.uploadType,
       },
       headers: {
-        Cookie: cookie,
+        Cookie: cookies,
       },
     });
 
@@ -146,30 +147,30 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     return json(
       {
-        status: "success" as const,
+        status: 'success' as const,
         result: data.result,
         errors: null,
       } as ActionSchema,
       {
         status: response.status,
-      }
+      },
     );
   } catch (error) {
     console.error(error);
-    if (error instanceof Error && error.name === "CloudflareResponseError") {
+    if (error instanceof Error && error.name === 'CloudflareResponseError') {
       const data = JSON.parse(error.message) as {
         status: number;
-        errors: ActionSchema["errors"];
+        errors: ActionSchema['errors'];
       };
       return json(
         {
-          status: "error" as const,
+          status: 'error' as const,
           result: null,
           errors: data.errors,
         } as ActionSchema,
         {
           status: data.status,
-        }
+        },
       );
     }
 
@@ -179,9 +180,9 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
 export type RoutesActionData = typeof action;
 
-export const loader = () => redirect("/", { status: 404 });
+export const loader = () => redirect('/', { status: 404 });
 
-export const getBasePath = "/api/v1/assets/upload";
+export const getBasePath = '/api/v1/assets/upload';
 
 export const getPath = (searchParams?: SearchParams) => {
   return getQueryPath(getBasePath, searchParams);

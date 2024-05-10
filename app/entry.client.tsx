@@ -4,10 +4,11 @@
  * For more information, see https://remix.run/docs/en/main/file-conventions/entry.client
  */
 
-import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
-import { handleDarkAndLightModeEls } from "~/context/useThemeContext";
+import { startTransition, StrictMode } from 'react';
+import { RemixBrowser } from '@remix-run/react';
+import { hydrateRoot } from 'react-dom/client';
+
+import { handleDarkAndLightModeEls } from '~/context/useThemeContext';
 
 handleDarkAndLightModeEls();
 startTransition(() => {
@@ -15,6 +16,6 @@ startTransition(() => {
     document,
     <StrictMode>
       <RemixBrowser />
-    </StrictMode>
+    </StrictMode>,
   );
 });

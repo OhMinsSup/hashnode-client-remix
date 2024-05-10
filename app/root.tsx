@@ -6,24 +6,28 @@ import {
   ScrollRestoration,
   useLoaderData,
   useRouteError,
-} from "@remix-run/react";
-import { Toaster, toast as showToast } from "sonner";
-import { Body } from "~/components/shared/future/Body";
+} from '@remix-run/react';
+import { toast as showToast, Toaster } from 'sonner';
+
+import { Body } from '~/components/shared/future/Body';
 import {
   NonFlashOfWrongThemeEls,
   ThemeProvider,
   useTheme,
-} from "~/context/useThemeContext";
-import "~/styles/global.css";
-import type { Theme } from "~/context/useThemeContext";
-import type { Toast } from "~/services/validate/toast.validate";
-import { useEffect, useRef } from "react";
-import { type RoutesLoaderData } from "~/.server/routes/root/root.loader";
-import { ClientQueryProvider } from "~/services/react-query";
-import { cn } from "~/services/libs";
+} from '~/context/useThemeContext';
 
-export { loader } from "~/.server/routes/root/root.loader";
-export { meta } from "~/services/seo/root/root.meta";
+import '~/styles/global.css';
+
+import { useEffect, useRef } from 'react';
+
+import type { Theme } from '~/context/useThemeContext';
+import type { Toast } from '~/services/validate/toast.validate';
+import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
+import { cn } from '~/services/libs';
+import { ClientQueryProvider } from '~/services/react-query';
+
+export { loader } from '~/.server/routes/root/root.loader';
+export { meta } from '~/services/seo/root/root.meta';
 
 function ShowToast({ toast }: { toast: Toast }) {
   const { id, type, title, description } = toast;
@@ -166,6 +170,6 @@ export default function AppWithProviders() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log("route ===>", error);
+  console.log('route ===>', error);
   return <>Error</>;
 }

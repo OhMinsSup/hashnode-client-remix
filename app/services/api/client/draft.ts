@@ -1,12 +1,12 @@
-import { API_ENDPOINTS } from "../../../constants/constant";
-import { type ServiceClient } from ".";
 import type {
   FetchOptions,
   FetchResponse,
   FetchWithoutRequestHandler,
   MappedResponseType,
   ResponseType,
-} from "../fetch/types";
+} from '../fetch/types';
+import { type ServiceClient } from '.';
+import { API_ENDPOINTS } from '../../../constants/constant';
 
 export class DraftNamespace {
   _service: ServiceClient;
@@ -21,10 +21,10 @@ export class DraftNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
@@ -32,10 +32,10 @@ export class DraftNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.SUBMITTED),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
@@ -43,10 +43,10 @@ export class DraftNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),
       {
-        method: "POST",
+        method: 'POST',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
@@ -54,24 +54,24 @@ export class DraftNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.SYNC),
       {
-        method: "POST",
+        method: 'POST',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
-  putSyncDraftHandler = async <T = unknown, R extends ResponseType = "json">(
+  putSyncDraftHandler = async <T = unknown, R extends ResponseType = 'json'>(
     id: string,
-    options?: FetchOptions<R>
+    options?: FetchOptions<R>,
   ): Promise<FetchResponse<MappedResponseType<R, T>>> => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ID_SYNC(id)),
       {
-        method: "PUT",
+        method: 'PUT',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 }
