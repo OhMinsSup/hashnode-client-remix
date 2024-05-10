@@ -1,22 +1,23 @@
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
-import { Label } from "~/components/ui/label";
+import { useCallback, useState } from 'react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
-import { useCallback, useState } from "react";
-import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
-import { Input } from "~/components/ui/input";
+} from '~/components/ui/tooltip';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 export default function InputSlug() {
   const { watch, setValue } = useWriteFormContext();
 
-  const urlSlug = watch("urlSlug");
+  const urlSlug = watch('urlSlug');
 
   const [text, setText] = useState(urlSlug);
 
@@ -27,7 +28,7 @@ export default function InputSlug() {
   const onChangeTextMode = useCallback(() => {
     setInputMode(false);
 
-    setValue("urlSlug", text, {
+    setValue('urlSlug', text, {
       shouldDirty: true,
     });
   }, [setValue, text]);
@@ -51,11 +52,11 @@ export default function InputSlug() {
 
   const textMode = () => {
     return (
-      <div className="border-slate-300 bg-transparent dark:border-slate-700 dark:text-slate-300 outline-none w-full py-3 pr-2 pl-4 items-center flex justify-between border rounded-xl">
+      <div className="flex w-full items-center justify-between rounded-xl border border-slate-300 bg-transparent py-3 pl-4 pr-2 outline-none dark:border-slate-700 dark:text-slate-300">
         <span
           className={cn(
-            "truncate max-w-[250px]",
-            styles.input_slug_by_readonly
+            'max-w-[250px] truncate',
+            styles.input_slug_by_readonly,
           )}
         >
           /{urlSlug}

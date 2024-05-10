@@ -1,7 +1,7 @@
-import { Surface } from "~/components/editor/future/components/Surface";
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import { Tooltip } from "~/components/editor/future/components/Tooltip";
-import { EditorIcon } from "~/components/icons";
+import { Surface } from '~/components/editor/future/components/Surface';
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { Tooltip } from '~/components/editor/future/components/Tooltip';
+import { EditorIcon } from '~/components/icons';
 
 export type LinkPreviewPanelProps = {
   url: string;
@@ -20,7 +20,7 @@ export const LinkPreviewPanel = ({
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-sm underline break-all"
+        className="break-all text-sm underline"
       >
         {url}
       </a>

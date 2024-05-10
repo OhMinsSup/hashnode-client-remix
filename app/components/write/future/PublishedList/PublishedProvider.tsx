@@ -1,11 +1,12 @@
-import React from "react";
-import PublishedList from "./PublishedList";
-import PublishedCollapsibleWrapper from "./PublishedCollapsibleWrapper";
-import { ErrorBoundary } from "react-error-boundary";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { Button } from "~/components/ui/button";
-import type { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
-import { useLoaderData } from "@remix-run/react";
+import React from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+
+import type { RoutesLoaderData } from '~/.server/routes/write/write-layout.loader';
+import { Button } from '~/components/ui/button';
+import PublishedCollapsibleWrapper from './PublishedCollapsibleWrapper';
+import PublishedList from './PublishedList';
 
 export default function PublishedProvider() {
   const data = useLoaderData<RoutesLoaderData>();
@@ -17,9 +18,9 @@ export default function PublishedProvider() {
           <ErrorBoundary
             fallbackRender={({ error, resetErrorBoundary }) => (
               <div>
-                There was an error!{" "}
+                There was an error!{' '}
                 <Button onClick={() => resetErrorBoundary()}>Try again</Button>
-                <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
+                <pre style={{ whiteSpace: 'normal' }}>{error.message}</pre>
               </div>
             )}
             onReset={reset}

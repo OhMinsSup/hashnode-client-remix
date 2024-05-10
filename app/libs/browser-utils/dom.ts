@@ -1,15 +1,15 @@
 export function isElement(el: unknown): el is Element {
   return (
     el !== null &&
-    typeof el === "object" &&
-    "nodeType" in el &&
+    typeof el === 'object' &&
+    'nodeType' in el &&
     (el as Element).nodeType === Node.ELEMENT_NODE
   );
 }
 
 export function canUseDOM(): boolean {
   return !!(
-    typeof window !== "undefined" &&
+    typeof window !== 'undefined' &&
     window.document &&
     window.document.createElement
   );
@@ -38,7 +38,7 @@ export type BasicTarget<T extends TargetType = Element> =
 
 export function getTargetElement<T extends TargetType>(
   target: BasicTarget<T>,
-  defaultElement?: T
+  defaultElement?: T,
 ) {
   if (!isBrowser) {
     return undefined;
@@ -50,9 +50,9 @@ export function getTargetElement<T extends TargetType>(
 
   let targetElement: TargetValue<T>;
 
-  if (typeof target === "function") {
+  if (typeof target === 'function') {
     targetElement = target();
-  } else if ("current" in target) {
+  } else if ('current' in target) {
     targetElement = target.current;
   } else {
     targetElement = target;
@@ -66,7 +66,7 @@ export const getScrollTop = (el: Document | Element) => {
     return Math.max(
       window.pageYOffset,
       document.documentElement.scrollTop,
-      document.body.scrollTop
+      document.body.scrollTop,
     );
   }
   return (el as Element).scrollTop;

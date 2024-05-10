@@ -1,11 +1,12 @@
-import React from "react";
-import SubmittedDraftList from "./SubmittedDraftList";
-import SubmittedDraftCollapsibleWrapper from "./SubmittedDraftCollapsibleWrapper";
-import { ErrorBoundary } from "react-error-boundary";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { Button } from "~/components/ui/button";
-import { useLoaderData } from "@remix-run/react";
-import type { RoutesLoaderData } from "~/.server/routes/write/write-layout.loader";
+import React from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+
+import type { RoutesLoaderData } from '~/.server/routes/write/write-layout.loader';
+import { Button } from '~/components/ui/button';
+import SubmittedDraftCollapsibleWrapper from './SubmittedDraftCollapsibleWrapper';
+import SubmittedDraftList from './SubmittedDraftList';
 
 export default function PublishedProvider() {
   const data = useLoaderData<RoutesLoaderData>();
@@ -17,9 +18,9 @@ export default function PublishedProvider() {
           <ErrorBoundary
             fallbackRender={({ error, resetErrorBoundary }) => (
               <div>
-                There was an error!{" "}
+                There was an error!{' '}
                 <Button onClick={() => resetErrorBoundary()}>Try again</Button>
-                <pre style={{ whiteSpace: "normal" }}>{error.message}</pre>
+                <pre style={{ whiteSpace: 'normal' }}>{error.message}</pre>
               </div>
             )}
             onReset={reset}

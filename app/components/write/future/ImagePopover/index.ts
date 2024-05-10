@@ -1,1 +1,1 @@
-export { default as ImagePopover } from "./ImagePopover";
+export { default as ImagePopover } from './ImagePopover';

@@ -1,8 +1,9 @@
-import { Node } from "@tiptap/pm/model";
-import { Editor, NodeViewWrapper } from "@tiptap/react";
-import { useCallback, useRef } from "react";
-import { useEventListener } from "~/libs/hooks/useEventListener";
-import { cn } from "~/services/libs";
+import { useCallback, useRef } from 'react';
+import { Node } from '@tiptap/pm/model';
+import { Editor, NodeViewWrapper } from '@tiptap/react';
+
+import { useEventListener } from '~/libs/hooks/useEventListener';
+import { cn } from '~/services/libs';
 
 interface ImageBlockViewProps {
   editor: Editor;
@@ -22,16 +23,16 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   const imgRef = useRef<HTMLImageElement>(null);
 
   const wrapperClassName = cn(
-    node.attrs.align === "left" ? "ml-0" : "ml-auto",
-    node.attrs.align === "right" ? "mr-0" : "mr-auto",
-    node.attrs.align === "center" && "mx-auto"
+    node.attrs.align === 'left' ? 'ml-0' : 'ml-auto',
+    node.attrs.align === 'right' ? 'mr-0' : 'mr-auto',
+    node.attrs.align === 'center' && 'mx-auto',
   );
 
   const handleImageClick = useCallback(() => {
     editor.commands.setNodeSelection(getPos());
   }, [getPos, editor.commands]);
 
-  useEventListener("click", handleImageClick, {
+  useEventListener('click', handleImageClick, {
     target: imgRef,
   });
 

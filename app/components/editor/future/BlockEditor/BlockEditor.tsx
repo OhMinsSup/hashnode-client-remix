@@ -1,12 +1,12 @@
-import { EditorContent } from "@tiptap/react";
-import { useRef } from "react";
+import { useRef } from 'react';
+import { EditorContent } from '@tiptap/react';
 
-import { useBlockEditor } from "../hooks/useBlockEditor";
-import { ColumnsMenu } from "../extensions/MultiColumn/menus";
-import { ImageBlockMenu } from "../extensions/ImageBlock/components/ImageBlockMenu";
-import { ContentItemMenu } from "../components/ContentItemMenu";
-import { LinkMenu } from "../components/LinkMenu";
-import { TextMenu } from "../components/TextMenu";
+import { ContentItemMenu } from '../components/ContentItemMenu';
+import { LinkMenu } from '../components/LinkMenu';
+import { TextMenu } from '../components/TextMenu';
+import { ImageBlockMenu } from '../extensions/ImageBlock/components/ImageBlockMenu';
+import { ColumnsMenu } from '../extensions/MultiColumn/menus';
+import { useBlockEditor } from '../hooks/useBlockEditor';
 
 export default function BlockEditor() {
   const menuContainerRef = useRef(null);

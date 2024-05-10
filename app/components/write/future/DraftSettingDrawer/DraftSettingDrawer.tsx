@@ -1,23 +1,23 @@
-import { Separator } from "~/components/ui/separator";
-import { DrawerItemWrapper } from "~/components/write/future/DrawerItemWrapper";
-import { LabelWithTooltip } from "~/components/write/future/LabelWithTooltip";
-import { LabelWrapper } from "~/components/write/future/LabelWrapper";
-import { InputSlug } from "~/components/write/future/InputSlug";
-import { LabelWithTooltipWrapper } from "~/components/write/future/LabelWithTooltipWrapper";
-import { InputDate } from "~/components/write/future/InputDate";
-import { InputSwitch } from "~/components/write/future/InputSwitch";
-import { Author } from "~/components/write/future/Author";
-import { InputText } from "~/components/write/future/InputText";
-import { InputTextarea } from "~/components/write/future/InputTextarea";
-import { LabelWithDescription } from "~/components/write/future/LabelWithDescription";
-import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
-import { InputTag } from "~/components/write/future/InputTag";
-import { InputAuthors } from "~/components/write/future/InputAuthors";
+import { Separator } from '~/components/ui/separator';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { Author } from '~/components/write/future/Author';
+import { DrawerItemWrapper } from '~/components/write/future/DrawerItemWrapper';
+import { InputAuthors } from '~/components/write/future/InputAuthors';
+import { InputDate } from '~/components/write/future/InputDate';
+import { InputSlug } from '~/components/write/future/InputSlug';
+import { InputSwitch } from '~/components/write/future/InputSwitch';
+import { InputTag } from '~/components/write/future/InputTag';
+import { InputText } from '~/components/write/future/InputText';
+import { InputTextarea } from '~/components/write/future/InputTextarea';
+import { LabelWithDescription } from '~/components/write/future/LabelWithDescription';
+import { LabelWithTooltip } from '~/components/write/future/LabelWithTooltip';
+import { LabelWithTooltipWrapper } from '~/components/write/future/LabelWithTooltipWrapper';
+import { LabelWrapper } from '~/components/write/future/LabelWrapper';
 
 const ComponentHelperItem = {
   author: {
-    id: "author",
-    text: "Author",
+    id: 'author',
+    text: 'Author',
     help: (
       <>
         Change of author will take effect once the article is published.
@@ -29,8 +29,8 @@ const ComponentHelperItem = {
     ),
   },
   coAuthors: {
-    id: "co-authors",
-    text: "Co-authors",
+    id: 'co-authors',
+    text: 'Co-authors',
     help: (
       <>
         Select up to 4 co-authors from your team.
@@ -41,28 +41,28 @@ const ComponentHelperItem = {
     ),
   },
   tableOfContents: {
-    id: "toc",
-    text: "Table of contents",
-    help: "Generate table of contents for your article",
+    id: 'toc',
+    text: 'Table of contents',
+    help: 'Generate table of contents for your article',
   },
   disabledComments: {
-    id: "disabled-comments",
-    text: "Disable comments",
-    help: "This will hide the comments section below your article",
+    id: 'disabled-comments',
+    text: 'Disable comments',
+    help: 'This will hide the comments section below your article',
   },
   hiddenArticle: {
-    id: "hiddenArticle",
-    text: "Hide article from Hashnode feed",
-    help: "Hide this article from Hashnode feed and display it only on my blog",
+    id: 'hiddenArticle',
+    text: 'Hide article from Hashnode feed',
+    help: 'Hide this article from Hashnode feed and display it only on my blog',
   },
   draftArticle: {
-    id: "draftArticle",
-    text: "Draft article",
-    help: "Save your article as a draft",
+    id: 'draftArticle',
+    text: 'Draft article',
+    help: 'Save your article as a draft',
   },
   publishOnBackdate: {
-    id: "publishOnBackdate",
-    text: "Publish on a backdate",
+    id: 'publishOnBackdate',
+    text: 'Publish on a backdate',
     help: (
       <>
         Once you publish your article, it will be visible to everyone.
@@ -72,8 +72,8 @@ const ComponentHelperItem = {
     ),
   },
   seoTitle: {
-    id: "seoTitle",
-    text: "SEO title",
+    id: 'seoTitle',
+    text: 'SEO title',
     help: (
       <>
         The &quot;SEO title&quot; will be shown in place of your Title on
@@ -84,8 +84,8 @@ const ComponentHelperItem = {
     ),
   },
   seoDescription: {
-    id: "seoDescription",
-    text: "SEO description",
+    id: 'seoDescription',
+    text: 'SEO description',
     help: (
       <>
         The &quot;SEO description&quot; will be used in place of your Subtitle
@@ -96,8 +96,8 @@ const ComponentHelperItem = {
     ),
   },
   ogImage: {
-    id: "ogImage",
-    text: "Custom OG Image",
+    id: 'ogImage',
+    text: 'Custom OG Image',
     help: (
       <>
         Upload an image to show when your article appears online or on social
@@ -106,8 +106,8 @@ const ComponentHelperItem = {
     ),
   },
   selectTags: {
-    id: "selectTags",
-    text: "Select tags",
+    id: 'selectTags',
+    text: 'Select tags',
     help: <></>,
   },
 };
@@ -118,12 +118,12 @@ export default function DraftSettingDrawer() {
     <>
       <DrawerItemWrapper>
         <LabelWrapper
-          label={<LabelWithTooltip {...ComponentHelperItem["author"]} />}
+          label={<LabelWithTooltip {...ComponentHelperItem['author']} />}
         >
           <Author />
         </LabelWrapper>
         <LabelWrapper
-          label={<LabelWithTooltip {...ComponentHelperItem["coAuthors"]} />}
+          label={<LabelWithTooltip {...ComponentHelperItem['coAuthors']} />}
         >
           <InputAuthors />
         </LabelWrapper>
@@ -133,28 +133,28 @@ export default function DraftSettingDrawer() {
         <InputSwitch
           control={control}
           name="config.hasTableOfContents"
-          {...ComponentHelperItem["tableOfContents"]}
+          {...ComponentHelperItem['tableOfContents']}
         />
         <InputSlug />
-        <LabelWithDescription {...ComponentHelperItem["selectTags"]}>
+        <LabelWithDescription {...ComponentHelperItem['selectTags']}>
           <InputTag />
         </LabelWithDescription>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
-        <LabelWithDescription {...ComponentHelperItem["ogImage"]}>
+        <LabelWithDescription {...ComponentHelperItem['ogImage']}>
           <>asdasdsa</>
         </LabelWithDescription>
         <LabelWithTooltipWrapper
           isOptional
-          label={<LabelWithTooltip {...ComponentHelperItem["seoTitle"]} />}
+          label={<LabelWithTooltip {...ComponentHelperItem['seoTitle']} />}
         >
           <InputText control={control} name="seo.title" />
         </LabelWithTooltipWrapper>
         <LabelWithTooltipWrapper
           isOptional
           label={
-            <LabelWithTooltip {...ComponentHelperItem["seoDescription"]} />
+            <LabelWithTooltip {...ComponentHelperItem['seoDescription']} />
           }
         >
           <InputTextarea control={control} name="seo.description" />
@@ -162,7 +162,7 @@ export default function DraftSettingDrawer() {
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
-        <LabelWithDescription {...ComponentHelperItem["publishOnBackdate"]}>
+        <LabelWithDescription {...ComponentHelperItem['publishOnBackdate']}>
           <InputDate control={control} name="config.publishedAt" />
         </LabelWithDescription>
       </DrawerItemWrapper>
@@ -171,17 +171,17 @@ export default function DraftSettingDrawer() {
         <InputSwitch
           control={control}
           name="config.disabledComment"
-          {...ComponentHelperItem["disabledComments"]}
+          {...ComponentHelperItem['disabledComments']}
         />
         <InputSwitch
           control={control}
           name="config.hiddenArticle"
-          {...ComponentHelperItem["hiddenArticle"]}
+          {...ComponentHelperItem['hiddenArticle']}
         />
         <InputSwitch
           control={control}
           name="config.isDraft"
-          {...ComponentHelperItem["draftArticle"]}
+          {...ComponentHelperItem['draftArticle']}
         />
       </DrawerItemWrapper>
     </>

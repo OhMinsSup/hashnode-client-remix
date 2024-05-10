@@ -1,8 +1,9 @@
-import type { RefObject} from 'react';
+import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import noop from 'lodash-es/noop';
-import { useMemoizedFn } from './useMemoizedFn';
+
 import { getOwnerDocument } from '../browser-utils';
+import { useMemoizedFn } from './useMemoizedFn';
 
 export interface UseOutsideClickProps {
   enabled?: boolean; // hook 활성화 여부

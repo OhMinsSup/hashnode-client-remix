@@ -1,6 +1,7 @@
-import { type BasicTarget, getTargetElement } from "../browser-utils";
-import { useEffectWithTarget } from "../react-utils/utils";
-import { useLatest } from "./useLatest";
+import type { BasicTarget } from '../browser-utils';
+import { getTargetElement } from '../browser-utils';
+import { useEffectWithTarget } from '../react-utils/createEffectWithTarget';
+import { useLatest } from './useLatest';
 
 type noop = (...p: any) => void;
 
@@ -17,37 +18,37 @@ type Options<T extends Target = Target> = {
 function useEventListener<K extends keyof HTMLElementEventMap>(
   eventName: K,
   handler: (ev: HTMLElementEventMap[K]) => void,
-  options?: Options<HTMLElement>
+  options?: Options<HTMLElement>,
 ): void;
 // @ts-ignore
 function useEventListener<K extends keyof ElementEventMap>(
   eventName: K,
   handler: (ev: ElementEventMap[K]) => void,
-  options?: Options<Element>
+  options?: Options<Element>,
 ): void;
 // @ts-ignore
 function useEventListener<K extends keyof DocumentEventMap>(
   eventName: K,
   handler: (ev: DocumentEventMap[K]) => void,
-  options?: Options<Document>
+  options?: Options<Document>,
 ): void;
 // @ts-ignore
 function useEventListener<K extends keyof WindowEventMap>(
   eventName: K,
   handler: (ev: WindowEventMap[K]) => void,
-  options?: Options<Window>
+  options?: Options<Window>,
 ): void;
 // @ts-ignore
 function useEventListener(
   eventName: string,
   handler: noop,
-  options: Options
+  options: Options,
 ): void;
 
 export function useEventListener(
   eventName: string,
   handler: noop,
-  options: Options = {}
+  options: Options = {},
 ) {
   const handlerRef = useLatest(handler);
 
@@ -75,6 +76,6 @@ export function useEventListener(
       };
     },
     [eventName, options.capture, options.once, options.passive],
-    options.target
+    options.target,
   );
 }

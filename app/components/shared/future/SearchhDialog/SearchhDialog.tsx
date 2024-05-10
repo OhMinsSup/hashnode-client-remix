@@ -1,18 +1,19 @@
-import { useCallback } from "react";
-import { useForm, useFormContext, useWatch } from "react-hook-form";
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+import { useCallback } from 'react';
+import { useForm, useFormContext, useWatch } from 'react-hook-form';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { useSearchDialogContext } from "~/context/useSearchDialogContext";
-import { FormFieldValues, resolver } from "~/services/validate/search.validate";
+} from '~/components/ui/dialog';
+import { Form, FormControl, FormField, FormItem } from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
+import { useSearchDialogContext } from '~/context/useSearchDialogContext';
+import { FormFieldValues, resolver } from '~/services/validate/search.validate';
 
 export default function SearchhDialog() {
   const { dialog, changeDialogState } = useSearchDialogContext();
@@ -21,7 +22,7 @@ export default function SearchhDialog() {
     (open: boolean) => {
       changeDialogState({ isOpen: open });
     },
-    [changeDialogState]
+    [changeDialogState],
   );
 
   return (
@@ -52,9 +53,9 @@ function SearchProvider({ children }: SearchProviderProps) {
   const form = useForm<FormFieldValues>({
     resolver,
     defaultValues: {
-      q: "",
+      q: '',
     },
-    reValidateMode: "onBlur",
+    reValidateMode: 'onBlur',
   });
 
   return <Form {...form}>{children}</Form>;
@@ -77,7 +78,7 @@ function SearchForm() {
           control={ctx.control}
           name="q"
           render={({ field }) => (
-            <FormItem className="space-y-1 w-full">
+            <FormItem className="w-full space-y-1">
               <FormControl>
                 <Input
                   className="py-5"
@@ -99,7 +100,7 @@ function SearchResults() {
   console.log(watch.q);
   return (
     <section className="flex items-center justify-center p-2 text-sm text-slate-500">
-      <Icons.search className="size-4 mr-2 fill-transparent stroke-current" />
+      <Icons.search className="mr-2 size-4 fill-transparent stroke-current" />
       <span>Search for tags, people, articles, and more</span>
     </section>
   );

@@ -13,7 +13,7 @@ import { isFetchError } from '~/services/api/error';
 import { getInfinityQueryPath, parseUrlParams } from '~/services/libs';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
-import { getInfinityQueryFn } from '~/services/react-query/function';
+import { getInfinityQueryFn } from '~/services/react-query';
 
 type Data = SerializeSchema.SerializePost<false>;
 

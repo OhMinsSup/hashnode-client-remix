@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Command, MenuListProps } from "./types";
-import { Surface } from "~/components/editor/future/components/Surface";
-import { DropdownButton } from "~/components/editor/future/components/Dropdown";
-import { EditorIcon } from "~/components/icons";
+import { DropdownButton } from '~/components/editor/future/components/Dropdown';
+import { Surface } from '~/components/editor/future/components/Surface';
+import { EditorIcon } from '~/components/icons';
+import { Command, MenuListProps } from './types';
 
 export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
@@ -23,12 +23,12 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
       const command = props.items[groupIndex].commands[commandIndex];
       props.command(command);
     },
-    [props]
+    [props],
   );
 
   React.useImperativeHandle(ref, () => ({
     onKeyDown: ({ event }: { event: React.KeyboardEvent }) => {
-      if (event.key === "ArrowDown") {
+      if (event.key === 'ArrowDown') {
         if (!props.items.length) {
           return false;
         }
@@ -53,7 +53,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         return true;
       }
 
-      if (event.key === "ArrowUp") {
+      if (event.key === 'ArrowUp') {
         if (!props.items.length) {
           return false;
         }
@@ -78,7 +78,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         return true;
       }
 
-      if (event.key === "Enter") {
+      if (event.key === 'Enter') {
         if (
           !props.items.length ||
           selectedGroupIndex === -1 ||
@@ -111,7 +111,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         selectItem(groupIndex, commandIndex);
       };
     },
-    [selectItem]
+    [selectItem],
   );
 
   if (!props.items.length) {
@@ -121,13 +121,13 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   return (
     <Surface
       ref={scrollContainer}
-      className="text-black max-h-[min(80vh,24rem)] overflow-auto flex-wrap mb-8 p-2"
+      className="mb-8 max-h-[min(80vh,24rem)] flex-wrap overflow-auto p-2 text-black"
     >
       <div className="grid grid-cols-1 gap-0.5">
         {props.items.map((group, groupIndex: number) => (
           <React.Fragment key={`${group.title}-wrapper`}>
             <div
-              className="text-neutral-500 text-[0.65rem] col-[1/-1] mx-2 mt-4 font-semibold tracking-wider select-none uppercase first:mt-0.5"
+              className="col-[1/-1] mx-2 mt-4 select-none text-[0.65rem] font-semibold uppercase tracking-wider text-neutral-500 first:mt-0.5"
               key={`${group.title}`}
             >
               {group.title}
@@ -152,6 +152,6 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   );
 });
 
-MenuList.displayName = "MenuList";
+MenuList.displayName = 'MenuList';
 
 export default MenuList;

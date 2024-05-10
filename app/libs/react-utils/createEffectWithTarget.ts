@@ -1,20 +1,18 @@
-import type { DependencyList, EffectCallback } from "react";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { depsAreSame } from "./depsAreSame";
-import {
-  type BasicTarget,
-  getTargetElement,
-  isBrowser,
-} from "../browser-utils";
-import { useUnmount } from "../hooks/useUnmount";
+import type { DependencyList, EffectCallback } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+
+import type { BasicTarget } from '../browser-utils';
+import { getTargetElement, isBrowser } from '../browser-utils';
+import { useUnmount } from '../hooks/useUnmount';
+import { depsAreSame } from './depsAreSame';
 
 const createEffectWithTarget = (
-  useEffectType: typeof useEffect | typeof useLayoutEffect
+  useEffectType: typeof useEffect | typeof useLayoutEffect,
 ) => {
   const useEffectWithTarget = (
     effect: EffectCallback,
     deps: DependencyList,
-    target: BasicTarget<any> | BasicTarget<any>[]
+    target: BasicTarget<any> | BasicTarget<any>[],
   ) => {
     const hasInitRef = useRef(false);
 

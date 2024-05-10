@@ -1,1 +1,1 @@
-export { default as WriteLayout } from "./WriteLayout";
+export { default as WriteLayout } from './WriteLayout';

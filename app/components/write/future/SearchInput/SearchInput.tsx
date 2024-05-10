@@ -1,9 +1,9 @@
-import React, { useCallback, useState, useTransition } from "react";
+import React, { useCallback, useState, useTransition } from 'react';
 
-import { Icons } from "~/components/icons";
-import { Input } from "~/components/ui/input";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
+import { Icons } from '~/components/icons';
+import { Input } from '~/components/ui/input';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { useDebounceFn } from '~/libs/hooks/useDebounceFn';
 
 export default function SearchInput() {
   const { changeLeftSideKeyword, leftSideKeyword } = useWriteContext();
@@ -16,7 +16,7 @@ export default function SearchInput() {
     },
     {
       wait: 300,
-    }
+    },
   );
 
   const onChange = useCallback(
@@ -27,17 +27,17 @@ export default function SearchInput() {
         run();
       });
     },
-    [run]
+    [run],
   );
 
   const onClear = useCallback(() => {
-    setQuery("");
-    changeLeftSideKeyword("");
+    setQuery('');
+    changeLeftSideKeyword('');
   }, []);
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         setQuery(query);
 
         startTransition(() => {
@@ -45,7 +45,7 @@ export default function SearchInput() {
         });
       }
     },
-    [query, run]
+    [query, run],
   );
 
   const isSearch = Boolean(leftSideKeyword) && leftSideKeyword.length > 0;

@@ -1,11 +1,10 @@
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  schema,
-  type FormFieldValues,
-} from "~/services/validate/post-create-api.validate";
-import { useEffect } from "react";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
+import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+
+import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { schema } from '~/services/validate/post-create-api.validate';
 
 interface Props {
   initialValues?: SerializeSchema.SerializePost<false>;
@@ -39,8 +38,8 @@ export function WriteFormProvider({ children, initialValues }: Props) {
         publishedAt: initialValues?.PostConfig.publishedAt ?? undefined,
       },
     },
-    reValidateMode: "onSubmit",
-    criteriaMode: "firstError",
+    reValidateMode: 'onSubmit',
+    criteriaMode: 'firstError',
   });
 
   useEffect(() => {

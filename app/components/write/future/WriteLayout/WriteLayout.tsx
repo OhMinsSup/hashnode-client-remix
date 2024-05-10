@@ -1,7 +1,8 @@
-import React from "react";
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
+import React from 'react';
+
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 interface WriteLayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ export default function WriteLayout({ children, sidebar }: WriteLayoutProps) {
     <div className={styles.root}>
       <div
         className={cn(
-          isSideOpen ? styles.container : styles.container_without_sidebar
+          isSideOpen ? styles.container : styles.container_without_sidebar,
         )}
       >
         <div

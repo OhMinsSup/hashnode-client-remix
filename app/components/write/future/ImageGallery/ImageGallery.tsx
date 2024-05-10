@@ -1,10 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { Icons } from "~/components/icons";
-import { ImageGalleryCardList } from "~/components/write/future/ImageGalleryCardList";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { ImageGalleryCardList } from '~/components/write/future/ImageGalleryCardList';
 
 const schema = z.object({
   keyword: z.string().optional(),
@@ -16,7 +17,7 @@ export default function ImageGallery() {
   const form = useForm<FormFieldValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      keyword: "",
+      keyword: '',
     },
   });
 
@@ -30,7 +31,7 @@ export default function ImageGallery() {
     <div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-row w-full space-x-2 mb-5"
+        className="mb-5 flex w-full flex-row space-x-2"
       >
         <div className="relative flex-1">
           <Icons.search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />

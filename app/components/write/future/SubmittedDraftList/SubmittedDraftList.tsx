@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useTransition } from "react";
-import { SidebarDraftItem } from "~/components/write/future/SidebarDraftItem";
-import { useSubmittedDraftInfiniteQuery } from "~/routes/api.v1.drafts.submitted";
-import { Button } from "~/components/ui/button";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { Icons } from "~/components/icons";
+import { useCallback, useMemo, useTransition } from 'react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { SidebarDraftItem } from '~/components/write/future/SidebarDraftItem';
+import { useSubmittedDraftInfiniteQuery } from '~/routes/api.v1.drafts.submitted';
 
 export default function SubmittedDraftList() {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
@@ -21,12 +22,12 @@ export default function SubmittedDraftList() {
 
   const items = useMemo(
     () => pages.map((page) => page?.result?.list ?? []).flat() ?? [],
-    [pages]
+    [pages],
   );
 
   const isSuccess = useMemo(
     () => !error && data && items.length > 0,
-    [data, error, items.length]
+    [data, error, items.length],
   );
 
   const loadNext = useCallback(() => {
@@ -57,12 +58,12 @@ export default function SubmittedDraftList() {
       {isSearch ? null : (
         <>
           {isSuccess && result?.pageInfo?.hasNextPage ? (
-            <div className="group grid relative grid-cols-12 sm:block">
+            <div className="group relative grid grid-cols-12 sm:block">
               <Button
                 type="button"
                 size="sm"
                 variant="outline"
-                className="justify-start w-full space-x-2"
+                className="w-full justify-start space-x-2"
                 onClick={() => startTransition(() => loadNext())}
               >
                 {isFetchingNextPage || isPending ? (

@@ -1,6 +1,7 @@
-import { Editor, useEditor } from "@tiptap/react";
-import { ExtensionKit } from "~/components/editor/future/extensions/extension-kit";
-import { isBrowser } from "~/libs/browser-utils";
+import { Editor, useEditor } from '@tiptap/react';
+
+import { ExtensionKit } from '~/components/editor/future/extensions/extension-kit';
+import { isBrowser } from '~/libs/browser-utils';
 
 declare global {
   interface Window {
@@ -23,14 +24,14 @@ export const useBlockEditor = () => {
       extensions: [...ExtensionKit()],
       editorProps: {
         attributes: {
-          autocomplete: "off",
-          autocorrect: "off",
-          autocapitalize: "off",
-          class: "min-h-full",
+          autocomplete: 'off',
+          autocorrect: 'off',
+          autocapitalize: 'off',
+          class: 'min-h-full',
         },
       },
     },
-    []
+    [],
   );
 
   const characterCount = editor?.storage.characterCount || {

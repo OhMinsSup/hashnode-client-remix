@@ -1,16 +1,17 @@
-import { DropdownButton } from "~/components/editor/future/components/Dropdown";
-import { EditorIcon } from "~/components/icons";
-import { Surface } from "~/components/editor/future/components/Surface";
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import * as Dropdown from "@radix-ui/react-dropdown-menu";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+import * as Dropdown from '@radix-ui/react-dropdown-menu';
+
+import { DropdownButton } from '~/components/editor/future/components/Dropdown';
+import { Surface } from '~/components/editor/future/components/Surface';
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { EditorIcon } from '~/components/icons';
 
 const FONT_SIZES = [
-  { label: "Smaller", value: "12px" },
-  { label: "Small", value: "14px" },
-  { label: "Medium", value: "" },
-  { label: "Large", value: "18px" },
-  { label: "Extra Large", value: "24px" },
+  { label: 'Smaller', value: '12px' },
+  { label: 'Small', value: '14px' },
+  { label: 'Medium', value: '' },
+  { label: 'Large', value: '18px' },
+  { label: 'Extra Large', value: '24px' },
 ];
 
 export type FontSizePickerProps = {
@@ -20,11 +21,11 @@ export type FontSizePickerProps = {
 
 export const FontSizePicker = ({ onChange, value }: FontSizePickerProps) => {
   const currentValue = FONT_SIZES.find((size) => size.value === value);
-  const currentSizeLabel = currentValue?.label.split(" ")[0] || "Medium";
+  const currentSizeLabel = currentValue?.label.split(' ')[0] || 'Medium';
 
   const selectSize = useCallback(
     (size: string) => () => onChange(size),
-    [onChange]
+    [onChange],
   );
 
   return (
@@ -32,7 +33,7 @@ export const FontSizePicker = ({ onChange, value }: FontSizePickerProps) => {
       <Dropdown.Trigger asChild>
         <Toolbar.Button active={!!currentValue?.value}>
           {currentSizeLabel}
-          <EditorIcon name="ChevronDown" className="w-2 h-2" />
+          <EditorIcon name="ChevronDown" className="h-2 w-2" />
         </Toolbar.Button>
       </Dropdown.Trigger>
       <Dropdown.Content asChild>

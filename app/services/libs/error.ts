@@ -1,8 +1,8 @@
-import { HttpStatus } from "./http-status.enum";
+import { HttpStatus } from './http-status.enum';
 
 export enum ErrorDisplayType {
-  TOAST = "TOAST",
-  NONE = "NONE",
+  TOAST = 'TOAST',
+  NONE = 'NONE',
 }
 
 export class RemixDataFlowError<DataT = unknown> extends Error {
@@ -28,7 +28,7 @@ export class RemixDataFlowError<DataT = unknown> extends Error {
   toJSON() {
     const obj: Pick<
       RemixDataFlowError<DataT>,
-      "message" | "statusCode" | "statusMessage" | "data"
+      'message' | 'statusCode' | 'statusMessage' | 'data'
     > = {
       message: this.message,
       statusCode: this.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
@@ -51,9 +51,9 @@ export function createError<DataT = unknown>(
     | (Partial<RemixDataFlowError<DataT>> & {
         status?: number;
         statusText?: string;
-      })
+      }),
 ) {
-  if (typeof input === "string") {
+  if (typeof input === 'string') {
     return new RemixDataFlowError<DataT>(input);
   }
 
@@ -62,14 +62,14 @@ export function createError<DataT = unknown>(
   }
 
   const err = new RemixDataFlowError<DataT>(
-    input.message ?? input.statusMessage ?? "",
+    input.message ?? input.statusMessage ?? '',
     {
       cause: input.cause || input,
-    }
+    },
   );
-  if ("stack" in input) {
+  if ('stack' in input) {
     try {
-      Object.defineProperty(err, "stack", {
+      Object.defineProperty(err, 'stack', {
         get() {
           return input.stack;
         },
@@ -115,7 +115,7 @@ export function createError<DataT = unknown>(
 }
 
 export function isError<DataT = unknown>(
-  input: any
+  input: any,
 ): input is RemixDataFlowError<DataT> {
   return input?.constructor?.__remix_data_flow_error__ === true;
 }

@@ -1,7 +1,7 @@
-import { useLocation, useParams } from "@remix-run/react";
+import { useLocation, useParams } from '@remix-run/react';
 
-import type { NavItem } from "~/constants/navigation";
-import { useMemoizedFn } from "./useMemoizedFn";
+import type { NavItem } from '~/constants/navigation';
+import { useMemoizedFn } from './useMemoizedFn';
 
 interface UseLinkActiveStateOptions {
   item: NavItem;
@@ -16,7 +16,7 @@ export function useLinkActiveState({ item }: UseLinkActiveStateOptions) {
 
   if (rootHref) {
     relationHrefs.add(
-      typeof rootHref === "string" ? rootHref : rootHref(params),
+      typeof rootHref === 'string' ? rootHref : rootHref(params),
     );
   }
 
@@ -25,14 +25,14 @@ export function useLinkActiveState({ item }: UseLinkActiveStateOptions) {
   }
 
   const href =
-    Array.from(relationHrefs).find((href) => href === location.pathname) ?? "#";
+    Array.from(relationHrefs).find((href) => href === location.pathname) ?? '#';
 
   const Icon = item.relationIcons?.[href] ?? item.icon;
 
   const isActive = relationHrefs.has(location.pathname);
 
   return {
-    href: item.href ? item.href : "#",
+    href: item.href ? item.href : '#',
     Icon,
     isActive,
   };
@@ -48,7 +48,7 @@ export function useLinkActiveStateHandler() {
 
     if (rootHref) {
       relationHrefs.add(
-        typeof rootHref === "string" ? rootHref : rootHref(params),
+        typeof rootHref === 'string' ? rootHref : rootHref(params),
       );
     }
 
@@ -58,14 +58,14 @@ export function useLinkActiveStateHandler() {
 
     const href =
       Array.from(relationHrefs).find((href) => href === location.pathname) ??
-      "#";
+      '#';
 
     const Icon = item.relationIcons?.[href] ?? item.icon;
 
     const isActive = relationHrefs.has(location.pathname);
 
     return {
-      href: item.href ? item.href : "#",
+      href: item.href ? item.href : '#',
       Icon,
       isActive,
     };

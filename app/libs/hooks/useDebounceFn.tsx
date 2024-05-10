@@ -1,6 +1,7 @@
-import { useMemo, useRef } from "react";
-import { useUnmount } from "./useUnmount";
-import debounce from "lodash-es/debounce";
+import { useMemo, useRef } from 'react';
+import debounce from 'lodash-es/debounce';
+
+import { useUnmount } from './useUnmount';
 
 type noop = (...args: any) => any;
 
@@ -13,7 +14,7 @@ interface DebounceOptions {
 
 export function useDebounceFn<T extends noop>(
   fn: T,
-  options?: DebounceOptions
+  options?: DebounceOptions,
 ) {
   const fnRef = useRef(fn);
   fnRef.current = fn;
@@ -27,10 +28,10 @@ export function useDebounceFn<T extends noop>(
           return fnRef.current(...(args as any));
         },
         wait,
-        options
+        options,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   useUnmount(() => {

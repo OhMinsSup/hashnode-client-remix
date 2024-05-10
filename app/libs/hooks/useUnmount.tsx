@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { useLatest } from "./useLatest";
+import { useEffect } from 'react';
+
+import { useLatest } from './useLatest';
 
 export const useUnmount = (fn: () => void) => {
   const fnRef = useLatest(fn);
@@ -8,6 +9,6 @@ export const useUnmount = (fn: () => void) => {
     () => () => {
       fnRef.current();
     },
-    []
+    [],
   );
 };

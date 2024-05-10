@@ -1,6 +1,6 @@
-import { Extension } from "@tiptap/core";
-import type { Node, NodeType } from "@tiptap/pm/model";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
+import type { Node, NodeType } from '@tiptap/pm/model';
+import { Extension } from '@tiptap/core';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 interface NodeEqualsType {
   types: NodeType[] | NodeType;
@@ -25,12 +25,12 @@ export interface TrailingNodeOptions {
 }
 
 export const TrailingNode = Extension.create<TrailingNodeOptions>({
-  name: "trailingNode",
+  name: 'trailingNode',
 
   addOptions() {
     return {
-      node: "paragraph",
-      notAfter: ["paragraph"],
+      node: 'paragraph',
+      notAfter: ['paragraph'],
     };
   },
 

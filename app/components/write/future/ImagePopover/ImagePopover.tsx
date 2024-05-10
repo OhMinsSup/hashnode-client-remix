@@ -1,10 +1,11 @@
-import { useCallback } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { Button } from "~/components/ui/button";
-import { Icons } from "~/components/icons";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { ImageUpload } from "~/components/write/future/ImageUpload";
-import { ImageGallery } from "~/components/write/future/ImageGallery";
+import { useCallback } from 'react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { ImageGallery } from '~/components/write/future/ImageGallery';
+import { ImageUpload } from '~/components/write/future/ImageUpload';
 
 export default function ImagePopover() {
   const { setCoverClose } = useWriteContext();
@@ -16,7 +17,7 @@ export default function ImagePopover() {
   return (
     <div>
       <Tabs defaultValue="upload">
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center justify-between">
           <TabsList data-test="tabs-list">
             <TabsTrigger value="upload">Upload</TabsTrigger>
             <TabsTrigger value="unsplash">Unsplash</TabsTrigger>

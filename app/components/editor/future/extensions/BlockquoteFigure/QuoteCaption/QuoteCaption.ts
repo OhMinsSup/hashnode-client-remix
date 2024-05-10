@@ -1,11 +1,11 @@
-import { Node } from "@tiptap/core";
+import { Node } from '@tiptap/core';
 
 export const QuoteCaption = Node.create({
-  name: "quoteCaption",
+  name: 'quoteCaption',
 
-  group: "block",
+  group: 'block',
 
-  content: "text*",
+  content: 'text*',
 
   defining: true,
 
@@ -14,13 +14,13 @@ export const QuoteCaption = Node.create({
   parseHTML() {
     return [
       {
-        tag: "figcaption",
+        tag: 'figcaption',
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["figcaption", HTMLAttributes, 0];
+    return ['figcaption', HTMLAttributes, 0];
   },
 
   addKeyboardShortcuts() {
@@ -48,7 +48,7 @@ export const QuoteCaption = Node.create({
         return editor
           .chain()
           .focus(pos)
-          .insertContentAt(pos, { type: "paragraph" })
+          .insertContentAt(pos, { type: 'paragraph' })
           .run();
       },
     };

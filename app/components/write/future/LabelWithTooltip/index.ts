@@ -1,1 +1,1 @@
-export { default as LabelWithTooltip } from "./LabelWithTooltip";
+export { default as LabelWithTooltip } from './LabelWithTooltip';

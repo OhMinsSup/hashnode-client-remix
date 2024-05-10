@@ -10,7 +10,7 @@ import {
 import { getQueryPath } from '~/services/libs';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
-import { getQueryFn } from '~/services/react-query/function';
+import { getQueryFn } from '~/services/react-query';
 
 type Data = FetchRespSchema.Success<
   FetchRespSchema.ListResp<Record<string, unknown>>

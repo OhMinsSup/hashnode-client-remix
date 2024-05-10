@@ -1,1 +1,1 @@
-export { default as MainFeedTabs } from "./MainFeedTabs";
+export { default as MainFeedTabs } from './MainFeedTabs';

@@ -1,5 +1,5 @@
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 interface MainContentProps {
   children: React.ReactNode;

@@ -1,27 +1,26 @@
-import { EditorIcon } from "~/components/icons";
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import { DragHandle } from "@tiptap-pro/extension-drag-handle-react";
-import { Editor } from "@tiptap/react";
-import * as Popover from "@radix-ui/react-popover";
-import { Surface } from "~/components/editor/future/components/Surface";
-import { DropdownButton } from "~/components/editor/future/components/Dropdown";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from 'react';
+import * as Popover from '@radix-ui/react-popover';
+import { DragHandle } from '@tiptap-pro/extension-drag-handle-react';
+import { Node } from '@tiptap/pm/model';
+import { NodeSelection } from '@tiptap/pm/state';
+import { Editor } from '@tiptap/react';
 
-import { Node } from "@tiptap/pm/model";
-
-import { NodeSelection } from "@tiptap/pm/state";
+import { DropdownButton } from '~/components/editor/future/components/Dropdown';
+import { Surface } from '~/components/editor/future/components/Surface';
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { EditorIcon } from '~/components/icons';
 
 const useContentItemActions = (
   editor: Editor,
   currentNode: Node | null,
-  currentNodePos: number
+  currentNodePos: number,
 ) => {
   const resetTextFormatting = useCallback(() => {
     const chain = editor.chain();
 
     chain.setNodeSelection(currentNodePos).unsetAllMarks();
 
-    if (currentNode?.type.name !== "paragraph") {
+    if (currentNode?.type.name !== 'paragraph') {
       chain.setParagraph();
     }
 
@@ -37,10 +36,10 @@ const useContentItemActions = (
 
     editor
       .chain()
-      .setMeta("hideDragHandle", true)
+      .setMeta('hideDragHandle', true)
       .insertContentAt(
         currentNodePos + (currentNode?.nodeSize || 0),
-        selectedNode.toJSON()
+        selectedNode.toJSON(),
       )
       .run();
   }, [editor, currentNodePos, currentNode?.nodeSize]);
@@ -48,17 +47,17 @@ const useContentItemActions = (
   const copyNodeToClipboard = useCallback(() => {
     editor
       .chain()
-      .setMeta("hideDragHandle", true)
+      .setMeta('hideDragHandle', true)
       .setNodeSelection(currentNodePos)
       .run();
 
-    document.execCommand("copy");
+    document.execCommand('copy');
   }, [editor, currentNodePos]);
 
   const deleteNode = useCallback(() => {
     editor
       .chain()
-      .setMeta("hideDragHandle", true)
+      .setMeta('hideDragHandle', true)
       .setNodeSelection(currentNodePos)
       .deleteSelection()
       .run();
@@ -69,7 +68,7 @@ const useContentItemActions = (
       const currentNodeSize = currentNode?.nodeSize || 0;
       const insertPos = currentNodePos + currentNodeSize;
       const currentNodeIsEmptyParagraph =
-        currentNode?.type.name === "paragraph" &&
+        currentNode?.type.name === 'paragraph' &&
         currentNode?.content?.size === 0;
       const focusPos = currentNodeIsEmptyParagraph
         ? currentNodePos + 2
@@ -80,13 +79,13 @@ const useContentItemActions = (
         .command(({ dispatch, tr, state }) => {
           if (dispatch) {
             if (currentNodeIsEmptyParagraph) {
-              tr.insertText("/", currentNodePos, currentNodePos + 1);
+              tr.insertText('/', currentNodePos, currentNodePos + 1);
             } else {
               tr.insert(
                 insertPos,
                 state.schema.nodes.paragraph.create(null, [
-                  state.schema.text("/"),
-                ])
+                  state.schema.text('/'),
+                ]),
               );
             }
 
@@ -121,7 +120,7 @@ export const useData = () => {
 
       setCurrentNodePos(data.pos);
     },
-    [setCurrentNodePos, setCurrentNode]
+    [setCurrentNodePos, setCurrentNode],
   );
 
   return {
@@ -143,14 +142,14 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
   const actions = useContentItemActions(
     editor,
     data.currentNode,
-    data.currentNodePos
+    data.currentNodePos,
   );
 
   useEffect(() => {
     if (menuOpen) {
-      editor.commands.setMeta("lockDragHandle", true);
+      editor.commands.setMeta('lockDragHandle', true);
     } else {
-      editor.commands.setMeta("lockDragHandle", false);
+      editor.commands.setMeta('lockDragHandle', false);
     }
   }, [editor, menuOpen]);
 
@@ -176,7 +175,7 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
             </Toolbar.Button>
           </Popover.Trigger>
           <Popover.Content side="bottom" align="start" sideOffset={8}>
-            <Surface className="p-2 flex flex-col min-w-[16rem]">
+            <Surface className="flex min-w-[16rem] flex-col p-2">
               <Popover.Close>
                 <DropdownButton onClick={actions.resetTextFormatting}>
                   <EditorIcon name="RemoveFormatting" />
@@ -199,7 +198,7 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
               <Popover.Close>
                 <DropdownButton
                   onClick={actions.deleteNode}
-                  className="text-red-500 bg-red-500 dark:text-red-500 hover:bg-red-500 dark:hover:text-red-500 dark:hover:bg-red-500 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-20"
+                  className="bg-red-500 bg-opacity-10 text-red-500 hover:bg-red-500 hover:bg-opacity-20 dark:text-red-500 dark:hover:bg-red-500 dark:hover:bg-opacity-20 dark:hover:text-red-500"
                 >
                   <EditorIcon name="Trash2" />
                   Delete

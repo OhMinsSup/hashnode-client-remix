@@ -1,7 +1,8 @@
-import { LinkEditorPanel } from "~/components/editor/future/components/LinkEditorPanel";
-import { EditorIcon } from "~/components/icons";
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import * as Popover from "@radix-ui/react-popover";
+import * as Popover from '@radix-ui/react-popover';
+
+import { LinkEditorPanel } from '~/components/editor/future/components/LinkEditorPanel';
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { EditorIcon } from '~/components/icons';
 
 export type EditLinkPopoverProps = {
   onSetLink: (link: string, openInNewTab?: boolean) => void;

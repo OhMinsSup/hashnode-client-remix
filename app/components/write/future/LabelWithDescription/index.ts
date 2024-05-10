@@ -1,1 +1,1 @@
-export { default as LabelWithDescription } from "./LabelWithDescription";
+export { default as LabelWithDescription } from './LabelWithDescription';

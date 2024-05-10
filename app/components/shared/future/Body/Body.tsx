@@ -1,6 +1,7 @@
-import React from "react";
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
+import React from 'react';
+
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 interface BodyProps {
   children: React.ReactNode;

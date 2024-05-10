@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { ImageGalleryCard } from "~/components/write/future/ImageGalleryCard";
-import { useAssetFileListInfiniteQuery } from "~/routes/api.v1.assets.files";
-import { getTargetElement } from "~/libs/browser-utils";
+import { useEffect, useRef } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+
+import { ImageGalleryCard } from '~/components/write/future/ImageGalleryCard';
+import { getTargetElement } from '~/libs/browser-utils';
+import { useAssetFileListInfiniteQuery } from '~/routes/api.v1.assets.files';
 
 const MIN_ITEM_HEIGHT_SIZE = 154;
 
@@ -10,8 +11,8 @@ export default function ImageGalleryCardList() {
   const { data, isFetchingNextPage, fetchNextPage } =
     useAssetFileListInfiniteQuery({
       searchParams: {
-        mediaType: "IMAGE",
-        uploadType: "POST_THUMBNAIL",
+        mediaType: 'IMAGE',
+        uploadType: 'POST_THUMBNAIL',
       },
     });
 
@@ -60,9 +61,9 @@ export default function ImageGalleryCardList() {
   return (
     <div
       ref={$container}
-      className="overflow-y-auto overflow-x-hidden flex justify-center max-w-full w-full"
+      className="flex w-full max-w-full justify-center overflow-y-auto overflow-x-hidden"
       style={{
-        height: "200px",
+        height: '200px',
       }}
     >
       <div
@@ -82,7 +83,7 @@ export default function ImageGalleryCardList() {
           return (
             <div
               key={virtualRow.key}
-              className="p-2 absolute top-0 w-1/3"
+              className="absolute top-0 w-1/3 p-2"
               style={{
                 left: `${virtualRow.lane * 33}%`,
                 height: `${virtualRow.size}px`,

@@ -1,8 +1,8 @@
-import { mergeAttributes, Node } from "@tiptap/core";
-import { Plugin } from "@tiptap/pm/state";
+import { mergeAttributes, Node } from '@tiptap/core';
+import { Plugin } from '@tiptap/pm/state';
 
 export const Figure = Node.create({
-  name: "figure",
+  name: 'figure',
 
   addOptions() {
     return {
@@ -10,9 +10,9 @@ export const Figure = Node.create({
     };
   },
 
-  group: "block",
+  group: 'block',
 
-  content: "block figcaption",
+  content: 'block figcaption',
 
   draggable: true,
 
@@ -30,8 +30,8 @@ export const Figure = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return [
-      "figure",
-      mergeAttributes(HTMLAttributes, { "data-type": this.name }),
+      'figure',
+      mergeAttributes(HTMLAttributes, { 'data-type': this.name }),
       0,
     ];
   },

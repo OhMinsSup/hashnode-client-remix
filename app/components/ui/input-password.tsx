@@ -1,12 +1,12 @@
-import * as React from "react";
-import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import * as React from 'react';
+import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 
-import { Button } from "./button";
-import { Input } from "./input";
+import { Button } from './button';
+import { Input } from './input';
 
 export type InputPasswordProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "type"
+  'type'
 >;
 
 const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
@@ -15,7 +15,7 @@ const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
     return (
       <div className="relative rounded-md">
         <Input
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           className={className}
           ref={ref}
           {...props}
@@ -24,7 +24,7 @@ const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
           type="button"
           size="icon"
           variant="ghost"
-          className="text-muted-foreground absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-md"
+          className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-md text-muted-foreground"
           onClick={() => {
             setShowPassword((prev) => !prev);
           }}
@@ -33,9 +33,9 @@ const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
         </Button>
       </div>
     );
-  }
+  },
 );
 
-InputPassword.displayName = "InputPassword";
+InputPassword.displayName = 'InputPassword';
 
 export { InputPassword };

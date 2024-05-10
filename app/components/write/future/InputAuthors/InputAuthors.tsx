@@ -1,16 +1,18 @@
-import React, { useCallback, useMemo, useState, useTransition } from "react";
-import { Icons } from "~/components/icons";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
-import { useUserWidgetQuery, type Data } from "~/routes/api.v1.users.widget";
-import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
-import { cn } from "~/services/libs";
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
+
+import type { Data } from '~/routes/api.v1.users.widget';
+import { Icons } from '~/components/icons';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { useDebounceFn } from '~/libs/hooks/useDebounceFn';
+import { useUserWidgetQuery } from '~/routes/api.v1.users.widget';
+import { cn } from '~/services/libs';
 
 export default function InputAuthors() {
-  const [input, setInput] = useState("");
-  const [deferredInput, setDeferredInput] = useState("");
+  const [input, setInput] = useState('');
+  const [deferredInput, setDeferredInput] = useState('');
   const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
 
@@ -22,12 +24,12 @@ export default function InputAuthors() {
     },
     {
       wait: 300,
-    }
+    },
   );
 
   const onClose = useCallback(() => {
-    setInput("");
-    setDeferredInput("");
+    setInput('');
+    setDeferredInput('');
     setOpen(false);
   }, []);
 
@@ -39,7 +41,7 @@ export default function InputAuthors() {
         run();
       });
     },
-    [run]
+    [run],
   );
 
   return (
@@ -53,9 +55,9 @@ export default function InputAuthors() {
           autoComplete="off"
         />
         <div
-          className="absolute right-0 top-full z-10 h-auto w-full overflow-hidden rounded-md border bg-white shadow-lg dark:bg-slate-900 dark:border-slate-800"
+          className="absolute right-0 top-full z-10 h-auto w-full overflow-hidden rounded-md border bg-white shadow-lg dark:border-slate-800 dark:bg-slate-900"
           style={{
-            display: open ? "block" : "none",
+            display: open ? 'block' : 'none',
           }}
         >
           {open ? (
@@ -73,19 +75,19 @@ export default function InputAuthors() {
 function SelectedAuthors() {
   const { watch, setValue, getValues } = useWriteFormContext();
 
-  const authors = watch("authors") ?? [];
+  const authors = watch('authors') ?? [];
 
   const onRemove = useCallback(
     (author: string) => {
-      const oldAuthors = getValues("authors") ?? [];
+      const oldAuthors = getValues('authors') ?? [];
 
       const nextAuthors = oldAuthors.filter((t) => t !== author);
 
-      setValue("authors", nextAuthors, {
+      setValue('authors', nextAuthors, {
         shouldDirty: true,
       });
     },
-    [getValues, setValue]
+    [getValues, setValue],
   );
 
   return (
@@ -94,7 +96,7 @@ function SelectedAuthors() {
         <Badge className="space-x-2" key={`selected-tag-${author}`}>
           <span>{author}</span>
           <Icons.close
-            className="w-4 h-4 hover:text-red-600 focus:text-red-600 cursor-pointer"
+            className="h-4 w-4 cursor-pointer hover:text-red-600 focus:text-red-600"
             onClick={() => onRemove(author)}
           />
         </Badge>
@@ -112,7 +114,7 @@ function Popover({ input, onClose }: PopoverProps) {
   const { data } = useUserWidgetQuery({
     searchParams: {
       keyword: input,
-      limit: "5",
+      limit: '5',
     },
   });
 
@@ -140,22 +142,22 @@ function PopoverAuthor({ author, onClose }: PopoverAuthorProps) {
   const { setValue, getValues } = useWriteFormContext();
 
   const isSelected = useMemo(() => {
-    const authors = getValues("authors") ?? [];
+    const authors = getValues('authors') ?? [];
     return authors.includes(author.UserProfile.username.toLowerCase());
   }, [getValues, author]);
 
   const onClick = useCallback(() => {
-    const oldAuthors = getValues("authors") ?? [];
+    const oldAuthors = getValues('authors') ?? [];
 
     const nextAuthors = oldAuthors.includes(
-      author.UserProfile.username.toLowerCase()
+      author.UserProfile.username.toLowerCase(),
     )
       ? oldAuthors.filter(
-          (t) => t !== author.UserProfile.username.toLowerCase()
+          (t) => t !== author.UserProfile.username.toLowerCase(),
         )
       : [...oldAuthors, author.UserProfile.username.toLowerCase()];
 
-    setValue("authors", nextAuthors, {
+    setValue('authors', nextAuthors, {
       shouldDirty: true,
     });
 
@@ -164,15 +166,15 @@ function PopoverAuthor({ author, onClose }: PopoverAuthorProps) {
 
   return (
     <Button
-      variant={isSelected ? "secondary" : "ghost"}
+      variant={isSelected ? 'secondary' : 'ghost'}
       className={cn(
-        "flex flex-row items-start w-full place-content-between justify-start h-auto"
+        'flex h-auto w-full flex-row place-content-between items-start justify-start',
       )}
       onClick={onClick}
       aria-selected={isSelected}
     >
       <div className="flex min-w-0 flex-col items-start space-y-2 text-start">
-        <span className="font-semibold truncate block text-lg">
+        <span className="block truncate text-lg font-semibold">
           {author.UserProfile.username.toLowerCase()}
         </span>
       </div>

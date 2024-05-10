@@ -1,24 +1,25 @@
-import { useMemo, useReducer } from "react";
-import { createContext } from "~/libs/react-utils";
+import { useMemo, useReducer } from 'react';
+
+import { createContext } from '~/libs/react-utils/context';
 
 enum Action {
-  OPEN = "OPEN",
-  CLOSE = "CLOSE",
+  OPEN = 'OPEN',
+  CLOSE = 'CLOSE',
 
-  SET_SIDE_OPEN = "SET_SIDE_OPEN",
-  SET_SIDE_CLOSE = "SET_SIDE_CLOSE",
+  SET_SIDE_OPEN = 'SET_SIDE_OPEN',
+  SET_SIDE_CLOSE = 'SET_SIDE_CLOSE',
 
-  SET_SUBTITLE_OPEN = "SET_SUBTITLE_OPEN",
-  SET_SUBTITLE_CLOSE = "SET_SUBTITLE_CLOSE",
+  SET_SUBTITLE_OPEN = 'SET_SUBTITLE_OPEN',
+  SET_SUBTITLE_CLOSE = 'SET_SUBTITLE_CLOSE',
 
-  SET_COVER_OPEN = "SET_COVER_OPEN",
-  SET_COVER_CLOSE = "SET_COVER_CLOSE",
+  SET_COVER_OPEN = 'SET_COVER_OPEN',
+  SET_COVER_CLOSE = 'SET_COVER_CLOSE',
 
-  SET_UPLOAD_STATE = "SET_UPLOAD_STATE",
+  SET_UPLOAD_STATE = 'SET_UPLOAD_STATE',
 
-  SET_MARKDOWN_MODE = "SET_MARKDOWN_MODE",
+  SET_MARKDOWN_MODE = 'SET_MARKDOWN_MODE',
 
-  CHANGE_LEFT_SIDE_KEYWORD = "CHANGE_LEFT_SIDE_KEYWORD",
+  CHANGE_LEFT_SIDE_KEYWORD = 'CHANGE_LEFT_SIDE_KEYWORD',
 }
 
 type OpenAction = {
@@ -55,7 +56,7 @@ type SetCoverCloseAction = {
 
 type SetUploadStateAction = {
   type: Action.SET_UPLOAD_STATE;
-  payload: "idle" | "pending" | "success" | "error";
+  payload: 'idle' | 'pending' | 'success' | 'error';
 };
 
 type ChangeLeftSideKeywordAction = {
@@ -80,7 +81,7 @@ interface WriteState {
   isSideOpen: boolean;
   isSubtitleOpen: boolean;
   isCoverOpen: boolean;
-  uploadState: "idle" | "pending" | "success" | "error";
+  uploadState: 'idle' | 'pending' | 'success' | 'error';
   leftSideKeyword: string;
 }
 
@@ -93,9 +94,9 @@ interface WriteContext extends WriteState {
   setSubtitleClose: () => void;
   setCoverOpen: () => void;
   setCoverClose: () => void;
-  setUploadState: (payload: SetUploadStateAction["payload"]) => void;
+  setUploadState: (payload: SetUploadStateAction['payload']) => void;
   changeLeftSideKeyword: (
-    payload: ChangeLeftSideKeywordAction["payload"]
+    payload: ChangeLeftSideKeywordAction['payload'],
   ) => void;
   dispatch: React.Dispatch<WriteAction>;
 }
@@ -105,13 +106,13 @@ const initialState: WriteState = {
   isSideOpen: true,
   isSubtitleOpen: false,
   isCoverOpen: false,
-  uploadState: "idle",
-  leftSideKeyword: "",
+  uploadState: 'idle',
+  leftSideKeyword: '',
 };
 
 const [Provider, useWriteContext] = createContext<WriteContext>({
-  name: "useWriteContext",
-  errorMessage: "useWriteContext: `context` is undefined.",
+  name: 'useWriteContext',
+  errorMessage: 'useWriteContext: `context` is undefined.',
   defaultValue: initialState,
 });
 
@@ -205,11 +206,11 @@ function WriteProvider({ children }: Props) {
 
   const setCoverClose = () => dispatch({ type: Action.SET_COVER_CLOSE });
 
-  const setUploadState = (payload: SetUploadStateAction["payload"]) =>
+  const setUploadState = (payload: SetUploadStateAction['payload']) =>
     dispatch({ type: Action.SET_UPLOAD_STATE, payload });
 
   const changeLeftSideKeyword = (
-    payload: ChangeLeftSideKeywordAction["payload"]
+    payload: ChangeLeftSideKeywordAction['payload'],
   ) => dispatch({ type: Action.CHANGE_LEFT_SIDE_KEYWORD, payload });
 
   const actions = useMemo(
@@ -227,7 +228,7 @@ function WriteProvider({ children }: Props) {
       changeLeftSideKeyword,
       dispatch,
     }),
-    [state]
+    [state],
   );
 
   return <Provider value={actions}>{children}</Provider>;

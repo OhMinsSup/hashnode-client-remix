@@ -1,1 +1,1 @@
-export { default as SidebarDraftItem } from "./SidebarDraftItem";
+export { default as SidebarDraftItem } from './SidebarDraftItem';

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface LabelWithTooltipWrapperProps {
   label?: React.ReactNode;
@@ -16,7 +16,7 @@ export default function LabelWithTooltipWrapper({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           {label ? (
-            <div className="flex gap-[0.375rem] items-center">{label}</div>
+            <div className="flex items-center gap-[0.375rem]">{label}</div>
           ) : null}
           {isOptional && (
             <span className="text-base text-muted-foreground">Optional</span>

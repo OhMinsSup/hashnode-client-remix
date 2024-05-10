@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { createDeepCompareEffect } from "../react-utils/createDeepCompareEffect";
+import { useEffect } from 'react';
+
+import { createDeepCompareEffect } from '../react-utils/createDeepCompareEffect';
 
 const useDeepCompareEffect = createDeepCompareEffect(useEffect);
 

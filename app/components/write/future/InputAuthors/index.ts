@@ -1,1 +1,1 @@
-export { default as InputAuthors } from "./InputAuthors";
+export { default as InputAuthors } from './InputAuthors';

@@ -1,5 +1,6 @@
-import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import { API } from "~/components/editor/context/api";
+import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
+
+import { API } from '~/components/editor/context/api';
 
 export const useUploader = ({
   onUpload,
@@ -52,12 +53,12 @@ export const useDropZone = ({
       setIsDragging(false);
     };
 
-    document.body.addEventListener("dragstart", dragStartHandler);
-    document.body.addEventListener("dragend", dragEndHandler);
+    document.body.addEventListener('dragstart', dragStartHandler);
+    document.body.addEventListener('dragend', dragEndHandler);
 
     return () => {
-      document.body.removeEventListener("dragstart", dragStartHandler);
-      document.body.removeEventListener("dragend", dragEndHandler);
+      document.body.removeEventListener('dragstart', dragStartHandler);
+      document.body.removeEventListener('dragend', dragEndHandler);
     };
   }, []);
 
@@ -79,13 +80,13 @@ export const useDropZone = ({
         }
       }
 
-      if (files.some((file) => file.type.indexOf("image") === -1)) {
+      if (files.some((file) => file.type.indexOf('image') === -1)) {
         return;
       }
 
       e.preventDefault();
 
-      const filteredFiles = files.filter((f) => f.type.indexOf("image") !== -1);
+      const filteredFiles = files.filter((f) => f.type.indexOf('image') !== -1);
 
       const file = filteredFiles.length > 0 ? filteredFiles[0] : undefined;
 
@@ -93,7 +94,7 @@ export const useDropZone = ({
         uploader(file);
       }
     },
-    [uploader]
+    [uploader],
   );
 
   const onDragEnter = () => {

@@ -1,5 +1,5 @@
 .root {
-  @apply w-full mx-auto grid grid-cols-12 px-5;
+  @apply mx-auto grid w-full grid-cols-12 px-5;
 }
 
 .container {
@@ -10,7 +10,7 @@
   transition-property: border;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-  @apply relative w-full border border-slate-100 pt-5 border-opacity-0;
+  @apply relative w-full border border-slate-100 border-opacity-0 pt-5;
 }
 
 @media (min-width: 640px) {

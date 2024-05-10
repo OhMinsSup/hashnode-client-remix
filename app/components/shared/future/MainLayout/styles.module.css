@@ -1,5 +1,5 @@
 .main {
-  @apply w-full relative z-40 mx-auto min-h-screen flex flex-col items-center justify-center gap-10 px-6;
+  @apply relative z-40 mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-10 px-6;
 }
 
 .header {
@@ -7,7 +7,7 @@
 }
 
 .nav {
-  @apply fixed bottom-0 flex justify-around items-center w-full border-t bg-white py-2 z-40 dark:text-slate-300 dark:bg-slate-950 dark:border-slate-800 md:hidden;
+  @apply fixed bottom-0 z-40 flex w-full items-center justify-around border-t bg-white py-2 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 md:hidden;
 }
 
 @media (min-width: 640px) {
@@ -24,18 +24,18 @@
 
 @media (min-width: 1024px) {
   .main {
-    @apply px-0 max-w-[1024px];
+    @apply max-w-[1024px] px-0;
   }
 }
 
 @media (min-width: 1280px) {
   .main {
-    @apply grid min-w-0 max-w-[1280px] px-20 grid-cols-12;
+    @apply grid min-w-0 max-w-[1280px] grid-cols-12 px-20;
   }
 }
 
 @media (min-width: 1536px) {
   .main {
-    @apply grid min-w-0 px-52 grid-cols-12 max-w-[1536px];
+    @apply grid min-w-0 max-w-[1536px] grid-cols-12 px-52;
   }
 }
