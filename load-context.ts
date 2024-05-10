@@ -31,6 +31,6 @@ export const getLoadContext: GetLoadContext = ({ context }) => {
     ...context,
     env: context.cloudflare.env,
     agent,
-    logger: logger,
+    logger,
   };
 };

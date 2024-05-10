@@ -9,7 +9,6 @@ type Data = SerializeSchema.Hashnodeonboard;
 type DataSchema = FetchRespSchema.Success<Data>;
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  context.logger.info('onboard loader');
   await redirectIfLoggedInLoader(request, context, PAGE_ENDPOINTS.ROOT);
 
   return json(

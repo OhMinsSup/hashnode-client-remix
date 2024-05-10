@@ -25,7 +25,7 @@ type SearchParams =
 
 type QueryKey = [string, SearchParams];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   try {
     const { cookies } = getCookie(request);
     if (!cookies) {
@@ -39,6 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     return json(successJsonResponse(0));
   } catch (error) {
+    context.logger.error('[ERROR]', error);
     if (isError(error)) {
       return json(errorJsonDataResponse(0, error.message));
     }

@@ -60,7 +60,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     }
     return redirect(nextUrl);
   } catch (error) {
-    console.error(error);
+    context.logger.error('[write.loader]', error);
     throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
   }
 };

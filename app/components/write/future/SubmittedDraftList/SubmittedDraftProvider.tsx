@@ -12,7 +12,7 @@ export default function PublishedProvider() {
   const data = useLoaderData<RoutesLoaderData>();
 
   return (
-    <SubmittedDraftCollapsibleWrapper totalCount={data.submitted}>
+    <SubmittedDraftCollapsibleWrapper totalCount={data.result.submitted}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary

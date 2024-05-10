@@ -43,6 +43,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     const data = response._data;
     return json(successJsonResponse(data ? data.result : []));
   } catch (error) {
+    context.logger.error('[ERROR]', error);
     if (isError<DataSchema>(error)) {
       return json(errorJsonDataResponse(error.data, error.message));
     }

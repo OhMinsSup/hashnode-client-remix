@@ -56,7 +56,7 @@ export const loader = async ({
 
     return json(successJsonResponse(data.result));
   } catch (error) {
-    console.error(error);
+    context.logger.error('[write.$id.loader]', error);
     throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
   }
 };

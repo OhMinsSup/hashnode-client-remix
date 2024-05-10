@@ -59,6 +59,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       },
     });
   } catch (e) {
+    context.logger.error('[signin.action]', e);
     if (isError<string>(e)) {
       if (e.displayType === ErrorDisplayType.TOAST) {
         return redirectWithToast(

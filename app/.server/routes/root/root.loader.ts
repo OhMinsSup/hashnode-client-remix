@@ -38,7 +38,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       headers: combineHeaders(toastHeaders, session ? null : headers),
     });
   } catch (error) {
-    console.error(error);
+    context.logger.error('[root.loader]', error);
     return json($object, {
       headers: combineHeaders(toastHeaders),
     });

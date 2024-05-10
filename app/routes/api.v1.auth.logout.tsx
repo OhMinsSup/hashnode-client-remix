@@ -25,6 +25,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       headers: clearAuthHeaders(),
     });
   } catch (error) {
+    context.logger.error('[ERROR]', error);
     if (isError(error)) {
       return json(errorJsonDataResponse(null, error.message), {
         headers: clearAuthHeaders(),

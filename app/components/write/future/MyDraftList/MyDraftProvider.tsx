@@ -12,7 +12,7 @@ export default function MyDraftProvider() {
   const data = useLoaderData<RoutesLoaderData>();
 
   return (
-    <MyDraftCollapsibleWrapper totalCount={data.draft}>
+    <MyDraftCollapsibleWrapper totalCount={data.result.draft}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary
