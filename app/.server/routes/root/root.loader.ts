@@ -9,7 +9,7 @@ import {
 } from "~/.server/utils/request.server";
 import { getAuthFromRequest } from "~/.server/utils/auth.server";
 
-export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
+export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);
   initializeToast(context.env.TOAST_SECRET);
 
@@ -46,4 +46,4 @@ export const rootLoader = async ({ context, request }: LoaderFunctionArgs) => {
   }
 };
 
-export type RoutesLoaderData = typeof rootLoader;
+export type RoutesLoaderData = typeof loader;

@@ -3,10 +3,7 @@ import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { redirectIfLoggedInLoader } from "~/.server/utils/auth.server";
 import { ASSET_URL, PAGE_ENDPOINTS } from "~/constants/constant";
 
-export const authLayoutLoader = async ({
-  request,
-  context,
-}: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   redirectIfLoggedInLoader(request, context, PAGE_ENDPOINTS.ROOT);
   return json(
     {
@@ -27,4 +24,4 @@ export const authLayoutLoader = async ({
   );
 };
 
-export type RoutesLoaderData = typeof authLayoutLoader;
+export type RoutesLoaderData = typeof loader;

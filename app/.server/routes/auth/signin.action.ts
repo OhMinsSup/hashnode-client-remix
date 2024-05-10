@@ -18,16 +18,13 @@ import {
 } from "~/.server/utils/toast.server";
 import { IFetchError } from "~/services/api/fetch/types";
 
-export const signinAction = async ({
-  request,
-  context,
-}: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   // 유효성 검사
   validateMethods(request, ["POST"], PAGE_ENDPOINTS.AUTH.SIGNIN);
 
   const { errors, data } = await getValidatedFormData<FormFieldValues>(
     request,
-    resolver,
+    resolver
   );
 
   if (errors) {
@@ -52,7 +49,7 @@ export const signinAction = async ({
           type: "error",
           description: "로그인에 실패했습니다. 다시 시도해주세요.",
         },
-        createToastHeaders,
+        createToastHeaders
       );
     }
 
@@ -68,7 +65,7 @@ export const signinAction = async ({
         const isNotExistsUser = error.data.resultCode === RESULT_CODE.NOT_EXIST;
         if (isNotExistsUser) {
           return redirect(
-            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`),
+            safeRedirect(`${PAGE_ENDPOINTS.AUTH.SIGNUP}?email=${data.email}`)
           );
         }
         return json({
@@ -89,9 +86,9 @@ export const signinAction = async ({
         type: "error",
         description: "로그인에 실패했습니다. 다시 시도해주세요.",
       },
-      createToastHeaders,
+      createToastHeaders
     );
   }
 };
 
-export type RoutesActionData = typeof signinAction;
+export type RoutesActionData = typeof action;

@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export const signupLoader = ({ request }: LoaderFunctionArgs) => {
+export const loader = ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const email = url.searchParams.get("email") ?? undefined;
   return {
@@ -8,4 +8,4 @@ export const signupLoader = ({ request }: LoaderFunctionArgs) => {
   };
 };
 
-export type RoutesLoaderData = typeof signupLoader;
+export type RoutesLoaderData = typeof loader;

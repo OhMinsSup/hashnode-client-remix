@@ -19,10 +19,7 @@ import {
 } from "~/.server/utils/toast.server";
 import { IFetchError } from "~/services/api/fetch/types";
 
-export const signupAction = async ({
-  request,
-  context,
-}: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   // 유효성 검사
   validateMethods(request, ["POST"], PAGE_ENDPOINTS.AUTH.SIGNUP);
 
@@ -93,4 +90,4 @@ export const signupAction = async ({
   }
 };
 
-export type RoutesActionData = typeof signupAction;
+export type RoutesActionData = typeof action;

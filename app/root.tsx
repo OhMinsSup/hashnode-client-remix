@@ -18,17 +18,12 @@ import "~/styles/global.css";
 import type { Theme } from "~/context/useThemeContext";
 import type { Toast } from "~/services/validate/toast.validate";
 import { useEffect, useRef } from "react";
-import {
-  rootLoader,
-  type RoutesLoaderData,
-} from "~/.server/routes/root/root.loader";
-import { rootMeta } from "~/services/seo/root/root.meta";
+import { type RoutesLoaderData } from "~/.server/routes/root/root.loader";
 import { ClientQueryProvider } from "~/services/react-query";
 import { cn } from "~/services/libs";
 
-export const loader = rootLoader;
-
-export const meta = rootMeta;
+export { loader } from "~/.server/routes/root/root.loader";
+export { meta } from "~/services/seo/root/root.meta";
 
 function ShowToast({ toast }: { toast: Toast }) {
   const { id, type, title, description } = toast;
