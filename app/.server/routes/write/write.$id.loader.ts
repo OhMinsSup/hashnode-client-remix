@@ -1,7 +1,12 @@
-import { json, redirect, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { safeRedirect } from "remix-utils/safe-redirect";
-import { requireCookie } from "~/.server/utils/auth.server";
-import { PAGE_ENDPOINTS, RESULT_CODE } from "~/constants/constant";
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json, redirect } from '@remix-run/cloudflare';
+import { safeRedirect } from 'remix-utils/safe-redirect';
+
+import { getCookie } from '~/.server/utils/request.server';
+import { successJsonResponse } from '~/.server/utils/response.server';
+import { PAGE_ENDPOINTS, RESULT_CODE } from '~/constants/constant';
+import { createError, ErrorDisplayType } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
 
 type Data = FetchRespSchema.Success<SerializeSchema.SerializePost<false>>;
 
@@ -14,50 +19,44 @@ export const loader = async ({
 
   try {
     if (!id) {
-      const error = new Error();
-      error.name = "InvalidIdError";
-      throw error;
+      throw createError({
+        statusMessage: 'Bad Request',
+        statusCode: HttpStatus.BAD_REQUEST,
+        displayType: ErrorDisplayType.NONE,
+        data: 'Bad Request',
+      });
     }
 
-    const { cookie } = requireCookie(request);
-    if (!cookie) {
-      const error = new Error();
-      error.name = "InvalidCookieError";
-      error.message = "Failed to get cookie";
-      throw error;
+    const { cookies } = getCookie(request);
+    if (!cookies) {
+      throw createError({
+        statusMessage: 'Unauthorized',
+        statusCode: HttpStatus.UNAUTHORIZED,
+        displayType: ErrorDisplayType.NONE,
+        data: 'Unauthorized',
+      });
     }
 
     const post = context.agent.api.app.post;
-
     const response = await post.getOwnerByIdHandler<Data>(id, {
       headers: {
-        Cookie: cookie,
+        Cookie: cookies,
       },
     });
 
     const data = response._data;
-    if (!data) {
-      const error = new Error();
-      error.name = "GetPostError";
-      error.message = "Failed to get post data with no data";
-      throw error;
+    if (!data || (data && data.resultCode !== RESULT_CODE.OK)) {
+      throw createError({
+        statusMessage: 'Bad Request',
+        statusCode: HttpStatus.BAD_REQUEST,
+        displayType: ErrorDisplayType.NONE,
+        data: 'Failed to create draft data with no data',
+      });
     }
 
-    if (data.resultCode !== RESULT_CODE.OK) {
-      const error = new Error();
-      error.name = "GetPostError";
-      error.message = "Failed to get post data with resultCode";
-      throw error;
-    }
-
-    return json({
-      status: "success" as const,
-      result: data.result,
-      errors: null,
-      message: null,
-    });
+    return json(successJsonResponse(data.result));
   } catch (error) {
-    console.error(error);
+    context.logger.error('[write.$id.loader]', error);
     throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
   }
 };

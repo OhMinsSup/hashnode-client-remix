@@ -1,5 +1,5 @@
 .root {
-  @apply transform-gpu duration-200 transition-transform sticky top-0 left-0 z-10 bg-white bg-opacity-70 p-4 shadow-sm backdrop-blur-md 2xl:px-5;
+  @apply sticky left-0 top-0 z-10 transform-gpu bg-white bg-opacity-70 p-4 shadow-sm backdrop-blur-md transition-transform duration-200 2xl:px-5;
 }
 
 .container {
@@ -11,7 +11,7 @@
 }
 
 .container_right {
-  @apply col-span-8 relative flex justify-end flex-row;
+  @apply relative col-span-8 flex flex-row justify-end;
 }
 
 .separator {
@@ -21,7 +21,7 @@
 }
 
 :global(.dark) .root {
-  @apply bg-slate-950 border-slate-800 bg-opacity-70;
+  @apply border-slate-800 bg-slate-950 bg-opacity-70;
 }
 
 :gloabl(.dark) .separator {

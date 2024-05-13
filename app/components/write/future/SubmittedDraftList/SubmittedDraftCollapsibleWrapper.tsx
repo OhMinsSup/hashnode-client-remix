@@ -1,6 +1,7 @@
-import { CollapsibleWrapper } from "~/components/write/future/CollapsibleWrapper";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { useMemo } from "react";
+import { useMemo } from 'react';
+
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { CollapsibleWrapper } from '~/components/write/future/CollapsibleWrapper';
 
 interface SubmittedDraftCollapsibleWrapperProps {
   children: React.ReactNode;

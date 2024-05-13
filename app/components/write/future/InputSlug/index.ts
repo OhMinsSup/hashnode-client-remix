@@ -1,1 +1,1 @@
-export { default as InputSlug } from "./InputSlug";
+export { default as InputSlug } from './InputSlug';

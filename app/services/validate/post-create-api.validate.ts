@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const schema = z.object({
   urlSlug: z.string().max(255),
   title: z.string().max(200),
   subTitle: z.string().max(120).optional(),
   content: z.string().min(1),
-  meta: z.record(z.unknown()).optional(),
+  meta: z.string().optional(),
   image: z.string().url().optional(),
   tags: z.array(z.string().min(1)).optional(),
   seo: z.object({

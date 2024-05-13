@@ -1,6 +1,6 @@
-import type { BasicTarget } from "../browser-utils";
-import { useBoolean } from "./useBoolean";
-import { useEventListener } from "./useEventListener";
+import type { BasicTarget } from '../browser-utils/dom';
+import { useBoolean } from './useBoolean';
+import { useEventListener } from './useEventListener';
 
 export interface Options {
   onEnter?: () => void;
@@ -8,13 +8,13 @@ export interface Options {
   onChange?: (isHovering: boolean) => void;
 }
 
-export default (target: BasicTarget, options?: Options): boolean => {
+export function useHover(target: BasicTarget, options?: Options) {
   const { onEnter, onLeave, onChange } = options || {};
 
   const [state, { setTrue, setFalse }] = useBoolean(false);
 
   useEventListener(
-    "mouseenter",
+    'mouseenter',
     () => {
       onEnter?.();
       setTrue();
@@ -22,11 +22,11 @@ export default (target: BasicTarget, options?: Options): boolean => {
     },
     {
       target,
-    }
+    },
   );
 
   useEventListener(
-    "mouseleave",
+    'mouseleave',
     () => {
       onLeave?.();
       setFalse();
@@ -34,8 +34,8 @@ export default (target: BasicTarget, options?: Options): boolean => {
     },
     {
       target,
-    }
+    },
   );
 
   return state;
-};
+}

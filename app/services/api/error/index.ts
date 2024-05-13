@@ -5,6 +5,8 @@ import type {
 } from "../fetch/types";
 
 export class FetchError<T = unknown> extends Error implements IFetchError<T> {
+  static __remix_fetch_error__ = true;
+
   constructor(message: string, opts?: { cause: unknown }) {
     // https://v8.dev/features/error-cause
     super(message, opts);
@@ -74,4 +76,10 @@ export function createFetchError<
   }
 
   return fetchError;
+}
+
+export function isFetchError<DataT = unknown>(
+  input: any
+): input is IFetchError<DataT> {
+  return input?.constructor?.__remix_fetch_error__ === true;
 }

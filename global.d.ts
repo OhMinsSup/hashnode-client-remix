@@ -40,6 +40,10 @@ declare namespace SerializeSchema {
     UserTags: SerializeTag<false>[];
   };
 
+  export type SerializeSimepleUser = {
+    UserProfile: Pick<SerializeUserProfile, "username" | "image">;
+  } & Pick<SerializeUser, "id" | "email">;
+
   export type SerializeTagStats = {
     follow: number;
     inUse: number;
@@ -86,6 +90,8 @@ declare namespace SerializeSchema {
     publishedAt: string | undefined;
   };
 
+  export type SerializePostCoAuthor = SerializeSimepleUser;
+
   export type SerializePost<IncludeStats = true> = {
     id: string;
     urlSlug: string;
@@ -96,6 +102,7 @@ declare namespace SerializeSchema {
     image: string | undefined;
     PostConfig: SerializePostConfig;
     PostTags: SerializeTag<false>[];
+    PostCoAuthor: SerializePostCoAuthor[];
     PostSeo: Partial<SerializePostSeo>;
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
     count: SerializePostCount;
@@ -191,6 +198,19 @@ declare namespace CloudflareSchema {
     id: string;
     uploadURL: string;
   }>;
+}
+
+declare namespace RemixDataFlow {
+  export type Status = "success" | "error";
+
+  export type Message = string | null;
+
+  export type Response<D = unknown, E = unknown> = {
+    status: Status;
+    result: D;
+    message: Message;
+    errors: E;
+  };
 }
 
 declare namespace UntilsTypes {

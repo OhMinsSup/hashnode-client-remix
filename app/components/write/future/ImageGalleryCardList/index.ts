@@ -1,1 +1,1 @@
-export { default as ImageGalleryCardList } from "./ImageGalleryCardList";
+export { default as ImageGalleryCardList } from './ImageGalleryCardList';

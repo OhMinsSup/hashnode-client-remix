@@ -1,10 +1,14 @@
-import "~/styles/editor/index.css";
-import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { WriteProvider } from "~/components/write/context/useWriteContext";
-import { WriteLayout } from "~/components/write/future/WriteLayout";
-import { LeftSidebar } from "~/components/write/future/LeftSidebar";
-export { meta } from "~/services/seo/write/write-layout.meta";
-export { loader } from "~/.server/routes/write/write-layout.loader";
+import '~/styles/editor/index.css';
+
+import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
+
+import { WriteProvider } from '~/components/write/context/useWriteContext';
+import { LeftSidebar } from '~/components/write/future/LeftSidebar';
+import { WriteLayout } from '~/components/write/future/WriteLayout';
+
+export { meta } from '~/services/seo/write/write-layout.meta';
+export { loader } from '~/.server/routes/write/write-layout.loader';
+export { action } from '~/.server/routes/write/write-layout.action';
 
 export default function Routes() {
   return (

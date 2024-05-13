@@ -1,5 +1,5 @@
-import { destr } from "destr";
-import { withBase, withQuery } from "ufo";
+import { destr } from 'destr';
+import { withBase, withQuery } from 'ufo';
 
 import type {
   FetchContext,
@@ -8,19 +8,19 @@ import type {
   FetchResponse,
   MappedResponseType,
   ResponseMapType,
-} from "./types";
-import { createFetchError } from "../error";
+} from './types';
+import { createFetchError } from '../error';
 import {
   detectResponseType,
   isJSONSerializable,
   mergeFetchOptions,
-} from "./utils";
+} from './utils';
 
 const payloadMethods = new Set(
-  Object.freeze(["PATCH", "POST", "PUT", "DELETE"])
+  Object.freeze(['PATCH', 'POST', 'PUT', 'DELETE']),
 );
 
-function isPayloadMethod(method = "GET"): boolean {
+function isPayloadMethod(method = 'GET'): boolean {
   return payloadMethods.has(method.toUpperCase());
 }
 
@@ -41,26 +41,26 @@ const nullBodyResponses = new Set([101, 204, 205, 304]);
 
 export async function fetchHandler<
   T = unknown,
-  R extends ResponseMapType = "json",
+  R extends ResponseMapType = 'json',
 >(
   _request: FetchRequest,
-  _options?: FetchOptions<R>
+  _options?: FetchOptions<R>,
 ): Promise<FetchResponse<MappedResponseType<R, T>>> {
   async function onError(
-    context: FetchContext<T, R>
+    context: FetchContext<T, R>,
   ): Promise<FetchResponse<MappedResponseType<R>>> {
     // Is Abort
     // If it is an active abort, it will not retry automatically.
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMException#error_names
     const isAbort =
       (context.error &&
-        context.error.name === "AbortError" &&
+        context.error.name === 'AbortError' &&
         !context.options.timeout) ||
       false;
     // Retry
     if (context.options.retry !== false && !isAbort) {
       let retries;
-      if (typeof context.options.retry === "number") {
+      if (typeof context.options.retry === 'number') {
         retries = context.options.retry;
       } else {
         retries = isPayloadMethod(context.options.method) ? 0 : 1;
@@ -92,9 +92,9 @@ export async function fetchHandler<
 
     // Only available on V8 based runtimes (https://v8.dev/docs/stack-trace-api)
     if (
-      "captureStackTrace" in Error &&
+      'captureStackTrace' in Error &&
       Error.captureStackTrace &&
-      typeof Error.captureStackTrace === "function"
+      typeof Error.captureStackTrace === 'function'
     ) {
       Error.captureStackTrace(error, fetchHandler);
     }
@@ -114,7 +114,7 @@ export async function fetchHandler<
     await context.options.onRequest(context);
   }
 
-  if (typeof context.request === "string") {
+  if (typeof context.request === 'string') {
     if (context.options.baseURL) {
       context.request = withBase(context.request, context.options.baseURL);
     }
@@ -130,16 +130,16 @@ export async function fetchHandler<
   if (context.options.body && isPayloadMethod(context.options.method)) {
     if (isJSONSerializable(context.options.body)) {
       context.options.body =
-        typeof context.options.body === "string"
+        typeof context.options.body === 'string'
           ? context.options.body
           : JSON.stringify(context.options.body);
 
       context.options.headers = new Headers(context.options.headers ?? {});
-      if (!context.options.headers.has("content-type")) {
-        context.options.headers.set("content-type", "application/json");
+      if (!context.options.headers.has('content-type')) {
+        context.options.headers.set('content-type', 'application/json');
       }
-      if (!context.options.headers.has("accept")) {
-        context.options.headers.set("accept", "application/json");
+      if (!context.options.headers.has('accept')) {
+        context.options.headers.set('accept', 'application/json');
       }
     }
   }
@@ -158,7 +158,7 @@ export async function fetchHandler<
   try {
     context.response = await fetch(
       context.request,
-      context.options as RequestInit
+      context.options as RequestInit,
     );
   } catch (error) {
     context.error = error as Error;
@@ -166,7 +166,7 @@ export async function fetchHandler<
       await context.options.onRequestError(
         context as FetchContext<T, R> & {
           error: Error;
-        }
+        },
       );
     }
     return await onError(context);
@@ -179,15 +179,15 @@ export async function fetchHandler<
   const hasBody =
     context.response.body &&
     !nullBodyResponses.has(context.response.status) &&
-    context.options.method !== "HEAD";
+    context.options.method !== 'HEAD';
 
   if (hasBody) {
     const responseType =
-      (context.options.parseResponse ? "json" : context.options.responseType) ??
-      detectResponseType(context.response.headers.get("content-type") ?? "");
+      (context.options.parseResponse ? 'json' : context.options.responseType) ??
+      detectResponseType(context.response.headers.get('content-type') ?? '');
 
     switch (responseType) {
-      case "json": {
+      case 'json': {
         const data = await context.response.text();
 
         const parseFunction = context.options.parseResponse || destr;
@@ -204,7 +204,7 @@ export async function fetchHandler<
     await context.options.onResponse(
       context as FetchContext<T, R> & {
         response: FetchResponse<R>;
-      }
+      },
     );
   }
 
@@ -217,7 +217,7 @@ export async function fetchHandler<
       await context.options.onResponseError(
         context as FetchContext<T, R> & {
           response: FetchResponse<R>;
-        }
+        },
       );
     }
     return await onError(context);

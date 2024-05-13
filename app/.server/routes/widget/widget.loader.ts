@@ -1,5 +1,5 @@
-import { defer, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { readHeaderCookie } from "~/.server/utils/request.server";
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { defer } from '@remix-run/cloudflare';
 
 export const widgetLoader = async ({
   context,
@@ -41,9 +41,9 @@ export const widgetLoader = async ({
     },
     {
       headers: {
-        "Cache-Control": "public, max-age=120",
+        'Cache-Control': 'public, max-age=120',
       },
-    }
+    },
   );
 };
 

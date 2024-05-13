@@ -1,11 +1,12 @@
-import { useFetcher } from "@remix-run/react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { isBrowser } from "~/libs/browser-utils";
-import { getPath } from "~/routes/api.v1.set-theme";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useFetcher } from '@remix-run/react';
+
+import { isBrowser } from '~/libs/browser-utils/dom';
+import { getPath } from '~/routes/api.v1.set-theme';
 
 enum Theme {
-  DARK = "dark",
-  LIGHT = "light",
+  DARK = 'dark',
+  LIGHT = 'light',
 }
 
 const themes: Array<Theme> = Object.values(Theme);
@@ -16,14 +17,14 @@ type ThemeContextType = [
 ];
 
 const ThemeContext = React.createContext<ThemeContextType | undefined>(
-  undefined
+  undefined,
 );
-ThemeContext.displayName = "ThemeContext";
+ThemeContext.displayName = 'ThemeContext';
 
-const prefersLightMQ = "(prefers-color-scheme: light)";
+const prefersLightMQ = '(prefers-color-scheme: light)';
 
 function isTheme(value: unknown): value is Theme {
-  return typeof value === "string" && themes.includes(value as Theme);
+  return typeof value === 'string' && themes.includes(value as Theme);
 }
 
 const getPreferredTheme = () =>
@@ -66,22 +67,22 @@ function ThemeProvider({
     const handleChange = () => {
       setThemeState(mediaQuery.matches ? Theme.LIGHT : Theme.DARK);
     };
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   const setTheme = useCallback(
     (cb: Parameters<typeof setThemeState>[0]) => {
-      const newTheme = typeof cb === "function" ? cb(theme) : cb;
+      const newTheme = typeof cb === 'function' ? cb(theme) : cb;
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },
-          { action: getPath(), method: "POST" }
+          { action: getPath(), method: 'POST' },
         );
       }
       setThemeState(newTheme);
     },
-    [theme]
+    [theme],
   );
 
   return (
@@ -94,7 +95,7 @@ function ThemeProvider({
 function useTheme() {
   const context = React.useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 }
@@ -140,10 +141,10 @@ const clientThemeCode = `
 
 function handleDarkAndLightModeEls() {
   const theme = getPreferredTheme();
-  const darkEls = document.querySelectorAll("dark-mode");
-  const lightEls = document.querySelectorAll("light-mode");
+  const darkEls = document.querySelectorAll('dark-mode');
+  const lightEls = document.querySelectorAll('light-mode');
   for (const darkEl of darkEls) {
-    if (theme === "dark") {
+    if (theme === 'dark') {
       for (const child of darkEl.childNodes) {
         // @ts-expect-error this is fine
         darkEl.parentElement?.append(child);
@@ -152,7 +153,7 @@ function handleDarkAndLightModeEls() {
     darkEl.remove();
   }
   for (const lightEl of lightEls) {
-    if (theme === "light") {
+    if (theme === 'light') {
       for (const child of lightEl.childNodes) {
         // @ts-expect-error this is fine
         lightEl.parentElement?.append(child);
@@ -178,7 +179,7 @@ function NonFlashOfWrongThemeEls({
         */}
       <meta
         name="color-scheme"
-        content={theme === "light" ? "light dark" : "dark light"}
+        content={theme === 'light' ? 'light dark' : 'dark light'}
       />
       {/*
           If we know what the theme is from the server then we don't need
@@ -215,19 +216,19 @@ function Themed({
   const [theme] = useTheme();
   const [initialTheme] = React.useState(theme);
   const themeToReference = initialOnly ? initialTheme : theme;
-  const serverRenderWithUnknownTheme = !theme && typeof window !== "object";
+  const serverRenderWithUnknownTheme = !theme && typeof window !== 'object';
   if (serverRenderWithUnknownTheme) {
     // stick them both in and our little script will update the DOM to match
     // what we'll render in the client during hydration.
     return (
       <>
-        {React.createElement("dark-mode", null, dark)}
-        {React.createElement("light-mode", null, light)}
+        {React.createElement('dark-mode', null, dark)}
+        {React.createElement('light-mode', null, light)}
       </>
     );
   } else {
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{themeToReference === "light" ? light : dark}</>;
+    return <>{themeToReference === 'light' ? light : dark}</>;
   }
 }
 

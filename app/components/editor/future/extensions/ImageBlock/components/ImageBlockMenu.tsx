@@ -1,12 +1,12 @@
-import { BubbleMenu as BaseBubbleMenu, Editor } from "@tiptap/react";
-import { useCallback, useRef } from "react";
-import { Instance, sticky } from "tippy.js";
-import { createId as cuid } from "@paralleldrive/cuid2";
+import { useCallback, useRef } from 'react';
+import { createId as cuid } from '@paralleldrive/cuid2';
+import { BubbleMenu as BaseBubbleMenu, Editor } from '@tiptap/react';
+import { Instance, sticky } from 'tippy.js';
 
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import { EditorIcon } from "~/components/icons";
-import { ImageBlockWidth } from "./ImageBlockWidth";
-import { getRenderContainer } from "~/components/editor/future/hooks/utils";
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { getRenderContainer } from '~/components/editor/future/hooks/utils';
+import { EditorIcon } from '~/components/icons';
+import { ImageBlockWidth } from './ImageBlockWidth';
 
 interface ImageBlockMenuuProps {
   editor: Editor;
@@ -19,7 +19,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
   const tippyInstance = useRef<Instance | null>(null);
 
   const getReferenceClientRect = useCallback(() => {
-    const renderContainer = getRenderContainer(editor, "node-imageBlock");
+    const renderContainer = getRenderContainer(editor, 'node-imageBlock');
     const rect =
       renderContainer?.getBoundingClientRect() ||
       new DOMRect(-1000, -1000, 0, 0);
@@ -28,7 +28,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
   }, [editor]);
 
   const shouldShow = useCallback(() => {
-    const isActive = editor.isActive("imageBlock");
+    const isActive = editor.isActive('imageBlock');
 
     return isActive;
   }, [editor]);
@@ -37,7 +37,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
     editor
       .chain()
       .focus(undefined, { scrollIntoView: false })
-      .setImageBlockAlign("left")
+      .setImageBlockAlign('left')
       .run();
   }, [editor]);
 
@@ -45,7 +45,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
     editor
       .chain()
       .focus(undefined, { scrollIntoView: false })
-      .setImageBlockAlign("center")
+      .setImageBlockAlign('center')
       .run();
   }, [editor]);
 
@@ -53,7 +53,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
     editor
       .chain()
       .focus(undefined, { scrollIntoView: false })
-      .setImageBlockAlign("right")
+      .setImageBlockAlign('right')
       .run();
   }, [editor]);
 
@@ -65,7 +65,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
         .setImageBlockWidth(value)
         .run();
     },
-    [editor]
+    [editor],
   );
 
   return (
@@ -77,7 +77,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
       tippyOptions={{
         offset: [0, 8],
         popperOptions: {
-          modifiers: [{ name: "flip", enabled: false }],
+          modifiers: [{ name: 'flip', enabled: false }],
         },
         getReferenceClientRect,
         onCreate: (instance: Instance) => {
@@ -87,27 +87,27 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
           return appendTo?.current;
         },
         plugins: [sticky],
-        sticky: "popper",
+        sticky: 'popper',
       }}
     >
       <Toolbar.Wrapper shouldShowContent={shouldShow()} ref={menuRef}>
         <Toolbar.Button
           tooltip="Align image left"
-          active={editor.isActive("imageBlock", { align: "left" })}
+          active={editor.isActive('imageBlock', { align: 'left' })}
           onClick={onAlignImageLeft}
         >
           <EditorIcon name="AlignHorizontalDistributeStart" />
         </Toolbar.Button>
         <Toolbar.Button
           tooltip="Align image center"
-          active={editor.isActive("imageBlock", { align: "center" })}
+          active={editor.isActive('imageBlock', { align: 'center' })}
           onClick={onAlignImageCenter}
         >
           <EditorIcon name="AlignHorizontalDistributeCenter" />
         </Toolbar.Button>
         <Toolbar.Button
           tooltip="Align image right"
-          active={editor.isActive("imageBlock", { align: "right" })}
+          active={editor.isActive('imageBlock', { align: 'right' })}
           onClick={onAlignImageRight}
         >
           <EditorIcon name="AlignHorizontalDistributeEnd" />
@@ -115,7 +115,7 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuuProps) => {
         <Toolbar.Divider />
         <ImageBlockWidth
           onChange={onWidthChange}
-          value={parseInt(editor.getAttributes("imageBlock").width)}
+          value={parseInt(editor.getAttributes('imageBlock').width)}
         />
       </Toolbar.Wrapper>
     </BaseBubbleMenu>

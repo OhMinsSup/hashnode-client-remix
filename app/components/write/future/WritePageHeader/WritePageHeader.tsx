@@ -1,17 +1,10 @@
-import { useCallback } from "react";
-import styles from "./styles.module.css";
-import { Button } from "~/components/ui/button";
-import { Icons } from "~/components/icons";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Separator } from "~/components/ui/separator";
-import { Switch } from "~/components/ui/switch";
-import { Label } from "~/components/ui/label";
-import { Theme, useTheme } from "~/context/useThemeContext";
+import { useCallback } from 'react';
+import { useFormAction, useNavigation } from '@remix-run/react';
+import { useController } from 'react-hook-form';
+
+import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -20,23 +13,37 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "~/components/ui/drawer";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { DraftSettingDrawer } from "~/components/write/future/DraftSettingDrawer";
-import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
-import { useController } from "react-hook-form";
-import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
+} from '~/components/ui/drawer';
+import { Label } from '~/components/ui/label';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import { ScrollArea } from '~/components/ui/scroll-area';
+import { Separator } from '~/components/ui/separator';
+import { Switch } from '~/components/ui/switch';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { DraftSettingDrawer } from '~/components/write/future/DraftSettingDrawer';
+import { Theme, useTheme } from '~/context/useThemeContext';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 export default function WritePageHeader() {
   const { setSideOpen, isSideOpen, isOpen, open, close } = useWriteContext();
 
   const { control } = useWriteFormContext();
 
+  const navigation = useNavigation();
+
+  const action = useFormAction();
+
   const {
     field: { value, onChange, ...field },
   } = useController<FormFieldValues>({
     control,
-    name: "config.isMarkdown",
+    name: 'config.isMarkdown',
   });
 
   const onToggleSidebar = useCallback(() => {
@@ -49,14 +56,14 @@ export default function WritePageHeader() {
     (checked: boolean) => {
       setTheme(checked ? Theme.DARK : Theme.LIGHT);
     },
-    [setTheme]
+    [setTheme],
   );
 
   const onOpenChange = useCallback(
     (value: boolean) => {
       value ? open() : close();
     },
-    [close, open]
+    [close, open],
   );
 
   return (
@@ -84,7 +91,7 @@ export default function WritePageHeader() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-80">
-                <div className="flex flex-col space-y-3 h-auto w-full text-sm">
+                <div className="flex h-auto w-full flex-col space-y-3 text-sm">
                   <Button
                     variant="ghost"
                     className="flex justify-start space-x-2"
@@ -105,18 +112,18 @@ export default function WritePageHeader() {
                   <Separator
                     aria-orientation="vertical"
                     orientation="vertical"
-                    className="min-h-full h-px w-full"
+                    className="h-px min-h-full w-full"
                     role="separator"
                   />
                   <div className="flex items-center justify-between space-x-2 px-3">
-                    <div className="flex justify-center items-center space-x-2">
+                    <div className="flex items-center justify-center space-x-2">
                       {theme === Theme.DARK ? (
                         <Icons.sun className="size-5" />
                       ) : (
                         <Icons.moon className="size-5" />
                       )}
                       <Label htmlFor="theme-mode" className="text-xs">
-                        {theme === Theme.DARK ? "Light" : "Dark"} mode
+                        {theme === Theme.DARK ? 'Light' : 'Dark'} mode
                       </Label>
                     </div>
                     <Switch
@@ -126,7 +133,7 @@ export default function WritePageHeader() {
                     />
                   </div>
                   <div className="flex items-center justify-between space-x-2 px-3">
-                    <div className="flex justify-center items-center space-x-2">
+                    <div className="flex items-center justify-center space-x-2">
                       <Icons.markdown className="size-5 stroke-current" />
                       <Label htmlFor="markdown-mode" className="text-xs">
                         Raw markdown editor
@@ -147,7 +154,7 @@ export default function WritePageHeader() {
           <Separator
             aria-orientation="vertical"
             orientation="vertical"
-            className="mx-4 min-h-full h-px"
+            className="mx-4 h-px min-h-full"
             role="separator"
           />
           <div className="flex flex-row space-x-2 md:space-x-3">
@@ -159,10 +166,10 @@ export default function WritePageHeader() {
               <DrawerTrigger asChild>
                 <Button variant="default">Publish</Button>
               </DrawerTrigger>
-              <DrawerContent className="rounded-none h-full w-full sm:w-[504px]">
+              <DrawerContent className="h-full w-full rounded-none sm:w-[504px]">
                 <DrawerHeader className="border-b">
                   <DrawerTitle>
-                    <div className="flex flex-row justify-between items-center">
+                    <div className="flex flex-row items-center justify-between">
                       <h2>Draft settings</h2>
                       <DrawerClose asChild>
                         <Button variant="ghost">
@@ -172,15 +179,27 @@ export default function WritePageHeader() {
                     </div>
                   </DrawerTitle>
                 </DrawerHeader>
-                <div className="flex-1 overflow-auto">
-                  <ScrollArea className="w-full h-full p-6">
+                <div
+                  className={cn('flex-1 overflow-auto', {
+                    'opacity-50':
+                      navigation.formMethod === 'PUT' &&
+                      navigation.formAction === action,
+                  })}
+                >
+                  <ScrollArea className="h-full w-full p-6">
                     <DraftSettingDrawer />
                   </ScrollArea>
                 </div>
                 <DrawerFooter className="border">
-                  <div className="flex items-center space-x-2 justify-end">
+                  <div className="flex items-center justify-end space-x-2">
                     <Button variant="outline">Submit for review</Button>
-                    <Button>Publish</Button>
+                    <Button form="hashnode-write-form" className="space-x-2">
+                      {navigation.formMethod === 'PUT' &&
+                      navigation.formAction === action ? (
+                        <Icons.spinner className="size-4 animate-spin" />
+                      ) : null}
+                      <span>Publish</span>
+                    </Button>
                   </div>
                 </DrawerFooter>
               </DrawerContent>

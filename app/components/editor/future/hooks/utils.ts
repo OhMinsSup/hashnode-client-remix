@@ -1,11 +1,12 @@
-import { Editor, isTextSelection } from "@tiptap/react";
+import { Editor, isTextSelection } from '@tiptap/react';
+
 import {
   CodeBlock,
   Figcaption,
   HorizontalRule,
   ImageBlock,
   Link,
-} from "../extensions/modules";
+} from '../extensions/modules';
 
 export const getRenderContainer = (editor: Editor, nodeType: string) => {
   const {
@@ -15,15 +16,15 @@ export const getRenderContainer = (editor: Editor, nodeType: string) => {
     },
   } = editor;
 
-  const elements = document.querySelectorAll(".has-focus");
+  const elements = document.querySelectorAll('.has-focus');
   const elementCount = elements.length;
   const innermostNode = elements[elementCount - 1];
   const element = innermostNode;
 
   if (
     (element &&
-      element.getAttribute("data-type") &&
-      element.getAttribute("data-type") === nodeType) ||
+      element.getAttribute('data-type') &&
+      element.getAttribute('data-type') === nodeType) ||
     (element && element.classList && element.classList.contains(nodeType))
   ) {
     return element;
@@ -39,8 +40,8 @@ export const getRenderContainer = (editor: Editor, nodeType: string) => {
   while (
     container &&
     !(
-      container.getAttribute("data-type") &&
-      container.getAttribute("data-type") === nodeType
+      container.getAttribute('data-type') &&
+      container.getAttribute('data-type') === nodeType
     ) &&
     !container.classList.contains(nodeType)
   ) {
@@ -75,18 +76,18 @@ export const isTextSelected = ({ editor }: { editor: Editor }) => {
 export const isTableGripSelected = (node: HTMLElement) => {
   let container = node;
 
-  while (container && !["TD", "TH"].includes(container.tagName)) {
+  while (container && !['TD', 'TH'].includes(container.tagName)) {
     container = container.parentElement!;
   }
 
   const gripColumn =
     container &&
     container.querySelector &&
-    container.querySelector("a.grip-column.selected");
+    container.querySelector('a.grip-column.selected');
   const gripRow =
     container &&
     container.querySelector &&
-    container.querySelector("a.grip-row.selected");
+    container.querySelector('a.grip-row.selected');
 
   if (gripColumn || gripRow) {
     return true;

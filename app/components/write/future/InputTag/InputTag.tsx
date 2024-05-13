@@ -1,16 +1,18 @@
-import React, { useCallback, useMemo, useState, useTransition } from "react";
-import { Icons } from "~/components/icons";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { useDebounceFn } from "~/libs/hooks/useDebounceFn";
-import { useTagWidgetQuery, type Data } from "~/routes/api.v1.tags.widget";
-import { useWriteFormContext } from "~/components/write/context/useWriteFormContext";
-import { cn } from "~/services/libs";
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
+
+import type { Data } from '~/routes/api.v1.tags.widget';
+import { Icons } from '~/components/icons';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { useDebounceFn } from '~/libs/hooks/useDebounceFn';
+import { useTagWidgetQuery } from '~/routes/api.v1.tags.widget';
+import { cn } from '~/services/libs';
 
 export default function InputTag() {
-  const [input, setInput] = useState("");
-  const [deferredInput, setDeferredInput] = useState("");
+  const [input, setInput] = useState('');
+  const [deferredInput, setDeferredInput] = useState('');
   const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
 
@@ -22,12 +24,12 @@ export default function InputTag() {
     },
     {
       wait: 300,
-    }
+    },
   );
 
   const onClose = useCallback(() => {
-    setInput("");
-    setDeferredInput("");
+    setInput('');
+    setDeferredInput('');
     setOpen(false);
   }, []);
 
@@ -39,7 +41,7 @@ export default function InputTag() {
         run();
       });
     },
-    [run]
+    [run],
   );
 
   return (
@@ -53,9 +55,9 @@ export default function InputTag() {
           autoComplete="off"
         />
         <div
-          className="absolute right-0 top-full z-10 h-auto w-full overflow-hidden rounded-md border bg-white shadow-lg dark:bg-slate-900 dark:border-slate-800"
+          className="absolute right-0 top-full z-10 h-auto w-full overflow-hidden rounded-md border bg-white shadow-lg dark:border-slate-800 dark:bg-slate-900"
           style={{
-            display: open ? "block" : "none",
+            display: open ? 'block' : 'none',
           }}
         >
           {open ? (
@@ -73,19 +75,19 @@ export default function InputTag() {
 function SelectedTags() {
   const { watch, setValue, getValues } = useWriteFormContext();
 
-  const tags = watch("tags") ?? [];
+  const tags = watch('tags') ?? [];
 
   const onRemove = useCallback(
     (tag: string) => {
-      const oldTags = getValues("tags") ?? [];
+      const oldTags = getValues('tags') ?? [];
 
       const nextTags = oldTags.filter((t) => t !== tag);
 
-      setValue("tags", nextTags, {
+      setValue('tags', nextTags, {
         shouldDirty: true,
       });
     },
-    [getValues, setValue]
+    [getValues, setValue],
   );
 
   return (
@@ -94,7 +96,7 @@ function SelectedTags() {
         <Badge className="space-x-2" key={`selected-tag-${tag}`}>
           <span>{tag}</span>
           <Icons.close
-            className="w-4 h-4 hover:text-red-600 focus:text-red-600 cursor-pointer"
+            className="h-4 w-4 cursor-pointer hover:text-red-600 focus:text-red-600"
             onClick={() => onRemove(tag)}
           />
         </Badge>
@@ -112,7 +114,7 @@ function Popover({ input, onClose }: PopoverProps) {
   const { data } = useTagWidgetQuery({
     searchParams: {
       keyword: input,
-      limit: "5",
+      limit: '5',
     },
   });
 
@@ -122,7 +124,7 @@ function Popover({ input, onClose }: PopoverProps) {
     <>
       <PopoverTag
         tag={{
-          id: "input",
+          id: 'input',
           name: input,
           description: undefined,
           image: undefined,
@@ -150,18 +152,18 @@ function PopoverTag({ tag, onClose }: PopoverTagProps) {
   const { setValue, getValues } = useWriteFormContext();
 
   const isSelected = useMemo(() => {
-    const tags = getValues("tags") ?? [];
+    const tags = getValues('tags') ?? [];
     return tags.includes(tag.name.toLowerCase());
   }, [getValues, tag.name]);
 
   const onClick = useCallback(() => {
-    const oldTags = getValues("tags") ?? [];
+    const oldTags = getValues('tags') ?? [];
 
     const nextTags = oldTags.includes(tag.name.toLowerCase())
       ? oldTags.filter((t) => t !== tag.name.toLowerCase())
       : [...oldTags, tag.name.toLowerCase()];
 
-    setValue("tags", nextTags, {
+    setValue('tags', nextTags, {
       shouldDirty: true,
     });
 
@@ -170,23 +172,23 @@ function PopoverTag({ tag, onClose }: PopoverTagProps) {
 
   return (
     <Button
-      variant={isSelected ? "secondary" : "ghost"}
+      variant={isSelected ? 'secondary' : 'ghost'}
       className={cn(
-        "flex flex-row items-start w-full place-content-between justify-start h-auto"
+        'flex h-auto w-full flex-row place-content-between items-start justify-start',
       )}
       onClick={onClick}
       aria-selected={isSelected}
     >
       <div className="flex min-w-0 flex-col items-start space-y-2 text-start">
-        <span className="font-semibold truncate block text-lg">
+        <span className="block truncate text-lg font-semibold">
           {tag.name.toLowerCase()}
         </span>
         {tag.description && (
-          <span className="truncate w-full text-sm text-muted-foreground">
+          <span className="w-full truncate text-sm text-muted-foreground">
             #{tag.description}
           </span>
         )}
-        <span className="truncate w-full text-sm text-muted-foreground">
+        <span className="w-full truncate text-sm text-muted-foreground">
           {tag.count.PostTags} posts
         </span>
       </div>

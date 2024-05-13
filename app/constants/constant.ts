@@ -1,70 +1,71 @@
 export const API_ENDPOINTS = {
   AUTH: {
-    SIGNUP: "auth/signup",
-    SIGNIN: "auth/signin",
+    SIGNUP: 'auth/signup',
+    SIGNIN: 'auth/signin',
   },
   USERS: {
-    ROOT: "users",
-    WIDGET: "users/widget",
+    ROOT: 'users',
+    WIDGET: 'users/widget',
   },
   POSTS: {
-    ROOT: "posts",
+    ROOT: 'posts',
     ID: (id: string) => `posts/${id}`,
     BY_OWNER: (id: string) => `posts/by-owner/${id}`,
-    PUBLISHED: "posts/published",
+    PUBLISHED: 'posts/published',
   },
   DRAFTS: {
-    ROOT: "drafts",
-    SYNC: "drafts/sync",
-    SUBMITTED: "drafts/submitted",
+    ROOT: 'drafts',
+    SYNC: 'drafts/sync',
+    SUBMITTED: 'drafts/submitted',
     ID_SYNC: (id: string) => `drafts/${id}/sync`,
   },
   FILES: {
-    ROOT: "files",
+    ROOT: 'files',
   },
   TAGS: {
-    ROOT: "tags",
-    WIDGET: "tags/widget",
+    ROOT: 'tags',
+    WIDGET: 'tags/widget',
   },
   WIDGETS: {
-    GET_LEFTSIDE_POST_COUNT: "widgets/get-leftside-post-count",
+    GET_LEFTSIDE_POST_COUNT: 'widgets/get-leftside-post-count',
   },
 } as const;
 
 export const ASSET_URL = {
-  DEFAULT_AVATAR: "/images/default_profile.png",
-  LOGO: "/images/logo.png",
-  PLACEHOLDER: "/images/placeholder.png",
-  SEO_IMAGE: "/images/seo_image.png",
-  WRITE_TEAM_LOGO: "/images/write_team_logo.png",
-  DEFAULT_TAG: "/images/default_tag.png",
-  SHAP: "/images/shap.png",
+  DEFAULT_AVATAR: '/images/default_profile.png',
+  LOGO: '/images/logo.png',
+  PLACEHOLDER: '/images/placeholder.png',
+  SEO_IMAGE: '/images/seo_image.png',
+  WRITE_TEAM_LOGO: '/images/write_team_logo.png',
+  DEFAULT_TAG: '/images/default_tag.png',
+  SHAP: '/images/shap.png',
+  EMPTY_BLOG: '/images/empty_blog.png',
 };
 
 export const PAGE_ENDPOINTS = {
   BOOKMARKS: {
-    ROOT: "/bookmarks",
+    ROOT: '/bookmarks',
   },
   NOTIFICATIONS: {
-    ROOT: "/notifications",
+    ROOT: '/notifications',
   },
   EXPLORE: {
-    ROOT: "/explore",
-    TAGS: "/explore/tags",
-    BLOGS: "/explore/blogs",
+    ROOT: '/explore',
+    TAGS: '/explore/tags',
+    BLOGS: '/explore/blogs',
   },
   SEARCH: {
-    ROOT: "/search",
+    ROOT: '/search',
   },
-  ROOT: "/",
-  FEATURED: "/featured",
-  FOLLOWING: "/following",
+  ROOT: '/',
+  FEATURED: '/featured',
+  FOLLOWING: '/following',
   AUTH: {
-    SIGNIN: "/signin",
-    SIGNUP: "/signup",
+    SIGNIN: '/signin',
+    SIGNUP: '/signup',
   },
   DRAFT: {
-    ROOT: "/draft",
+    ROOT: '/draft',
     ID: (id: string | number) => `/draft/${id}`,
   },
   ITEMS: {
@@ -76,17 +77,17 @@ export const PAGE_ENDPOINTS = {
     TAG_RSS: (tag: string) => `/n/${tag}/rss.xml`,
   },
   SETTINGS: {
-    ROOT: "/settings",
-    EMAILS: "/settings/emails",
-    ACCOUNT: "/settings/account",
+    ROOT: '/settings',
+    EMAILS: '/settings/emails',
+    ACCOUNT: '/settings/account',
   },
   USERS: {
-    ROOT: "/users",
+    ROOT: '/users',
     ID: (id: string) => `/@${id}`,
     FOLLOWING: (id: string) => `/@${id}/following`,
   },
   WRITE: {
-    ROOT: "/write",
+    ROOT: '/write',
     ID: (id: string | number) => `/write/${id}`,
   },
   POSTS: {

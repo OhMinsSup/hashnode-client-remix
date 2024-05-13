@@ -1,11 +1,11 @@
-import type { ServiceClient } from "../client";
+import type { ServiceClient } from '../client';
 import type {
   AgentConfigureOptions,
   AgentOpts,
   FetchHandler,
-} from "../fetch/types";
-import { BaseClient } from "../client";
-import { fetchHandler } from "../fetch";
+} from '../fetch/types';
+import { BaseClient } from '../client';
+import { fetchHandler } from '../fetch';
 
 export class Agent {
   service: URL;
@@ -32,7 +32,7 @@ export class Agent {
 
   private _fetch: FetchHandler = async (request, options) => {
     if (!Agent.fetch) {
-      throw new Error("Agent fetch() method not configured");
+      throw new Error('Agent fetch() method not configured');
     }
     return await Agent.fetch(request, options);
   };

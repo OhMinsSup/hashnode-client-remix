@@ -1,15 +1,14 @@
-import { Buffer } from "node:buffer";
-
+import { Buffer } from 'node:buffer';
 // utils
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const host =
-    request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
+    request.headers.get('X-Forwarded-Host') ?? request.headers.get('host');
   if (!host) {
-    throw new Error("Could not determine domain URL.");
+    throw new Error('Could not determine domain URL.');
   }
-  const protocol = host.includes("localhost") ? "http" : "https";
+  const protocol = host.includes('localhost') ? 'http' : 'https';
   const domain = `${protocol}://${host}`;
   const xmlString = `
   <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
@@ -24,9 +23,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return new Response(xmlString, {
     headers: {
-      "Cache-Control": `public, max-age=${60 * 10}, s-maxage=${60 * 60 * 24}`,
-      "Content-Type": "application/xml",
-      "Content-Length": String(Buffer.byteLength(xmlString)),
+      'Cache-Control': `public, max-age=${60 * 10}, s-maxage=${60 * 60 * 24}`,
+      'Content-Type': 'application/xml',
+      'Content-Length': String(Buffer.byteLength(xmlString)),
     },
   });
 };

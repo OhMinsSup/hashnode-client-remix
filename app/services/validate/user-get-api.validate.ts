@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const schema = z.object({
   id: z
@@ -6,7 +6,7 @@ export const schema = z.object({
     .min(1)
     .transform((v) => {
       // 첫번째에 "@" 문자가 있으면 제거 (ex: @username)
-      if (v.startsWith("@")) {
+      if (v.startsWith('@')) {
         return v.slice(1);
       }
       return v;

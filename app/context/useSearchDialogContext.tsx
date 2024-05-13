@@ -1,10 +1,11 @@
-import { useMemo, useReducer } from "react";
-import { createContext } from "~/libs/react-utils";
+import { useMemo, useReducer } from 'react';
+
+import { createContext } from '~/libs/react-utils/context';
 
 enum Action {
-  INITIALIZE = "INITIALIZE",
-  CHANGE_DIALOG_STATE = "CHANGE_DIALOG_STATE",
-  CHANGE_INPUT = "CHANGE_INPUT",
+  INITIALIZE = 'INITIALIZE',
+  CHANGE_DIALOG_STATE = 'CHANGE_DIALOG_STATE',
+  CHANGE_INPUT = 'CHANGE_INPUT',
 }
 
 type InitializeAction = {
@@ -39,21 +40,21 @@ interface SearchDialogState {
 
 interface SearchDialogContext extends SearchDialogState {
   initialize: () => void;
-  changeDialogState: (payload: ChangeDialogStateAction["payload"]) => void;
-  changeInput: (payload: ChangeInputAction["payload"]) => void;
+  changeDialogState: (payload: ChangeDialogStateAction['payload']) => void;
+  changeInput: (payload: ChangeInputAction['payload']) => void;
   dispatch: React.Dispatch<SearchDialogAction>;
 }
 
 const initialState: SearchDialogState = {
-  input: "",
+  input: '',
   dialog: {
     isOpen: false,
   },
 };
 
 const [Provider, useSearchDialogContext] = createContext<SearchDialogContext>({
-  name: "useSearchDialogContext",
-  errorMessage: "useSearchDialogContext: `context` is undefined.",
+  name: 'useSearchDialogContext',
+  errorMessage: 'useSearchDialogContext: `context` is undefined.',
   defaultValue: initialState,
 });
 
@@ -91,10 +92,10 @@ function SearchDialogProvider({ children }: Props) {
 
   const initialize = () => dispatch({ type: Action.INITIALIZE });
 
-  const changeDialogState = (payload: ChangeDialogStateAction["payload"]) =>
+  const changeDialogState = (payload: ChangeDialogStateAction['payload']) =>
     dispatch({ type: Action.CHANGE_DIALOG_STATE, payload });
 
-  const changeInput = (payload: ChangeInputAction["payload"]) =>
+  const changeInput = (payload: ChangeInputAction['payload']) =>
     dispatch({ type: Action.CHANGE_INPUT, payload });
 
   const actions = useMemo(
@@ -105,7 +106,7 @@ function SearchDialogProvider({ children }: Props) {
       changeInput,
       dispatch,
     }),
-    [state]
+    [state],
   );
 
   return <Provider value={actions}>{children}</Provider>;

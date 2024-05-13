@@ -1,13 +1,13 @@
-import { type ServiceClient } from ".";
-import { API_ENDPOINTS } from "../../../constants/constant";
-import { fetchHandler } from "../fetch";
+import { type ServiceClient } from '.';
+import { API_ENDPOINTS } from '../../../constants/constant';
+import { fetchHandler } from '../fetch';
 import {
-  type FetchWithoutRequestHandler,
   type FetchOptions,
-} from "../fetch/types";
+  type FetchWithoutRequestHandler,
+} from '../fetch/types';
 
 export const CLOUDFLARE = {
-  URL: new URL("https://api.cloudflare.com"),
+  URL: new URL('https://api.cloudflare.com'),
   CF_DIRECT_UPLOAD: (cfId: string) =>
     `/client/v4/accounts/${cfId}/images/v2/direct_upload`,
 };
@@ -25,10 +25,10 @@ export class FileNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
@@ -36,26 +36,26 @@ export class FileNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),
       {
-        method: "POST",
+        method: 'POST',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
   postDirectUploadHandler = <Data = unknown>(
     accountId: string,
     token: string,
-    opts?: FetchOptions<"json"> | undefined
+    opts?: FetchOptions<'json'> | undefined,
   ) => {
     const request = new URL(
       CLOUDFLARE.CF_DIRECT_UPLOAD(accountId),
-      CLOUDFLARE.URL
+      CLOUDFLARE.URL,
     );
 
-    return fetchHandler<Data, "json">(request.toString(), {
+    return fetchHandler<Data, 'json'>(request.toString(), {
       ...opts,
-      method: "POST",
+      method: 'POST',
       headers: {
         ...opts?.headers,
         Authorization: `Bearer ${token}`,
@@ -65,34 +65,24 @@ export class FileNamespace {
 
   postCloudflareUploadHandler = async (uploadUrl: string, file: File) => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     const responseInit = new Request(uploadUrl, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     });
 
     const response = await fetch(responseInit);
     if (!response.ok) {
-      const error = new Error();
-
-      const requestStr = `[${responseInit.method}] ${JSON.stringify(uploadUrl)}`;
-
-      const statusStr = response
-        ? `${response.status.toString()} ${response.statusText}`
-        : "<no response>";
-
-      const message = `${requestStr}: ${statusStr}`;
-
-      error.name = "CloudflareUploadError";
-      error.message = JSON.stringify({
-        status: response.status,
-        errors: message,
-      });
-
-      throw error;
+      return {
+        status: 'error' as const,
+        data: response,
+      };
     }
 
-    return response.json<CloudflareSchema.CfUpload>();
+    return {
+      status: 'success' as const,
+      data: await response.json<CloudflareSchema.CfUpload>(),
+    };
   };
 }

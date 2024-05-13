@@ -81,7 +81,7 @@
   }
 
   & > *:first-child,
-  [data-type="column"] > * {
+  [data-type='column'] > * {
     @apply first:mt-0 last:mb-0;
   }
 
@@ -103,18 +103,18 @@
     }
   }
 
-  [data-type="columns"] {
-    &.has-focus [data-type="column"],
-    &:hover [data-type="column"] {
+  [data-type='columns'] {
+    &.has-focus [data-type='column'],
+    &:hover [data-type='column'] {
       @apply border-neutral-300 dark:border-neutral-700;
     }
 
-    [data-type="column"].has-focus {
+    [data-type='column'].has-focus {
       @apply border-neutral-400 dark:border-neutral-600;
     }
   }
 
-  [data-type="column"] {
+  [data-type='column'] {
     @apply rounded border-2 border-dotted border-transparent p-1;
     transition: border 160ms cubic-bezier(0.45, 0.05, 0.55, 0.95);
 
@@ -130,7 +130,7 @@
 
   .node-imageBlock {
     & img {
-      @apply border-2 border-transparent rounded-xl overflow-hidden;
+      @apply overflow-hidden rounded-xl border-2 border-transparent;
     }
 
     &:hover img {
@@ -147,28 +147,28 @@
   .node-aiImage,
   .node-tableOfContentsNode {
     &.has-focus [data-node-view-wrapper] > * {
-      @apply shadow-[0_0_0_2px] shadow-black/30 dark:shadow-white/30 transition-all rounded-lg;
+      @apply rounded-lg shadow-[0_0_0_2px] shadow-black/30 transition-all dark:shadow-white/30;
     }
   }
 
   .ProseMirror-gapcursor + .node-imageBlock,
   .ProseMirror-gapcursor + .node-imageUpload,
-  .ProseMirror-gapcursor + [data-type="blockquoteFigure"] {
+  .ProseMirror-gapcursor + [data-type='blockquoteFigure'] {
     @apply outline-neutral-700 hover:outline-neutral-600 dark:outline-neutral-300 dark:hover:outline-neutral-400;
   }
 
-  [data-type="blockquoteFigure"] > div {
-    @apply border-l-4 border-l-neutral-700 py-2 px-4 bg-opacity-80 rounded-lg rounded-tl-none rounded-bl-none;
+  [data-type='blockquoteFigure'] > div {
+    @apply rounded-lg rounded-bl-none rounded-tl-none border-l-4 border-l-neutral-700 bg-opacity-80 px-4 py-2;
     @apply dark:border-l-neutral-300;
   }
 
-  [data-type="blockquoteFigure"] > blockquote {
+  [data-type='blockquoteFigure'] > blockquote {
     @apply text-lg text-black;
     @apply dark:text-white;
   }
 
-  [data-type="blockquoteFigure"] figcaption {
-    @apply text-sm text-neutral-500 mt-4 transition-all overflow-hidden;
+  [data-type='blockquoteFigure'] figcaption {
+    @apply mt-4 overflow-hidden text-sm text-neutral-500 transition-all;
     @apply dark:text-neutral-400;
   }
 }

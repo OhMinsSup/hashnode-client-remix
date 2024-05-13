@@ -1,6 +1,7 @@
-import React from "react";
-import styles from "./styles.module.css";
-import { cn } from "~/services/libs";
+import React from 'react';
+
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ export default function MainLayout({
         <nav
           className={cn(
             styles.nav,
-            "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
+            'bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white',
           )}
         >
           {footer}

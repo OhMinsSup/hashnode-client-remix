@@ -1,1 +1,1 @@
-export { default as LabelWithTooltipWrapper } from "./LabelWithTooltipWrapper";
+export { default as LabelWithTooltipWrapper } from './LabelWithTooltipWrapper';

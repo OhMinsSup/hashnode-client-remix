@@ -1,13 +1,14 @@
-import React from "react";
-import { Label } from "~/components/ui/label";
-import { Button } from "~/components/ui/button";
+import React from 'react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { Label } from '~/components/ui/label';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { Icons } from "~/components/icons";
+} from '~/components/ui/tooltip';
 
 interface LabelWithTooltipProps {
   id: string;

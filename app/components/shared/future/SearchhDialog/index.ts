@@ -1,1 +1,1 @@
-export { default as SearchDialog } from "./SearchhDialog";
+export { default as SearchDialog } from './SearchhDialog';

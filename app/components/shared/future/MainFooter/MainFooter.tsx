@@ -1,18 +1,19 @@
-import styles from "./styles.module.css";
-import { NAV_CONFIG, NavItem } from "~/constants/navigation";
-import { NavLink, useParams } from "@remix-run/react";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { cn } from "~/services/libs";
+import { useCallback, useState } from 'react';
+import { NavLink, useParams } from '@remix-run/react';
+
+import { Icons } from '~/components/icons';
+import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "~/components/ui/drawer";
-import { Icons } from "~/components/icons";
-import { useCallback, useState } from "react";
-import { useLinkActiveStateHandler } from "~/libs/hooks/useLinkActiveState";
+} from '~/components/ui/drawer';
+import { NAV_CONFIG, NavItem } from '~/constants/navigation';
+import { useLinkActiveStateHandler } from '~/libs/hooks/useLinkActiveState';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 export default function MainFooter() {
   return (
@@ -36,10 +37,10 @@ MainFooter.Navigation = function Item({ item }: ItemProps) {
   const { handler } = useLinkActiveStateHandler();
 
   switch (item.type) {
-    case "link": {
+    case 'link': {
       return <MainFooter.Link item={item} />;
     }
-    case "drawer": {
+    case 'drawer': {
       const { isActive } = handler({ item });
       return isActive ? <MainFooter.Dropdown item={item} /> : null;
     }
@@ -52,7 +53,7 @@ MainFooter.Navigation = function Item({ item }: ItemProps) {
 MainFooter.Link = function Item({ item }: ItemProps) {
   const params = useParams();
   const to =
-    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+    typeof item.href === 'function' ? item.href(params) : item.href ?? '#';
 
   return (
     <NavLink
@@ -61,8 +62,8 @@ MainFooter.Link = function Item({ item }: ItemProps) {
       className={({ isActive }) => {
         return cn(
           buttonVariants({
-            variant: "ghost",
-            size: "default",
+            variant: 'ghost',
+            size: 'default',
           }),
           styles.link,
           isActive && styles.active,
@@ -94,7 +95,7 @@ MainFooter.Dropdown = function Item({ item }: ItemProps) {
           <span className="sr-only">{item.title}</span>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="rounded-none inset-0 top-0 left-0 bottom-0 m-0 h-full w-full">
+      <DrawerContent className="inset-0 bottom-0 left-0 top-0 m-0 h-full w-full rounded-none">
         <DrawerHeader>
           <DrawerTitle>
             <div className="flex flex-row justify-start">

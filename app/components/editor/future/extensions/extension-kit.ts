@@ -1,8 +1,12 @@
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
+import { createLowlight } from 'lowlight';
+
 import {
-  StarterKit,
   BlockquoteFigure,
   CharacterCount,
   Color,
+  Column,
+  Columns,
   Document,
   Dropcursor,
   Figcaption,
@@ -17,21 +21,17 @@ import {
   Placeholder,
   Selection,
   SlashCommand,
+  StarterKit,
   Subscript,
   Superscript,
+  TaskItem,
+  TaskList,
   TextAlign,
   TextStyle,
   TrailingNode,
   Typography,
   Underline,
-  Columns,
-  Column,
-  TaskItem,
-  TaskList,
-} from "./modules";
-
-import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
-import { createLowlight } from "lowlight";
+} from './modules';
 
 export const ExtensionKit = () => [
   Document,
@@ -76,7 +76,7 @@ export const ExtensionKit = () => [
       return {};
     },
   }).configure({
-    types: ["heading", "paragraph"],
+    types: ['heading', 'paragraph'],
   }),
   Subscript,
   Superscript,
@@ -84,7 +84,7 @@ export const ExtensionKit = () => [
   Placeholder.configure({
     includeChildren: true,
     showOnlyCurrent: false,
-    placeholder: () => "",
+    placeholder: () => '',
   }),
   SlashCommand,
   Focus,
@@ -92,7 +92,7 @@ export const ExtensionKit = () => [
   BlockquoteFigure,
   Dropcursor.configure({
     width: 2,
-    class: "ProseMirror-dropcursor border-black",
+    class: 'ProseMirror-dropcursor border-black',
   }),
 ];
 

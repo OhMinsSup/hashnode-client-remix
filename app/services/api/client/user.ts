@@ -1,6 +1,6 @@
-import { API_ENDPOINTS } from "../../../constants/constant";
-import { type ServiceClient } from ".";
-import { type FetchWithoutRequestHandler } from "../fetch/types";
+import { type ServiceClient } from '.';
+import { API_ENDPOINTS } from '../../../constants/constant';
+import { type FetchWithoutRequestHandler } from '../fetch/types';
 
 export class UserNamespace {
   _service: ServiceClient;
@@ -15,10 +15,10 @@ export class UserNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.ROOT),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 
@@ -26,10 +26,10 @@ export class UserNamespace {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.WIDGET),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 }

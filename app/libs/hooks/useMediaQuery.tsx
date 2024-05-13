@@ -1,14 +1,15 @@
-import { useMemo, useSyncExternalStore } from "react";
-import { isBrowser } from "../browser-utils";
-import { useMemoizedFn } from "./useMemoizedFn";
+import { useMemo, useSyncExternalStore } from 'react';
+
+import { isBrowser } from '../browser-utils/dom';
+import { useMemoizedFn } from './useMemoizedFn';
 
 export const MEDIA_QUERY = {
-  xxlarge: "(min-width: 1920px)",
-  xlarge: "(min-width: 1440px)",
-  large: "(min-width: 1280px)",
-  medium: "(min-width: 1024px)",
-  small: "(max-width: 768px)",
-  xsmall: "(max-width: 375px)",
+  xxlarge: '(min-width: 1920px)',
+  xlarge: '(min-width: 1440px)',
+  large: '(min-width: 1280px)',
+  medium: '(min-width: 1024px)',
+  small: '(max-width: 768px)',
+  xsmall: '(max-width: 375px)',
 };
 
 export function useMediaQuery(query: string, serverFallback: boolean): boolean {
@@ -29,9 +30,9 @@ export function useMediaQuery(query: string, serverFallback: boolean): boolean {
     return [
       () => mediaQueryList.matches,
       (notify: () => void) => {
-        mediaQueryList.addEventListener("change", notify);
+        mediaQueryList.addEventListener('change', notify);
         return () => {
-          mediaQueryList.removeEventListener("change", notify);
+          mediaQueryList.removeEventListener('change', notify);
         };
       },
     ];
@@ -41,6 +42,6 @@ export function useMediaQuery(query: string, serverFallback: boolean): boolean {
     subscribe,
     // Fallback to getServerSnapshot only required for React 17
     isBrowser ? getSnapshot : getServerSnapshot,
-    getServerSnapshot
+    getServerSnapshot,
   );
 }

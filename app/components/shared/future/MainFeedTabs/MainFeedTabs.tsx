@@ -1,9 +1,10 @@
-import { useLocation, useNavigate, useParams } from "@remix-run/react";
-import { useCallback } from "react";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { NAV_CONFIG } from "~/constants/navigation";
+import { useCallback } from 'react';
+import { useLocation, useNavigate, useParams } from '@remix-run/react';
+
+import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { NAV_CONFIG } from '~/constants/navigation';
 
 interface MainFeedTabsProps {
   children: React.ReactNode;
@@ -40,7 +41,7 @@ export default function MainFeedTabs({ children }: MainFeedTabsProps) {
                     key={`main-tabs-${item.id}`}
                     className="space-x-3"
                     value={
-                      typeof item.href === "function"
+                      typeof item.href === 'function'
                         ? item.href(params)
                         : item.href
                     }
@@ -61,7 +62,7 @@ export default function MainFeedTabs({ children }: MainFeedTabsProps) {
             key={`main-tabs-content-${item.id}`}
             className="w-full"
             value={
-              typeof item.href === "function" ? item.href(params) : item.href
+              typeof item.href === 'function' ? item.href(params) : item.href
             }
           >
             {children}

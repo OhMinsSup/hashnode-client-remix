@@ -1,9 +1,16 @@
-import { json } from "@remix-run/cloudflare";
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { useQuery } from "@tanstack/react-query";
-import { requireCookie } from "~/.server/utils/auth.server";
-import { getQueryPath } from "~/services/libs";
-import { getQueryFn } from "~/services/react-query/function";
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
+import { useQuery } from '@tanstack/react-query';
+
+import { getCookie } from '~/.server/utils/request.server';
+import {
+  errorJsonDataResponse,
+  successJsonResponse,
+} from '~/.server/utils/response.server';
+import { getQueryPath } from '~/services/libs';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
+import { getQueryFn } from '~/services/react-query';
 
 type Data = FetchRespSchema.Success<
   FetchRespSchema.ListResp<Record<string, unknown>>
@@ -18,50 +25,30 @@ type SearchParams =
 
 type QueryKey = [string, SearchParams];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { cookie } = requireCookie(request);
-  if (!cookie) {
-    return json(
-      {
-        status: "error" as const,
-        result: null,
-        errors: null,
-        message: "로그인이 필요합니다.",
-      },
-      {
-        status: 401,
-      }
-    );
-  }
-
-  // const response = await context.agent.api.app. .api.getNotificationCountHandler({
-  //   headers: {
-  //     Cookie: cookie,
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const data: Awaited<Data> = await response.body;
-  // return json(data, {
-  //   headers: {
-  //     "Cache-Control": "public, max-age=120, immutable",
-  //   },
-  // });
-  return json(
-    {
-      status: "error" as const,
-      result: null,
-      errors: null,
-      message: "로그인이 필요합니다.",
-    },
-    {
-      status: 401,
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  try {
+    const { cookies } = getCookie(request);
+    if (!cookies) {
+      throw createError({
+        statusMessage: 'Unauthorized',
+        statusCode: HttpStatus.UNAUTHORIZED,
+        displayType: ErrorDisplayType.NONE,
+        data: 0,
+      });
     }
-  );
+
+    return json(successJsonResponse(0));
+  } catch (error) {
+    context.logger.error('[ERROR]', error);
+    if (isError(error)) {
+      return json(errorJsonDataResponse(0, error.message));
+    }
+  }
 };
 
 export type RoutesLoaderData = typeof loader;
 
-export const getBasePath = "/api/v1/notifications/count";
+export const getBasePath = '/api/v1/notifications/count';
 
 export const getPath = (searchParams?: SearchParams) => {
   return getQueryPath(getBasePath, searchParams);

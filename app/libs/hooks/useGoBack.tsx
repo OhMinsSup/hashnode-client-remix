@@ -1,5 +1,5 @@
-import { useNavigate } from "@remix-run/react";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+import { useNavigate } from '@remix-run/react';
 
 export function useGoBack() {
   const navigate = useNavigate();

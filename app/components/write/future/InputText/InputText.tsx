@@ -1,6 +1,8 @@
-import { type UseControllerProps, useController } from "react-hook-form";
-import { Input } from "~/components/ui/input";
-import type { FormFieldValues } from "~/services/validate/post-create-api.validate";
+import type { UseControllerProps } from 'react-hook-form';
+import { useController } from 'react-hook-form';
+
+import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
+import { Input } from '~/components/ui/input';
 
 export default function InputText(props: UseControllerProps<FormFieldValues>) {
   const {
@@ -9,11 +11,11 @@ export default function InputText(props: UseControllerProps<FormFieldValues>) {
 
   return (
     <Input
-      className="w-full !h-[50px]"
+      className="!h-[50px] w-full"
       maxLength={70}
       placeholder="Enter meta title"
       {...field}
-      value={value as unknown as string}
+      value={(value || undefined) as unknown as string | undefined}
     />
   );
 }

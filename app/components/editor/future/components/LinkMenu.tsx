@@ -1,8 +1,9 @@
-import { BubbleMenu as BaseBubbleMenu } from "@tiptap/react";
-import { useCallback, useState } from "react";
-import { LinkEditorPanel } from "./LinkEditorPanel";
-import { LinkPreviewPanel } from "./LinkPreviewPanel";
-import { Editor } from "@tiptap/core";
+import { useCallback, useState } from 'react';
+import { Editor } from '@tiptap/core';
+import { BubbleMenu as BaseBubbleMenu } from '@tiptap/react';
+
+import { LinkEditorPanel } from './LinkEditorPanel';
+import { LinkPreviewPanel } from './LinkPreviewPanel';
 
 export interface MenuProps {
   editor: Editor;
@@ -15,11 +16,11 @@ export const LinkMenu = ({ editor, appendTo }: MenuProps): JSX.Element => {
   const [showEdit, setShowEdit] = useState(false);
 
   const shouldShow = useCallback(() => {
-    const isActive = editor.isActive("link");
+    const isActive = editor.isActive('link');
     return isActive;
   }, [editor]);
 
-  const { href: link, target } = editor.getAttributes("link");
+  const { href: link, target } = editor.getAttributes('link');
 
   const handleEdit = useCallback(() => {
     setShowEdit(true);
@@ -30,16 +31,16 @@ export const LinkMenu = ({ editor, appendTo }: MenuProps): JSX.Element => {
       editor
         .chain()
         .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url, target: openInNewTab ? "_blank" : "" })
+        .extendMarkRange('link')
+        .setLink({ href: url, target: openInNewTab ? '_blank' : '' })
         .run();
       setShowEdit(false);
     },
-    [editor]
+    [editor],
   );
 
   const onUnsetLink = useCallback(() => {
-    editor.chain().focus().extendMarkRange("link").unsetLink().run();
+    editor.chain().focus().extendMarkRange('link').unsetLink().run();
     setShowEdit(false);
     return null;
   }, [editor]);
@@ -60,7 +61,7 @@ export const LinkMenu = ({ editor, appendTo }: MenuProps): JSX.Element => {
       updateDelay={0}
       tippyOptions={{
         popperOptions: {
-          modifiers: [{ name: "flip", enabled: false }],
+          modifiers: [{ name: 'flip', enabled: false }],
         },
         appendTo: () => {
           return appendTo?.current;
@@ -73,7 +74,7 @@ export const LinkMenu = ({ editor, appendTo }: MenuProps): JSX.Element => {
       {showEdit ? (
         <LinkEditorPanel
           initialUrl={link}
-          initialOpenInNewTab={target === "_blank"}
+          initialOpenInNewTab={target === '_blank'}
           onSetLink={onSetLink}
         />
       ) : (

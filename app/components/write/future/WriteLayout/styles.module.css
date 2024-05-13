@@ -19,16 +19,16 @@
 
 .sidebar {
   --tw-translate-x: 0px;
-  @apply fixed inset-0 z-50 h-auto bg-white transition-transform flex flex-col transform-cpu;
+  @apply fixed inset-0 z-50 flex h-auto transform-cpu flex-col bg-white transition-transform;
 }
 
 .sidebar_hidden {
   --tw-translate-x: -100%;
-  @apply fixed inset-0 z-50 h-auto bg-white transition-transform transform-cpu;
+  @apply fixed inset-0 z-50 h-auto transform-cpu bg-white transition-transform;
 }
 
 :global(.dark) .root {
-  @apply bg-slate-950 border-slate-800;
+  @apply border-slate-800 bg-slate-950;
 }
 
 :global(.dark) .sidebar {
@@ -73,11 +73,11 @@
   }
 
   .sidebar {
-    @apply sticky top-0 left-0 h-screen z-auto transform-none border-r transition-opacity visible;
+    @apply visible sticky left-0 top-0 z-auto h-screen transform-none border-r transition-opacity;
   }
 
   .sidebar_hidden {
-    @apply sticky top-0 left-0 h-screen z-auto transform-none border-r transition-opacity overflow-hidden invisible;
+    @apply invisible sticky left-0 top-0 z-auto h-screen transform-none overflow-hidden border-r transition-opacity;
   }
 
   :global(.dark) .sidebar {

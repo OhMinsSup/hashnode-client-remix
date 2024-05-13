@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
 export interface Actions<T> {
   setLeft: () => void;
@@ -16,12 +16,12 @@ function useToggle<T>(defaultValue: T): [T, Actions<T>];
 // @ts-ignore
 function useToggle<T, U>(
   defaultValue: T,
-  reverseValue: U
+  reverseValue: U,
 ): [T | U, Actions<T | U>];
 
 export function useToggle<D, R>(
   defaultValue: D = false as unknown as D,
-  reverseValue?: R
+  reverseValue?: R,
 ) {
   const [state, setState] = useState<D | R>(defaultValue);
 

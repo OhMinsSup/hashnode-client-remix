@@ -1,13 +1,13 @@
 .item {
-  @apply flex flex-col cursor-pointer box-border;
+  @apply box-border flex cursor-pointer flex-col;
 }
 
 .item_cover {
-  @apply w-full overflow-hidden rounded-md border outline-offset-2 outline-none hover:!border-primary;
+  @apply w-full overflow-hidden rounded-md border outline-none outline-offset-2 hover:!border-primary;
 }
 
 .item_label {
-  @apply text-sm mt-1 text-slate-700;
+  @apply mt-1 text-sm text-slate-700;
 }
 
 :global(.dark) .item_label {

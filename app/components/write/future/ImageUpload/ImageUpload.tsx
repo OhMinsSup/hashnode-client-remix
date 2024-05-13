@@ -1,12 +1,15 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import styles from "./styles.module.css";
-import { Button } from "~/components/ui/button";
-import { Icons } from "~/components/icons";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { useFetcher } from "@remix-run/react";
-import { type RoutesActionData, getPath } from "~/routes/api.v1.assets.upload";
-import { getTargetElement } from "~/libs/browser-utils";
-import { useDrop } from "~/libs/hooks/useDrop";
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useFetcher } from '@remix-run/react';
+
+import type { RoutesActionData } from '~/routes/api.v1.assets.upload';
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { getTargetElement } from '~/libs/browser-utils/dom';
+import { useDrop } from '~/libs/hooks/useDrop';
+import { getPath } from '~/routes/api.v1.assets.upload';
+import styles from './styles.module.css';
 
 export default function ImageUpload() {
   const $ipt = useRef<HTMLInputElement | null>(null);
@@ -15,13 +18,13 @@ export default function ImageUpload() {
 
   const { setUploadState, uploadState, setCoverClose } = useWriteContext();
 
-  const fetcher = useFetcher<RoutesActionData>();
+  const { setValue } = useWriteFormContext();
 
-  console.log(fetcher);
+  const fetcher = useFetcher<RoutesActionData>();
 
   const upload = useCallback(
     async (file: File) => {
-      setUploadState("pending");
+      setUploadState('pending');
       const objectUrl = URL.createObjectURL(file);
 
       // validation checj file sizes 1600 x 800 px
@@ -37,23 +40,23 @@ export default function ImageUpload() {
       }
 
       if (image.width > 1600 || image.height > 840) {
-        alert("Image size is too small");
-        setUploadState("idle");
+        alert('Image size is too small');
+        setUploadState('idle');
         return;
       }
 
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("uploadType", "POST_THUMBNAIL");
-      formData.append("mediaType", "IMAGE");
+      formData.append('file', file);
+      formData.append('uploadType', 'POST_THUMBNAIL');
+      formData.append('mediaType', 'IMAGE');
 
       fetcher.submit(formData, {
-        method: "POST",
+        method: 'POST',
         action: getPath(),
-        encType: "multipart/form-data",
+        encType: 'multipart/form-data',
       });
     },
-    [setUploadState, fetcher]
+    [setUploadState, fetcher],
   );
 
   const onClick = useCallback(() => {
@@ -66,35 +69,35 @@ export default function ImageUpload() {
       const files = e.target.files;
 
       if (!files) {
-        alert("No file");
+        alert('No file');
         return;
       }
 
       const file = files.item(0);
       if (!file) {
-        alert("No file");
+        alert('No file');
         return;
       }
 
       await upload(file);
     },
-    [upload]
+    [upload],
   );
 
   useDrop($container, {
     onFiles: async (files) => {
-      if (uploadState === "pending") {
+      if (uploadState === 'pending') {
         return;
       }
 
       if (!files) {
-        alert("No file");
+        alert('No file');
         return;
       }
 
       const file = files.at(0);
       if (!file) {
-        alert("No file");
+        alert('No file');
         return;
       }
 
@@ -104,14 +107,16 @@ export default function ImageUpload() {
 
   useEffect(() => {
     const fetcherData = fetcher.data;
-    if (fetcher.state === "idle" && fetcherData != null) {
+    if (
+      fetcher.state === 'idle' &&
+      fetcherData != null &&
+      fetcherData.status === 'success'
+    ) {
       setCoverClose();
-      setUploadState("success");
-      console.log(fetcherData);
-      //   setValue("thumbnail", {
-      //     id: fetcherData.id,
-      //     url: fetcherData.publicUrl,
-      //   });
+      setUploadState('success');
+      setValue('image', fetcherData.result?.publicUrl, {
+        shouldDirty: true,
+      });
     }
   }, [fetcher.state, fetcher.data]);
 
@@ -122,9 +127,9 @@ export default function ImageUpload() {
         variant="outline"
         className="space-x-2"
         onClick={onClick}
-        disabled={uploadState === "pending"}
+        disabled={uploadState === 'pending'}
       >
-        {uploadState === "pending" ? (
+        {uploadState === 'pending' ? (
           <Icons.spinner className="animate-spin" />
         ) : (
           <Icons.cloudUpload />
@@ -138,7 +143,7 @@ export default function ImageUpload() {
         accept="image/jpeg, image/png, image/webp, image/gif, image/svg+xml"
         className="hidden"
         ref={$ipt}
-        disabled={uploadState === "pending"}
+        disabled={uploadState === 'pending'}
         onChange={onChange}
       />
       <p className={styles.recommended_text}>

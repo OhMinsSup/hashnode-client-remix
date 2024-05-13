@@ -1,9 +1,10 @@
-import { useCallback, useRef, useState } from "react";
-import { useUnmount } from "./useUnmount";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from 'react';
+import { useCallback, useRef, useState } from 'react';
+
+import { useUnmount } from './useUnmount';
 
 function useRafState<S>(
-  initialState: S | (() => S)
+  initialState: S | (() => S),
 ): [S, Dispatch<SetStateAction<S>>];
 function useRafState<S = undefined>(): [
   S | undefined,

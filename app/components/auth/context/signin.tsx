@@ -1,9 +1,10 @@
-import { useMemo, useReducer } from "react";
-import { createContext } from "~/libs/react-utils";
+import { useMemo, useReducer } from 'react';
+
+import { createContext } from '~/libs/react-utils/context';
 
 enum Action {
-  CHANGE_STEP = "CHANGE_STEP",
-  CHANGE_EMAIL = "CHANGE_EMAIL",
+  CHANGE_STEP = 'CHANGE_STEP',
+  CHANGE_EMAIL = 'CHANGE_EMAIL',
 }
 
 type ChangeStepAction = {
@@ -24,19 +25,19 @@ interface SigninState {
 }
 
 interface SigninContext extends SigninState {
-  changeStep: (payload: ChangeStepAction["payload"]) => void;
-  changeEmail: (payload: ChangeEmailAction["payload"]) => void;
+  changeStep: (payload: ChangeStepAction['payload']) => void;
+  changeEmail: (payload: ChangeEmailAction['payload']) => void;
   dispatch: React.Dispatch<SigninAction>;
 }
 
 const initialState: SigninState = {
   step: 1,
-  email: "",
+  email: '',
 };
 
 const [Provider, useSigninContext] = createContext<SigninContext>({
-  name: "useSigninContext",
-  errorMessage: "useSigninContext: `context` is undefined.",
+  name: 'useSigninContext',
+  errorMessage: 'useSigninContext: `context` is undefined.',
   defaultValue: initialState,
 });
 
@@ -66,11 +67,11 @@ interface Props {
 function SigninProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const changeStep = (payload: ChangeStepAction["payload"]) => {
+  const changeStep = (payload: ChangeStepAction['payload']) => {
     dispatch({ type: Action.CHANGE_STEP, payload });
   };
 
-  const changeEmail = (payload: ChangeEmailAction["payload"]) => {
+  const changeEmail = (payload: ChangeEmailAction['payload']) => {
     dispatch({ type: Action.CHANGE_EMAIL, payload });
   };
 
@@ -81,7 +82,7 @@ function SigninProvider({ children }: Props) {
       changeEmail,
       dispatch,
     }),
-    [state]
+    [state],
   );
 
   return <Provider value={actions}>{children}</Provider>;

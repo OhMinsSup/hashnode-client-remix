@@ -1,65 +1,45 @@
-import styles from "./styles.module.css";
-import {
-  Link,
-  NavLink,
-  useNavigate,
-  useParams,
-  useSubmit,
-} from "@remix-run/react";
-import { NAV_CONFIG, NavItem } from "~/constants/navigation";
-import { Icons } from "~/components/icons";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "~/components/ui/dropdown-menu";
+import { useCallback, useState } from 'react';
+import { Link, NavLink, useNavigate, useParams } from '@remix-run/react';
+
+import { Icons } from '~/components/icons';
+import { SearchDialog } from '~/components/shared/future/SearchhDialog';
+import { UserMenu } from '~/components/shared/future/UserMenu';
+import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "~/components/ui/drawer";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { SearchDialog } from "~/components/shared/future/SearchhDialog";
-import { SearchDialogProvider } from "~/context/useSearchDialogContext";
-import { Theme, useTheme } from "~/context/useThemeContext";
-import { useCallback, useState } from "react";
-import { useOptionalSession } from "~/libs/hooks/useSession";
-import { cn } from "~/services/libs";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { getPath } from "~/routes/api.v1.auth.logout";
+} from '~/components/ui/drawer';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { NAV_CONFIG, NavItem } from '~/constants/navigation';
+import { SearchDialogProvider } from '~/context/useSearchDialogContext';
+import { Theme, useTheme } from '~/context/useThemeContext';
+import { useOptionalSession } from '~/libs/hooks/useSession';
+import { cn } from '~/services/libs';
+import styles from './styles.module.css';
 
 export default function MainHeader() {
   const navigate = useNavigate();
 
   const session = useOptionalSession();
 
-  const submit = useSubmit();
-
   const [theme, setTheme] = useTheme();
-
-  const onLogout = useCallback(() => {
-    const formData = new FormData();
-    submit(formData, {
-      action: getPath(),
-      method: "POST",
-      navigate: false,
-    });
-  }, [submit]);
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
-      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK
+      previousTheme === Theme.DARK ? Theme.LIGHT : Theme.DARK,
     );
   }, [setTheme]);
 
-  const renderWriteButton = useCallback((variant: "ghost" | "default") => {
+  const renderWriteButton = useCallback((variant: 'ghost' | 'default') => {
     return (
       <Link
         aria-label="Go to Write Page"
@@ -67,7 +47,7 @@ export default function MainHeader() {
           buttonVariants({
             variant,
           }),
-          "space-x-3"
+          'space-x-3',
         )}
         unstable_viewTransition
         to={PAGE_ENDPOINTS.WRITE.ROOT}
@@ -90,7 +70,7 @@ export default function MainHeader() {
     <div
       className={cn(
         styles.header_container,
-        "bg-slate-50 dark:text-white dark:bg-slate-800 dark:border-slate-800"
+        'bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white',
       )}
     >
       <div className={styles.header_layout}>
@@ -101,8 +81,8 @@ export default function MainHeader() {
             className="mr-6 flex items-center space-x-2"
             aria-label="Hashnode Logo"
           >
-            <Icons.hashnodeTypeHeader className="w-36 fill-current hidden md:block" />
-            <Icons.hashnodeTypeHeaderMobile className="w-8 fill-current text-blue-600 block md:hidden dark:text-transparent" />
+            <Icons.hashnodeTypeHeader className="hidden w-36 fill-current md:block" />
+            <Icons.hashnodeTypeHeaderMobile className="block w-8 fill-current text-blue-600 dark:text-transparent md:hidden" />
             <span className="sr-only">Hashnode</span>
           </Link>
         </div>
@@ -111,7 +91,7 @@ export default function MainHeader() {
           aria-label="hashnode service"
           className={styles.center}
         >
-          <nav className="items-center justify-center space-x-2 w-full flex">
+          <nav className="flex w-full items-center justify-center space-x-2">
             {NAV_CONFIG.mainNav.map((item) => {
               return (
                 <MainHeader.Navigation
@@ -123,20 +103,20 @@ export default function MainHeader() {
           </nav>
         </div>
         <div className={styles.right}>
-          <div className="relative z-20 md:inline hidden">
+          <div className="relative z-20 hidden md:inline">
             <SearchDialogProvider>
               <SearchDialog />
             </SearchDialogProvider>
           </div>
           {session ? (
-            <div className="hidden relative md:block">
-              {renderWriteButton("default")}
+            <div className="relative hidden md:block">
+              {renderWriteButton('default')}
             </div>
           ) : null}
           <div className="flex flex-row items-center justify-end gap-4">
             <div className="flex gap-2">
               {session ? (
-                <div className="md:hidden">{renderWriteButton("ghost")}</div>
+                <div className="md:hidden">{renderWriteButton('ghost')}</div>
               ) : null}
               <Button
                 variant="ghost"
@@ -154,51 +134,17 @@ export default function MainHeader() {
               ) : null}
             </div>
             {session ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="cursor-pointer hover:opacity-80">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Icons.filetext className="mr-2 h-4 w-4" />
-                      <span>My drafts</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.bookmark className="mr-2 h-4 w-4" />
-                      <span>Bookmarks</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.user className="mr-2 h-4 w-4" />
-                      <span>Account settings</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.history className="mr-2 h-4 w-4" />
-                      <span>My reading history</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={onLogout}>
-                    <Icons.logout className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <UserMenu />
             ) : (
               <>
                 <Button
-                  className="md:hidden block"
+                  className="block md:hidden"
                   data-href={PAGE_ENDPOINTS.AUTH.SIGNIN}
                   onClick={onSigninPage}
                 >
                   Sign in
                 </Button>
-                <section className="md:flex hidden gap-3">
+                <section className="hidden gap-3 md:flex">
                   <Button
                     variant="link"
                     role="link"
@@ -242,7 +188,7 @@ MainHeader.Menu = function Item() {
           <Icons.menu className="w-6 fill-current" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="rounded-none inset-0 top-0 left-0 bottom-0 m-0 h-full w-[323px]">
+      <DrawerContent className="inset-0 bottom-0 left-0 top-0 m-0 h-full w-[323px] rounded-none">
         <DrawerHeader className="border-b border-slate-200 dark:border-slate-800">
           <DrawerTitle>
             <div className="flex flex-row justify-between">
@@ -252,7 +198,7 @@ MainHeader.Menu = function Item() {
                 to={PAGE_ENDPOINTS.ROOT}
               >
                 <Icons.hashnode className="w-full fill-current dark:hidden" />
-                <Icons.hashnodeDark className="w-full fill-current hidden dark:block" />
+                <Icons.hashnodeDark className="hidden w-full fill-current dark:block" />
               </Link>
               <Button variant="ghost" onClick={onClose}>
                 <Icons.close />
@@ -260,7 +206,7 @@ MainHeader.Menu = function Item() {
             </div>
           </DrawerTitle>
         </DrawerHeader>
-        <nav className="py-4 px-3 list-none p-0 m-0">
+        <nav className="m-0 list-none p-0 px-3 py-4">
           {NAV_CONFIG.mainNav.map((item) => {
             return (
               <li key={`drawer-mneu-navigation-${item.id}`}>
@@ -276,18 +222,18 @@ MainHeader.Menu = function Item() {
 
 interface ItemProps {
   item: NavItem;
-  renderType?: "default" | "drawer";
+  renderType?: 'default' | 'drawer';
 }
 
 MainHeader.Navigation = function Item({ item, renderType }: ItemProps) {
   switch (item.type) {
-    case "link": {
+    case 'link': {
       return <MainHeader.Link item={item} renderType={renderType} />;
     }
-    case "dropdown": {
+    case 'dropdown': {
       return <MainHeader.Dropdown item={item} renderType={renderType} />;
     }
-    case "external_link": {
+    case 'external_link': {
       return <MainHeader.ExternalLink item={item} renderType={renderType} />;
     }
     default: {
@@ -299,7 +245,7 @@ MainHeader.Navigation = function Item({ item, renderType }: ItemProps) {
 MainHeader.Link = function Item({ item, renderType }: ItemProps) {
   const params = useParams();
   const to =
-    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+    typeof item.href === 'function' ? item.href(params) : item.href ?? '#';
   return (
     <NavLink
       to={to}
@@ -307,13 +253,13 @@ MainHeader.Link = function Item({ item, renderType }: ItemProps) {
       className={({ isActive }) => {
         return cn(
           buttonVariants({
-            variant: "ghost",
-            size: "default",
+            variant: 'ghost',
+            size: 'default',
           }),
           styles.btn_common,
           styles.link,
           isActive && styles.active,
-          renderType === "drawer" ? styles.drawer_link : undefined
+          renderType === 'drawer' ? styles.drawer_link : undefined,
         );
       }}
     >
@@ -329,10 +275,10 @@ MainHeader.Dropdown = function Item({ item, renderType }: ItemProps) {
         <Button
           variant="ghost"
           className={cn(
-            "group",
+            'group',
             styles.btn_common,
             styles.link,
-            renderType === "drawer" ? styles.drawer_dropdown : undefined
+            renderType === 'drawer' ? styles.drawer_dropdown : undefined,
           )}
         >
           <span>{item.title}</span>
@@ -354,18 +300,18 @@ MainHeader.Dropdown = function Item({ item, renderType }: ItemProps) {
 MainHeader.ExternalLink = function Item({ item, renderType }: ItemProps) {
   const params = useParams();
   const to =
-    typeof item.href === "function" ? item.href(params) : item.href ?? "#";
+    typeof item.href === 'function' ? item.href(params) : item.href ?? '#';
   return (
     <a
       href={to}
       className={cn(
         buttonVariants({
-          variant: "ghost",
-          size: "default",
+          variant: 'ghost',
+          size: 'default',
         }),
         styles.btn_common,
         styles.link,
-        renderType === "drawer" ? styles.drawer_link : undefined
+        renderType === 'drawer' ? styles.drawer_link : undefined,
       )}
       target="_blank"
       rel="noreferrer"

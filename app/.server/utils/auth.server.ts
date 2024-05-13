@@ -1,12 +1,9 @@
-import { RESULT_CODE } from "~/constants/constant";
-import {
-  clearAuthHeaders,
-  getParsedCookie,
-  getTokenFromCookie,
-  readHeaderCookie,
-} from "./request.server";
-import { type AppLoadContext, redirect } from "@remix-run/cloudflare";
-import { safeRedirect } from "remix-utils/safe-redirect";
+import type { AppLoadContext } from '@remix-run/cloudflare';
+import { redirect } from '@remix-run/cloudflare';
+import { safeRedirect } from 'remix-utils/safe-redirect';
+
+import { RESULT_CODE } from '~/constants/constant';
+import { clearAuthHeaders, getCookie } from './request.server';
 
 interface GetAuthFromRequestOptions {
   throwException?: boolean;
@@ -17,19 +14,18 @@ type Data = FetchRespSchema.Success<SerializeSchema.SerializeUser>;
 export async function getAuthFromRequest(
   request: Request,
   context: AppLoadContext,
-  options = { throwException: false } as GetAuthFromRequestOptions
+  options = { throwException: false } as GetAuthFromRequestOptions,
 ) {
   try {
-    const { cookie } = requireCookie(request);
-    if (!cookie) {
+    const { cookies } = getCookie(request);
+    if (!cookies) {
       return null;
     }
 
     const user = context.agent.api.app.user;
-
     const response = await user.getMyInfoHandler<Data>({
       headers: {
-        Cookie: cookie,
+        Cookie: cookies,
       },
     });
 
@@ -39,41 +35,18 @@ export async function getAuthFromRequest(
     }
     return data.result;
   } catch (error) {
+    console.error(error);
     if (options.throwException) {
       throw error;
     }
-
     return null;
   }
-}
-
-export function requireCookie(request: Request) {
-  const cookie = readHeaderCookie(request);
-  if (!cookie) {
-    return {
-      cookie: null,
-      cookieData: null,
-    };
-  }
-
-  const token = getTokenFromCookie(cookie);
-  if (!token) {
-    return {
-      cookie: null,
-      cookieData: null,
-    };
-  }
-
-  return {
-    cookie,
-    token,
-  };
 }
 
 export async function requireAuthCookie(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string
+  redirectUrl: string,
 ) {
   const session = await getAuthFromRequest(request, context);
   if (!session) {
@@ -87,7 +60,7 @@ export async function requireAuthCookie(
 export async function redirectIfLoggedInLoader(
   request: Request,
   context: AppLoadContext,
-  redirectUrl: string
+  redirectUrl: string,
 ) {
   const session = await getAuthFromRequest(request, context);
   if (session) {

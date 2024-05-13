@@ -1,6 +1,5 @@
-import { Editor } from "@tiptap/core";
-
-import { icons } from "lucide-react";
+import { Editor } from '@tiptap/core';
+import { icons } from 'lucide-react';
 
 export interface Group {
   name: string;

@@ -1,1 +1,1 @@
-export { default as CollapsibleWrapper } from "./CollapsibleWrapper";
+export { default as CollapsibleWrapper } from './CollapsibleWrapper';

@@ -1,65 +1,68 @@
-import React from "react";
+import React from 'react';
 import {
   AlertTriangle,
-  ArrowRight,
+  AlignLeft,
   ArrowLeft,
+  ArrowLeftRight,
+  ArrowRight,
+  Award,
   Bell,
+  Bookmark,
+  Calendar,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  CircleAlert,
+  CloudUpload,
   Command,
   CreditCard,
   File,
-  FileText,
-  HelpCircle,
-  Image,
-  Laptop,
-  Loader2,
-  LucideProps,
-  Moon,
-  MoreVertical,
-  Pizza,
-  Plus,
-  Settings,
-  SunMedium,
-  Trash,
-  ArrowLeftRight,
-  User,
-  X,
-  Home,
-  Search,
-  Heart,
-  PenSquare,
-  AlignLeft,
-  MoreHorizontal,
-  Repeat,
-  MessageSquare,
-  RotateCcw,
-  Users,
-  Share,
-  ChevronDown,
-  ChevronUp,
-  Menu,
-  CircleAlert,
-  Bookmark,
-  History,
-  LogOut,
-  WandSparkles,
-  Award,
   FilePlus2,
   Files,
-  icons,
   FileSearch,
+  FileText,
   GanttChart,
-  CloudUpload,
-  Settings2,
+  Heart,
+  HelpCircle,
+  History,
+  Home,
+  icons,
+  Image,
   Info,
+  Laptop,
+  Link,
+  Loader2,
+  LogOut,
+  LucideProps,
+  Menu,
+  MessageSquare,
+  Moon,
+  MoreHorizontal,
+  MoreVertical,
+  PenSquare,
+  Pizza,
+  Plus,
+  Repeat,
+  RotateCcw,
   Save,
-  Calendar,
-} from "lucide-react";
-import { cn } from "~/services/libs";
+  Search,
+  Settings,
+  Settings2,
+  Share,
+  SunMedium,
+  Trash,
+  User,
+  Users,
+  WandSparkles,
+  X,
+} from 'lucide-react';
+
+import { cn } from '~/services/libs';
 
 export const Icons = {
+  link: Link,
   calendar: Calendar,
   save: Save,
   info: Info,
@@ -218,7 +221,7 @@ export const Icons = {
         y="1"
         width="18"
         height="18"
-        style={{ maskType: "alpha" }}
+        style={{ maskType: 'alpha' }}
       >
         <rect
           x="1.875"
@@ -270,7 +273,7 @@ export const Icons = {
         y="1"
         width="18"
         height="18"
-        style={{ maskType: "alpha" }}
+        style={{ maskType: 'alpha' }}
       >
         <rect
           width="16.25"
@@ -342,11 +345,11 @@ export const EditorIcon = React.memo(
 
     return (
       <IconComponent
-        className={cn("w-4 h-4", className)}
+        className={cn('h-4 w-4', className)}
         strokeWidth={strokeWidth || 2.5}
       />
     );
-  }
+  },
 );
 
-EditorIcon.displayName = "EditorIcon";
+EditorIcon.displayName = 'EditorIcon';

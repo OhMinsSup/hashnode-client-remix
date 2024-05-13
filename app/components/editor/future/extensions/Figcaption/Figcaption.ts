@@ -1,9 +1,9 @@
-import { mergeAttributes, Node } from "@tiptap/core";
+import { mergeAttributes, Node } from '@tiptap/core';
 
-import { Image } from "../Image";
+import { Image } from '../Image';
 
 export const Figcaption = Node.create({
-  name: "figcaption",
+  name: 'figcaption',
 
   addOptions() {
     return {
@@ -11,18 +11,18 @@ export const Figcaption = Node.create({
     };
   },
 
-  content: "inline*",
+  content: 'inline*',
 
   selectable: false,
 
   draggable: false,
 
-  marks: "link",
+  marks: 'link',
 
   parseHTML() {
     return [
       {
-        tag: "figcaption",
+        tag: 'figcaption',
       },
     ];
   },
@@ -52,7 +52,7 @@ export const Figcaption = Node.create({
         return editor
           .chain()
           .focus(pos)
-          .insertContentAt(pos, { type: "paragraph" })
+          .insertContentAt(pos, { type: 'paragraph' })
           .run();
       },
 
@@ -87,7 +87,7 @@ export const Figcaption = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["figcaption", mergeAttributes(HTMLAttributes), 0];
+    return ['figcaption', mergeAttributes(HTMLAttributes), 0];
   },
 });
 

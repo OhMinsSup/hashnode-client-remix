@@ -1,5 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 export const schema = z.object({
   q: z.string().optional(),

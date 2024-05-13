@@ -1,16 +1,16 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const FORMAT = {
-  YYYYMMDD: "YYYY-MM-DD",
-  YYYYMMDD_HHMMSS: "YYYY-MM-DD HH:mm:ss",
-  YYYYMMDD_HHMM: "YYYY-MM-DD HH:mm",
-  MM_YY: "MM/YY",
-  HHMMSS: "HH:mm:ss",
-  MMMM_D_YYYY: "MMMM D, YYYY",
+  YYYYMMDD: 'YYYY-MM-DD',
+  YYYYMMDD_HHMMSS: 'YYYY-MM-DD HH:mm:ss',
+  YYYYMMDD_HHMM: 'YYYY-MM-DD HH:mm',
+  MM_YY: 'MM/YY',
+  HHMMSS: 'HH:mm:ss',
+  MMMM_D_YYYY: 'MMMM D, YYYY',
 };
 
 export const dayjsWrap = (
-  date?: string | number | dayjs.Dayjs | Date | null | undefined
+  date?: string | number | dayjs.Dayjs | Date | null | undefined,
 ) => {
   return dayjs(date);
 };
@@ -18,10 +18,10 @@ export const dayjsWrap = (
 export const getDateFormat = (
   date: number | Date | string | null | undefined,
   key = FORMAT.MMMM_D_YYYY,
-  format = ""
+  format = '',
 ) => {
   if (!date) return format;
-  if (typeof date !== "number" || typeof date !== "string") {
+  if (typeof date !== 'number' || typeof date !== 'string') {
     if (date instanceof Date) {
       const mom = dayjsWrap(date);
       if (mom.isValid()) {

@@ -1,6 +1,7 @@
-import React from "react";
-import styles from "./styles.module.css";
-import { AspectRatio } from "~/components/ui/aspect-ratio";
+import React from 'react';
+
+import { AspectRatio } from '~/components/ui/aspect-ratio';
+import styles from './styles.module.css';
 
 export default function ImageGalleryCard() {
   // <div className={styles.item}></div>
@@ -20,8 +21,8 @@ export default function ImageGalleryCard() {
         </AspectRatio>
       </button>
       <p className={styles.item_label}>
-        by{" "}
-        <a href="#" className="font-semibold truncate">
+        by{' '}
+        <a href="#" className="truncate font-semibold">
           John Doe
         </a>
       </p>

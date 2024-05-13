@@ -1,41 +1,45 @@
-import { redirect, json } from "@remix-run/cloudflare";
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
-import { getAuthFromRequest } from "~/.server/utils/auth.server";
-import { clearAuthHeaders } from "~/.server/utils/request.server";
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json, redirect } from '@remix-run/cloudflare';
+
+import { getAuthFromRequest } from '~/.server/utils/auth.server';
+import { clearAuthHeaders } from '~/.server/utils/request.server';
+import {
+  errorJsonDataResponse,
+  successJsonResponse,
+} from '~/.server/utils/response.server';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  const session = await getAuthFromRequest(request, context);
-  if (!session) {
-    return json(
-      {
-        status: "error" as const,
-        result: null,
-        message: "You are not logged in.",
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
-  return json(
-    {
-      status: "success" as const,
-      result: null,
-      message: "You have been logged out.",
-    },
-    {
+  try {
+    const session = await getAuthFromRequest(request, context);
+    if (!session) {
+      throw createError({
+        statusMessage: 'Unauthorized',
+        statusCode: HttpStatus.UNAUTHORIZED,
+        displayType: ErrorDisplayType.NONE,
+        data: null,
+      });
+    }
+    return json(successJsonResponse(null), {
       headers: clearAuthHeaders(),
-    },
-  );
+    });
+  } catch (error) {
+    context.logger.error('[ERROR]', error);
+    if (isError(error)) {
+      return json(errorJsonDataResponse(null, error.message), {
+        headers: clearAuthHeaders(),
+      });
+    }
+  }
 };
 
 export type RoutesActionData = typeof action;
 
-export const loader = () => redirect("/", { status: 404 });
+export const loader = () => redirect('/', { status: 404 });
 
 export const getPath = () => {
-  return "/api/v1/auth/logout";
+  return '/api/v1/auth/logout';
 };
 
 export default function Routes() {

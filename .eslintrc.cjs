@@ -47,6 +47,7 @@ module.exports = {
       },
       rules: {
         "react/prop-types": "off",
+        "react/display-name": "off",
       },
     },
 
@@ -71,6 +72,9 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off",
+      },
     },
 
     // Node
@@ -82,8 +86,6 @@ module.exports = {
     },
   ],
   rules: {
-    "react/prop-types": "off",
-    "react/display-name": "off",
     "no-useless-constructor": "off",
   },
 };

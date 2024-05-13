@@ -1,6 +1,4 @@
-import { redirect } from "@remix-run/cloudflare";
-import cookies from "cookie";
-import { safeRedirect } from "remix-utils/safe-redirect";
+import cookies from 'cookie';
 
 export type SearchParams =
   | string
@@ -10,7 +8,7 @@ export type SearchParams =
   | undefined;
 
 export function combineHeaders(
-  ...headers: Array<ResponseInit["headers"] | null>
+  ...headers: Array<ResponseInit['headers'] | null>
 ) {
   const combined = new Headers();
   for (const header of headers) {
@@ -38,38 +36,20 @@ export function combineResponseInits(
 export function clearAuthHeaders() {
   const headers = new Headers();
   headers.append(
-    "Set-Cookie",
-    "hashnode.access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    'Set-Cookie',
+    'hashnode.access_token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
   );
   return headers;
 }
 
-export function readHeaderCookie(request: Request) {
-  const cookie =
-    request.headers.get("Cookie") || request.headers.get("Set-Cookie") || null;
-  return cookie;
-}
-
-export function getParsedCookie(cookie: string) {
-  return cookies.parse(cookie);
-}
-
-export function getTokenFromCookie(cookie: string) {
-  const cookies = getParsedCookie(cookie);
-  return cookies["hashnode.access_token"];
-}
-
-export function validateMethods(
-  request: Request,
-  methods: string[],
-  redirectUrl: string
-) {
-  const method = request.method;
-  const methodLowerCase = method.toLowerCase();
-  const checkMethod = methods.some(
-    (item) => item.toLowerCase() === methodLowerCase
-  );
-  if (!checkMethod) {
-    throw redirect(safeRedirect(redirectUrl));
-  }
+export function getCookie(request: Request) {
+  const headers = request.headers;
+  const cookie = headers.get('Cookie') || headers.get('Set-Cookie');
+  const cookieData = cookie ? cookies.parse(cookie) : null;
+  const hasAuthToken = cookieData?.['hashnode.access_token'] ? true : false;
+  return {
+    cookies: cookie,
+    cookieData,
+    hasAuthToken,
+  };
 }

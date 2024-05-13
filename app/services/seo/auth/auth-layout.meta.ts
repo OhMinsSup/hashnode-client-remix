@@ -1,21 +1,22 @@
-import { MetaFunction } from "@remix-run/cloudflare";
-import { RoutesLoaderData } from "~/.server/routes/auth/auth-layout.loader";
-import { mergeMeta } from "~/services/libs";
+import { MetaFunction } from '@remix-run/cloudflare';
 
-export const authLayoutMeta: MetaFunction<RoutesLoaderData> = mergeMeta(() => {
+import { RoutesLoaderData } from '~/.server/routes/auth/auth-layout.loader';
+import { mergeMeta } from '~/services/libs';
+
+export const meta: MetaFunction<RoutesLoaderData> = mergeMeta(() => {
   const content =
-    "Start your programming blog. Share your knowledge and build your own brand";
+    'Start your programming blog. Share your knowledge and build your own brand';
   return [
     {
-      name: "description",
+      name: 'description',
       content,
     },
     {
-      name: "og:description",
+      name: 'og:description',
       content,
     },
     {
-      name: "twitter:description",
+      name: 'twitter:description',
       content,
     },
   ];

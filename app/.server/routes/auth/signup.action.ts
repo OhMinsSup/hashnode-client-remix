@@ -1,96 +1,97 @@
-import omit from "lodash-es/omit";
-import { redirect, type ActionFunctionArgs } from "@remix-run/cloudflare";
-import { safeRedirect } from "remix-utils/safe-redirect";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import {
-  getTokenFromCookie,
-  validateMethods,
-} from "~/.server/utils/request.server";
-import {
-  resolver,
-  FormFieldValues,
-} from "~/services/validate/signup-api.validate";
-import { getValidatedFormData } from "~/services/libs";
-import { json } from "@remix-run/cloudflare";
-import { FieldErrors } from "react-hook-form";
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json, redirect } from '@remix-run/cloudflare';
+import { safeRedirect } from 'remix-utils/safe-redirect';
+import omit from 'lodash-es/omit';
+
+import { errorJsonResponse } from '~/.server/utils/response.server';
 import {
   createToastHeaders,
   redirectWithToast,
-} from "~/.server/utils/toast.server";
-import { IFetchError } from "~/services/api/fetch/types";
+} from '~/.server/utils/toast.server';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { isFetchError } from '~/services/api/error';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { getValidatedFormData } from '~/services/libs/form-data';
+import { HttpStatus } from '~/services/libs/http-status.enum';
+import { RequestMethod } from '~/services/libs/request-method.enum';
+import {
+  FormFieldValues,
+  resolver,
+} from '~/services/validate/signup-api.validate';
 
-export const signupAction = async ({
-  request,
-  context,
-}: ActionFunctionArgs) => {
-  // 유효성 검사
-  validateMethods(request, ["POST"], PAGE_ENDPOINTS.AUTH.SIGNUP);
+type Data = FetchRespSchema.Auth;
 
-  const { errors, data } = await getValidatedFormData<FormFieldValues>(
-    request,
-    resolver
-  );
+type DataSchema = FetchRespSchema.Success<Data>;
 
-  if (errors) {
-    return json({
-      status: "error" as const,
-      result: null,
-      errors,
-      message: null,
-    });
-  }
-
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   try {
-    const response = await context.agent.api.app.auth.signupHandler<
-      FetchRespSchema.Success<FetchRespSchema.Auth>
-    >({
-      body: omit(data, ["confirmPassword"]),
+    if (request.method.toUpperCase() !== RequestMethod.POST) {
+      throw createError({
+        statusMessage: 'Method Not Allowed',
+        statusCode: HttpStatus.METHOD_NOT_ALLOWED,
+        displayType: ErrorDisplayType.TOAST,
+        data: 'not allowed method',
+      });
+    }
+
+    const { errors, data } = await getValidatedFormData<FormFieldValues>(
+      request,
+      resolver,
+    );
+
+    if (errors) {
+      return json(errorJsonResponse('validation failed', errors));
+    }
+
+    const auth = context.agent.api.app.auth;
+    const response = await auth.signupHandler<DataSchema>({
+      body: omit(data, ['confirmPassword']),
     });
-    const cookie = response.headers.get("set-cookie");
-    const token = cookie ? getTokenFromCookie(cookie) : null;
-    if (!token || !cookie) {
-      return redirectWithToast(
-        PAGE_ENDPOINTS.AUTH.SIGNUP,
-        {
-          type: "error",
-          description: "회원가입에 실패했습니다. 다시 시도해주세요.",
-        },
-        createToastHeaders
-      );
+
+    const cookie = response.headers.get('set-cookie');
+    if (!cookie) {
+      throw createError({
+        statusMessage: 'Forbidden',
+        statusCode: HttpStatus.FORBIDDEN,
+        displayType: ErrorDisplayType.TOAST,
+        data: 'failed to sign up',
+      });
     }
 
     return redirect(safeRedirect(PAGE_ENDPOINTS.ROOT), {
       headers: {
-        "Set-Cookie": cookie,
+        'Set-Cookie': cookie,
       },
     });
   } catch (e) {
-    console.error(e);
-    if (e instanceof Error && e.name === "FetchError") {
-      const error = e as IFetchError<FetchRespSchema.Error>;
-      if (error.data) {
-        return json({
-          status: "error" as const,
-          result: null,
-          errors: {
-            [error.data.error]: {
-              message: error.data.message,
-            },
-          } as FieldErrors<FormFieldValues>,
-          message: null,
-        });
+    context.logger.error('[signup.action]', e);
+    if (isError<string>(e)) {
+      if (e.displayType === ErrorDisplayType.TOAST) {
+        return redirectWithToast(
+          safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNUP),
+          {
+            type: 'error',
+            description: e.data ?? 'failed to sign up',
+          },
+          createToastHeaders,
+        );
       }
     }
 
-    return redirectWithToast(
-      safeRedirect(PAGE_ENDPOINTS.AUTH.SIGNUP),
-      {
-        type: "error",
-        description: "회원가입에 실패했습니다. 다시 시도해주세요.",
-      },
-      createToastHeaders
-    );
+    if (isFetchError<FetchRespSchema.Error>(e)) {
+      if (e.data) {
+        return json(
+          errorJsonResponse(e.message, {
+            [e.data.error]: {
+              message: e.data.message,
+            },
+          }),
+        );
+      }
+    }
+
+    throw e;
   }
 };
 
-export type RoutesActionData = typeof signupAction;
+export type RoutesActionData = typeof action;

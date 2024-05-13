@@ -1,1 +1,1 @@
-export { default as WriteEditorHeader } from "./WriteEditorHeader";
+export { default as WriteEditorHeader } from './WriteEditorHeader';

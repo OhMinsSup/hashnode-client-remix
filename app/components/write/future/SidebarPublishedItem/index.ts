@@ -1,1 +1,1 @@
-export { default as SidebarPublishedItem } from "./SidebarPublishedItem";
+export { default as SidebarPublishedItem } from './SidebarPublishedItem';

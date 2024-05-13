@@ -1,35 +1,36 @@
+import { useCallback } from 'react';
+import * as Dropdown from '@radix-ui/react-dropdown-menu';
+
 import {
   DropdownButton,
   DropdownCategoryTitle,
-} from "~/components/editor/future/components/Dropdown";
-import { EditorIcon } from "~/components/icons";
-import { Surface } from "~/components/editor/future/components/Surface";
-import { Toolbar } from "~/components/editor/future/components/Toolbar";
-import * as Dropdown from "@radix-ui/react-dropdown-menu";
-import { useCallback } from "react";
+} from '~/components/editor/future/components/Dropdown';
+import { Surface } from '~/components/editor/future/components/Surface';
+import { Toolbar } from '~/components/editor/future/components/Toolbar';
+import { EditorIcon } from '~/components/icons';
 
 const FONT_FAMILY_GROUPS = [
   {
-    label: "Sans Serif",
+    label: 'Sans Serif',
     options: [
-      { label: "Inter", value: "" },
-      { label: "Arial", value: "Arial" },
-      { label: "Helvetica", value: "Helvetica" },
+      { label: 'Inter', value: '' },
+      { label: 'Arial', value: 'Arial' },
+      { label: 'Helvetica', value: 'Helvetica' },
     ],
   },
   {
-    label: "Serif",
+    label: 'Serif',
     options: [
-      { label: "Times New Roman", value: "Times" },
-      { label: "Garamond", value: "Garamond" },
-      { label: "Georgia", value: "Georgia" },
+      { label: 'Times New Roman', value: 'Times' },
+      { label: 'Garamond', value: 'Garamond' },
+      { label: 'Georgia', value: 'Georgia' },
     ],
   },
   {
-    label: "Monospace",
+    label: 'Monospace',
     options: [
-      { label: "Courier", value: "Courier" },
-      { label: "Courier New", value: "Courier New" },
+      { label: 'Courier', value: 'Courier' },
+      { label: 'Courier New', value: 'Courier New' },
     ],
   },
 ];
@@ -48,11 +49,11 @@ export const FontFamilyPicker = ({
   value,
 }: FontFamilyPickerProps) => {
   const currentValue = FONT_FAMILIES.find((size) => size.value === value);
-  const currentFontLabel = currentValue?.label.split(" ")[0] || "Inter";
+  const currentFontLabel = currentValue?.label.split(' ')[0] || 'Inter';
 
   const selectFont = useCallback(
     (font: string) => () => onChange(font),
-    [onChange]
+    [onChange],
   );
 
   return (
@@ -60,14 +61,14 @@ export const FontFamilyPicker = ({
       <Dropdown.Trigger asChild>
         <Toolbar.Button active={!!currentValue?.value}>
           {currentFontLabel}
-          <EditorIcon name="ChevronDown" className="w-2 h-2" />
+          <EditorIcon name="ChevronDown" className="h-2 w-2" />
         </Toolbar.Button>
       </Dropdown.Trigger>
       <Dropdown.Content asChild>
         <Surface className="flex flex-col gap-1 px-2 py-4">
           {FONT_FAMILY_GROUPS.map((group) => (
             <div
-              className="mt-2.5 first:mt-0 gap-0.5 flex flex-col"
+              className="mt-2.5 flex flex-col gap-0.5 first:mt-0"
               key={group.label}
             >
               <DropdownCategoryTitle>{group.label}</DropdownCategoryTitle>

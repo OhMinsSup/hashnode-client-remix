@@ -1,1 +1,1 @@
-export { default as WritePageHeader } from "./WritePageHeader";
+export { default as WritePageHeader } from './WritePageHeader';

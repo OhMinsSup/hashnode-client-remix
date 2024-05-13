@@ -1,23 +1,24 @@
-import { useCallback } from "react";
-import { Icons } from "~/components/icons";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { useCallback } from 'react';
+import { Link } from '@remix-run/react';
+
+import { Icons } from '~/components/icons';
+import { Button, buttonVariants } from '~/components/ui/button';
+import { ScrollArea } from '~/components/ui/scroll-area';
+import { Separator } from '~/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { useSession } from "~/libs/hooks/useSession";
-import { useWriteContext } from "~/components/write/context/useWriteContext";
-import { SearchInput } from "~/components/write/future/SearchInput";
-import { PAGE_ENDPOINTS } from "~/constants/constant";
-import { Link } from "@remix-run/react";
-import { Separator } from "~/components/ui/separator";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { cn } from "~/services/libs";
-import { MyDraftProvider } from "~/components/write/future/MyDraftList";
-import { SubmittedDraftProvider } from "~/components/write/future/SubmittedDraftList";
-import { PublishedProvider } from "~/components/write/future/PublishedList";
+} from '~/components/ui/tooltip';
+import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { MyDraftProvider } from '~/components/write/future/MyDraftList';
+import { PublishedProvider } from '~/components/write/future/PublishedList';
+import { SearchInput } from '~/components/write/future/SearchInput';
+import { SubmittedDraftProvider } from '~/components/write/future/SubmittedDraftList';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { useSession } from '~/libs/hooks/useSession';
+import { cn } from '~/services/libs';
 
 export default function LeftSidebar() {
   const session = useSession();
@@ -32,18 +33,18 @@ export default function LeftSidebar() {
       <div data-name="top" className="flex flex-row items-center gap-2 p-4">
         <div className="flex-1">
           <div
-            className="py-1 px-0 grid-cols-12 h-full gap-2 text-sm w-full border border-transparent grid items-center justify-center text-center"
+            className="grid h-full w-full grid-cols-12 items-center justify-center gap-2 border border-transparent px-0 py-1 text-center text-sm"
             title={`${session.UserProfile.username}'s team blog`}
           >
             <div className="col-span-2">
-              <div className="relative w-full h-8">
-                <Icons.hashnodeTypeHeaderMobile className="w-full h-full fill-current text-blue-600" />
+              <div className="relative h-8 w-full">
+                <Icons.hashnodeTypeHeaderMobile className="h-full w-full fill-current text-blue-600" />
               </div>
             </div>
-            <div className="col-span-8 text-left truncate">
+            <div className="col-span-8 truncate text-left">
               <span className="block truncate text-base">{`${session.UserProfile.username}'s team blog`}</span>
             </div>
-            <div className="flex col-span-2 flex-row items-center justify-center"></div>
+            <div className="col-span-2 flex flex-row items-center justify-center"></div>
           </div>
         </div>
         <TooltipProvider>
@@ -72,14 +73,14 @@ export default function LeftSidebar() {
         <Link
           to={{
             pathname: PAGE_ENDPOINTS.WRITE.ROOT,
-            search: "isNewDraft=true",
+            search: 'isNewDraft=true',
           }}
           unstable_viewTransition
           className={cn(
             buttonVariants({
-              variant: "ghost",
+              variant: 'ghost',
             }),
-            "w-full justify-start"
+            'w-full justify-start',
           )}
           aria-label="Go to New Draft page"
         >
@@ -103,14 +104,14 @@ export default function LeftSidebar() {
         </div>
       </ScrollArea>
       <hr className="css-1a5r2w9" />
-      <div className="flex flex-col py-5 px-4 gap-4">
+      <div className="flex flex-col gap-4 px-4 py-5">
         <div className="flex flex-col gap-1">
           <Link
             className={cn(
               buttonVariants({
-                variant: "ghost",
-                className: "flex justify-start space-x-2",
-              })
+                variant: 'ghost',
+                className: 'flex justify-start space-x-2',
+              }),
             )}
             unstable_viewTransition
             to={PAGE_ENDPOINTS.ROOT}
@@ -125,9 +126,9 @@ export default function LeftSidebar() {
           <Link
             className={cn(
               buttonVariants({
-                variant: "ghost",
-                className: "flex justify-start space-x-2",
-              })
+                variant: 'ghost',
+                className: 'flex justify-start space-x-2',
+              }),
             )}
             unstable_viewTransition
             to={PAGE_ENDPOINTS.ROOT}

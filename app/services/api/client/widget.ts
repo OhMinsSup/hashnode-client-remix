@@ -1,6 +1,6 @@
-import { API_ENDPOINTS } from "../../../constants/constant";
-import { type ServiceClient } from ".";
-import { type FetchWithoutRequestHandler } from "../fetch/types";
+import { type ServiceClient } from '.';
+import { API_ENDPOINTS } from '../../../constants/constant';
+import { type FetchWithoutRequestHandler } from '../fetch/types';
 
 export class WidgetNamespace {
   _service: ServiceClient;
@@ -14,13 +14,13 @@ export class WidgetNamespace {
   getLeftSidePostCountHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(
-        this.endpoint.GET_LEFTSIDE_POST_COUNT
+        this.endpoint.GET_LEFTSIDE_POST_COUNT,
       ),
       {
-        method: "GET",
+        method: 'GET',
         baseURL: this._service.uri.toString(),
         ...options,
-      }
+      },
     );
   };
 }

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+import React, { useState } from 'react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "~/components/ui/collapsible";
-import { cn } from "~/services/libs";
+} from '~/components/ui/collapsible';
+import { cn } from '~/services/libs';
 
 interface CollapsibleWrapperProps {
   title: string;
@@ -33,7 +34,7 @@ export default function CollapsibleWrapper({
       <CollapsibleTrigger asChild>
         <Button
           variant="link"
-          className="w-full justify-between hover:no-underline max-w-60"
+          className="w-full max-w-60 justify-between hover:no-underline"
         >
           <span
             className={cn({
