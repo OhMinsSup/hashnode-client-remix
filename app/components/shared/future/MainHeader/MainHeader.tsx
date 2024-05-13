@@ -1,15 +1,9 @@
 import { useCallback, useState } from 'react';
-import {
-  Link,
-  NavLink,
-  useNavigate,
-  useParams,
-  useSubmit,
-} from '@remix-run/react';
+import { Link, NavLink, useNavigate, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
 import { SearchDialog } from '~/components/shared/future/SearchhDialog';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { UserMenu } from '~/components/shared/future/UserMenu';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Drawer,
@@ -21,10 +15,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
@@ -32,7 +23,6 @@ import { NAV_CONFIG, NavItem } from '~/constants/navigation';
 import { SearchDialogProvider } from '~/context/useSearchDialogContext';
 import { Theme, useTheme } from '~/context/useThemeContext';
 import { useOptionalSession } from '~/libs/hooks/useSession';
-import { getPath } from '~/routes/api.v1.auth.logout';
 import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
@@ -41,18 +31,7 @@ export default function MainHeader() {
 
   const session = useOptionalSession();
 
-  const submit = useSubmit();
-
   const [theme, setTheme] = useTheme();
-
-  const onLogout = useCallback(() => {
-    const formData = new FormData();
-    submit(formData, {
-      action: getPath(),
-      method: 'POST',
-      navigate: false,
-    });
-  }, [submit]);
 
   const onToggleTheme = useCallback(() => {
     setTheme((previousTheme) =>
@@ -155,41 +134,7 @@ export default function MainHeader() {
               ) : null}
             </div>
             {session ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="cursor-pointer hover:opacity-80">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Icons.filetext className="mr-2 h-4 w-4" />
-                      <span>My drafts</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.bookmark className="mr-2 h-4 w-4" />
-                      <span>Bookmarks</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.user className="mr-2 h-4 w-4" />
-                      <span>Account settings</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Icons.history className="mr-2 h-4 w-4" />
-                      <span>My reading history</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={onLogout}>
-                    <Icons.logout className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <UserMenu />
             ) : (
               <>
                 <Button

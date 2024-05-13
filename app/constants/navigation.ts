@@ -164,4 +164,10 @@ export const NAV_CONFIG = {
       title: 'Mentions',
     },
   ],
+  blogTabs: [
+    {
+      id: 'home',
+      title: 'Home',
+    },
+  ],
 };
