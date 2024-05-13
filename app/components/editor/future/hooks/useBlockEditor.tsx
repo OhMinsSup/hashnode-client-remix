@@ -13,6 +13,7 @@ export interface UseBlockEditorProps {
   initialContent?: Content;
   onCreate?: EditorOptions['onCreate'];
   onUpdate?: EditorOptions['onUpdate'];
+  onDestroy?: EditorOptions['onDestroy'];
   editable?: EditorOptions['editable'];
 }
 
@@ -21,6 +22,7 @@ export const useBlockEditor = ({
   editable,
   onCreate,
   onUpdate,
+  onDestroy,
 }: UseBlockEditorProps) => {
   const editor = useEditor(
     {
@@ -30,11 +32,13 @@ export const useBlockEditor = ({
         if (props.editor.isEmpty && initialContent) {
           props.editor.commands.setContent(initialContent);
         }
-
         onCreate?.(props);
       },
       onUpdate: (props) => {
         onUpdate?.(props);
+      },
+      onDestroy: (props) => {
+        onDestroy?.(props);
       },
       extensions: [...ExtensionKit()],
       editorProps: {

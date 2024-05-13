@@ -8,7 +8,7 @@ import { ImageBlockMenu } from '../extensions/ImageBlock/components/ImageBlockMe
 import { ColumnsMenu } from '../extensions/MultiColumn/menus';
 import { useBlockEditor, UseBlockEditorProps } from '../hooks/useBlockEditor';
 
-interface BlockEditorProps extends UseBlockEditorProps {}
+export interface BlockEditorProps extends UseBlockEditorProps {}
 
 export default function BlockEditor(props: BlockEditorProps) {
   const menuContainerRef = useRef(null);

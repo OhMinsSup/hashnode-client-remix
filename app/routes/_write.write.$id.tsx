@@ -2,6 +2,7 @@ import React from 'react';
 import {
   isRouteErrorResponse,
   useLoaderData,
+  useNavigation,
   useRouteError,
 } from '@remix-run/react';
 
@@ -21,15 +22,17 @@ export default function Routes() {
 
   const initialValues = data?.result as SerializeSchema.SerializePost<false>;
 
-  console.log(initialValues);
+  const navigation = useNavigation();
 
   return (
     <WriteFormProvider initialValues={initialValues || undefined}>
       <WritePageHeader />
       <WriteEditor header={<WriteEditorHeader />}>
-        <React.Suspense fallback={<></>}>
-          <Editor />
-        </React.Suspense>
+        {navigation.state === 'loading' ? null : (
+          <React.Suspense fallback={<></>}>
+            <Editor initialContent={initialValues?.content} />
+          </React.Suspense>
+        )}
       </WriteEditor>
     </WriteFormProvider>
   );
