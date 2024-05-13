@@ -5,126 +5,84 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
   redirect,
 } from '@remix-run/cloudflare';
-import { parse } from '@conform-to/zod';
+import { parseWithZod } from '@conform-to/zod';
 
-import { requireAuthCookie } from '~/.server/utils/auth.server';
 import { getCookie, SearchParams } from '~/.server/utils/request.server';
-import { PAGE_ENDPOINTS } from '~/constants/constant';
-import { type FetchResponse } from '~/services/api/fetch/types';
+import { errorJsonDataResponse } from '~/.server/utils/response.server';
+import { isFetchError } from '~/services/api/error';
 import { getQueryPath } from '~/services/libs';
+import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
+import { HttpStatus } from '~/services/libs/http-status.enum';
 import { schema } from '~/services/validate/cf-file.validate';
 
 type Data = FetchRespSchema.File;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
-type CfDirectSchema = CloudflareSchema.CfDirectUpload;
-
-type CfUploadSchema = CloudflareSchema.CfUpload;
-
-type ActionSchema = {
-  status: 'success' | 'error';
-  result: Data | null;
-  errors: Record<string, string | string[]> | null;
-};
-
-type OverrideFetchResponse<T> = FetchResponse<T> & {
-  _data: T;
-};
-
-function invariantCloudflareResponse(
-  response: FetchResponse<CfDirectSchema | CfUploadSchema>,
-): asserts response is OverrideFetchResponse<CfDirectSchema | CfUploadSchema> {
-  if (!response._data) {
-    const error = new Error();
-    error.name = 'CloudflareResponseError';
-    error.message = JSON.stringify({
-      status: response.status,
-      errors: undefined,
-    });
-    throw error;
-  }
-
-  if (!response._data.success) {
-    const error = new Error();
-    error.name = 'CloudflareResponseError';
-    error.message = JSON.stringify({
-      status: response.status,
-      errors: response._data.errors.at(0),
-    });
-    throw error;
-  }
-}
-
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  await requireAuthCookie(request, context, PAGE_ENDPOINTS.ROOT);
-
-  const defaultValue: ActionSchema = {
-    status: 'error' as const,
-    result: null,
-    errors: null,
-  };
-
-  const { cookies } = getCookie(request);
-  if (!cookies) {
-    return json(
-      {
-        status: 'error' as const,
-        result: defaultValue,
-        message: 'You are not logged in.',
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
-  const fileApi = context.agent.api.app.file;
-
-  const MAX_FILE_SIZE = 5_000_000; // 5MB
-  const uploadHandler = createMemoryUploadHandler({
-    maxPartSize: MAX_FILE_SIZE,
-  });
-
-  const formData = await parseMultipartFormData(request, uploadHandler);
-
-  const submission = parse(formData, {
-    schema,
-  });
-
-  if (Object.keys(submission.error).length || !submission.value) {
-    return json(
-      {
-        status: 'error' as const,
-        result: null,
-        errors: submission.error,
-      } as ActionSchema,
-      { status: 400 },
-    );
-  }
-
   try {
-    // const formData = new FormData();
-    // // Now + 2 minutes (2021-01-02T02:20:00Z)
-    // const expiry = new Date(Date.now() + 120000).toISOString();
-    // formData.append("expiry", expiry);
-    const responseTypeCfDirect =
-      await fileApi.postDirectUploadHandler<CfDirectSchema>(
+    const { cookies } = getCookie(request);
+    if (!cookies) {
+      throw createError({
+        statusMessage: 'Unauthorized',
+        statusCode: HttpStatus.UNAUTHORIZED,
+        displayType: ErrorDisplayType.NONE,
+        data: null,
+      });
+    }
+
+    const MAX_FILE_SIZE = 5_000_000; // 5MB
+    const uploadHandler = createMemoryUploadHandler({
+      maxPartSize: MAX_FILE_SIZE,
+    });
+
+    const formData = await parseMultipartFormData(request, uploadHandler);
+    const submission = parseWithZod(formData, {
+      schema,
+    });
+
+    if (submission.status !== 'success') {
+      throw createError({
+        statusMessage: 'Bad Request',
+        statusCode: HttpStatus.BAD_REQUEST,
+        displayType: ErrorDisplayType.NONE,
+        data: submission.error,
+      });
+    }
+
+    const fileApi = context.agent.api.app.file;
+    const response1 =
+      await fileApi.postDirectUploadHandler<CloudflareSchema.CfDirectUpload>(
         context.env.CF_ID,
         context.env.CF_API_TOKEN,
       );
-    invariantCloudflareResponse(responseTypeCfDirect);
 
-    const { uploadURL } = responseTypeCfDirect._data.result;
+    if (!response1._data) {
+      throw createError({
+        statusMessage: response1.statusText,
+        statusCode: response1.status,
+        displayType: ErrorDisplayType.NONE,
+        data: 'cloudflare direct upload failed',
+      });
+    }
 
-    const responseTypeCfUpload = await fileApi.postCloudflareUploadHandler(
+    const { uploadURL } = response1._data.result;
+
+    const response2 = await fileApi.postCloudflareUploadHandler(
       uploadURL,
       submission.value.file,
     );
+    if (response2.status === 'error') {
+      throw createError({
+        statusMessage: response2.data.statusText,
+        statusCode: response2.data.status,
+        displayType: ErrorDisplayType.NONE,
+        data: 'cloudflare upload failed',
+      });
+    }
+    const { id, variants } = response2.data.result;
 
-    const { id, variants } = responseTypeCfUpload.result;
-
-    const response = await fileApi.postFileCreateHandler<DataSchema>({
+    const response3 = await fileApi.postFileCreateHandler<DataSchema>({
       body: {
         cfId: id,
         filename: submission.value.file.name,
@@ -138,43 +96,31 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       },
     });
 
-    const data = response._data;
-    if (!data) {
-      return json(defaultValue, {
-        status: response.status,
+    if (!response3._data) {
+      throw createError({
+        statusMessage: response3.statusText,
+        statusCode: response3.status,
+        displayType: ErrorDisplayType.NONE,
+        data: 'failed to create file',
       });
     }
 
-    return json(
-      {
-        status: 'success' as const,
-        result: data.result,
-        errors: null,
-      } as ActionSchema,
-      {
-        status: response.status,
-      },
-    );
+    return json({
+      status: 'success' as const,
+      result: response3._data.result,
+      errors: null,
+    });
   } catch (error) {
-    console.error(error);
-    if (error instanceof Error && error.name === 'CloudflareResponseError') {
-      const data = JSON.parse(error.message) as {
-        status: number;
-        errors: ActionSchema['errors'];
-      };
-      return json(
-        {
-          status: 'error' as const,
-          result: null,
-          errors: data.errors,
-        } as ActionSchema,
-        {
-          status: data.status,
-        },
-      );
+    context.logger.error('[api.v1.assets.upload]', error);
+    if (isError<string | Record<string, any>>(error)) {
+      return json(errorJsonDataResponse(null, error.message));
     }
 
-    return json(defaultValue, { status: 500 });
+    if (isFetchError<DataSchema>(error)) {
+      return json(errorJsonDataResponse(null, error.message));
+    }
+
+    throw error;
   }
 };
 

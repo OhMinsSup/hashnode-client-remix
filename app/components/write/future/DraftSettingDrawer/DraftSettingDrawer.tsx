@@ -13,6 +13,7 @@ import { LabelWithDescription } from '~/components/write/future/LabelWithDescrip
 import { LabelWithTooltip } from '~/components/write/future/LabelWithTooltip';
 import { LabelWithTooltipWrapper } from '~/components/write/future/LabelWithTooltipWrapper';
 import { LabelWrapper } from '~/components/write/future/LabelWrapper';
+import { OgImage } from '~/components/write/future/OgImage';
 
 const ComponentHelperItem = {
   author: {
@@ -143,7 +144,7 @@ export default function DraftSettingDrawer() {
       <Separator className="my-9" orientation="horizontal" />
       <DrawerItemWrapper>
         <LabelWithDescription {...ComponentHelperItem['ogImage']}>
-          <>asdasdsa</>
+          <OgImage />
         </LabelWithDescription>
         <LabelWithTooltipWrapper
           isOptional

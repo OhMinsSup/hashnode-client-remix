@@ -5,6 +5,7 @@ import type { RoutesActionData } from '~/routes/api.v1.assets.upload';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { getTargetElement } from '~/libs/browser-utils/dom';
 import { useDrop } from '~/libs/hooks/useDrop';
 import { getPath } from '~/routes/api.v1.assets.upload';
@@ -17,9 +18,9 @@ export default function ImageUpload() {
 
   const { setUploadState, uploadState, setCoverClose } = useWriteContext();
 
-  const fetcher = useFetcher<RoutesActionData>();
+  const { setValue } = useWriteFormContext();
 
-  console.log(fetcher);
+  const fetcher = useFetcher<RoutesActionData>();
 
   const upload = useCallback(
     async (file: File) => {
@@ -106,14 +107,16 @@ export default function ImageUpload() {
 
   useEffect(() => {
     const fetcherData = fetcher.data;
-    if (fetcher.state === 'idle' && fetcherData != null) {
+    if (
+      fetcher.state === 'idle' &&
+      fetcherData != null &&
+      fetcherData.status === 'success'
+    ) {
       setCoverClose();
       setUploadState('success');
-      console.log(fetcherData);
-      //   setValue("thumbnail", {
-      //     id: fetcherData.id,
-      //     url: fetcherData.publicUrl,
-      //   });
+      setValue('image', fetcherData.result?.publicUrl, {
+        shouldDirty: true,
+      });
     }
   }, [fetcher.state, fetcher.data]);
 

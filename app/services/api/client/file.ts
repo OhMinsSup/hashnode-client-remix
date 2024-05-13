@@ -74,25 +74,15 @@ export class FileNamespace {
 
     const response = await fetch(responseInit);
     if (!response.ok) {
-      const error = new Error();
-
-      const requestStr = `[${responseInit.method}] ${JSON.stringify(uploadUrl)}`;
-
-      const statusStr = response
-        ? `${response.status.toString()} ${response.statusText}`
-        : '<no response>';
-
-      const message = `${requestStr}: ${statusStr}`;
-
-      error.name = 'CloudflareUploadError';
-      error.message = JSON.stringify({
-        status: response.status,
-        errors: message,
-      });
-
-      throw error;
+      return {
+        status: 'error' as const,
+        data: response,
+      };
     }
 
-    return response.json<CloudflareSchema.CfUpload>();
+    return {
+      status: 'success' as const,
+      data: await response.json<CloudflareSchema.CfUpload>(),
+    };
   };
 }

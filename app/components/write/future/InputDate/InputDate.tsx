@@ -50,7 +50,7 @@ export default function InputDate(props: UseControllerProps<FormFieldValues>) {
         </PopoverContent>
       </Popover>
       {selected && (
-        <div className="flex w-full items-center justify-end">
+        <div className="mt-2 flex w-full items-center justify-end">
           <Button variant="outline" onClick={() => field.onChange(undefined)}>
             <span>Clear date</span>
           </Button>
