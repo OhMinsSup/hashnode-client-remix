@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
   POSTS: {
     ROOT: 'posts',
     ID: (id: string) => `posts/${id}`,
-    BY_OWNER: (id: string) => `posts/by-owner/${id}`,
+    BY_OWNER: (id: string) => `posts/${id}/by-owner`,
     PUBLISHED: 'posts/published',
   },
   DRAFTS: {
