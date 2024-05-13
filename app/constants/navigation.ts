@@ -13,7 +13,12 @@ export type NavItem = {
     | 'search'
     | 'feed'
     | 'notifications'
-    | 'sidebar';
+    | 'sidebar'
+    | 'profile'
+    | 'email_notifications'
+    | 'manage_blogs'
+    | 'developer'
+    | 'account';
   type: 'link' | 'dropdown' | 'external_link' | 'drawer';
   title: React.ReactNode;
   href?: string | ((...args: unknown[]) => string);
@@ -164,6 +169,43 @@ export const NAV_CONFIG = {
       title: 'Mentions',
     },
   ],
+  settingsSidebar: [
+    {
+      id: 'profile',
+      type: 'link',
+      title: 'Profile',
+      icon: Icons.circleUser,
+      href: PAGE_ENDPOINTS.SETTINGS.ROOT,
+    },
+    {
+      id: 'email_notifications',
+      type: 'link',
+      title: 'Email Notifications',
+      icon: Icons.mail,
+      href: PAGE_ENDPOINTS.SETTINGS.EMAILS,
+    },
+    {
+      id: 'manage_blogs',
+      type: 'link',
+      title: 'Manage Blogs',
+      icon: Icons.panelTop,
+      href: PAGE_ENDPOINTS.SETTINGS.BLOGS,
+    },
+    {
+      id: 'developer',
+      type: 'link',
+      title: 'Developer',
+      icon: Icons.code,
+      href: PAGE_ENDPOINTS.SETTINGS.DEVELOPER,
+    },
+    {
+      id: 'account',
+      type: 'link',
+      title: 'Account',
+      icon: Icons.settings,
+      href: PAGE_ENDPOINTS.SETTINGS.ACCOUNT,
+    },
+  ] as NavItem[],
   blogTabs: [
     {
       id: 'home',

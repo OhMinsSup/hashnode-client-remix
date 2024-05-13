@@ -70,7 +70,7 @@ export default function MainHeader() {
     <div
       className={cn(
         styles.header_container,
-        'bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white',
+        'bg-slate-50 dark:border-slate-950 dark:bg-slate-950 dark:text-white',
       )}
     >
       <div className={styles.header_layout}>

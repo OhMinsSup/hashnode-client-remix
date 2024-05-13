@@ -80,6 +80,8 @@ export const PAGE_ENDPOINTS = {
     ROOT: '/settings',
     EMAILS: '/settings/emails',
     ACCOUNT: '/settings/account',
+    BLOGS: '/settings/blogs',
+    DEVELOPER: '/settings/developer',
   },
   USERS: {
     ROOT: '/users',
