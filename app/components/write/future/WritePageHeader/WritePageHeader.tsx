@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useFormAction, useNavigation } from '@remix-run/react';
 import { useController } from 'react-hook-form';
 
 import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
@@ -26,12 +27,17 @@ import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { DraftSettingDrawer } from '~/components/write/future/DraftSettingDrawer';
 import { Theme, useTheme } from '~/context/useThemeContext';
+import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
 export default function WritePageHeader() {
   const { setSideOpen, isSideOpen, isOpen, open, close } = useWriteContext();
 
   const { control } = useWriteFormContext();
+
+  const navigation = useNavigation();
+
+  const action = useFormAction();
 
   const {
     field: { value, onChange, ...field },
@@ -173,7 +179,13 @@ export default function WritePageHeader() {
                     </div>
                   </DrawerTitle>
                 </DrawerHeader>
-                <div className="flex-1 overflow-auto">
+                <div
+                  className={cn('flex-1 overflow-auto', {
+                    'opacity-50':
+                      navigation.formMethod === 'PUT' &&
+                      navigation.formAction === action,
+                  })}
+                >
                   <ScrollArea className="h-full w-full p-6">
                     <DraftSettingDrawer />
                   </ScrollArea>
@@ -181,7 +193,13 @@ export default function WritePageHeader() {
                 <DrawerFooter className="border">
                   <div className="flex items-center justify-end space-x-2">
                     <Button variant="outline">Submit for review</Button>
-                    <Button>Publish</Button>
+                    <Button form="hashnode-write-form" className="space-x-2">
+                      {navigation.formMethod === 'PUT' &&
+                      navigation.formAction === action ? (
+                        <Icons.spinner className="size-4 animate-spin" />
+                      ) : null}
+                      <span>Publish</span>
+                    </Button>
                   </div>
                 </DrawerFooter>
               </DrawerContent>

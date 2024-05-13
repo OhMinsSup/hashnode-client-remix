@@ -6,13 +6,15 @@ import { LinkMenu } from '../components/LinkMenu';
 import { TextMenu } from '../components/TextMenu';
 import { ImageBlockMenu } from '../extensions/ImageBlock/components/ImageBlockMenu';
 import { ColumnsMenu } from '../extensions/MultiColumn/menus';
-import { useBlockEditor } from '../hooks/useBlockEditor';
+import { useBlockEditor, UseBlockEditorProps } from '../hooks/useBlockEditor';
 
-export default function BlockEditor() {
+interface BlockEditorProps extends UseBlockEditorProps {}
+
+export default function BlockEditor(props: BlockEditorProps) {
   const menuContainerRef = useRef(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
-  const { editor } = useBlockEditor();
+  const { editor } = useBlockEditor(props);
 
   if (!editor) {
     return null;

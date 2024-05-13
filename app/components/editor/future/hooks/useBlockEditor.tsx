@@ -1,4 +1,4 @@
-import { Editor, useEditor } from '@tiptap/react';
+import { Content, Editor, EditorOptions, useEditor } from '@tiptap/react';
 
 import { ExtensionKit } from '~/components/editor/future/extensions/extension-kit';
 import { isBrowser } from '~/libs/browser-utils/dom';
@@ -9,17 +9,32 @@ declare global {
   }
 }
 
-export const useBlockEditor = () => {
+export interface UseBlockEditorProps {
+  initialContent?: Content;
+  onCreate?: EditorOptions['onCreate'];
+  onUpdate?: EditorOptions['onUpdate'];
+  editable?: EditorOptions['editable'];
+}
+
+export const useBlockEditor = ({
+  initialContent,
+  editable,
+  onCreate,
+  onUpdate,
+}: UseBlockEditorProps) => {
   const editor = useEditor(
     {
+      editable,
       autofocus: true,
-      onCreate: () => {
-        // console.log("editor created", editor);
-        // provider?.on("synced", () => {
-        //   if (editor.isEmpty) {
-        //     editor.commands.setContent(initialContent);
-        //   }
-        // });
+      onCreate: (props) => {
+        if (props.editor.isEmpty && initialContent) {
+          props.editor.commands.setContent(initialContent);
+        }
+
+        onCreate?.(props);
+      },
+      onUpdate: (props) => {
+        onUpdate?.(props);
       },
       extensions: [...ExtensionKit()],
       editorProps: {

@@ -1,27 +1,30 @@
+import React from 'react';
 import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
-} from "@remix-run/react";
-import React from "react";
-import { type RoutesLoaderData } from "~/.server/routes/write/write.$id.loader";
-import { WriteEditor } from "~/components/write/future/WriteEditor";
-import { WriteEditorHeader } from "~/components/write/future/WriteEditorHeader";
-import { WritePageHeader } from "~/components/write/future/WritePageHeader";
-import { WriteFormProvider } from "~/components/write/context/useWriteFormContext";
-export { loader } from "~/.server/routes/write/write.$id.loader";
+} from '@remix-run/react';
 
-const Editor = React.lazy(
-  () => import("~/components/editor/future/BlockEditor/BlockEditor")
-);
+import { type RoutesLoaderData } from '~/.server/routes/write/write.$id.loader';
+import { WriteFormProvider } from '~/components/write/context/useWriteFormContext';
+import { WriteEditor } from '~/components/write/future/WriteEditor';
+import { WriteEditorHeader } from '~/components/write/future/WriteEditorHeader';
+import { WritePageHeader } from '~/components/write/future/WritePageHeader';
+
+export { loader } from '~/.server/routes/write/write.$id.loader';
+export { action } from '~/.server/routes/write/write.$id.action';
+
+const Editor = React.lazy(() => import('~/components/write/future/Editor'));
 
 export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
 
   const initialValues = data?.result as SerializeSchema.SerializePost<false>;
 
+  console.log(initialValues);
+
   return (
-    <WriteFormProvider initialValues={initialValues}>
+    <WriteFormProvider initialValues={initialValues || undefined}>
       <WritePageHeader />
       <WriteEditor header={<WriteEditorHeader />}>
         <React.Suspense fallback={<></>}>

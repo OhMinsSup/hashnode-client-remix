@@ -13,6 +13,7 @@ interface Props {
 
 export function WriteFormProvider({ children, initialValues }: Props) {
   const { setSubtitleOpen } = useWriteContext();
+
   const methods = useForm<FormFieldValues>({
     resolver: zodResolver(schema),
     defaultValues: {

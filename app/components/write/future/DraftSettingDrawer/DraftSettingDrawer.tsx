@@ -1,3 +1,9 @@
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import { useRef } from 'react';
+import { useSubmit } from '@remix-run/react';
+import { toast as showToast } from 'sonner';
+
+import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
 import { Separator } from '~/components/ui/separator';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { Author } from '~/components/write/future/Author';
@@ -114,9 +120,39 @@ const ComponentHelperItem = {
 };
 
 export default function DraftSettingDrawer() {
-  const { control } = useWriteFormContext();
+  const { control, handleSubmit } = useWriteFormContext();
+  const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const submit = useSubmit();
+
+  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
+    submit(input as unknown as Record<string, any>, {
+      method: 'put',
+      encType: 'application/json',
+    });
+  };
+
+  const onInvalid: SubmitErrorHandler<FormFieldValues> = (errors) => {
+    console.log(errors);
+    const er = Object.entries(errors)
+      .map(([key, value]) => `${key}: ${value.message}`)
+      .join(', ')
+      .replace(/,/g, '\n');
+    ref.current = setTimeout(() => {
+      showToast.error('Bad Request', {
+        description: er,
+        onAutoClose: () => {
+          if (ref.current) {
+            clearTimeout(ref.current);
+            ref.current = null;
+          }
+        },
+      });
+    }, 0);
+  };
+
   return (
-    <>
+    <form id="hashnode-write-form" onSubmit={handleSubmit(onSubmit, onInvalid)}>
       <DrawerItemWrapper>
         <LabelWrapper
           label={<LabelWithTooltip {...ComponentHelperItem['author']} />}
@@ -185,6 +221,6 @@ export default function DraftSettingDrawer() {
           {...ComponentHelperItem['draftArticle']}
         />
       </DrawerItemWrapper>
-    </>
+    </form>
   );
 }
