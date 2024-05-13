@@ -41,20 +41,25 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
   }, []);
 
   const onDeleteDraft = useCallback(() => {
-    const isConfirm = confirm('Are you sure you want to delete this draft?');
-    if (isConfirm) {
-      console.log('Delete draft');
-
-      submit(
-        {
-          type: 'DRAFT_DELETE',
-          postId: item.id,
-          redirectUrl: location.pathname,
-        },
-        { method: 'delete', encType: 'application/json' },
-      );
+    if (id && item.id === id) {
+      alert('You cannot delete the draft you are currently editing.');
+      return;
     }
-  }, [item.id, submit]);
+
+    const isConfirm = confirm('Are you sure you want to delete this draft?');
+    if (!isConfirm) {
+      return;
+    }
+
+    submit(
+      {
+        type: 'DRAFT_DELETE',
+        postId: item.id,
+        redirectUrl: location.pathname,
+      },
+      { method: 'delete', encType: 'application/json' },
+    );
+  }, [id, item.id, submit]);
 
   useEventListener(
     'mouseenter',

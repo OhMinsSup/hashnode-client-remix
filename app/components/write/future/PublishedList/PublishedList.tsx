@@ -1,5 +1,7 @@
-import { useCallback, useMemo, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useTransition } from 'react';
+import { useActionData } from '@remix-run/react';
 
+import { RoutesActionData } from '~/.server/routes/write/write-layout.action';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
@@ -7,11 +9,13 @@ import { SidebarPublishedItem } from '~/components/write/future/SidebarPublished
 import { usePostPublishedInfiniteQuery } from '~/routes/api.v1.posts.published';
 
 export default function PublishedList() {
+  const actionData = useActionData<RoutesActionData>();
+
   const { leftSideKeyword: searchKeyword } = useWriteContext();
 
   const [isPending, startTransition] = useTransition();
 
-  const { data, fetchNextPage, error, isFetchingNextPage } =
+  const { data, fetchNextPage, error, isFetchingNextPage, refetch } =
     usePostPublishedInfiniteQuery();
 
   const pages = useMemo(() => data?.pages ?? [], [data]);
@@ -37,6 +41,18 @@ export default function PublishedList() {
   }, [fetchNextPage, result]);
 
   const isSearch = Boolean(searchKeyword);
+
+  console.log('actionData', actionData);
+
+  useEffect(() => {
+    if (
+      actionData &&
+      'status' in actionData &&
+      actionData.status === 'success'
+    ) {
+      refetch();
+    }
+  }, [actionData, refetch]);
 
   return (
     <>

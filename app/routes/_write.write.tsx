@@ -1,18 +1,14 @@
-import "~/styles/editor/index.css";
-import { Outlet, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { WriteProvider } from "~/components/write/context/useWriteContext";
-import { WriteLayout } from "~/components/write/future/WriteLayout";
-import { LeftSidebar } from "~/components/write/future/LeftSidebar";
-import { ActionFunctionArgs } from "@remix-run/cloudflare";
+import '~/styles/editor/index.css';
 
-export { meta } from "~/services/seo/write/write-layout.meta";
-export { loader } from "~/.server/routes/write/write-layout.loader";
+import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
 
-export const action = async (args: ActionFunctionArgs) => {
-  const body = await args.request.json();
-  console.log("action", body);
-  return {};
-};
+import { WriteProvider } from '~/components/write/context/useWriteContext';
+import { LeftSidebar } from '~/components/write/future/LeftSidebar';
+import { WriteLayout } from '~/components/write/future/WriteLayout';
+
+export { meta } from '~/services/seo/write/write-layout.meta';
+export { loader } from '~/.server/routes/write/write-layout.loader';
+export { action } from '~/.server/routes/write/write-layout.action';
 
 export default function Routes() {
   return (

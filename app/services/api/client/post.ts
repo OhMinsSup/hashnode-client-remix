@@ -55,4 +55,18 @@ export class PostNamespace {
       },
     );
   };
+
+  deleteHandler = async <T = unknown, R extends ResponseType = 'json'>(
+    id: string,
+    options?: FetchOptions<R>,
+  ): Promise<FetchResponse<MappedResponseType<R, T>>> => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ID(id)),
+      {
+        method: 'DELETE',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
 }
