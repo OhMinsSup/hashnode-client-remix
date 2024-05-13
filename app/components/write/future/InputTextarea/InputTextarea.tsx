@@ -17,7 +17,7 @@ export default function InputTextarea(
       maxLength={156}
       placeholder="Enter meta description"
       {...field}
-      value={value as unknown as string}
+      value={(value || undefined) as unknown as string | undefined}
     />
   );
 }
