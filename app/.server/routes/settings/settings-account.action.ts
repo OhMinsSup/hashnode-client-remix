@@ -21,7 +21,7 @@ type DataSchema = FetchRespSchema.Success<null>;
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   try {
-    if (request.method.toUpperCase() !== RequestMethod.PUT) {
+    if (request.method.toUpperCase() !== RequestMethod.DELETE) {
       throw createError({
         statusMessage: 'Method Not Allowed',
         statusCode: HttpStatus.METHOD_NOT_ALLOWED,
@@ -43,7 +43,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     const user = context.agent.api.app.user;
-    const response = await user.putEmailPreferencesHandler<DataSchema>({
+    const response = await user.deleteHandler<DataSchema>({
       body: input,
       headers: {
         Cookie: cookies,
@@ -56,7 +56,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         statusMessage: 'Bad Request',
         statusCode: HttpStatus.BAD_REQUEST,
         displayType: ErrorDisplayType.TOAST,
-        data: `failed to email preferences update with no data`,
+        data: `failed to user delete with no data`,
       });
     }
 
@@ -66,14 +66,14 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       }),
     );
   } catch (error) {
-    context.logger.error('[settings-email.action]', error);
+    context.logger.error('[settings-accoint.action]', error);
     if (isError<string>(error)) {
       if (error.displayType === ErrorDisplayType.TOAST) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.EMAILS),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
           {
             type: 'error',
-            description: error.data ?? 'failed to email preferences update',
+            description: error.data ?? 'failed to delete user',
           },
           createToastHeaders,
         );
@@ -83,11 +83,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     if (isFetchError<FetchRespSchema.Error>(error)) {
       if (error.data) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.EMAILS),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
           {
             type: 'error',
-            description:
-              error.data.message.at(0) ?? 'failed to email preferences update',
+            description: error.data.message.at(0) ?? 'failed to delete user',
           },
           createToastHeaders,
         );

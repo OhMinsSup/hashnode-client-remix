@@ -1,9 +1,80 @@
-import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
+import { json } from '@remix-run/cloudflare';
+import {
+  ClientActionFunctionArgs,
+  Form,
+  isRouteErrorResponse,
+  useFormAction,
+  useNavigation,
+  useRouteError,
+} from '@remix-run/react';
+
+import { Icons } from '~/components/icons';
+import { Button } from '~/components/ui/button';
+import { Separator } from '~/components/ui/separator';
+import { useMatchesData } from '~/libs/hooks/useMatchesData';
 
 export { meta } from '~/services/seo/settings/settings-account.meta';
+export { action } from '~/.server/routes/settings/settings-account.action';
+
+export const clientAction = async ({
+  serverAction,
+}: ClientActionFunctionArgs) => {
+  const confirmDelete = confirm(
+    'Are you sure you want to delete your account?',
+  );
+
+  if (!confirmDelete) {
+    return json({
+      status: 'success' as const,
+      result: null,
+      message: 'Account deletion cancelled',
+      errors: null,
+    });
+  }
+  const data = await serverAction();
+  return data;
+};
 
 export default function Routes() {
-  return <>Test1</>;
+  const initialValues = useMatchesData(
+    'routes/_settings',
+  ) as RemixDataFlow.Response<SerializeSchema.SerializeUser>;
+
+  const username = initialValues?.result?.UserProfile?.username;
+
+  const action = useFormAction();
+
+  const navigation = useNavigation();
+
+  const isSubmitting =
+    navigation.formMethod === 'PUT' && navigation.formAction === action;
+
+  return (
+    <Form method="delete">
+      <div className="space-y-6">
+        <div>
+          <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+            Delete account
+          </h3>
+          <p className="my-4 text-base text-muted-foreground">
+            Your Hashnode account administers these blogs:
+            <strong>{username}.hashnode.dev</strong>
+          </p>
+          <p className="mb-4 text-base text-muted-foreground">
+            Your personal data will be deleted permanently when you delete your
+            account on Hashnode. This action is irreversible.
+          </p>
+        </div>
+        <Separator orientation="horizontal" />
+        <Button type="submit" className="mt-8" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Icons.spinner className="mr-2 animate-spin" />
+          ) : null}
+          <span>Delete your account</span>
+        </Button>
+      </div>
+    </Form>
+  );
 }
 
 export function ErrorBoundary() {

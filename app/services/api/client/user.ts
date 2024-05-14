@@ -44,6 +44,17 @@ export class UserNamespace {
     );
   };
 
+  deleteHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ROOT),
+      {
+        method: 'DELETE',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
+
   putEmailPreferencesHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.EMIAL_PREFERENCES),
