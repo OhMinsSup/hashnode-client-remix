@@ -43,4 +43,15 @@ export class UserNamespace {
       },
     );
   };
+
+  putEmailPreferencesHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.EMIAL_PREFERENCES),
+      {
+        method: 'PUT',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
 }

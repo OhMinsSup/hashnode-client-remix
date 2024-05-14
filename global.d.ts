@@ -34,6 +34,16 @@ declare namespace SerializeSchema {
     linkedin: string | undefined;
   };
 
+  export type SerializeUserEmail = {
+    id: string;
+    hashnodeWeekly: boolean;
+    activityNotifications: boolean;
+    generalAnnouncements: boolean;
+    monthlyBlogStats: boolean;
+    referralNotifications: boolean;
+    newFollowersWeekly: boolean;
+  };
+
   export type SerializeUser = {
     id: string;
     email: string;
@@ -41,6 +51,7 @@ declare namespace SerializeSchema {
     UserProfile: SerializeUserProfile;
     UserSocial: SerializeUserSocial;
     UserTags: SerializeTag<false>[];
+    UserEmail: SerializeUserEmail;
   };
 
   export type SerializeSimepleUser = {

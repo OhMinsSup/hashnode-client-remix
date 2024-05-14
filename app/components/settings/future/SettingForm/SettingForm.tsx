@@ -1,7 +1,6 @@
 import { useFormAction, useNavigation, useSubmit } from '@remix-run/react';
-import { SubmitHandler } from 'react-hook-form';
+import { type SubmitHandler } from 'react-hook-form';
 
-import type { FormFieldValues } from '~/services/validate/user-update-api.validate';
 import { Icons } from '~/components/icons';
 import { useUserProfileFormContext } from '~/components/settings/context/useUserProfileFormContext';
 import { AboutYou } from '~/components/settings/future/AboutYou';
@@ -11,6 +10,7 @@ import { Social } from '~/components/settings/future/Social';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/services/libs';
+import { type FormFieldValues } from '~/services/validate/user-update-api.validate';
 
 export default function SettingForm() {
   const submit = useSubmit();

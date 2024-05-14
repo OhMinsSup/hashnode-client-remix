@@ -43,7 +43,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     const user = context.agent.api.app.user;
-    const response = await user.putHandler<DataSchema>({
+    const response = await user.putEmailPreferencesHandler<DataSchema>({
       body: input,
       headers: {
         Cookie: cookies,
@@ -70,7 +70,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     if (isError<string>(error)) {
       if (error.displayType === ErrorDisplayType.TOAST) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.EMAILS),
           {
             type: 'error',
             description: error.data ?? 'failed to update user',
@@ -83,7 +83,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     if (isFetchError<FetchRespSchema.Error>(error)) {
       if (error.data) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.EMAILS),
           {
             type: 'error',
             description: error.data.message.at(0) ?? 'failed to update user',

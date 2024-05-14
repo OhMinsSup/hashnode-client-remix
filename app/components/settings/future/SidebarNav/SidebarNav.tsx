@@ -13,6 +13,7 @@ export default function SidebarNav() {
           <NavLink
             key={`setting-nav-${item.id}`}
             to={item.href as string}
+            end
             className={({ isActive }) => {
               return cn(
                 buttonVariants({ variant: 'ghost' }),

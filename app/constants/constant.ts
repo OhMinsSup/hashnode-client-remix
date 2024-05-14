@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   USERS: {
     ROOT: 'users',
     WIDGET: 'users/widget',
+    EMIAL_PREFERENCES: 'users/email-preferences',
   },
   POSTS: {
     ROOT: 'posts',
