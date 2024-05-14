@@ -3,7 +3,7 @@ import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 export { meta } from '~/services/seo/settings/settings-blogs.meta';
 
 export default function Routes() {
-  return <>Test1</>;
+  return <>Blogs</>;
 }
 
 export function ErrorBoundary() {
