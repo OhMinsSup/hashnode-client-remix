@@ -2,44 +2,25 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useFetcher } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
+import { useUserProfileFormContext } from '~/components/settings/context/useUserProfileFormContext';
 import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Button } from '~/components/ui/button';
-import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { useDrop } from '~/libs/hooks/useDrop';
 import { getPath, RoutesActionData } from '~/routes/api.v1.assets.upload';
 import { cn } from '~/services/libs';
 
-export default function OgImage() {
+export default function InputProfile() {
   const $container = useRef<HTMLLabelElement | null>(null);
 
   const fetcher = useFetcher<RoutesActionData>();
 
-  const { setValue } = useWriteFormContext();
+  const { setValue } = useUserProfileFormContext();
 
   const upload = useCallback(
     async (file: File) => {
-      const objectUrl = URL.createObjectURL(file);
-
-      // validation checj file sizes 1600 x 800 px
-      const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = (e) => reject(e);
-        img.src = objectUrl;
-      });
-
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-      }
-
-      if (image.width > 1200 || image.height > 630) {
-        alert('Image size is too small');
-        return;
-      }
-
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('uploadType', 'SEO');
+      formData.append('uploadType', 'IMAGE');
       formData.append('mediaType', 'IMAGE');
 
       fetcher.submit(formData, {
@@ -72,7 +53,7 @@ export default function OgImage() {
   );
 
   const onRemove = useCallback(() => {
-    setValue('seo.image', undefined, {
+    setValue('image', undefined, {
       shouldDirty: true,
     });
   }, [setValue]);
@@ -100,7 +81,7 @@ export default function OgImage() {
       fetcherData != null &&
       fetcherData.status === 'success'
     ) {
-      setValue('seo.image', fetcherData.result?.publicUrl, {
+      setValue('image', fetcherData.result?.publicUrl, {
         shouldDirty: true,
       });
     }
@@ -113,16 +94,13 @@ export default function OgImage() {
           <>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
-              className="flex size-full cursor-pointer flex-row items-center justify-center rounded-xl border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300"
+              className="flex size-40 cursor-pointer flex-row items-center justify-center rounded-full border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300"
               ref={$container}
             >
               <div className="flex flex-col items-center justify-center gap-3 text-muted-foreground">
                 <Icons.cloudUpload />
                 <span className="text-sm text-muted-foreground">
-                  Click to upload image
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  Recommended dimension: 1200 x 630 px
+                  upload image
                 </span>
               </div>
               <input
@@ -139,7 +117,7 @@ export default function OgImage() {
         {fetcher.state === 'loading' || fetcher.state === 'submitting' ? (
           <div
             className={cn(
-              'flex size-full cursor-pointer flex-row items-center justify-center rounded-xl border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300',
+              'flex size-40 cursor-pointer flex-row items-center justify-center rounded-full border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300',
               'absolute inset-0',
             )}
           >
@@ -152,14 +130,14 @@ export default function OgImage() {
               href={fetcher.data.result?.publicUrl}
               target="_Blank"
               aria-label="cover-image"
-              className=" relative block size-full"
+              className="relative block size-40 rounded-full"
               rel="noreferrer"
             >
               <img
                 src={fetcher.data.result?.publicUrl}
                 alt="homepage illustrations"
                 decoding="async"
-                className="h-full w-full rounded object-cover"
+                className="h-full w-full rounded-full object-cover"
               />
             </a>
             <Button

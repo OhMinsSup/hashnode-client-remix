@@ -5,9 +5,11 @@ import { SettingLayout } from '~/components/settings/future/SettingLayout';
 import { MainHeader } from '~/components/shared/future/MainHeader';
 import { MainLayout } from '~/components/shared/future/MainLayout';
 
+export { loader } from '~/.server/routes/settings/settings-layout.loader';
+
 export default function Routes() {
   return (
-    <MainLayout header={<MainHeader />} isCustomMain>
+    <MainLayout header={<MainHeader />} isCustomMain hiddenFooter>
       <SettingLayout>
         <Outlet />
       </SettingLayout>

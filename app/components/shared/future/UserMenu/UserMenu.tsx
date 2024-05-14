@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useSubmit } from '@remix-run/react';
+import { Link, useSubmit } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
 import { getPath } from '~/routes/api.v1.auth.logout';
 
 export default function UserMenu() {
@@ -46,9 +47,15 @@ export default function UserMenu() {
             <Icons.bookmark className="mr-2 h-4 w-4" />
             <span>Bookmarks</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Icons.user className="mr-2 h-4 w-4" />
-            <span>Account settings</span>
+          <DropdownMenuItem asChild>
+            <Link
+              unstable_viewTransition
+              to={PAGE_ENDPOINTS.SETTINGS.ROOT}
+              aria-label="Go to Account settings"
+            >
+              <Icons.user className="mr-2 h-4 w-4" />
+              <span>Account settings</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Icons.history className="mr-2 h-4 w-4" />

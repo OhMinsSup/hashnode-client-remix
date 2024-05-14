@@ -32,4 +32,15 @@ export class UserNamespace {
       },
     );
   };
+
+  putHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ROOT),
+      {
+        method: 'PUT',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
 }

@@ -3,10 +3,7 @@ import { json } from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getCookie } from '~/.server/utils/request.server';
-import {
-  errorJsonResponse,
-  successJsonResponse,
-} from '~/.server/utils/response.server';
+import { successJsonResponse } from '~/.server/utils/response.server';
 import {
   createToastHeaders,
   redirectWithToast,
@@ -27,18 +24,7 @@ export const action = async ({
   context,
   params,
 }: ActionFunctionArgs) => {
-  const { id } = params;
-
   try {
-    if (!id) {
-      throw createError({
-        statusMessage: 'Bad Request',
-        statusCode: HttpStatus.BAD_REQUEST,
-        displayType: ErrorDisplayType.TOAST,
-        data: 'parameter is missing',
-      });
-    }
-
     if (request.method.toUpperCase() !== RequestMethod.PUT) {
       throw createError({
         statusMessage: 'Method Not Allowed',
@@ -60,8 +46,8 @@ export const action = async ({
       });
     }
 
-    const post = context.agent.api.app.post;
-    const response = await post.putHandler<DataSchema>(id, {
+    const user = context.agent.api.app.user;
+    const response = await user.putHandler<DataSchema>({
       body: input,
       headers: {
         Cookie: cookies,
@@ -74,7 +60,7 @@ export const action = async ({
         statusMessage: 'Bad Request',
         statusCode: HttpStatus.BAD_REQUEST,
         displayType: ErrorDisplayType.TOAST,
-        data: `failed to post update with no data`,
+        data: `failed to user update with no data`,
       });
     }
 
@@ -84,14 +70,14 @@ export const action = async ({
       }),
     );
   } catch (error) {
-    context.logger.error('[write.$id.action]', error);
+    context.logger.error('[settings.action]', error);
     if (isError<string>(error)) {
-      if (error.displayType === ErrorDisplayType.TOAST && id) {
+      if (error.displayType === ErrorDisplayType.TOAST) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
           {
             type: 'error',
-            description: error.data ?? 'failed to update post',
+            description: error.data ?? 'failed to update user',
           },
           createToastHeaders,
         );
@@ -99,12 +85,12 @@ export const action = async ({
     }
 
     if (isFetchError<FetchRespSchema.Error>(error)) {
-      if (error.data && id) {
+      if (error.data) {
         return redirectWithToast(
-          safeRedirect(PAGE_ENDPOINTS.WRITE.ID(id)),
+          safeRedirect(PAGE_ENDPOINTS.SETTINGS.ROOT),
           {
             type: 'error',
-            description: error.data.message.at(0) ?? 'failed to update post',
+            description: error.data.message.at(0) ?? 'failed to update user',
           },
           createToastHeaders,
         );

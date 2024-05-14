@@ -29,6 +29,9 @@ declare namespace SerializeSchema {
     facebook: string | undefined;
     instagram: string | undefined;
     website: string | undefined;
+    stackoverflow: string | undefined;
+    youtube: string | undefined;
+    linkedin: string | undefined;
   };
 
   export type SerializeUser = {
@@ -41,8 +44,8 @@ declare namespace SerializeSchema {
   };
 
   export type SerializeSimepleUser = {
-    UserProfile: Pick<SerializeUserProfile, "username" | "image">;
-  } & Pick<SerializeUser, "id" | "email">;
+    UserProfile: Pick<SerializeUserProfile, 'username' | 'image'>;
+  } & Pick<SerializeUser, 'id' | 'email'>;
 
   export type SerializeTagStats = {
     follow: number;
@@ -108,9 +111,9 @@ declare namespace SerializeSchema {
     count: SerializePostCount;
   };
 
-  type UploadType = "IMAGE" | "POST_THUMBNAIL" | "SEO";
+  type UploadType = 'IMAGE' | 'POST_THUMBNAIL' | 'SEO';
 
-  type MediaType = "IMAGE" | "VIDEO" | "AUDIO";
+  type MediaType = 'IMAGE' | 'VIDEO' | 'AUDIO';
 
   export type SerializeFile = {
     id: string;
@@ -201,7 +204,7 @@ declare namespace CloudflareSchema {
 }
 
 declare namespace RemixDataFlow {
-  export type Status = "success" | "error";
+  export type Status = 'success' | 'error';
 
   export type Message = string | null;
 

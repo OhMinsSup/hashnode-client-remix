@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Link, NavLink, useNavigate, useParams } from '@remix-run/react';
+import { Link, NavLink, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
 import { SearchDialog } from '~/components/shared/future/SearchhDialog';
@@ -27,8 +27,6 @@ import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
 export default function MainHeader() {
-  const navigate = useNavigate();
-
   const session = useOptionalSession();
 
   const [theme, setTheme] = useTheme();
@@ -57,14 +55,6 @@ export default function MainHeader() {
       </Link>
     );
   }, []);
-
-  const onSigninPage = useCallback(() => {
-    navigate(PAGE_ENDPOINTS.AUTH.SIGNIN);
-  }, [navigate]);
-
-  const onSignupPage = useCallback(() => {
-    navigate(PAGE_ENDPOINTS.AUTH.SIGNUP);
-  }, [navigate]);
 
   return (
     <div
@@ -137,29 +127,36 @@ export default function MainHeader() {
               <UserMenu />
             ) : (
               <>
-                <Button
-                  className="block md:hidden"
-                  data-href={PAGE_ENDPOINTS.AUTH.SIGNIN}
-                  onClick={onSigninPage}
+                <Link
+                  className={cn(buttonVariants(), 'block md:hidden')}
+                  to={PAGE_ENDPOINTS.AUTH.SIGNIN}
+                  unstable_viewTransition
                 >
                   Sign in
-                </Button>
+                </Link>
                 <section className="hidden gap-3 md:flex">
-                  <Button
-                    variant="link"
-                    role="link"
-                    data-href={PAGE_ENDPOINTS.AUTH.SIGNIN}
-                    onClick={onSigninPage}
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'link',
+                      }),
+                    )}
+                    to={PAGE_ENDPOINTS.AUTH.SIGNIN}
+                    unstable_viewTransition
                   >
                     Log in
-                  </Button>
-                  <Button
-                    role="link"
-                    data-href={PAGE_ENDPOINTS.AUTH.SIGNUP}
-                    onClick={onSignupPage}
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'link',
+                      }),
+                    )}
+                    to={PAGE_ENDPOINTS.AUTH.SIGNUP}
+                    unstable_viewTransition
                   >
                     Sign up
-                  </Button>
+                  </Link>
                 </section>
               </>
             )}
