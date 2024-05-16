@@ -1,7 +1,6 @@
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 export default function Routes() {
-  console.log("Routes2");
   return <div>Routes</div>;
 }
 

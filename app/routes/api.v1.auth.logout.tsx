@@ -1,5 +1,8 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json, redirect } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+  redirect,
+} from '@remix-run/cloudflare';
 
 import { getAuthFromRequest } from '~/.server/utils/auth.server';
 import { clearAuthHeaders } from '~/.server/utils/request.server';
@@ -10,7 +13,7 @@ import {
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context }) => {
   try {
     const session = await getAuthFromRequest(request, context);
     if (!session) {
@@ -32,7 +35,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       });
     }
   }
-};
+});
 
 export type RoutesActionData = typeof action;
 

@@ -1,5 +1,7 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getCookie } from '~/.server/utils/request.server';
@@ -19,7 +21,7 @@ type Json = FormFieldValues;
 
 type DataSchema = FetchRespSchema.Success<null>;
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context }) => {
   try {
     if (request.method.toUpperCase() !== RequestMethod.PUT) {
       throw createError({
@@ -60,11 +62,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       });
     }
 
-    return json(
-      successJsonResponse({
-        ok: true,
-      }),
-    );
+    return json(successJsonResponse(true));
   } catch (error) {
     context.logger.error('[settings.action]', error);
     if (isError<string>(error)) {
@@ -95,6 +93,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     throw error;
   }
-};
+});
 
 export type RoutesActionData = typeof action;

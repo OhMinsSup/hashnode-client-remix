@@ -1,5 +1,7 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  json,
+} from '@remix-run/cloudflare';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCookie } from '~/.server/utils/request.server';
@@ -25,7 +27,7 @@ type SearchParams =
 
 type QueryKey = [string, SearchParams];
 
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request, context }) => {
   try {
     const { cookies } = getCookie(request);
     if (!cookies) {
@@ -44,7 +46,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
       return json(errorJsonDataResponse(0, error.message));
     }
   }
-};
+});
 
 export type RoutesLoaderData = typeof loader;
 

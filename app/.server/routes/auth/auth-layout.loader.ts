@@ -1,4 +1,8 @@
-import { json, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  json,
+  LoaderFunctionArgs,
+} from '@remix-run/cloudflare';
 
 import { redirectIfLoggedInLoader } from '~/.server/utils/auth.server';
 import { successJsonResponse } from '~/.server/utils/response.server';
@@ -8,7 +12,7 @@ type Data = SerializeSchema.Hashnodeonboard;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request, context }) => {
   await redirectIfLoggedInLoader(request, context, PAGE_ENDPOINTS.ROOT);
 
   return json(
@@ -24,6 +28,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
       },
     },
   );
-};
+});
 
 export type RoutesLoaderData = typeof loader;

@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import {
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+  unstable_defineAction as defineAction,
   json,
   unstable_parseMultipartFormData as parseMultipartFormData,
   redirect,
@@ -19,7 +19,7 @@ type Data = FetchRespSchema.File;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context }) => {
   try {
     const { cookies } = getCookie(request);
     if (!cookies) {
@@ -122,7 +122,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     throw error;
   }
-};
+});
 
 export type RoutesActionData = typeof action;
 

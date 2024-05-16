@@ -1,5 +1,7 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getCookie } from '~/.server/utils/request.server';
@@ -25,7 +27,7 @@ type Json = {
 
 type DataSchema = FetchRespSchema.Success<null>;
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context }) => {
   const { redirectUrl, postId } = await request.json<Json>();
 
   try {
@@ -64,11 +66,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       });
     }
 
-    return json(
-      successJsonResponse({
-        ok: true,
-      }),
-    );
+    return json(successJsonResponse(true));
   } catch (error) {
     context.logger.error('[write-layout.action]', error);
     if (isError<string>(error)) {
@@ -98,6 +96,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     throw error;
   }
-};
+});
 
 export type RoutesActionData = typeof action;

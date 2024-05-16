@@ -1,6 +1,6 @@
 import { json } from '@remix-run/cloudflare';
 import {
-  ClientActionFunctionArgs,
+  unstable_defineClientAction as defineClientAction,
   Form,
   isRouteErrorResponse,
   useFormAction,
@@ -8,6 +8,7 @@ import {
   useRouteError,
 } from '@remix-run/react';
 
+import { RoutesActionData } from '~/.server/routes/settings/settings-account.action';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
@@ -16,9 +17,7 @@ import { useMatchesData } from '~/libs/hooks/useMatchesData';
 export { meta } from '~/services/seo/settings/settings-account.meta';
 export { action } from '~/.server/routes/settings/settings-account.action';
 
-export const clientAction = async ({
-  serverAction,
-}: ClientActionFunctionArgs) => {
+export const clientAction = defineClientAction(async ({ serverAction }) => {
   const confirmDelete = confirm(
     'Are you sure you want to delete your account?',
   );
@@ -31,9 +30,9 @@ export const clientAction = async ({
       errors: null,
     });
   }
-  const data = await serverAction();
-  return data;
-};
+
+  return await serverAction<RoutesActionData>();
+});
 
 export default function Routes() {
   const initialValues = useMatchesData(

@@ -1,12 +1,11 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getCookie } from '~/.server/utils/request.server';
-import {
-  errorJsonResponse,
-  successJsonResponse,
-} from '~/.server/utils/response.server';
+import { successJsonResponse } from '~/.server/utils/response.server';
 import {
   createToastHeaders,
   redirectWithToast,
@@ -16,17 +15,13 @@ import { isFetchError } from '~/services/api/error';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 import { RequestMethod } from '~/services/libs/request-method.enum';
-import { FormFieldValues } from '~/services/validate/post-create-api.validate';
+import { type FormFieldValues } from '~/services/validate/post-create-api.validate';
 
 type Json = FormFieldValues;
 
 type DataSchema = FetchRespSchema.Success<null>;
 
-export const action = async ({
-  request,
-  context,
-  params,
-}: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context, params }) => {
   const { id } = params;
 
   try {
@@ -78,11 +73,7 @@ export const action = async ({
       });
     }
 
-    return json(
-      successJsonResponse({
-        ok: true,
-      }),
-    );
+    return json(successJsonResponse(true));
   } catch (error) {
     context.logger.error('[write.$id.action]', error);
     if (isError<string>(error)) {
@@ -113,6 +104,6 @@ export const action = async ({
 
     throw error;
   }
-};
+});
 
 export type RoutesActionData = typeof action;

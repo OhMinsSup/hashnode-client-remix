@@ -1,5 +1,7 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  json,
+} from '@remix-run/cloudflare';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import type { SearchParams } from '~/.server/utils/request.server';
@@ -21,7 +23,7 @@ type DataList = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
 
 type DataSchema = FetchRespSchema.Success<DataList>;
 
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request, context }) => {
   try {
     const { cookies } = getCookie(request);
     if (!cookies) {
@@ -61,7 +63,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
     throw error;
   }
-};
+});
 
 export type RoutesLoaderData = typeof loader;
 

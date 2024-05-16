@@ -1,5 +1,8 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json, redirect } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  json,
+  redirect,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getAuthFromRequest } from '~/.server/utils/auth.server';
@@ -8,7 +11,7 @@ import { PAGE_ENDPOINTS } from '~/constants/constant';
 import { createError, ErrorDisplayType } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request, context }) => {
   try {
     const userInfo = await getAuthFromRequest(request, context, {
       throwException: true,
@@ -28,6 +31,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     context.logger.error('[settings-layout.loader]', error);
     throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
   }
-};
+});
 
 export type RoutesLoaderData = typeof loader;
