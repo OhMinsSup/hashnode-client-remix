@@ -31,7 +31,15 @@ import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
 export default function WritePageHeader() {
-  const { setSideOpen, isSideOpen, isOpen, open, close } = useWriteContext();
+  const {
+    setSideOpen,
+    isSideOpen,
+    isOpen,
+    open,
+    close,
+    isPreviewDraftOpen,
+    setPreviewDraftOpen,
+  } = useWriteContext();
 
   const { control } = useWriteFormContext();
 
@@ -158,7 +166,15 @@ export default function WritePageHeader() {
             role="separator"
           />
           <div className="flex flex-row space-x-2 md:space-x-3">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={() => setPreviewDraftOpen()}
+              aria-haspopup={isPreviewDraftOpen ? 'dialog' : undefined}
+              aria-expanded={isPreviewDraftOpen}
+              aria-controls={
+                isPreviewDraftOpen ? 'preview-draft-dialog' : undefined
+              }
+            >
               <span className="hidden md:flex">Preview</span>
               <Icons.fileSearch className="flex md:hidden" />
             </Button>

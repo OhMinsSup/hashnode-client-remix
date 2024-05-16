@@ -15,9 +15,10 @@ enum Action {
   SET_COVER_OPEN = 'SET_COVER_OPEN',
   SET_COVER_CLOSE = 'SET_COVER_CLOSE',
 
-  SET_UPLOAD_STATE = 'SET_UPLOAD_STATE',
+  SET_PREVIEW_DRAFT_OPEN = 'SET_PREVIEW_DRAFT_OPEN',
+  SET_PREVIEW_DRAFT_CLOSE = 'SET_PREVIEW_DRAFT_CLOSE',
 
-  SET_MARKDOWN_MODE = 'SET_MARKDOWN_MODE',
+  SET_UPLOAD_STATE = 'SET_UPLOAD_STATE',
 
   CHANGE_LEFT_SIDE_KEYWORD = 'CHANGE_LEFT_SIDE_KEYWORD',
 }
@@ -59,6 +60,14 @@ type SetUploadStateAction = {
   payload: 'idle' | 'pending' | 'success' | 'error';
 };
 
+type SetPreviewDraftOpenAction = {
+  type: Action.SET_PREVIEW_DRAFT_OPEN;
+};
+
+type SetPreviewDraftCloseAction = {
+  type: Action.SET_PREVIEW_DRAFT_CLOSE;
+};
+
 type ChangeLeftSideKeywordAction = {
   type: Action.CHANGE_LEFT_SIDE_KEYWORD;
   payload: string;
@@ -74,13 +83,16 @@ type WriteAction =
   | SetCoverOpenAction
   | SetCoverCloseAction
   | SetUploadStateAction
-  | ChangeLeftSideKeywordAction;
+  | ChangeLeftSideKeywordAction
+  | SetPreviewDraftOpenAction
+  | SetPreviewDraftCloseAction;
 
 interface WriteState {
   isOpen: boolean;
   isSideOpen: boolean;
   isSubtitleOpen: boolean;
   isCoverOpen: boolean;
+  isPreviewDraftOpen: boolean;
   uploadState: 'idle' | 'pending' | 'success' | 'error';
   leftSideKeyword: string;
 }
@@ -98,6 +110,8 @@ interface WriteContext extends WriteState {
   changeLeftSideKeyword: (
     payload: ChangeLeftSideKeywordAction['payload'],
   ) => void;
+  setPreviewDraftOpen: () => void;
+  setPreviewDraftClose: () => void;
   dispatch: React.Dispatch<WriteAction>;
 }
 
@@ -106,6 +120,7 @@ const initialState: WriteState = {
   isSideOpen: true,
   isSubtitleOpen: false,
   isCoverOpen: false,
+  isPreviewDraftOpen: false,
   uploadState: 'idle',
   leftSideKeyword: '',
 };
@@ -178,6 +193,18 @@ function reducer(state = initialState, action: WriteAction) {
         leftSideKeyword: action.payload,
       };
     }
+    case Action.SET_PREVIEW_DRAFT_OPEN: {
+      return {
+        ...state,
+        isPreviewDraftOpen: true,
+      };
+    }
+    case Action.SET_PREVIEW_DRAFT_CLOSE: {
+      return {
+        ...state,
+        isPreviewDraftOpen: false,
+      };
+    }
     default:
       return state;
   }
@@ -213,6 +240,12 @@ function WriteProvider({ children }: Props) {
     payload: ChangeLeftSideKeywordAction['payload'],
   ) => dispatch({ type: Action.CHANGE_LEFT_SIDE_KEYWORD, payload });
 
+  const setPreviewDraftOpen = () =>
+    dispatch({ type: Action.SET_PREVIEW_DRAFT_OPEN });
+
+  const setPreviewDraftClose = () =>
+    dispatch({ type: Action.SET_PREVIEW_DRAFT_CLOSE });
+
   const actions = useMemo(
     () => ({
       ...state,
@@ -226,6 +259,8 @@ function WriteProvider({ children }: Props) {
       setCoverClose,
       setUploadState,
       changeLeftSideKeyword,
+      setPreviewDraftOpen,
+      setPreviewDraftClose,
       dispatch,
     }),
     [state],

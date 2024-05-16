@@ -23,7 +23,7 @@ export const getInitialValues = (
   seo: {
     title: initialValues?.PostSeo.title ?? '',
     description: initialValues?.PostSeo.description ?? '',
-    image: initialValues?.PostSeo.image ?? '',
+    image: initialValues?.PostSeo.image ?? undefined,
   },
   config: {
     disabledComment: initialValues?.PostConfig.disabledComment ?? false,
@@ -45,7 +45,7 @@ export const getDefaultValues = () => ({
   seo: {
     title: '',
     description: '',
-    image: '',
+    image: undefined,
   },
   config: {
     disabledComment: false,

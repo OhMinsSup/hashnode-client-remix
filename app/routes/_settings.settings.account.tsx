@@ -39,14 +39,14 @@ export default function Routes() {
     'routes/_settings',
   ) as RemixDataFlow.Response<SerializeSchema.SerializeUser>;
 
-  const username = initialValues?.result?.UserProfile?.username;
-
   const action = useFormAction();
 
   const navigation = useNavigation();
 
   const isSubmitting =
     navigation.formMethod === 'PUT' && navigation.formAction === action;
+
+  const blogName = initialValues?.result?.Blog?.title;
 
   return (
     <Form method="delete">
@@ -57,7 +57,7 @@ export default function Routes() {
           </h3>
           <p className="my-4 text-base text-muted-foreground">
             Your Hashnode account administers these blogs:
-            <strong>{username}.hashnode.dev</strong>
+            <strong>{blogName}</strong>
           </p>
           <p className="mb-4 text-base text-muted-foreground">
             Your personal data will be deleted permanently when you delete your
