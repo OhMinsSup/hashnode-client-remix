@@ -34,7 +34,7 @@ export default function LeftSidebar() {
         <div className="flex-1">
           <div
             className="grid h-full w-full grid-cols-12 items-center justify-center gap-2 border border-transparent px-0 py-1 text-center text-sm"
-            title={`${session.UserProfile.username}'s team blog`}
+            title={session.Blog.title || 'Untitled'}
           >
             <div className="col-span-2">
               <div className="relative h-8 w-full">
@@ -42,7 +42,9 @@ export default function LeftSidebar() {
               </div>
             </div>
             <div className="col-span-8 truncate text-left">
-              <span className="block truncate text-base">{`${session.UserProfile.username}'s team blog`}</span>
+              <span className="block truncate text-base">
+                {session.Blog.title || 'Untitled'}
+              </span>
             </div>
             <div className="col-span-2 flex flex-row items-center justify-center"></div>
           </div>

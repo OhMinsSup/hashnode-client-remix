@@ -25,7 +25,6 @@ export const getInitialValues = (
     description: initialValues?.PostSeo.description ?? undefined,
     image: initialValues?.PostSeo.image ?? undefined,
   },
-  authors: [],
   config: {
     disabledComment: initialValues?.PostConfig.disabledComment ?? false,
     hiddenArticle: initialValues?.PostConfig.hiddenArticle ?? false,
@@ -48,7 +47,6 @@ export const getDefaultValues = () => ({
     description: undefined,
     image: undefined,
   },
-  authors: [],
   config: {
     disabledComment: false,
     hiddenArticle: false,

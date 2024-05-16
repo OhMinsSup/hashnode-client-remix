@@ -22,6 +22,9 @@ export class UserNamespace {
     );
   };
 
+  /**
+   * @deprecated
+   */
   getWidgetHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.WIDGET),
