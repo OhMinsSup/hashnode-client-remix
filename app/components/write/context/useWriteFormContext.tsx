@@ -14,16 +14,16 @@ interface Props {
 export const getInitialValues = (
   initialValues?: SerializeSchema.SerializePost<false>,
 ) => ({
-  urlSlug: initialValues?.urlSlug || initialValues?.title || undefined,
-  title: initialValues?.title ?? undefined,
-  subTitle: initialValues?.subTitle ?? undefined,
+  urlSlug: initialValues?.urlSlug || initialValues?.title || '',
+  title: initialValues?.title ?? '',
+  subTitle: initialValues?.subTitle ?? '',
   content: initialValues?.content || undefined,
   image: initialValues?.image ?? undefined,
   tags: initialValues?.PostTags.map((tag) => tag.name) ?? [],
   seo: {
-    title: initialValues?.PostSeo.title ?? undefined,
-    description: initialValues?.PostSeo.description ?? undefined,
-    image: initialValues?.PostSeo.image ?? undefined,
+    title: initialValues?.PostSeo.title ?? '',
+    description: initialValues?.PostSeo.description ?? '',
+    image: initialValues?.PostSeo.image ?? '',
   },
   config: {
     disabledComment: initialValues?.PostConfig.disabledComment ?? false,
@@ -36,16 +36,16 @@ export const getInitialValues = (
 });
 
 export const getDefaultValues = () => ({
-  urlSlug: undefined,
-  title: undefined,
-  subTitle: undefined,
+  urlSlug: '',
+  title: '',
+  subTitle: '',
   content: undefined,
   image: undefined,
   tags: [],
   seo: {
-    title: undefined,
-    description: undefined,
-    image: undefined,
+    title: '',
+    description: '',
+    image: '',
   },
   config: {
     disabledComment: false,

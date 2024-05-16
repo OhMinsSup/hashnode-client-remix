@@ -124,7 +124,7 @@ export default function MainHeader() {
               ) : null}
             </div>
             {session ? (
-              <UserMenu />
+              <UserMenu session={session} />
             ) : (
               <>
                 <Link
