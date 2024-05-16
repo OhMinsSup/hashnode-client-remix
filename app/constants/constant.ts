@@ -96,6 +96,9 @@ export const PAGE_ENDPOINTS = {
   POSTS: {
     ID: (id: string | number) => `/posts/${id}`,
   },
+  PREVIEW: {
+    ID: (id: string | number) => `/preview/${id}`,
+  },
 } as const;
 
 export const STATUS_CODE = {

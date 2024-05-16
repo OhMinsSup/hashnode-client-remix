@@ -1,14 +1,33 @@
+import { useMemo } from 'react';
+import { useParams } from '@remix-run/react';
+
 import { Icons } from '~/components/icons';
 import { Iframe } from '~/components/shared/future/Iframe';
 import { Button, buttonVariants } from '~/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { useMatchesData } from '~/libs/hooks/useMatchesData';
 import { cn } from '~/services/libs';
 import { DesktopSvg } from './DesktopSvg';
 import { MobileSvg } from './MobileSvg';
 
 export default function PreviewDraft() {
+  const { id } = useParams();
   const { setPreviewDraftClose } = useWriteContext();
+  const data = useMatchesData('root') as Record<string, any>;
+
+  const outNewTabLink = useMemo(() => {
+    if (!data || (data && !data.origin)) {
+      return '#';
+    }
+
+    if (!id) {
+      return '#';
+    }
+
+    return `${data.origin}${PAGE_ENDPOINTS.PREVIEW.ID(id)}`;
+  }, [data, id]);
 
   return (
     <div
@@ -25,7 +44,7 @@ export default function PreviewDraft() {
             style={{ flexFlow: 'wrap' }}
           >
             <a
-              href="https://hashnode.com/preview/66423da8dcf011ea7c240690"
+              href={outNewTabLink}
               target="_blank"
               className={cn(
                 buttonVariants({
