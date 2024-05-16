@@ -1,4 +1,5 @@
 import { Icons } from '~/components/icons';
+import { Iframe } from '~/components/shared/future/Iframe';
 import { Button, buttonVariants } from '~/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
@@ -45,26 +46,26 @@ export default function PreviewDraft() {
       </div>
       <div className="container py-4">
         <Tabs
-          defaultValue="account"
+          defaultValue="Desktop"
           className="max-w-[72rem] 2xl:max-w-[80rem]"
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="account">Web Desktop</TabsTrigger>
-            <TabsTrigger value="password">Web Mobile</TabsTrigger>
+            <TabsTrigger value="Desktop">Web Desktop</TabsTrigger>
+            <TabsTrigger value="Mobile">Web Mobile</TabsTrigger>
           </TabsList>
-          <TabsContent value="account" className="container pb-10 pt-5">
+          <TabsContent value="Desktop" className="container pb-10 pt-5">
             <div className="relative flex h-[635px] w-full flex-row items-center justify-center pt-5">
               <DesktopSvg />
-              <div className="absolute left-[225px] top-[40px] h-[480px] w-[770px] overflow-hidden bg-slate-400">
-                asdasds
+              <div className="absolute left-[225px] top-[40px] h-[480px] w-[770px] overflow-hidden">
+                <Iframe />
               </div>
             </div>
           </TabsContent>
-          <TabsContent value="password" className="container pb-10 pt-5">
+          <TabsContent value="Mobile" className="container pb-10 pt-5">
             <div className="relative flex h-[884px] w-full flex-row items-center justify-center pt-5">
               <MobileSvg />
-              <div className="absolute h-[844px] w-[390px] overflow-hidden rounded-[3rem] bg-slate-400">
-                asdasds
+              <div className="absolute h-[844px] w-[390px] overflow-hidden rounded-[3rem]">
+                <Iframe />
               </div>
             </div>
           </TabsContent>
