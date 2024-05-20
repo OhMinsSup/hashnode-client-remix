@@ -7,6 +7,7 @@ import { Button } from '~/components/ui/button';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { useDrop } from '~/libs/hooks/useDrop';
 import { getPath, RoutesActionData } from '~/routes/api.v1.assets.upload';
+import { resetFetcher } from '~/routes/api.v1.reset-fetcher';
 import { cn } from '~/services/libs';
 
 export default function OgImage() {
@@ -103,8 +104,9 @@ export default function OgImage() {
       setValue('seo.image', fetcherData.result?.publicUrl, {
         shouldDirty: true,
       });
+      resetFetcher(fetcher);
     }
-  }, [fetcher.state, fetcher.data]);
+  }, [fetcher, setValue]);
 
   return (
     <AspectRatio ratio={16 / 9}>
