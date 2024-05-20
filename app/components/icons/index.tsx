@@ -42,6 +42,7 @@ import {
   Mail,
   Menu,
   MessageSquare,
+  MessagesSquare,
   Moon,
   MoreHorizontal,
   MoreVertical,
@@ -67,6 +68,7 @@ import {
 import { cn } from '~/services/libs';
 
 export const Icons = {
+  messagesSquare: MessagesSquare,
   bookOpen: BookOpen,
   code: Code,
   panelTop: PanelTop,

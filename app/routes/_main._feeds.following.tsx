@@ -1,7 +1,15 @@
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
+import { PostCard } from '~/components/shared/future/PostCard';
+
 export default function Routes() {
-  return <div>Routes</div>;
+  return (
+    <div className="flex flex-col items-center gap-6">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <PostCard key={i} />
+      ))}
+    </div>
+  );
 }
 
 export function ErrorBoundary() {
