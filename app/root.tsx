@@ -19,6 +19,9 @@ import {
 import '~/styles/global.css';
 
 import { useEffect, useRef } from 'react';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 import type { Theme } from '~/context/useThemeContext';
 import type { Toast } from '~/services/validate/toast.validate';
@@ -28,6 +31,9 @@ import { ClientQueryProvider } from '~/services/react-query';
 
 export { loader } from '~/.server/routes/root/root.loader';
 export { meta } from '~/services/seo/root/root.meta';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function ShowToast({ toast }: { toast: Toast }) {
   const { id, type, title, description } = toast;

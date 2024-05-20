@@ -15,8 +15,6 @@ export { loader } from '~/.server/routes/preview/preview.$id.loader';
 export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
 
-  console.log(data);
-
   return (
     <>
       <BlogTemplate.Headers />
@@ -24,6 +22,7 @@ export default function Routes() {
         <BlogTemplate.Writer
           title={data.result.title}
           createdAt={data.result.createdAt}
+          subTitle={data.result.subTitle}
         />
         <BlogTemplate.Content>
           <ClientOnly>

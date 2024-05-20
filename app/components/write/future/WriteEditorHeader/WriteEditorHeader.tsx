@@ -79,15 +79,17 @@ export default function WriteEditorHeader() {
               <ImagePopover />
             </PopoverContent>
           </Popover>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="space-x-2"
-            onClick={onAddSubtitle}
-          >
-            <Icons.subtitle className="size-5" />
-            <span>Add Subtitle</span>
-          </Button>
+          {isSubtitleOpen ? null : (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="space-x-2"
+              onClick={onAddSubtitle}
+            >
+              <Icons.subtitle className="size-5" />
+              <span>Add Subtitle</span>
+            </Button>
+          )}
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>

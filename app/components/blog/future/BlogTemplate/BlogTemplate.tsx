@@ -14,7 +14,7 @@ import {
 import { PAGE_ENDPOINTS } from '~/constants/constant';
 import { NAV_CONFIG } from '~/constants/navigation';
 import { Theme, useTheme } from '~/context/useThemeContext';
-import { FORMAT, getDateFormat } from '~/libs/date';
+import { distanceInWordsToNow, FORMAT, getDateFormat } from '~/libs/date';
 import { useOptionalSession } from '~/libs/hooks/useSession';
 import { cn } from '~/services/libs';
 import styles from './styles.module.css';
@@ -216,10 +216,15 @@ BlogTemplate.SubHeader = function Item({ children }: BlogTemplateProps) {
 
 interface WriterProps {
   title: SerializeSchema.SerializePost<false>['title'];
+  subTitle: SerializeSchema.SerializePost<false>['subTitle'];
   createdAt: SerializeSchema.SerializePost<false>['createdAt'];
 }
 
-BlogTemplate.Writer = function Item({ title, createdAt }: WriterProps) {
+BlogTemplate.Writer = function Item({
+  title,
+  subTitle,
+  createdAt,
+}: WriterProps) {
   return (
     <div className="container relative mx-auto grid grid-cols-8">
       <div className="col-span-full lg:col-span-6 lg:col-start-2">
@@ -228,13 +233,20 @@ BlogTemplate.Writer = function Item({ title, createdAt }: WriterProps) {
             {title}
           </h1>
         </div>
+        {subTitle && (
+          <div className="font-heading mb-8 px-4 text-center md:mb-14 md:px-5 lg:px-8 xl:px-20">
+            <h2 className="text-2xl leading-snug text-slate-700 dark:text-slate-400 md:text-3xl xl:text-3xl">
+              {subTitle}
+            </h2>
+          </div>
+        )}
         <div className="relative z-20 mb-8 flex flex-row flex-wrap items-center justify-center px-4 md:-mt-7 md:mb-14 md:text-lg">
           <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:w-auto md:justify-start">
             <div className="h-10 w-10  overflow-hidden  rounded-full bg-slate-200 dark:bg-white/20 md:mr-3 md:h-12 md:w-12">
               <Link to="/" className="relative block size-full">
                 <Avatar className="size-full cursor-pointer hover:opacity-80">
                   <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>asdds</AvatarFallback>
+                  <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </Link>
             </div>
@@ -258,7 +270,7 @@ BlogTemplate.Writer = function Item({ title, createdAt }: WriterProps) {
             <span className="mx-3 block font-bold text-slate-500">.</span>
             <p className="flex flex-row items-center text-slate-700 dark:text-slate-400">
               <Icons.bookOpen className="mr-2 h-5 w-5 opacity-75" />
-              <span>1 min read</span>
+              <span>{distanceInWordsToNow(createdAt)} read</span>
             </p>
           </div>
         </div>
