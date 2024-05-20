@@ -1,18 +1,14 @@
 import React from 'react';
-import { useLoaderData } from '@remix-run/react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import type { RoutesLoaderData } from '~/.server/routes/write/write-layout.loader';
 import { Button } from '~/components/ui/button';
 import MyDraftCollapsibleWrapper from './MyDraftCollapsibleWrapper';
 import MyDraftList from './MyDraftList';
 
 export default function MyDraftProvider() {
-  const data = useLoaderData<RoutesLoaderData>();
-
   return (
-    <MyDraftCollapsibleWrapper totalCount={data.result.draft}>
+    <MyDraftCollapsibleWrapper>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary

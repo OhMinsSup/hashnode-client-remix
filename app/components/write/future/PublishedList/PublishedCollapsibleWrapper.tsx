@@ -5,14 +5,12 @@ import { CollapsibleWrapper } from '~/components/write/future/CollapsibleWrapper
 
 interface PublishedCollapsibleWrapperProps {
   children: React.ReactNode;
-  totalCount: number;
 }
 
 export default function PublishedCollapsibleWrapper({
   children,
-  totalCount,
 }: PublishedCollapsibleWrapperProps) {
-  const { leftSideKeyword: searchKeyword } = useWriteContext();
+  const { leftSideKeyword: searchKeyword, count } = useWriteContext();
 
   const isSearch = Boolean(searchKeyword);
 
@@ -27,7 +25,7 @@ export default function PublishedCollapsibleWrapper({
       title="PUBLISHED"
       searchTitle={searchTitle}
       isSearch={isSearch}
-      totalCount={totalCount}
+      totalCount={count.published}
     >
       {children}
     </CollapsibleWrapper>

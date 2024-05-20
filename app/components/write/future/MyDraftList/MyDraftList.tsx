@@ -1,7 +1,5 @@
-import { useCallback, useEffect, useMemo, useTransition } from 'react';
-import { useActionData } from '@remix-run/react';
+import { useCallback, useTransition } from 'react';
 
-import { RoutesActionData } from '~/.server/routes/write/write-layout.action';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
@@ -9,30 +7,22 @@ import { SidebarDraftItem } from '~/components/write/future/SidebarDraftItem';
 import { useDraftInfiniteQuery } from '~/routes/api.v1.drafts';
 
 export default function MyDraftList() {
-  const actionData = useActionData<RoutesActionData>();
-
   const { leftSideKeyword: searchKeyword } = useWriteContext();
 
   const [isPending, startTransition] = useTransition();
 
-  const { data, fetchNextPage, error, isFetchingNextPage, refetch } =
+  const { data, fetchNextPage, error, isFetchingNextPage } =
     useDraftInfiniteQuery();
 
-  const pages = useMemo(() => data?.pages ?? [], [data]);
+  const pages = data?.pages ?? [];
 
-  const result = useMemo(() => pages.at(-1)?.result, [pages]);
+  const result = pages.at(-1)?.result;
 
-  const totalCount = useMemo(() => result?.totalCount ?? 0, [result]);
+  const totalCount = result?.totalCount ?? 0;
 
-  const items = useMemo(
-    () => pages.map((page) => page?.result?.list ?? []).flat() ?? [],
-    [pages],
-  );
+  const items = pages.map((page) => page?.result?.list ?? []).flat() ?? [];
 
-  const isSuccess = useMemo(
-    () => !error && data && items.length > 0,
-    [data, error, items.length],
-  );
+  const isSuccess = !error && data && items.length > 0;
 
   const loadNext = useCallback(() => {
     if (result && result.pageInfo.hasNextPage) {
@@ -41,16 +31,6 @@ export default function MyDraftList() {
   }, [fetchNextPage, result]);
 
   const isSearch = Boolean(searchKeyword);
-
-  useEffect(() => {
-    if (
-      actionData &&
-      'status' in actionData &&
-      actionData.status === 'success'
-    ) {
-      refetch();
-    }
-  }, [actionData, refetch]);
 
   return (
     <>

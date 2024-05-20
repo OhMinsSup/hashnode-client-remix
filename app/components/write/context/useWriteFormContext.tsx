@@ -21,8 +21,8 @@ export const getInitialValues = (
   image: initialValues?.image ?? undefined,
   tags: initialValues?.PostTags.map((tag) => tag.name) ?? [],
   seo: {
-    title: initialValues?.PostSeo.title ?? '',
-    description: initialValues?.PostSeo.description ?? '',
+    title: initialValues?.PostSeo?.title ?? '',
+    description: initialValues?.PostSeo?.description ?? '',
     image: initialValues?.PostSeo.image ?? undefined,
   },
   config: {

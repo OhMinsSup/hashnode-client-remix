@@ -1,8 +1,10 @@
 // components
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 // types
-export { loader } from "~/.server/routes/write/write.loader";
+export { loader } from '~/.server/routes/write/write.loader';
+
+export const shouldRevalidate = () => false;
 
 export default function Routes() {
   return <></>;
