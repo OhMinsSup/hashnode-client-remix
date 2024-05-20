@@ -163,8 +163,9 @@ export default function OgImage() {
               />
             </a>
             <Button
+              type="button"
               variant="secondary"
-              className="absolute right-0 top-0 rounded-full"
+              className="absolute right-0 top-0 z-[300px] rounded-full"
               size="icon"
               onClick={onRemove}
             >

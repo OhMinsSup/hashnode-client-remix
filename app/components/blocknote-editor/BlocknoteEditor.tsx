@@ -15,6 +15,8 @@ import '@blocknote/shadcn/style.css';
 import { useCallback, useEffect, useTransition } from 'react';
 
 import { useTheme } from '~/context/useThemeContext';
+import { getPath } from '~/routes/api.v1.assets.upload';
+import { fetchAndDecode } from '~/services/libs/remix-signle-fetch';
 
 type BlockType = 'html' | 'markdown';
 
@@ -45,7 +47,40 @@ function Editor({
 }: BlocknoteEditorProps) {
   const [theme] = useTheme();
   // Creates a new editor instance.
-  const editor = useCreateBlockNote(options, deps);
+  const editor = useCreateBlockNote(
+    {
+      ...options,
+      uploadFile: async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('uploadType', 'IMAGE');
+        formData.append('mediaType', 'IMAGE');
+
+        const { data } = await fetchAndDecode(`${getPath()}.data`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!data) {
+          throw new Error('Failed to upload file');
+        }
+
+        const { data: data2 } = data as {
+          data: {
+            result: {
+              id: string;
+              publicUrl: string;
+            };
+            status: string;
+            error: any;
+          };
+        };
+
+        return data2.result.publicUrl;
+      },
+    },
+    deps,
+  );
 
   const [, startTransition] = useTransition();
 
