@@ -1,29 +1,28 @@
-import { useTransition } from 'react';
-
-import { BlockEditor } from '~/components/editor/future/BlockEditor';
-import { BlockEditorProps } from '~/components/editor/future/BlockEditor/BlockEditor';
+import { BlocknoteEditor } from '~/components/blocknote-editor';
+import { BlocknoteEditorProps } from '~/components/blocknote-editor/BlocknoteEditor';
+import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 
 interface EditorProps
-  extends Pick<BlockEditorProps, 'initialContent' | 'editable'> {}
+  extends Pick<BlocknoteEditorProps, 'editable' | 'initialHTML'> {}
 
-export default function Editor({ initialContent, editable }: EditorProps) {
-  const { setValue } = useWriteFormContext();
+export default function Editor({ initialHTML, editable }: EditorProps) {
+  const { setValue, watch } = useWriteFormContext();
 
-  const [, startTransition] = useTransition();
+  const isMarkdown = watch('config.isMarkdown');
 
   return (
-    <BlockEditor
-      editable={editable}
-      initialContent={initialContent}
-      onUpdate={({ editor }) => {
-        startTransition(() => {
-          setValue('content', editor.getHTML(), {
+    <ClientOnly>
+      <BlocknoteEditor
+        blockType={isMarkdown ? 'markdown' : 'html'}
+        initialHTML={initialHTML}
+        editable={editable}
+        onChange={(_, value) => {
+          setValue('content', value, {
             shouldDirty: true,
           });
-          setValue('meta', JSON.stringify(editor.getJSON()));
-        });
-      }}
-    />
+        }}
+      />
+    </ClientOnly>
   );
 }

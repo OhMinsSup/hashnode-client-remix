@@ -5,8 +5,8 @@ import {
 } from '@remix-run/react';
 
 import type { RoutesLoaderData } from '~/.server/routes/preview/preview.$id.loader';
+import { BlocknoteEditor } from '~/components/blocknote-editor';
 import { BlogTemplate } from '~/components/blog/future/BlogTemplate';
-import { BlockEditor } from '~/components/editor/future/BlockEditor';
 import { ClientOnly } from '~/components/shared/future/ClientOnly';
 
 export { meta } from '~/services/seo/preview/preview.meta';
@@ -26,9 +26,12 @@ export default function Routes() {
         />
         <BlogTemplate.Content>
           <ClientOnly>
-            <BlockEditor
+            <BlocknoteEditor
+              blockType={
+                data.result.PostConfig.isMarkdown ? 'markdown' : 'html'
+              }
+              initialHTML={data.result.content}
               editable={false}
-              initialContent={data?.result.content}
             />
           </ClientOnly>
         </BlogTemplate.Content>

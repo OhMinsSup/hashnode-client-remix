@@ -40,7 +40,7 @@ export default function PreviewDraft() {
         <div className="container flex flex-wrap items-center justify-between p-5">
           <h3 id="preview-draft-title">Preview Draft</h3>
           <div
-            className="flex w-full justify-center md:w-auto"
+            className="flex w-full justify-center md:!w-auto"
             style={{ flexFlow: 'wrap' }}
           >
             <a
@@ -63,7 +63,7 @@ export default function PreviewDraft() {
           </div>
         </div>
       </div>
-      <div className="container py-4">
+      <div className="container flex justify-center py-4">
         <Tabs
           defaultValue="Desktop"
           className="max-w-[72rem] 2xl:max-w-[80rem]"

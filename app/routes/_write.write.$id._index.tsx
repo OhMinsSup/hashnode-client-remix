@@ -6,7 +6,6 @@ import {
 } from '@remix-run/react';
 
 import { type RoutesLoaderData } from '~/.server/routes/write/write.$id.loader';
-import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { WriteFormProvider } from '~/components/write/context/useWriteFormContext';
 import Editor from '~/components/write/future/Editor';
 import { WriteEditor } from '~/components/write/future/WriteEditor';
@@ -28,9 +27,7 @@ export default function Routes() {
       <WritePageHeader />
       <WriteEditor header={<WriteEditorHeader />}>
         {navigation.state === 'loading' ? null : (
-          <ClientOnly>
-            <Editor initialContent={initialValues?.content} />
-          </ClientOnly>
+          <Editor initialHTML={initialValues.content} editable />
         )}
       </WriteEditor>
     </WriteFormProvider>
