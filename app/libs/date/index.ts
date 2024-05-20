@@ -20,15 +20,7 @@ export const getDateFormat = (
   key = FORMAT.MMMM_D_YYYY,
   format = '',
 ) => {
-  if (!date) return format;
-  if (typeof date !== 'number' || typeof date !== 'string') {
-    if (date instanceof Date) {
-      const mom = dayjsWrap(date);
-      if (mom.isValid()) {
-        return mom.format(key);
-      }
-      return format;
-    }
+  if (!date) {
     return format;
   }
   const mom = dayjsWrap(new Date(date));

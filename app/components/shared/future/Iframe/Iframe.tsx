@@ -2,11 +2,18 @@ import { useRef } from 'react';
 
 import { useIframe } from './useIframe';
 
-export default function Iframe() {
+interface IframeProps {
+  iframeUrl: string;
+}
+
+export default function Iframe({ iframeUrl }: IframeProps) {
   const $ele = useRef<HTMLIFrameElement>(null);
 
   const { status } = useIframe({
     ref: $ele,
+    options: {
+      iframeUrl,
+    },
   });
 
   console.log('Iframe status:', status);

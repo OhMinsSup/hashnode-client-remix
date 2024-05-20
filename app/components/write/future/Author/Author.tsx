@@ -3,8 +3,8 @@ import { Badge } from '~/components/ui/badge';
 import { useSession } from '~/libs/hooks/useSession';
 
 export default function Author() {
-  const sesion = useSession();
-  const owner = sesion.Blog.BlogMembers.find(
+  const session = useSession();
+  const owner = session.Blog.BlogMembers.find(
     (member) => member.role === 'OWNER',
   );
 

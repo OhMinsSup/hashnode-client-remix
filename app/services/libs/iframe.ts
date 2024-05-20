@@ -108,7 +108,6 @@ export class IFrameProtocol {
 
   // Handles message windows coming from iframes
   private eventListener(evt: MessageEvent): void {
-    console.log('eventListener:', evt);
     // skip events originating from different iframes
     if (evt.source !== this.frameWindow) {
       return;

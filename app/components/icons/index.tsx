@@ -8,6 +8,7 @@ import {
   Award,
   Bell,
   Bookmark,
+  BookOpen,
   Calendar,
   Check,
   ChevronDown,
@@ -66,6 +67,7 @@ import {
 import { cn } from '~/services/libs';
 
 export const Icons = {
+  bookOpen: BookOpen,
   code: Code,
   panelTop: PanelTop,
   mail: Mail,

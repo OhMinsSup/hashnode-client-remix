@@ -173,6 +173,8 @@ declare namespace SerializeSchema {
     PostSeo: Partial<SerializePostSeo>;
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
     count: SerializePostCount;
+    createdAt: string;
+    updatedAt: string;
   };
 
   type UploadType = 'IMAGE' | 'POST_THUMBNAIL' | 'SEO';

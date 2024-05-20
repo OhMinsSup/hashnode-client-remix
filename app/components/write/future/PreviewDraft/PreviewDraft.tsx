@@ -73,18 +73,21 @@ export default function PreviewDraft() {
             <TabsTrigger value="Mobile">Web Mobile</TabsTrigger>
           </TabsList>
           <TabsContent value="Desktop" className="container pb-10 pt-5">
-            <div className="relative flex h-[635px] w-full flex-row items-center justify-center pt-5">
+            <div className="relative flex h-[635px] w-[1008px] flex-row items-center justify-center pt-5">
               <DesktopSvg />
-              <div className="absolute left-[225px] top-[40px] h-[480px] w-[770px] overflow-hidden">
-                <Iframe />
+              <div className="absolute left-[119px] top-[31px] h-[480px] w-[770px] overflow-hidden">
+                <Iframe iframeUrl={outNewTabLink} />
               </div>
             </div>
           </TabsContent>
-          <TabsContent value="Mobile" className="container pb-10 pt-5">
-            <div className="relative flex h-[884px] w-full flex-row items-center justify-center pt-5">
+          <TabsContent
+            value="Mobile"
+            className="container flex justify-center pb-10 pt-5"
+          >
+            <div className="relative flex h-[884px] w-[438px] flex-row items-center justify-center pt-5">
               <MobileSvg />
               <div className="absolute h-[844px] w-[390px] overflow-hidden rounded-[3rem]">
-                <Iframe />
+                <Iframe iframeUrl={outNewTabLink} />
               </div>
             </div>
           </TabsContent>
