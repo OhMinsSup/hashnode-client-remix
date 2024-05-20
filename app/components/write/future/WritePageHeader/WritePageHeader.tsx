@@ -31,7 +31,15 @@ import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
 export default function WritePageHeader() {
-  const { setSideOpen, isSideOpen, isOpen, open, close } = useWriteContext();
+  const {
+    setSideOpen,
+    isSideOpen,
+    isOpen,
+    open,
+    close,
+    isPreviewDraftOpen,
+    setPreviewDraftOpen,
+  } = useWriteContext();
 
   const { control } = useWriteFormContext();
 
@@ -158,15 +166,24 @@ export default function WritePageHeader() {
             role="separator"
           />
           <div className="flex flex-row space-x-2 md:space-x-3">
-            <Button variant="outline">
-              <span className="hidden md:flex">Preview</span>
+            <Button
+              variant="outline"
+              className="flex items-center space-x-2"
+              onClick={() => setPreviewDraftOpen()}
+              aria-haspopup={isPreviewDraftOpen ? 'dialog' : undefined}
+              aria-expanded={isPreviewDraftOpen}
+              aria-controls={
+                isPreviewDraftOpen ? 'preview-draft-dialog' : undefined
+              }
+            >
               <Icons.fileSearch className="flex md:hidden" />
+              <span className="hidden md:flex">Preview</span>
             </Button>
             <Drawer direction="left" open={isOpen} onOpenChange={onOpenChange}>
               <DrawerTrigger asChild>
                 <Button variant="default">Publish</Button>
               </DrawerTrigger>
-              <DrawerContent className="h-full w-full rounded-none sm:w-[504px]">
+              <DrawerContent className="h-full w-full rounded-none sm:!w-[504px]">
                 <DrawerHeader className="border-b">
                   <DrawerTitle>
                     <div className="flex flex-row items-center justify-between">

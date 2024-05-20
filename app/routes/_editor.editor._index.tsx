@@ -1,22 +1,19 @@
-import "~/styles/editor/index.css";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import React from "react";
+import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-const Editor = React.lazy(
-  () => import("~/components/editor/future/BlockEditor/BlockEditor")
-);
+import { BlocknoteEditor } from '~/components/blocknote-editor';
+import { ClientOnly } from '~/components/shared/future/ClientOnly';
 
 export default function Routes() {
   return (
-    <React.Suspense fallback={<>Loading...</>}>
-      <Editor />
-    </React.Suspense>
+    <ClientOnly fallback={<>Loading...</>}>
+      <BlocknoteEditor />
+    </ClientOnly>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log("ErrorBoundary", error);
+  console.log('ErrorBoundary', error);
   if (isRouteErrorResponse(error)) {
     return <Routes />;
   } else if (error instanceof Error) {

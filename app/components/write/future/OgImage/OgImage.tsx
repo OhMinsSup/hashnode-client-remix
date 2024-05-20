@@ -7,6 +7,7 @@ import { Button } from '~/components/ui/button';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { useDrop } from '~/libs/hooks/useDrop';
 import { getPath, RoutesActionData } from '~/routes/api.v1.assets.upload';
+import { resetFetcher } from '~/routes/api.v1.reset-fetcher';
 import { cn } from '~/services/libs';
 
 export default function OgImage() {
@@ -39,7 +40,7 @@ export default function OgImage() {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('uploadType', 'POST_THUMBNAIL');
+      formData.append('uploadType', 'SEO');
       formData.append('mediaType', 'IMAGE');
 
       fetcher.submit(formData, {
@@ -103,8 +104,9 @@ export default function OgImage() {
       setValue('seo.image', fetcherData.result?.publicUrl, {
         shouldDirty: true,
       });
+      resetFetcher(fetcher);
     }
-  }, [fetcher.state, fetcher.data]);
+  }, [fetcher, setValue]);
 
   return (
     <AspectRatio ratio={16 / 9}>
@@ -163,8 +165,9 @@ export default function OgImage() {
               />
             </a>
             <Button
+              type="button"
               variant="secondary"
-              className="absolute right-0 top-0 rounded-full"
+              className="absolute right-0 top-0 z-[300px] rounded-full"
               size="icon"
               onClick={onRemove}
             >

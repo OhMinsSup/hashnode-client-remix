@@ -5,12 +5,64 @@ interface Window {
 }
 
 declare namespace SerializeSchema {
+  type BlogMemberRole = 'OWNER' | 'EDITOR';
+
+  type BlogMemberVisibility = 'PUBLIC' | 'PRIVATE';
+
+  type BlogLayoutType = 'MAGAZINE' | 'STACKED' | 'GRID';
+
   // Auth
   export type Hashnodeonboard = {
     username: string;
     job: string;
     image: string;
     description: string;
+  };
+
+  export type SerializeBlogSeo = {
+    title: string;
+    description: string;
+    image: string;
+  };
+
+  export type SerializeBlogAppearance = {
+    layoutType: BlogLayoutType;
+    logo: string | undefined;
+    logoDark: string | undefined;
+    favicon: string | undefined;
+    headerColor: string | undefined;
+    displayReadTime: boolean;
+    displayPostViews: boolean;
+    subscribeNewsletter: boolean;
+  };
+
+  export type SerializeBlogSocial = {
+    github: string | undefined;
+    twitter: string | undefined;
+    instagram: string | undefined;
+    mastodon: string | undefined;
+    youtube: string | undefined;
+    linkedin: string | undefined;
+    dailydev: string | undefined;
+  };
+
+  export type SerializeBlogMember = {
+    role: BlogMemberRole;
+    visibility: BlogMemberVisibility;
+    User: SerializeSimepleUser;
+    createdAt: string;
+  };
+
+  export type SerializeBlog = {
+    id: string;
+    type: BlogType;
+    title: string;
+    about: string;
+    createdAt: string;
+    BlogMembers: SerializeBlogMember[];
+    BlogSeo: SerializeBlogSeo;
+    BlogAppearance: SerializeBlogAppearance;
+    BlogSocial: SerializeBlogSocial;
   };
 
   export type SerializeUserProfile = {
@@ -29,6 +81,19 @@ declare namespace SerializeSchema {
     facebook: string | undefined;
     instagram: string | undefined;
     website: string | undefined;
+    stackoverflow: string | undefined;
+    youtube: string | undefined;
+    linkedin: string | undefined;
+  };
+
+  export type SerializeUserEmail = {
+    id: string;
+    hashnodeWeekly: boolean;
+    activityNotifications: boolean;
+    generalAnnouncements: boolean;
+    monthlyBlogStats: boolean;
+    referralNotifications: boolean;
+    newFollowersWeekly: boolean;
   };
 
   export type SerializeUser = {
@@ -38,11 +103,13 @@ declare namespace SerializeSchema {
     UserProfile: SerializeUserProfile;
     UserSocial: SerializeUserSocial;
     UserTags: SerializeTag<false>[];
+    UserEmail: SerializeUserEmail;
+    Blog: SerializeBlog;
   };
 
   export type SerializeSimepleUser = {
-    UserProfile: Pick<SerializeUserProfile, "username" | "image">;
-  } & Pick<SerializeUser, "id" | "email">;
+    UserProfile: Pick<SerializeUserProfile, 'username' | 'image'>;
+  } & Pick<SerializeUser, 'id' | 'email'>;
 
   export type SerializeTagStats = {
     follow: number;
@@ -106,11 +173,13 @@ declare namespace SerializeSchema {
     PostSeo: Partial<SerializePostSeo>;
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
     count: SerializePostCount;
+    createdAt: string;
+    updatedAt: string;
   };
 
-  type UploadType = "IMAGE" | "POST_THUMBNAIL" | "SEO";
+  type UploadType = 'IMAGE' | 'POST_THUMBNAIL' | 'SEO';
 
-  type MediaType = "IMAGE" | "VIDEO" | "AUDIO";
+  type MediaType = 'IMAGE' | 'VIDEO' | 'AUDIO';
 
   export type SerializeFile = {
     id: string;
@@ -201,7 +270,7 @@ declare namespace CloudflareSchema {
 }
 
 declare namespace RemixDataFlow {
-  export type Status = "success" | "error";
+  export type Status = 'success' | 'error';
 
   export type Message = string | null;
 

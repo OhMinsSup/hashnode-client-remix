@@ -1,5 +1,8 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json, redirect } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+  redirect,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 import omit from 'lodash-es/omit';
 
@@ -23,7 +26,7 @@ type Data = FetchRespSchema.Auth;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
-export const action = async ({ request, context }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request, context }) => {
   try {
     if (request.method.toUpperCase() !== RequestMethod.POST) {
       throw createError({
@@ -92,6 +95,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     throw e;
   }
-};
+});
 
 export type RoutesActionData = typeof action;

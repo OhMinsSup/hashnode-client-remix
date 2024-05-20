@@ -1,5 +1,7 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { redirect } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  redirect,
+} from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
 import { getCookie } from '~/.server/utils/request.server';
@@ -11,7 +13,7 @@ type Data = FetchRespSchema.Id<string>;
 
 type DataSchema = FetchRespSchema.Success<Data>;
 
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request, context }) => {
   const { searchParams } = new URL(request.url);
   const isNewDraft = searchParams.get('isNewDraft');
   const tag = searchParams.get('tag');
@@ -63,6 +65,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     context.logger.error('[write.loader]', error);
     throw redirect(safeRedirect(PAGE_ENDPOINTS.ROOT));
   }
-};
+});
 
 export type RoutesLoaderData = typeof loader;

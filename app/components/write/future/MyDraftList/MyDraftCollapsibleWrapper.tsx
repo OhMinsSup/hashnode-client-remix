@@ -5,14 +5,12 @@ import { CollapsibleWrapper } from '~/components/write/future/CollapsibleWrapper
 
 interface MyDraftCollapsibleWrapperProps {
   children: React.ReactNode;
-  totalCount: number;
 }
 
 export default function MyDraftCollapsibleWrapper({
   children,
-  totalCount,
 }: MyDraftCollapsibleWrapperProps) {
-  const { leftSideKeyword: searchKeyword } = useWriteContext();
+  const { leftSideKeyword: searchKeyword, count } = useWriteContext();
 
   const isSearch = Boolean(searchKeyword);
 
@@ -25,7 +23,7 @@ export default function MyDraftCollapsibleWrapper({
       title="My Drafts"
       searchTitle={searchTitle}
       isSearch={isSearch}
-      totalCount={totalCount}
+      totalCount={count.draft}
     >
       {children}
     </CollapsibleWrapper>

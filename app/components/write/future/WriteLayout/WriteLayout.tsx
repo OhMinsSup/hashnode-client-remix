@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useWriteContext } from '~/components/write/context/useWriteContext';
+import { PreviewDraft } from '~/components/write/future/PreviewDraft';
 import { cn } from '~/services/libs';
 import styles from './styles.module.css';
 
@@ -10,7 +11,7 @@ interface WriteLayoutProps {
 }
 
 export default function WriteLayout({ children, sidebar }: WriteLayoutProps) {
-  const { isSideOpen } = useWriteContext();
+  const { isSideOpen, isPreviewDraftOpen } = useWriteContext();
   return (
     <div className={styles.root}>
       <div
@@ -23,6 +24,7 @@ export default function WriteLayout({ children, sidebar }: WriteLayoutProps) {
         >
           {sidebar}
         </div>
+        {isPreviewDraftOpen ? <PreviewDraft /> : null}
         <div
           className={cn(isSideOpen ? styles.content : styles.content_hidden)}
         >

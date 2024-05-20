@@ -1,8 +1,8 @@
-import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-import { MainFeedTabs } from "~/components/shared/future/MainFeedTabs";
+import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
+
+import { MainFeedTabs } from '~/components/shared/future/MainFeedTabs';
 
 export default function Routes() {
-  console.log("Routes1");
   return (
     <MainFeedTabs>
       <Outlet />

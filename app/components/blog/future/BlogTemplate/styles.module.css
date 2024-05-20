@@ -1,0 +1,9 @@
+.header_left_btn_back {
+  /* focus-ring-base focus-ring-colors-dark-header */
+  @apply mr-2 flex flex-row items-center rounded-full p-3 font-medium transition duration-100 ease-in-out hover:bg-white/20;
+}
+
+.header_left_title_link {
+  /* focus-ring-base focus-ring-colors-dark-header */
+  @apply flex flex-row items-center;
+}

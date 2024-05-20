@@ -8,7 +8,6 @@ import { Separator } from '~/components/ui/separator';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { Author } from '~/components/write/future/Author';
 import { DrawerItemWrapper } from '~/components/write/future/DrawerItemWrapper';
-import { InputAuthors } from '~/components/write/future/InputAuthors';
 import { InputDate } from '~/components/write/future/InputDate';
 import { InputSlug } from '~/components/write/future/InputSlug';
 import { InputSwitch } from '~/components/write/future/InputSwitch';
@@ -158,11 +157,6 @@ export default function DraftSettingDrawer() {
           label={<LabelWithTooltip {...ComponentHelperItem['author']} />}
         >
           <Author />
-        </LabelWrapper>
-        <LabelWrapper
-          label={<LabelWithTooltip {...ComponentHelperItem['coAuthors']} />}
-        >
-          <InputAuthors />
         </LabelWrapper>
       </DrawerItemWrapper>
       <Separator className="my-9" orientation="horizontal" />

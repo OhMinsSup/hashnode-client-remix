@@ -22,11 +22,47 @@ export class UserNamespace {
     );
   };
 
+  /**
+   * @deprecated
+   */
   getWidgetHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.WIDGET),
       {
         method: 'GET',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
+
+  putHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ROOT),
+      {
+        method: 'PUT',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
+
+  deleteHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.ROOT),
+      {
+        method: 'DELETE',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
+
+  putEmailPreferencesHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.EMIAL_PREFERENCES),
+      {
+        method: 'PUT',
         baseURL: this._service.uri.toString(),
         ...options,
       },

@@ -13,7 +13,6 @@ export const schema = z.object({
     description: z.string().max(156).optional(),
     image: z.string().url().optional(),
   }),
-  authors: z.array(z.string().min(1)).optional(),
   config: z.object({
     disabledComment: z.boolean().optional(),
     hiddenArticle: z.boolean().optional(),

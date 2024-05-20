@@ -1,13 +1,15 @@
-import { Outlet, useRouteError, isRouteErrorResponse } from "@remix-run/react";
-import { MainContent } from "~/components/shared/future/MainContent";
-import { MainFooter } from "~/components/shared/future/MainFooter";
-import { MainHeader } from "~/components/shared/future/MainHeader";
-import { MainLayout } from "~/components/shared/future/MainLayout";
+import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
+
+import { Aside } from '~/components/shared/future/Aside';
+import { MainContent } from '~/components/shared/future/MainContent';
+import { MainFooter } from '~/components/shared/future/MainFooter';
+import { MainHeader } from '~/components/shared/future/MainHeader';
+import { MainLayout } from '~/components/shared/future/MainLayout';
 
 export default function Routes() {
   return (
     <MainLayout header={<MainHeader />} footer={<MainFooter />}>
-      <MainContent aside={<>Aside</>}>
+      <MainContent aside={<Aside />}>
         <Outlet />
       </MainContent>
     </MainLayout>

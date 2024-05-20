@@ -10,7 +10,6 @@
     "**/.client/**/*.tsx",
     "node_modules/@remix-run/react/future/single-fetch.d.ts"
   ],
-  "exclude": ["**/.routes/**/*.ts", "**/.routes/**/*.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,

@@ -1,5 +1,6 @@
 import { useMemo, useReducer } from 'react';
 
+import { useDeepCompareEffect } from '~/libs/hooks/useDeepCompareEffect';
 import { createContext } from '~/libs/react-utils/context';
 
 enum Action {
@@ -15,11 +16,15 @@ enum Action {
   SET_COVER_OPEN = 'SET_COVER_OPEN',
   SET_COVER_CLOSE = 'SET_COVER_CLOSE',
 
+  SET_PREVIEW_DRAFT_OPEN = 'SET_PREVIEW_DRAFT_OPEN',
+  SET_PREVIEW_DRAFT_CLOSE = 'SET_PREVIEW_DRAFT_CLOSE',
+
   SET_UPLOAD_STATE = 'SET_UPLOAD_STATE',
 
-  SET_MARKDOWN_MODE = 'SET_MARKDOWN_MODE',
-
   CHANGE_LEFT_SIDE_KEYWORD = 'CHANGE_LEFT_SIDE_KEYWORD',
+
+  CHANGE_COUNT = 'CHANGE_COUNT',
+  CHANGE_COUNTS = 'CHANGE_COUNTS',
 }
 
 type OpenAction = {
@@ -59,9 +64,30 @@ type SetUploadStateAction = {
   payload: 'idle' | 'pending' | 'success' | 'error';
 };
 
+type SetPreviewDraftOpenAction = {
+  type: Action.SET_PREVIEW_DRAFT_OPEN;
+};
+
+type SetPreviewDraftCloseAction = {
+  type: Action.SET_PREVIEW_DRAFT_CLOSE;
+};
+
 type ChangeLeftSideKeywordAction = {
   type: Action.CHANGE_LEFT_SIDE_KEYWORD;
   payload: string;
+};
+
+type ChangeCountAction = {
+  type: Action.CHANGE_COUNT;
+  payload: {
+    key: keyof CounState;
+    value: number;
+  };
+};
+
+type ChangeCountsAction = {
+  type: Action.CHANGE_COUNTS;
+  payload: CounState;
 };
 
 type WriteAction =
@@ -74,15 +100,27 @@ type WriteAction =
   | SetCoverOpenAction
   | SetCoverCloseAction
   | SetUploadStateAction
-  | ChangeLeftSideKeywordAction;
+  | ChangeLeftSideKeywordAction
+  | SetPreviewDraftOpenAction
+  | SetPreviewDraftCloseAction
+  | ChangeCountAction
+  | ChangeCountsAction;
+
+type CounState = {
+  submitted: number;
+  draft: number;
+  published: number;
+};
 
 interface WriteState {
   isOpen: boolean;
   isSideOpen: boolean;
   isSubtitleOpen: boolean;
   isCoverOpen: boolean;
+  isPreviewDraftOpen: boolean;
   uploadState: 'idle' | 'pending' | 'success' | 'error';
   leftSideKeyword: string;
+  count: CounState;
 }
 
 interface WriteContext extends WriteState {
@@ -98,6 +136,9 @@ interface WriteContext extends WriteState {
   changeLeftSideKeyword: (
     payload: ChangeLeftSideKeywordAction['payload'],
   ) => void;
+  setPreviewDraftOpen: () => void;
+  setPreviewDraftClose: () => void;
+  changeCount: (payload: ChangeCountAction['payload']) => void;
   dispatch: React.Dispatch<WriteAction>;
 }
 
@@ -106,8 +147,14 @@ const initialState: WriteState = {
   isSideOpen: true,
   isSubtitleOpen: false,
   isCoverOpen: false,
+  isPreviewDraftOpen: false,
   uploadState: 'idle',
   leftSideKeyword: '',
+  count: {
+    submitted: 0,
+    draft: 0,
+    published: 0,
+  },
 };
 
 const [Provider, useWriteContext] = createContext<WriteContext>({
@@ -178,6 +225,33 @@ function reducer(state = initialState, action: WriteAction) {
         leftSideKeyword: action.payload,
       };
     }
+    case Action.SET_PREVIEW_DRAFT_OPEN: {
+      return {
+        ...state,
+        isPreviewDraftOpen: true,
+      };
+    }
+    case Action.SET_PREVIEW_DRAFT_CLOSE: {
+      return {
+        ...state,
+        isPreviewDraftOpen: false,
+      };
+    }
+    case Action.CHANGE_COUNT: {
+      return {
+        ...state,
+        count: {
+          ...state.count,
+          [action.payload.key]: action.payload.value,
+        },
+      };
+    }
+    case Action.CHANGE_COUNTS: {
+      return {
+        ...state,
+        count: action.payload,
+      };
+    }
     default:
       return state;
   }
@@ -185,10 +259,20 @@ function reducer(state = initialState, action: WriteAction) {
 
 interface Props {
   children: React.ReactNode;
+  count?: CounState;
 }
 
-function WriteProvider({ children }: Props) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+function WriteProvider({ children, count }: Props) {
+  const [state, dispatch] = useReducer(
+    reducer,
+    count ? { ...initialState, count } : initialState,
+  );
+
+  useDeepCompareEffect(() => {
+    if (count) {
+      dispatch({ type: Action.CHANGE_COUNTS, payload: count });
+    }
+  }, [count]);
 
   const open = () => dispatch({ type: Action.OPEN });
 
@@ -213,6 +297,15 @@ function WriteProvider({ children }: Props) {
     payload: ChangeLeftSideKeywordAction['payload'],
   ) => dispatch({ type: Action.CHANGE_LEFT_SIDE_KEYWORD, payload });
 
+  const setPreviewDraftOpen = () =>
+    dispatch({ type: Action.SET_PREVIEW_DRAFT_OPEN });
+
+  const setPreviewDraftClose = () =>
+    dispatch({ type: Action.SET_PREVIEW_DRAFT_CLOSE });
+
+  const changeCount = (payload: ChangeCountAction['payload']) =>
+    dispatch({ type: Action.CHANGE_COUNT, payload });
+
   const actions = useMemo(
     () => ({
       ...state,
@@ -226,6 +319,9 @@ function WriteProvider({ children }: Props) {
       setCoverClose,
       setUploadState,
       changeLeftSideKeyword,
+      setPreviewDraftOpen,
+      setPreviewDraftClose,
+      changeCount,
       dispatch,
     }),
     [state],

@@ -1,40 +1,46 @@
-import React from 'react';
+import '~/styles/editor/index.css';
+
+import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   isRouteErrorResponse,
+  Outlet,
   useLoaderData,
-  useNavigation,
   useRouteError,
 } from '@remix-run/react';
 
-import { type RoutesLoaderData } from '~/.server/routes/write/write.$id.loader';
-import { WriteFormProvider } from '~/components/write/context/useWriteFormContext';
-import { WriteEditor } from '~/components/write/future/WriteEditor';
-import { WriteEditorHeader } from '~/components/write/future/WriteEditorHeader';
-import { WritePageHeader } from '~/components/write/future/WritePageHeader';
+import type { RoutesLoaderData } from '~/.server/routes/write/write-layout.loader';
+import { WriteProvider } from '~/components/write/context/useWriteContext';
+import { LeftSidebar } from '~/components/write/future/LeftSidebar';
+import { WriteLayout } from '~/components/write/future/WriteLayout';
 
-export { loader } from '~/.server/routes/write/write.$id.loader';
-export { action } from '~/.server/routes/write/write.$id.action';
+export { meta } from '~/services/seo/write/write-layout.meta';
+export { loader } from '~/.server/routes/write/write-layout.loader';
+export { action } from '~/.server/routes/write/write-layout.action';
 
-const Editor = React.lazy(() => import('~/components/write/future/Editor'));
+export const shouldRevalidate = ({
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) => {
+  const currentId = currentParams.id;
+  const nextId = nextParams.id;
+  if (currentId === nextId) {
+    return false;
+  }
+  return defaultShouldRevalidate;
+};
 
 export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
 
-  const initialValues = data?.result as SerializeSchema.SerializePost<false>;
-
-  const navigation = useNavigation();
-
   return (
-    <WriteFormProvider initialValues={initialValues || undefined}>
-      <WritePageHeader />
-      <WriteEditor header={<WriteEditorHeader />}>
-        {navigation.state === 'loading' ? null : (
-          <React.Suspense fallback={<></>}>
-            <Editor initialContent={initialValues?.content} />
-          </React.Suspense>
-        )}
-      </WriteEditor>
-    </WriteFormProvider>
+    <WriteProvider count={data?.result}>
+      <div data-id="root">
+        <WriteLayout sidebar={<LeftSidebar />}>
+          <Outlet />
+        </WriteLayout>
+      </div>
+    </WriteProvider>
   );
 }
 

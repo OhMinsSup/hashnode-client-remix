@@ -1,7 +1,0 @@
-.root {
-  @apply bg-white leading-[1.5];
-}
-
-:global(.dark) .root {
-  @apply bg-black;
-}

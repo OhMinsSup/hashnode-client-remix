@@ -1,5 +1,7 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
+import {
+  unstable_defineLoader as defineLoader,
+  json,
+} from '@remix-run/cloudflare';
 
 import { getAuthFromRequest } from '~/.server/utils/auth.server';
 import {
@@ -10,7 +12,7 @@ import { getTheme, initializeTheme } from '~/.server/utils/theme.server';
 import { getToast, initializeToast } from '~/.server/utils/toast.server';
 import { getDomainUrl } from '~/services/libs';
 
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ context, request }) => {
   initializeTheme(context.env.COOKIE_SESSION_SECRET);
   initializeToast(context.env.TOAST_SECRET);
 
@@ -43,6 +45,6 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       headers: combineHeaders(toastHeaders),
     });
   }
-};
+});
 
 export type RoutesLoaderData = typeof loader;

@@ -1,8 +1,8 @@
 import { Buffer } from 'node:buffer';
 // utils
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { unstable_defineLoader as defineLoader } from '@remix-run/cloudflare';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = defineLoader(async ({ request }) => {
   const host =
     request.headers.get('X-Forwarded-Host') ?? request.headers.get('host');
   if (!host) {
@@ -28,4 +28,4 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       'Content-Length': String(Buffer.byteLength(xmlString)),
     },
   });
-};
+});

@@ -1,5 +1,8 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json, redirect } from '@remix-run/cloudflare';
+import {
+  unstable_defineAction as defineAction,
+  json,
+  redirect,
+} from '@remix-run/cloudflare';
 
 import { SearchParams } from '~/.server/utils/request.server';
 import {
@@ -10,7 +13,7 @@ import { commit, setTheme } from '~/.server/utils/theme.server';
 import { isTheme } from '~/context/useThemeContext';
 import { getQueryPath } from '~/services/libs';
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = defineAction(async ({ request }) => {
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
   const theme = form.get('theme');
@@ -27,7 +30,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       'Set-Cookie': await commit(request, session),
     },
   });
-};
+});
 
 export type RoutesActionData = typeof action;
 

@@ -9,6 +9,7 @@ interface MainLayoutProps {
   footer?: React.ReactNode;
   hiddenHeader?: boolean;
   hiddenFooter?: boolean;
+  isCustomMain?: boolean;
 }
 
 export default function MainLayout({
@@ -17,18 +18,23 @@ export default function MainLayout({
   header,
   hiddenHeader,
   hiddenFooter,
+  isCustomMain,
 }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen">
       {hiddenHeader ? null : (
         <header className={styles.header}>{header}</header>
       )}
-      <main className={styles.main}>{children}</main>
+      {isCustomMain ? (
+        <>{children}</>
+      ) : (
+        <main className={styles.main}>{children}</main>
+      )}
       {hiddenFooter ? null : (
         <nav
           className={cn(
             styles.nav,
-            'bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white',
+            'bg-slate-50 dark:border-slate-950 dark:bg-slate-950 dark:text-white',
           )}
         >
           {footer}

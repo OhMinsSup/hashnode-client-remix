@@ -68,7 +68,7 @@ export default function BlogHeader() {
               {theme === Theme.DARK ? <Icons.sun /> : <Icons.moon />}
             </Button>
             {session ? (
-              <UserMenu />
+              <UserMenu session={session} />
             ) : (
               <>
                 <Button

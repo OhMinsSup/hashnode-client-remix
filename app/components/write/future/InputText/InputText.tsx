@@ -15,7 +15,7 @@ export default function InputText(props: UseControllerProps<FormFieldValues>) {
       maxLength={70}
       placeholder="Enter meta title"
       {...field}
-      value={(value || undefined) as unknown as string | undefined}
+      value={value as unknown as string}
     />
   );
 }
