@@ -24,7 +24,7 @@ export interface ResponseMap {
   blob: Blob;
   text: string;
   arrayBuffer: ArrayBuffer;
-  turbo: ReadableStream<Uint8Array>;
+  turbo: any;
 }
 
 export type ResponseMapType = keyof ResponseMap | 'json';

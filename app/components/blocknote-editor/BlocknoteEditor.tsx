@@ -57,7 +57,8 @@ function Editor({
         formData.append('mediaType', 'IMAGE');
 
         const response = await fetchHandler<
-          RemixDataFlow.Response<FetchRespSchema.File>
+          RemixDataFlow.Response<FetchRespSchema.File>,
+          'turbo'
         >(getPath(), {
           baseURL: window.location.origin,
           isSingleFetch: true,
