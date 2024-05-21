@@ -1,12 +1,14 @@
 import {
   unstable_defineAction as defineAction,
+  json,
   redirect,
 } from '@remix-run/cloudflare';
 
 import { getQueryPath } from '~/services/libs';
 
 export const action = defineAction(async () => {
-  return null;
+  console.log('Reset fetcher');
+  return json({});
 });
 
 export type RoutesActionData = typeof action;
