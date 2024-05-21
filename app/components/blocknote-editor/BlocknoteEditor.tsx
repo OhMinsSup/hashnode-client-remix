@@ -70,7 +70,11 @@ function Editor({
           throw new Error('Failed to upload file');
         }
 
-        return response._data.result.publicUrl;
+        if (!response._data.data) {
+          throw new Error('Failed to upload file');
+        }
+
+        return response._data.data.result.publicUrl;
       },
     },
     deps,

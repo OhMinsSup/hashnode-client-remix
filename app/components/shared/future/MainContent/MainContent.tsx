@@ -55,7 +55,7 @@ export default function MainContent({
       <div className={cn(styles.root)}>{children}</div>
       <aside
         className={cn(styles.aside)}
-        style={{ top: 0, position: 'relative' }}
+        style={{ top: 0, position: 'relative', height: '100%' }}
       >
         {aside}
       </aside>
