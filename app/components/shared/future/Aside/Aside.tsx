@@ -4,9 +4,15 @@ import { Link } from '@remix-run/react';
 import { Icons } from '~/components/icons';
 import { Button, buttonVariants } from '~/components/ui/button';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { distanceInWordsToNow } from '~/libs/date';
 import { cn } from '~/services/libs';
 
-export default function Aside() {
+interface AsideProps {
+  draftTotal?: number;
+  drafts?: SerializeSchema.SerializePost<false>[];
+}
+
+export default function Aside({ drafts, draftTotal }: AsideProps) {
   return (
     <div className="hidden xl:block">
       <div className="mb-5 flex flex-col gap-6 sm:w-[340px] xl:mt-8">
@@ -20,24 +26,30 @@ export default function Aside() {
         >
           adsa
         </Aside.Container>
-        <Aside.Container
-          title="Drafts (32)"
-          subheading={
-            <Link
-              to={PAGE_ENDPOINTS.WRITE.ROOT}
-              className={cn(
-                buttonVariants({
-                  variant: 'outline',
-                  size: 'sm',
-                }),
-              )}
-            >
-              See all
-            </Link>
-          }
-        >
-          adsa
-        </Aside.Container>
+        {drafts && drafts.length > 0 ? (
+          <Aside.Container
+            title={`Drafts (${draftTotal})`}
+            subheading={
+              <Link
+                to={PAGE_ENDPOINTS.WRITE.ROOT}
+                className={cn(
+                  buttonVariants({
+                    variant: 'outline',
+                    size: 'sm',
+                  }),
+                )}
+              >
+                See all
+              </Link>
+            }
+          >
+            <div className="space-y-3">
+              {drafts.map((draft) => (
+                <DraftCard key={`draft-${draft.id}`} draft={draft} />
+              ))}
+            </div>
+          </Aside.Container>
+        ) : null}
         <Aside.Container title="Trending Articles">adsa</Aside.Container>
         <Aside.Container title="Top commenters this week">adsa</Aside.Container>
         <Aside.Container title="Bookmarks">adsa</Aside.Container>
@@ -71,3 +83,35 @@ Aside.Container = function Item({
     </div>
   );
 };
+
+interface DraftCardProps {
+  draft: SerializeSchema.SerializePost<false>;
+}
+
+function DraftCard({ draft }: DraftCardProps) {
+  return (
+    <div className="flex flex-col gap-3 text-slate-700 dark:text-slate-300">
+      <Link
+        unstable_viewTransition
+        className="font-heading mr-3 line-clamp-1 text-base font-semibold leading-snug"
+        to={PAGE_ENDPOINTS.WRITE.ID(draft.id)}
+      >
+        {draft.title}
+      </Link>
+      <div className="flex flex-row space-x-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+        <p className="text-sm font-normal text-slate-600 dark:text-slate-400">
+          Edited {distanceInWordsToNow(draft.createdAt)}
+        </p>
+        <Link
+          unstable_viewTransition
+          className="flex flex-row gap-2 text-slate-500 hover:underline"
+          to={PAGE_ENDPOINTS.WRITE.ID(draft.id)}
+        >
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            Continue editing
+          </p>
+        </Link>
+      </div>
+    </div>
+  );
+}
