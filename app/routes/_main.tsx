@@ -8,8 +8,8 @@ import { MainLayout } from '~/components/shared/future/MainLayout';
 
 export default function Routes() {
   return (
-    <MainLayout header={<MainHeader />} footer={<MainFooter />}>
-      <MainContent aside={<Aside />}>
+    <MainLayout header={<MainHeader />} footer={<MainFooter />} hasScrollSensor>
+      <MainContent aside={<Aside />} hasScrollSensor>
         <Outlet />
       </MainContent>
     </MainLayout>
