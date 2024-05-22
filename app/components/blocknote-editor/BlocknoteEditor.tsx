@@ -112,6 +112,7 @@ function Editor({
   // Renders the editor instance using a React component.
   return (
     <BlockNoteView
+      className="blocknote-editor"
       editor={editor}
       editable={editable}
       theme={theme ?? 'light'}
