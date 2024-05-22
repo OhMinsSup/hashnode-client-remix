@@ -3,8 +3,11 @@ import { Link, NavLink } from '@remix-run/react';
 
 import { BlogUserMenu } from '~/components/blog/future/BlogUserMenu';
 import { Icons } from '~/components/icons';
+import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { badgeVariants } from '~/components/ui/badge';
 import { Button, buttonVariants } from '~/components/ui/button';
+import { Separator } from '~/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
@@ -215,12 +218,14 @@ BlogTemplate.SubHeader = function Item({ children }: BlogTemplateProps) {
 };
 
 interface WriterProps {
+  image?: SerializeSchema.SerializePost<false>['image'];
   title: SerializeSchema.SerializePost<false>['title'];
   subTitle: SerializeSchema.SerializePost<false>['subTitle'];
   createdAt: SerializeSchema.SerializePost<false>['createdAt'];
 }
 
 BlogTemplate.Writer = function Item({
+  image,
   title,
   subTitle,
   createdAt,
@@ -228,6 +233,18 @@ BlogTemplate.Writer = function Item({
   return (
     <div className="container relative mx-auto grid grid-cols-8">
       <div className="col-span-full lg:col-span-6 lg:col-start-2">
+        {image ? (
+          <div className="relative">
+            <AspectRatio ratio={16 / 9}>
+              <img
+                src={image}
+                alt={`Cover for ${title}`}
+                decoding="async"
+                className="h-full w-full rounded object-cover"
+              />
+            </AspectRatio>
+          </div>
+        ) : null}
         <div className="font-heading mb-8 mt-6 break-words px-4 text-center text-3xl font-bold text-slate-900 dark:text-white md:mb-14 md:mt-10 md:px-5 md:text-4xl lg:px-8 xl:px-20 xl:text-5xl">
           <h1 className="leading-tight" data-query="post-title">
             {title}
@@ -251,10 +268,7 @@ BlogTemplate.Writer = function Item({
               </Link>
             </div>
           </div>
-          <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:w-auto md:justify-start">
-            <span className="mx-3 hidden font-bold text-slate-500 md:block">
-              .
-            </span>
+          <div className="mb-5 flex w-full flex-row items-center justify-center space-x-4 md:mb-0 md:w-auto md:justify-start">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -267,7 +281,6 @@ BlogTemplate.Writer = function Item({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <span className="mx-3 block font-bold text-slate-500">.</span>
             <p className="flex flex-row items-center text-slate-700 dark:text-slate-400">
               <Icons.bookOpen className="mr-2 h-5 w-5 opacity-75" />
               <span>{distanceInWordsToNow(createdAt)} read</span>
@@ -315,12 +328,47 @@ BlogTemplate.ContentWrapper = function Item({ children }: BlogTemplateProps) {
   );
 };
 
-BlogTemplate.Content = function Item({ children }: BlogTemplateProps) {
+interface BlogTemplateContentProps extends BlogTemplateProps {
+  tags?: SerializeSchema.SerializePost<false>['PostTags'];
+}
+
+BlogTemplate.Content = function Item({
+  children,
+  tags,
+}: BlogTemplateContentProps) {
   return (
     <div className="blog-content-wrapper article-main-wrapper container relative z-30 mx-auto grid grid-flow-row grid-cols-8 xl:gap-6 2xl:grid-cols-10">
       <div className="blog-content-main relative z-20 col-span-8 mb-10 px-4 md:z-10 lg:col-span-6 lg:col-start-2 lg:px-0 xl:col-span-6 xl:col-start-2 2xl:col-span-6 2xl:col-start-3">
         <div className="relative">
-          <div className="relative mb-10 pb-14">{children}</div>
+          <div id="post-content-parent" className="relative mb-10 pb-14">
+            {children}
+          </div>
+          <div className="mb-5 flex w-full flex-row flex-wrap justify-center md:mb-0">
+            {tags?.map((tag) => (
+              <Link
+                key={tag.id}
+                to="/"
+                className={cn(badgeVariants(), 'mb-3 mr-3')}
+              >
+                {tag.name}
+              </Link>
+            ))}
+          </div>
+          <div className="mb-5 mt-10 flex flex-col gap-16">
+            <div className="flex-1 px-2">
+              <div className="flex flex-col flex-wrap items-start md:flex-nowrap">
+                <h3 className="mb-4 w-full pb-2 text-base font-medium tracking-wider text-slate-500 dark:border-slate-800 dark:text-slate-400 ">
+                  <span>Written by</span>
+                  <Separator className="mt-4" orientation="horizontal" />
+                </h3>
+                <div className="flex w-full flex-col gap-12">
+                  <div className="flex w-full flex-1 flex-col md:flex-row">
+                    adds
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
