@@ -24,6 +24,7 @@ export interface ResponseMap {
   blob: Blob;
   text: string;
   arrayBuffer: ArrayBuffer;
+  turbo: any;
 }
 
 export type ResponseMapType = keyof ResponseMap | 'json';
@@ -40,6 +41,8 @@ export interface FetchContext<
 
 export interface FetchOptions<R extends ResponseMapType = ResponseMapType>
   extends Omit<RequestInit, 'body'> {
+  isSingleFetch?: boolean;
+
   baseURL?: string;
   body?: RequestInit['body'] | Params;
   params?: Params;

@@ -16,7 +16,7 @@ import { useCallback, useEffect, useTransition } from 'react';
 
 import { useTheme } from '~/context/useThemeContext';
 import { getPath } from '~/routes/api.v1.assets.upload';
-import { fetchAndDecode } from '~/services/libs/remix-signle-fetch';
+import { fetchHandler } from '~/services/api/fetch';
 
 type BlockType = 'html' | 'markdown';
 
@@ -56,27 +56,25 @@ function Editor({
         formData.append('uploadType', 'IMAGE');
         formData.append('mediaType', 'IMAGE');
 
-        const { data } = await fetchAndDecode(`${getPath()}.data`, {
+        const response = await fetchHandler<
+          RemixDataFlow.Response<FetchRespSchema.File>,
+          'turbo'
+        >(getPath(), {
+          baseURL: window.location.origin,
+          isSingleFetch: true,
           method: 'POST',
           body: formData,
         });
 
-        if (!data) {
+        if (!response._data) {
           throw new Error('Failed to upload file');
         }
 
-        const { data: data2 } = data as {
-          data: {
-            result: {
-              id: string;
-              publicUrl: string;
-            };
-            status: string;
-            error: any;
-          };
-        };
+        if (!response._data.data) {
+          throw new Error('Failed to upload file');
+        }
 
-        return data2.result.publicUrl;
+        return response._data.data.result.publicUrl;
       },
     },
     deps,
@@ -114,6 +112,7 @@ function Editor({
   // Renders the editor instance using a React component.
   return (
     <BlockNoteView
+      className="blocknote-editor"
       editor={editor}
       editable={editable}
       theme={theme ?? 'light'}

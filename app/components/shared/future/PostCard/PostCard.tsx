@@ -150,9 +150,9 @@ PostCard.Footer = function Item() {
             <span>Discuss</span>
           </div>
         </a>
-        <p className="font-bold text-slate-400 dark:text-slate-500">·</p>
+        <p className="font-bold text-slate-400 dark:text-slate-500">-</p>
         <p>80 likes</p>
-        <p className="font-bold text-slate-400 dark:text-slate-500">·</p>
+        <p className="font-bold text-slate-400 dark:text-slate-500">-</p>
         <p>32 reads</p>
       </div>
       <div className="flex flex-row items-center gap-1">

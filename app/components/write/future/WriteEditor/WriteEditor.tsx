@@ -13,7 +13,7 @@ export default function WriteEditor({ header, children }: WriteEditorProps) {
       <div className={styles.container}>
         <div className={styles.editor_container}>
           <div>{header}</div>
-          <div className="px-4">{children}</div>
+          <div className="p-4">{children}</div>
         </div>
       </div>
     </div>

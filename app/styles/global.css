@@ -20,3 +20,7 @@
 ::view-transition-new(view-opacity) {
   animation-name: opacityLeave;
 }
+
+.blocknote-editor > .ProseMirror {
+  @apply !p-0;
+}

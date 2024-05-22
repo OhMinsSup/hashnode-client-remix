@@ -20,11 +20,17 @@ export default function Routes() {
       <BlogTemplate.Headers />
       <BlogTemplate.ContentWrapper>
         <BlogTemplate.Writer
+          image={data.result.image}
           title={data.result.title}
           createdAt={data.result.createdAt}
           subTitle={data.result.subTitle}
         />
-        <BlogTemplate.Content>
+        <BlogTemplate.Content
+          tags={
+            data.result
+              .PostTags as SerializeSchema.SerializePost<false>['PostTags']
+          }
+        >
           <ClientOnly>
             <BlocknoteEditor
               blockType={

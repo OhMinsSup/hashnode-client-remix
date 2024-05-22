@@ -90,7 +90,7 @@ export default function ImageGalleryCardList() {
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <ImageGalleryCard />
+              <ImageGalleryCard data={item} />
             </div>
           );
         })}

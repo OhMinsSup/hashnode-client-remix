@@ -1,5 +1,3 @@
-import '~/styles/editor/index.css';
-
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   isRouteErrorResponse,
