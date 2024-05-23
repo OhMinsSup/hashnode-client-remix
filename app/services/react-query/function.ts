@@ -15,8 +15,13 @@ export const getInfinityQueryFn = <D, Q extends QueryKey>(
     const url = opts?.originUrl
       ? new URL(getPath(lastKey, ctx.pageParam), opts.originUrl)
       : getPath(lastKey, ctx.pageParam);
+
+    console.log('url', url);
     const response = await fetch(url, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     const data = await response.json<D>();
     return data;

@@ -156,3 +156,31 @@ export const getInfinityQueryPath = (
 
   return basePath;
 };
+
+export const getInfinityQueryPathRemixLoader = (
+  basePath: string,
+  searchParams?: SearchParams,
+  pageNo?: number,
+) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set('pageNo', String(pageNo));
+    }
+    if (basePath.includes('?index')) {
+      return `${basePath}&${params.toString()}`;
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set('pageNo', String(pageNo));
+    if (basePath.includes('?index')) {
+      return `${basePath}&${params.toString()}`;
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  return basePath;
+};
