@@ -7,7 +7,7 @@ import {
   useLoaderData,
   useRouteError,
 } from '@remix-run/react';
-import { toast as showToast, Toaster } from 'sonner';
+import { toast as showToast } from 'sonner';
 
 import { Body } from '~/components/shared/future/Body';
 import {
@@ -15,6 +15,7 @@ import {
   ThemeProvider,
   useTheme,
 } from '~/context/useThemeContext';
+import { Toaster } from '~/components/ui/sonner'
 
 import '~/styles/global.css';
 

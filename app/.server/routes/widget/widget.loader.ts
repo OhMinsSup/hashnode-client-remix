@@ -31,7 +31,6 @@ export const loader = defineLoader(
         });
 
         const data = response._data;
-        context.logger.info('[drafts]', data);
         if (data) {
           drafts.push(...data.result.list);
           draftTotal = data.result.totalCount;

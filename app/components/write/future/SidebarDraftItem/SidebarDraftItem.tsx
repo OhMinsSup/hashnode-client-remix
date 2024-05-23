@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { Link, useParams, useSubmit } from '@remix-run/react';
-
+import { toast } from 'sonner';
 import { Icons } from '~/components/icons';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
+import { useCopyToClipboard } from '~/libs/hooks/useCopyToClipboard';
 import { useEventListener } from '~/libs/hooks/useEventListener';
 import { useMediaQuery } from '~/libs/hooks/useMediaQuery';
 import { cn } from '~/services/libs';
@@ -31,6 +32,14 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
   const target = useRef<HTMLDivElement>(null);
 
   const submit = useSubmit();
+
+  const { copy } = useCopyToClipboard({
+    onSuccess: () => {
+      toast('Link copied to clipboard', {
+        description: 'You can now paste the link anywhere.',
+      });
+    },
+  });
 
   const onOpenChange = useCallback((nextOpen: boolean) => {
     setOpen(nextOpen);
@@ -60,6 +69,11 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
       { method: 'delete', encType: 'application/json' },
     );
   }, [id, item.id, submit]);
+
+  const onCopy = useCallback(() => {
+    const url = new URL(PAGE_ENDPOINTS.PREVIEW.ID(item.id), location.origin);
+    copy(url.toString());
+  }, [copy, item.id]);
 
   useEventListener(
     'mouseenter',
@@ -121,6 +135,7 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
                   variant="ghost"
                   className="w-full justify-start space-x-2"
                   size="sm"
+                  onClick={onCopy}
                 >
                   <Icons.link className="size-4" />
                   <span>Copy preview link</span>
