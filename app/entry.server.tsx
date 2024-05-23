@@ -4,8 +4,13 @@
  * For more information, see https://remix.run/docs/en/main/file-conventions/entry.server
  */
 
-import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
+import type {
+  AppLoadContext,
+  EntryContext,
+  HandleDataRequestFunction,
+} from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
+import { cors } from 'remix-utils/cors';
 import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 
@@ -35,8 +40,18 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html');
-  return new Response(body, {
-    headers: responseHeaders,
-    status: responseStatusCode,
-  });
+  return cors(
+    request,
+    new Response(body, {
+      headers: responseHeaders,
+      status: responseStatusCode,
+    }),
+  );
 }
+
+export const handleDataRequest: HandleDataRequestFunction = async (
+  response,
+  { request },
+) => {
+  return await cors(request, response);
+};
