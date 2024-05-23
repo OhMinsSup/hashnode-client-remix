@@ -6,7 +6,9 @@ import {
 } from '@remix-run/react';
 
 import { type RoutesLoaderData } from '~/.server/routes/write/write.$id.loader';
+import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { WriteFormProvider } from '~/components/write/context/useWriteFormContext';
+import { AutoSave } from '~/components/write/future/AutoSave';
 import Editor from '~/components/write/future/Editor';
 import { WriteEditor } from '~/components/write/future/WriteEditor';
 import { WriteEditorHeader } from '~/components/write/future/WriteEditorHeader';
@@ -30,6 +32,9 @@ export default function Routes() {
           <Editor initialHTML={initialValues.content} editable />
         )}
       </WriteEditor>
+      <ClientOnly>
+        <AutoSave />
+      </ClientOnly>
     </WriteFormProvider>
   );
 }

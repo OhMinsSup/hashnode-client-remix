@@ -34,7 +34,7 @@ export default function CollapsibleWrapper({
       <CollapsibleTrigger asChild>
         <Button
           variant="link"
-          className="w-full max-w-60 justify-between hover:no-underline"
+          className="w-full max-w-full justify-between hover:no-underline sm:max-w-60"
         >
           <span
             className={cn({

@@ -91,6 +91,12 @@ export default function WritePageHeader() {
           )}
         </div>
         <div className={styles.container_right}>
+          {/* <div className="mr-1 flex flex-row items-center md:mr-4">
+            <div className="flex flex-row items-center text-green-500">
+              <Icons.cloudUpload />
+              <span className="ml-2 hidden sm:block">Saved</span>
+            </div>
+          </div> */}
           <div className="relative">
             <Popover>
               <PopoverTrigger asChild>
