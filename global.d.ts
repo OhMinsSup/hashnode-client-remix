@@ -172,6 +172,7 @@ declare namespace SerializeSchema {
     PostCoAuthor: SerializePostCoAuthor[];
     PostSeo: Partial<SerializePostSeo>;
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
+    User: SerializeSimepleUser;
     count: SerializePostCount;
     createdAt: string;
     updatedAt: string;

@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Link, useParams, useSubmit } from '@remix-run/react';
 import { toast } from 'sonner';
+
 import { Icons } from '~/components/icons';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
@@ -143,14 +144,20 @@ export default function SidebarDraftItem({ item }: SidebarDraftItemProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="p-0">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start space-x-2"
-                  size="sm"
+                <Link
+                  to={PAGE_ENDPOINTS.PREVIEW.ID(item.id)}
+                  unstable_viewTransition
+                  className={cn(
+                    buttonVariants({
+                      variant: 'ghost',
+                      size: 'sm',
+                    }),
+                    'w-full justify-start space-x-2',
+                  )}
                 >
                   <Icons.fileSearch className="size-4" />
                   <span>Preview draft</span>
-                </Button>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="p-0">

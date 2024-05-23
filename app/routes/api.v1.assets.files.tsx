@@ -50,7 +50,7 @@ export const loader = defineLoader(async ({ request, context }) => {
       ),
     );
   } catch (error) {
-    context.logger.error('[ERROR]', error);
+    context.logger.error('[api.v1.assets.files]', error);
     if (isError<DataSchema>(error)) {
       return json(errorJsonDataResponse(error.data, error.message));
     }

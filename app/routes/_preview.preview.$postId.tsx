@@ -20,6 +20,7 @@ export default function Routes() {
       <BlogTemplate.Headers />
       <BlogTemplate.ContentWrapper>
         <BlogTemplate.Writer
+          username={data.result.User.UserProfile.username}
           image={data.result.image}
           title={data.result.title}
           createdAt={data.result.createdAt}
