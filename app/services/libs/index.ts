@@ -3,8 +3,6 @@ import type { ClassValue } from 'clsx';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import type { SearchParams } from '~/.server/utils/request.server';
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -125,62 +123,4 @@ export const mergeMeta = <
       return acc;
     }, leafMeta);
   };
-};
-
-export const getQueryPath = (basePath: string, searchParams?: SearchParams) => {
-  if (searchParams) {
-    const params = new URLSearchParams(searchParams);
-    return `${basePath}?${params.toString()}`;
-  }
-  return basePath;
-};
-
-export const getInfinityQueryPath = (
-  basePath: string,
-  searchParams?: SearchParams,
-  pageNo?: number,
-) => {
-  if (searchParams) {
-    const params = new URLSearchParams(searchParams);
-    if (pageNo) {
-      params.set('pageNo', String(pageNo));
-    }
-    return `${basePath}?${params.toString()}`;
-  }
-
-  if (pageNo) {
-    const params = new URLSearchParams();
-    params.set('pageNo', String(pageNo));
-    return `${basePath}?${params.toString()}`;
-  }
-
-  return basePath;
-};
-
-export const getInfinityQueryPathRemixLoader = (
-  basePath: string,
-  searchParams?: SearchParams,
-  pageNo?: number,
-) => {
-  if (searchParams) {
-    const params = new URLSearchParams(searchParams);
-    if (pageNo) {
-      params.set('pageNo', String(pageNo));
-    }
-    if (basePath.includes('?index')) {
-      return `${basePath}&${params.toString()}`;
-    }
-    return `${basePath}?${params.toString()}`;
-  }
-
-  if (pageNo) {
-    const params = new URLSearchParams();
-    params.set('pageNo', String(pageNo));
-    if (basePath.includes('?index')) {
-      return `${basePath}&${params.toString()}`;
-    }
-    return `${basePath}?${params.toString()}`;
-  }
-
-  return basePath;
 };

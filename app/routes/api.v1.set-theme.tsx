@@ -11,7 +11,7 @@ import {
 } from '~/.server/utils/response.server';
 import { commit, setTheme } from '~/.server/utils/theme.server';
 import { isTheme } from '~/context/useThemeContext';
-import { getQueryPath } from '~/services/libs';
+import { getQueryPath } from '~/services/react-query';
 
 export const action = defineAction(async ({ request }) => {
   const requestText = await request.text();

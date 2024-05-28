@@ -12,10 +12,13 @@ import {
   successJsonResponse,
 } from '~/.server/utils/response.server';
 import { isFetchError } from '~/services/api/error';
-import { getInfinityQueryPath, parseUrlParams } from '~/services/libs';
+import { parseUrlParams } from '~/services/libs';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
-import { getInfinityQueryFn } from '~/services/react-query';
+import {
+  getInfinityQueryFn,
+  getInfinityQueryPath,
+} from '~/services/react-query';
 
 type Data = SerializeSchema.SerializeFile;
 

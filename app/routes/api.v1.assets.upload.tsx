@@ -10,9 +10,9 @@ import { parseWithZod } from '@conform-to/zod';
 import { getCookie, SearchParams } from '~/.server/utils/request.server';
 import { errorJsonDataResponse } from '~/.server/utils/response.server';
 import { isFetchError } from '~/services/api/error';
-import { getQueryPath } from '~/services/libs';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
+import { getQueryPath } from '~/services/react-query';
 import { schema } from '~/services/validate/cf-file.validate';
 
 type Data = FetchRespSchema.File;

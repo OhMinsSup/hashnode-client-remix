@@ -54,7 +54,7 @@ function ThemeProvider({
     return getPreferredTheme();
   });
 
-  const persistTheme = useFetcher();
+  const persistTheme = useFetcher<any>();
   // TODO: remove this when persistTheme is memoized properly
   const persistThemeRef = useRef(persistTheme);
 

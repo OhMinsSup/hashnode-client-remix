@@ -4,7 +4,7 @@ import {
   redirect,
 } from '@remix-run/cloudflare';
 
-import { getQueryPath } from '~/services/libs';
+import { getQueryPath } from '~/services/react-query';
 
 export const action = defineAction(async () => {
   console.log('Reset fetcher');

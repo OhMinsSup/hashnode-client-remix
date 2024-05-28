@@ -1,12 +1,8 @@
-import { json, unstable_defineLoader } from '@remix-run/cloudflare';
 import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
 
 import { MainFeedTabs } from '~/components/shared/future/MainFeedTabs';
 
-export const loader = unstable_defineLoader(({ context }) => {
-  context.logger.log('hello');
-  return json({ hello: 'world' });
-});
+export { loader } from '~/.server/routes/feeds/feeds-layout.loader';
 
 export default function Routes() {
   return (

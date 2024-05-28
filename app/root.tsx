@@ -10,12 +10,12 @@ import {
 import { toast as showToast } from 'sonner';
 
 import { Body } from '~/components/shared/future/Body';
+import { Toaster } from '~/components/ui/sonner';
 import {
   NonFlashOfWrongThemeEls,
   ThemeProvider,
   useTheme,
 } from '~/context/useThemeContext';
-import { Toaster } from '~/components/ui/sonner'
 
 import '~/styles/global.css';
 
@@ -27,6 +27,7 @@ import utc from 'dayjs/plugin/utc';
 import type { Theme } from '~/context/useThemeContext';
 import type { Toast } from '~/services/validate/toast.validate';
 import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
+import { LayoutSizeMeasuringMachine } from '~/components/shared/future/LayoutSizeMeasuringMachine';
 import { cn } from '~/services/libs';
 import { ClientQueryProvider } from '~/services/react-query';
 
@@ -166,6 +167,7 @@ function App() {
       <Document theme={theme} env={data.env} origin={data.origin}>
         <Outlet />
         {data.toast ? <ShowToast toast={data.toast} /> : null}
+        <LayoutSizeMeasuringMachine />
       </Document>
     </ClientQueryProvider>
   );

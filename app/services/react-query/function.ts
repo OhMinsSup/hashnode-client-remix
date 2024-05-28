@@ -16,7 +16,6 @@ export const getInfinityQueryFn = <D, Q extends QueryKey>(
       ? new URL(getPath(lastKey, ctx.pageParam), opts.originUrl)
       : getPath(lastKey, ctx.pageParam);
 
-    console.log('url', url);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -43,4 +42,62 @@ export const getQueryFn = <D, Q extends QueryKey>(
     const data = await response.json<D>();
     return data;
   };
+};
+
+export const getQueryPath = (basePath: string, searchParams?: SearchParams) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    return `${basePath}?${params.toString()}`;
+  }
+  return basePath;
+};
+
+export const getInfinityQueryPath = (
+  basePath: string,
+  searchParams?: SearchParams,
+  pageNo?: number,
+) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set('pageNo', String(pageNo));
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set('pageNo', String(pageNo));
+    return `${basePath}?${params.toString()}`;
+  }
+
+  return basePath;
+};
+
+export const getInfinityQueryPathRemixLoader = (
+  basePath: string,
+  searchParams?: SearchParams,
+  pageNo?: number,
+) => {
+  if (searchParams) {
+    const params = new URLSearchParams(searchParams);
+    if (pageNo) {
+      params.set('pageNo', String(pageNo));
+    }
+    if (basePath.includes('?index')) {
+      return `${basePath}&${params.toString()}`;
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  if (pageNo) {
+    const params = new URLSearchParams();
+    params.set('pageNo', String(pageNo));
+    if (basePath.includes('?index')) {
+      return `${basePath}&${params.toString()}`;
+    }
+    return `${basePath}?${params.toString()}`;
+  }
+
+  return basePath;
 };

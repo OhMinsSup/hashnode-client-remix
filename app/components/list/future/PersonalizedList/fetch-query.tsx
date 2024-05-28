@@ -1,8 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { type SearchParams } from '~/.server/utils/request.server';
-import { getInfinityQueryPathRemixLoader } from '~/services/libs';
-import { getInfinityQueryFn } from '~/services/react-query';
+import {
+  getInfinityQueryFn,
+  getInfinityQueryPathRemixLoader,
+} from '~/services/react-query';
 
 type QueryKey = [string, SearchParams];
 
