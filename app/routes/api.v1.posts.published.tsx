@@ -22,7 +22,7 @@ import {
 
 type Data = SerializeSchema.SerializePost<false>;
 
-type DataList = FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>;
+type DataList = FetchRespSchema.ListResp<Data>;
 
 type DataSchema = FetchRespSchema.Success<DataList>;
 

@@ -6,7 +6,6 @@ import type {
   FetchOptions,
   FetchRequest,
   FetchResponse,
-  MappedResponseType,
   ResponseMapType,
 } from './types';
 import { createFetchError } from '../error';
@@ -43,13 +42,10 @@ const nullBodyResponses = new Set([101, 204, 205, 304]);
 export async function fetchHandler<
   T = unknown,
   R extends ResponseMapType = 'json',
->(
-  _request: FetchRequest,
-  _options?: FetchOptions<R>,
-): Promise<FetchResponse<MappedResponseType<R, T>>> {
+>(_request: FetchRequest, _options?: FetchOptions<R>) {
   async function onError(
     context: FetchContext<T, R>,
-  ): Promise<FetchResponse<MappedResponseType<R>>> {
+  ): Promise<FetchResponse<any>> {
     // Is Abort
     // If it is an active abort, it will not retry automatically.
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMException#error_names
@@ -240,5 +236,5 @@ export async function fetchHandler<
     return await onError(context);
   }
 
-  return context.response as FetchResponse<MappedResponseType<R, T>>;
+  return context.response;
 }

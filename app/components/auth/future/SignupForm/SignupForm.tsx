@@ -47,16 +47,16 @@ export default function SignupForm({ email }: SignupFormProps) {
       nickname: '',
       confirmPassword: '',
     },
-    reValidateMode: 'onBlur',
+    criteriaMode: 'firstError',
+    reValidateMode: 'onSubmit',
     errors: actionData?.errors as FieldErrors<FormFieldValues> | undefined,
   });
 
-  const onSubmit = (input: FormFieldValues) => {
+  const onSubmit = (input: FormFieldValues) =>
     submit(createFormData(input), {
       method: 'post',
       replace: true,
     });
-  };
 
   return (
     <div className="grid gap-6">

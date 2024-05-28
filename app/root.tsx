@@ -7,10 +7,9 @@ import {
   useLoaderData,
   useRouteError,
 } from '@remix-run/react';
-import { toast as showToast } from 'sonner';
 
 import { Body } from '~/components/shared/future/Body';
-import { Toaster } from '~/components/ui/sonner';
+import { ShowToast, Toaster } from '~/components/ui/sonner';
 import {
   NonFlashOfWrongThemeEls,
   ThemeProvider,
@@ -19,45 +18,32 @@ import {
 
 import '~/styles/global.css';
 
-import { useEffect, useRef } from 'react';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import { defineClientLoader } from '@remix-run/react/dist/single-fetch';
 
 import type { Theme } from '~/context/useThemeContext';
-import type { Toast } from '~/services/validate/toast.validate';
 import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
 import { LayoutSizeMeasuringMachine } from '~/components/shared/future/LayoutSizeMeasuringMachine';
 import { cn } from '~/services/libs';
 import { ClientQueryProvider } from '~/services/react-query';
+import { DefaultLinks } from './components/shared/future/DefaultLinks';
+import { DefaultMetas } from './components/shared/future/DefaultMetas';
+import { useEnvStore } from './services/store/useEnvStore';
 
 export { loader } from '~/.server/routes/root/root.loader';
 export { meta } from '~/services/seo/root/root.meta';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+export const clientLoader = defineClientLoader(async ({ serverLoader }) => {
+  // call the server loader
+  const serverData = await serverLoader<RoutesLoaderData>();
 
-function ShowToast({ toast }: { toast: Toast }) {
-  const { id, type, title, description } = toast;
-  const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEnvStore.setState({
+    apiHost: serverData.env.apiHost,
+  });
 
-  useEffect(() => {
-    ref.current = setTimeout(() => {
-      showToast[type](title, {
-        id,
-        description,
-        onAutoClose: () => {
-          if (ref.current) {
-            clearTimeout(ref.current);
-            ref.current = null;
-          }
-        },
-      });
-    }, 0);
-  }, [description, id, title, type]);
+  return serverData;
+});
 
-  return null;
-}
+clientLoader.hydrate = true;
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -76,69 +62,8 @@ function Document({ children, theme, origin, env }: DocumentProps) {
       className={cn(theme)}
     >
       <head>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="canonical" href={origin} />
-        <link
-          rel="search"
-          href="/opensearch.xml"
-          type="application/opensearchdescription+xml"
-          title="Hashnode"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/images/logo_180x180.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/images/logo_32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/images/logo_16x16.png"
-        />
-        <link
-          rel="mask-icon"
-          href="/images/safari-pinned-tab-new.svg"
-          color="#2962ff"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SuisseIntl-Book-WebXL.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SuisseIntl-Medium-WebXL.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SuisseIntl-SemiBold-WebXL.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SuisseIntl-Bold-WebXL.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        <DefaultMetas />
+        <DefaultLinks origin={origin} />
         <Meta />
         <Links />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
