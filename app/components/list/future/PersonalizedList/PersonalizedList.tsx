@@ -8,7 +8,7 @@ import { getTargetElement } from '~/libs/browser-utils/dom';
 import { usePostInfiniteQuery } from './fetch-query';
 
 const DATA_OVERSCAN = 10;
-const MIN_ITEM_SIZE = 300;
+const MIN_ITEM_SIZE = 425;
 
 export default function PersonalizedList() {
   const initialData = useLoaderData<RoutesLoaderData>();

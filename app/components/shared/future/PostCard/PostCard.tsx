@@ -108,28 +108,30 @@ PostCard.Body = function Item() {
             <AspectRatio ratio={16 / 9}>
               <a
                 target="_blank"
-                className="block h-full w-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
+                className="block size-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
                 href="/authenticate?next=https://blog.bytescrum.com/mastering-python-coding-advanced-techniques-and-best-practices"
               >
                 <img
-                  className="h-full w-full object-cover"
-                  src="https://cdn.hashnode.com/res/hashnode/image/upload/v1716202977190/649d35e8-5903-4e21-b966-4976f29a9ead.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp"
+                  className="size-full object-cover"
+                  src="/images/placeholder-image.jpg"
                   alt="Mastering Python Coding: Advanced Techniques and Best Practices"
+                  data-name="mobile-image"
                 />
               </a>
             </AspectRatio>
           </div>
-          <div className="hidden h-full w-full md:block">
+          <div className="hidden size-full md:block">
             <AspectRatio ratio={16 / 9}>
               <a
                 target="_blank"
                 href="/authenticate?next=https://blog.bytescrum.com/mastering-python-coding-advanced-techniques-and-best-practices"
-                className="block h-full w-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
+                className="block size-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
               >
                 <img
-                  className="h-full w-full object-cover"
-                  src="https://cdn.hashnode.com/res/hashnode/image/upload/v1716202977190/649d35e8-5903-4e21-b966-4976f29a9ead.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp"
+                  className="size-full object-cover"
+                  src="/images/placeholder-image.jpg"
                   alt="Mastering Python Coding: Advanced Techniques and Best Practices"
+                  data-name="desktop-image"
                 />
               </a>
             </AspectRatio>

@@ -1,40 +1,28 @@
 import { useCallback } from 'react';
-import { useFormAction, useNavigation } from '@remix-run/react';
 import { useController } from 'react-hook-form';
 
 import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
 import { Icons } from '~/components/icons';
+import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { Button } from '~/components/ui/button';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '~/components/ui/drawer';
 import { Label } from '~/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import { ScrollArea } from '~/components/ui/scroll-area';
 import { Separator } from '~/components/ui/separator';
 import { Switch } from '~/components/ui/switch';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
-import { DraftSettingDrawer } from '~/components/write/future/DraftSettingDrawer';
 import { Theme, useTheme } from '~/context/useThemeContext';
-import { cn } from '~/services/libs';
+import { SettingPublishDrawer } from '../SettingPublishDrawer';
 import styles from './styles.module.css';
 
 export default function WritePageHeader() {
   const {
     setSideOpen,
     isSideOpen,
-    isOpen,
     open,
     close,
     isPreviewDraftOpen,
@@ -42,10 +30,6 @@ export default function WritePageHeader() {
   } = useWriteContext();
 
   const { control } = useWriteFormContext();
-
-  const navigation = useNavigation();
-
-  const action = useFormAction();
 
   const {
     field: { value, onChange, ...field },
@@ -185,48 +169,9 @@ export default function WritePageHeader() {
               <Icons.fileSearch className="flex md:hidden" />
               <span className="hidden md:flex">Preview</span>
             </Button>
-            <Drawer direction="left" open={isOpen} onOpenChange={onOpenChange}>
-              <DrawerTrigger asChild>
-                <Button variant="default">Publish</Button>
-              </DrawerTrigger>
-              <DrawerContent className="h-full w-full rounded-none sm:!w-[504px]">
-                <DrawerHeader className="border-b">
-                  <DrawerTitle>
-                    <div className="flex flex-row items-center justify-between">
-                      <h2>Draft settings</h2>
-                      <DrawerClose asChild>
-                        <Button variant="ghost">
-                          <Icons.close />
-                        </Button>
-                      </DrawerClose>
-                    </div>
-                  </DrawerTitle>
-                </DrawerHeader>
-                <div
-                  className={cn('flex-1 overflow-auto', {
-                    'opacity-50':
-                      navigation.formMethod === 'PUT' &&
-                      navigation.formAction === action,
-                  })}
-                >
-                  <ScrollArea className="h-full w-full p-6">
-                    <DraftSettingDrawer />
-                  </ScrollArea>
-                </div>
-                <DrawerFooter className="border">
-                  <div className="flex items-center justify-end space-x-2">
-                    <Button variant="outline">Submit for review</Button>
-                    <Button form="hashnode-write-form" className="space-x-2">
-                      {navigation.formMethod === 'PUT' &&
-                      navigation.formAction === action ? (
-                        <Icons.spinner className="size-4 animate-spin" />
-                      ) : null}
-                      <span>Publish</span>
-                    </Button>
-                  </div>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
+            <ClientOnly>
+              <SettingPublishDrawer />
+            </ClientOnly>
           </div>
         </div>
       </div>

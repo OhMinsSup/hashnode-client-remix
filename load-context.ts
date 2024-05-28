@@ -24,7 +24,7 @@ type GetLoadContext = (args: {
 export const getLoadContext: GetLoadContext = ({ context }) => {
   const agent = new HashnodeAgent({
     service: context.cloudflare.env.API_BASE_URL,
-    prefix: '/v1',
+    prefix: '/api/v1',
   });
 
   return {

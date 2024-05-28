@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { NavLink, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
+import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Drawer,
@@ -42,7 +43,11 @@ MainFooter.Navigation = function Item({ item }: ItemProps) {
     }
     case 'drawer': {
       const { isActive } = handler({ item });
-      return isActive ? <MainFooter.Dropdown item={item} /> : null;
+      return isActive ? (
+        <ClientOnly>
+          <MainFooter.Dropdown item={item} />
+        </ClientOnly>
+      ) : null;
     }
     default: {
       return null;
