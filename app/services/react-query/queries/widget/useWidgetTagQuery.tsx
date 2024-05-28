@@ -34,6 +34,7 @@ export function useWidgetTagQuery({ initialData, searchParams }: Params) {
     queryFn: getQueryFn<DataSchema, QueriesTypes.BaseQueryKey>(getPath, {
       options: {
         baseURL: state.getApiHost(),
+        credentials: 'include',
       },
     }),
   });

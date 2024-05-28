@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useController, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -62,7 +62,9 @@ export default function ImageGallery() {
           Search
         </Button>
       </form>
-      <ImageGalleryCardList keyword={keyword} />
+      <React.Suspense fallback={<>Loading...</>}>
+        <ImageGalleryCardList keyword={keyword} />
+      </React.Suspense>
     </div>
   );
 }

@@ -20,25 +20,23 @@ import '~/styles/global.css';
 
 import { defineClientLoader } from '@remix-run/react/dist/single-fetch';
 
-import type { Theme } from '~/context/useThemeContext';
 import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
+import { DefaultLinks } from '~/components/shared/future/DefaultLinks';
+import { DefaultMetas } from '~/components/shared/future/DefaultMetas';
 import { LayoutSizeMeasuringMachine } from '~/components/shared/future/LayoutSizeMeasuringMachine';
 import { cn } from '~/services/libs';
 import { ClientQueryProvider } from '~/services/react-query';
-import { DefaultLinks } from './components/shared/future/DefaultLinks';
-import { DefaultMetas } from './components/shared/future/DefaultMetas';
-import { useEnvStore } from './services/store/useEnvStore';
+import { useEnvStore } from '~/services/store/useEnvStore';
 
 export { loader } from '~/.server/routes/root/root.loader';
+export { action } from '~/.server/routes/root/root.action';
 export { meta } from '~/services/seo/root/root.meta';
 
 export const clientLoader = defineClientLoader(async ({ serverLoader }) => {
   // call the server loader
   const serverData = await serverLoader<RoutesLoaderData>();
 
-  useEnvStore.setState({
-    apiHost: serverData.env.apiHost,
-  });
+  useEnvStore.setState(serverData.env);
 
   return serverData;
 });
@@ -47,12 +45,11 @@ clientLoader.hydrate = true;
 
 interface DocumentProps {
   children: React.ReactNode;
-  theme?: Theme | null;
-  origin?: string;
-  env?: Record<string, string>;
 }
 
-function Document({ children, theme, origin, env }: DocumentProps) {
+function Document({ children }: DocumentProps) {
+  const [theme] = useTheme();
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <html
       id="current-style"
@@ -63,18 +60,13 @@ function Document({ children, theme, origin, env }: DocumentProps) {
     >
       <head>
         <DefaultMetas />
-        <DefaultLinks origin={origin} />
+        <DefaultLinks origin={data.origin} />
         <Meta />
         <Links />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(theme)} />
       </head>
       <Body>
         {children}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(env)}`,
-          }}
-        />
         <Toaster closeButton position="top-center" />
         <ScrollRestoration />
         <Scripts />
@@ -84,12 +76,10 @@ function Document({ children, theme, origin, env }: DocumentProps) {
 }
 
 function App() {
-  const [theme] = useTheme();
   const data = useLoaderData<RoutesLoaderData>();
-
   return (
     <ClientQueryProvider>
-      <Document theme={theme} env={data.env} origin={data.origin}>
+      <Document>
         <Outlet />
         {data.toast ? <ShowToast toast={data.toast} /> : null}
         <LayoutSizeMeasuringMachine />

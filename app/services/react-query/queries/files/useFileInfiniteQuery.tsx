@@ -39,6 +39,7 @@ export function useFileInfiniteQuery({ initialData, searchParams }: Params) {
     queryFn: getInfinityQueryFn(getPath, {
       options: {
         baseURL: state.getApiHost(),
+        credentials: 'include',
       },
     }),
     initialPageParam: 1,

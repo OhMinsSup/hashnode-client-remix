@@ -4,7 +4,7 @@ import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { SidebarDraftItem } from '~/components/write/future/SidebarDraftItem';
-import { useDraftInfiniteQuery } from '~/routes/api.v1.drafts';
+import { useDraftInfiniteQuery } from '~/services/react-query/queries/drafts/useDraftInfiniteQuery';
 
 export default function MyDraftList() {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
@@ -12,7 +12,7 @@ export default function MyDraftList() {
   const [isPending, startTransition] = useTransition();
 
   const { data, fetchNextPage, error, isFetchingNextPage } =
-    useDraftInfiniteQuery();
+    useDraftInfiniteQuery({});
 
   const pages = data?.pages ?? [];
 

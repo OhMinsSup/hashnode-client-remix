@@ -3,7 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { ImageGalleryCard } from '~/components/write/future/ImageGalleryCard';
 import { getTargetElement } from '~/libs/browser-utils/dom';
-import { useAssetFileListInfiniteQuery } from '~/routes/api.v1.assets.files';
+import { useFileInfiniteQuery } from '~/services/react-query/queries/files/useFileInfiniteQuery';
 
 const MIN_ITEM_HEIGHT_SIZE = 154;
 
@@ -14,16 +14,15 @@ interface ImageGalleryCardListProps {
 export default function ImageGalleryCardList({
   keyword,
 }: ImageGalleryCardListProps) {
-  const { data, isFetchingNextPage, fetchNextPage } =
-    useAssetFileListInfiniteQuery({
-      searchParams: {
-        mediaType: 'IMAGE',
-        uploadType: 'POST_THUMBNAIL',
-        ...(keyword && {
-          keyword,
-        }),
-      },
-    });
+  const { data, isFetchingNextPage, fetchNextPage } = useFileInfiniteQuery({
+    searchParams: {
+      mediaType: 'IMAGE',
+      uploadType: 'POST_THUMBNAIL',
+      ...(keyword && {
+        keyword,
+      }),
+    },
+  });
 
   const pages = data?.pages ?? [];
 

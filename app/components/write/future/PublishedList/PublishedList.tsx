@@ -4,7 +4,7 @@ import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { SidebarPublishedItem } from '~/components/write/future/SidebarPublishedItem';
-import { usePostPublishedInfiniteQuery } from '~/routes/api.v1.posts.published';
+import { usePostPublishedInfiniteQuery } from '~/services/react-query/queries/posts/usePostPublishedInfiniteQuery';
 
 export default function PublishedList() {
   const { leftSideKeyword: searchKeyword } = useWriteContext();
@@ -12,7 +12,7 @@ export default function PublishedList() {
   const [isPending, startTransition] = useTransition();
 
   const { data, fetchNextPage, error, isFetchingNextPage } =
-    usePostPublishedInfiniteQuery();
+    usePostPublishedInfiniteQuery({});
 
   const pages = data?.pages ?? [];
 

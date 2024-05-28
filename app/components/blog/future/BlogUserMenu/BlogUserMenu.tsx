@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
-import { getPath } from '~/routes/api.v1.auth.logout';
 
 interface UserMenuProps {
   session: SerializeSchema.SerializeUser | undefined;
@@ -24,7 +23,7 @@ export default function BlogUserMenu({ session }: UserMenuProps) {
   const onLogout = useCallback(() => {
     const formData = new FormData();
     submit(formData, {
-      action: getPath(),
+      action: '?/logout',
       method: 'POST',
       navigate: false,
     });

@@ -46,6 +46,7 @@ export function useDraftSubmittedInfiniteQuery({
     queryFn: getInfinityQueryFn(getPath, {
       options: {
         baseURL: state.getApiHost(),
+        credentials: 'include',
       },
     }),
     initialPageParam: 1,
