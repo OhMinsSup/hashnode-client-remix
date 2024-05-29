@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
@@ -5,10 +6,22 @@ import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
+import { cn } from '~/services/libs';
 
-export default function PostCard() {
+interface PostCardProps {
+  className?: string;
+  styles?: React.CSSProperties;
+}
+
+export default function PostCard({ styles, className }: PostCardProps) {
   return (
-    <article className="flex w-full flex-col gap-4 rounded-none border-t border-slate-200 bg-white pt-5 first-of-type:border-t-0 dark:border-slate-800/80 dark:bg-slate-950 md:gap-5 md:pt-8 lg:rounded-2xl lg:!border lg:p-6 lg:pb-5">
+    <article
+      style={styles}
+      className={cn(
+        className,
+        'flex w-full flex-col gap-4 rounded-none border-t border-slate-200 bg-white pt-5 first-of-type:border-t-0 dark:border-slate-800/80 dark:bg-slate-950 md:gap-5 md:pt-8 lg:rounded-2xl lg:!border lg:p-6 lg:pb-5',
+      )}
+    >
       <section className="flex flex-col gap-2 sm:gap-4">
         <PostCard.Header />
         <PostCard.Body />

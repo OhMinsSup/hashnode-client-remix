@@ -3,7 +3,7 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '~/constants/constant';
 import { mutationFn } from '~/services/react-query';
 import { sharedMutationKey } from '~/services/react-query/shared';
-import { useEnvStore } from '~/services/store/useEnvStore';
+import { useEnvStore } from '~/services/store/env-store-provider';
 import { type FormFieldValues } from '~/services/validate/cf-file.validate';
 
 type Data = FetchRespSchema.File;
@@ -18,7 +18,7 @@ interface UseFileUploadMutationParams
 export function useFileUploadMutation(
   params?: Omit<UseFileUploadMutationParams, 'mutationFn' | 'mutationKey'>,
 ) {
-  const state = useEnvStore();
+  const getApiHost = useEnvStore((state) => state.getApiHost);
 
   const mutationKey: QueriesTypes.BaseMutationKey = [
     sharedMutationKey,
@@ -34,7 +34,7 @@ export function useFileUploadMutation(
     mutationFn: mutationFn(getPath, {
       options: {
         method: 'POST',
-        baseURL: state.getApiHost(),
+        baseURL: getApiHost(),
         credentials: 'include',
         headers: {
           'Content-Type': 'multipart/form-data',

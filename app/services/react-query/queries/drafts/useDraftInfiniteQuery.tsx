@@ -6,7 +6,7 @@ import {
   getInfinityQueryPath,
 } from '~/services/react-query';
 import { sharedQueryKey } from '~/services/react-query/shared';
-import { useEnvStore } from '~/services/store/useEnvStore';
+import { useEnvStore } from '~/services/store/env-store-provider';
 
 type Data = SerializeSchema.SerializePost<false>;
 
@@ -20,7 +20,7 @@ type Params = {
 };
 
 export function useDraftInfiniteQuery({ initialData, searchParams }: Params) {
-  const state = useEnvStore();
+  const getApiHost = useEnvStore((state) => state.getApiHost);
   const queryKey: QueriesTypes.BaseQueryKey = [
     sharedQueryKey,
     useDraftInfiniteQuery.name,
@@ -42,7 +42,7 @@ export function useDraftInfiniteQuery({ initialData, searchParams }: Params) {
     queryKey,
     queryFn: getInfinityQueryFn(getPath, {
       options: {
-        baseURL: state.getApiHost(),
+        baseURL: getApiHost(),
         credentials: 'include',
       },
     }),

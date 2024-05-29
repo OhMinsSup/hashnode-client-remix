@@ -19,14 +19,11 @@ type Params = {
   searchParams?: UntilsTypes.SearchParams;
 };
 
-export function useDraftSubmittedInfiniteQuery({
-  initialData,
-  searchParams,
-}: Params) {
+export function usePostInfiniteQuery({ initialData, searchParams }: Params) {
   const getApiHost = useEnvStore((state) => state.getApiHost);
   const queryKey: QueriesTypes.BaseQueryKey = [
     sharedQueryKey,
-    useDraftSubmittedInfiniteQuery.name,
+    usePostInfiniteQuery.name,
     searchParams,
   ];
 
@@ -34,11 +31,7 @@ export function useDraftSubmittedInfiniteQuery({
     searchParams?: UntilsTypes.SearchParams,
     pageNo?: number,
   ) => {
-    return getInfinityQueryPath(
-      API_ENDPOINTS.DRAFTS.SUBMITTED,
-      searchParams,
-      pageNo,
-    );
+    return getInfinityQueryPath(API_ENDPOINTS.POSTS.ROOT, searchParams, pageNo);
   };
 
   return useSuspenseInfiniteQuery({

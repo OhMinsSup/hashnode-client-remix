@@ -6,7 +6,7 @@ import {
   getInfinityQueryPath,
 } from '~/services/react-query';
 import { sharedQueryKey } from '~/services/react-query/shared';
-import { useEnvStore } from '~/services/store/useEnvStore';
+import { useEnvStore } from '~/services/store/env-store-provider';
 
 type Data = SerializeSchema.SerializePost<false>;
 
@@ -23,7 +23,7 @@ export function usePostPublishedInfiniteQuery({
   initialData,
   searchParams,
 }: Params) {
-  const state = useEnvStore();
+  const getApiHost = useEnvStore((state) => state.getApiHost);
   const queryKey: QueriesTypes.BaseQueryKey = [
     sharedQueryKey,
     usePostPublishedInfiniteQuery.name,
@@ -45,7 +45,7 @@ export function usePostPublishedInfiniteQuery({
     queryKey,
     queryFn: getInfinityQueryFn(getPath, {
       options: {
-        baseURL: state.getApiHost(),
+        baseURL: getApiHost(),
         credentials: 'include',
       },
     }),

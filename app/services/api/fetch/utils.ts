@@ -1,10 +1,4 @@
-import { decode } from 'turbo-stream';
-
 import type { FetchOptions, ResponseMapType } from './types';
-
-export function decodeViaTurboStream(body: ReadableStream<Uint8Array>) {
-  return decode(body);
-}
 
 export function mergeFetchOptions<R extends ResponseMapType = 'json'>(
   input: FetchOptions<R> | undefined,
@@ -99,8 +93,6 @@ const textTypes = new Set([
 
 const JSON_RE = /^application\/(?:[\w!#$%&*.^`~-]*\+)?json(?<temp1>;.+)?$/i;
 
-const TURBO_RE = /^text\/x-turbo$/i;
-
 export function detectResponseType(_contentType = ''): ResponseMapType {
   if (!_contentType) {
     return 'json';
@@ -108,10 +100,6 @@ export function detectResponseType(_contentType = ''): ResponseMapType {
 
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- safe
   const contentType = _contentType.split(';').shift() || '';
-
-  if (TURBO_RE.test(contentType)) {
-    return 'turbo';
-  }
 
   if (JSON_RE.test(contentType)) {
     return 'json';

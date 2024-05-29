@@ -1,4 +1,4 @@
-interface CookieOptions {
+export interface CookieOptions {
   expires?: Date;
   path?: string;
   domain?: string;
@@ -38,4 +38,14 @@ export const getCookie = (name: string) => {
   );
 
   return cookieObj[name];
+};
+
+export const removeCookie = (name: string, options: CookieOptions = {}) => {
+  let cookieString = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+
+  if (options.domain) {
+    cookieString += `; domain=${options.domain}`;
+  }
+
+  document.cookie = cookieString;
 };

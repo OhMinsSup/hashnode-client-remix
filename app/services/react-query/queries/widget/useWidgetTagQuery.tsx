@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '~/constants/constant';
 import { getQueryFn, getQueryPath } from '~/services/react-query';
 import { sharedQueryKey } from '~/services/react-query/shared';
-import { useEnvStore } from '~/services/store/useEnvStore';
+import { useEnvStore } from '~/services/store/env-store-provider';
 
 export type Data = SerializeSchema.SerializeTag<false>;
 
@@ -17,7 +17,7 @@ type Params = {
 };
 
 export function useWidgetTagQuery({ initialData, searchParams }: Params) {
-  const state = useEnvStore();
+  const getApiHost = useEnvStore((state) => state.getApiHost);
   const queryKey: QueriesTypes.BaseQueryKey = [
     sharedQueryKey,
     useWidgetTagQuery.name,
@@ -33,7 +33,7 @@ export function useWidgetTagQuery({ initialData, searchParams }: Params) {
     initialData,
     queryFn: getQueryFn<DataSchema, QueriesTypes.BaseQueryKey>(getPath, {
       options: {
-        baseURL: state.getApiHost(),
+        baseURL: getApiHost(),
         credentials: 'include',
       },
     }),

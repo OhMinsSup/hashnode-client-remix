@@ -18,30 +18,17 @@ import {
 
 import '~/styles/global.css';
 
-import { defineClientLoader } from '@remix-run/react/dist/single-fetch';
-
 import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
 import { DefaultLinks } from '~/components/shared/future/DefaultLinks';
 import { DefaultMetas } from '~/components/shared/future/DefaultMetas';
 import { LayoutSizeMeasuringMachine } from '~/components/shared/future/LayoutSizeMeasuringMachine';
 import { cn } from '~/services/libs';
 import { ClientQueryProvider } from '~/services/react-query';
-import { useEnvStore } from '~/services/store/useEnvStore';
+import { EnvStoreProvider } from '~/services/store/env-store-provider';
 
 export { loader } from '~/.server/routes/root/root.loader';
 export { action } from '~/.server/routes/root/root.action';
 export { meta } from '~/services/seo/root/root.meta';
-
-export const clientLoader = defineClientLoader(async ({ serverLoader }) => {
-  // call the server loader
-  const serverData = await serverLoader<RoutesLoaderData>();
-
-  useEnvStore.setState(serverData.env);
-
-  return serverData;
-});
-
-clientLoader.hydrate = true;
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -91,9 +78,11 @@ function App() {
 export default function AppWithProviders() {
   const data = useLoaderData<RoutesLoaderData>();
   return (
-    <ThemeProvider specifiedTheme={data.theme}>
-      <App />
-    </ThemeProvider>
+    <EnvStoreProvider apiHost={data.env.apiHost} layout={data.env.layout}>
+      <ThemeProvider specifiedTheme={data.theme}>
+        <App />
+      </ThemeProvider>
+    </EnvStoreProvider>
   );
 }
 

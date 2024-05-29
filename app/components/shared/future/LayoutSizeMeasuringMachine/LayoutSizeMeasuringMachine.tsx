@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
-import { useLoaderData } from '@remix-run/react';
 
 import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { useEventListener } from '~/libs/hooks/useEventListener';
 import { optimizeAnimation } from '~/services/libs';
-import { setCookie } from '~/services/libs/cookie';
+import { setCookie } from '~/services/store/env-layout-cookie';
+import { useEnvStore } from '~/services/store/env-store-provider';
 
 export default function LayoutSizeMeasuringMachine() {
-  const data = useLoaderData<any>();
-  console.log(data);
   return (
     <ClientOnly>
       <LayoutSizeMeasuringMachine.Internal />
@@ -17,19 +15,24 @@ export default function LayoutSizeMeasuringMachine() {
 }
 
 LayoutSizeMeasuringMachine.Internal = function Item() {
+  const setLayout = useEnvStore((state) => state.setLayout);
+
+  const layoutState = useEnvStore((state) => state.layout);
+
   useEventListener(
     'resize',
     optimizeAnimation(() => {
-      const width = window.innerWidth;
-      setCookie('hashnode.layout.width', window.innerWidth.toString());
-      console.log('resize', width);
+      setLayout(window.innerWidth);
     }),
   );
 
   useEffect(() => {
-    console.log('mount', window.innerWidth);
-    setCookie('hashnode.layout.width', window.innerWidth.toString());
-  }, []);
+    setLayout(window.innerWidth);
+  }, [setLayout]);
+
+  useEffect(() => {
+    setCookie('hashnode.layout-width', layoutState.toString());
+  }, [layoutState]);
 
   return null;
 };
