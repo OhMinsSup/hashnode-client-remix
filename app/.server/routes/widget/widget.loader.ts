@@ -12,6 +12,10 @@ type Data = {
     totalCount: number;
     list: SerializeSchema.SerializePost<false>[];
   };
+  trending: {
+    totalCount: number;
+    list: SerializeSchema.SerializePost<false>[];
+  };
 };
 
 type DataSchema = FetchRespSchema.Success<Data>;
@@ -34,11 +38,16 @@ export const loader = defineLoader(
         totalCount: 0,
         list: [],
       },
+      trending: {
+        totalCount: 0,
+        list: [],
+      },
     };
 
     return json(
       successJsonResponse({
         draft: response._data?.result.draft ?? defaultDraft.draft,
+        trending: response._data?.result.trending ?? defaultDraft.trending,
       }),
       {
         headers: {

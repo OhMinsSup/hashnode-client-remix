@@ -15,7 +15,10 @@ interface AsideProps {
 export default function Aside({ drafts, draftTotal }: AsideProps) {
   return (
     <div className="hidden xl:block">
-      <div className="mb-5 flex flex-col gap-6 sm:w-[340px] xl:mt-8">
+      <div
+        className="mb-5 flex flex-col gap-6 sm:w-[340px] xl:mt-8"
+        id="main-aside"
+      >
         <Aside.Container
           title="Changelog"
           subheading={

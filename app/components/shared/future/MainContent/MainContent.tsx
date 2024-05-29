@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { useEventListener } from '~/libs/hooks/useEventListener';
 import { cn, optimizeAnimation } from '~/services/libs';
@@ -12,8 +10,6 @@ interface MainContentProps {
 }
 
 function ScrollSensor() {
-  const cachedScroll = useRef(0);
-
   useEventListener(
     'scroll',
     optimizeAnimation(() => {
@@ -23,8 +19,14 @@ function ScrollSensor() {
         return;
       }
 
+      const element = aside.querySelector('div[id="main-aside"]');
+      if (!element) {
+        return;
+      }
+      const elementHeight = element.clientHeight;
+
       const currentScroll = window.scrollY;
-      const isScrollTop = currentScroll > 2000;
+      const isScrollTop = currentScroll >= elementHeight;
 
       if (isScrollTop) {
         aside.setAttribute('style', 'position: sticky; top: 0;');
@@ -34,8 +36,6 @@ function ScrollSensor() {
           'position: relative; top: 0; height: 100%;',
         );
       }
-
-      cachedScroll.current = currentScroll;
     }),
     {
       passive: true,
