@@ -7,7 +7,6 @@ import { getAuthFromRequest } from '~/.server/utils/auth.server';
 import {
   clearAuthHeaders,
   combineHeaders,
-  getCookie,
 } from '~/.server/utils/request.server';
 import { getTheme, initializeTheme } from '~/.server/utils/theme.server';
 import { getToast, initializeToast } from '~/.server/utils/toast.server';
@@ -20,10 +19,6 @@ export const loader = defineLoader(async ({ context, request }) => {
   const { toast, headers: toastHeaders } = await getToast(request);
   const theme = await getTheme(request);
 
-  const { cookieData } = getCookie(request);
-
-  const cookieLayout = cookieData?.['hashnode.layout-width'];
-
   const $object = {
     currentProfile: null,
     theme,
@@ -31,7 +26,6 @@ export const loader = defineLoader(async ({ context, request }) => {
     origin: getDomainUrl(request),
     env: {
       apiHost: `${context.env.API_BASE_URL}/api/v1`,
-      layout: typeof cookieLayout === 'string' ? Number(cookieLayout) : 0,
     },
   };
 

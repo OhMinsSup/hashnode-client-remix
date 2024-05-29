@@ -9,7 +9,7 @@ import { createEnvStore, initEnvStore } from './env-store';
 export const EnvStoreContext = createContext<StoreApi<EnvStore> | null>(null);
 
 export interface EnvStoreProviderProps
-  extends Partial<Pick<EnvStore, 'apiHost' | 'layout'>> {
+  extends Partial<Pick<EnvStore, 'apiHost'>> {
   children: ReactNode;
 }
 

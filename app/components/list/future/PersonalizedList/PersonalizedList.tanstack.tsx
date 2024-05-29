@@ -83,16 +83,18 @@ export default function PersonalizedList() {
           }
 
           return (
-            <PostCard
+            <div
               key={`items:${item.id}`}
               className="absolute left-0 top-0 w-full"
-              styles={{
+              style={{
                 height: `${virtualRow.size}px`,
                 transform: `translateY(${
                   virtualRow.start - rowVirtualizer.options.scrollMargin
                 }px)`,
               }}
-            />
+            >
+              <PostCard />
+            </div>
           );
         })}
       </div>

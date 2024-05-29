@@ -1,14 +1,14 @@
 import React from 'react';
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { PersonalizedList } from '~/components/list/future/PersonalizedList';
+import { VirtuosoPersonalizedList } from '~/components/list/future/PersonalizedList';
 
 export { loader } from '~/.server/routes/feeds/feeds.loader';
 
 export default function Routes() {
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
-      <PersonalizedList />
+      <VirtuosoPersonalizedList />
     </React.Suspense>
   );
 }

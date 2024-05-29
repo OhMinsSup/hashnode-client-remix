@@ -23,4 +23,15 @@ export class WidgetNamespace {
       },
     );
   };
+
+  getMainLayoutHandler: FetchWithoutRequestHandler = async (options) => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.GET_MAIN_LAYOUT),
+      {
+        method: 'GET',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
 }

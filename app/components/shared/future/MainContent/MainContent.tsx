@@ -52,7 +52,7 @@ export default function MainContent({
 }: MainContentProps) {
   return (
     <>
-      <div className={cn(styles.root)}>{children}</div>
+      <div className={cn(styles.root, 'h-full')}>{children}</div>
       <aside
         className={cn(styles.aside)}
         style={{ top: 0, position: 'relative', height: '100%' }}

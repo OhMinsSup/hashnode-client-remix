@@ -21,7 +21,6 @@ import '~/styles/global.css';
 import { type RoutesLoaderData } from '~/.server/routes/root/root.loader';
 import { DefaultLinks } from '~/components/shared/future/DefaultLinks';
 import { DefaultMetas } from '~/components/shared/future/DefaultMetas';
-import { LayoutSizeMeasuringMachine } from '~/components/shared/future/LayoutSizeMeasuringMachine';
 import { cn } from '~/services/libs';
 import { ClientQueryProvider } from '~/services/react-query';
 import { EnvStoreProvider } from '~/services/store/env-store-provider';
@@ -69,7 +68,6 @@ function App() {
       <Document>
         <Outlet />
         {data.toast ? <ShowToast toast={data.toast} /> : null}
-        <LayoutSizeMeasuringMachine />
       </Document>
     </ClientQueryProvider>
   );
@@ -78,7 +76,7 @@ function App() {
 export default function AppWithProviders() {
   const data = useLoaderData<RoutesLoaderData>();
   return (
-    <EnvStoreProvider apiHost={data.env.apiHost} layout={data.env.layout}>
+    <EnvStoreProvider apiHost={data.env.apiHost}>
       <ThemeProvider specifiedTheme={data.theme}>
         <App />
       </ThemeProvider>

@@ -7,43 +7,38 @@ import {
 import { getCookie } from '~/.server/utils/request.server';
 import { successJsonResponse } from '~/.server/utils/response.server';
 
-type DraftDataSchema = FetchRespSchema.Success<
-  FetchRespSchema.ListResp<SerializeSchema.SerializePost<false>>
->;
+type Data = {
+  draft: {
+    totalCount: number;
+    list: SerializeSchema.SerializePost<false>[];
+  };
+};
+
+type DataSchema = FetchRespSchema.Success<Data>;
 
 export const loader = defineLoader(
   async ({ context, request }: LoaderFunctionArgs) => {
     const { cookies } = getCookie(request);
 
-    const drafts: SerializeSchema.SerializePost<false>[] = [];
-    let draftTotal = 0;
-    if (cookies) {
-      try {
-        const draft = context.agent.api.app.draft;
-        const response = await draft.getDraftsHandler<DraftDataSchema>({
-          headers: {
-            Cookie: cookies,
-          },
-          query: {
-            limit: '5',
-            pageNo: '1',
-          },
-        });
+    const widget = context.agent.api.app.widget;
+    const response = await widget.getMainLayoutHandler<DataSchema>({
+      ...(cookies && {
+        headers: {
+          Cookie: cookies,
+        },
+      }),
+    });
 
-        const data = response._data;
-        if (data) {
-          drafts.push(...data.result.list);
-          draftTotal = data.result.totalCount;
-        }
-      } catch (error) {
-        // noops
-      }
-    }
+    const defaultDraft: Data = {
+      draft: {
+        totalCount: 0,
+        list: [],
+      },
+    };
 
     return json(
       successJsonResponse({
-        drafts,
-        draftTotal,
+        draft: response._data?.result.draft ?? defaultDraft.draft,
       }),
       {
         headers: {
