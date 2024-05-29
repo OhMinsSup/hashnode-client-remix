@@ -46,6 +46,7 @@ export function usePostPublishedInfiniteQuery({
     queryFn: getInfinityQueryFn(getPath, {
       options: {
         baseURL: state.getApiHost(),
+        credentials: 'include',
       },
     }),
     initialPageParam: 1,

@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
   },
   FILES: {
     ROOT: 'files',
+    UPLOAD: 'files/upload',
   },
   TAGS: {
     ROOT: 'tags',

@@ -15,8 +15,7 @@ import '@blocknote/shadcn/style.css';
 import { useCallback, useEffect, useTransition } from 'react';
 
 import { useTheme } from '~/context/useThemeContext';
-import { getPath } from '~/routes/api.v1.assets.upload';
-import { fetchHandler } from '~/services/api/fetch';
+import { useFileUploadMutation } from '~/services/react-query/mutations/files/useFileUploadMutation';
 
 type BlockType = 'html' | 'markdown';
 
@@ -46,35 +45,21 @@ function Editor({
   initialHTML,
 }: BlocknoteEditorProps) {
   const [theme] = useTheme();
+
+  const { mutateAsync } = useFileUploadMutation();
+
   // Creates a new editor instance.
   const editor = useCreateBlockNote(
     {
       ...options,
       uploadFile: async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('uploadType', 'IMAGE');
-        formData.append('mediaType', 'IMAGE');
-
-        const response = await fetchHandler<
-          RemixDataFlow.Response<FetchRespSchema.File>,
-          'turbo'
-        >(getPath(), {
-          baseURL: window.location.origin,
-          isSingleFetch: true,
-          method: 'POST',
-          body: formData,
+        const response = await mutateAsync({
+          file,
+          uploadType: 'IMAGE',
+          mediaType: 'IMAGE',
         });
 
-        if (!response._data) {
-          throw new Error('Failed to upload file');
-        }
-
-        if (!response._data.data) {
-          throw new Error('Failed to upload file');
-        }
-
-        return response._data.data.result.publicUrl;
+        return response.result?.publicUrl ?? null;
       },
     },
     deps,

@@ -1,21 +1,27 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useFetcher } from '@remix-run/react';
+import React, { useCallback, useRef } from 'react';
 
 import { Icons } from '~/components/icons';
 import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Button } from '~/components/ui/button';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { useDrop } from '~/libs/hooks/useDrop';
-import { getPath, RoutesActionData } from '~/routes/api.v1.assets.upload';
-import { resetFetcher } from '~/routes/api.v1.reset-fetcher';
 import { cn } from '~/services/libs';
+import { useFileUploadMutation } from '~/services/react-query/mutations/files/useFileUploadMutation';
 
 export default function OgImage() {
   const $container = useRef<HTMLLabelElement | null>(null);
 
-  const fetcher = useFetcher<RoutesActionData>();
+  const { setValue, watch } = useWriteFormContext();
 
-  const { setValue } = useWriteFormContext();
+  const seoImage = watch('seo.image');
+
+  const { mutateAsync, isPending } = useFileUploadMutation({
+    onSuccess: (data) => {
+      setValue('seo.image', data.result.publicUrl, {
+        shouldDirty: true,
+      });
+    },
+  });
 
   const upload = useCallback(
     async (file: File) => {
@@ -38,18 +44,13 @@ export default function OgImage() {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('uploadType', 'SEO');
-      formData.append('mediaType', 'IMAGE');
-
-      fetcher.submit(formData, {
-        method: 'POST',
-        action: getPath(),
-        encType: 'multipart/form-data',
+      await mutateAsync({
+        file,
+        uploadType: 'SEO',
+        mediaType: 'IMAGE',
       });
     },
-    [fetcher],
+    [mutateAsync],
   );
 
   const onChange = useCallback(
@@ -94,24 +95,10 @@ export default function OgImage() {
     },
   });
 
-  useEffect(() => {
-    const fetcherData = fetcher.data;
-    if (
-      fetcher.state === 'idle' &&
-      fetcherData != null &&
-      fetcherData.status === 'success'
-    ) {
-      setValue('seo.image', fetcherData.result?.publicUrl, {
-        shouldDirty: true,
-      });
-      resetFetcher(fetcher);
-    }
-  }, [fetcher, setValue]);
-
   return (
     <AspectRatio ratio={16 / 9}>
       <>
-        {fetcher.state === 'idle' && fetcher.data == null ? (
+        {!seoImage && !isPending ? (
           <>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
@@ -138,7 +125,7 @@ export default function OgImage() {
             </label>
           </>
         ) : null}
-        {fetcher.state === 'loading' || fetcher.state === 'submitting' ? (
+        {isPending ? (
           <div
             className={cn(
               'flex size-full cursor-pointer flex-row items-center justify-center rounded-xl border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300',
@@ -148,17 +135,17 @@ export default function OgImage() {
             <Icons.spinner className="animate-spin" />
           </div>
         ) : null}
-        {fetcher.state === 'idle' && fetcher.data != null ? (
+        {seoImage && !isPending ? (
           <>
             <a
-              href={fetcher.data.result?.publicUrl}
+              href={seoImage}
               target="_Blank"
               aria-label="cover-image"
               className=" relative block size-full"
               rel="noreferrer"
             >
               <img
-                src={fetcher.data.result?.publicUrl}
+                src={seoImage}
                 alt="homepage illustrations"
                 decoding="async"
                 className="h-full w-full rounded object-cover"

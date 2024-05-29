@@ -1,1 +1,3 @@
-export const sharedQueryKey = 'hashnode.client.api';
+export const sharedQueryKey = 'hashnode.client.query';
+
+export const sharedMutationKey = 'hashnode.client.mutation';

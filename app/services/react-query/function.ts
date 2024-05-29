@@ -1,4 +1,8 @@
-import type { QueryFunction, QueryKey } from '@tanstack/react-query';
+import type {
+  MutationFunction,
+  QueryFunction,
+  QueryKey,
+} from '@tanstack/react-query';
 
 import { fetchHandler } from '~/services/api/fetch';
 import { type FetchOptions } from '../api/fetch/types';
@@ -9,6 +13,25 @@ type GetPathFn = (
 ) => string;
 
 type Options = { options?: FetchOptions<'json'> };
+
+export const mutationFn = <D = any, V = any>(
+  getPath: () => string,
+  opts?: Options,
+): MutationFunction<D, V> => {
+  return async (variables) => {
+    const url = getPath();
+    const response = await fetchHandler<D>(url.toString(), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...(variables && {
+        body: variables,
+      }),
+      ...(opts && { ...opts.options }),
+    });
+    return response._data as D;
+  };
+};
 
 export const getInfinityQueryFn = <D, Q extends QueryKey>(
   getPath: GetPathFn,

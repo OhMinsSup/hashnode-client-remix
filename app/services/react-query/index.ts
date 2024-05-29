@@ -6,4 +6,5 @@ export {
   getInfinityQueryPath,
   getInfinityQueryPathRemixLoader,
   getQueryPath,
+  mutationFn,
 } from './function';

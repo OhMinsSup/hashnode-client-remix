@@ -300,4 +300,6 @@ declare namespace UntilsTypes {
 
 declare namespace QueriesTypes {
   type BaseQueryKey = [string, string, UntilsTypes.SearchParams];
+
+  type BaseMutationKey = [string, string];
 }

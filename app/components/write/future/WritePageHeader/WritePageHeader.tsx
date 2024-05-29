@@ -15,8 +15,8 @@ import { Separator } from '~/components/ui/separator';
 import { Switch } from '~/components/ui/switch';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
+import { SettingPublishDrawer } from '~/components/write/future/SettingPublishDrawer';
 import { Theme, useTheme } from '~/context/useThemeContext';
-import { SettingPublishDrawer } from '../SettingPublishDrawer';
 import styles from './styles.module.css';
 
 export default function WritePageHeader() {
