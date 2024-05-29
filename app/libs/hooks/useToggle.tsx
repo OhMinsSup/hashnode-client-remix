@@ -7,13 +7,13 @@ export interface Actions<T> {
   toggle: () => void;
 }
 
-// @ts-ignore
+// @ts-expect-error reverseValue is missing in type
 function useToggle<T = boolean>(): [boolean, Actions<T>];
 
-// @ts-ignore
+// @ts-expect-error reverseValue is missing in type
 function useToggle<T>(defaultValue: T): [T, Actions<T>];
 
-// @ts-ignore
+// @ts-expect-error reverseValue is missing in type
 function useToggle<T, U>(
   defaultValue: T,
   reverseValue: U,

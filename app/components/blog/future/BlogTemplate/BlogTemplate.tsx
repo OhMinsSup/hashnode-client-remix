@@ -218,6 +218,7 @@ BlogTemplate.SubHeader = function Item({ children }: BlogTemplateProps) {
 };
 
 interface WriterProps {
+  username: SerializeSchema.SerializePost<false>['User']['UserProfile']['username'];
   image?: SerializeSchema.SerializePost<false>['image'];
   title: SerializeSchema.SerializePost<false>['title'];
   subTitle: SerializeSchema.SerializePost<false>['subTitle'];
@@ -229,65 +230,160 @@ BlogTemplate.Writer = function Item({
   title,
   subTitle,
   createdAt,
+  username,
 }: WriterProps) {
   return (
-    <div className="container relative mx-auto grid grid-cols-8">
+    <div className="blog-article-page container relative mx-auto grid grid-cols-8">
       <div className="col-span-full lg:col-span-6 lg:col-start-2">
-        {image ? (
-          <div className="relative">
-            <AspectRatio ratio={16 / 9}>
-              <img
-                src={image}
-                alt={`Cover for ${title}`}
-                decoding="async"
-                className="h-full w-full rounded object-cover"
-              />
-            </AspectRatio>
-          </div>
-        ) : null}
-        <div className="font-heading mb-8 mt-6 break-words px-4 text-center text-3xl font-bold text-slate-900 dark:text-white md:mb-14 md:mt-10 md:px-5 md:text-4xl lg:px-8 xl:px-20 xl:text-5xl">
-          <h1 className="leading-tight" data-query="post-title">
-            {title}
-          </h1>
-        </div>
-        {subTitle && (
-          <div className="font-heading mb-8 px-4 text-center md:mb-14 md:px-5 lg:px-8 xl:px-20">
-            <h2 className="text-2xl leading-snug text-slate-700 dark:text-slate-400 md:text-3xl xl:text-3xl">
-              {subTitle}
-            </h2>
-          </div>
-        )}
-        <div className="relative z-20 mb-8 flex flex-row flex-wrap items-center justify-center px-4 md:-mt-7 md:mb-14 md:text-lg">
-          <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:w-auto md:justify-start">
-            <div className="h-10 w-10  overflow-hidden  rounded-full bg-slate-200 dark:bg-white/20 md:mr-3 md:h-12 md:w-12">
-              <Link to="/" className="relative block size-full">
-                <Avatar className="size-full cursor-pointer hover:opacity-80">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </Link>
-            </div>
-          </div>
-          <div className="mb-5 flex w-full flex-row items-center justify-center space-x-4 md:mb-0 md:w-auto md:justify-start">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link to="/" className="text-slate-700 dark:text-slate-400">
-                    <span>{getDateFormat(createdAt)}</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{getDateFormat(createdAt, FORMAT.YYYYMMDD_HHMMSS)}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <p className="flex flex-row items-center text-slate-700 dark:text-slate-400">
-              <Icons.bookOpen className="mr-2 h-5 w-5 opacity-75" />
-              <span>{distanceInWordsToNow(createdAt)} read</span>
-            </p>
-          </div>
-        </div>
+        <BlogTemplate.Cover image={image} title={title} />
+        <BlogTemplate.Title title={title} />
+        <BlogTemplate.Subtile subTitle={subTitle} />
+        <BlogTemplate.WriterProfile createdAt={createdAt} username={username} />
+        <BlogTemplate.WriterOther />
       </div>
+    </div>
+  );
+};
+
+BlogTemplate.WriterOther = function Item() {
+  return (
+    <div className="-mt-7 mb-8 flex flex-col items-center md:mb-14 md:flex-row md:justify-center">
+      <Button
+        type="button"
+        className="group mb-2 ml-0 mt-4 flex flex-row items-center overflow-hidden rounded-full bg-slate-100 pl-2 pr-1 text-sm font-semibold leading-snug text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 hover:dark:bg-slate-700 md:mb-0 md:ml-4 md:mt-0"
+      >
+        <div className="mr-3 p-2">
+          <Icons.doubleLikes className="h-6 w-6 stroke-current" />
+        </div>
+        <div className="border-1-1/2 [&amp;:not(:first-of-type)]:-ml-3 relative h-8 w-8 rounded-full border-slate-100 bg-white group-hover:border-slate-200 dark:border-slate-800 dark:bg-slate-600 group-hover:dark:border-slate-700">
+          <Avatar className="size-full">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>{' '}
+        <div
+          className="border-1-1/2 relative h-8 w-8 rounded-full border-slate-100 bg-white group-hover:border-slate-200 dark:border-slate-800 dark:bg-slate-600 group-hover:dark:border-slate-700 [&:not(:first-of-type)]:-ml-3"
+          style={{ zIndex: 1 }}
+        >
+          <Avatar className="size-full">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
+        <div
+          className="border-1-1/2 relative h-8 w-8 rounded-full border-slate-100 bg-white group-hover:border-slate-200 dark:border-slate-800 dark:bg-slate-600 group-hover:dark:border-slate-700 [&:not(:first-of-type)]:-ml-3"
+          style={{ zIndex: 2 }}
+        >
+          <Avatar className="size-full">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
+        <div
+          className="border-1-1/2 relative h-8 w-8 rounded-full border-slate-100 bg-white group-hover:border-slate-200 dark:border-slate-800 dark:bg-slate-600 group-hover:dark:border-slate-700 [&:not(:first-of-type)]:-ml-3"
+          style={{ zIndex: 3 }}
+        >
+          <Avatar className="size-full">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
+        <div
+          className="border-1-1/2 relative -ml-3 flex h-8 items-center justify-center overflow-hidden rounded-full border-slate-100 bg-white px-1 group-hover:border-slate-200 dark:border-slate-800 dark:bg-slate-600 group-hover:dark:border-slate-700"
+          style={{ zIndex: 4, minWidth: '2rem' }}
+        >
+          <p className="truncate text-xs font-normal">+3</p>
+        </div>
+      </Button>
+    </div>
+  );
+};
+
+BlogTemplate.WriterProfile = function Item({
+  createdAt,
+  username,
+}: Pick<WriterProps, 'createdAt' | 'username'>) {
+  return (
+    <div className="relative z-20 mb-8 flex flex-row flex-wrap items-center justify-center px-4 md:-mt-7 md:mb-14 md:text-lg last:md:mb-10">
+      <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:!w-auto md:justify-start">
+        <div className="h-10 w-10  overflow-hidden  rounded-full bg-slate-200 dark:bg-white/20 md:mr-3 md:h-12 md:w-12">
+          <Link to="/" className="relative block size-full">
+            <Avatar className="cursor-pointer hover:opacity-80">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
+        </div>
+        <Link
+          to="/"
+          className="ml-2 font-semibold text-slate-600 dark:text-white md:ml-0"
+        >
+          <span>{username}</span>
+        </Link>
+      </div>
+      <div className="mb-5 flex w-full flex-row items-center justify-center md:mb-0 md:!w-auto md:justify-start">
+        <span className="mx-3 hidden font-bold text-slate-500 md:block">·</span>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link to="/" className="text-slate-700 dark:text-slate-400">
+                <span>{getDateFormat(createdAt)}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{getDateFormat(createdAt, FORMAT.YYYYMMDD_HHMMSS)}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <span className="mx-3 block font-bold text-slate-500">·</span>
+        <p className="flex flex-row items-center text-slate-700 dark:text-slate-400">
+          <Icons.bookOpen className="mr-2 h-5 w-5 opacity-75" />
+          <span>{distanceInWordsToNow(createdAt)} read</span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+BlogTemplate.Title = function Item({ title }: Pick<WriterProps, 'title'>) {
+  return (
+    <div className="font-heading mb-8 mt-6 break-words px-4 text-center text-3xl font-bold text-slate-900 dark:text-white md:mb-14 md:mt-10 md:px-5 md:text-4xl lg:px-8 xl:px-20 xl:text-5xl">
+      <h1 className="leading-tight" data-query="post-title">
+        {title}
+      </h1>
+    </div>
+  );
+};
+
+BlogTemplate.Subtile = function Item({
+  subTitle,
+}: Pick<WriterProps, 'subTitle'>) {
+  if (!subTitle) return null;
+  return (
+    <div className="font-heading mb-8 px-4 text-center md:mb-14 md:px-5 lg:px-8 xl:px-20">
+      <h2 className="text-2xl leading-snug text-slate-700 dark:text-slate-400 md:text-3xl xl:text-3xl">
+        {subTitle}
+      </h2>
+    </div>
+  );
+};
+
+BlogTemplate.Cover = function Item({
+  image,
+  title,
+}: Pick<WriterProps, 'title' | 'image'>) {
+  if (!image) return null;
+
+  return (
+    <div className="relative">
+      <AspectRatio ratio={16 / 9}>
+        <img
+          src={image}
+          alt={`Cover for ${title}`}
+          decoding="async"
+          className="h-full w-full rounded object-cover"
+        />
+      </AspectRatio>
     </div>
   );
 };
@@ -343,29 +439,87 @@ BlogTemplate.Content = function Item({
           <div id="post-content-parent" className="relative mb-10 pb-14">
             {children}
           </div>
-          <div className="mb-5 flex w-full flex-row flex-wrap justify-center md:mb-0">
-            {tags?.map((tag) => (
-              <Link
-                key={tag.id}
-                to="/"
-                className={cn(badgeVariants(), 'mb-3 mr-3')}
-              >
-                {tag.name}
-              </Link>
-            ))}
-          </div>
-          <div className="mb-5 mt-10 flex flex-col gap-16">
-            <div className="flex-1 px-2">
-              <div className="flex flex-col flex-wrap items-start md:flex-nowrap">
-                <h3 className="mb-4 w-full pb-2 text-base font-medium tracking-wider text-slate-500 dark:border-slate-800 dark:text-slate-400 ">
-                  <span>Written by</span>
-                  <Separator className="mt-4" orientation="horizontal" />
-                </h3>
-                <div className="flex w-full flex-col gap-12">
-                  <div className="flex w-full flex-1 flex-col md:flex-row">
-                    adds
+          <BlogTemplate.Tags tags={tags} />
+          <BlogTemplate.WriterInfo />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+BlogTemplate.Tags = function Item({
+  tags,
+}: Pick<BlogTemplateContentProps, 'tags'>) {
+  if (!tags) return null;
+
+  if (tags.length === 0) return null;
+
+  return (
+    <div className="mb-5 flex w-full flex-row flex-wrap justify-center md:mb-0">
+      {tags?.map((tag) => (
+        <Link key={tag.id} to="/" className={cn(badgeVariants(), 'mb-3 mr-3')}>
+          {tag.name}
+        </Link>
+      ))}
+    </div>
+  );
+};
+
+BlogTemplate.WriterInfo = function Item() {
+  return (
+    <div className="mb-5 mt-10 flex flex-col gap-16">
+      <div className="flex-1 px-2">
+        <div className="flex flex-col flex-wrap items-start md:flex-nowrap">
+          <h3 className="mb-4 w-full pb-2 text-base font-medium tracking-wider text-slate-500 dark:border-slate-800 dark:text-slate-400 ">
+            <span>Written by</span>
+            <Separator className="mt-4" orientation="horizontal" />
+          </h3>
+          <div className="flex w-full flex-col gap-12">
+            <div className="flex w-full flex-1 flex-col md:!flex-row">
+              <div className="mb-4 flex w-full flex-1 flex-row md:mb-0 ">
+                <div className="mr-4 flex flex-row md:mb-0">
+                  <Link
+                    to="/"
+                    className="block h-10 w-10 overflow-hidden rounded-full border dark:border-slate-800 md:h-14 md:w-14"
+                  >
+                    <Avatar className="size-full">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </Link>
+                </div>
+                <div className="flex flex-1 flex-col justify-center md:justify-start">
+                  <div className="flex flex-row items-center md:mb-1">
+                    <h1 className="font-sans text-lg font-semibold text-slate-800 dark:text-slate-100">
+                      <a href="https://hashnode.com/@k33g">
+                        Philippe Charrière
+                      </a>
+                    </h1>
+                  </div>
+                  <div className="hidden pr-2 md:block">
+                    <div className="prose dark:prose-dark text-slate-600 dark:text-slate-300">
+                      <p>
+                        {`I'm on BlueSky{' '}`}
+                        <a href="https://bsky.app/profile/k33gorg.bsky.social">
+                          https://bsky.app/profile/k33gorg.bsky.social
+                        </a>
+                      </p>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div className="mb-4 block md:hidden ">
+                <div className="prose dark:prose-dark text-slate-600 ">
+                  <p>
+                    {`I'm on BlueSky`}{' '}
+                    <a href="https://bsky.app/profile/k33gorg.bsky.social">
+                      https://bsky.app/profile/k33gorg.bsky.social
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start ">
+                <Button variant="outline">Follow</Button>
               </div>
             </div>
           </div>

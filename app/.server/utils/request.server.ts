@@ -48,6 +48,7 @@ export function getCookie(request: Request) {
   const cookieData = cookie ? cookies.parse(cookie) : null;
   const hasAuthToken = cookieData?.['hashnode.access_token'] ? true : false;
   return {
+    // hasAuthToken이 존재하면 cookieData는 무조건 존재한다의 타입을 명시
     cookies: cookie,
     cookieData,
     hasAuthToken,

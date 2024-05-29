@@ -1,14 +1,15 @@
+import React from 'react';
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { PostCard } from '~/components/shared/future/PostCard';
+import { VirtuosoPersonalizedList } from '~/components/list/future/PersonalizedList';
+
+export { loader } from '~/.server/routes/feeds/feeds.loader';
 
 export default function Routes() {
   return (
-    <div className="flex flex-col items-center gap-6">
-      {Array.from({ length: 10 }).map((_, i) => (
-        <PostCard key={i} />
-      ))}
-    </div>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <VirtuosoPersonalizedList />
+    </React.Suspense>
   );
 }
 

@@ -1,35 +1,37 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useFetcher } from '@remix-run/react';
+import React, { useCallback, useRef } from 'react';
 
 import { Icons } from '~/components/icons';
 import { useUserProfileFormContext } from '~/components/settings/context/useUserProfileFormContext';
 import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Button } from '~/components/ui/button';
 import { useDrop } from '~/libs/hooks/useDrop';
-import { getPath, RoutesActionData } from '~/routes/api.v1.assets.upload';
 import { cn } from '~/services/libs';
+import { useFileUploadMutation } from '~/services/react-query/mutations/files/useFileUploadMutation';
 
 export default function InputProfile() {
   const $container = useRef<HTMLLabelElement | null>(null);
 
-  const fetcher = useFetcher<RoutesActionData>();
+  const { setValue, watch } = useUserProfileFormContext();
 
-  const { setValue } = useUserProfileFormContext();
+  const image = watch('image');
+
+  const { mutateAsync, isPending } = useFileUploadMutation({
+    onSuccess: (data) => {
+      setValue('image', data.result.publicUrl, {
+        shouldDirty: true,
+      });
+    },
+  });
 
   const upload = useCallback(
     async (file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('uploadType', 'IMAGE');
-      formData.append('mediaType', 'IMAGE');
-
-      fetcher.submit(formData, {
-        method: 'POST',
-        action: getPath(),
-        encType: 'multipart/form-data',
+      await mutateAsync({
+        file,
+        uploadType: 'IMAGE',
+        mediaType: 'IMAGE',
       });
     },
-    [fetcher],
+    [mutateAsync],
   );
 
   const onChange = useCallback(
@@ -74,23 +76,10 @@ export default function InputProfile() {
     },
   });
 
-  useEffect(() => {
-    const fetcherData = fetcher.data;
-    if (
-      fetcher.state === 'idle' &&
-      fetcherData != null &&
-      fetcherData.status === 'success'
-    ) {
-      setValue('image', fetcherData.result?.publicUrl, {
-        shouldDirty: true,
-      });
-    }
-  }, [fetcher.state, fetcher.data]);
-
   return (
     <AspectRatio ratio={16 / 9}>
       <>
-        {fetcher.state === 'idle' && fetcher.data == null ? (
+        {!image && !isPending ? (
           <>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label
@@ -114,7 +103,7 @@ export default function InputProfile() {
             </label>
           </>
         ) : null}
-        {fetcher.state === 'loading' || fetcher.state === 'submitting' ? (
+        {isPending ? (
           <div
             className={cn(
               'flex size-40 cursor-pointer flex-row items-center justify-center rounded-full border border-dashed border-slate-700 px-[26px] py-[52px] dark:border-slate-300',
@@ -124,17 +113,17 @@ export default function InputProfile() {
             <Icons.spinner className="animate-spin" />
           </div>
         ) : null}
-        {fetcher.state === 'idle' && fetcher.data != null ? (
+        {image && !isPending ? (
           <>
             <a
-              href={fetcher.data.result?.publicUrl}
+              href={image}
               target="_Blank"
               aria-label="cover-image"
               className="relative block size-40 rounded-full"
               rel="noreferrer"
             >
               <img
-                src={fetcher.data.result?.publicUrl}
+                src={image}
                 alt="homepage illustrations"
                 decoding="async"
                 className="h-full w-full rounded-full object-cover"

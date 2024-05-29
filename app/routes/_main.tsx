@@ -17,8 +17,8 @@ export { loader } from '~/.server/routes/widget/widget.loader';
 export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
 
-  const draftTotal = data.result?.draftTotal ?? 0;
-  const drafts = (data.result?.drafts ??
+  const draftTotal = data.result?.draft.totalCount ?? 0;
+  const drafts = (data.result?.draft.list ??
     []) as SerializeSchema.SerializePost<false>[];
 
   return (

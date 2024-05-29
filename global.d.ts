@@ -172,6 +172,7 @@ declare namespace SerializeSchema {
     PostCoAuthor: SerializePostCoAuthor[];
     PostSeo: Partial<SerializePostSeo>;
     PostStats: IncludeStats extends true ? SerializePostStats : undefined;
+    User: SerializeSimepleUser;
     count: SerializePostCount;
     createdAt: string;
     updatedAt: string;
@@ -283,9 +284,22 @@ declare namespace RemixDataFlow {
 }
 
 declare namespace UntilsTypes {
-  type DeepObjectKeyOf<T> = {
+  export type DeepObjectKeyOf<T> = {
     [K in keyof T]: T[K] extends Record<string, unknown>
       ? `${K}.${DeepObjectKeyOf<T[K]>}`
       : K;
   }[keyof T];
+
+  export type SearchParams =
+    | string
+    | string[][]
+    | Record<string, string>
+    | URLSearchParams
+    | undefined;
+}
+
+declare namespace QueriesTypes {
+  type BaseQueryKey = [string, string, UntilsTypes.SearchParams];
+
+  type BaseMutationKey = [string, string];
 }

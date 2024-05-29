@@ -105,7 +105,7 @@ export default function LeftSidebar() {
           <PublishedProvider />
         </div>
       </ScrollArea>
-      <hr className="css-1a5r2w9" />
+      <Separator orientation="horizontal" />
       <div className="flex flex-col gap-4 px-4 py-5">
         <div className="flex flex-col gap-1">
           <Link

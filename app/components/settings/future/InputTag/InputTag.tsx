@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
-import type { Data } from '~/routes/api.v1.tags.widget';
+import type { Data } from '~/services/react-query/queries/widget/useWidgetTagQuery';
 import { Icons } from '~/components/icons';
 import { useUserProfileFormContext } from '~/components/settings/context/useUserProfileFormContext';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { useDebounceFn } from '~/libs/hooks/useDebounceFn';
-import { useTagWidgetQuery } from '~/routes/api.v1.tags.widget';
 import { cn } from '~/services/libs';
+import { useWidgetTagQuery } from '~/services/react-query/queries/widget/useWidgetTagQuery';
 
 export default function InputTag() {
   const [input, setInput] = useState('');
@@ -111,7 +111,7 @@ interface PopoverProps {
 }
 
 function Popover({ input, onClose }: PopoverProps) {
-  const { data } = useTagWidgetQuery({
+  const { data } = useWidgetTagQuery({
     searchParams: {
       keyword: input,
       limit: '5',

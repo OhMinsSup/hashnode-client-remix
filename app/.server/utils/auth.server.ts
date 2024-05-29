@@ -17,8 +17,12 @@ export async function getAuthFromRequest(
   options = { throwException: false } as GetAuthFromRequestOptions,
 ) {
   try {
-    const { cookies } = getCookie(request);
+    const { hasAuthToken, cookies } = getCookie(request);
     if (!cookies) {
+      return null;
+    }
+
+    if (!hasAuthToken) {
       return null;
     }
 

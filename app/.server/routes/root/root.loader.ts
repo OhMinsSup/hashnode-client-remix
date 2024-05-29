@@ -25,7 +25,7 @@ export const loader = defineLoader(async ({ context, request }) => {
     toast,
     origin: getDomainUrl(request),
     env: {
-      API_BASE_URL: context.env.API_BASE_URL,
+      apiHost: `${context.env.API_BASE_URL}/api/v1`,
     },
   };
 

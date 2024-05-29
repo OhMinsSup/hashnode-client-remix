@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useController, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Icons } from '~/components/icons';
@@ -21,10 +22,20 @@ export default function ImageGallery() {
     },
   });
 
+  const [keyword, setKeyword] = useState('');
+
+  const { field } = useController({
+    control: form.control,
+    name: 'keyword',
+  });
+
   const onSubmit = (input: FormFieldValues) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(input);
+    setKeyword(input.keyword ?? '');
+  };
+
+  const onReset = () => {
+    form.reset();
+    setKeyword('');
   };
 
   return (
@@ -40,22 +51,20 @@ export default function ImageGallery() {
             autoComplete="off"
             className="px-8"
             placeholder="Type something and press enter"
-            //   value={query}
-            //   onChange={onChange}
-            //   onKeyDown={onKeyDown}
+            {...field}
           />
           <Icons.close
             className="absolute right-2 top-2.5 size-4 text-muted-foreground"
-            onClick={() => {
-              //   setQuery('');
-            }}
+            onClick={onReset}
           />
         </div>
         <Button type="submit" className=" inline-flex">
           Search
         </Button>
       </form>
-      <ImageGalleryCardList />
+      <React.Suspense fallback={<>Loading...</>}>
+        <ImageGalleryCardList keyword={keyword} />
+      </React.Suspense>
     </div>
   );
 }

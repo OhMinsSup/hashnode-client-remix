@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useFetcher } from '@remix-run/react';
+import React, { useCallback, useRef } from 'react';
 
-import type { RoutesActionData } from '~/routes/api.v1.assets.upload';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import { useWriteContext } from '~/components/write/context/useWriteContext';
 import { useWriteFormContext } from '~/components/write/context/useWriteFormContext';
 import { getTargetElement } from '~/libs/browser-utils/dom';
 import { useDrop } from '~/libs/hooks/useDrop';
-import { getPath } from '~/routes/api.v1.assets.upload';
+import { useFileUploadMutation } from '~/services/react-query/mutations/files/useFileUploadMutation';
 import styles from './styles.module.css';
 
 export default function ImageUpload() {
@@ -20,7 +18,15 @@ export default function ImageUpload() {
 
   const { setValue } = useWriteFormContext();
 
-  const fetcher = useFetcher<RoutesActionData>();
+  const { mutateAsync } = useFileUploadMutation({
+    onSuccess: (data) => {
+      setCoverClose();
+      setUploadState('success');
+      setValue('image', data.result.publicUrl, {
+        shouldDirty: true,
+      });
+    },
+  });
 
   const upload = useCallback(
     async (file: File) => {
@@ -45,18 +51,13 @@ export default function ImageUpload() {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('uploadType', 'POST_THUMBNAIL');
-      formData.append('mediaType', 'IMAGE');
-
-      fetcher.submit(formData, {
-        method: 'POST',
-        action: getPath(),
-        encType: 'multipart/form-data',
+      await mutateAsync({
+        file,
+        uploadType: 'POST_THUMBNAIL',
+        mediaType: 'IMAGE',
       });
     },
-    [setUploadState, fetcher],
+    [setUploadState, mutateAsync],
   );
 
   const onClick = useCallback(() => {
@@ -104,21 +105,6 @@ export default function ImageUpload() {
       await upload(file);
     },
   });
-
-  useEffect(() => {
-    const fetcherData = fetcher.data;
-    if (
-      fetcher.state === 'idle' &&
-      fetcherData != null &&
-      fetcherData.status === 'success'
-    ) {
-      setCoverClose();
-      setUploadState('success');
-      setValue('image', fetcherData.result?.publicUrl, {
-        shouldDirty: true,
-      });
-    }
-  }, [fetcher.state, fetcher.data]);
 
   return (
     <div className={styles.tab_content_upload} ref={$container}>

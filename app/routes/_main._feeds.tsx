@@ -2,6 +2,8 @@ import { isRouteErrorResponse, Outlet, useRouteError } from '@remix-run/react';
 
 import { MainFeedTabs } from '~/components/shared/future/MainFeedTabs';
 
+export { loader } from '~/.server/routes/feeds/feeds-layout.loader';
+
 export default function Routes() {
   return (
     <MainFeedTabs>

@@ -6,12 +6,10 @@ import type {
   FetchOptions,
   FetchRequest,
   FetchResponse,
-  MappedResponseType,
   ResponseMapType,
 } from './types';
 import { createFetchError } from '../error';
 import {
-  decodeViaTurboStream,
   detectResponseType,
   isJSONSerializable,
   mergeFetchOptions,
@@ -43,13 +41,10 @@ const nullBodyResponses = new Set([101, 204, 205, 304]);
 export async function fetchHandler<
   T = unknown,
   R extends ResponseMapType = 'json',
->(
-  _request: FetchRequest,
-  _options?: FetchOptions<R>,
-): Promise<FetchResponse<MappedResponseType<R, T>>> {
+>(_request: FetchRequest, _options?: FetchOptions<R>) {
   async function onError(
     context: FetchContext<T, R>,
-  ): Promise<FetchResponse<MappedResponseType<R>>> {
+  ): Promise<FetchResponse<any>> {
     // Is Abort
     // If it is an active abort, it will not retry automatically.
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMException#error_names
@@ -117,15 +112,7 @@ export async function fetchHandler<
 
   if (typeof context.request === 'string') {
     if (context.options.baseURL) {
-      // remix single fetch will append `.data` to the request
-      if (context.options.isSingleFetch) {
-        context.request = withBase(
-          `${context.request}.data`,
-          context.options.baseURL,
-        );
-      } else {
-        context.request = withBase(context.request, context.options.baseURL);
-      }
+      context.request = withBase(context.request, context.options.baseURL);
     }
 
     if (context.options.query ?? context.options.params) {
@@ -203,14 +190,6 @@ export async function fetchHandler<
         context.response._data = parseFunction(data) as T;
         break;
       }
-      // remix single fetch response data stream
-      case 'turbo': {
-        const decoded = await decodeViaTurboStream(
-          context.response.body as ReadableStream<Uint8Array>,
-        );
-        context.response._data = decoded.value as T;
-        break;
-      }
       default: {
         context.response._data = (await context.response[responseType]()) as T;
       }
@@ -240,5 +219,5 @@ export async function fetchHandler<
     return await onError(context);
   }
 
-  return context.response as FetchResponse<MappedResponseType<R, T>>;
+  return context.response;
 }

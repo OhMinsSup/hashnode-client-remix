@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFetcher } from '@remix-run/react';
 
 import { isBrowser } from '~/libs/browser-utils/dom';
-import { getPath } from '~/routes/api.v1.set-theme';
 
 enum Theme {
   DARK = 'dark',
@@ -54,7 +53,7 @@ function ThemeProvider({
     return getPreferredTheme();
   });
 
-  const persistTheme = useFetcher();
+  const persistTheme = useFetcher<any>();
   // TODO: remove this when persistTheme is memoized properly
   const persistThemeRef = useRef(persistTheme);
 
@@ -77,7 +76,7 @@ function ThemeProvider({
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },
-          { action: getPath(), method: 'POST' },
+          { action: '?/setTheme', method: 'POST' },
         );
       }
       setThemeState(newTheme);

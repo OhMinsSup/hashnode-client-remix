@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
   },
   FILES: {
     ROOT: 'files',
+    UPLOAD: 'files/upload',
   },
   TAGS: {
     ROOT: 'tags',
@@ -29,6 +30,7 @@ export const API_ENDPOINTS = {
   },
   WIDGETS: {
     GET_LEFTSIDE_POST_COUNT: 'widgets/get-leftside-post-count',
+    GET_MAIN_LAYOUT: 'widgets/get-main-layout',
   },
 } as const;
 
