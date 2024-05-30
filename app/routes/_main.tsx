@@ -18,13 +18,26 @@ export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
 
   const draftTotal = data.result?.draft.totalCount ?? 0;
+
   const drafts = (data.result?.draft.list ??
+    []) as SerializeSchema.SerializePost<false>[];
+
+  const trendingArticlesTotal = data.result?.trending.totalCount ?? 0;
+
+  const trendingArticles = (data.result?.trending?.list ??
     []) as SerializeSchema.SerializePost<false>[];
 
   return (
     <MainLayout header={<MainHeader />} footer={<MainFooter />} hasScrollSensor>
       <MainContent
-        aside={<Aside draftTotal={draftTotal} drafts={drafts} />}
+        aside={
+          <Aside
+            draftTotal={draftTotal}
+            drafts={drafts}
+            trendingArticlesTotal={trendingArticlesTotal}
+            trendingArticles={trendingArticles}
+          />
+        }
         hasScrollSensor
       >
         <Outlet />
