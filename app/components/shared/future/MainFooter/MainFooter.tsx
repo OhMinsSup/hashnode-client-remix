@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { NavLink, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
+import { Aside } from '~/components/shared/future/Aside';
 import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
@@ -11,6 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '~/components/ui/drawer';
+import { ScrollArea } from '~/components/ui/scroll-area';
 import { NAV_CONFIG, NavItem } from '~/constants/navigation';
 import { useLinkActiveStateHandler } from '~/libs/hooks/useLinkActiveState';
 import { cn } from '~/services/libs';
@@ -101,15 +103,20 @@ MainFooter.Dropdown = function Item({ item }: ItemProps) {
         </Button>
       </DrawerTrigger>
       <DrawerContent className="inset-0 bottom-0 left-0 top-0 m-0 h-full w-full rounded-none">
-        <DrawerHeader>
-          <DrawerTitle>
-            <div className="flex flex-row justify-start">
-              <Button variant="ghost" onClick={onClose}>
-                <Icons.close />
-              </Button>
+        <ScrollArea>
+          <DrawerHeader>
+            <DrawerTitle>
+              <div className="flex flex-row justify-start">
+                <Button variant="ghost" onClick={onClose}>
+                  <Icons.close />
+                </Button>
+              </div>
+            </DrawerTitle>
+            <div className="mb-5 flex w-fit flex-col gap-6">
+              <Aside.Content />
             </div>
-          </DrawerTitle>
-        </DrawerHeader>
+          </DrawerHeader>
+        </ScrollArea>
       </DrawerContent>
     </Drawer>
   );

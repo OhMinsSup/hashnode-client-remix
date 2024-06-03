@@ -60,7 +60,7 @@ export default function MainFeedTabs({ children }: MainFeedTabsProps) {
         return (
           <TabsContent
             key={`main-tabs-content-${item.id}`}
-            className="w-full"
+            className="h-svh md:w-full"
             value={
               typeof item.href === 'function' ? item.href(params) : item.href
             }
