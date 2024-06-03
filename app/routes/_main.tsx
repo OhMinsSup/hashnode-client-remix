@@ -27,6 +27,10 @@ export default function Routes() {
   const trendingArticles = (data.result?.trending?.list ??
     []) as SerializeSchema.SerializePost<false>[];
 
+  const bookmarkTotal = data.result?.bookmark.totalCount ?? 0;
+  const bookmarks = (data.result?.bookmark.list ??
+    []) as SerializeSchema.SerializePost<false>[];
+
   return (
     <MainLayout header={<MainHeader />} footer={<MainFooter />} hasScrollSensor>
       <MainContent
@@ -36,6 +40,8 @@ export default function Routes() {
             drafts={drafts}
             trendingArticlesTotal={trendingArticlesTotal}
             trendingArticles={trendingArticles}
+            bookmarkTotal={bookmarkTotal}
+            bookmarks={bookmarks}
           />
         }
         hasScrollSensor

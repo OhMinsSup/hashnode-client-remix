@@ -1,11 +1,7 @@
-import take from 'lodash-es/take';
+import { usePostBookmarkQuery } from '~/services/react-query/queries/posts/usePostBookmarkQuery';
+import BookmarkCard from './BookmarkCard';
 
-import { usePostTrendingQuery } from '~/services/react-query/queries/posts/usePostTrendingQuery';
-import TrendingArticleCard from './TrendingArticleCard';
-
-interface TrendingArticleCardListProps {
-  visiblePost: boolean;
-  duration: string;
+interface BookmarksProps {
   total: number;
   items?: SerializeSchema.SerializePost<false>[];
 }
@@ -31,29 +27,25 @@ function getInitialData(
   };
 }
 
-export default function TrendingArticleCardList({
-  visiblePost,
-  duration,
-  items,
-  total,
-}: TrendingArticleCardListProps) {
-  const { data } = usePostTrendingQuery({
+export default function Bookmarks({ items, total }: BookmarksProps) {
+  const { data } = usePostBookmarkQuery({
     searchParams: {
-      duration,
       pageNo: '1',
       limit: '6',
     },
-    ...(items && duration === '7'
+    ...(items
       ? {
           initialData: getInitialData(items, total),
         }
       : undefined),
   });
 
+  const list = data.result?.list ?? [];
+
   return (
     <>
-      {take(data.result?.list ?? [], visiblePost ? 6 : 3).map((item) => (
-        <TrendingArticleCard key={`trending-article-${item.id}`} />
+      {list.map((item) => (
+        <BookmarkCard key={`bookmark-card-${item.id}`} />
       ))}
     </>
   );

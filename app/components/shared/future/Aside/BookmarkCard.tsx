@@ -1,4 +1,4 @@
-export default function TrendingArticleCard() {
+export default function BookmarkCard() {
   return (
     <div className="flex flex-col gap-1">
       <h2 className="line-clamp-2 cursor-pointer font-semibold text-slate-700 dark:text-slate-300">

@@ -16,6 +16,10 @@ type Data = {
     totalCount: number;
     list: SerializeSchema.SerializePost<false>[];
   };
+  bookmark: {
+    totalCount: number;
+    list: SerializeSchema.SerializePost<false>[];
+  };
 };
 
 type DataSchema = FetchRespSchema.Success<Data>;
@@ -42,12 +46,17 @@ export const loader = defineLoader(
         totalCount: 0,
         list: [],
       },
+      bookmark: {
+        totalCount: 0,
+        list: [],
+      },
     };
 
     return json(
       successJsonResponse({
         draft: response._data?.result.draft ?? defaultDraft.draft,
         trending: response._data?.result.trending ?? defaultDraft.trending,
+        bookmark: response._data?.result.bookmark ?? defaultDraft.bookmark,
       }),
       {
         headers: {

@@ -16,16 +16,16 @@ type Params = {
   searchParams?: UntilsTypes.SearchParams;
 };
 
-export function usePostTrendingQuery({ initialData, searchParams }: Params) {
+export function usePostBookmarkQuery({ initialData, searchParams }: Params) {
   const getApiHost = useEnvStore((state) => state.getApiHost);
   const queryKey: QueriesTypes.BaseQueryKey = [
     sharedQueryKey,
-    usePostTrendingQuery.name,
+    usePostBookmarkQuery.name,
     searchParams,
   ];
 
   const getPath = (searchParams?: UntilsTypes.SearchParams) => {
-    return getQueryPath(API_ENDPOINTS.POSTS.TRENDING, searchParams);
+    return getQueryPath(API_ENDPOINTS.POSTS.BOOKMARK, searchParams);
   };
 
   return useSuspenseQuery({

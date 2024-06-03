@@ -12,13 +12,13 @@ import Aside from './Aside';
 import TrendingArticleCardList from './TrendingArticleCardList';
 
 interface AsideTrendingArticlesProps {
-  trendingArticlesTotal: number;
-  trendingArticles?: SerializeSchema.SerializePost<false>[];
+  total: number;
+  items?: SerializeSchema.SerializePost<false>[];
 }
 
 export default function AsideTrendingArticles({
-  trendingArticlesTotal,
-  trendingArticles,
+  total,
+  items,
 }: AsideTrendingArticlesProps) {
   const [visiblePost, setVisiblePost] = useState(false);
   const [duration, setDuration] = useState('7');
@@ -60,8 +60,8 @@ export default function AsideTrendingArticles({
           <TrendingArticleCardList
             visiblePost={visiblePost}
             duration={duration}
-            trendingArticlesTotal={trendingArticlesTotal}
-            trendingArticles={trendingArticles}
+            total={total}
+            items={items}
           />
         </React.Suspense>
       </div>
