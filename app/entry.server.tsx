@@ -8,6 +8,7 @@ import type {
   AppLoadContext,
   EntryContext,
   HandleDataRequestFunction,
+  // HandleErrorFunction,
 } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { cors } from 'remix-utils/cors';
@@ -55,3 +56,21 @@ export const handleDataRequest: HandleDataRequestFunction = async (
 ) => {
   return await cors(request, response);
 };
+
+// export const handleError: HandleErrorFunction = (
+//   error: unknown,
+//   { context, request },
+// ) => {
+//   // Skip capturing if the request is aborted as Remix docs suggest
+//   // Ref: https://remix.run/docs/en/main/file-conventions/entry.server#handleerror
+//   if (request.signal.aborted) {
+//     return;
+//   }
+//   // if (error instanceof Error) {
+//   //   context.logger.error(error.stack);
+//   //   Sentry.captureRemixServerException(error, 'remix.server', request);
+//   // } else {
+//   //   context.logger.error(error);
+//   //   Sentry.captureException(error);
+//   // }
+// };
