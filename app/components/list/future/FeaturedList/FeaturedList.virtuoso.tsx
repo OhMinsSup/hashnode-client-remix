@@ -50,8 +50,8 @@ export default function FeaturedList() {
       components={{ List }}
       endReached={endReached}
       totalCount={totalCount}
-      itemContent={(index) => {
-        return <PostCard key={`featured-item-${index}`} />;
+      itemContent={(index, data) => {
+        return <PostCard key={`featured-item-${index}`} data={data} />;
       }}
     />
   );

@@ -6,7 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 
-export default function PostCard() {
+interface PostCardProps {
+  data: SerializeSchema.SerializePost<false>;
+}
+
+export default function PostCard({ data }: PostCardProps) {
   return (
     <article className="flex w-full flex-col gap-4 rounded-none border-t border-slate-200 bg-white pt-5 first-of-type:border-t-0 dark:border-slate-800/80 dark:bg-slate-950 md:gap-5 md:pt-8 lg:rounded-2xl lg:!border lg:p-6 lg:pb-5">
       <section className="flex flex-col gap-2 sm:gap-4">
@@ -121,20 +125,18 @@ PostCard.Body = function Item() {
             </AspectRatio>
           </div>
           <div className="hidden size-full md:block">
-            <AspectRatio ratio={16 / 9}>
-              <a
-                target="_blank"
-                href="/authenticate?next=https://blog.bytescrum.com/mastering-python-coding-advanced-techniques-and-best-practices"
-                className="block size-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
-              >
-                <img
-                  className="size-full object-cover"
-                  src="/images/placeholder-image.jpg"
-                  alt="Mastering Python Coding: Advanced Techniques and Best Practices"
-                  data-name="desktop-image"
-                />
-              </a>
-            </AspectRatio>
+            <a
+              target="_blank"
+              href="/authenticate?next=https://blog.bytescrum.com/mastering-python-coding-advanced-techniques-and-best-practices"
+              className="block size-full overflow-hidden rounded-xl focus:outline-none focus:ring focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus:dark:ring-offset-slate-800 md:rounded-lg"
+            >
+              <img
+                className="size-full object-cover"
+                src="/images/placeholder-image.jpg"
+                alt="Mastering Python Coding: Advanced Techniques and Best Practices"
+                data-name="desktop-image"
+              />
+            </a>
           </div>
         </div>
       </div>

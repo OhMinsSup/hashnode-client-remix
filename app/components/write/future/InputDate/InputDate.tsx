@@ -44,7 +44,7 @@ export default function InputDate(props: UseControllerProps<FormFieldValues>) {
             mode="single"
             selected={selected}
             onSelect={onChange}
-            disabled={(date) => date < new Date()}
+            disabled={{ before: new Date() }}
             initialFocus
           />
         </PopoverContent>
