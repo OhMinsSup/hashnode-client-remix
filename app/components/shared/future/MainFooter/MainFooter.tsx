@@ -45,11 +45,7 @@ MainFooter.Navigation = function Item({ item }: ItemProps) {
     }
     case 'drawer': {
       const { isActive } = handler({ item });
-      return isActive ? (
-        <ClientOnly>
-          <MainFooter.Dropdown item={item} />
-        </ClientOnly>
-      ) : null;
+      return isActive ? <MainFooter.Dropdown item={item} /> : null;
     }
     default: {
       return null;

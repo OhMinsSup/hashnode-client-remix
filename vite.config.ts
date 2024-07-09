@@ -9,7 +9,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { getLoadContext } from './load-context';
 
 export default defineConfig(({ mode }) => {
-  console.log('mode:', process.env);
   return {
     build: {
       cssMinify: mode === 'production',

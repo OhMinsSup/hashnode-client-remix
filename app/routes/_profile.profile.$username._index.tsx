@@ -4,11 +4,12 @@ import {
   useRouteError,
 } from '@remix-run/react';
 
+import type { RoutesLoaderData } from '~/.server/routes/profile/profile.$username.loader';
+
 export { loader } from '~/.server/routes/profile/profile.$username.loader';
 
 export default function Routes() {
-  const data = useLoaderData<any>();
-  console.log(data);
+  const data = useLoaderData<RoutesLoaderData>();
   return (
     <>
       <div className="grid">Profile</div>

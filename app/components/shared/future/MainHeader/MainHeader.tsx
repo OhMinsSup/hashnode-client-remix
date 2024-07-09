@@ -66,9 +66,7 @@ export default function MainHeader() {
     >
       <div className={styles.header_layout}>
         <div className={styles.left}>
-          <ClientOnly>
-            <MainHeader.Menu />
-          </ClientOnly>
+          <MainHeader.Menu />
           <Link
             to={PAGE_ENDPOINTS.ROOT}
             className="mr-6 flex items-center space-x-2"
