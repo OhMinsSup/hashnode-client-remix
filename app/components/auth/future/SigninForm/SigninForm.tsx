@@ -7,7 +7,8 @@ import {
 } from '@remix-run/react';
 import { useForm } from 'react-hook-form';
 
-import { type RoutesActionData } from '~/.server/routes/auth/signin.action';
+import type { RoutesActionData } from '~/.server/routes/auth/signin.action';
+import type { FormFieldValues } from '~/services/validate/signin-api.validate';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import {
@@ -21,11 +22,7 @@ import {
 import { Input } from '~/components/ui/input';
 import { InputPassword } from '~/components/ui/input-password';
 import { PAGE_ENDPOINTS } from '~/constants/constant';
-import { createFormData } from '~/services/libs/form-data';
-import {
-  FormFieldValues,
-  resolver,
-} from '~/services/validate/signin-api.validate';
+import { resolver } from '~/services/validate/signin-api.validate';
 
 export default function SigninForm() {
   const navigation = useNavigation();
@@ -46,9 +43,10 @@ export default function SigninForm() {
   });
 
   const onSubmit = (input: FormFieldValues) =>
-    submit(createFormData(input), {
+    submit(input, {
       method: 'post',
       replace: true,
+      encType: 'application/json',
     });
 
   return (
