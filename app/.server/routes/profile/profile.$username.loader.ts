@@ -11,7 +11,7 @@ import { PAGE_ENDPOINTS, RESULT_CODE } from '~/constants/constant';
 import { createError, ErrorDisplayType } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 
-type Data = FetchRespSchema.Success<SerializeSchema.SerializePost<false>>;
+type Data = FetchRespSchema.Success<SerializeSchema.SerializeUser>;
 
 export const loader = defineLoader(async ({ request, context, params }) => {
   const { username } = params;

@@ -5,3 +5,9 @@
 .container {
   @apply relative z-10 col-span-10 mt-5 min-w-0 rounded-md px-5;
 }
+
+@media (min-width: 1024px) {
+  .container {
+    @apply border;
+  }
+}

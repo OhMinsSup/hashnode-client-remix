@@ -1,18 +1,15 @@
-import {
-  isRouteErrorResponse,
-  useLoaderData,
-  useRouteError,
-} from '@remix-run/react';
+import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import type { RoutesLoaderData } from '~/.server/routes/profile/profile.$username.loader';
+import { ProfileInfoBox } from '~/components/profile/future/ProfileInfoBox';
 
 export { loader } from '~/.server/routes/profile/profile.$username.loader';
 
 export default function Routes() {
-  const data = useLoaderData<RoutesLoaderData>();
   return (
     <>
-      <div className="grid">Profile</div>
+      <div className="grid">
+        <ProfileInfoBox />
+      </div>
       <div className="mb-5 grid">Profile</div>
       <div className="mb-5 grid">Profile</div>
       <div className="mb-20 grid">Profile</div>

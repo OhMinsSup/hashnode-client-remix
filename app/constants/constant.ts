@@ -107,6 +107,10 @@ export const PAGE_ENDPOINTS = {
   BLOG: {
     ID: (userId: string | number) => `/blog/${userId}`,
   },
+  PROFILE: {
+    USERNAME: (username: string) => `/profile/${username}`,
+    FOLLOWERS: (username: string) => `/profile/${username}/followers`,
+  },
 } as const;
 
 export const STATUS_CODE = {
