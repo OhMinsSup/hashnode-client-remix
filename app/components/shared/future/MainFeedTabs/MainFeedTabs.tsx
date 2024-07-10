@@ -72,3 +72,5 @@ export default function MainFeedTabs({ children }: MainFeedTabsProps) {
     </Tabs>
   );
 }
+
+MainFeedTabs.displayName = 'MainFeedTabs';

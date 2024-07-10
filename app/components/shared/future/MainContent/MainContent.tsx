@@ -1,4 +1,5 @@
-import { ClientOnly } from '~/components/shared/future/ClientOnly';
+import { ClientOnly } from 'remix-utils/client-only';
+
 import { useEventListener } from '~/libs/hooks/useEventListener';
 import { cn, optimizeAnimation } from '~/services/libs';
 import styles from './styles.module.css';
@@ -42,6 +43,8 @@ function ScrollSensor() {
   return null;
 }
 
+ScrollSensor.displayName = 'ScrollSensor';
+
 export default function MainContent({
   children,
   aside,
@@ -56,11 +59,9 @@ export default function MainContent({
       >
         {aside}
       </aside>
-      {hasScrollSensor && (
-        <ClientOnly>
-          <ScrollSensor />
-        </ClientOnly>
-      )}
+      {hasScrollSensor && <ClientOnly>{() => <ScrollSensor />}</ClientOnly>}
     </>
   );
 }
+
+MainContent.displayName = 'MainContent';

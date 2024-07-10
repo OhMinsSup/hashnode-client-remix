@@ -80,3 +80,5 @@ export default function UserMenu({ session }: UserMenuProps) {
     </DropdownMenu>
   );
 }
+
+UserMenu.displayName = 'UserMenu';

@@ -94,7 +94,7 @@ export default function FeaturedList() {
                 }px)`,
               }}
             >
-              <PostCard />
+              <PostCard data={item} />
             </div>
           );
         })}

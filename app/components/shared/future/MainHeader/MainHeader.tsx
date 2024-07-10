@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { Link, NavLink, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
-import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { SearchDialog } from '~/components/shared/future/SearchhDialog';
 import { UserMenu } from '~/components/shared/future/UserMenu';
 import { Button, buttonVariants } from '~/components/ui/button';
@@ -69,6 +68,7 @@ export default function MainHeader() {
           <MainHeader.Menu />
           <Link
             to={PAGE_ENDPOINTS.ROOT}
+            unstable_viewTransition
             className="mr-6 flex items-center space-x-2"
             aria-label="Hashnode Logo"
           >
@@ -192,6 +192,7 @@ MainHeader.Menu = function Item() {
             <div className="flex flex-row justify-between">
               <Link
                 aria-label="Hashnode Logo"
+                unstable_viewTransition
                 className="block w-[168px] text-slate-900 dark:text-white"
                 to={PAGE_ENDPOINTS.ROOT}
               >
@@ -318,3 +319,5 @@ MainHeader.ExternalLink = function Item({ item, renderType }: ItemProps) {
     </a>
   );
 };
+
+MainHeader.displayName = 'MainHeader';

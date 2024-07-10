@@ -24,6 +24,8 @@ export default function PostCard({ data }: PostCardProps) {
   );
 }
 
+PostCard.displayName = 'PostCard';
+
 PostCard.Header = function Item() {
   return (
     <div className="flex flex-col gap-6">
@@ -87,7 +89,7 @@ PostCard.Body = function Item() {
               target="_blank"
               href="/authenticate?next=https://blog.bytescrum.com/mastering-python-coding-advanced-techniques-and-best-practices"
             >
-              <h1 className="font-heading hn-break-words cursor-pointer text-base font-semibold  text-slate-700 dark:text-slate-200 sm:text-xl sm:font-bold">
+              <h1 className="font-heading hn-break-words cursor-pointer text-base font-semibold text-slate-700 dark:text-slate-200 sm:text-xl sm:font-bold">
                 Mastering Python Coding: Advanced Techniques and Best Practices
               </h1>
             </a>

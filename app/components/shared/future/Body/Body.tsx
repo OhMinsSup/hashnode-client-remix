@@ -9,3 +9,5 @@ export default function Body({ children }: BodyProps) {
     <body className="bg-white leading-[1.5] dark:bg-slate-950">{children}</body>
   );
 }
+
+Body.displayName = 'Body';

@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
 
+import type { RoutesLoaderData } from '~/.server/routes/widget/widget.loader';
 import { Button } from '~/components/ui/button';
 import {
   Select,
@@ -11,15 +13,12 @@ import {
 import Aside from './Aside';
 import TrendingArticleCardList from './TrendingArticleCardList';
 
-interface AsideTrendingArticlesProps {
-  total: number;
-  items?: SerializeSchema.SerializePost<false>[];
-}
+export default function AsideTrendingArticles() {
+  const data = useLoaderData<RoutesLoaderData>();
 
-export default function AsideTrendingArticles({
-  total,
-  items,
-}: AsideTrendingArticlesProps) {
+  const totalCount = data.result?.trending.totalCount ?? 0;
+  const items = data.result?.trending?.list ?? [];
+
   const [visiblePost, setVisiblePost] = useState(false);
   const [duration, setDuration] = useState('7');
 
@@ -60,8 +59,8 @@ export default function AsideTrendingArticles({
           <TrendingArticleCardList
             visiblePost={visiblePost}
             duration={duration}
-            total={total}
-            items={items}
+            total={totalCount}
+            items={items as unknown as SerializeSchema.SerializePost<false>[]}
           />
         </React.Suspense>
       </div>

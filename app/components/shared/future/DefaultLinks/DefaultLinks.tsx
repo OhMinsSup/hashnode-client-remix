@@ -66,3 +66,5 @@ export default function DefaultLinks({ origin }: DefaultLinksProps) {
     </>
   );
 }
+
+DefaultLinks.displayName = 'DefaultLinks';

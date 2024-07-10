@@ -3,7 +3,6 @@ import { NavLink, useParams } from '@remix-run/react';
 
 import { Icons } from '~/components/icons';
 import { Aside } from '~/components/shared/future/Aside';
-import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Drawer,
@@ -117,3 +116,5 @@ MainFooter.Dropdown = function Item({ item }: ItemProps) {
     </Drawer>
   );
 };
+
+MainFooter.displayName = 'MainFooter';

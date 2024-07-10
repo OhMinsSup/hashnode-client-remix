@@ -20,3 +20,5 @@ export default function Iframe({ iframeUrl }: IframeProps) {
 
   return <iframe title="title" ref={$ele} className="size-full" />;
 }
+
+Iframe.displayName = 'Iframe';

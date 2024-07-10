@@ -1,9 +1,8 @@
-import {
-  unstable_defineAction as defineAction,
-  json,
-} from '@remix-run/cloudflare';
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
+import type { FormFieldValues } from '~/services/validate/post-create-api.validate';
 import { getCookie } from '~/.server/utils/request.server';
 import { successJsonResponse } from '~/.server/utils/response.server';
 import {
@@ -15,13 +14,10 @@ import { isFetchError } from '~/services/api/error';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 import { RequestMethod } from '~/services/libs/request-method.enum';
-import { FormFieldValues } from '~/services/validate/post-create-api.validate';
-
-type Json = FormFieldValues;
 
 type DataSchema = FetchRespSchema.Success<null>;
 
-export const action = defineAction(async ({ request, context }) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   try {
     if (request.method.toUpperCase() !== RequestMethod.PUT) {
       throw createError({
@@ -32,7 +28,7 @@ export const action = defineAction(async ({ request, context }) => {
       });
     }
 
-    const input = await request.json<Json>();
+    const input = await request.json<FormFieldValues>();
 
     const { cookies } = getCookie(request);
     if (!cookies) {
@@ -94,6 +90,6 @@ export const action = defineAction(async ({ request, context }) => {
 
     throw error;
   }
-});
+};
 
 export type RoutesActionData = typeof action;

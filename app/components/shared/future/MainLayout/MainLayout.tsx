@@ -1,6 +1,6 @@
 import { useRef } from 'react';
+import { ClientOnly } from 'remix-utils/client-only';
 
-import { ClientOnly } from '~/components/shared/future/ClientOnly';
 import { useEventListener } from '~/libs/hooks/useEventListener';
 import { cn, optimizeAnimation } from '~/services/libs';
 import styles from './styles.module.css';
@@ -56,6 +56,8 @@ function ScrollSensor() {
   return null;
 }
 
+ScrollSensor.displayName = 'ScrollSensor';
+
 export default function MainLayout({
   children,
   footer,
@@ -86,10 +88,10 @@ export default function MainLayout({
         </nav>
       )}
       {hasScrollSensor ? (
-        <ClientOnly>
-          <ScrollSensor />
-        </ClientOnly>
+        <ClientOnly>{() => <ScrollSensor />}</ClientOnly>
       ) : null}
     </div>
   );
 }
+
+MainLayout.displayName = 'MainLayout';
