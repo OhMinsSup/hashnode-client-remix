@@ -32,10 +32,10 @@ export const socialSchema = z.object({
       (val) => {
         if (!val) return true;
         const regex =
-          /(http|https):\/\/twitter\.com\/(.+)|(http|https):\/\/www\.twitter\.com\/(.+)/;
+          /(http|https):\/\/x\.com\/(.+)|(http|https):\/\/www\.x\.com\/(.+)/;
         return regex.test(val);
       },
-      { message: 'Invalid twitter url' },
+      { message: 'Invalid x url' },
     ),
   instagram: z
     .string()

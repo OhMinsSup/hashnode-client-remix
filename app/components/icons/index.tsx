@@ -10,6 +10,7 @@ import {
   Bookmark,
   BookOpen,
   Calendar,
+  CalendarDays,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -68,6 +69,7 @@ import {
 import { cn } from '~/services/libs';
 
 export const Icons = {
+  calendarDays: CalendarDays,
   messagesSquare: MessagesSquare,
   bookOpen: BookOpen,
   code: Code,

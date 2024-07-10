@@ -1,13 +1,7 @@
 .root {
-  @apply relative z-40 grid min-h-screen w-full min-w-full gap-8 sm:max-w-[640px] md:max-w-[768px] lg:mx-auto lg:min-w-0 lg:max-w-full lg:grid-cols-10 lg:px-20;
+  @apply relative z-40 grid min-h-screen w-full min-w-full gap-8 sm:max-w-[640px] md:max-w-[768px] lg:mx-auto lg:min-w-0 lg:max-w-full lg:grid-cols-10 lg:px-20 xl:mx-auto xl:min-w-0 xl:max-w-full xl:grid-cols-10 xl:px-32 2xl:mx-auto 2xl:min-w-0 2xl:max-w-[1536px] 2xl:grid-cols-10 2xl:px-52;
 }
 
 .container {
-  @apply relative z-10 col-span-10 mt-5 min-w-0 rounded-md px-5;
-}
-
-@media (min-width: 1024px) {
-  .container {
-    @apply border;
-  }
+  @apply relative z-10 col-span-10 mt-5 min-w-0 rounded-md px-5 lg:border xl:px-0;
 }

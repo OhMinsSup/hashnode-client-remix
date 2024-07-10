@@ -17,8 +17,8 @@ export default function Social() {
     () => [
       {
         id: 'socials.twitter' as const,
-        title: 'Twitter Profile',
-        placeholder: 'https://twitter.com/johndoe',
+        title: 'X Profile',
+        placeholder: 'https://x.com/johndoe',
       },
       {
         id: 'socials.instagram' as const,

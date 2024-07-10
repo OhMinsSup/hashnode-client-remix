@@ -7,7 +7,7 @@ export { loader } from '~/.server/routes/profile/profile.$username.loader';
 export default function Routes() {
   return (
     <>
-      <div className="grid">
+      <div className="grid xl:grid-cols-12 2xl:grid-cols-10">
         <ProfileInfoBox />
       </div>
       <div className="mb-5 grid">Profile</div>
