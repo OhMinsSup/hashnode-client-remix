@@ -169,9 +169,7 @@ export default function WritePageHeader() {
               <Icons.fileSearch className="flex md:hidden" />
               <span className="hidden md:flex">Preview</span>
             </Button>
-            <ClientOnly>
-              <SettingPublishDrawer />
-            </ClientOnly>
+            <SettingPublishDrawer />
           </div>
         </div>
       </div>

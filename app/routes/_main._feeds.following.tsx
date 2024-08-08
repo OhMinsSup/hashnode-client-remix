@@ -5,9 +5,9 @@ import { PostCard } from '~/components/shared/future/PostCard';
 export default function Routes() {
   return (
     <div className="flex flex-col items-center gap-6">
-      {Array.from({ length: 10 }).map((_, i) => (
+      {/* {Array.from({ length: 10 }).map((_, i) => (
         <PostCard key={i} />
-      ))}
+      ))} */}
     </div>
   );
 }

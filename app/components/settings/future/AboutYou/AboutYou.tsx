@@ -12,13 +12,13 @@ import { Textarea } from '~/components/ui/textarea';
 export default function AboutYou() {
   const form = useUserProfileFormContext();
 
-  const count = form.watch('availableText')?.length ?? 0;
+  const count = form.watch('profile.availableText')?.length ?? 0;
 
   return (
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="bio"
+        name="profile.bio"
         render={({ field }) => (
           <FormItem className="space-y-1">
             <FormLabel>Profile Bio (About you)</FormLabel>
@@ -39,7 +39,7 @@ export default function AboutYou() {
       </div>
       <FormField
         control={form.control}
-        name="availableText"
+        name="profile.availableText"
         render={({ field }) => (
           <FormItem className="space-y-1">
             <FormLabel>Available for</FormLabel>

@@ -15,7 +15,7 @@ import {
 import { PAGE_ENDPOINTS } from '~/constants/constant';
 
 interface UserMenuProps {
-  session: SerializeSchema.SerializeUser | undefined;
+  session: SerializeSchema.SerializeUser;
 }
 
 export default function UserMenu({ session }: UserMenuProps) {
@@ -35,7 +35,7 @@ export default function UserMenu({ session }: UserMenuProps) {
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer hover:opacity-80">
           <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>{session?.UserProfile?.username}</AvatarFallback>
+          <AvatarFallback>{session.UserProfile.username}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -45,6 +45,18 @@ export default function UserMenu({ session }: UserMenuProps) {
           <DropdownMenuItem asChild>
             <Link
               unstable_viewTransition
+              className="cursor-pointer"
+              to={PAGE_ENDPOINTS.PROFILE.USERNAME(session.UserProfile.username)}
+              aria-label="Go to Profile"
+            >
+              <Icons.user className="mr-2 h-4 w-4" />
+              <span>My Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link
+              unstable_viewTransition
+              className="cursor-pointer"
               to={PAGE_ENDPOINTS.WRITE.ROOT}
               aria-label="Go to Write"
             >
@@ -52,13 +64,14 @@ export default function UserMenu({ session }: UserMenuProps) {
               <span>My drafts</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <Icons.bookmark className="mr-2 h-4 w-4" />
             <span>Bookmarks</span>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
               unstable_viewTransition
+              className="cursor-pointer"
               to={PAGE_ENDPOINTS.SETTINGS.ROOT}
               aria-label="Go to Account settings"
             >
@@ -66,13 +79,13 @@ export default function UserMenu({ session }: UserMenuProps) {
               <span>Account settings</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <Icons.history className="mr-2 h-4 w-4" />
             <span>My reading history</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={onLogout}>
+        <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
           <Icons.logout className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
@@ -80,3 +93,5 @@ export default function UserMenu({ session }: UserMenuProps) {
     </DropdownMenu>
   );
 }
+
+UserMenu.displayName = 'UserMenu';

@@ -15,7 +15,7 @@ export default function ProfileIdentity() {
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="username"
+        name="profile.username"
         render={({ field }) => (
           <FormItem className="space-y-2">
             <FormLabel>Username</FormLabel>

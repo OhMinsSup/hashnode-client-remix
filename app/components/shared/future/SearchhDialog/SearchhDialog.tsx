@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useForm, useFormContext, useWatch } from 'react-hook-form';
 
+import type { FormFieldValues } from '~/services/validate/search.validate';
 import { Icons } from '~/components/icons';
 import { Button } from '~/components/ui/button';
 import {
@@ -13,7 +14,7 @@ import {
 import { Form, FormControl, FormField, FormItem } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 import { useSearchDialogContext } from '~/context/useSearchDialogContext';
-import { FormFieldValues, resolver } from '~/services/validate/search.validate';
+import { resolver } from '~/services/validate/search.validate';
 
 export default function SearchhDialog() {
   const { dialog, changeDialogState } = useSearchDialogContext();
@@ -45,6 +46,8 @@ export default function SearchhDialog() {
   );
 }
 
+SearchhDialog.displayName = 'SearchhDialog';
+
 interface SearchProviderProps {
   children: React.ReactNode;
 }
@@ -60,6 +63,8 @@ function SearchProvider({ children }: SearchProviderProps) {
 
   return <Form {...form}>{children}</Form>;
 }
+
+SearchProvider.displayName = 'SearchProvider';
 
 function SearchForm() {
   const ctx = useFormContext<FormFieldValues>();
@@ -95,6 +100,8 @@ function SearchForm() {
   );
 }
 
+SearchForm.displayName = 'SearchForm';
+
 function SearchResults() {
   const watch = useWatch<FormFieldValues>();
   console.log(watch.q);
@@ -105,3 +112,5 @@ function SearchResults() {
     </section>
   );
 }
+
+SearchResults.displayName = 'SearchResults';

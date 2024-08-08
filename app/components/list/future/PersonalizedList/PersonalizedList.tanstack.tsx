@@ -93,7 +93,7 @@ export default function PersonalizedList() {
                 }px)`,
               }}
             >
-              <PostCard />
+              <PostCard data={item} />
             </div>
           );
         })}

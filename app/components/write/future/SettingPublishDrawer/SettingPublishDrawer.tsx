@@ -36,7 +36,7 @@ export default function SettingPublishDrawer() {
       <DrawerTrigger asChild>
         <Button variant="default">Publish</Button>
       </DrawerTrigger>
-      <DrawerContent className="h-full w-full rounded-none sm:!w-[504px]">
+      <DrawerContent className="z-[1000] h-full w-full rounded-none sm:!w-[504px]">
         <DrawerHeader className="border-b">
           <DrawerTitle>
             <div className="flex flex-row items-center justify-between">

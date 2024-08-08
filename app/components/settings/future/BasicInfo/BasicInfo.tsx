@@ -15,7 +15,7 @@ export default function BasicInfo() {
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="nickname"
+        name="profile.nickname"
         render={({ field }) => (
           <FormItem className="space-y-2">
             <FormLabel>Nickname</FormLabel>
@@ -28,7 +28,7 @@ export default function BasicInfo() {
       />
       <FormField
         control={form.control}
-        name="tagline"
+        name="profile.tagline"
         render={({ field }) => (
           <FormItem className="space-y-2">
             <FormLabel>Profile Tagline</FormLabel>
@@ -47,7 +47,7 @@ export default function BasicInfo() {
       </div>
       <FormField
         control={form.control}
-        name="location"
+        name="profile.location"
         render={({ field }) => (
           <FormItem className="space-y-2">
             <FormLabel>Location</FormLabel>

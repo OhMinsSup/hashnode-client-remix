@@ -1,10 +1,8 @@
-import {
-  unstable_defineAction as defineAction,
-  json,
-  redirect,
-} from '@remix-run/cloudflare';
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json, redirect } from '@remix-run/cloudflare';
 import { safeRedirect } from 'remix-utils/safe-redirect';
 
+import type { FormFieldValues } from '~/services/validate/signin-api.validate';
 import { errorJsonResponse } from '~/.server/utils/response.server';
 import {
   createToastHeaders,
@@ -13,15 +11,10 @@ import {
 import { PAGE_ENDPOINTS, RESULT_CODE } from '~/constants/constant';
 import { isFetchError } from '~/services/api/error';
 import { createError, ErrorDisplayType, isError } from '~/services/libs/error';
-import { getValidatedFormData } from '~/services/libs/form-data';
 import { HttpStatus } from '~/services/libs/http-status.enum';
 import { RequestMethod } from '~/services/libs/request-method.enum';
-import {
-  FormFieldValues,
-  resolver,
-} from '~/services/validate/signin-api.validate';
 
-export const action = defineAction(async ({ request, context }) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   try {
     if (request.method.toUpperCase() !== RequestMethod.POST) {
       throw createError({
@@ -32,18 +25,10 @@ export const action = defineAction(async ({ request, context }) => {
       });
     }
 
-    const { errors, data } = await getValidatedFormData<FormFieldValues>(
-      request,
-      resolver,
-    );
-
-    if (errors) {
-      return json(errorJsonResponse('validation failed', errors));
-    }
-
+    const input = await request.json<FormFieldValues>();
     const auth = context.agent.api.app.auth;
     const response = await auth.signinHandler({
-      body: data,
+      body: input,
     });
 
     const cookie = response.headers.get('set-cookie');
@@ -100,6 +85,6 @@ export const action = defineAction(async ({ request, context }) => {
 
     throw e;
   }
-});
+};
 
 export type RoutesActionData = typeof action;

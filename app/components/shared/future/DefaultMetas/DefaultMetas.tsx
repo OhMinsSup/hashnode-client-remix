@@ -9,3 +9,5 @@ export default function DefaultMetas() {
     </>
   );
 }
+
+DefaultMetas.displayName = 'DefaultMetas';

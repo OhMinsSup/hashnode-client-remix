@@ -36,10 +36,8 @@ export function useFileUploadMutation(
         method: 'POST',
         baseURL: getApiHost(),
         credentials: 'include',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
       },
+      isMultipart: true,
     }),
     ...params,
   });

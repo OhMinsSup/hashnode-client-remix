@@ -76,7 +76,7 @@ function ThemeProvider({
       if (newTheme) {
         persistThemeRef.current.submit(
           { theme: newTheme },
-          { action: '?/setTheme', method: 'POST' },
+          { action: '/?/setTheme', method: 'POST' },
         );
       }
       setThemeState(newTheme);

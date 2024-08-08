@@ -16,42 +16,42 @@ export default function Social() {
   const socialList = useMemo(
     () => [
       {
-        id: 'socials.twitter' as const,
-        title: 'Twitter Profile',
-        placeholder: 'https://twitter.com/johndoe',
+        id: 'social.twitter' as const,
+        title: 'X Profile',
+        placeholder: 'https://x.com/johndoe',
       },
       {
-        id: 'socials.instagram' as const,
+        id: 'social.instagram' as const,
         title: 'Instagram Profile',
         placeholder: 'https://instagram.com/johndoe',
       },
       {
-        id: 'socials.github' as const,
+        id: 'social.github' as const,
         title: 'GitHub Profile',
         placeholder: 'https://github.com/hashnode',
       },
       {
-        id: 'socials.stackoverflow' as const,
+        id: 'social.stackoverflow' as const,
         title: 'StackOverflow Profile',
         placeholder: 'https://stackoverflow.com/users/22656/jon-skeet',
       },
       {
-        id: 'socials.facebook' as const,
+        id: 'social.facebook' as const,
         title: 'Facebook Profile',
         placeholder: 'https://facebook.com/johndoe',
       },
       {
-        id: 'socials.website' as const,
+        id: 'social.website' as const,
         title: 'Website URL',
         placeholder: 'https://johndoe.com',
       },
       {
-        id: 'socials.linkedin' as const,
+        id: 'social.linkedin' as const,
         title: 'LinkedIn Profile',
         placeholder: 'https://www.linkedin.com/in/johndoe',
       },
       {
-        id: 'socials.youtube' as const,
+        id: 'social.youtube' as const,
         title: 'YouTube Channel',
         placeholder: 'https://www.youtube.com/channel/channel-name',
       },

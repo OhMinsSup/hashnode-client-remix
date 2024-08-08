@@ -32,9 +32,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                   `before:content-['"'] after:content-['"']`,
                 )}
               >
-                {data.result?.description}
+                {data.result.description}
               </p>
-              <footer className="text-sm">{data.result?.username}</footer>
+              <footer className="text-sm">{data.result.username}</footer>
             </blockquote>
           </div>
         </div>

@@ -30,6 +30,19 @@ export class PostNamespace {
     );
   };
 
+  getTrendingHandler = async <T = unknown, R extends ResponseType = 'json'>(
+    options?: FetchOptions<R>,
+  ): Promise<FetchResponse<MappedResponseType<R, T>>> => {
+    return await this._service._baseClient.fetch(
+      this._service.constructMethodCallUri(this.endpoint.TRENDING),
+      {
+        method: 'GET',
+        baseURL: this._service.uri.toString(),
+        ...options,
+      },
+    );
+  };
+
   getPublishedHandler: FetchWithoutRequestHandler = async (options) => {
     return await this._service._baseClient.fetch(
       this._service.constructMethodCallUri(this.endpoint.PUBLISHED),

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   isRouteErrorResponse,
   useLoaderData,
@@ -5,12 +6,15 @@ import {
 } from '@remix-run/react';
 
 import type { RoutesLoaderData } from '~/.server/routes/preview/preview.$id.loader';
-import { BlocknoteEditor } from '~/components/blocknote-editor';
 import { BlogTemplate } from '~/components/blog/future/BlogTemplate';
 import { ClientOnly } from '~/components/shared/future/ClientOnly';
 
 export { meta } from '~/services/seo/preview/preview.meta';
 export { loader } from '~/.server/routes/preview/preview.$id.loader';
+
+const BlocknoteEditor = React.lazy(
+  () => import('~/components/blocknote-editor/BlocknoteEditor'),
+);
 
 export default function Routes() {
   const data = useLoaderData<RoutesLoaderData>();
@@ -33,13 +37,15 @@ export default function Routes() {
           }
         >
           <ClientOnly>
-            <BlocknoteEditor
-              blockType={
-                data.result.PostConfig.isMarkdown ? 'markdown' : 'html'
-              }
-              initialHTML={data.result.content}
-              editable={false}
-            />
+            <React.Suspense fallback={null}>
+              <BlocknoteEditor
+                blockType={
+                  data.result.PostConfig.isMarkdown ? 'markdown' : 'html'
+                }
+                initialHTML={data.result.content}
+                editable={false}
+              />
+            </React.Suspense>
           </ClientOnly>
         </BlogTemplate.Content>
       </BlogTemplate.ContentWrapper>

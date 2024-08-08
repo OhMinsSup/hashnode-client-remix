@@ -12,16 +12,18 @@ interface Props {
 }
 
 export const getInitialValues = (initialValues?: Props['initialValues']) => ({
-  nickname: initialValues?.UserProfile?.nickname || '',
-  username: initialValues?.UserProfile?.username || '',
   email: initialValues?.email || '',
-  tagline: initialValues?.UserProfile?.tagline || '',
-  image: initialValues?.UserProfile?.image || undefined,
-  location: initialValues?.UserProfile?.location || '',
-  bio: initialValues?.UserProfile?.bio || '',
-  availableText: initialValues?.UserProfile?.availableText || '',
+  profile: {
+    nickname: initialValues?.UserProfile?.nickname || '',
+    username: initialValues?.UserProfile?.username || '',
+    tagline: initialValues?.UserProfile?.tagline || '',
+    image: initialValues?.UserProfile?.image || undefined,
+    location: initialValues?.UserProfile?.location || '',
+    bio: initialValues?.UserProfile?.bio || '',
+    availableText: initialValues?.UserProfile?.availableText || '',
+  },
   skills: initialValues?.UserTags?.map((tag) => tag.name) || [],
-  socials: {
+  social: {
     github: initialValues?.UserSocial?.github || '',
     facebook: initialValues?.UserSocial?.facebook || '',
     twitter: initialValues?.UserSocial?.twitter || '',
@@ -34,16 +36,18 @@ export const getInitialValues = (initialValues?: Props['initialValues']) => ({
 });
 
 export const getDefaultValues = (): Partial<FormFieldValues> => ({
-  nickname: '',
-  username: '',
+  profile: {
+    nickname: '',
+    username: '',
+    image: undefined,
+    tagline: '',
+    location: '',
+    bio: '',
+    availableText: '',
+  },
   email: '',
-  tagline: '',
-  image: undefined,
-  location: '',
-  bio: '',
-  availableText: '',
   skills: [],
-  socials: {
+  social: {
     github: '',
     facebook: '',
     twitter: '',

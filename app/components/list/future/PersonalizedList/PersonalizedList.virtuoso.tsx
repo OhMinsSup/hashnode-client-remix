@@ -49,8 +49,8 @@ export default function PersonalizedList() {
       components={{ List }}
       endReached={endReached}
       totalCount={totalCount}
-      itemContent={(index) => {
-        return <PostCard key={`personailized-item-${index}`} />;
+      itemContent={(index, data) => {
+        return <PostCard key={`personailized-item-${index}`} data={data} />;
       }}
     />
   );

@@ -7,12 +7,15 @@ export const API_ENDPOINTS = {
     ROOT: 'users',
     WIDGET: 'users/widget',
     EMIAL_PREFERENCES: 'users/email-preferences',
+    USERNAME: (username: string) => `users/${username}`,
   },
   POSTS: {
     ROOT: 'posts',
     ID: (id: string) => `posts/${id}`,
     BY_OWNER: (id: string) => `posts/${id}/by-owner`,
     PUBLISHED: 'posts/published',
+    TRENDING: 'posts/trending',
+    BOOKMARK: 'posts/bookmark',
   },
   DRAFTS: {
     ROOT: 'drafts',
@@ -103,6 +106,10 @@ export const PAGE_ENDPOINTS = {
   },
   BLOG: {
     ID: (userId: string | number) => `/blog/${userId}`,
+  },
+  PROFILE: {
+    USERNAME: (username: string) => `/profile/${username}`,
+    FOLLOWERS: (username: string) => `/profile/${username}/followers`,
   },
 } as const;
 

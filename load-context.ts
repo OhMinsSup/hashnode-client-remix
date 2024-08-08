@@ -22,14 +22,17 @@ type GetLoadContext = (args: {
 }) => AppLoadContext;
 
 export const getLoadContext: GetLoadContext = ({ context }) => {
+  const { cloudflare } = context;
+  const bindings = cloudflare.env;
+
   const agent = new HashnodeAgent({
-    service: context.cloudflare.env.API_BASE_URL,
+    service: bindings.API_BASE_URL,
     prefix: '/api/v1',
   });
 
   return {
     ...context,
-    env: context.cloudflare.env,
+    env: bindings,
     agent,
     logger,
   };

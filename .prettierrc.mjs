@@ -27,7 +27,7 @@ const config = Object.assign(
       'prettier-plugin-tailwindcss',
     ],
     tailwindConfig: fileURLToPath(
-      new URL('./tailwind.config.cjs', import.meta.url),
+      new URL('./tailwind.config.ts', import.meta.url),
     ),
     tailwindFunctions: ['cn', 'cva'],
     importOrder: [

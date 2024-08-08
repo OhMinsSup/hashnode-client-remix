@@ -1,6 +1,7 @@
+import type { SubmitHandler } from 'react-hook-form';
 import { useFormAction, useNavigation, useSubmit } from '@remix-run/react';
-import { type SubmitHandler } from 'react-hook-form';
 
+import type { FormFieldValues } from '~/services/validate/user-email-update-api.validate';
 import { Icons } from '~/components/icons';
 import { useEmailPreferencesFormContext } from '~/components/settings/context/useEmailPreferencesFormContext';
 import { Button } from '~/components/ui/button';
@@ -13,7 +14,6 @@ import {
 } from '~/components/ui/form';
 import { Switch } from '~/components/ui/switch';
 import { cn } from '~/services/libs';
-import { type FormFieldValues } from '~/services/validate/user-email-update-api.validate';
 
 export default function EmailPreferencesForm() {
   const form = useEmailPreferencesFormContext();
@@ -27,12 +27,11 @@ export default function EmailPreferencesForm() {
   const isSubmitting =
     navigation.formMethod === 'PUT' && navigation.formAction === action;
 
-  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
-    submit(input as unknown as Record<string, any>, {
+  const onSubmit: SubmitHandler<FormFieldValues> = (input) =>
+    submit(input, {
       method: 'put',
       encType: 'application/json',
     });
-  };
 
   return (
     <form

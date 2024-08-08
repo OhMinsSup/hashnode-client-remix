@@ -132,7 +132,6 @@ export default function DraftSettingDrawer() {
   };
 
   const onInvalid: SubmitErrorHandler<FormFieldValues> = (errors) => {
-    console.log(errors);
     const er = Object.entries(errors)
       .map(([key, value]) => `${key}: ${value.message}`)
       .join(', ')
