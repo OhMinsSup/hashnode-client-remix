@@ -129,7 +129,7 @@ export default function SigninForm() {
                 type="button"
                 disabled={isSubmittingForm}
               >
-                <Icons.gitHub className="size-4" />
+                <Icons.github className="size-4" />
                 <span>GitHub</span>
               </Button>
               <Button

@@ -12,7 +12,7 @@ type GetPathFn = (
   pageNo?: number,
 ) => string;
 
-type Options = { options?: FetchOptions<'json'> };
+type Options = { options?: FetchOptions<'json'>; isMultipart?: boolean };
 
 export const mutationFn = <D = any, V = any>(
   getPath: () => string,
@@ -21,11 +21,24 @@ export const mutationFn = <D = any, V = any>(
   return async (variables) => {
     const url = getPath();
     const response = await fetchHandler<D>(url.toString(), {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      ...(!opts?.isMultipart && {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
       ...(variables && {
-        body: variables,
+        body: opts?.isMultipart
+          ? (function () {
+              const formData = new FormData();
+              for (const key in variables) {
+                if (Object.prototype.hasOwnProperty.call(variables, key)) {
+                  const element = variables[key] as string | Blob;
+                  formData.append(key, element);
+                }
+              }
+              return formData;
+            })()
+          : variables,
       }),
       ...(opts && { ...opts.options }),
     });

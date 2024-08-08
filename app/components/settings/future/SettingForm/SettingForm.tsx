@@ -27,6 +27,8 @@ export default function SettingForm() {
   const onSubmit: SubmitHandler<FormFieldValues> = (input) =>
     submit(input, {
       method: 'put',
+      replace: true,
+      action,
       encType: 'application/json',
     });
 

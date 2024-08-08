@@ -7,8 +7,7 @@
     "**/.server/**/*.ts",
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
-    "**/.client/**/*.tsx",
-    "node_modules/@remix-run/react/future/single-fetch.d.ts"
+    "**/.client/**/*.tsx"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
@@ -29,6 +28,5 @@
     },
     // Vite takes care of building everything, not tsc.
     "noEmit": true,
-    "types": ["@remix-run/react/future/single-fetch.d.ts"]
   }
 }

@@ -7,7 +7,7 @@ import { z } from 'zod';
 export const schema = z.object({
   file: z.instanceof(File),
   uploadType: z
-    .enum(['PROFILE', 'IMAGE', 'POST_THUMBNAIL', 'SEO'])
+    .enum(['IMAGE', 'POST_THUMBNAIL', 'SEO'])
     .default('IMAGE')
     .optional(),
   mediaType: z.enum(['IMAGE']).default('IMAGE').optional(),

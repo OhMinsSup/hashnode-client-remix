@@ -13,11 +13,11 @@ export default function InputProfile() {
 
   const { setValue, watch } = useUserProfileFormContext();
 
-  const image = watch('image');
+  const image = watch('profile.image');
 
   const { mutateAsync, isPending } = useFileUploadMutation({
     onSuccess: (data) => {
-      setValue('image', data.result.publicUrl, {
+      setValue('profile.image', data.result.publicUrl, {
         shouldDirty: true,
       });
     },
@@ -25,6 +25,7 @@ export default function InputProfile() {
 
   const upload = useCallback(
     async (file: File) => {
+      console.log('file', file);
       await mutateAsync({
         file,
         uploadType: 'IMAGE',
@@ -55,7 +56,7 @@ export default function InputProfile() {
   );
 
   const onRemove = useCallback(() => {
-    setValue('image', undefined, {
+    setValue('profile.image', undefined, {
       shouldDirty: true,
     });
   }, [setValue]);
@@ -77,7 +78,7 @@ export default function InputProfile() {
   });
 
   return (
-    <AspectRatio ratio={16 / 9}>
+    <AspectRatio ratio={8 / 2}>
       <>
         {!image && !isPending ? (
           <>

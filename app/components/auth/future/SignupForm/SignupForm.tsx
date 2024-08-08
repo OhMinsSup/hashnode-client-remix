@@ -167,7 +167,7 @@ export default function SignupForm({ email }: SignupFormProps) {
                 type="button"
                 disabled={isSubmittingForm}
               >
-                <Icons.gitHub className="size-4" />
+                <Icons.github className="size-4" />
                 <span>GitHub</span>
               </Button>
               <Button

@@ -98,17 +98,21 @@ export const socialSchema = z.object({
     ),
 });
 
-export const schema = z.object({
+export const profileSchema = z.object({
   nickname: z.string().min(1).max(20),
   username: z.string().min(1).max(20),
-  email: z.string().email(),
   tagline: z.string().max(255).optional(),
   image: z.string().url().optional(),
   location: z.string().max(255).optional(),
   bio: z.string().max(255).optional(),
-  skills: z.array(z.string()).max(10).optional(),
   availableText: z.string().max(140).optional(),
-  socials: socialSchema.optional(),
+});
+
+export const schema = z.object({
+  email: z.string().email(),
+  profile: profileSchema,
+  skills: z.array(z.string()).max(10).optional(),
+  social: socialSchema.optional(),
 });
 
 export type FormFieldValues = z.infer<typeof schema>;
